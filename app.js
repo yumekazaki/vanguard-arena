@@ -477,11 +477,16 @@
     if (!instance) return;
     const c = cardMap.get(instance.cardId); if (!c) return;
     const turnPower = Number(instance.turnPowerBoost || 0), turnCrit = Number(instance.turnCriticalBoost || 0);
-    const effectTag = turnPower || turnCrit ? `<span class="turn-effect-badge">${turnPower ? `+${Math.round(turnPower / 1000)}k` : ""}${turnPower && turnCrit ? " · " : ""}${turnCrit ? `+${turnCrit} CRIT` : ""}</span>` : "";
-    const effectivePower = Number(c.power || 0) + Number(instance.powerBoost || 0) + turnPower;
-    const effectivePowerLabel = effectivePower >= 1000000 ? `${Math.round(effectivePower / 1000000)}M` : `${Math.round(effectivePower / 1000)}k`;
+    const forcePower = match.side === side ? markers.filter((gift) => /^Force I$/i.test(gift.type || "")).length * 10000 : 0;
+    const effectLabels = [];
+    if (turnPower) effectLabels.push(`+${Math.round(turnPower / 1000)}k`);
+    if (turnCrit) effectLabels.push(`+${turnCrit} CRIT`);
+    if (forcePower) effectLabels.push(`+${Math.round(forcePower / 1000)}k FORCE I`);
+    const effectTag = effectLabels.length ? `<span class="turn-effect-badge">${escapeHtml(effectLabels.join(" · "))}</span>` : "";
+    const effectivePower = Number(c.power || 0) + Number(instance.powerBoost || 0) + turnPower + forcePower;
+    const effectivePowerLabel = effectivePower.toLocaleString();
     const effectiveCrit = Math.max(1, Number(c.critical || 1) + turnCrit);
-    const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade}`}</span>${effectTag}<span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${effectivePowerLabel} · ${effectiveCrit} crit</b><span>${escapeHtml(c.trigger || "UNIT")}</span></span>`;
+    const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; const powerBreakdown = [`base ${Number(c.power || 0).toLocaleString()}`, Number(instance.powerBoost || 0) ? `+${Number(instance.powerBoost).toLocaleString()} manual` : "", turnPower ? `+${turnPower.toLocaleString()} temporary until end of turn` : "", forcePower ? `+${forcePower.toLocaleString()} Force I for this turn` : ""].filter(Boolean).join(" · "); field.title = `${c.name}\nPower: ${effectivePowerLabel}${effectiveCrit > 1 ? ` · ${effectiveCrit} critical` : ""}\n${powerBreakdown}`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade}`}</span>${effectTag}<span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${effectivePowerLabel}</b><span>${effectiveCrit} CRIT</span></span>`;
     if (c.image) { field.style.backgroundImage = `linear-gradient(#1118,#111c),url("${String(c.image).replace(/["\\]/g, "")}")`; field.style.backgroundSize = "cover"; }
     el.appendChild(field);
   }
@@ -687,7 +692,12 @@
     p.hand = p.hand.filter((x) => x.uid !== instance.uid); p.rear[empty] = { ...instance, rested: false }; match.selected = null;
     addLog(`You called ${cardMap.get(instance.cardId)?.name || "a card"} to the rear-guard circle.`); setMessage("Unit called."); renderMatch();
   }
-  function attackerPower(entry) { return Number(cardMap.get(entry.instance.cardId)?.power || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0); }
+  function attackerPower(entry) {
+    const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid);
+    const card = cardMap.get(entry.instance.cardId);
+    const forcePower = field && match.side === field.side ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force I$/i.test(gift.type || "")).length * 10000 : 0;
+    return Number(card?.power || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0) + forcePower;
+  }
   function attackerCritical(entry) { return Math.max(1, Number(cardMap.get(entry.instance.cardId)?.critical || 1) + Number(entry.instance.turnCriticalBoost || 0)); }
   function resolveHumanAttack() {
     if (match?.turn === 1 && match.firstSide === "human") { toast("The player going first cannot attack during their first turn."); return; }
