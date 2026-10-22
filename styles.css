@@ -146,3 +146,4 @@
 @media(max-height:600px) and (orientation:landscape) and (pointer:coarse) and (hover:none){
   .page-heading{display:flex;align-items:center}.page-heading>div:first-child{display:none}.heading-actions{grid-template-columns:repeat(4,minmax(0,1fr));width:100%}.game-table{height:min(126vw,calc(100dvh - 86px));min-height:390px}.field-row,.rear-row{left:14%;width:72%}.match-layout{gap:8px}.manual-quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
+.field-card .field-card-stats small{display:block;margin-top:2px;padding:2px 1px;border-radius:3px;background:#080a10e8;color:#f0f0f4;font-size:clamp(6px,.6vw,8px);line-height:1.1;text-shadow:none;font-weight:700}.field-card .field-card-name{bottom:40px}

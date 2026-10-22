@@ -1,6 +1,8 @@
 {
   "records": 10476,
   "withGrade": 9583,
+  "withPower": 10109,
+  "withShield": 7379,
   "withClan": 8693,
   "withImage": 10476
 }
