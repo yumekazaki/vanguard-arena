@@ -29,6 +29,7 @@
   const cardList = importedCatalog.length ? [...importedCatalog, ...userCards] : [...sampleCards, ...userCards];
   const cardMap = new Map(cardList.map((c) => [c.id, c]));
   cardMap.set("token-quick-shield", { id: "token-quick-shield", name: "Quick Shield", grade: 0, nation: "Token", power: 0, shield: 5000, type: "Quick Shield Token", text: "Placeholder token for a Quick Shield. Resolve its shield value manually.", color: "#a39bff", glyph: "◇", source: "Vanguard Arena token" });
+  cardMap.set("token-protect", { id: "token-protect", name: "Protect Marker", grade: 0, nation: "Token", power: 0, shield: 0, type: "Protect Marker", text: "Protect marker added to your hand. Resolve its protection effect manually.", color: "#81d9ee", glyph: "◇", source: "Vanguard Arena token" });
   const artIds = Array.isArray(window.CARD_ART_IDS) ? window.CARD_ART_IDS : [];
   const artPageSize = 60;
   let artPage = 0;
@@ -363,7 +364,7 @@
     const starterIndex = pile.findIndex((instance) => instance.cardId === starterId);
     const vanguard = starterIndex >= 0 ? { ...pile.splice(starterIndex, 1)[0], rested: false } : null;
     shuffle(pile);
-    return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rear: [null, null, null, null, null], accelZones: 0, giftZones: [], orders: [], extra: [], gDeck: shuffle(gDeck), gZone: [], quickShields: 0, gifts: 0, human };
+    return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rear: [null, null, null, null, null], accelZones: 0, giftZones: [], orders: [], extra: [], gDeck: shuffle(gDeck), gZone: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
   }
   function openPracticeSetup() { $("#practice-setup-dialog").showModal(); }
   function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
@@ -441,8 +442,8 @@
     $("#human-order-zone").innerHTML = renderOrderCards(you.orders, "human"); $("#bot-order-zone").innerHTML = renderOrderCards(bot.orders, "bot");
     $("#human-gzone").innerHTML = renderGZone(you); $("#bot-gzone").innerHTML = renderGZone(bot);
     $("#gift-count").textContent = String(you.gifts || 0);
-    $(".human-line .player-title small").textContent = `YOUR SIDE · G ${you.gZone?.length || 0} · QUICK SHIELD ${you.quickShields || 0}`;
-    $(".opponent-line .player-title small").textContent = `${online.role ? "OPPONENT" : "DEMO DECK"} · G ${bot.gZone?.length || 0} · QUICK SHIELD ${bot.quickShields || 0}`;
+    $(".human-line .player-title small").textContent = `YOUR SIDE · G ${you.gZone?.length || 0} · QUICK SHIELD ${you.quickShields || 0} · PROTECT ${you.protectMarkers || 0}`;
+    $(".opponent-line .player-title small").textContent = `${online.role ? "OPPONENT" : "DEMO DECK"} · G ${bot.gZone?.length || 0} · QUICK SHIELD ${bot.quickShields || 0} · PROTECT ${bot.protectMarkers || 0}`;
     $("#human-damage").innerHTML = renderDamageCards(you);
     $("#bot-damage").innerHTML = renderDamageCards(bot);
     $("#bot-hand-count").textContent = `${bot.hand.length} CARDS`;
@@ -854,6 +855,8 @@
       addLog(`${player.name} moved ${cardMap.get(card.cardId)?.name || "a card"} from hand to damage.`);
     } else if (action === "quick-shield") {
       player.quickShields = (player.quickShields || 0) + 1; player.hand.push({ uid: `quick-shield-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, cardId: "token-quick-shield", isToken: true }); addLog(`${player.name} added a Quick Shield placeholder to hand.`);
+    } else if (action === "protect-to-hand") {
+      player.protectMarkers = (player.protectMarkers || 0) + 1; player.hand.push({ uid: `protect-marker-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, cardId: "token-protect", isToken: true }); addLog(`${player.name} added a Protect marker to hand.`);
     }
     renderMatch();
   }
