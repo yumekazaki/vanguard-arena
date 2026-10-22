@@ -370,7 +370,7 @@
   function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
-    match = { players: { human: makePlayer(readyDeck, "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { rolls: { human: null, bot: null }, winner: null } : null, phase: 0, drewThisTurn: false, selected: null, pendingAttack: null, botAttacks: [], revealed: null, log: [], ended: false, deckName: readyDeck.name };
+    match = { players: { human: makePlayer(readyDeck, "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { rolls: { human: null, bot: null }, winner: null } : null, phase: 0, drewThisTurn: false, ridePerformed: false, selected: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
     if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
@@ -466,7 +466,7 @@
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog();
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
-    renderOnlineSetup();
+    renderOnlineSetup(); renderTriggerPrompt();
     if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
   }
   function renderZone(side, zone, instance) {
@@ -476,7 +476,12 @@
     if (markers.length) { const marker = document.createElement("b"); marker.className = "gift-zone-marker"; marker.textContent = markers.map((gift) => gift.type).join(" · "); el.appendChild(marker); }
     if (!instance) return;
     const c = cardMap.get(instance.cardId); if (!c) return;
-    const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade}`}</span><span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${Math.round((Number(c.power) + Number(instance.powerBoost || 0)) / 1000)}k</b><span>${escapeHtml(c.trigger || "UNIT")}</span></span>`;
+    const turnPower = Number(instance.turnPowerBoost || 0), turnCrit = Number(instance.turnCriticalBoost || 0);
+    const effectTag = turnPower || turnCrit ? `<span class="turn-effect-badge">${turnPower ? `+${Math.round(turnPower / 1000)}k` : ""}${turnPower && turnCrit ? " · " : ""}${turnCrit ? `+${turnCrit} CRIT` : ""}</span>` : "";
+    const effectivePower = Number(c.power || 0) + Number(instance.powerBoost || 0) + turnPower;
+    const effectivePowerLabel = effectivePower >= 1000000 ? `${Math.round(effectivePower / 1000000)}M` : `${Math.round(effectivePower / 1000)}k`;
+    const effectiveCrit = Math.max(1, Number(c.critical || 1) + turnCrit);
+    const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade}`}</span>${effectTag}<span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${effectivePowerLabel} · ${effectiveCrit} crit</b><span>${escapeHtml(c.trigger || "UNIT")}</span></span>`;
     if (c.image) { field.style.backgroundImage = `linear-gradient(#1118,#111c),url("${String(c.image).replace(/["\\]/g, "")}")`; field.style.backgroundSize = "cover"; }
     el.appendChild(field);
   }
@@ -566,6 +571,102 @@
     const p = match.players[side]; if (!p.deck.length) return null;
     const card = p.deck.pop(); p.hand.push(card); return card;
   }
+  function fieldUnits(side) {
+    const player = match.players[side];
+    return [{ instance: player.vanguard, zone: "vanguard", label: "Vanguard" }, ...player.rear.map((instance, index) => ({ instance, zone: `rear-${index}`, label: `Rear-Guard ${index + 1}` }))].filter((item) => item.instance);
+  }
+  function triggerKind(instance) {
+    const card = cardMap.get(instance?.cardId); const value = String(card?.trigger || "").toLowerCase();
+    return ["over", "critical", "draw", "stand", "heal", "front"].find((kind) => value.includes(kind)) || "";
+  }
+  function triggerPower(instance) {
+    const card = cardMap.get(instance?.cardId);
+    return Number(card?.triggerPower || card?.trigger_power || card?.triggerValue) || 10000;
+  }
+  function renderTriggerPrompt() {
+    const dialog = $("#trigger-prompt-dialog"), pending = match?.pendingTrigger;
+    if (!dialog || !pending || pending.side !== "human" || online.applyingRemote || online.role === "watcher") { if (dialog?.open) dialog.close(); return; }
+    const units = fieldUnits("human"), player = match.players.human;
+    const stage = pending.stage;
+    const title = stage === "critical-target" ? "Choose a unit for +1 critical" : stage === "over-target" ? "Choose a unit for +100,000,000 power" : stage === "power-target" ? `Choose a unit for +${Math.round(pending.power / 1000)}k power` : stage === "stand-target" ? "Choose a Rear-Guard to stand" : "Choose damage to heal";
+    $("#trigger-prompt-title").textContent = title;
+    $("#trigger-prompt-description").textContent = `${pending.cardName} activated from your ${pending.checkName} check. These effects last until end of turn.`;
+    let targets = stage === "stand-target" ? units.filter((u) => u.zone !== "vanguard" && u.instance.rested) : stage === "heal-target" ? player.damage.map((item) => ({ instance: item, label: cardMap.get(item.cardId)?.name || "Damage" })) : units;
+    const list = $("#trigger-prompt-targets");
+    list.innerHTML = targets.map((target) => {
+      const item = target.instance, card = cardMap.get(item.cardId);
+      return `<button class="trigger-target" type="button" data-trigger-pick="${escapeHtml(item.uid)}">${card?.image ? `<img src="${escapeHtml(card.image)}" alt="">` : ""}<span><b>${escapeHtml(card?.name || target.label)}</b><small>${escapeHtml(target.label)}</small></span></button>`;
+    }).join("") || `<p class="zone-empty-message">No legal cards to choose.</p>`;
+    $("#trigger-prompt-skip").hidden = stage !== "heal-target";
+    if (!dialog.open) dialog.showModal();
+  }
+  function finishTriggerResolution() {
+    const pending = match?.pendingTrigger;
+    if (!pending) return;
+    match.pendingTrigger = null;
+    addLog(`${pending.cardName}'s trigger effects are active until end of turn.`);
+    if (pending.after) pending.after();
+    checkDamageEnd(pending.side);
+    resolveDamageQueue();
+    if (!online.role && match.side === "bot" && !match.ended && !match.pendingTrigger && !match.pendingDamageQueue.length) setTimeout(nextBotAttack, 250);
+  }
+  function checkDamageEnd(side) {
+    const player = match.players[side];
+    if (player.damage.length < 6 || match.pendingTrigger) return;
+    match.ended = true;
+    const winner = match.players[flipSide(side)].name;
+    addLog(`${winner} wins the match.`); setMessage(`${winner} wins — start a new match to play again.`);
+  }
+  function beginTriggerResolution(side, instance, checkName) {
+    const kind = triggerKind(instance); if (!kind) return false;
+    const player = match.players[side], power = triggerPower(instance), cardName = cardMap.get(instance.cardId)?.name || `${kind} trigger`;
+    const pending = { side, uid: instance.uid, cardName, kind, checkName, power, stage: "power-target" };
+    if (kind === "over") {
+      player.removed ||= []; player.removed.push(instance);
+      if (checkName === "drive") {
+        draw(side);
+        if (!fieldUnits(side).length) { addLog(`${player.name} revealed an Over Trigger and drew 1; it was removed from the game.`); return false; }
+        const pendingOver = { side, uid: instance.uid, cardName, kind, checkName, power: 100000000, stage: "over-target" };
+        if (side === "bot" && !online.role) { fieldUnits(side)[0].instance.turnPowerBoost = Number(fieldUnits(side)[0].instance.turnPowerBoost || 0) + 100000000; addLog("Practice Bot resolved its Over Trigger."); return false; }
+        match.pendingTrigger = pendingOver;
+      } else addLog(`${player.name} revealed an Over Trigger during a damage check; it was removed from the game and did not count as damage.`);
+      return false;
+    }
+    if (kind === "draw") { if (draw(side)) addLog(`${side === "human" ? "You" : "Practice Bot"} drew 1 from the Draw Trigger.`); }
+    if (kind === "critical") pending.stage = "critical-target";
+    if (kind === "stand") pending.stage = "stand-target";
+    if (kind === "heal") pending.stage = player.damage.length && player.damage.length >= match.players[flipSide(side)].damage.length ? "heal-target" : "power-target";
+    if (kind === "front") {
+      fieldUnits(side).filter((unit) => unit.zone === "vanguard" || unit.zone === "rear-0" || unit.zone === "rear-1").forEach((unit) => { unit.instance.turnPowerBoost = Number(unit.instance.turnPowerBoost || 0) + power; });
+      addLog(`${side === "human" ? "Your" : "Practice Bot's"} Front Trigger gave the front row +${Math.round(power / 1000)}k until end of turn.`); return false;
+    }
+    if (side === "bot" && !online.role) {
+      if (pending.stage === "critical-target") { const target = fieldUnits(side).sort((a, b) => Number(a.zone !== "vanguard") - Number(b.zone !== "vanguard"))[0]?.instance; if (target) target.turnCriticalBoost = Number(target.turnCriticalBoost || 0) + 1; pending.stage = "power-target"; }
+      if (pending.stage === "stand-target") { const target = fieldUnits(side).find((unit) => unit.zone !== "vanguard" && unit.instance.rested); if (target) target.instance.rested = false; pending.stage = "power-target"; }
+      const target = fieldUnits(side)[0]?.instance; if (target) target.turnPowerBoost = Number(target.turnPowerBoost || 0) + power;
+      if (pending.stage === "heal-target") { const healed = player.damage.pop(); if (healed) player.drop.push(healed); }
+      addLog(`Practice Bot resolved its ${kind} trigger.`); return false;
+    }
+    if (pending.stage === "stand-target" && !fieldUnits(side).some((unit) => unit.zone !== "vanguard" && unit.instance.rested)) pending.stage = "power-target";
+    if (pending.stage === "heal-target" && !player.damage.length) pending.stage = "power-target";
+    if (!fieldUnits(side).length && pending.stage !== "heal-target" && pending.stage !== "stand-target") return false;
+    match.pendingTrigger = pending; return true;
+  }
+  function chooseTriggerTarget(uid) {
+    const pending = match?.pendingTrigger; if (!pending || pending.side !== "human") return;
+    const player = match.players.human;
+    if (pending.stage === "heal-target") {
+      const index = player.damage.findIndex((item) => item.uid === uid); if (index < 0) return;
+      player.drop.push(player.damage.splice(index, 1)[0]); addLog(`${player.name} healed one damage to Drop.`); pending.stage = "power-target";
+      if (!fieldUnits("human").length) finishTriggerResolution();
+    } else {
+      const unit = fieldUnits("human").find((item) => item.instance.uid === uid && (pending.stage !== "stand-target" || (item.zone !== "vanguard" && item.instance.rested))); if (!unit) return;
+      if (pending.stage === "critical-target") { unit.instance.turnCriticalBoost = Number(unit.instance.turnCriticalBoost || 0) + 1; addLog(`${cardMap.get(unit.instance.cardId)?.name || "A unit"} gets +1 critical until end of turn.`); pending.stage = "power-target"; }
+      else if (pending.stage === "stand-target") { unit.instance.rested = false; addLog(`${cardMap.get(unit.instance.cardId)?.name || "A Rear-Guard"} stood.`); pending.stage = "power-target"; }
+      else { unit.instance.turnPowerBoost = Number(unit.instance.turnPowerBoost || 0) + pending.power; addLog(`${cardMap.get(unit.instance.cardId)?.name || "A unit"} gets +${pending.power >= 1000000 ? `${Math.round(pending.power / 1000000)}M` : `${Math.round(pending.power / 1000)}k`} power until end of turn.`); finishTriggerResolution(); }
+    }
+    renderMatch();
+  }
   function drawForHuman() {
     if (!match || match.side !== "human" || match.pendingAttack || match.phase !== 1 || match.drewThisTurn) return;
     const card = draw("human"); if (!card) { setMessage("Your deck is empty."); return; }
@@ -573,35 +674,50 @@
   }
   function rideHuman() {
     const instance = selectedHandCard(); if (!instance || match.phase !== 2) return;
-    const p = match.players.human; p.hand = p.hand.filter((x) => x.uid !== instance.uid); if (p.vanguard) p.soul.push(p.vanguard); p.vanguard = { ...instance, rested: false };
+    const p = match.players.human, grade = Number(cardMap.get(instance.cardId)?.grade || 0), currentGrade = Number(cardMap.get(p.vanguard?.cardId)?.grade || 0);
+    if (match.ridePerformed || grade < currentGrade || grade > currentGrade + 1) { toast("A normal ride is once per turn and must be the same grade or one grade higher than your Vanguard."); return; }
+    p.hand = p.hand.filter((x) => x.uid !== instance.uid); if (p.vanguard) p.soul.push(p.vanguard); p.vanguard = { ...instance, rested: false }; match.ridePerformed = true;
     match.selected = null; addLog(`You rode ${cardMap.get(instance.cardId)?.name || "a card"}.`); setMessage("Ride complete."); renderMatch();
   }
   function callHuman() {
     const instance = selectedHandCard(); if (!instance || match.phase !== 3) return;
-    const p = match.players.human; const empty = p.rear.indexOf(null); if (empty < 0) return;
+    const p = match.players.human, card = cardMap.get(instance.cardId), empty = p.rear.indexOf(null);
+    if (!/Unit/i.test(card?.type || "") || Number(card.grade || 0) > Number(cardMap.get(p.vanguard?.cardId)?.grade || 0)) { toast("You can only call a Unit whose grade is no higher than your Vanguard."); return; }
+    if (empty < 0) return;
     p.hand = p.hand.filter((x) => x.uid !== instance.uid); p.rear[empty] = { ...instance, rested: false }; match.selected = null;
     addLog(`You called ${cardMap.get(instance.cardId)?.name || "a card"} to the rear-guard circle.`); setMessage("Unit called."); renderMatch();
   }
-  function attackerPower(entry) { return Number(cardMap.get(entry.instance.cardId)?.power || 0); }
+  function attackerPower(entry) { return Number(cardMap.get(entry.instance.cardId)?.power || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0); }
+  function attackerCritical(entry) { return Math.max(1, Number(cardMap.get(entry.instance.cardId)?.critical || 1) + Number(entry.instance.turnCriticalBoost || 0)); }
   function resolveHumanAttack() {
+    if (match?.turn === 1 && match.firstSide === "human") { toast("The player going first cannot attack during their first turn."); return; }
     const field = findFieldCard(match.selected); if (!field || field.side !== "human" || field.instance.rested || field.instance.locked || match.phase !== 4 || !match.players.bot.vanguard) return;
     field.instance.rested = true;
-    const attackPower = attackerPower(field); const defenderPower = Number(cardMap.get(match.players.bot.vanguard.cardId)?.power || 0);
+    const attackPower = attackerPower(field); const defenderPower = attackerPower({ instance: match.players.bot.vanguard });
     if (online.role) {
-      match.pendingAttack = { attacker: cardMap.get(field.instance.cardId)?.name || "unit", power: attackPower, targetPower: defenderPower };
+      match.pendingAttack = { attacker: cardMap.get(field.instance.cardId)?.name || "unit", power: attackPower, targetPower: defenderPower, critical: attackerCritical(field) };
       match.selected = null; addLog(`${match.pendingAttack.attacker} attacked ${match.players.bot.name}'s vanguard.`); setMessage(`${match.players.bot.name} is defending — guard or take the hit.`); renderMatch(); return;
     }
     const candidates = match.players.bot.hand.map((x) => ({ x, shield: Number(cardMap.get(x.cardId)?.shield || 0) })).sort((a, b) => b.shield - a.shield);
     let guarded = false;
     if (candidates[0]?.shield > Math.max(0, attackPower - defenderPower) && Math.random() < 0.28) { match.players.bot.hand = match.players.bot.hand.filter((x) => x.uid !== candidates[0].x.uid); match.players.bot.drop.push(candidates[0].x); guarded = true; }
     addLog(`You attacked the opposing vanguard${guarded ? "; the bot guarded." : "."}`);
-    if (!guarded && attackPower >= defenderPower) dealDamage("bot");
+    if (!guarded && attackPower >= defenderPower) dealDamage("bot", attackerCritical(field));
     match.selected = null; renderMatch();
   }
-  function dealDamage(side) {
-    const p = match.players[side]; const top = p.deck.pop(); if (top) p.damage.push(top);
-    addLog(`${side === "human" ? "You" : "Practice Bot"} took 1 damage (${p.damage.length}/6).`);
-    if (p.damage.length >= 6) { match.ended = true; addLog(side === "human" ? "Practice Bot wins the demo match." : "You win the demo match!"); setMessage(side === "human" ? "Practice Bot wins — start a new match to play again." : "You win! Start a new match to play again."); }
+  function dealDamage(side, amount = 1) {
+    match.pendingDamageQueue ||= [];
+    for (let i = 0; i < amount; i++) match.pendingDamageQueue.push(side);
+    resolveDamageQueue();
+  }
+  function resolveDamageQueue() {
+    while (match?.pendingDamageQueue?.length && !match.ended && !match.pendingTrigger) {
+      const side = match.pendingDamageQueue.shift(), player = match.players[side], top = player.deck.pop();
+      if (!top) { match.ended = true; addLog(`${side === "human" ? "You" : "Practice Bot"} lost because their deck is empty.`); setMessage("Match over — the deck is empty."); break; }
+      if (triggerKind(top) !== "over") { player.damage.push(top); addLog(`${side === "human" ? "You" : "Practice Bot"} took 1 damage (${player.damage.length}/6).`); }
+      beginTriggerResolution(side, top, "damage");
+      checkDamageEnd(side);
+    }
   }
   function humanGuard() {
     if (!match?.pendingAttack) return;
@@ -614,39 +730,44 @@
   }
   function noGuard() {
     if (!match?.pendingAttack) return;
-    const attack = match.pendingAttack; addLog(`${match.players.human.name} did not guard ${attack.attacker} — taking 1 damage.`); dealDamage("human"); match.pendingAttack = null; match.selected = null; renderMatch();
+    const attack = match.pendingAttack; match.pendingAttack = null; match.selected = null;
+    if (Number(attack.power || 0) >= Number(attack.targetPower || 0)) { addLog(`${match.players.human.name} did not guard ${attack.attacker} — taking ${attack.critical || 1} damage.`); dealDamage("human", attack.critical || 1); }
+    else addLog(`${match.players.human.name} did not guard ${attack.attacker}; its power was too low to deal damage.`);
+    renderMatch();
     if (!online.role && !match.ended) setTimeout(nextBotAttack, 450);
   }
   function botTurn() {
     if (!match || match.ended) return;
     match.side = "bot"; match.phase = 0; match.players.bot.vanguard && (match.players.bot.vanguard.rested = false); match.players.bot.rear.forEach((x) => x && (x.rested = false));
-    const card = draw("bot"); if (card) addLog("Practice Bot drew a card.");
+    const skipFirstDraw = match.initialBotTurn && match.firstSide === "bot";
+    const card = skipFirstDraw ? null : draw("bot"); if (card) addLog("Practice Bot drew a card.");
     renderMatch(); setMessage("Practice Bot is taking its turn…");
     botTimer = setTimeout(() => {
       const bot = match.players.bot;
-      const ride = bot.hand.map((x) => ({ x, c: cardMap.get(x.cardId) })).sort((a, b) => (b.c?.grade || 0) - (a.c?.grade || 0))[0];
+      const currentGrade = Number(cardMap.get(bot.vanguard?.cardId)?.grade || 0);
+      const ride = bot.hand.map((x) => ({ x, c: cardMap.get(x.cardId) })).filter((item) => item.c && Number(item.c.grade) >= currentGrade && Number(item.c.grade) <= currentGrade + 1).sort((a, b) => Number(b.c.grade) - Number(a.c.grade))[0];
       if (ride) { bot.hand = bot.hand.filter((x) => x.uid !== ride.x.uid); if (bot.vanguard) bot.soul.push(bot.vanguard); bot.vanguard = { ...ride.x, rested: false }; addLog(`Practice Bot rode ${ride.c.name}.`); }
       let calls = 0;
-      while (bot.rear.includes(null) && calls < 2) { const unit = bot.hand.find((x) => cardMap.get(x.cardId)?.type !== "Trigger"); if (!unit) break; bot.hand = bot.hand.filter((x) => x.uid !== unit.uid); bot.rear[bot.rear.indexOf(null)] = { ...unit, rested: false }; addLog(`Practice Bot called ${cardMap.get(unit.cardId)?.name}.`); calls++; }
+      while (bot.rear.includes(null) && calls < 2) { const unit = bot.hand.find((x) => { const card = cardMap.get(x.cardId); return /Unit/i.test(card?.type || "") && Number(card.grade || 0) <= Number(cardMap.get(bot.vanguard?.cardId)?.grade || 0); }); if (!unit) break; bot.hand = bot.hand.filter((x) => x.uid !== unit.uid); bot.rear[bot.rear.indexOf(null)] = { ...unit, rested: false }; addLog(`Practice Bot called ${cardMap.get(unit.cardId)?.name}.`); calls++; }
       renderMatch(); setMessage("Practice Bot is attacking…");
-      const attackers = [bot.vanguard, ...bot.rear].filter((x) => x && !x.rested);
+      const attackers = (match.initialBotTurn && match.firstSide === "bot" ? [] : [bot.vanguard, ...bot.rear]).filter((x) => x && !x.rested && !x.locked);
       match.botAttacks = attackers.map((x) => x.uid);
       setTimeout(nextBotAttack, 550);
     }, 750);
   }
   function nextBotAttack() {
-    if (!match || match.ended || match.side !== "bot" || match.pendingAttack) return;
+    if (!match || match.ended || match.side !== "bot" || match.pendingAttack || match.pendingTrigger) return;
     const bot = match.players.bot; const uid = match.botAttacks.shift();
     if (!uid) { finishBotTurn(); return; }
     const attacker = [bot.vanguard, ...bot.rear].find((x) => x?.uid === uid); if (!attacker) { nextBotAttack(); return; }
-    attacker.rested = true; const c = cardMap.get(attacker.cardId); const target = match.players.human.vanguard; const targetPower = target ? Number(cardMap.get(target.cardId)?.power || 0) : 0;
-    match.pendingAttack = { attacker: c?.name || "unit", power: Number(c?.power || 0), targetPower };
+    attacker.rested = true; const c = cardMap.get(attacker.cardId); const target = match.players.human.vanguard; const targetPower = target ? attackerPower({ instance: target }) : 0;
+    match.pendingAttack = { attacker: c?.name || "unit", power: attackerPower({ instance: attacker }), targetPower, critical: attackerCritical({ instance: attacker }) };
     match.selected = null; setMessage(`Practice Bot attacks with ${c?.name || "a unit"}. Guard or take the hit.`); renderMatch();
   }
   function finishBotTurn() {
     if (!match || match.ended) return;
     match.players.human.vanguard && (match.players.human.vanguard.rested = false); match.players.human.rear.forEach((x) => x && (x.rested = false));
-    match.side = "human"; match.phase = 0; match.drewThisTurn = false; match.pendingAttack = null; match.selected = null;
+    clearTurnBonuses("bot"); match.side = "human"; match.phase = 0; match.drewThisTurn = false; match.ridePerformed = false; match.pendingAttack = null; match.selected = null;
     if (match.initialBotTurn) match.initialBotTurn = false; else match.turn += 1;
     addLog("Your turn began — advance to Draw to draw a card.");
     setMessage("Your turn — Stand phase."); renderMatch();
@@ -654,20 +775,22 @@
   function endTurn() {
     if (!match || match.side !== "human" || match.pendingAttack || match.ended) return;
     if (online.role) {
-      addLog(`${match.players.human.name} ended their turn.`); match.selected = null;
+      addLog(`${match.players.human.name} ended their turn.`); clearTurnBonuses("human"); match.ridePerformed = false; match.selected = null;
       match.players.human.vanguard && (match.players.human.vanguard.rested = false); match.players.human.rear.forEach((x) => x && (x.rested = false));
       match.side = "bot"; match.phase = 0; match.drewThisTurn = false;
       setMessage(`${match.players.bot.name}'s turn — Stand phase.`); renderMatch(); return;
     }
-    addLog("You ended your turn."); match.selected = null; renderMatch(); botTurn();
+    addLog("You ended your turn."); clearTurnBonuses("human"); match.ridePerformed = false; match.selected = null; renderMatch(); botTurn();
   }
+  function clearTurnBonuses(side) { fieldUnits(side).forEach(({ instance }) => { instance.turnPowerBoost = 0; instance.turnCriticalBoost = 0; }); }
   function advancePhase() {
     if (!match || match.side !== "human" || match.pendingAttack || match.ended) return;
     if (match.phase >= phases.length - 1) { endTurn(); return; }
     match.phase += 1; match.selected = null;
     if (match.phase === 1 && !match.drewThisTurn) {
-      const drawn = draw("human"); match.drewThisTurn = true;
-      addLog(drawn ? `${match.players.human.name} drew a card for the Draw phase.` : `${match.players.human.name} has no cards to draw.`);
+      const skipsFirstDraw = match.turn === 1 && match.firstSide === "human";
+      const drawn = skipsFirstDraw ? null : draw("human"); match.drewThisTurn = true;
+      addLog(skipsFirstDraw ? `${match.players.human.name} skipped the first-turn Draw.` : drawn ? `${match.players.human.name} drew a card for the Draw phase.` : `${match.players.human.name} has no cards to draw.`);
     }
     if (match.phase === 0) {
       const player = match.players.human; [player.vanguard, ...player.rear].forEach((unit) => { if (unit) unit.rested = false; });
@@ -688,21 +811,32 @@
       addLog(`${player.name} returned ${cardMap.get(instance.cardId)?.name || "a card"} to the ${action === "hand-to-top" ? "top" : "bottom"} of the deck.`);
     } else if (action === "damage-check" || action === "drive-check" || action === "trigger-check") {
       const top = player.deck.pop(); if (!top) { toast("Your deck is empty."); return; }
-      if (action === "damage-check") player.damage.push({ ...top, faceDown: false }); else player.hand.push(top);
+      const kind = triggerKind(top), over = kind === "over";
+      if (action === "damage-check") { if (!over) player.damage.push(top); } else if (!over) player.hand.push(top);
       const checkName = action === "damage-check" ? "damage" : action === "trigger-check" ? "trigger" : "drive";
-      addLog(`${player.name} performed a ${checkName} check and revealed ${cardMap.get(top.cardId)?.name || "a card"}. Resolve trigger effects manually.`);
+      addLog(`${player.name} performed a ${checkName} check and revealed ${cardMap.get(top.cardId)?.name || "a card"}.`);
+      beginTriggerResolution("human", top, checkName);
+      checkDamageEnd("human");
+    } else if (action.startsWith("trigger-pick:")) {
+      chooseTriggerTarget(action.slice("trigger-pick:".length)); return;
+    } else if (action === "trigger-skip") {
+      if (match.pendingTrigger?.stage === "heal-target") { match.pendingTrigger.stage = "power-target"; if (!fieldUnits("human").length) finishTriggerResolution(); }
     } else if (action.startsWith("place:")) {
       const zone = action.slice(6);
       if (zone === "vanguard") {
         const instance = selectedHandCard();
         if (!instance || match.phase !== 2) { toast("Select a card during Ride phase to ride it."); return; }
+        const grade = Number(cardMap.get(instance.cardId)?.grade || 0), currentGrade = Number(cardMap.get(player.vanguard?.cardId)?.grade || 0);
+        if (match.ridePerformed || grade < currentGrade || grade > currentGrade + 1) { toast("A normal ride is once per turn and must be the same grade or one grade higher than your Vanguard."); return; }
         player.hand = player.hand.filter((item) => item.uid !== instance.uid); if (player.vanguard) player.soul.push(player.vanguard); player.vanguard = { ...instance, rested: false }; match.selected = null;
+        match.ridePerformed = true;
         addLog(`${player.name} rode ${cardMap.get(instance.cardId)?.name || "a card"} to vanguard.`);
         renderMatch(); return;
       }
       const index = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)].indexOf(zone);
       const instance = selectedHandCard();
       if (!instance || index < 0 || player.rear[index]) { toast("Select a card and choose an empty rear-guard circle."); return; }
+      if (!/Unit/i.test(cardMap.get(instance.cardId)?.type || "") || Number(cardMap.get(instance.cardId)?.grade || 0) > Number(cardMap.get(player.vanguard?.cardId)?.grade || 0)) { toast("You can only call a Unit whose grade is no higher than your Vanguard."); return; }
       player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.rear[index] = { ...instance, rested: false }; match.selected = null;
       addLog(`${player.name} placed ${cardMap.get(instance.cardId)?.name || "a card"} in the ${zone} circle.`);
     } else if (action === "play-order") {
@@ -906,6 +1040,8 @@
     snapshot.players = { human: snapshot.players.bot, bot: snapshot.players.human };
     snapshot.side = flipSide(snapshot.side);
     if (snapshot.revealed?.owner) snapshot.revealed.owner = flipSide(snapshot.revealed.owner);
+    if (snapshot.firstSide) snapshot.firstSide = flipSide(snapshot.firstSide);
+    if (snapshot.pendingTrigger?.side) snapshot.pendingTrigger.side = flipSide(snapshot.pendingTrigger.side);
     if (snapshot.preMatch) {
       snapshot.preMatch.rolls = { human: snapshot.preMatch.rolls.bot, bot: snapshot.preMatch.rolls.human };
       if (snapshot.preMatch.winner) snapshot.preMatch.winner = flipSide(snapshot.preMatch.winner);
@@ -957,7 +1093,9 @@
     const players = match.players;
     match.players = { human: players.bot, bot: players.human };
     match.side = flipSide(match.side);
+    if (match.firstSide) match.firstSide = flipSide(match.firstSide);
     if (match.revealed?.owner) match.revealed.owner = flipSide(match.revealed.owner);
+    if (match.pendingTrigger?.side) match.pendingTrigger.side = flipSide(match.pendingTrigger.side);
     match.selected = message.selected || null;
     online.applyingRemote = true;
     try {
@@ -967,7 +1105,9 @@
     } finally {
       match.players = players;
       match.side = flipSide(match.side);
+      if (match.firstSide) match.firstSide = flipSide(match.firstSide);
       if (match.revealed?.owner) match.revealed.owner = flipSide(match.revealed.owner);
+      if (match.pendingTrigger?.side) match.pendingTrigger.side = flipSide(match.pendingTrigger.side);
       online.applyingRemote = false;
     }
     renderMatch();
@@ -1103,6 +1243,7 @@
   function openMyDeck() { if(!match){toast("Start a match to look through your deck.");return;} const cards=match.players.human.deck.slice().reverse(); $("#deck-view-title").textContent="Your deck · "+cards.length+" cards"; $("#deck-view-help").textContent="Choose any card to add to your hand, add a Unit to Soul, or send it to Drop."; $("#deck-view-list").innerHTML=renderInteractiveCards(cards,"deck-action"); if(!$("#deck-view-dialog").open)$("#deck-view-dialog").showModal(); }
   function openGDeckDialog(kind) {
     if (!match) { toast("Start a match first."); return; }
+    if (kind === "stride" && Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade || 0) < 3) { toast("Stride requires a grade 3 or greater Vanguard under the modeled Premium rules."); return; }
     const isGuard = kind === "g-guard";
     const allCards = match.players.human.gDeck || [];
     const cards = allCards.filter((item) => {
@@ -1127,7 +1268,7 @@
     if (action === "soul-blast") { openSoulDialog(true); return; }
     if (action === "stride" || action === "g-guard") { if(action === "g-guard" && !match?.pendingAttack){toast("Use G-guard while defending an attack.");return;} openGDeckDialog(action); return; }
     if (action === "counter-blast" || action === "counter-charge" || action === "heal-damage") { openDamageDialog(action); return; }
-    if (action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action === "reveal-done") { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.connection.send({type:"action",action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
+    if (action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done") { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.connection.send({type:"action",action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
     if (action === "reveal-top-cards") { if (!match) { toast("Start a match first."); return; } $("#reveal-count-dialog").showModal(); return; }
     if (action === "gift-force" || action === "gift-accel") { openGiftDialog(action === "gift-force" ? "force" : "accel"); return; }
     if (online.role === "guest") {
@@ -1191,6 +1332,8 @@
   $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
   $("#bind-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
   $("#damage-card-list").addEventListener("click",(e)=>{const action=e.target.closest("[data-damage-action]");if(action){$("#damage-dialog").close();performManualAction("damage-action:"+action.dataset.damageAction);}});
+  $("#trigger-prompt-targets").addEventListener("click",(e)=>{const target=e.target.closest("[data-trigger-pick]");if(target)performManualAction("trigger-pick:"+target.dataset.triggerPick);});
+  $("#trigger-prompt-skip").addEventListener("click",()=>performManualAction("trigger-skip"));
   $("#close-soul-dialog").addEventListener("click", () => $("#soul-dialog").close()); $("#soul-blast-cancel").addEventListener("click", () => $("#soul-dialog").close());
   $("#soul-card-list").addEventListener("click", (e) => { const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const zoom=e.target.closest("[data-card-zoom]");if(zoom&&!$("#soul-dialog").dataset.blast){showCardDetails(zoom.dataset.cardZoom);return;}const card=e.target.closest("[data-soul-uid]");if(card&&$("#soul-dialog").dataset.blast)card.classList.toggle("selected"); });
   $("#soul-card-list").addEventListener("change",(e)=>{const select=e.target.closest("[data-soul-field-uid]");if(select?.value)performManualAction("zone-move:soul:field:"+select.dataset.soulFieldUid+":"+select.value);});
