@@ -103,3 +103,10 @@
 .opponent-side .field-row{top:48%;bottom:auto}.opponent-side .rear-row{top:14%;bottom:auto}
 @media(max-width:760px){.opponent-side .field-row{top:48%;bottom:auto}.opponent-side .rear-row{top:14%;bottom:auto}}
 @media(max-width:430px){.opponent-side .field-row{top:48%;bottom:auto}.opponent-side .rear-row{top:14%;bottom:auto}}
+/* Rotate the upper mat as a whole so its top edge (green guardian ring) meets the lower mat's top edge. */
+.mat-opponent{transform:rotate(180deg)}.mat-player{transform:none}
+.opponent-side .field-row,.opponent-side .rear-row{direction:rtl}
+.opponent-line .damage-track{left:auto;right:2%}
+.opponent-line .deck-zone,.opponent-line .drop-zone{left:3%;right:auto}
+.opponent-line .back-card{left:2%;right:auto}
+@media(max-width:760px){.opponent-line .damage-track{left:auto;right:1%}.opponent-line .deck-zone,.opponent-line .drop-zone{left:2%;right:auto}.opponent-line .back-card{left:1%;right:auto}}
