@@ -45,7 +45,7 @@
   let botTimer = null;
   let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, applyingRemote: false, dialogMode: "host" };
   const localDeckStorageKey = "vanguardArenaDecks";
-  const account = { client: null, user: null, syncing: false, recovery: false };
+  const account = { client: null, user: null, syncing: false, recovery: false, profile: null };
 
   function deckStorageKey() { return account.user ? `${localDeckStorageKey}:${account.user.id}` : localDeckStorageKey; }
   function readSavedDecks() {
@@ -68,6 +68,10 @@
     if (account.user) $("#account-email-label").textContent = account.user.email || "Signed-in player";
     $("#account-button").textContent = account.user ? `Account · ${(account.user.email || "Player").split("@")[0]}` : "Account";
     $("#account-import-local").classList.toggle("hidden", !account.user || !localDecksToImport().length);
+    $("#profile-username").value = account.profile?.username || "";
+    $("#profile-display-name").value = account.profile?.display_name || "";
+    $("#profile-bio").value = account.profile?.bio || "";
+    if (account.profile?.username) $("#account-button").textContent = `@${account.profile.username}`;
     if (config?.url && config?.publishableKey && !window.supabase?.createClient) {
       $("#account-setup-needed").classList.remove("hidden");
       $("#account-setup-needed").innerHTML = "The account service library did not load. Check your internet connection and reload the page.";
@@ -112,6 +116,34 @@
       accountMessage("You are signed in, but deck sync failed. Check the database setup guide.", true);
     } finally { account.syncing = false; }
   }
+  async function loadPlayerProfile() {
+    if (!account.user || !account.client) return;
+    const { data, error } = await account.client.from("player_profiles").select("username,display_name,bio").eq("user_id", account.user.id).maybeSingle();
+    if (error) { $("#profile-status").textContent = "Profile storage is not set up yet. Run the updated SQL setup script."; return; }
+    account.profile = data || null;
+    if (!data) {
+      const metadata = account.user.user_metadata || {};
+      const fallback = (account.user.email || "player").split("@")[0].replace(/[^a-zA-Z0-9_]/g, "").slice(0, 20).toLowerCase();
+      account.profile = { username: metadata.username || fallback, display_name: metadata.display_name || localStorage.getItem("vanguardArenaPlayerName") || (account.user.email || "Player").split("@")[0], bio: "" };
+      $("#profile-status").textContent = "Choose a unique username and save your profile.";
+    } else $("#profile-status").textContent = "Profile loaded. Usernames and bios are visible to site visitors.";
+    refreshAccountUI();
+  }
+  async function savePlayerProfile() {
+    if (!account.user || !account.client) return;
+    const username = $("#profile-username").value.trim().toLowerCase();
+    const displayName = $("#profile-display-name").value.trim();
+    const bio = $("#profile-bio").value.trim();
+    if (!/^[a-z0-9_]{3,20}$/.test(username)) { $("#profile-status").textContent = "Username must be 3–20 characters: lowercase letters, numbers or underscores."; return; }
+    if (!displayName || displayName.length > 32 || bio.length > 160) { $("#profile-status").textContent = "Enter a display name up to 32 characters; bio can be up to 160."; return; }
+    $("#profile-status").textContent = "Saving profile…";
+    const profile = { user_id: account.user.id, username, display_name: displayName, bio, updated_at: new Date().toISOString() };
+    const { error } = await account.client.from("player_profiles").upsert(profile, { onConflict: "user_id" });
+    if (error) { $("#profile-status").textContent = error.code === "23505" ? "That username is already taken. Choose another one." : `Could not save profile: ${error.message}`; return; }
+    account.profile = { username, display_name: displayName, bio };
+    localStorage.setItem("vanguardArenaPlayerName", displayName);
+    refreshAccountUI(); $("#profile-status").textContent = `Saved. Friends will see ${displayName} (@${username}) in matches.`;
+  }
   function openAccountDialog() { refreshAccountUI(); $("#account-dialog").showModal(); }
   function initializeAccounts() {
     const config = window.VANGUARD_CLOUD_CONFIG;
@@ -119,16 +151,17 @@
     try {
       account.client = window.supabase.createClient(config.url, config.publishableKey);
       account.client.auth.onAuthStateChange((event, session) => {
-        account.user = session?.user || null; account.recovery = event === "PASSWORD_RECOVERY";
+        const previousUserId = account.user?.id;
+        account.user = session?.user || null; if (previousUserId !== account.user?.id) account.profile = null; account.recovery = event === "PASSWORD_RECOVERY";
         refreshAccountUI(); updateDeckCount(); renderSavedDecks();
-        if (account.user && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) setTimeout(() => void syncCloudDecks(), 0);
+        if (account.user && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) setTimeout(() => { void syncCloudDecks(); void loadPlayerProfile(); }, 0);
         if (account.recovery) { accountMessage("Enter a new password, then choose Save new password."); setTimeout(openAccountDialog, 0); }
         if (!account.user) $("#account-sync-status").textContent = "Your account is signed out. Local decks remain in this browser.";
       });
       account.client.auth.getSession().then(({ data, error }) => {
         if (error) throw error;
         account.user = data.session?.user || null; refreshAccountUI(); updateDeckCount(); renderSavedDecks();
-        if (account.user) void syncCloudDecks();
+        if (account.user) { void syncCloudDecks(); void loadPlayerProfile(); }
       }).catch((error) => accountMessage(`Couldn't restore your account session: ${error.message}`, true));
     } catch (error) { accountMessage(`Account setup error: ${error.message}`, true); }
     refreshAccountUI();
@@ -715,6 +748,7 @@
   $("#join-online").addEventListener("click", () => openOnlineDialog("join")); $("#join-online-empty").addEventListener("click", () => openOnlineDialog("join"));
   $("#account-button").addEventListener("click", openAccountDialog); $("#close-account-dialog").addEventListener("click", () => $("#account-dialog").close());
   $("#account-signup").addEventListener("click", accountSignUp); $("#account-signin").addEventListener("click", accountSignIn); $("#account-signout").addEventListener("click", accountSignOut); $("#account-reset").addEventListener("click", resetAccountPassword); $("#account-update-password").addEventListener("click", updateAccountPassword); $("#account-import-local").addEventListener("click", importLocalDecks);
+  $("#profile-save").addEventListener("click", savePlayerProfile);
   $("#online-confirm").addEventListener("click", () => online.dialogMode === "host" ? beginHosting() : beginJoining());
   $("#online-cancel").addEventListener("click", () => $("#online-dialog").close()); $("#close-online-dialog").addEventListener("click", () => $("#online-dialog").close());
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });

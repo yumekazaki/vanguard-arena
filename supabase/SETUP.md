@@ -1,14 +1,14 @@
-# Enable player accounts and cloud decks
+# Enable player accounts, profiles, and cloud decks
 
-Vanguard Arena is a static GitHub Pages site, so it needs a separate service for accounts and shared deck storage. Supabase's free plan is enough for a small friend group, but it has quotas and can pause a project after a week of inactivity. The card images stay on GitHub Pages; only deck names, card IDs/counts, and account IDs are stored in Supabase.
+Vanguard Arena is a static GitHub Pages site, so it needs a separate service for accounts and shared deck storage. Supabase's free plan is enough for a small friend group, but it has quotas and can pause a project after a week of inactivity. The card images stay on GitHub Pages; deck names, card IDs/counts, account IDs, and profile names are stored in Supabase.
 
 ## 1. Create a Supabase project
 
 Create a free project in the [Supabase dashboard](https://supabase.com/dashboard). Keep its database password private; Vanguard Arena does not need it.
 
-## 2. Create the private deck table
+## 2. Create the player data tables
 
-In the Supabase dashboard, open **SQL Editor**, create a query, paste all of [`player-decks.sql`](player-decks.sql), and run it. The table uses Row Level Security so each signed-in player can only read or change their own saved decks. Do not disable RLS.
+In the Supabase dashboard, open **SQL Editor**, create a query, paste all of [`player-decks.sql`](player-decks.sql), and run it. This creates a private deck table and a public player profile table. Players can only change their own profile and decks; usernames and bios can be read by site visitors. Do not disable Row Level Security.
 
 ## 3. Add the public client settings
 
@@ -41,6 +41,6 @@ Leave email confirmation enabled. Players create an account with their email and
 
 ## 5. Publish the configuration
 
-Save `assets/cloud-config.js`, commit the change, and push it to the existing `main` branch. After GitHub Pages finishes deploying, the **Account** button will support account creation, sign-in, password reset, and per-account cloud deck sync. Existing browser-only decks stay local until **Import browser-saved decks** is pressed while signed in.
+Save `assets/cloud-config.js`, commit the change, and push it to the existing `main` branch. After GitHub Pages finishes deploying, the **Account** button will support account creation, sign-in, password reset, player profiles, and per-account cloud deck sync. Signed-in players can save a unique username, display name, and short public bio. Existing browser-only decks stay local until **Import browser-saved decks** is pressed while signed in.
 
 Supabase Free currently includes 50,000 monthly active users, a 500 MB database, and 5 GB egress; free projects pause after one week of inactivity. Limits can change, so check [current pricing](https://supabase.com/pricing) before relying on it for a larger public community.
