@@ -8,6 +8,7 @@ A browser project with local practice and two-player online rooms. Saved decks s
 - Local practice match with simplified demonstration rules.
 - Two-player peer-to-peer rooms: host creates an invite link, friend opens it, and game actions synchronize while both pages stay open.
 - Deck builder with local save, open, duplicate, delete, and JSON import/export.
+- Tap the expand icon on cards in the builder, saved deck previews, deck list, or match field/hand to open a large card image and its details.
 - Card catalog with search by name or database number and filters for grade and clan.
 - 10,476 catalog records matched to the supplied card art by numeric image ID.
 
