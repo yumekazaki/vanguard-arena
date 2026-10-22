@@ -28,6 +28,7 @@
   const importedCatalog = Array.isArray(window.CARD_CATALOG) ? window.CARD_CATALOG : [];
   const cardList = importedCatalog.length ? [...importedCatalog, ...userCards] : [...sampleCards, ...userCards];
   const cardMap = new Map(cardList.map((c) => [c.id, c]));
+  cardMap.set("token-quick-shield", { id: "token-quick-shield", name: "Quick Shield", grade: 0, nation: "Token", power: 0, shield: 5000, type: "Quick Shield Token", text: "Placeholder token for a Quick Shield. Resolve its shield value manually.", color: "#a39bff", glyph: "◇", source: "Vanguard Arena token" });
   const artIds = Array.isArray(window.CARD_ART_IDS) ? window.CARD_ART_IDS : [];
   const artPageSize = 60;
   let artPage = 0;
@@ -38,12 +39,12 @@
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => [...document.querySelectorAll(q)];
   let view = "play";
-  let builder = { id: null, name: "Untitled deck", cards: {} };
+  let builder = { id: null, name: "Untitled deck", cards: {}, starterCardId: "" };
   let selectedCard = null;
   let match = null;
   let selectedZone = null;
   let botTimer = null;
-  let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, applyingRemote: false, dialogMode: "host" };
+  let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, dialogMode: "host" };
   const localDeckStorageKey = "vanguardArenaDecks";
   const account = { client: null, user: null, syncing: false, recovery: false, profile: null };
 
@@ -78,7 +79,7 @@
     }
   }
   function localDecksToImport() { try { return JSON.parse(localStorage.getItem(localDeckStorageKey) || "[]"); } catch { return []; } }
-  function cloudDeckRows(decks, userId = account.user?.id) { return decks.map((deck) => ({ user_id: userId, deck_id: String(deck.id), name: String(deck.name || "Untitled deck"), cards: deck.cards && typeof deck.cards === "object" ? deck.cards : {}, updated_at: deck.updatedAt || new Date().toISOString() })); }
+  function cloudDeckRows(decks, userId = account.user?.id) { return decks.map((deck) => ({ user_id: userId, deck_id: String(deck.id), name: String(deck.name || "Untitled deck"), cards: { ...(deck.cards && typeof deck.cards === "object" ? deck.cards : {}), __starterCardId: deck.starterCardId || null }, updated_at: deck.updatedAt || new Date().toISOString() })); }
   async function persistCloudDecks(decks) {
     if (!account.client || !account.user || !decks.length) return;
     $("#account-sync-status").textContent = "Saving decks to your account…";
@@ -100,7 +101,7 @@
       const { data, error } = await account.client.from("player_decks").select("deck_id,name,cards,updated_at").eq("user_id", userId).order("updated_at", { ascending: false });
       if (error) throw error;
       const decks = new Map();
-      [...readSavedDecks(), ...(data || []).map((row) => ({ id: row.deck_id, name: row.name, cards: row.cards || {}, updatedAt: row.updated_at }))].forEach((deck) => {
+      [...readSavedDecks(), ...(data || []).map((row) => { const stored = row.cards || {}; const { __starterCardId, ...cards } = stored; return { id: row.deck_id, name: row.name, cards, starterCardId: __starterCardId || "", updatedAt: row.updated_at }; })].forEach((deck) => {
         const current = decks.get(String(deck.id));
         if (!current || Date.parse(deck.updatedAt || 0) > Date.parse(current.updatedAt || 0)) decks.set(String(deck.id), deck);
       });
@@ -222,12 +223,13 @@
     if (next === "cards") renderLibrary();
     window.location.hash = next;
   }
-  function emptyDeck() { builder = { id: null, name: "Untitled deck", cards: {} }; renderBuilder(); }
+  function emptyDeck() { builder = { id: null, name: "Untitled deck", cards: {}, starterCardId: "" }; renderBuilder(); }
   function defaultDeck() {
     const cards = {};
     const pool = cardList.filter((c) => c.type === "Unit" || c.type === "Trigger");
     for (let i = 0; i < 50; i++) { const card = pool[(i * 7 + Math.floor(i / pool.length)) % pool.length]; cards[card.id] = (cards[card.id] || 0) + 1; }
-    return { id: crypto.randomUUID?.() || String(Date.now()), name: "Demo Practice Deck", cards };
+    const starterCardId = Object.keys(cards).find((id) => Number(cardMap.get(id)?.grade) === 0 && /Unit/i.test(cardMap.get(id)?.type || "")) || "";
+    return { id: crypto.randomUUID?.() || String(Date.now()), name: "Demo Practice Deck", cards, starterCardId };
   }
   function deckCount(deck) { return Object.values(deck.cards || {}).reduce((a, b) => a + Number(b || 0), 0); }
   function deckSummary(deck) {
@@ -246,6 +248,11 @@
     if (!total) { validation.className = "deck-validation"; validation.textContent = "Add cards from the library to start building."; }
     else if (total !== 50) { validation.className = "deck-validation invalid"; validation.textContent = `${total}/50 main-deck cards. Premium format legality is not verified.`; }
     else { validation.className = "deck-validation valid"; validation.textContent = "50 main-deck cards · Premium format legality is not verified."; }
+    const starterOptions = Object.entries(builder.cards || {}).filter(([id, qty]) => qty > 0 && Number(cardMap.get(id)?.grade) === 0 && /Unit/i.test(cardMap.get(id)?.type || "")).map(([id]) => cardMap.get(id)).filter(Boolean).sort((a, b) => a.name.localeCompare(b.name));
+    if (builder.starterCardId && !starterOptions.some((card) => card.id === builder.starterCardId)) builder.starterCardId = "";
+    $("#starter-vanguard").innerHTML = `<option value="">Choose a Grade 0 unit…</option>${starterOptions.map((card) => `<option value="${escapeHtml(card.id)}">${escapeHtml(card.name)}</option>`).join("")}`;
+    $("#starter-vanguard").value = builder.starterCardId || "";
+    $("#starter-vanguard-help").textContent = builder.starterCardId ? `${cardMap.get(builder.starterCardId)?.name || "Selected unit"} will begin on your Vanguard circle.` : "Choose a Grade 0 unit from your deck. It starts on your Vanguard circle.";
     const rows = Object.entries(builder.cards || {}).filter(([, qty]) => qty > 0).map(([id, qty]) => ({ card: cardMap.get(id), qty })).filter((x) => x.card).sort((a, b) => a.card.grade - b.card.grade || a.card.name.localeCompare(b.card.name));
     $("#deck-list").innerHTML = rows.length ? rows.map(({ card, qty }) => `<div class="deck-row"><button class="deck-row-image" type="button" data-card-zoom="${escapeHtml(card.id)}" aria-label="Zoom ${escapeHtml(card.name)}" title="Zoom card">${cardImage(card)}</button><span class="row-grade">${card.grade === null || card.grade === undefined ? "G?" : `G${escapeHtml(card.grade)}`}</span><span class="row-title">${escapeHtml(card.name)}<small>${escapeHtml(card.clan || card.nation || "Clan not listed")} · ${escapeHtml(card.type)}${card.trigger ? ` · ${escapeHtml(card.trigger)}` : ""}</small></span><span class="qty-controls"><button data-qty="-1" data-id="${escapeHtml(card.id)}">−</button>${qty}<button data-qty="1" data-id="${escapeHtml(card.id)}">+</button><button class="remove-row" data-remove="${escapeHtml(card.id)}" title="Remove">×</button></span></div>`).join("") : `<div class="empty-saved">Your deck is empty. Choose cards from the library.</div>`;
     renderBuilderCards();
@@ -294,13 +301,13 @@
   function saveDeck() {
     const name = $("#deck-name").value.trim() || "Untitled deck"; const existing = readSavedDecks();
     const id = builder.id || (crypto.randomUUID?.() || String(Date.now()));
-    const saved = { id, name, cards: { ...builder.cards }, updatedAt: new Date().toISOString() };
+    const saved = { id, name, cards: { ...builder.cards }, starterCardId: builder.starterCardId || "", updatedAt: new Date().toISOString() };
     const index = existing.findIndex((d) => d.id === id);
     if (index >= 0) existing[index] = saved; else existing.unshift(saved);
     builder = { ...saved }; writeSavedDecks(existing); renderBuilder(); renderSavedDecks();
     toast("Deck saved in this browser");
   }
-  function loadDeck(deck) { builder = { id: deck.id, name: deck.name, cards: { ...deck.cards } }; renderBuilder(); showView("decks"); toast(`Loaded “${deck.name}” into the builder`); }
+  function loadDeck(deck) { builder = { id: deck.id, name: deck.name, cards: { ...deck.cards }, starterCardId: deck.starterCardId || "" }; renderBuilder(); showView("decks"); toast(`Loaded “${deck.name}” into the builder`); }
   function renderSavedDecks() {
     const decks = readSavedDecks(); $("#saved-deck-subtitle").textContent = decks.length ? `${decks.length} deck${decks.length === 1 ? "" : "s"}` : "No decks yet";
     $("#saved-decks").innerHTML = decks.length ? decks.map((d) => { const s = deckSummary(d); const preview = Object.keys(d.cards || {}).slice(0, 5).map((id) => cardMap.get(id)).filter(Boolean); return `<article class="saved-deck-card"><h3>${escapeHtml(d.name)}</h3><div class="saved-deck-meta">${deckCount(d)} cards · G${s.counts.join(" / ")} · ${escapeHtml(new Date(d.updatedAt || Date.now()).toLocaleDateString())}</div><div class="saved-deck-preview">${preview.map((c) => `<button class="saved-deck-preview-card" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom ${escapeHtml(c.name)}">${c.image ? `<img src="${escapeHtml(c.image)}" alt="" onerror="this.remove()"/>` : escapeHtml(c.glyph)}</button>`).join("")}</div><div class="saved-deck-actions"><button class="button button-primary" data-load-deck="${escapeHtml(d.id)}">Open</button><button class="button" data-duplicate-deck="${escapeHtml(d.id)}">Duplicate</button><button class="button" data-export-saved="${escapeHtml(d.id)}">Export</button><button class="button" data-delete-deck="${escapeHtml(d.id)}" title="Delete">×</button></div></article>`; }).join("") : `<div class="empty-saved">Saved decks appear here. Build a deck and choose Save deck.</div>`;
@@ -349,8 +356,12 @@
   function makePlayer(deck, name, human = false) {
     const allCards = cardInstances(deck);
     const gDeck = allCards.filter((instance) => /G Unit/i.test(cardMap.get(instance.cardId)?.type || ""));
-    const pile = shuffle(allCards.filter((instance) => !gDeck.includes(instance)));
-    return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], vanguard: null, rear: [null, null], orders: [], extra: [], gDeck: shuffle(gDeck), gZone: [], quickShields: 0, gifts: 0, human };
+    const pile = allCards.filter((instance) => !gDeck.includes(instance));
+    const starterId = deck.starterCardId || pile.find((instance) => Number(cardMap.get(instance.cardId)?.grade) === 0 && /Unit/i.test(cardMap.get(instance.cardId)?.type || ""))?.cardId;
+    const starterIndex = pile.findIndex((instance) => instance.cardId === starterId);
+    const vanguard = starterIndex >= 0 ? { ...pile.splice(starterIndex, 1)[0], rested: false } : null;
+    shuffle(pile);
+    return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], vanguard, rear: [null, null, null, null, null], accelZones: 0, giftZones: [], orders: [], extra: [], gDeck: shuffle(gDeck), gZone: [], quickShields: 0, gifts: 0, human };
   }
   function startMatch(deck = null) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
@@ -377,19 +388,30 @@
     $("#phase-list").innerHTML = phases.map((p, i) => `<div class="phase-item${i === match.phase ? " active" : ""}${i < match.phase ? " past" : ""}"><span class="phase-bullet">${i < match.phase ? "✓" : i + 1}</span>${p} phase</div>`).join("");
     $$(".phase-segment").forEach((el, i) => { el.classList.toggle("done", i < match.phase); el.classList.toggle("current", i === match.phase); });
     $("#human-deck-count").textContent = you.deck.length; $("#bot-deck-count").textContent = bot.deck.length; $("#human-drop-count").textContent = you.drop.length;
+    $("#soul-count").textContent = String(you.soul.length);
     $("#human-gdeck-count").textContent = you.gDeck?.length || 0; $("#bot-gdeck-count").textContent = bot.gDeck?.length || 0;
     $("#human-order-zone").innerHTML = renderOrderCards(you.orders, "human"); $("#bot-order-zone").innerHTML = renderOrderCards(bot.orders, "bot");
     $("#human-gzone").innerHTML = renderGZone(you); $("#bot-gzone").innerHTML = renderGZone(bot);
     $("#gift-count").textContent = String(you.gifts || 0);
     $(".human-line .player-title small").textContent = `YOUR SIDE · G ${you.gZone?.length || 0} · QUICK SHIELD ${you.quickShields || 0}`;
     $(".opponent-line .player-title small").textContent = `${online.role ? "OPPONENT" : "DEMO DECK"} · G ${bot.gZone?.length || 0} · QUICK SHIELD ${bot.quickShields || 0}`;
-    $("#human-damage").innerHTML = Array.from({ length: 6 }, (_, i) => `<span class="damage-heart${i < you.damage.length ? " filled" : ""}"></span>`).join("");
-    $("#bot-damage").innerHTML = Array.from({ length: 6 }, (_, i) => `<span class="damage-heart${i < bot.damage.length ? " filled" : ""}"></span>`).join("");
+    $("#human-damage").innerHTML = renderDamageCards(you);
+    $("#bot-damage").innerHTML = renderDamageCards(bot);
     $("#bot-hand-count").textContent = `${bot.hand.length} CARDS`;
     $("#bot-hand").innerHTML = Array.from({ length: Math.min(8, bot.hand.length) }, () => `<span class="mini-back"></span>`).join("");
     renderZone("human", "vanguard", you.vanguard); renderZone("bot", "vanguard", bot.vanguard);
-    renderZone("human", "rear-left", you.rear[0]); renderZone("human", "rear-right", you.rear[1]);
-    renderZone("bot", "rear-left", bot.rear[0]); renderZone("bot", "rear-right", bot.rear[1]);
+    const standardRearZones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right"];
+    ["human", "bot"].forEach((side) => {
+      const player = match.players[side]; player.accelZones = Math.max(0, Number(player.accelZones) || 0);
+      while (player.rear.length < standardRearZones.length + player.accelZones) player.rear.push(null);
+      const zoneIds = [...standardRearZones, ...Array.from({ length: player.accelZones }, (_, i) => `accel-${i + 1}`)];
+      zoneIds.forEach((zone, index) => {
+        if (zone.startsWith("accel-") && !$(`.field-zone[data-side="${side}"][data-zone="${zone}"]`)) {
+          const row = $(`#${side}-accel-row`); if (row) row.insertAdjacentHTML("beforeend", `<div class="field-zone accel-zone" data-side="${side}" data-zone="${zone}"><span>ACCEL CIRCLE</span></div>`);
+        }
+        renderZone(side, zone, player.rear[index]);
+      });
+    });
     $("#soul-pips").innerHTML = you.soul.slice(0, 7).map(() => `<span class="soul-pip"></span>`).join("");
     $("#hand-count").textContent = `${you.hand.length} card${you.hand.length === 1 ? "" : "s"}`;
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
@@ -399,11 +421,21 @@
   function renderZone(side, zone, instance) {
     const el = $(`.field-zone[data-side="${side}"][data-zone="${zone}"]`); if (!el) return;
     el.innerHTML = `<span>${zone === "vanguard" ? "VANGUARD" : "REAR-GUARD"}</span>`;
+    const markers = (match.players[side].giftZones || []).filter((gift) => gift.zone === zone);
+    if (markers.length) { const marker = document.createElement("b"); marker.className = "gift-zone-marker"; marker.textContent = markers.map((gift) => gift.type).join(" · "); el.appendChild(marker); }
     if (!instance) return;
     const c = cardMap.get(instance.cardId); if (!c) return;
-    const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; field.innerHTML = `<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade}`}</span><span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${Math.round((Number(c.power) + Number(instance.powerBoost || 0)) / 1000)}k</b><span>${escapeHtml(c.trigger || "UNIT")}</span></span>`;
+    const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade}`}</span><span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${Math.round((Number(c.power) + Number(instance.powerBoost || 0)) / 1000)}k</b><span>${escapeHtml(c.trigger || "UNIT")}</span></span>`;
     if (c.image) { field.style.backgroundImage = `linear-gradient(#1118,#111c),url("${String(c.image).replace(/["\\]/g, "")}")`; field.style.backgroundSize = "cover"; }
     el.appendChild(field);
+  }
+  function renderDamageCards(player) {
+    const cards = (player.damage || []).map((instance) => {
+      if (instance.faceDown) return `<span class="damage-card face-down" title="Face-down damage">V</span>`;
+      const card = cardMap.get(instance.cardId); if (!card) return `<span class="damage-card">?</span>`;
+      return `<button class="damage-card" type="button" data-card-zoom="${escapeHtml(card.id)}" title="${escapeHtml(card.name)} · click to zoom">${card.image ? `<img src="${escapeHtml(card.image)}" alt=""/>` : `<span>${escapeHtml(card.name)}</span>`}</button>`;
+    }).join("");
+    return `${cards}<span class="damage-total" aria-label="${player.damage.length} damage">${player.damage.length}/6</span>`;
   }
   function renderOrderCards(orders = [], side) {
     return (orders || []).map((instance) => { const c = cardMap.get(instance.cardId); return c ? `<span class="zone-card-wrap"><button class="zone-card" data-order-uid="${escapeHtml(instance.uid)}" data-side="${side}" title="Move ${escapeHtml(c.name)} to drop">${escapeHtml(c.name)}</button><button class="zone-zoom" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}">⤢</button></span>` : ""; }).join("") || `<span class="zone-empty">No orders</span>`;
@@ -441,7 +473,7 @@
   }
   function findFieldCard(uid) {
     if (!uid || !match) return null;
-    for (const side of ["human", "bot"]) { const p = match.players[side]; if (p.vanguard?.uid === uid) return { side, zone: "vanguard", instance: p.vanguard }; const i = p.rear.findIndex((x) => x?.uid === uid); if (i >= 0) return { side, zone: i === 0 ? "rear-left" : "rear-right", index: i, instance: p.rear[i] }; }
+    for (const side of ["human", "bot"]) { const p = match.players[side]; if (p.vanguard?.uid === uid) return { side, zone: "vanguard", instance: p.vanguard }; const i = p.rear.findIndex((x) => x?.uid === uid); if (i >= 0) return { side, zone: ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: p.accelZones || 0 }, (_, n) => `accel-${n + 1}`)][i], index: i, instance: p.rear[i] }; }
     return null;
   }
   function selectedHandCard() { return match?.players.human.hand.find((x) => x.uid === match.selected); }
@@ -561,7 +593,7 @@
     const player = match.players.human, card = selectedHandCard();
     if (action === "damage-check" || action === "drive-check" || action === "trigger-check") {
       const top = player.deck.pop(); if (!top) { toast("Your deck is empty."); return; }
-      (action === "damage-check" ? player.damage : player.hand).push(top);
+      if (action === "damage-check") player.damage.push({ ...top, faceDown: false }); else player.hand.push(top);
       const checkName = action === "damage-check" ? "damage" : action === "trigger-check" ? "trigger" : "drive";
       addLog(`${player.name} performed a ${checkName} check and revealed ${cardMap.get(top.cardId)?.name || "a card"}. Resolve trigger effects manually.`);
     } else if (action.startsWith("place:")) {
@@ -573,7 +605,7 @@
         addLog(`${player.name} rode ${cardMap.get(instance.cardId)?.name || "a card"} to vanguard.`);
         renderMatch(); return;
       }
-      const index = zone === "rear-right" ? 1 : zone === "rear-left" ? 0 : -1;
+      const index = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)].indexOf(zone);
       const instance = selectedHandCard();
       if (!instance || index < 0 || player.rear[index]) { toast("Select a card and choose an empty rear-guard circle."); return; }
       player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.rear[index] = { ...instance, rested: false }; match.selected = null;
@@ -585,7 +617,13 @@
       addLog(`${player.name} played ${cardMap.get(instance.cardId)?.name || "an Order"} to the Order zone.`);
     } else if (action === "counter-blast") {
       if (!player.damage.length) { toast("There are no face-up damage cards to Counter-Blast."); return; }
-      player.drop.push(player.damage.shift()); addLog(`${player.name} Counter-Blasted 1 damage.`);
+      const damage = player.damage.find((instance) => !instance.faceDown); if (!damage) { toast("There are no face-up damage cards to Counter-Blast."); return; }
+      damage.faceDown = true; addLog(`${player.name} Counter-Blasted 1 damage.`);
+    } else if (action.startsWith("soul-blast:")) {
+      const wanted = new Set(action.slice("soul-blast:".length).split(",").filter(Boolean));
+      const blasted = player.soul.filter((instance) => wanted.has(instance.uid));
+      if (!blasted.length) { toast("Select at least one card in your soul."); return; }
+      player.soul = player.soul.filter((instance) => !wanted.has(instance.uid)); player.drop.push(...blasted); addLog(`${player.name} Soul-Blasted ${blasted.length} card${blasted.length === 1 ? "" : "s"} to Drop.`);
     } else if (action === "soul-charge") {
       const top = player.deck.pop(); if (!top) { toast("Your deck is empty."); return; }
       player.soul.push(top); addLog(`${player.name} Soul-Charged ${cardMap.get(top.cardId)?.name || "a card"}.`);
@@ -595,8 +633,13 @@
     } else if (action === "power") {
       const field = findFieldCard(match.selected); if (!field || field.side !== "human") { toast("Select one of your units first."); return; }
       field.instance.powerBoost = Number(field.instance.powerBoost || 0) + 5000; addLog(`${player.name} gave ${cardMap.get(field.instance.cardId)?.name || "a unit"} +5000 power.`);
-    } else if (action === "gift") {
-      player.gifts = (player.gifts || 0) + 1; addLog(`${player.name} added an Imaginary Gift marker (${player.gifts}).`);
+    } else if (action.startsWith("gift-force:")) {
+      const [, type, zone] = action.split(":");
+      const zones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
+      if (!zones.includes(zone)) { toast("Choose a circle for the Force marker."); return; }
+      player.giftZones.push({ type, zone }); player.gifts = (player.gifts || 0) + 1; addLog(`${player.name} placed ${type} on ${zone}.`);
+    } else if (action.startsWith("gift-accel:")) {
+      const type = action.slice("gift-accel:".length); player.accelZones = (player.accelZones || 0) + 1; player.rear.push(null); player.gifts = (player.gifts || 0) + 1; addLog(`${player.name} created an ${type} circle.`);
     } else if (action === "shuffle") {
       shuffle(player.deck); addLog(`${player.name} shuffled their deck.`);
     } else if (action === "stride") {
@@ -632,13 +675,13 @@
       player.hand = player.hand.filter((item) => item.uid !== card.uid); player.damage.push(card); match.selected = null;
       addLog(`${player.name} moved ${cardMap.get(card.cardId)?.name || "a card"} from hand to damage.`);
     } else if (action === "quick-shield") {
-      player.quickShields = (player.quickShields || 0) + 1; addLog(`${player.name} created a Quick Shield token (${player.quickShields}). Move it to drop when used.`);
+      player.quickShields = (player.quickShields || 0) + 1; player.hand.push({ uid: `quick-shield-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, cardId: "token-quick-shield", isToken: true }); addLog(`${player.name} added a Quick Shield placeholder to hand.`);
     }
     renderMatch();
   }
   function flipSide(side) { return side === "human" ? "bot" : side === "bot" ? "human" : side; }
   function onlineDeck() {
-    if (builder.cards && deckCount(builder)) return { name: builder.name || "My Deck", cards: { ...builder.cards } };
+    if (builder.cards && deckCount(builder)) return { name: builder.name || "My Deck", cards: { ...builder.cards }, starterCardId: builder.starterCardId || "" };
     return defaultDeck();
   }
   function setOnlineError(message = "") { $("#online-error").textContent = message; }
@@ -648,11 +691,19 @@
     $("#online-dialog-title").textContent = mode === "host" ? "Host an online match" : "Join an online match";
     $("#online-dialog-copy").textContent = mode === "host" ? "Create a link and send it to your friend. Keep this page open while you play." : "Paste the invite link or room code your friend sent you.";
     $("#online-confirm").textContent = mode === "host" ? "Create invite" : "Join match";
-    $("#join-code-wrap").classList.toggle("hidden", mode !== "join");
+    $("#join-code-wrap").classList.toggle("hidden", mode !== "join"); $("#host-room-fields").classList.toggle("hidden", mode !== "host");
     $("#online-name").value = localStorage.getItem("vanguardArenaPlayerName") || "Player";
     $("#join-code").value = invite;
+    if (mode === "join") void loadOpenRooms();
     setOnlineError("");
     $("#online-dialog").showModal();
+  }
+  async function loadOpenRooms() {
+    const list = $("#room-list"); list.innerHTML = '<option value="">Loading rooms…</option>';
+    if (!account.client) { list.innerHTML = '<option value="">Room directory unavailable</option>'; return; }
+    const { data, error } = await account.client.rpc("list_match_rooms");
+    if (error) { list.innerHTML = '<option value="">Room directory needs setup</option>'; return; }
+    const rooms = data || []; list.innerHTML = rooms.length ? '<option value="">Choose an open room…</option>' + rooms.map((room) => `<option value="${escapeHtml(room.room_code)}">${escapeHtml(room.room_name)} · ${escapeHtml(room.host_name)} · ${escapeHtml(room.room_code)}</option>`).join("") : '<option value="">No open rooms found</option>';
   }
   function onlinePeerError(error) {
     const message = error?.type === "peer-unavailable" ? "That invite is no longer active. Ask your friend to create a new one." : `Online connection error: ${error?.message || error?.type || "please try again"}`;
@@ -666,7 +717,7 @@
   function sanitizedDeck(deck) {
     const cards = {};
     Object.entries(deck?.cards || {}).forEach(([id, qty]) => { if (cardMap.has(id)) cards[id] = Math.max(0, Math.min(4, Number(qty) || 0)); });
-    return { name: String(deck?.name || "Online Deck").slice(0, 40), cards };
+    return { name: String(deck?.name || "Online Deck").slice(0, 40), cards, starterCardId: cardMap.has(deck?.starterCardId) ? deck.starterCardId : "" };
   }
   function revealLocalMatch() { if (!match) return; $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden"); showView("play"); }
   function snapshotForGuest() {
@@ -741,13 +792,19 @@
   }
   function beginHosting() {
     if (!window.Peer) { setOnlineError("The online connection library did not load. Check your internet connection and reload."); return; }
+    if (!account.client) { setOnlineError("Room discovery needs the configured Supabase connection."); return; }
+    if (!$("#room-password").value.trim()) { setOnlineError("Set a room password before creating the room."); return; }
     online.localName = String($("#online-name").value.trim() || "Player").slice(0, 24); localStorage.setItem("vanguardArenaPlayerName", online.localName);
     online.role = "host"; setConnectionPill("CONNECTING"); online.peer = new Peer();
-    online.peer.on("open", (id) => {
-      online.roomId = id; $("#online-dialog").close(); startMatch(onlineDeck());
+    online.peer.on("open", async (id) => {
+      const roomCode = crypto.randomUUID().replace(/-/g, "").slice(0, 8).toUpperCase();
+      const { error } = await account.client.rpc("create_match_room", { p_room_code: roomCode, p_peer_id: id, p_room_name: $("#room-name").value.trim() || "Vanguard room", p_host_name: online.localName, p_password: $("#room-password").value });
+      if (error) { setOnlineError("Could not publish this room. Run supabase/match-rooms.sql in the Supabase SQL Editor, then try again."); online.peer.destroy(); online.peer = null; online.role = null; return; }
+      online.roomId = id; online.publicRoomCode = roomCode; $("#online-dialog").close(); startMatch(onlineDeck());
+      online.heartbeat = setInterval(() => { if (account.client && online.publicRoomCode) void account.client.rpc("touch_match_room", { p_room_code: online.publicRoomCode }); }, 60000);
       match.players.human.name = online.localName; $("#online-invite").classList.remove("hidden");
-      const invite = new URL(location.href); invite.searchParams.set("join", id); invite.hash = "play"; $("#invite-link").value = invite.toString();
-      const watch = new URL(location.href); watch.searchParams.delete("join"); watch.searchParams.set("watch", id); watch.hash = "play"; $("#spectate-link").value = watch.toString();
+      const invite = new URL(location.href); invite.searchParams.set("join", roomCode); invite.hash = "play"; $("#invite-link").value = invite.toString();
+      const watch = new URL(location.href); watch.searchParams.delete("join"); watch.searchParams.set("watch", roomCode); watch.hash = "play"; $("#spectate-link").value = watch.toString();
       setConnectionPill("WAITING"); setMessage("Invite link ready — waiting for your friend to join."); renderMatch();
     });
     online.peer.on("connection", (connection) => {
@@ -765,13 +822,17 @@
     });
     online.peer.on("error", onlinePeerError);
   }
-  function beginJoining() {
-    const roomId = getInviteId($("#join-code").value);
-    if (!roomId) { setOnlineError("Paste a valid invite link or room code."); return; }
+  async function beginJoining() {
+    const roomCode = getInviteId($("#join-code").value);
+    if (!roomCode) { setOnlineError("Choose an open room or enter a room code."); return; }
+    if (!account.client) { setOnlineError("Room discovery needs the configured Supabase connection."); return; }
+    const { data: roomPeer, error: roomError } = await account.client.rpc("resolve_match_room", { p_room_code: roomCode, p_password: $("#join-password").value });
+    const roomId = typeof roomPeer === "string" ? roomPeer : Array.isArray(roomPeer) ? roomPeer[0]?.peer_id : roomPeer?.peer_id;
+    if (roomError || !roomId) { setOnlineError("Room not found, closed, or password is incorrect."); return; }
     if (!window.Peer) { setOnlineError("The online connection library did not load. Check your internet connection and reload."); return; }
     online.localName = String($("#online-name").value.trim() || "Player").slice(0, 24); localStorage.setItem("vanguardArenaPlayerName", online.localName);
     const watching = $("#online-join-role").value === "spectator" || new URLSearchParams(location.search).has("watch");
-    online.role = watching ? "watcher" : "guest"; online.roomId = roomId; setConnectionPill("CONNECTING"); online.peer = new Peer();
+    online.role = watching ? "watcher" : "guest"; online.roomId = roomId; online.publicRoomCode = roomCode; setConnectionPill("CONNECTING"); online.peer = new Peer();
     online.peer.on("open", () => {
       if (watching) {
         const connection = online.peer.connect(roomId, { reliable: true }); online.connection = connection;
@@ -784,8 +845,10 @@
     $("#online-dialog").close(); setMessage("Connecting to your friend's match…");
   }
   function endOnlineSession() {
+    if (online.heartbeat) clearInterval(online.heartbeat);
+    if (online.role === "host" && online.publicRoomCode && account.client) void account.client.rpc("close_match_room", { p_room_code: online.publicRoomCode });
     try { online.connection?.close(); online.watchers?.forEach((connection) => connection.close()); online.peer?.destroy(); } catch {}
-    online = { role: null, peer: null, connection: null, watchers: [], roomId: null, applyingRemote: false, dialogMode: "host" };
+    online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, dialogMode: "host" };
     setConnectionPill("READY");
     $("#online-invite").classList.add("hidden");
   }
@@ -797,8 +860,34 @@
     }
     ({ draw: drawForHuman, ride: rideHuman, call: callHuman, attack: resolveHumanAttack, guard: humanGuard, noGuard, endTurn, advance: advancePhase }[action] || (() => {}))();
   }
+  function openGiftDialog(kind) {
+    const dialog = $("#gift-dialog"), force = kind === "force";
+    $("#gift-type").innerHTML = force ? "<option>Force I</option><option>Force II</option>" : "<option>Accel I</option><option>Accel II</option>";
+    $("#gift-zone-wrap").classList.toggle("hidden", !force);
+    const player = match?.players.human, zones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player?.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
+    const names = { "rear-left": "Front left", "rear-right": "Front right", "rear-back-left": "Back left", "rear-back-center": "Back center", "rear-back-right": "Back right" };
+    $("#gift-zone").innerHTML = '<option value="">Choose a circle…</option>' + zones.map((zone) => `<option value="${zone}">${names[zone] || `Accel ${zone.split("-")[1]}`}</option>`).join("");
+    dialog.dataset.kind = kind; dialog.showModal();
+  }
+  function openSoulDialog(blast = false) {
+    if (!match) { toast("Start a match to view Soul."); return; }
+    const soul = match.players.human.soul || [];
+    $("#soul-dialog-title").textContent = blast ? "Choose Soul Blast cards" : "Cards under your Vanguard";
+    $("#soul-dialog-help").textContent = blast ? "Select the cards to move from Soul to Drop." : `${soul.length} card${soul.length === 1 ? "" : "s"} in Soul.`;
+    $("#soul-blast-confirm").classList.toggle("hidden", !blast);
+    $("#soul-card-list").innerHTML = soul.length ? soul.map((instance) => { const card = cardMap.get(instance.cardId); return card ? `<button class="zone-view-card${blast ? " selectable" : ""}" type="button" data-soul-uid="${escapeHtml(instance.uid)}" data-card-zoom="${escapeHtml(card.id)}">${card.image ? `<img src="${escapeHtml(card.image)}" alt=""/>` : `<span>${escapeHtml(card.name)}</span>`}<b>${escapeHtml(card.name)}</b></button>` : ""; }).join("") : '<p class="zone-empty-message">Your Soul is empty.</p>';
+    $("#soul-dialog").dataset.blast = blast ? "1" : "0"; $("#soul-dialog").showModal();
+  }
+  function openDropDialog() {
+    if (!match) { toast("Start a match to view Drop."); return; }
+    const cards = match.players.human.drop || [];
+    $("#drop-card-list").innerHTML = cards.length ? cards.map((instance) => { const card = cardMap.get(instance.cardId); return card ? `<button class="zone-view-card" type="button" data-card-zoom="${escapeHtml(card.id)}">${card.image ? `<img src="${escapeHtml(card.image)}" alt=""/>` : `<span>${escapeHtml(card.name)}</span>`}<b>${escapeHtml(card.name)}</b></button>` : ""; }).join("") : '<p class="zone-empty-message">No cards in Drop yet.</p>';
+    $("#drop-dialog").showModal();
+  }
   function performManualAction(action) {
     if (online.role === "watcher") { toast("Spectators can watch but cannot change the match."); return; }
+    if (action === "soul-blast") { openSoulDialog(true); return; }
+    if (action === "gift-force" || action === "gift-accel") { openGiftDialog(action === "gift-force" ? "force" : "accel"); return; }
     if (online.role === "guest") {
       if (!online.connection?.open) { toast("You are disconnected from the match."); return; }
       online.connection.send({ type: "action", action: `manual:${action}`, selected: match?.selected || null }); return;
@@ -806,11 +895,11 @@
     manualGameAction(action);
   }
   function exportDeck(deck, filename) {
-    const content = JSON.stringify({ format: "Vanguard Arena local demo deck", name: deck.name, cards: deck.cards, exportedAt: new Date().toISOString() }, null, 2);
+    const content = JSON.stringify({ format: "Vanguard Arena local demo deck", name: deck.name, cards: deck.cards, starterCardId: deck.starterCardId || "", exportedAt: new Date().toISOString() }, null, 2);
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([content], { type: "application/json" })); a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
   function importDeckFile(file) {
-    const reader = new FileReader(); reader.onload = () => { try { const data = JSON.parse(reader.result); const cards = data.cards || data; if (!cards || typeof cards !== "object") throw new Error("Invalid deck format"); builder = { id: null, name: data.name || file.name.replace(/\.json$/i, ""), cards: {} }; Object.entries(cards).forEach(([id, qty]) => { if (cardMap.has(id)) builder.cards[id] = Math.max(0, Math.min(4, Number(qty) || 0)); }); renderBuilder(); showView("decks"); toast("Deck imported"); } catch { toast("Could not read that deck JSON"); } }; reader.readAsText(file);
+    const reader = new FileReader(); reader.onload = () => { try { const data = JSON.parse(reader.result); const cards = data.cards || data; if (!cards || typeof cards !== "object") throw new Error("Invalid deck format"); builder = { id: null, name: data.name || file.name.replace(/\.json$/i, ""), cards: {}, starterCardId: data.starterCardId || "" }; Object.entries(cards).forEach(([id, qty]) => { if (cardMap.has(id)) builder.cards[id] = Math.max(0, Math.min(4, Number(qty) || 0)); }); renderBuilder(); showView("decks"); toast("Deck imported"); } catch { toast("Could not read that deck JSON"); } }; reader.readAsText(file);
   }
   function toast(text) {
     let el = $("#toast"); if (!el) { el = document.createElement("div"); el.id = "toast"; el.style.cssText = "position:fixed;bottom:23px;left:50%;transform:translateX(-50%);background:#252633;border:1px solid #ffffff2a;color:#fff;padding:11px 15px;border-radius:9px;box-shadow:0 12px 35px #0009;font:11px 'DM Sans',sans-serif;z-index:20;transition:.2s"; document.body.appendChild(el); }
@@ -826,6 +915,7 @@
   $("#account-signup").addEventListener("click", accountSignUp); $("#account-signin").addEventListener("click", accountSignIn); $("#account-signout").addEventListener("click", accountSignOut); $("#account-reset").addEventListener("click", resetAccountPassword); $("#account-update-password").addEventListener("click", updateAccountPassword); $("#account-import-local").addEventListener("click", importLocalDecks);
   $("#profile-save").addEventListener("click", savePlayerProfile);
   $("#online-confirm").addEventListener("click", () => online.dialogMode === "host" ? beginHosting() : beginJoining());
+  $("#refresh-rooms").addEventListener("click", () => void loadOpenRooms()); $("#room-list").addEventListener("change", () => { if ($("#room-list").value) $("#join-code").value = $("#room-list").value; });
   $("#online-cancel").addEventListener("click", () => $("#online-dialog").close()); $("#close-online-dialog").addEventListener("click", () => $("#online-dialog").close());
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });
   $("#copy-spectate").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#spectate-link").value); toast("Spectator link copied."); } catch { $("#spectate-link").select(); document.execCommand("copy"); toast("Spectator link copied."); } });
@@ -834,14 +924,22 @@
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher" || match.side !== "human") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
   $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; match.selected = match.selected === field.dataset.fieldUid ? null : field.dataset.fieldUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
-  $("#human-damage").addEventListener("click", () => performManualAction("counter-blast"));
+  $("#gift-cancel").addEventListener("click", () => $("#gift-dialog").close()); $("#gift-close").addEventListener("click", () => $("#gift-dialog").close());
+  $("#gift-confirm").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind === "force") { const zone = $("#gift-zone").value; if (!zone) { toast("Choose a circle for the Force marker."); return; } performManualAction(`gift-force:${type}:${zone}`); } else performManualAction(`gift-accel:${type}`); dialog.close(); });
+  $("#view-soul").addEventListener("click", () => openSoulDialog(false)); $("#open-drop-zone").addEventListener("click", openDropDialog);
+  $("#close-soul-dialog").addEventListener("click", () => $("#soul-dialog").close()); $("#soul-blast-cancel").addEventListener("click", () => $("#soul-dialog").close());
+  $("#soul-card-list").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom && !$("#soul-dialog").dataset.blast) { showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-soul-uid]"); if (card && $("#soul-dialog").dataset.blast) card.classList.toggle("selected"); });
+  $("#soul-blast-confirm").addEventListener("click", () => { const ids = [...$$("#soul-card-list [data-soul-uid].selected")].map((node) => node.dataset.soulUid); if (!ids.length) { toast("Select at least one card to Soul Blast."); return; } performManualAction(`soul-blast:${ids.join(",")}`); $("#soul-dialog").close(); });
+  $("#close-drop-dialog").addEventListener("click", () => $("#drop-dialog").close()); $("#drop-dialog-close").addEventListener("click", () => $("#drop-dialog").close());
+  $("#drop-card-list").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) showCardDetails(zoom.dataset.cardZoom); });
+  $("#human-damage").addEventListener("click", (e) => { if (e.target.closest("[data-card-zoom]")) return; performManualAction("counter-blast"); });
   $("#human-order-zone").addEventListener("click", (e) => { if (e.target.closest("[data-card-zoom]")) return; const order = e.target.closest("[data-order-uid]"); if (order) performManualAction(`order-to-drop:${order.dataset.orderUid}`); });
   $("#advance-phase").addEventListener("click", () => { if (match?.pendingAttack) return; });
   const noGuardButton = document.createElement("button"); noGuardButton.id = "no-guard"; noGuardButton.className = "button button-quiet hidden"; noGuardButton.textContent = "No guard"; noGuardButton.addEventListener("click", () => performOnlineAction("noGuard")); $(".action-buttons").insertBefore(noGuardButton, $("#guard-card"));
   $("#sort-hand").addEventListener("click", () => { if (!match) return; match.players.human.hand.sort((a, b) => { const ca = cardMap.get(a.cardId), cb = cardMap.get(b.cardId); return (ca?.grade || 0) - (cb?.grade || 0) || ca?.name.localeCompare(cb?.name); }); renderMatch(); });
   $("#clear-log").addEventListener("click", () => { if (match) { match.log = []; renderLog(); } });
   $("#create-deck").addEventListener("click", () => { emptyDeck(); showView("decks"); $("#deck-name").focus(); });
-  $("#save-deck").addEventListener("click", saveDeck); $("#deck-name").addEventListener("input", () => { builder.name = $("#deck-name").value; $("#builder-title").textContent = builder.name || "Untitled deck"; });
+  $("#save-deck").addEventListener("click", saveDeck); $("#starter-vanguard").addEventListener("change", () => { builder.starterCardId = $("#starter-vanguard").value; renderBuilder(); }); $("#deck-name").addEventListener("input", () => { builder.name = $("#deck-name").value; $("#builder-title").textContent = builder.name || "Untitled deck"; });
   $("#card-search").addEventListener("input", () => { builderPage = 0; renderBuilderCards(); }); $("#grade-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-clan-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-nation-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); });
   $("#builder-prev").addEventListener("click", () => { builderPage = Math.max(0, builderPage - 1); renderBuilderCards(); }); $("#builder-next").addEventListener("click", () => { builderPage += 1; renderBuilderCards(); });
   $("#builder-card-grid").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const node = e.target.closest("[data-card-id]"); if (!node) return; const id = node.dataset.cardId; builder.cards[id] = Math.min(4, (builder.cards[id] || 0) + 1); renderBuilder(); });

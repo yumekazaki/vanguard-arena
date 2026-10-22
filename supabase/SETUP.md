@@ -44,3 +44,7 @@ Leave email confirmation enabled. Players create an account with their email and
 Save `assets/cloud-config.js`, commit the change, and push it to the existing `main` branch. After GitHub Pages finishes deploying, the **Account** button will support account creation, sign-in, password reset, player profiles, and per-account cloud deck sync. Signed-in players can save a unique username, display name, and short public bio. Existing browser-only decks stay local until **Import browser-saved decks** is pressed while signed in.
 
 Supabase Free currently includes 50,000 monthly active users, a 500 MB database, and 5 GB egress; free projects pause after one week of inactivity. Limits can change, so check [current pricing](https://supabase.com/pricing) before relying on it for a larger public community.
+
+## 6. Enable password-protected room discovery
+
+In the same Supabase SQL Editor, run [`match-rooms.sql`](match-rooms.sql). This creates the public room directory RPCs. Room passwords are stored only as salted hashes; the directory listing shows room names, host names, and short room codes. Players enter the password and choose Player or Spectator before the site returns the private PeerJS connection ID. Rooms expire from the listing after ten minutes without a host heartbeat and are removed when the host ends the match.
