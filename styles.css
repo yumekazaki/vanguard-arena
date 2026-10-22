@@ -35,3 +35,54 @@
 .zone-stack.drop-zone{width:52px;height:48px;transition:.15s}.zone-stack.drop-zone:hover{background:#262439;border-color:#c6a4df;transform:translateY(-1px)}
 
 .opponent-soul-button{font-size:7px;padding:4px 5px;white-space:nowrap}.zone-view-card.selectable.selected,.zone-card-face.selectable.selected{outline:2px solid var(--pink);border-color:var(--pink)}
+
+/* Match the board zones to the circles and side pockets printed on the supplied playmat. */
+.game-table{height:clamp(610px,62vw,820px);min-height:610px;padding:0;display:block;background:#10141a;border-color:#d3c59055}
+.mat-half{position:absolute;left:0;width:100%;height:50%;background-image:linear-gradient(#090b1090,#090b1090),url("assets/playmat.jpg");background-position:center;background-size:100% 100%;background-repeat:no-repeat;pointer-events:none;z-index:0}
+.mat-opponent{top:0}.mat-player{bottom:0;transform:scaleY(-1)}
+.table-glow{display:none}.game-table:before{inset:5px;border-color:#d8c99455;z-index:4}.game-table:after{display:none}
+.board-side{position:absolute;left:0;right:0;height:50%;z-index:2}
+.opponent-side{top:0}.human-side{bottom:0}
+.field-row,.rear-row{position:absolute;left:16%;width:68%;max-width:none;height:31%;margin:0;gap:0;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+.opponent-side .field-row{bottom:2%;top:auto}.opponent-side .rear-row{bottom:36%;top:auto}
+.human-side .field-row{top:2%;bottom:auto}.human-side .rear-row{top:36%;bottom:auto}
+.field-zone,.rear-row-zone{height:100%;min-height:0;border:0;border-radius:0;background:transparent;overflow:visible}
+.field-zone:before{display:none}.field-zone>span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:7px;color:#d6c89188;text-shadow:0 1px 3px #000}
+.vanguard-zone{height:100%;border:0;background:transparent}.vanguard-zone>span{color:#c8ecf2a0}
+.field-card{height:calc(100% - 5px);max-width:88%;aspect-ratio:2/3}
+.rear-row-zone{height:100%}.accel-row{position:absolute;bottom:0;left:16%;width:68%;height:25px;z-index:3;display:flex;justify-content:center}
+.player-line{position:absolute;inset:0;min-height:0;display:block;pointer-events:none}
+.player-line>*{position:absolute;margin:0;pointer-events:auto}
+.player-line .avatar{left:43%;top:6%;width:26px;height:26px}
+.player-title{left:calc(43% + 32px);top:6%;min-width:0}.player-title b{font-size:10px}.player-title small{font-size:7px}
+.damage-track{left:2%;top:13%;width:10%;height:74%;max-width:none;max-height:74%;margin:0;display:flex;flex-direction:column;flex-wrap:wrap;align-content:center;justify-content:center;gap:4px;overflow:hidden}
+.damage-card{width:clamp(19px,3vw,31px);height:clamp(27px,4.2vw,43px)}
+.damage-total{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:9px;text-shadow:0 1px 3px #000}
+.deck-zone,.zone-stack.drop-zone{position:absolute;right:13%;width:11%;height:17%;min-width:36px;max-width:66px;border-radius:5px;background:#111720b8;border-color:#e5d9b488;z-index:3}
+.opponent-line .deck-zone{top:4%}.opponent-line .drop-zone{top:24%}
+.human-line .deck-zone{bottom:4%}.human-line .drop-zone{bottom:24%}
+.zone-stack small{font-size:clamp(6px,.8vw,8px)}.zone-stack b{font-size:clamp(10px,1.3vw,13px)}
+.back-card{position:absolute;right:2%;top:5%;width:9%;height:16%;margin:0}
+.gdeck-button{position:absolute;right:2%;bottom:5%;width:10%;height:17%;margin:0}
+.player-line .opponent-soul-button{right:2%;bottom:25%;top:auto}
+.zone-strip{position:absolute;left:16%;width:68%;bottom:2%;height:24%;margin:0;display:flex;flex-wrap:wrap;align-content:end;justify-content:center;overflow:hidden;z-index:3}
+.human-side .zone-strip{top:auto;bottom:2%}.opponent-side .zone-strip{top:2%;bottom:auto;transform:scaleY(-1)}
+.soul-pips{position:absolute;z-index:3;right:2%;bottom:4%;top:auto;transform:none;writing-mode:horizontal-tb}
+.soul-pips>div{flex-direction:row}.soul-view-button{font-size:7px}
+.opponent-hand-row{position:absolute;left:16%;bottom:1%;width:68%;justify-content:center;margin:0;z-index:3}
+.center-divider{position:absolute;left:12%;right:12%;top:50%;height:25px;transform:translateY(-50%);z-index:3;padding:0 10px;background:#10141ac9;border-radius:6px}
+.selected-card-actions,.manual-quick-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.manual-actions{align-items:flex-start;flex-wrap:wrap}.manual-actions .selected-summary{width:100%}.selected-card-actions .button,.manual-quick-actions .button{font-size:9px;padding:7px 9px}.manual-command-drawer{width:100%;font-size:10px;color:#b9bac5}.manual-command-drawer summary{cursor:pointer;padding:6px}.manual-command-drawer .action-buttons{justify-content:flex-start}
+.zone-card-face{cursor:pointer}.zone-view-card.selected{outline:2px solid var(--pink);border-color:var(--pink)}.zone-card-zoom{border:0;border-radius:5px;background:#272331;color:#ddd;padding:4px 7px;align-self:flex-start;font-size:12px;cursor:pointer}.peek-actions[hidden]{display:none}.peek-actions:not([hidden]){display:flex}
+.roll-results{display:flex;gap:10px;margin:14px 0}.roll-results>div{flex:1;padding:12px;border:1px solid #ffffff18;border-radius:8px;text-align:center}.roll-results small,.roll-results b{display:block}.roll-results small{color:#9b9daa;font:9px var(--mono)}.roll-results b{font:24px var(--display);margin-top:5px}
+@media(max-width:760px){.game-table{height:660px;min-height:660px}.field-row,.rear-row{left:15%;width:70%;height:29%}.opponent-side .rear-row{bottom:35%}.human-side .rear-row{top:35%}.player-line .avatar{left:38%;top:5%;width:22px;height:22px}.player-title{left:calc(38% + 27px);top:5%}.damage-track{left:1%;width:12%;gap:3px}.deck-zone,.zone-stack.drop-zone{right:12%;width:12%;min-width:31px}.back-card,.gdeck-button{right:1%;width:10%}.center-divider{left:8%;right:8%}.zone-strip{left:15%;width:70%}.soul-pips{right:1%;bottom:3%}}
+@media(max-width:430px){.game-table{height:610px;min-height:610px}.field-row,.rear-row{left:14%;width:72%;height:28%}.field-zone>span{font-size:5px}.player-title b{font-size:8px}.player-title small{font-size:6px}.damage-card{width:17px;height:24px}.deck-zone,.zone-stack.drop-zone{right:12%;width:12%;min-width:27px}.zone-stack small{font-size:5px}.zone-stack b{font-size:9px}.manual-actions .selected-card-actions .button,.manual-quick-actions .button{font-size:8px;padding:6px}}
+.opponent-side .field-row{bottom:16%;top:auto}.opponent-side .rear-row{bottom:50%;top:auto}
+.human-side .field-row{top:14%;bottom:auto}.human-side .rear-row{top:48%;bottom:auto}
+.opponent-line .deck-zone{top:22%}.opponent-line .drop-zone{top:55%}
+.human-line .deck-zone{bottom:22%}.human-line .drop-zone{bottom:55%}
+.deck-zone,.zone-stack.drop-zone{right:3%}
+.player-line .opponent-soul-button{right:3%;top:44%;bottom:auto}
+.soul-pips{right:3%;top:44%;bottom:auto}
+.gdeck-button{right:3%;bottom:3%}.opponent-line .gdeck-button{top:3%;bottom:auto}
+@media(max-width:760px){.opponent-side .field-row{bottom:16%}.opponent-side .rear-row{bottom:50%}.human-side .field-row{top:14%}.human-side .rear-row{top:48%}.opponent-line .deck-zone{top:22%}.opponent-line .drop-zone{top:55%}.human-line .deck-zone{bottom:22%}.human-line .drop-zone{bottom:55%}.deck-zone,.zone-stack.drop-zone{right:2%}.soul-pips,.player-line .opponent-soul-button{right:2%;top:44%;bottom:auto}}
+@media(max-width:430px){.opponent-side .field-row{bottom:16%}.opponent-side .rear-row{bottom:50%}.human-side .field-row{top:14%}.human-side .rear-row{top:48%}.opponent-line .deck-zone{top:22%}.opponent-line .drop-zone{top:55%}.human-line .deck-zone{bottom:22%}.human-line .drop-zone{bottom:55%}}

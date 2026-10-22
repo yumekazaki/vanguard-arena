@@ -365,13 +365,59 @@
     shuffle(pile);
     return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rear: [null, null, null, null, null], accelZones: 0, giftZones: [], orders: [], extra: [], gDeck: shuffle(gDeck), gZone: [], quickShields: 0, gifts: 0, human };
   }
-  function startMatch(deck = null) {
+  function openPracticeSetup() { $("#practice-setup-dialog").showModal(); }
+  function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
-    match = { players: { human: makePlayer(readyDeck, "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: "human", phase: 0, drewThisTurn: false, selected: null, pendingAttack: null, botAttacks: [], revealed: null, log: [], ended: false, deckName: readyDeck.name };
+    match = { players: { human: makePlayer(readyDeck, "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { rolls: { human: null, bot: null }, winner: null } : null, phase: 0, drewThisTurn: false, selected: null, pendingAttack: null, botAttacks: [], revealed: null, log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
-    addLog(`${online.role ? "Online match" : "Practice match"} started with ${readyDeck.name}.`); setMessage("Your turn — advance through Stand and Draw."); renderMatch(); showView("play");
+    if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
+    else { addLog(`${online.role ? "Online match" : "Practice match"} started with ${readyDeck.name}. ${firstSide === "human" ? "You chose to go first." : "You chose to go second."}`); setMessage(firstSide === "human" ? "Your turn — advance through Stand and Draw." : "Practice Bot goes first."); }
+    renderMatch(); showView("play");
+    if (!onlineSetup && firstSide === "bot") setTimeout(botTurn, 350);
+  }
+  function rollOnlineDieFor(side) {
+    if (!match?.preMatch || match.preMatch.rolls[side] !== null) return;
+    match.preMatch.rolls[side] = 1 + Math.floor(Math.random() * 6);
+    const [hostRoll, guestRoll] = [match.preMatch.rolls.human, match.preMatch.rolls.bot];
+    if (hostRoll !== null && guestRoll !== null) {
+      if (hostRoll === guestRoll) {
+        match.preMatch.rolls = { human: null, bot: null }; match.preMatch.winner = null;
+        setMessage(`Both rolled ${hostRoll}. Roll again.`);
+      } else {
+        match.preMatch.winner = hostRoll > guestRoll ? "human" : "bot";
+        setMessage(`${match.players[match.preMatch.winner].name} won the roll and chooses who goes first.`);
+      }
+    }
+    renderMatch();
+  }
+  function chooseOnlineFirstPlayer(localChoice) {
+    if (!match?.preMatch || match.preMatch.winner !== "human") return;
+    if (online.role === "guest") {
+      online.connection?.send({ type: "setup-choice", firstSide: localChoice });
+      return;
+    }
+    beginOnlineTurns(localChoice);
+  }
+  function beginOnlineTurns(firstSide) {
+    if (!match?.preMatch || !["human", "bot"].includes(firstSide)) return;
+    match.firstSide = firstSide; match.side = firstSide; match.preMatch = null;
+    addLog(`${match.players.human.name} and ${match.players.bot.name} finished the dice roll. ${match.players[firstSide].name} goes first.`);
+    setMessage(firstSide === "human" ? "Your turn — advance through Stand and Draw." : `${match.players.bot.name} goes first.`);
+    renderMatch();
+  }
+  function renderOnlineSetup() {
+    const dialog = $("#online-start-dialog");
+    if (!match?.preMatch) { if (dialog.open) dialog.close(); return; }
+    const rolls = match.preMatch.rolls, winner = match.preMatch.winner || (rolls.human !== null && rolls.bot !== null ? (rolls.human > rolls.bot ? "human" : rolls.bot > rolls.human ? "bot" : null) : null);
+    $("#online-roll-status").textContent = rolls.human === null || rolls.bot === null ? "Both players roll one die. Higher roll chooses who goes first." : winner ? `${match.players[winner].name} rolled higher and chooses first or second.` : `Tie at ${rolls.human}. Both players roll again.`;
+    $("#online-local-roll").textContent = rolls.human === null ? "—" : String(rolls.human);
+    $("#online-opponent-roll").textContent = rolls.bot === null ? "—" : String(rolls.bot);
+    $("#roll-online-die").disabled = online.role === "watcher" || rolls.human !== null;
+    $("#roll-online-die").textContent = rolls.human === null ? "Roll your die" : "You rolled";
+    $("#online-first-choice").classList.toggle("hidden", winner !== "human" || online.role === "watcher");
+    if (!dialog.open) dialog.showModal();
   }
   function addLog(message) { if (!match) return; match.log.unshift({ time: new Date(), message }); match.log = match.log.slice(0, 15); renderLog(); }
   function renderLog() { if (!match) return; $("#match-log").innerHTML = match.log.map((entry) => `<div class="log-entry"><time>${entry.time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</time><span>${escapeHtml(entry.message)}</span></div>`).join(""); }
@@ -419,6 +465,7 @@
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog();
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
+    renderOnlineSetup();
     if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
   }
   function renderZone(side, zone, instance) {
@@ -476,6 +523,15 @@
     if (restSelected) restSelected.disabled = online.role === "watcher" || match.ended || fieldCard?.side !== "human" || fieldCard.instance.rested;
     const standSelected = $("[data-manual-action='stand-selected']");
     if (standSelected) standSelected.disabled = online.role === "watcher" || match.ended || fieldCard?.side !== "human" || !fieldCard.instance.rested;
+    const onHumanField = fieldCard?.side === "human", onHumanHand = Boolean(handCard);
+    const contextualActions = {
+      bind: onHumanField || onHumanHand, "selected-to-drop": onHumanField || onHumanHand, "selected-to-soul": onHumanField || onHumanHand,
+      "view-selected-soul": onHumanField && fieldCard.zone === "vanguard", "rest-selected": onHumanField && !fieldCard.instance.rested,
+      "stand-selected": onHumanField && fieldCard.instance.rested, "move-rear": onHumanField && fieldCard.zone !== "vanguard",
+      "hand-to-damage": onHumanHand, lock: onHumanField, power: onHumanField
+    };
+    Object.entries(contextualActions).forEach(([action, visible]) => $$(`.selected-card-actions [data-manual-action="${action}"]`).forEach((button) => { button.hidden = !visible; }));
+    $("#manual-selection-help").textContent = onHumanHand ? "Hand card selected · choose where to move or play it." : onHumanField ? `${fieldCard.zone === "vanguard" ? "Vanguard" : "Rear-Guard"} selected · choose a card action.` : "Select a card on your hand or field to see its actions.";
     $("#advance-phase").innerHTML = match.phase === phases.length - 1 ? `End turn <span>→</span>` : `Continue ${phases[match.phase + 1].toLowerCase()} phase <span>→</span>`;
     if (match.selected) {
       const cardId = handCard?.cardId || fieldCard?.instance.cardId; const c = cardMap.get(cardId);
@@ -589,7 +645,8 @@
   function finishBotTurn() {
     if (!match || match.ended) return;
     match.players.human.vanguard && (match.players.human.vanguard.rested = false); match.players.human.rear.forEach((x) => x && (x.rested = false));
-    match.side = "human"; match.phase = 0; match.drewThisTurn = false; match.pendingAttack = null; match.selected = null; match.turn += 1;
+    match.side = "human"; match.phase = 0; match.drewThisTurn = false; match.pendingAttack = null; match.selected = null;
+    if (match.initialBotTurn) match.initialBotTurn = false; else match.turn += 1;
     addLog("Your turn began — advance to Draw to draw a card.");
     setMessage("Your turn — Stand phase."); renderMatch();
   }
@@ -846,6 +903,10 @@
     snapshot.players = { human: snapshot.players.bot, bot: snapshot.players.human };
     snapshot.side = flipSide(snapshot.side);
     if (snapshot.revealed?.owner) snapshot.revealed.owner = flipSide(snapshot.revealed.owner);
+    if (snapshot.preMatch) {
+      snapshot.preMatch.rolls = { human: snapshot.preMatch.rolls.bot, bot: snapshot.preMatch.rolls.human };
+      if (snapshot.preMatch.winner) snapshot.preMatch.winner = flipSide(snapshot.preMatch.winner);
+    }
     const visibleIds = new Set(snapshot.players.human.hand.map((card) => card.uid));
     [snapshot.players.human.vanguard, ...snapshot.players.human.rear].filter(Boolean).forEach((card) => visibleIds.add(card.uid));
     if (!visibleIds.has(snapshot.selected)) snapshot.selected = null;
@@ -874,7 +935,7 @@
   function handleRemoteMessage(message) {
     if (!message || typeof message !== "object") return;
     if (online.role === "host" && message.type === "join") {
-      if (!match) startMatch(onlineDeck());
+      if (!match) startMatch(onlineDeck(), "human", true);
       const deck = sanitizedDeck(message.deck);
       const playerName = String(message.name || "Opponent").slice(0, 24);
       match.players.bot = makePlayer(deck.cards && deckCount(deck) ? deck : defaultDeck(), playerName);
@@ -884,6 +945,11 @@
     }
     if (online.role === "guest" && message.type === "state") { updateGuestState(message.match); return; }
     if (online.role === "watcher" && message.type === "watch-state") { updateGuestState(message.match); $("#match-status").textContent = "SPECTATING · LIVE"; return; }
+    if (online.role === "host" && match?.preMatch && message.type === "setup-roll") { rollOnlineDieFor("bot"); return; }
+    if (online.role === "host" && match?.preMatch && message.type === "setup-choice") {
+      if (match.preMatch.winner === "bot" && ["human", "bot"].includes(message.firstSide)) beginOnlineTurns(flipSide(message.firstSide));
+      return;
+    }
     if (online.role !== "host" || !match || !["action", "select"].includes(message.type)) return;
     const players = match.players;
     match.players = { human: players.bot, bot: players.human };
@@ -924,7 +990,7 @@
       const roomCode = crypto.randomUUID().replace(/-/g, "").slice(0, 8).toUpperCase();
       const { error } = await account.client.rpc("create_match_room", { p_room_code: roomCode, p_peer_id: id, p_room_name: $("#room-name").value.trim() || "Vanguard room", p_host_name: online.localName, p_password: $("#room-password").value });
       if (error) { setOnlineError("Could not publish this room. Run supabase/match-rooms.sql in the Supabase SQL Editor, then try again."); online.peer.destroy(); online.peer = null; online.role = null; return; }
-      online.roomId = id; online.publicRoomCode = roomCode; $("#online-dialog").close(); startMatch(onlineDeck());
+      online.roomId = id; online.publicRoomCode = roomCode; $("#online-dialog").close(); startMatch(onlineDeck(), "human", true);
       online.heartbeat = setInterval(() => { if (account.client && online.publicRoomCode) void account.client.rpc("touch_match_room", { p_room_code: online.publicRoomCode }); }, 60000);
       match.players.human.name = online.localName; $("#online-invite").classList.remove("hidden");
       const invite = new URL(location.href); invite.searchParams.set("join", roomCode); invite.hash = "play"; $("#invite-link").value = invite.toString();
@@ -1001,7 +1067,7 @@
     $("#soul-dialog-help").textContent = blast ? "Select Soul cards to move to Drop." : `${soul.length} card${soul.length === 1 ? "" : "s"} under this Vanguard.`;
     $("#soul-blast-confirm").classList.toggle("hidden", !blast);
     $("#soul-blast-cancel").textContent = blast ? "Cancel" : "Stop viewing Soul";
-    $("#soul-card-list").innerHTML = soul.length ? soul.map((instance) => { const card = cardMap.get(instance.cardId); return card ? `<article class="zone-view-card"><button class="zone-card-face${blast ? " selectable" : ""}" type="button" data-soul-uid="${escapeHtml(instance.uid)}" data-card-zoom="${escapeHtml(card.id)}">${cardImage(card)}<b>${escapeHtml(card.name)}</b></button>${canAct && !blast ? zoneMoveControls(instance,"soul") : ""}</article>` : ""; }).join("") : `<p class="zone-empty-message">${escapeHtml(player.name)}'s Soul is empty.</p>`;
+    $("#soul-card-list").innerHTML = soul.length ? soul.map((instance) => { const card = cardMap.get(instance.cardId); return card ? `<article class="zone-view-card"><button class="zone-card-face${blast ? " selectable" : ""}" type="button" data-zone-select data-soul-uid="${escapeHtml(instance.uid)}">${cardImage(card)}<b>${escapeHtml(card.name)}</b></button><button class="zone-card-zoom" type="button" data-card-zoom="${escapeHtml(card.id)}" aria-label="Zoom ${escapeHtml(card.name)}">⤢</button>${canAct && !blast ? zoneMoveControls(instance,"soul") : ""}</article>` : ""; }).join("") : `<p class="zone-empty-message">${escapeHtml(player.name)}'s Soul is empty.</p>`;
     $("#soul-dialog").dataset.blast = blast ? "1" : "0"; $("#soul-dialog").dataset.side = side; if (!$("#soul-dialog").open) $("#soul-dialog").showModal();
   }
   function openDropDialog(side = "human") {
@@ -1011,7 +1077,7 @@
     const zones=["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:player.accelZones||0},(_,i)=>"accel-"+(i+1))];
     const labels={"rear-left":"Front left Rear-Guard","rear-right":"Front right Rear-Guard","rear-back-left":"Back left Rear-Guard","rear-back-center":"Back center Rear-Guard","rear-back-right":"Back right Rear-Guard"};
     const fieldOptions='<option value="">Move to field…</option><option value="vanguard">Vanguard</option>'+zones.map((zone,i)=>({zone,i,label:labels[zone]||("Accel "+(i-4))})).filter(({i})=>!player.rear[i]).map(({zone,label})=>'<option value="'+zone+'">'+label+'</option>').join("");
-    $("#drop-card-list").innerHTML=cards.length?cards.map((instance)=>{const c=cardMap.get(instance.cardId);if(!c)return "";const unit=/Unit/i.test(c.type||"");const moves=own?'<div class="peek-actions"><button class="button" data-drop-action="hand:'+escapeHtml(instance.uid)+'">Add to hand</button><button class="button" data-drop-action="soul:'+escapeHtml(instance.uid)+'">Add to Soul</button><button class="button" data-drop-action="bind:'+escapeHtml(instance.uid)+'">Bind card</button>'+(unit?'<select class="text-input drop-field-select" data-drop-uid="'+escapeHtml(instance.uid)+'">'+fieldOptions+'</select>':'')+'<button class="button" data-drop-action="deck-top:'+escapeHtml(instance.uid)+'">Return to deck top</button><button class="button" data-drop-action="deck-bottom:'+escapeHtml(instance.uid)+'">Return to deck bottom</button></div>':'';return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(c.id)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>'+moves+'</article>';}).join(""):'<p class="zone-empty-message">No cards in Drop yet.</p>';
+    $("#drop-card-list").innerHTML=cards.length?cards.map((instance)=>{const c=cardMap.get(instance.cardId);if(!c)return "";const unit=/Unit/i.test(c.type||"");const moves=own?'<div class="peek-actions" hidden><button class="button" data-drop-action="hand:'+escapeHtml(instance.uid)+'">Add to hand</button><button class="button" data-drop-action="soul:'+escapeHtml(instance.uid)+'">Add to Soul</button><button class="button" data-drop-action="bind:'+escapeHtml(instance.uid)+'">Bind card</button>'+(unit?'<select class="text-input drop-field-select" data-drop-uid="'+escapeHtml(instance.uid)+'">'+fieldOptions+'</select>':'')+'<button class="button" data-drop-action="deck-top:'+escapeHtml(instance.uid)+'">Return to deck top</button><button class="button" data-drop-action="deck-bottom:'+escapeHtml(instance.uid)+'">Return to deck bottom</button></div>':'';return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button><button class="zone-card-zoom" type="button" data-card-zoom="'+escapeHtml(c.id)+'" aria-label="Zoom '+escapeHtml(c.name)+'">⤢</button>'+moves+'</article>';}).join(""):'<p class="zone-empty-message">No cards in Drop yet.</p>';
     $("#drop-dialog").dataset.side=side;if(!$("#drop-dialog").open)$("#drop-dialog").showModal();
   }
   function zoneMoveControls(instance, source, canAct = true) {
@@ -1020,12 +1086,16 @@
     const button = (choice, label) => `<button class="button" type="button" data-zone-move="${source}:${choice}:${escapeHtml(instance.uid)}">${label}</button>`;
     const zones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: match.players.human.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
     const fieldOptions = zones.map((zone, i) => match.players.human.rear[i] ? "" : '<option value="' + zone + '">' + zone.replace("rear-", "").replace("back-", "back ").replaceAll("-", " ") + '</option>').join("");
-    const fieldControl = source === "soul" && unit ? '<select class="text-input drop-field-select" data-soul-field-uid="' + escapeHtml(instance.uid) + '"><option value="">Move Unit to field…</option><option value="vanguard">Vanguard</option>' + fieldOptions + '</select>' : "";
-    return '<div class="peek-actions">' + button("hand", "Add to hand") + (source !== "soul" ? button("soul", "Add to Soul") : "") + button("drop", "Send to Drop") + (source !== "bind" ? button("bind", "Bind card") : "") + (source !== "deck" ? button("deck-top", "Return to deck top") : "") + (source !== "deck" ? button("deck-bottom", "Return to deck bottom") : "") + fieldControl + '</div>';
+    const fieldControl = source === "soul" && unit ? '<select class="text-input drop-field-select" data-soul-field-uid="' + escapeHtml(instance.uid) + '"><option value="">Call Unit to Rear-Guard…</option>' + fieldOptions + '</select>' : "";
+    return '<div class="peek-actions" hidden>' + button("hand", "Add to hand") + (source !== "soul" ? button("soul", "Add to Soul") : "") + button("drop", "Send to Drop") + (source !== "bind" ? button("bind", "Bind card") : "") + (source !== "deck" ? button("deck-top", "Return to deck top") : "") + (source !== "deck" ? button("deck-bottom", "Return to deck bottom") : "") + fieldControl + '</div>';
   }
   function renderInteractiveCards(instances, prefix, canAct = true) {
     if (!instances?.length) return '<p class="zone-empty-message">No cards here.</p>';
-    return instances.map((instance) => { const card=cardMap.get(instance.cardId); if(!card)return ""; const controls=canAct?(prefix==="deck-action"?zoneMoveControls(instance,"deck"): '<div class="peek-actions"><button class="button" type="button" data-peek-action="'+prefix+':hand:'+escapeHtml(instance.uid)+'">Add to hand</button><button class="button" type="button" data-peek-action="'+prefix+':soul:'+escapeHtml(instance.uid)+'">Add to Soul</button><button class="button" type="button" data-peek-action="'+prefix+':drop:'+escapeHtml(instance.uid)+'">Send to Drop</button></div>'):''; return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(card.id)+'">'+cardImage(card)+'<b>'+escapeHtml(card.name)+'</b></button>'+controls+'</article>'; }).join("");
+    return instances.map((instance) => {
+      const card = cardMap.get(instance.cardId); if (!card) return "";
+      const controls = canAct ? (prefix === "deck-action" ? zoneMoveControls(instance, "deck") : '<div class="peek-actions" hidden><button class="button" type="button" data-peek-action="' + prefix + ':hand:' + escapeHtml(instance.uid) + '">Add to hand</button><button class="button" type="button" data-peek-action="' + prefix + ':soul:' + escapeHtml(instance.uid) + '">Add to Soul</button><button class="button" type="button" data-peek-action="' + prefix + ':drop:' + escapeHtml(instance.uid) + '">Send to Drop</button></div>') : '';
+      return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select aria-label="Select actions for ' + escapeHtml(card.name) + '">' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button>' + controls + '</article>';
+    }).join("");
   }
   function openMyDeck() { if(!match){toast("Start a match to look through your deck.");return;} const cards=match.players.human.deck.slice().reverse(); $("#deck-view-title").textContent="Your deck · "+cards.length+" cards"; $("#deck-view-help").textContent="Choose any card to add to your hand, add a Unit to Soul, or send it to Drop."; $("#deck-view-list").innerHTML=renderInteractiveCards(cards,"deck-action"); if(!$("#deck-view-dialog").open)$("#deck-view-dialog").showModal(); }
   function openGDeckDialog(kind) {
@@ -1040,13 +1110,13 @@
     $("#gdeck-dialog-help").textContent = isGuard ? "Choose a G Guardian from your G deck to place face up in the G zone." : "Choose which G Unit to ride over your Vanguard.";
     $("#gdeck-card-list").innerHTML = cards.length ? cards.map((item) => {
       const card = cardMap.get(item.cardId);
-      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="' + escapeHtml(card.id) + '">' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="button button-primary" type="button" data-gdeck-action="' + (isGuard ? "g-guard" : "stride") + ':' + escapeHtml(item.uid) + '">' + (isGuard ? "G-guard" : "Stride") + '</button>' + zoneMoveControls(item,"gdeck") + '</article>' : "";
+      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions" hidden><button class="button button-primary" type="button" data-gdeck-action="' + (isGuard ? "g-guard" : "stride") + ':' + escapeHtml(item.uid) + '">' + (isGuard ? "G-guard" : "Stride") + '</button>' + zoneMoveControls(item,"gdeck") + '</div></article>' : "";
     }).join("") : '<p class="zone-empty-message">No ' + (isGuard ? "G Guardians" : "G Units") + ' are available in your G deck.</p>';
     $("#gdeck-dialog").dataset.kind = kind;
     if (!$("#gdeck-dialog").open) $("#gdeck-dialog").showModal();
   }
   function renderSharedReveal() { const reveal=match?.revealed;if(!reveal?.cards?.length)return;const canAct=reveal.owner==="human"&&online.role!=="watcher";$("#reveal-dialog-title").textContent="Revealed cards · "+reveal.cards.length;$("#reveal-dialog-help").textContent=canAct?"Both players can see these cards. Move each to hand, Soul, or Drop, or finish looking to return the rest to the deck.":match.players.human.name+" revealed these cards. Both players can see them.";$("#reveal-card-list").innerHTML=renderInteractiveCards(reveal.cards,"reveal-action",canAct);$("#reveal-done").classList.toggle("hidden",!canAct);$("#reveal-close").classList.toggle("hidden",canAct);if(!$("#reveal-dialog").open)$("#reveal-dialog").showModal(); }
-  function openBindDialog() { if(!match)return;const cards=match.players.human.bind||[];$("#bind-card-list").innerHTML=cards.length?cards.map((item)=>{const c=cardMap.get(item.cardId);return c?'<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(c.id)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>'+zoneMoveControls(item,"bind")+'</article>':"";}).join(""):'<p class="zone-empty-message">No cards are bound.</p>';if(!$("#bind-dialog").open)$("#bind-dialog").showModal(); }
+  function openBindDialog() { if(!match)return;const cards=match.players.human.bind||[];$("#bind-card-list").innerHTML=cards.length?cards.map((item)=>{const c=cardMap.get(item.cardId);return c?'<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button><button class="zone-card-zoom" type="button" data-card-zoom="'+escapeHtml(c.id)+'" aria-label="Zoom '+escapeHtml(c.name)+'">⤢</button>'+zoneMoveControls(item,"bind")+'</article>':"";}).join(""):'<p class="zone-empty-message">No cards are bound.</p>';if(!$("#bind-dialog").open)$("#bind-dialog").showModal(); }
   function openDamageDialog(action) { if(!match){toast("Start a match first.");return;}const damage=match.players.human.damage||[];const eligible=damage.filter((item)=>action==="heal-damage"?true:action==="counter-blast"?!item.faceDown:item.faceDown);$("#damage-dialog-title").textContent=action==="heal-damage"?"Heal damage · choose a damage card":action==="counter-blast"?"Counter-Blast · choose face-up damage":"Counter-Charge · choose face-down damage";$("#damage-card-list").innerHTML=eligible.length?eligible.map((item)=>{const c=cardMap.get(item.cardId);return c?'<button class="zone-view-card" type="button" data-damage-action="'+(action==="heal-damage"?"heal":action)+':'+escapeHtml(item.uid)+'" title="Choose '+escapeHtml(c.name)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>':"";}).join(""):'<p class="zone-empty-message">No eligible damage cards.</p>';$("#damage-dialog").dataset.action=action;$("#damage-dialog").showModal(); }
   function performManualAction(action) {
     if (action === "view-selected-soul") { openSoulDialog(false, "human"); return; }
@@ -1088,7 +1158,7 @@
   $("#online-cancel").addEventListener("click", () => $("#online-dialog").close()); $("#close-online-dialog").addEventListener("click", () => $("#online-dialog").close());
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });
   $("#copy-spectate").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#spectate-link").value); toast("Spectator link copied."); } catch { $("#spectate-link").select(); document.execCommand("copy"); toast("Spectator link copied."); } });
-  $("#new-match").addEventListener("click", () => { endOnlineSession(); startMatch(); }); $("#empty-start").addEventListener("click", () => { endOnlineSession(); startMatch(); }); $("#reset-match").addEventListener("click", newMatchButton);
+  $("#new-match").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#empty-start").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#practice-start-confirm").addEventListener("click", () => { const firstSide = $("#practice-first-player").value; $("#practice-setup-dialog").close(); startMatch(null, firstSide); }); $("#reset-match").addEventListener("click", newMatchButton);
   $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher" || match.side !== "human") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
@@ -1099,6 +1169,14 @@
   $(".opponent-field .vanguard-zone").addEventListener("click", (e) => { if (match && !e.target.closest("[data-card-zoom]") && e.target.closest("[data-field-uid]")) openSoulDialog(false,"bot"); });
   $("#open-my-deck").addEventListener("click", openMyDeck); $("#open-bind-zone").addEventListener("click", openBindDialog);
   $("#open-opponent-drop-zone").addEventListener("click",()=>openDropDialog("bot"));
+  $$(".zone-card-list").forEach((list) => list.addEventListener("click", (event) => {
+    const face = event.target.closest("[data-zone-select]");
+    if (!face || (list.id === "soul-card-list" && $("#soul-dialog").dataset.blast === "1")) return;
+    const article = face.closest(".zone-view-card");
+    const wasSelected = article.classList.contains("selected");
+    list.querySelectorAll(".zone-view-card").forEach((card) => { card.classList.remove("selected"); card.querySelectorAll(".peek-actions").forEach((panel) => { panel.hidden = true; }); });
+    if (!wasSelected) { article.classList.add("selected"); article.querySelectorAll(".peek-actions").forEach((panel) => { panel.hidden = false; }); }
+  }));
   $$('[data-close-dialog]').forEach((button)=>button.addEventListener("click",()=>$("#"+button.dataset.closeDialog)?.close()));
   $$("dialog").forEach((dialog) => dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); }));
   $("#reveal-top-cards").addEventListener("click",()=>performManualAction("reveal-top-cards"));
@@ -1138,7 +1216,10 @@
   $("#art-next").addEventListener("click", () => { artPage += 1; renderArtGallery(); });
   $("#art-grid").addEventListener("click", (e) => { const tile = e.target.closest("[data-art-id]"); if (tile) showArtImage(Number(tile.dataset.artId)); });
   $("#close-card-dialog").addEventListener("click", () => $("#card-dialog").close()); $("#help-button").addEventListener("click", () => $("#help-dialog").showModal()); $("#close-help-dialog").addEventListener("click", () => $("#help-dialog").close());
-  $("#match-menu").addEventListener("click", () => { if (confirm("Start a new practice match? The current match will end.")) { endOnlineSession(); startMatch(); } });
+  $("#match-menu").addEventListener("click", () => { if (confirm("Start a new practice match? The current match will end.")) { endOnlineSession(); openPracticeSetup(); } });
+  $("#roll-online-die").addEventListener("click", () => { if (online.role === "guest") { if (!online.connection?.open) { toast("Wait for the host to connect, then roll again."); return; } online.connection.send({ type: "setup-roll" }); } else if (online.role === "host") rollOnlineDieFor("human"); });
+  $$("[data-first-choice]").forEach((button) => button.addEventListener("click", () => chooseOnlineFirstPlayer(button.dataset.firstChoice)));
+  $("#online-start-dialog").addEventListener("cancel", (event) => event.preventDefault());
   $("#card-dialog").addEventListener("click", (e) => { if (e.target === $("#card-dialog")) $("#card-dialog").close(); });
   populateClanFilters(); updateDeckCount(); renderBuilder(); renderLibrary(); renderArtGallery(); renderSavedDecks();
   initializeAccounts();
