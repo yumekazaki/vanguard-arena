@@ -1011,7 +1011,7 @@
   $("#view-soul").addEventListener("click", () => openSoulDialog(false)); $("#open-drop-zone").addEventListener("click", openDropDialog);
   $("#open-my-deck").addEventListener("click", openMyDeck); $("#open-bind-zone").addEventListener("click", openBindDialog);
   $("#open-opponent-drop-zone").addEventListener("click",()=>openDropDialog("bot"));
-  $('[data-close-dialog]').forEach((button)=>button.addEventListener("click",()=>$("#"+button.dataset.closeDialog).close()));
+  $$('[data-close-dialog]').forEach((button)=>button.addEventListener("click",()=>$("#"+button.dataset.closeDialog).close()));
   $("#reveal-top-cards").addEventListener("click",()=>performManualAction("reveal-top-cards"));
   $("#reveal-count-confirm").addEventListener("click",()=>{const n=Math.max(1,Math.min(60,Number($("#reveal-count").value)||1));$("#reveal-count-dialog").close();performManualAction("reveal-top:"+n);});
   $("#reveal-done").addEventListener("click",()=>performManualAction("reveal-done"));
