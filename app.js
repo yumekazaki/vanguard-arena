@@ -472,6 +472,10 @@
     if (moveRearButton) moveRearButton.disabled = online.role === "watcher" || !humanTurn || fieldCard?.side !== "human" || fieldCard.zone === "vanguard";
     const selectedVanguardSoul = $("[data-manual-action='view-selected-soul']");
     if (selectedVanguardSoul) selectedVanguardSoul.disabled = online.role === "watcher" || !fieldCard || fieldCard.side !== "human" || fieldCard.zone !== "vanguard";
+    const restSelected = $("[data-manual-action='rest-selected']");
+    if (restSelected) restSelected.disabled = online.role === "watcher" || !humanTurn || fieldCard?.side !== "human" || fieldCard.instance.rested;
+    const standSelected = $("[data-manual-action='stand-selected']");
+    if (standSelected) standSelected.disabled = online.role === "watcher" || !humanTurn || fieldCard?.side !== "human" || !fieldCard.instance.rested;
     $("#advance-phase").innerHTML = match.phase === phases.length - 1 ? `End turn <span>→</span>` : `Continue ${phases[match.phase + 1].toLowerCase()} phase <span>→</span>`;
     if (match.selected) {
       const cardId = handCard?.cardId || fieldCard?.instance.cardId; const c = cardMap.get(cardId);
@@ -715,6 +719,11 @@
     } else if (action === "lock") {
       const field = findFieldCard(match.selected); if (!field || field.side !== "human") { toast("Select one of your cards on the field to lock or unlock it."); return; }
       field.instance.locked = !field.instance.locked; addLog(`${player.name} ${field.instance.locked ? "locked" : "unlocked"} ${cardMap.get(field.instance.cardId)?.name || "a card"}.`);
+    } else if (action === "rest-selected" || action === "stand-selected") {
+      const field = findFieldCard(match.selected);
+      if (!field || field.side !== "human") { toast("Select one of your cards on the field first."); return; }
+      field.instance.rested = action === "rest-selected";
+      addLog(`${player.name} ${field.instance.rested ? "rested" : "stood"} ${cardMap.get(field.instance.cardId)?.name || "a card"}.`);
     } else if (action === "power") {
       const field = findFieldCard(match.selected); if (!field || field.side !== "human") { toast("Select one of your units first."); return; }
       field.instance.powerBoost = Number(field.instance.powerBoost || 0) + 5000; addLog(`${player.name} gave ${cardMap.get(field.instance.cardId)?.name || "a unit"} +5000 power.`);
