@@ -43,7 +43,7 @@
   let match = null;
   let selectedZone = null;
   let botTimer = null;
-  let online = { role: null, peer: null, connection: null, roomId: null, applyingRemote: false, dialogMode: "host" };
+  let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, applyingRemote: false, dialogMode: "host" };
   const localDeckStorageKey = "vanguardArenaDecks";
   const account = { client: null, user: null, syncing: false, recovery: false };
 
@@ -218,8 +218,8 @@
     renderBuilderCards();
   }
   function renderBuilderCards() {
-    const term = $("#card-search").value.trim().toLowerCase(); const grade = $("#grade-filter").value; const clan = $("#builder-clan-filter").value;
-    const filtered = cardList.filter((c) => gradeMatches(c, grade) && clanMatches(c, clan) && (!term || `${c.name} ${c.id} ${c.dbId || ""} ${c.clan || ""} ${c.nation || ""} ${c.type}`.toLowerCase().includes(term)));
+    const term = $("#card-search").value.trim().toLowerCase(); const grade = $("#grade-filter").value; const clan = $("#builder-clan-filter").value; const nation = $("#builder-nation-filter").value;
+    const filtered = cardList.filter((c) => gradeMatches(c, grade) && clanMatches(c, clan) && nationMatches(c, nation) && (!term || `${c.name} ${c.id} ${c.dbId || ""} ${c.clan || ""} ${c.nation || ""} ${c.type} ${c.trigger || ""}`.toLowerCase().includes(term)));
     const pages = Math.max(1, Math.ceil(filtered.length / cardPageSize)); builderPage = Math.min(builderPage, pages - 1);
     const visible = filtered.slice(builderPage * cardPageSize, (builderPage + 1) * cardPageSize);
     $("#builder-results-count").textContent = `${filtered.length.toLocaleString()} cards`;
@@ -240,11 +240,22 @@
     if (selected === "unknown") return !(card.clans || (card.clan ? [card.clan] : [])).length;
     return (card.clans || []).includes(selected) || card.clan === selected;
   }
+  function nationMatches(card, selected) {
+    const nations = card.nations?.length ? card.nations : (card.nation ? [card.nation] : []);
+    if (selected === "all") return true;
+    if (selected === "unknown") return nations.length === 0;
+    return nations.includes(selected);
+  }
   function populateClanFilters() {
     const clans = [...new Set(cardList.flatMap((c) => c.clans?.length ? c.clans : c.clan ? [c.clan] : []))].sort((a,b) => a.localeCompare(b));
     ["#builder-clan-filter", "#library-clan"].forEach((selector) => {
       const select = $(selector); if (!select) return;
       select.innerHTML = `<option value="all">All clans</option>${clans.map((clan) => `<option value="${escapeHtml(clan)}">${escapeHtml(clan)}</option>`).join("")}<option value="unknown">No clan listed</option>`;
+    });
+    const nations = [...new Set(cardList.flatMap((c) => c.nations?.length ? c.nations : c.nation ? [c.nation] : []))].sort((a,b) => a.localeCompare(b));
+    ["#builder-nation-filter", "#library-nation"].forEach((selector) => {
+      const select = $(selector); if (!select) return;
+      select.innerHTML = `<option value="all">All nations</option>${nations.map((nation) => `<option value="${escapeHtml(nation)}">${escapeHtml(nation)}</option>`).join("")}<option value="unknown">No nation listed</option>`;
     });
   }
   function saveDeck() {
@@ -263,8 +274,8 @@
     updateDeckCount();
   }
   function renderLibrary() {
-    const term = $("#library-search").value.trim().toLowerCase(); const grade = $("#library-grade").value; const clan = $("#library-clan").value;
-    const filtered = cardList.filter((c) => gradeMatches(c, grade) && clanMatches(c, clan) && (!term || `${c.name} ${c.id} ${c.dbId || ""} ${c.clan || ""} ${c.nation || ""} ${c.type}`.toLowerCase().includes(term)));
+    const term = $("#library-search").value.trim().toLowerCase(); const grade = $("#library-grade").value; const clan = $("#library-clan").value; const nation = $("#library-nation").value;
+    const filtered = cardList.filter((c) => gradeMatches(c, grade) && clanMatches(c, clan) && nationMatches(c, nation) && (!term || `${c.name} ${c.id} ${c.dbId || ""} ${c.clan || ""} ${c.nation || ""} ${c.type} ${c.trigger || ""}`.toLowerCase().includes(term)));
     const pages = Math.max(1, Math.ceil(filtered.length / cardPageSize)); libraryPage = Math.min(libraryPage, pages - 1);
     const visible = filtered.slice(libraryPage * cardPageSize, (libraryPage + 1) * cardPageSize);
     $("#library-count").textContent = `${filtered.length.toLocaleString()} cards · ${importedCatalog.length.toLocaleString()} matched to your images`;
@@ -303,7 +314,7 @@
   }
   function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
   function makePlayer(deck, name, human = false) {
-    const pile = shuffle(cardInstances(deck)); return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], vanguard: null, rear: [null, null], human };
+    const pile = shuffle(cardInstances(deck)); return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], vanguard: null, rear: [null, null], extra: [], gZone: [], quickShields: 0, human };
   }
   function startMatch(deck = null) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
@@ -321,7 +332,7 @@
     const you = match.players.human, bot = match.players.bot;
     $("#human-name").textContent = you.name; $("#table-human-name").textContent = you.name;
     $("#opponent-name").textContent = bot.name; $("#table-opponent-name").textContent = bot.name;
-    $("#match-status").textContent = online.role ? "ONLINE MATCH" : "PRACTICE MATCH";
+    $("#match-status").textContent = online.role === "watcher" ? "SPECTATING · LIVE" : online.role ? "ONLINE MATCH" : "PRACTICE MATCH";
     $("#opponent-deck-label").textContent = online.role ? "OPPONENT" : "DEMO DECK";
     $("#turn-label").textContent = match.side === "human" ? "YOUR TURN" : "OPPONENT TURN";
     $("#phase-label").textContent = match.side === "human" ? `${phases[match.phase]} phase` : "Practice Bot";
@@ -330,6 +341,8 @@
     $("#phase-list").innerHTML = phases.map((p, i) => `<div class="phase-item${i === match.phase ? " active" : ""}${i < match.phase ? " past" : ""}"><span class="phase-bullet">${i < match.phase ? "✓" : i + 1}</span>${p} phase</div>`).join("");
     $$(".phase-segment").forEach((el, i) => { el.classList.toggle("done", i < match.phase); el.classList.toggle("current", i === match.phase); });
     $("#human-deck-count").textContent = you.deck.length; $("#bot-deck-count").textContent = bot.deck.length; $("#human-drop-count").textContent = you.drop.length;
+    $(".human-line .player-title small").textContent = `YOUR SIDE · G ${you.gZone?.length || 0} · QUICK SHIELD ${you.quickShields || 0}`;
+    $(".opponent-line .player-title small").textContent = `${online.role ? "OPPONENT" : "DEMO DECK"} · G ${bot.gZone?.length || 0} · QUICK SHIELD ${bot.quickShields || 0}`;
     $("#human-damage").innerHTML = Array.from({ length: 6 }, (_, i) => `<span class="damage-heart${i < you.damage.length ? " filled" : ""}"></span>`).join("");
     $("#bot-damage").innerHTML = Array.from({ length: 6 }, (_, i) => `<span class="damage-heart${i < bot.damage.length ? " filled" : ""}"></span>`).join("");
     $("#bot-hand-count").textContent = `${bot.hand.length} CARDS`;
@@ -341,7 +354,7 @@
     $("#hand-count").textContent = `${you.hand.length} card${you.hand.length === 1 ? "" : "s"}`;
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog();
-    if (online.role === "host" && online.connection?.open && !online.applyingRemote) sendOnlineSnapshot();
+    if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
   }
   function renderZone(side, zone, instance) {
     const el = $(`.field-zone[data-side="${side}"][data-zone="${zone}"]`); if (!el) return;
@@ -375,6 +388,7 @@
       $("#selected-summary").innerHTML = `<span class="selected-card-icon">✦</span><span><b>${pending ? "Attack incoming" : "No card selected"}</b><small>${pending ? "Use Guard or No guard" : "Choose a card from your hand or field"}</small></span>`;
     }
     const noGuard = $("#no-guard"); if (noGuard) noGuard.classList.toggle("hidden", !pending || match.side === "human");
+    if (online.role === "watcher") $$(".action-buttons button").forEach((button) => { button.disabled = true; });
   }
   function findFieldCard(uid) {
     if (!uid || !match) return null;
@@ -485,6 +499,34 @@
     if (match.phase >= phases.length - 1) { endTurn(); return; }
     match.phase += 1; match.selected = null; setMessage(`${phases[match.phase]} phase.`); addLog(`You entered ${phases[match.phase].toLowerCase()} phase.`); renderMatch();
   }
+  function manualGameAction(action) {
+    if (!match || match.ended) return;
+    const player = match.players.human, card = selectedHandCard();
+    if (action === "damage-check" || action === "drive-check") {
+      const top = player.deck.pop(); if (!top) { toast("Your deck is empty."); return; }
+      (action === "damage-check" ? player.damage : player.hand).push(top);
+      addLog(`${player.name} performed a ${action === "damage-check" ? "damage" : "drive"} check and revealed ${cardMap.get(top.cardId)?.name || "a card"}. Resolve trigger effects manually.`);
+    } else if (action === "add-damage") {
+      if (!card) { toast("Select a card in your hand first."); return; }
+      player.hand = player.hand.filter((item) => item.uid !== card.uid); player.damage.push(card); match.selected = null;
+      addLog(`${player.name} moved ${cardMap.get(card.cardId)?.name || "a card"} from hand to damage.`);
+    } else if (action === "g-guard") {
+      if (!card) { toast("Select the card to pay the G-guard cost."); return; }
+      player.hand = player.hand.filter((item) => item.uid !== card.uid); player.drop.push(card); match.selected = null;
+      addLog(`${player.name} paid the manual G-guard cost with ${cardMap.get(card.cardId)?.name || "a card"}. Resolve shield and effects manually.`);
+    } else if (action === "stride") {
+      if (!card || !/G Unit/i.test(cardMap.get(card.cardId)?.type || "")) { toast("Select a G Unit from your hand. Add an Extra Deck/G zone manager before playing G Units from a separate deck."); return; }
+      if (player.vanguard) player.gZone.push(player.vanguard);
+      player.hand = player.hand.filter((item) => item.uid !== card.uid); player.vanguard = { ...card, rested: false }; match.selected = null;
+      addLog(`${player.name} strode ${cardMap.get(card.cardId)?.name || "a G Unit"}; resolve the discard cost manually.`);
+    } else if (action === "flip-g-unit") {
+      if (!player.gZone?.length) { toast("Your G zone is empty. A dedicated Extra Deck list is not set up yet."); return; }
+      const unit = player.gZone.shift(); player.extra.push(unit); addLog(`${player.name} turned a G-zone card face down in the Extra Deck.`);
+    } else if (action === "quick-shield") {
+      player.quickShields = (player.quickShields || 0) + 1; addLog(`${player.name} created a Quick Shield token (${player.quickShields}). Move it to drop when used.`);
+    }
+    renderMatch();
+  }
   function flipSide(side) { return side === "human" ? "bot" : side === "bot" ? "human" : side; }
   function onlineDeck() {
     if (builder.cards && deckCount(builder)) return { name: builder.name || "My Deck", cards: { ...builder.cards } };
@@ -510,7 +552,7 @@
   function getInviteId(value) {
     const text = String(value || "").trim();
     if (!text) return "";
-    try { const url = new URL(text); return url.searchParams.get("join") || ""; } catch { return text; }
+    try { const url = new URL(text); return url.searchParams.get("join") || url.searchParams.get("watch") || ""; } catch { return text; }
   }
   function sanitizedDeck(deck) {
     const cards = {};
@@ -529,15 +571,22 @@
     return snapshot;
   }
   function sendOnlineSnapshot() {
-    if (online.role !== "host" || !online.connection?.open || !match) return;
-    try { online.connection.send({ type: "state", match: snapshotForGuest() }); } catch { setOnlineError("Unable to send the latest match state. Reconnect and try again."); }
+    if (online.role !== "host" || !match) return;
+    try {
+      if (online.connection?.open) online.connection.send({ type: "state", match: snapshotForGuest() });
+      const publicMatch = JSON.parse(JSON.stringify(match));
+      for (const side of ["human", "bot"]) publicMatch.players[side].hand = publicMatch.players[side].hand.map((_, i) => ({ uid: `hidden-${side}-${i}`, cardId: null }));
+      online.watchers = online.watchers.filter((connection) => connection.open);
+      online.watchers.forEach((connection) => connection.send({ type: "watch-state", match: publicMatch }));
+      $("#spectator-count").textContent = `${online.watchers.length} spectator${online.watchers.length === 1 ? "" : "s"}`;
+    } catch { setOnlineError("Unable to send the latest match state. Reconnect and try again."); }
   }
   function updateGuestState(snapshot) {
     if (!snapshot) return;
     match = snapshot;
     match.log = (match.log || []).map((entry) => ({ ...entry, time: new Date(entry.time) }));
     selectedCard = null; selectedZone = null;
-    if (match.players?.human) match.players.human.name = online.localName || match.players.human.name;
+    if (online.role === "guest" && match.players?.human) match.players.human.name = online.localName || match.players.human.name;
     revealLocalMatch(); renderMatch();
   }
   function handleRemoteMessage(message) {
@@ -552,6 +601,7 @@
       return;
     }
     if (online.role === "guest" && message.type === "state") { updateGuestState(message.match); return; }
+    if (online.role === "watcher" && message.type === "watch-state") { updateGuestState(message.match); $("#match-status").textContent = "SPECTATING · LIVE"; return; }
     if (online.role !== "host" || !match || !["action", "select"].includes(message.type)) return;
     const players = match.players;
     match.players = { human: players.bot, bot: players.human };
@@ -560,6 +610,7 @@
     online.applyingRemote = true;
     try {
       if (message.type === "select") renderMatch();
+      else if (message.action?.startsWith("manual:")) manualGameAction(message.action.slice(8));
       else ({ draw: drawForHuman, ride: rideHuman, call: callHuman, attack: resolveHumanAttack, guard: humanGuard, noGuard, endTurn, advance: advancePhase }[message.action] || (() => {}))();
     } finally {
       match.players = players;
@@ -587,11 +638,21 @@
       online.roomId = id; $("#online-dialog").close(); startMatch(onlineDeck());
       match.players.human.name = online.localName; $("#online-invite").classList.remove("hidden");
       const invite = new URL(location.href); invite.searchParams.set("join", id); invite.hash = "play"; $("#invite-link").value = invite.toString();
+      const watch = new URL(location.href); watch.searchParams.delete("join"); watch.searchParams.set("watch", id); watch.hash = "play"; $("#spectate-link").value = watch.toString();
       setConnectionPill("WAITING"); setMessage("Invite link ready — waiting for your friend to join."); renderMatch();
     });
     online.peer.on("connection", (connection) => {
-      if (online.connection?.open) { connection.close(); return; }
-      bindOnlineConnection(connection, "host");
+      const onFirstData = (message) => {
+        connection.off("data", onFirstData);
+        if (message?.type === "watch") {
+          online.watchers.push(connection);
+          connection.on("close", () => { online.watchers = online.watchers.filter((item) => item !== connection); sendOnlineSnapshot(); });
+          connection.on("error", onlinePeerError); sendOnlineSnapshot();
+        } else if (message?.type === "join" && !online.connection?.open) {
+          bindOnlineConnection(connection, "host"); handleRemoteMessage(message);
+        } else connection.close();
+      };
+      connection.on("data", onFirstData);
     });
     online.peer.on("error", onlinePeerError);
   }
@@ -600,23 +661,40 @@
     if (!roomId) { setOnlineError("Paste a valid invite link or room code."); return; }
     if (!window.Peer) { setOnlineError("The online connection library did not load. Check your internet connection and reload."); return; }
     online.localName = String($("#online-name").value.trim() || "Player").slice(0, 24); localStorage.setItem("vanguardArenaPlayerName", online.localName);
-    online.role = "guest"; online.roomId = roomId; setConnectionPill("CONNECTING"); online.peer = new Peer();
-    online.peer.on("open", () => bindOnlineConnection(online.peer.connect(roomId, { reliable: true }), "guest"));
+    const watching = $("#online-join-role").value === "spectator" || new URLSearchParams(location.search).has("watch");
+    online.role = watching ? "watcher" : "guest"; online.roomId = roomId; setConnectionPill("CONNECTING"); online.peer = new Peer();
+    online.peer.on("open", () => {
+      if (watching) {
+        const connection = online.peer.connect(roomId, { reliable: true }); online.connection = connection;
+        connection.on("open", () => connection.send({ type: "watch", name: online.localName }));
+        connection.on("data", (message) => { if (message?.type === "watch-state") { updateGuestState(message.match); $("#match-status").textContent = "SPECTATING · LIVE"; } });
+        connection.on("close", () => { setConnectionPill("DISCONNECTED"); toast("Host disconnected."); }); connection.on("error", onlinePeerError);
+      } else bindOnlineConnection(online.peer.connect(roomId, { reliable: true }), "guest");
+    });
     online.peer.on("error", onlinePeerError);
     $("#online-dialog").close(); setMessage("Connecting to your friend's match…");
   }
   function endOnlineSession() {
-    try { online.connection?.close(); online.peer?.destroy(); } catch {}
-    online = { role: null, peer: null, connection: null, roomId: null, applyingRemote: false, dialogMode: "host" };
+    try { online.connection?.close(); online.watchers?.forEach((connection) => connection.close()); online.peer?.destroy(); } catch {}
+    online = { role: null, peer: null, connection: null, watchers: [], roomId: null, applyingRemote: false, dialogMode: "host" };
     setConnectionPill("READY");
     $("#online-invite").classList.add("hidden");
   }
   function performOnlineAction(action) {
+    if (online.role === "watcher") { toast("Spectators can watch but cannot change the match."); return; }
     if (online.role === "guest") {
       if (!online.connection?.open) { toast("You are disconnected from the match."); return; }
       online.connection.send({ type: "action", action, selected: match?.selected || null }); return;
     }
     ({ draw: drawForHuman, ride: rideHuman, call: callHuman, attack: resolveHumanAttack, guard: humanGuard, noGuard, endTurn, advance: advancePhase }[action] || (() => {}))();
+  }
+  function performManualAction(action) {
+    if (online.role === "watcher") { toast("Spectators can watch but cannot change the match."); return; }
+    if (online.role === "guest") {
+      if (!online.connection?.open) { toast("You are disconnected from the match."); return; }
+      online.connection.send({ type: "action", action: `manual:${action}`, selected: match?.selected || null }); return;
+    }
+    manualGameAction(action);
   }
   function exportDeck(deck, filename) {
     const content = JSON.stringify({ format: "Vanguard Arena local demo deck", name: deck.name, cards: deck.cards, exportedAt: new Date().toISOString() }, null, 2);
@@ -640,24 +718,26 @@
   $("#online-confirm").addEventListener("click", () => online.dialogMode === "host" ? beginHosting() : beginJoining());
   $("#online-cancel").addEventListener("click", () => $("#online-dialog").close()); $("#close-online-dialog").addEventListener("click", () => $("#online-dialog").close());
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });
+  $("#copy-spectate").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#spectate-link").value); toast("Spectator link copied."); } catch { $("#spectate-link").select(); document.execCommand("copy"); toast("Spectator link copied."); } });
   $("#new-match").addEventListener("click", () => { endOnlineSession(); startMatch(); }); $("#empty-start").addEventListener("click", () => { endOnlineSession(); startMatch(); }); $("#reset-match").addEventListener("click", newMatchButton);
   $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
-  $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || match.side !== "human") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
-  $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || field.dataset.side !== "human") return; match.selected = match.selected === field.dataset.fieldUid ? null : field.dataset.fieldUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
+  $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
+  $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher" || match.side !== "human") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
+  $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; match.selected = match.selected === field.dataset.fieldUid ? null : field.dataset.fieldUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
   $("#advance-phase").addEventListener("click", () => { if (match?.pendingAttack) return; });
   const noGuardButton = document.createElement("button"); noGuardButton.id = "no-guard"; noGuardButton.className = "button button-quiet hidden"; noGuardButton.textContent = "No guard"; noGuardButton.addEventListener("click", () => performOnlineAction("noGuard")); $(".action-buttons").insertBefore(noGuardButton, $("#guard-card"));
   $("#sort-hand").addEventListener("click", () => { if (!match) return; match.players.human.hand.sort((a, b) => { const ca = cardMap.get(a.cardId), cb = cardMap.get(b.cardId); return (ca?.grade || 0) - (cb?.grade || 0) || ca?.name.localeCompare(cb?.name); }); renderMatch(); });
   $("#clear-log").addEventListener("click", () => { if (match) { match.log = []; renderLog(); } });
   $("#create-deck").addEventListener("click", () => { emptyDeck(); showView("decks"); $("#deck-name").focus(); });
   $("#save-deck").addEventListener("click", saveDeck); $("#deck-name").addEventListener("input", () => { builder.name = $("#deck-name").value; $("#builder-title").textContent = builder.name || "Untitled deck"; });
-  $("#card-search").addEventListener("input", () => { builderPage = 0; renderBuilderCards(); }); $("#grade-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-clan-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); });
+  $("#card-search").addEventListener("input", () => { builderPage = 0; renderBuilderCards(); }); $("#grade-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-clan-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-nation-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); });
   $("#builder-prev").addEventListener("click", () => { builderPage = Math.max(0, builderPage - 1); renderBuilderCards(); }); $("#builder-next").addEventListener("click", () => { builderPage += 1; renderBuilderCards(); });
   $("#builder-card-grid").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const node = e.target.closest("[data-card-id]"); if (!node) return; const id = node.dataset.cardId; builder.cards[id] = Math.min(4, (builder.cards[id] || 0) + 1); renderBuilder(); });
   $("#deck-list").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const q = e.target.closest("[data-qty]"); const r = e.target.closest("[data-remove]"); if (q) { const id = q.dataset.id; builder.cards[id] = Math.max(0, Math.min(4, (builder.cards[id] || 0) + Number(q.dataset.qty))); if (!builder.cards[id]) delete builder.cards[id]; renderBuilder(); } if (r) { delete builder.cards[r.dataset.remove]; renderBuilder(); } });
   $("#saved-decks").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const load = e.target.closest("[data-load-deck]"); const duplicate = e.target.closest("[data-duplicate-deck]"); const remove = e.target.closest("[data-delete-deck]"); const exp = e.target.closest("[data-export-saved]"); const decks = readSavedDecks(); if (load) { const d = decks.find((x) => x.id === load.dataset.loadDeck); if (d) loadDeck(d); } if (duplicate) { const d = decks.find((x) => x.id === duplicate.dataset.duplicateDeck); if (d) { const copy = { ...d, id: crypto.randomUUID?.() || String(Date.now()), name: `${d.name} Copy`, updatedAt: new Date().toISOString() }; decks.unshift(copy); writeSavedDecks(decks); renderSavedDecks(); toast("Deck duplicated"); } } if (remove) { const d = decks.find((x) => x.id === remove.dataset.deleteDeck); if (d && confirm(`Delete “${d.name}” from this browser?`)) { writeSavedDecks(decks.filter((x) => x.id !== d.id)); void deleteCloudDeck(d.id); renderSavedDecks(); } } if (exp) { const d = decks.find((x) => x.id === exp.dataset.exportSaved); if (d) exportDeck(d, `${d.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`); } });
   $("#export-deck").addEventListener("click", () => exportDeck(builder, `${builder.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`));
   $("#import-deck").addEventListener("click", () => $("#deck-file").click()); $("#deck-file").addEventListener("change", (e) => { if (e.target.files[0]) importDeckFile(e.target.files[0]); e.target.value = ""; });
-  $("#library-search").addEventListener("input", () => { libraryPage = 0; renderLibrary(); }); $("#library-grade").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-clan").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-prev").addEventListener("click", () => { libraryPage = Math.max(0, libraryPage - 1); renderLibrary(); }); $("#library-next").addEventListener("click", () => { libraryPage += 1; renderLibrary(); }); $("#library-grid").addEventListener("click", (e) => { const node = e.target.closest("[data-card-detail]"); if (node) showCardDetails(node.dataset.cardDetail); });
+  $("#library-search").addEventListener("input", () => { libraryPage = 0; renderLibrary(); }); $("#library-grade").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-clan").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-nation").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-prev").addEventListener("click", () => { libraryPage = Math.max(0, libraryPage - 1); renderLibrary(); }); $("#library-next").addEventListener("click", () => { libraryPage += 1; renderLibrary(); }); $("#library-grid").addEventListener("click", (e) => { const node = e.target.closest("[data-card-detail]"); if (node) showCardDetails(node.dataset.cardDetail); });
   $("#art-search").addEventListener("input", () => { artPage = 0; renderArtGallery(); });
   $("#art-prev").addEventListener("click", () => { artPage = Math.max(0, artPage - 1); renderArtGallery(); });
   $("#art-next").addEventListener("click", () => { artPage += 1; renderArtGallery(); });
@@ -669,5 +749,5 @@
   initializeAccounts();
   const initial = ["play", "decks", "cards"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "play"; showView(initial);
   if (!readSavedDecks().length) { $("#match-layout").classList.add("hidden"); $("#match-empty").classList.remove("hidden"); }
-  const joinInvite = new URLSearchParams(location.search).get("join"); if (joinInvite) openOnlineDialog("join", location.href);
+  const inviteParams = new URLSearchParams(location.search); if (inviteParams.has("join") || inviteParams.has("watch")) { openOnlineDialog("join", location.href); if (inviteParams.has("watch")) $("#online-join-role").value = "spectator"; }
 })();
