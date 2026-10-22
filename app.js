@@ -647,6 +647,20 @@
       if (match.revealed?.cards?.length) { toast("Finish the current reveal first."); return; }
       const count = Math.max(1, Math.min(player.deck.length, Number(action.split(":")[1]) || 1)); const cards = []; for (let i = 0; i < count; i++) cards.push(player.deck.pop());
       match.revealed = { owner: "human", cards }; addLog(`${player.name} revealed ${cards.length} card${cards.length === 1 ? "" : "s"} from the top of the deck.`); renderSharedReveal();
+    } else if (action.startsWith("zone-move:")) {
+      const [, source, choice, uid] = action.split(":");
+      const sourceZones = { deck: player.deck, bind: player.bind || [], gdeck: player.gDeck || [] };
+      const sourceCards = sourceZones[source], index = sourceCards?.findIndex((item) => item.uid === uid) ?? -1;
+      if (index < 0) return;
+      const instance = sourceCards.splice(index, 1)[0];
+      if (choice === "hand") player.hand.push(instance);
+      else if (choice === "soul") player.soul.push(instance);
+      else if (choice === "bind") { player.bind ||= []; player.bind.push(instance); }
+      else if (choice === "deck-top") player.deck.push(instance);
+      else if (choice === "deck-bottom") player.deck.unshift(instance);
+      else player.drop.push(instance);
+      const destination = { hand: "hand", soul: "Soul", bind: "Bind", drop: "Drop", "deck-top": "the top of the deck", "deck-bottom": "the bottom of the deck" }[choice] || "Drop";
+      addLog(`${player.name} moved ${cardMap.get(instance.cardId)?.name || "a card"} from ${source === "gdeck" ? "the G deck" : source === "bind" ? "Bind" : "the deck"} to ${destination}.`);
     } else if (action.startsWith("deck-action:")) {
       const [, choice, uid] = action.split(":"); const index = player.deck.findIndex((item) => item.uid === uid); if (index < 0) return; const instance = player.deck.splice(index, 1)[0];
       if (choice === "hand") player.hand.push(instance); else if (choice === "soul") player.soul.push(instance); else player.drop.push(instance);
@@ -684,6 +698,15 @@
       const type = action.slice("gift-accel:".length); player.accelZones = (player.accelZones || 0) + 1; player.rear.push(null); player.gifts = (player.gifts || 0) + 1; addLog(`${player.name} created an ${type} circle.`);
     } else if (action === "shuffle") {
       shuffle(player.deck); addLog(`${player.name} shuffled their deck.`);
+    } else if (action === "swap-rear") {
+      match.swapRearPending = !match.swapRearPending; match.swapRearFirst = null; match.selected = null;
+      toast(match.swapRearPending ? "Choose two Rear-Guards to swap. Click Swap Rear-Guards again to cancel." : "Rear-Guard swap canceled.");
+    } else if (action.startsWith("swap-rear:")) {
+      const [, firstUid, secondUid] = action.split(":");
+      const first = player.rear.findIndex((item) => item?.uid === firstUid), second = player.rear.findIndex((item) => item?.uid === secondUid);
+      if (first < 0 || second < 0 || first === second) { toast("Choose two different Rear-Guards."); return; }
+      [player.rear[first], player.rear[second]] = [player.rear[second], player.rear[first]]; match.swapRearPending = false;
+      addLog(`${player.name} swapped two Rear-Guards.`);
     } else if (action === "stride" || action.startsWith("stride:")) {
       if (action === "stride") { openGDeckDialog("stride"); return; }
       const uid = action.slice("stride:".length); const unitIndex = player.gDeck?.findIndex((item) => item.uid === uid) ?? -1;
@@ -794,7 +817,7 @@
     match.log = (match.log || []).map((entry) => ({ ...entry, time: new Date(entry.time) }));
     selectedCard = null; selectedZone = null;
     if (online.role === "guest" && match.players?.human) match.players.human.name = online.localName || match.players.human.name;
-    revealLocalMatch(); renderMatch(); if($("#deck-view-dialog").open)openMyDeck(); if($("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side);
+    revealLocalMatch(); renderMatch(); if($("#deck-view-dialog").open)openMyDeck(); if($("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); if($("#bind-dialog").open)openBindDialog(); if($("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind);
   }
   function handleRemoteMessage(message) {
     if (!message || typeof message !== "object") return;
@@ -937,9 +960,15 @@
     $("#drop-card-list").innerHTML=cards.length?cards.map((instance)=>{const c=cardMap.get(instance.cardId);if(!c)return "";const unit=/Unit/i.test(c.type||"");const moves=own?'<div class="peek-actions"><button class="button" data-drop-action="hand:'+escapeHtml(instance.uid)+'">Add to hand</button>'+(unit?'<select class="text-input drop-field-select" data-drop-uid="'+escapeHtml(instance.uid)+'">'+fieldOptions+'</select>':'')+'<button class="button" data-drop-action="deck-top:'+escapeHtml(instance.uid)+'">Return to deck top</button><button class="button" data-drop-action="deck-bottom:'+escapeHtml(instance.uid)+'">Return to deck bottom</button></div>':'';return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(c.id)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>'+moves+'</article>';}).join(""):'<p class="zone-empty-message">No cards in Drop yet.</p>';
     $("#drop-dialog").dataset.side=side;if(!$("#drop-dialog").open)$("#drop-dialog").showModal();
   }
+  function zoneMoveControls(instance, source, canAct = true) {
+    if (!canAct) return "";
+    const card = cardMap.get(instance.cardId), unit = /Unit/i.test(card?.type || "");
+    const button = (choice, label) => `<button class="button" type="button" data-zone-move="${source}:${choice}:${escapeHtml(instance.uid)}">${label}</button>`;
+    return `<div class="peek-actions">${button("hand", "Add to hand")}${unit ? button("soul", "Add to Soul") : ""}${button("drop", "Send to Drop")}${source !== "deck" ? button("deck-top", "Return to deck top") : ""}${source !== "deck" ? button("deck-bottom", "Return to deck bottom") : ""}</div>`;
+  }
   function renderInteractiveCards(instances, prefix, canAct = true) {
     if (!instances?.length) return '<p class="zone-empty-message">No cards here.</p>';
-    return instances.map((instance) => { const card=cardMap.get(instance.cardId); if(!card)return ""; const unit=/Unit/i.test(card.type||""); const controls=canAct?'<div class="peek-actions"><button class="button" data-peek-action="'+prefix+':hand:'+escapeHtml(instance.uid)+'">Add to hand</button>'+(unit?'<button class="button" data-peek-action="'+prefix+':soul:'+escapeHtml(instance.uid)+'">Add to Soul</button>':'')+'<button class="button" data-peek-action="'+prefix+':drop:'+escapeHtml(instance.uid)+'">Send to Drop</button></div>':''; return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(card.id)+'">'+cardImage(card)+'<b>'+escapeHtml(card.name)+'</b></button>'+controls+'</article>'; }).join("");
+    return instances.map((instance) => { const card=cardMap.get(instance.cardId); if(!card)return ""; const unit=/Unit/i.test(card.type||""); const controls=canAct?(prefix==="deck-action"?zoneMoveControls(instance,"deck"): '<div class="peek-actions"><button class="button" type="button" data-peek-action="'+prefix+':hand:'+escapeHtml(instance.uid)+'">Add to hand</button>'+(unit?'<button class="button" type="button" data-peek-action="'+prefix+':soul:'+escapeHtml(instance.uid)+'">Add to Soul</button>':'')+'<button class="button" type="button" data-peek-action="'+prefix+':drop:'+escapeHtml(instance.uid)+'">Send to Drop</button></div>'):''; return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(card.id)+'">'+cardImage(card)+'<b>'+escapeHtml(card.name)+'</b></button>'+controls+'</article>'; }).join("");
   }
   function openMyDeck() { if(!match){toast("Start a match to look through your deck.");return;} const cards=match.players.human.deck.slice().reverse(); $("#deck-view-title").textContent="Your deck · "+cards.length+" cards"; $("#deck-view-help").textContent="Choose any card to add to your hand, add a Unit to Soul, or send it to Drop."; $("#deck-view-list").innerHTML=renderInteractiveCards(cards,"deck-action"); if(!$("#deck-view-dialog").open)$("#deck-view-dialog").showModal(); }
   function openGDeckDialog(kind) {
@@ -954,20 +983,20 @@
     $("#gdeck-dialog-help").textContent = isGuard ? "Choose a G Guardian from your G deck to place face up in the G zone." : "Choose which G Unit to ride over your Vanguard.";
     $("#gdeck-card-list").innerHTML = cards.length ? cards.map((item) => {
       const card = cardMap.get(item.cardId);
-      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="' + escapeHtml(card.id) + '">' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="button button-primary" data-gdeck-action="' + (isGuard ? "g-guard" : "stride") + ':' + escapeHtml(item.uid) + '">' + (isGuard ? "G-guard" : "Stride") + '</button></article>' : "";
+      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="' + escapeHtml(card.id) + '">' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="button button-primary" type="button" data-gdeck-action="' + (isGuard ? "g-guard" : "stride") + ':' + escapeHtml(item.uid) + '">' + (isGuard ? "G-guard" : "Stride") + '</button>' + zoneMoveControls(item,"gdeck") + '</article>' : "";
     }).join("") : '<p class="zone-empty-message">No ' + (isGuard ? "G Guardians" : "G Units") + ' are available in your G deck.</p>';
     $("#gdeck-dialog").dataset.kind = kind;
-    $("#gdeck-dialog").showModal();
+    if (!$("#gdeck-dialog").open) $("#gdeck-dialog").showModal();
   }
   function renderSharedReveal() { const reveal=match?.revealed;if(!reveal?.cards?.length)return;const canAct=reveal.owner==="human"&&online.role!=="watcher";$("#reveal-dialog-title").textContent="Revealed cards · "+reveal.cards.length;$("#reveal-dialog-help").textContent=canAct?"Both players can see these cards. Move each to hand, Soul, or Drop, or finish looking to return the rest to the deck.":match.players.human.name+" revealed these cards. Both players can see them.";$("#reveal-card-list").innerHTML=renderInteractiveCards(reveal.cards,"reveal-action",canAct);$("#reveal-done").classList.toggle("hidden",!canAct);$("#reveal-close").classList.toggle("hidden",canAct);if(!$("#reveal-dialog").open)$("#reveal-dialog").showModal(); }
-  function openBindDialog() { if(!match)return;const cards=match.players.human.bind||[];$("#bind-card-list").innerHTML=cards.length?cards.map((item)=>{const c=cardMap.get(item.cardId);return c?'<button class="zone-view-card" type="button" data-card-zoom="'+escapeHtml(c.id)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>':"";}).join(""):'<p class="zone-empty-message">No cards are bound.</p>';$("#bind-dialog").showModal(); }
+  function openBindDialog() { if(!match)return;const cards=match.players.human.bind||[];$("#bind-card-list").innerHTML=cards.length?cards.map((item)=>{const c=cardMap.get(item.cardId);return c?'<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(c.id)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>'+zoneMoveControls(item,"bind")+'</article>':"";}).join(""):'<p class="zone-empty-message">No cards are bound.</p>';if(!$("#bind-dialog").open)$("#bind-dialog").showModal(); }
   function openDamageDialog(action) { if(!match){toast("Start a match first.");return;}const damage=match.players.human.damage||[];const eligible=damage.filter((item)=>action==="heal-damage"?true:action==="counter-blast"?!item.faceDown:item.faceDown);$("#damage-dialog-title").textContent=action==="heal-damage"?"Heal damage · choose a damage card":action==="counter-blast"?"Counter-Blast · choose face-up damage":"Counter-Charge · choose face-down damage";$("#damage-card-list").innerHTML=eligible.length?eligible.map((item)=>{const c=cardMap.get(item.cardId);return c?'<button class="zone-view-card" type="button" data-damage-action="'+(action==="heal-damage"?"heal":action)+':'+escapeHtml(item.uid)+'" title="Choose '+escapeHtml(c.name)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>':"";}).join(""):'<p class="zone-empty-message">No eligible damage cards.</p>';$("#damage-dialog").dataset.action=action;$("#damage-dialog").showModal(); }
   function performManualAction(action) {
     if (online.role === "watcher") { toast("Spectators can watch but cannot change the match."); return; }
     if (action === "soul-blast") { openSoulDialog(true); return; }
     if (action === "stride" || action === "g-guard") { if(action === "g-guard" && !match?.pendingAttack){toast("Use G-guard while defending an attack.");return;} openGDeckDialog(action); return; }
     if (action === "counter-blast" || action === "counter-charge" || action === "heal-damage") { openDamageDialog(action); return; }
-    if (action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action === "reveal-done") { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.connection.send({type:"action",action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
+    if (action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action === "reveal-done") { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.connection.send({type:"action",action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
     if (action === "reveal-top-cards") { if (!match) { toast("Start a match first."); return; } $("#reveal-count-dialog").showModal(); return; }
     if (action === "gift-force" || action === "gift-accel") { openGiftDialog(action === "gift-force" ? "force" : "accel"); return; }
     if (online.role === "guest") {
@@ -1005,21 +1034,22 @@
   $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher" || match.side !== "human") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
-  $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; match.selected = match.selected === field.dataset.fieldUid ? null : field.dataset.fieldUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
+  $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; const uid = field.dataset.fieldUid; if (match.swapRearPending && field.dataset.zone !== "vanguard") { if (!match.swapRearFirst) { match.swapRearFirst = uid; toast("Now choose the Rear-Guard to swap with."); renderMatch(); return; } const first = match.swapRearFirst; match.swapRearPending = false; match.swapRearFirst = null; performManualAction(`swap-rear:${first}:${uid}`); return; } match.selected = match.selected === uid ? null : uid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
   $("#gift-cancel").addEventListener("click", () => $("#gift-dialog").close()); $("#gift-close").addEventListener("click", () => $("#gift-dialog").close());
   $("#gift-confirm").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind === "force") { const zone = $("#gift-zone").value; if (!zone) { toast("Choose a circle for the Force marker."); return; } performManualAction(`gift-force:${type}:${zone}`); } else performManualAction(`gift-accel:${type}`); dialog.close(); });
   $("#view-soul").addEventListener("click", () => openSoulDialog(false)); $("#open-drop-zone").addEventListener("click", openDropDialog);
   $("#open-my-deck").addEventListener("click", openMyDeck); $("#open-bind-zone").addEventListener("click", openBindDialog);
   $("#open-opponent-drop-zone").addEventListener("click",()=>openDropDialog("bot"));
-  $$('[data-close-dialog]').forEach((button)=>button.addEventListener("click",()=>$("#"+button.dataset.closeDialog).close()));
+  $$('[data-close-dialog]').forEach((button)=>button.addEventListener("click",()=>$("#"+button.dataset.closeDialog)?.close()));
+  $$("dialog").forEach((dialog) => dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); }));
   $("#reveal-top-cards").addEventListener("click",()=>performManualAction("reveal-top-cards"));
   $("#reveal-count-confirm").addEventListener("click",()=>{const n=Math.max(1,Math.min(60,Number($("#reveal-count").value)||1));$("#reveal-count-dialog").close();performManualAction("reveal-top:"+n);});
   $("#reveal-done").addEventListener("click",()=>performManualAction("reveal-done"));
   $("#reveal-close").addEventListener("click",()=>$("#reveal-dialog").close());
-  $("#deck-view-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const action=e.target.closest("[data-peek-action]");if(action)performManualAction(action.dataset.peekAction);});
+  $("#deck-view-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
   $("#reveal-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const action=e.target.closest("[data-peek-action]");if(action)performManualAction(action.dataset.peekAction);});
-  $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
-  $("#bind-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom)showCardDetails(zoom.dataset.cardZoom);});
+  $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
+  $("#bind-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
   $("#damage-card-list").addEventListener("click",(e)=>{const action=e.target.closest("[data-damage-action]");if(action){$("#damage-dialog").close();performManualAction("damage-action:"+action.dataset.damageAction);}});
   $("#close-soul-dialog").addEventListener("click", () => $("#soul-dialog").close()); $("#soul-blast-cancel").addEventListener("click", () => $("#soul-dialog").close());
   $("#soul-card-list").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom && !$("#soul-dialog").dataset.blast) { showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-soul-uid]"); if (card && $("#soul-dialog").dataset.blast) card.classList.toggle("selected"); });
