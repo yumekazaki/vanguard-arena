@@ -92,3 +92,14 @@
 .human-side .field-row{top:54%;bottom:auto}.human-side .rear-row{top:20%;bottom:auto}
 @media(max-width:760px){.opponent-side .field-row{top:20%;bottom:auto}.opponent-side .rear-row{top:54%;bottom:auto}.human-side .field-row{top:54%;bottom:auto}.human-side .rear-row{top:20%;bottom:auto}}
 @media(max-width:430px){.opponent-side .field-row{top:20%;bottom:auto}.opponent-side .rear-row{top:54%;bottom:auto}.human-side .field-row{top:54%;bottom:auto}.human-side .rear-row{top:20%;bottom:auto}}
+.mat-opponent{top:0;bottom:auto;transform:scaleY(-1)}.mat-player{top:auto;bottom:0;transform:none}
+/* Both Vanguard circles face the center seam; each player's mat-top is inward. */
+.opponent-side .field-row{top:54%;bottom:auto}.opponent-side .rear-row{top:20%;bottom:auto}
+.human-side .field-row{top:20%;bottom:auto}.human-side .rear-row{top:54%;bottom:auto}
+.opponent-line .deck-zone{top:auto;bottom:22%}.opponent-line .drop-zone{top:22%;bottom:auto}
+.human-line .deck-zone{top:22%;bottom:auto}.human-line .drop-zone{top:55%;bottom:auto}
+@media(max-width:760px){.opponent-side .field-row{top:54%;bottom:auto}.opponent-side .rear-row{top:20%;bottom:auto}.human-side .field-row{top:20%;bottom:auto}.human-side .rear-row{top:54%;bottom:auto}.opponent-line .deck-zone{top:auto;bottom:22%}.opponent-line .drop-zone{top:22%;bottom:auto}.human-line .deck-zone{top:22%;bottom:auto}.human-line .drop-zone{top:55%;bottom:auto}}
+@media(max-width:430px){.opponent-side .field-row{top:54%;bottom:auto}.opponent-side .rear-row{top:20%;bottom:auto}.human-side .field-row{top:20%;bottom:auto}.human-side .rear-row{top:54%;bottom:auto}}
+.opponent-side .field-row{top:48%;bottom:auto}.opponent-side .rear-row{top:14%;bottom:auto}
+@media(max-width:760px){.opponent-side .field-row{top:48%;bottom:auto}.opponent-side .rear-row{top:14%;bottom:auto}}
+@media(max-width:430px){.opponent-side .field-row{top:48%;bottom:auto}.opponent-side .rear-row{top:14%;bottom:auto}}
