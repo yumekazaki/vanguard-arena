@@ -482,10 +482,12 @@
     if (turnPower) effectLabels.push(`+${Math.round(turnPower / 1000)}k`);
     if (turnCrit) effectLabels.push(`+${turnCrit} CRIT`);
     if (forcePower) effectLabels.push(`+${Math.round(forcePower / 1000)}k FORCE I`);
-    const effectTag = effectLabels.length ? `<span class="turn-effect-badge">${escapeHtml(effectLabels.join(" · "))}</span>` : "";
     const effectivePower = Number(c.power || 0) + Number(instance.powerBoost || 0) + turnPower + forcePower;
     const effectivePowerLabel = effectivePower.toLocaleString();
-    const effectiveCrit = Math.max(1, Number(c.critical || 1) + turnCrit);
+    const forceCrit = markers.filter((gift) => /^Force II$/i.test(gift.type || "")).length;
+    const effectiveCrit = Math.max(1, Number(c.critical || 1) + turnCrit + forceCrit);
+    if (forceCrit) effectLabels.push(`+${forceCrit} CRIT FORCE II`);
+    const effectTag = effectLabels.length ? `<span class="turn-effect-badge">${escapeHtml(effectLabels.join(" · "))}</span>` : "";
     const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; const powerBreakdown = [`base ${Number(c.power || 0).toLocaleString()}`, Number(instance.powerBoost || 0) ? `+${Number(instance.powerBoost).toLocaleString()} manual` : "", turnPower ? `+${turnPower.toLocaleString()} temporary until end of turn` : "", forcePower ? `+${forcePower.toLocaleString()} Force I for this turn` : ""].filter(Boolean).join(" · "); field.title = `${c.name}\nPower: ${effectivePowerLabel}${effectiveCrit > 1 ? ` · ${effectiveCrit} critical` : ""}\n${powerBreakdown}`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade}`}</span>${effectTag}<span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${effectivePowerLabel}</b><span>${effectiveCrit} CRIT</span></span>`;
     if (c.image) { field.style.backgroundImage = `linear-gradient(#1118,#111c),url("${String(c.image).replace(/["\\]/g, "")}")`; field.style.backgroundSize = "cover"; }
     el.appendChild(field);
@@ -698,7 +700,7 @@
     const forcePower = field && match.side === field.side ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force I$/i.test(gift.type || "")).length * 10000 : 0;
     return Number(card?.power || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0) + forcePower;
   }
-  function attackerCritical(entry) { return Math.max(1, Number(cardMap.get(entry.instance.cardId)?.critical || 1) + Number(entry.instance.turnCriticalBoost || 0)); }
+  function attackerCritical(entry) { const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid); const forceCrit = field ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force II$/i.test(gift.type || "")).length : 0; return Math.max(1, Number(cardMap.get(entry.instance.cardId)?.critical || 1) + Number(entry.instance.turnCriticalBoost || 0) + forceCrit); }
   function resolveHumanAttack() {
     if (match?.turn === 1 && match.firstSide === "human") { toast("The player going first cannot attack during their first turn."); return; }
     const field = findFieldCard(match.selected); if (!field || field.side !== "human" || field.instance.rested || field.instance.locked || match.phase !== 4 || !match.players.bot.vanguard) return;
@@ -934,9 +936,9 @@
       field.instance.powerBoost = Number(field.instance.powerBoost || 0) + 5000; addLog(`${player.name} gave ${cardMap.get(field.instance.cardId)?.name || "a unit"} +5000 power.`);
     } else if (action.startsWith("gift-force:")) {
       const [, type, zone] = action.split(":");
-      const zones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
+      const zones = ["vanguard", "rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
       if (!zones.includes(zone)) { toast("Choose a circle for the Force marker."); return; }
-      player.giftZones.push({ type, zone }); player.gifts = (player.gifts || 0) + 1; addLog(`${player.name} placed ${type} on ${zone}.`);
+      player.giftZones.push({ type, zone }); player.gifts = (player.gifts || 0) + 1; const stackCount = player.giftZones.filter((gift) => gift.zone === zone && gift.type === type).length; addLog(`${player.name} placed ${type} on ${zone}${stackCount > 1 ? ` (stack ${stackCount})` : ""}.`);
     } else if (action.startsWith("gift-accel:")) {
       const type = action.slice("gift-accel:".length); player.accelZones = (player.accelZones || 0) + 1; player.rear.push(null); player.gifts = (player.gifts || 0) + 1; addLog(`${player.name} created an ${type} circle.`);
     } else if (action === "shuffle") {
@@ -1207,8 +1209,8 @@
     const dialog = $("#gift-dialog"), force = kind === "force";
     $("#gift-type").innerHTML = force ? "<option>Force I</option><option>Force II</option>" : "<option>Accel I</option><option>Accel II</option>";
     $("#gift-zone-wrap").classList.toggle("hidden", !force);
-    const player = match?.players.human, zones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player?.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
-    const names = { "rear-left": "Front left", "rear-right": "Front right", "rear-back-left": "Back left", "rear-back-center": "Back center", "rear-back-right": "Back right" };
+    const player = match?.players.human, zones = ["vanguard", "rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player?.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
+    const names = { vanguard: "Vanguard", "rear-left": "Front left", "rear-right": "Front right", "rear-back-left": "Back left", "rear-back-center": "Back center", "rear-back-right": "Back right" };
     $("#gift-zone").innerHTML = '<option value="">Choose a circle…</option>' + zones.map((zone) => `<option value="${zone}">${names[zone] || `Accel ${zone.split("-")[1]}`}</option>`).join("");
     dialog.dataset.kind = kind; dialog.showModal();
   }
