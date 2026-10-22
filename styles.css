@@ -86,3 +86,9 @@
 .gdeck-button{right:3%;bottom:3%}.opponent-line .gdeck-button{top:3%;bottom:auto}
 @media(max-width:760px){.opponent-side .field-row{bottom:16%}.opponent-side .rear-row{bottom:50%}.human-side .field-row{top:14%}.human-side .rear-row{top:48%}.opponent-line .deck-zone{top:22%}.opponent-line .drop-zone{top:55%}.human-line .deck-zone{bottom:22%}.human-line .drop-zone{bottom:55%}.deck-zone,.zone-stack.drop-zone{right:2%}.soul-pips,.player-line .opponent-soul-button{right:2%;top:44%;bottom:auto}}
 @media(max-width:430px){.opponent-side .field-row{bottom:16%}.opponent-side .rear-row{bottom:50%}.human-side .field-row{top:14%}.human-side .rear-row{top:48%}.opponent-line .deck-zone{top:22%}.opponent-line .drop-zone{top:55%}.human-line .deck-zone{bottom:22%}.human-line .drop-zone{bottom:55%}}
+.mat-half{background:none!important;overflow:hidden}.mat-half img{display:block;width:100%;height:100%;object-fit:fill;filter:brightness(.96) contrast(1.06)}
+/* The cyan Vanguard ring is on the inner row of each mirrored half. */
+.opponent-side .field-row{top:20%;bottom:auto}.opponent-side .rear-row{top:54%;bottom:auto}
+.human-side .field-row{top:54%;bottom:auto}.human-side .rear-row{top:20%;bottom:auto}
+@media(max-width:760px){.opponent-side .field-row{top:20%;bottom:auto}.opponent-side .rear-row{top:54%;bottom:auto}.human-side .field-row{top:54%;bottom:auto}.human-side .rear-row{top:20%;bottom:auto}}
+@media(max-width:430px){.opponent-side .field-row{top:20%;bottom:auto}.opponent-side .rear-row{top:54%;bottom:auto}.human-side .field-row{top:54%;bottom:auto}.human-side .rear-row{top:20%;bottom:auto}}
