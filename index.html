@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101118" />
+    <title>Vanguard Arena — Card Game Sandbox</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#play" aria-label="Vanguard Arena home">
+          <span class="brand-mark">V</span>
+          <span>VANGUARD <b>ARENA</b><small>ONLINE CARD GAME SANDBOX</small></span>
+        </a>
+        <nav class="main-nav" aria-label="Main navigation">
+          <button class="nav-button active" data-view="play">Play</button>
+          <button class="nav-button" data-view="decks">Decks <span id="deck-count" class="nav-count">0</span></button>
+          <button class="nav-button" data-view="cards">Card library</button>
+        </nav>
+        <div class="topbar-right"><span class="local-pill" id="connection-pill"><i></i> READY</span><button class="icon-button" id="help-button" title="About this prototype">?</button></div>
+      </header>
+
+      <main id="app-main">
+        <section id="view-play" class="view active-view">
+          <div class="page-heading play-heading">
+            <div><p class="eyebrow">PLAY WITH FRIENDS <span class="tiny-dot"></span> EARLY ONLINE BUILD</p><h1>Cardfight <em>Sandbox</em></h1><p class="subheading">Host a table, share an invite link, and play a simplified online match.</p></div>
+          <div class="heading-actions"><button class="button button-quiet" id="join-online">Join online</button><button class="button button-quiet" id="host-online">Host online</button><button class="button button-quiet" id="reset-match">New practice match</button><button class="button button-primary" id="new-match">Start practice</button></div>
+          </div>
+
+          <div id="match-empty" class="empty-match hidden">
+            <div class="empty-art">✦</div><h2>Your table is ready</h2><p>Start a local practice match, or host/join an online match with a friend.</p><div class="empty-actions"><button class="button button-primary" id="host-online-empty">Host online match</button><button class="button button-quiet" id="join-online-empty">Join with invite link</button><button class="button button-quiet" id="empty-start">Practice locally</button><button class="button button-quiet" data-goto="decks">Browse saved decks</button></div>
+          </div>
+
+          <div id="match-layout" class="match-layout">
+            <aside class="match-rail">
+          <div class="rail-card status-card"><div class="status-top"><span class="live-dot"></span><span id="match-status">PRACTICE MATCH</span><button id="match-menu" class="dots-button" aria-label="Match options">•••</button></div><div class="status-names"><div><small>YOU</small><b id="human-name">Player</b></div><span class="versus">VS</span><div class="opponent-name"><small>OPPONENT</small><b id="opponent-name">Practice Bot</b></div></div><div id="online-invite" class="online-invite hidden"><small>Invite link</small><input id="invite-link" readonly /><button class="button button-quiet" id="copy-invite">Copy</button></div><div class="rail-divider"></div><div class="turn-banner"><span class="turn-symbol">↻</span><div><small id="turn-label">YOUR TURN</small><b id="phase-label">Ride phase</b></div><span class="turn-number" id="turn-number">01</span></div></div>
+              <div class="rail-card turn-controls"><div class="rail-heading"><span>TURN CONTROLS</span><span class="phase-count" id="phase-count">2 / 5</span></div><div class="phase-track"><div class="phase-segment done"></div><div class="phase-segment current"></div><div class="phase-segment"></div><div class="phase-segment"></div><div class="phase-segment"></div></div><div class="phase-list" id="phase-list"></div><button id="advance-phase" class="button button-primary wide">Continue phase <span>→</span></button></div>
+              <div class="rail-card match-log-card"><div class="rail-heading"><span>MATCH LOG</span><button class="text-button" id="clear-log">CLEAR</button></div><div id="match-log" class="match-log"></div></div>
+              <div class="prototype-note"><span>ⓘ</span><p>Online matches synchronize a simplified table. Card effects and full Premium rules still need manual handling.</p></div>
+            </aside>
+
+            <section class="table-column" aria-label="Practice match table">
+              <div class="game-table">
+                <div class="table-glow"></div>
+                <div class="opponent-side board-side">
+                  <div class="player-line opponent-line"><span class="avatar bot-avatar">✦</span><div class="player-title"><b id="table-opponent-name">Practice Bot</b><small id="opponent-deck-label">DEMO DECK</small></div><div class="damage-track" id="bot-damage" aria-label="Opponent damage"></div><div class="zone-stack"><small>DECK</small><b id="bot-deck-count">50</b></div><div class="back-card"><span>V</span></div></div>
+                  <div class="field-row opponent-field"><div class="field-zone side-zone" data-side="bot" data-zone="rear-left"><span>REAR-GUARD</span></div><div class="field-zone vanguard-zone" data-side="bot" data-zone="vanguard"><span>VANGUARD</span></div><div class="field-zone side-zone" data-side="bot" data-zone="rear-right"><span>REAR-GUARD</span></div></div>
+                  <div class="opponent-hand-row"><span>HIDDEN HAND</span><div id="bot-hand" class="card-back-stack"></div><span id="bot-hand-count">5 CARDS</span></div>
+                </div>
+                <div class="center-divider"><span id="table-message">Choose an action to begin</span><i></i><span>TURN <b id="table-turn">01</b></span></div>
+                <div class="human-side board-side">
+                  <div class="field-row human-field"><div class="field-zone side-zone" data-side="human" data-zone="rear-left"><span>REAR-GUARD</span></div><div class="field-zone vanguard-zone" data-side="human" data-zone="vanguard"><span>VANGUARD</span></div><div class="field-zone side-zone" data-side="human" data-zone="rear-right"><span>REAR-GUARD</span></div></div>
+                  <div class="player-line human-line"><span class="avatar human-avatar">P</span><div class="player-title"><b id="table-human-name">Player</b><small>YOUR SIDE</small></div><div class="damage-track" id="human-damage" aria-label="Your damage"></div><div class="zone-stack"><small>DECK</small><b id="human-deck-count">50</b></div><div class="zone-stack drop-zone"><small>DROP</small><b id="human-drop-count">0</b></div></div>
+                </div>
+                <div class="soul-pips"><span>SOUL</span><div id="soul-pips"></div></div>
+              </div>
+              <div class="hand-panel"><div class="hand-heading"><div><span class="eyebrow">YOUR HAND</span><b id="hand-count">5 cards</b></div><span class="selection-hint" id="selection-hint">Select a card to see actions</span><button class="text-button" id="sort-hand">SORT BY GRADE</button></div><div class="hand-cards" id="hand-cards"></div></div>
+              <div class="action-bar"><div class="selected-summary" id="selected-summary"><span class="selected-card-icon">✦</span><span><b>No card selected</b><small>Choose a card from your hand or field</small></span></div><div class="action-buttons"><button class="button button-quiet" id="draw-card">Draw</button><button class="button button-quiet" id="ride-card" disabled>Ride</button><button class="button button-quiet" id="call-card" disabled>Call</button><button class="button button-quiet" id="attack-card" disabled>Attack</button><button class="button button-quiet" id="guard-card" disabled>Guard</button><button class="button button-primary" id="end-turn">End turn <span>→</span></button></div></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="view-decks" class="view">
+          <div class="page-heading"><div><p class="eyebrow">YOUR COLLECTION</p><h1>Deck <em>workshop</em></h1><p class="subheading">Build and save decks using the imported card catalog. Import/export keeps a copy you can move elsewhere.</p></div><div class="heading-actions"><button class="button button-quiet" id="import-deck">Import deck</button><button class="button button-primary" id="create-deck">New deck <span>＋</span></button><input type="file" id="deck-file" accept="application/json,.json" hidden /></div></div>
+          <div class="deck-workshop-grid"><div class="deck-builder-panel panel"><div class="panel-heading"><div><span class="eyebrow">DECK BUILDER</span><h2 id="builder-title">Untitled deck</h2></div><button class="icon-button" id="builder-menu" title="Deck actions">•••</button></div><label class="input-label" for="deck-name">Deck name</label><input class="text-input" id="deck-name" maxlength="40" placeholder="Give your deck a name" /><div class="builder-stats"><div><b id="deck-total">0</b><small>CARDS</small></div><div><b id="grade-breakdown">0 / 0 / 0 / 0</b><small>GRADE 0 / 1 / 2 / 3+</small></div><div><b id="trigger-count">0</b><small>DEMO TRIGGERS</small></div></div><div class="deck-validation" id="deck-validation">Add cards from the library to start building.</div><div id="deck-list" class="deck-list"></div><div class="deck-save-row"><button class="button button-primary" id="save-deck">Save deck</button><button class="button button-quiet" id="export-deck">Export JSON</button></div></div>
+            <div class="card-browser panel"><div class="panel-heading"><div><span class="eyebrow">CARD DATABASE</span><h2>Choose cards for your deck</h2></div><span class="demo-badge">LOCAL CARD DATA</span></div><div class="card-search-row"><input class="text-input" id="card-search" placeholder="Search card name or number…" /><select class="text-input filter-select" id="grade-filter"><option value="all">All grades</option><option value="0">Grade 0</option><option value="1">Grade 1</option><option value="2">Grade 2</option><option value="3">Grade 3</option><option value="4">Grade 4</option><option value="5+">Grade 5+</option><option value="unknown">Grade not listed</option></select><select class="text-input filter-select clan-select" id="builder-clan-filter"><option value="all">All clans</option></select></div><div class="catalog-pager"><span class="muted-text" id="builder-results-count"></span><div><button class="button button-quiet" id="builder-prev">← Previous</button><span class="muted-text" id="builder-page-label"></span><button class="button button-quiet" id="builder-next">Next →</button></div></div><div id="builder-card-grid" class="builder-card-grid"></div></div></div>
+          <div class="saved-decks-section"><div class="section-title"><div><span class="eyebrow">SAVED IN THIS BROWSER</span><h2>Your saved decks</h2></div><span id="saved-deck-subtitle" class="muted-text">No decks yet</span></div><div id="saved-decks" class="saved-decks-grid"></div></div>
+        </section>
+
+        <section id="view-cards" class="view">
+          <div class="page-heading"><div><p class="eyebrow">CARD LIBRARY</p><h1>Browse <em>cards</em></h1><p class="subheading">Real card records matched to your numbered Cardfight Area art files. Search by name, grade, or clan.</p></div><div class="heading-actions"><a class="button button-quiet external-link" href="https://en.cf-vanguard.com/cardlist/" target="_blank" rel="noopener">Official card list ↗</a></div></div>
+          <div class="library-toolbar panel"><div class="card-search-row"><input class="text-input" id="library-search" placeholder="Search card name or number…" /><select class="text-input filter-select" id="library-grade"><option value="all">All grades</option><option value="0">Grade 0</option><option value="1">Grade 1</option><option value="2">Grade 2</option><option value="3">Grade 3</option><option value="4">Grade 4</option><option value="5+">Grade 5+</option><option value="unknown">Grade not listed</option></select><select class="text-input filter-select clan-select" id="library-clan"><option value="all">All clans</option></select></div><div class="catalog-pager"><span class="muted-text" id="library-count"></span><div><button class="button button-quiet" id="library-prev">← Previous</button><span class="muted-text" id="library-page-label"></span><button class="button button-quiet" id="library-next">Next →</button></div></div></div><div id="library-grid" class="library-grid"></div>
+          <section class="artwork-library panel"><div class="artwork-heading"><div><span class="eyebrow">IMPORTED ART FILES</span><h2>Your card image collection</h2><p>Browse by filename number. Images with matching database records also appear in the searchable card library above.</p></div><span class="muted-text" id="art-count"></span></div><div class="artwork-controls"><input class="text-input" id="art-search" inputmode="numeric" placeholder="Find an image number…" /><div><button class="button button-quiet" id="art-prev">← Previous</button><span class="muted-text" id="art-page"></span><button class="button button-quiet" id="art-next">Next →</button></div></div><div id="art-grid" class="art-grid"></div></section>
+          <div class="asset-help panel"><div class="asset-help-mark">▧</div><div><b>Matching pictures to real cards</b><p>The imported images are stored as <code>full/n123.jpg</code> and <code>mini/n123.jpg</code>. Their original filenames contain numbers only; add real card names, stats, effects, and the matching image number in <code>cards.js</code> to use them in deck building.</p><a href="assets/cards/README.md" target="_blank">Read the asset guide →</a></div></div>
+        </section>
+      </main>
+      <footer class="app-footer"><span>VANGUARD ARENA · EARLY ONLINE BUILD</span><span>Simplified rules · Not affiliated with Bushiroad</span></footer>
+    </div>
+    <dialog id="online-dialog" class="help-dialog"><button class="dialog-close" id="close-online-dialog">×</button><p class="eyebrow">ONLINE MATCH</p><h2 id="online-dialog-title">Host a match</h2><p id="online-dialog-copy">Create an invite link to send your friend. Keep this page open while you play.</p><label class="input-label" for="online-name">Your name</label><input class="text-input" id="online-name" maxlength="24" placeholder="Player" /><div id="join-code-wrap" class="hidden"><label class="input-label" for="join-code">Invite code or link</label><input class="text-input" id="join-code" placeholder="Paste your friend's invite link" /></div><div class="empty-actions"><button class="button button-primary" id="online-confirm">Create invite</button><button class="button button-quiet" id="online-cancel">Cancel</button></div><p class="muted-text" id="online-error" role="status"></p></dialog>
+    <dialog id="card-dialog" class="card-dialog"><button class="dialog-close" id="close-card-dialog">×</button><div id="card-dialog-content"></div></dialog>
+    <dialog id="help-dialog" class="help-dialog"><button class="dialog-close" id="close-help-dialog">×</button><p class="eyebrow">ABOUT THIS BUILD</p><h2>Online play, first steps.</h2><p>This early build can connect two browsers and synchronize a simplified Vanguard table. It is not a complete Premium rules engine: card-specific abilities, complete rules enforcement, accounts, and persistent match storage are not included yet.</p><p>Decks stay in each browser. Players should use the same card library version. Peer connections may fail on some restricted networks.</p><p>Card art and imported card-text permissions still apply to any public deployment.</p></dialog>
+    <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
+    <script src="assets/cards/cards.js" defer></script>
+    <script src="assets/cards/catalog-data.js" defer></script>
+    <script src="assets/cards/art-index.js" defer></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>

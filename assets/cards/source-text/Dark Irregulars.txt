@@ -1,0 +1,3756 @@
+CardStat = 439
+{
+global.CardName[CardStat] = 'Blitzritter'
+global.CardText[CardStat] = 'Dark Irregulars/Elf/Critical Trigger'
+}
+global.TriggerUnit[CardStat] = 2
+
+
+CardStat = 440
+{
+global.CardName[CardStat] = 'Cheshire Cat of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/High Beast/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+}
+global.TriggerUnit[CardStat] = 4
+
+
+CardStat = 441
+{
+global.CardName[CardStat] = 'Cursed Doctor'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+}
+global.TriggerUnit[CardStat] = 4
+
+
+CardStat = 442
+{
+global.CardName[CardStat] = 'Dark Knight of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/Demon/Critical Trigger
+
+ACT [RC]: [Put this unit into your soul] Choose up to one of your «Dark Irregulars», and that unit gets power +3000 until end of turn.'
+}
+global.TriggerUnit[CardStat] = 2
+
+
+CardStat = 443
+{
+global.CardName[CardStat] = 'Dark Queen of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Stand Trigger
+
+AUTO [RC]: When an attack hits during the battle that this unit boosted, you may Soul Charge 1. If you do, return this unit to your deck, and shuffle your deck.'
+}
+global.TriggerUnit[CardStat] = 3
+
+
+CardStat = 444
+{
+global.CardName[CardStat] = 'Devil in Shadow'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: Forerunner (When another unit from the same clan rides this unit, you may call this card to RC.)
+
+ACT [RC]: [Counter Blast 1 & Put this unit into your soul] Look at up to five cards from the top of your deck, search for up to one grade 3 or greater «Dark Irregulars» from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.'
+}
+
+
+CardStat = 445
+{
+global.CardName[CardStat] = 'Greedy Hand'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: Forerunner (When another unit from the same clan rides this unit, you may call this card to RC.)
+
+ACT [RC]: [Counter Blast 1 & Put this unit into your soul] Search your deck for up to one grade 2 or less «Dark Irregulars», put it into your soul, and shuffle your deck.'
+}
+
+
+CardStat = 446
+{
+global.CardName[CardStat] = 'Hungry Egg of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/Demon/Stand Trigger'
+}
+global.TriggerUnit[CardStat] = 3
+
+
+CardStat = 447
+{
+global.CardName[CardStat] = 'Hysteric Shirley'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Draw Trigger
+
+ACT [RC]: [Put this unit into your soul] If you have a «Dark Irregulars» vanguard, you may Soul Charge 1.'
+}
+global.TriggerUnit[CardStat] = 1
+
+
+CardStat = 448
+{
+global.CardName[CardStat] = 'Mad Hatter of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Draw Trigger'
+}
+global.TriggerUnit[CardStat] = 1
+
+
+CardStat = 449
+{
+global.CardName[CardStat] = 'Rock The Wall'
+global.CardText[CardStat] = 'Dark Irregulars/Ogre
+
+AUTO: When this unit is put into the drop zone from GC, put this card into your soul.'
+}
+
+
+CardStat = 450
+{
+global.CardName[CardStat] = 'Hades Puppet Master'
+global.CardText[CardStat] = 'Dark Irregulars/Ghost/Stand Trigger'
+}
+global.TriggerUnit[CardStat] = 3
+
+
+CardStat = 451
+{
+global.CardName[CardStat] = 'Vermillion Gatekeeper'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC]: When another «Dark Irregulars» rides this unit, you may Soul Charge 1.'
+}
+
+
+CardStat = 452
+{
+global.CardName[CardStat] = 'Alluring Succubus'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO: When this unit is placed on VC or RC, if you have a «Dark Irregulars» vanguard, you may Soul Charge 1.'
+}
+
+
+CardStat = 453
+{
+global.CardName[CardStat] = 'Bloody Calf'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO: [Counter Blast 2] When this unit is placed on VC or RC, if you have a «Dark Irregulars» vanguard, you may pay the cost. If you do, choose one of your opponent’s grade 1 or less rear-guard, and retire it.'
+}
+
+
+CardStat = 454
+{
+global.CardName[CardStat] = 'Courting Succubus'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO [RC]: When an attack hits a vanguard during the battle that this unit boosted a «Dark Irregulars», you may Soul Charge 1.'
+}
+
+
+CardStat = 455
+{
+global.CardName[CardStat] = 'Demon Bike of the Witching Hour'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+CONT [VC/RC]: During your turn, this unit gets power +2000 for each card named "Demon Bike of the Witching Hour" in your soul.'
+}
+
+
+CardStat = 456
+{
+global.CardName[CardStat] = 'Devil Child'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [RC]: When this unit boosts a «Dark Irregulars» vanguard, if you have six or more «Dark Irregulars» in your soul, the boosted unit gets power +4000 until end of that battle.'
+}
+
+
+CardStat = 457
+{
+global.CardName[CardStat] = 'Doreen the Thruster'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [RC]: During your main phase, when a card is put into your soul, if you have a «Dark Irregulars» vanguard, this unit gets power +3000 until end of turn.
+
+(SHIFT + left click to count up activations.)
+(SHIFT + right click to count down activations.)
+(Middle click or hover and press SPACE to set number of activations.)'
+}
+global.UseCounters[CardStat] = 1
+
+
+CardStat = 458
+{
+global.CardName[CardStat] = 'Beautiful Harpuia'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO: [Counter Blast 1] When this unit is placed on VC or RC, if you have a «Dark Irregulars» vanguard, you may pay the cost. If you do, put the top card of your deck into your damage zone, and at the beginning of the end phase of that turn, choose a card from your damage zone, return it to your deck, and shuffle your deck.'
+}
+
+
+CardStat = 459
+{
+global.CardName[CardStat] = 'Poet of Darkness, Amon'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+CONT [VC/RC]: During your turn, if the number of «Dark Irregulars» in your soul is six or more, this unit gets power +3000.'
+}
+
+
+CardStat = 460
+{
+global.CardName[CardStat] = 'March Rabbit of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+CONT: Sentinel (You may only have up to four cards with "Sentinel" in a deck.)
+
+AUTO: [Choose a «Dark Irregulars» from your hand, and discard it] When this unit is placed on GC, you may pay the cost. If you do, choose one of your «Dark Irregulars» that is being attacked, and that unit cannot be hit until end of that battle.'
+}
+
+
+CardStat = 461
+{
+global.CardName[CardStat] = 'Mirage Maker'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [RC]: When an attack hits a vanguard during the battle that this unit boosted a «Dark Irregulars», you may return this unit to your hand.'
+}
+
+
+CardStat = 462
+{
+global.CardName[CardStat] = 'Nightmare Baby'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [RC]: When this unit boosts a unit named "Blue Dust", the boosted unit gets power +4000 until end of that battle.'
+}
+
+
+CardStat = 463
+{
+global.CardName[CardStat] = 'Prisoner Beast'
+global.CardText[CardStat] = 'Dark Irregulars/Chimera'
+}
+
+
+CardStat = 464
+{
+global.CardName[CardStat] = 'Rune Weaver'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: When this unit is placed on VC or RC, if you have a «Dark Irregulars» vanguard, choose up to one «Dark Irregulars» from your hand, and put it into your soul.'
+}
+
+
+CardStat = 465
+{
+global.CardName[CardStat] = 'Yellow Bolt'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [VC/RC]: [Rest this unit] If you have a «Dark Irregulars» vanguard, Soul Charge 1.'
+}
+
+
+CardStat = 466
+{
+global.CardName[CardStat] = 'Beast in Hand'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO: [Counter Blast 1] When this unit is placed on VC or RC, if you have a «Dark Irregulars» vanguard, you may pay the cost. If you do, put the top card of your deck into your damage zone, and at the beginning of the end phase of that turn, choose a card from your damage zone, return it to your deck, and shuffle your deck.'
+}
+
+
+CardStat = 467
+{
+global.CardName[CardStat] = 'Blue Dust'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: When this unit’s attack hits, if you have a «Dark Irregulars» vanguard, you may Soul Charge 1.'
+}
+
+
+CardStat = 468
+{
+global.CardName[CardStat] = 'Cyber Beast'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC/RC]: When this unit’s attack hits a vanguard, if you have four or more other «Dark Irregulars» rear-guards, draw a card.'
+}
+
+
+CardStat = 469
+{
+global.CardName[CardStat] = 'Dark Soul Conductor'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO: When this unit is put into the drop zone from GC, if you have a «Dark Irregulars» vanguard, you may Soul Charge 2.'
+}
+
+
+CardStat = 470
+{
+global.CardName[CardStat] = 'Demon of Aspiration, Amon'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+CONT [VC/RC]: During your turn, if the number of «Dark Irregulars» in your soul is six or more, this unit gets power +3000.'
+}
+
+
+CardStat = 471
+{
+global.CardName[CardStat] = 'Emblem Master'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: [Counter Blast 1] When this unit’s attack hits a vanguard, if you have a «Dark Irregulars» vanguard, you may pay the cost. If you do, you may Soul Charge 3.'
+}
+
+
+CardStat = 472
+{
+global.CardName[CardStat] = 'Flirtatious Succubus'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO: When this unit is placed on VC or RC, if you have a «Dark Irregulars» vanguard, you may Soul Charge 1.'
+}
+
+
+CardStat = 473
+{
+global.CardName[CardStat] = 'Free Traveler'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: [Counter Blast 1] When this unit is placed on VC or RC, if you have a «Dark Irregulars» vanguard, you may pay the cost. If you do, search your deck for up to one grade 2 or less «Dark Irregulars», put it into your soul, and shuffle your deck.'
+}
+
+
+CardStat = 474
+{
+global.CardName[CardStat] = 'Gwynn the Ripper'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO: [Counter Blast 2] When this unit is placed on VC or RC, if you have a «Dark Irregulars» vanguard, you may pay the cost. If you do, choose one of your opponent’s grade 2 or less rear-guards, and retire it.'
+}
+
+
+CardStat = 475
+{
+global.CardName[CardStat] = 'Hades Carriage of the Witching Hour'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+CONT [VC/RC]: During your turn, this unit gets power +2000 for each card named "Hades Carriage of the Witching Hour" in your soul.'
+}
+
+
+CardStat = 476
+{
+global.CardName[CardStat] = 'Imprisoned Fallen Angel, Saraqael'
+global.CardText[CardStat] = 'Dark Irregulars/Angel
+
+CONT [VC/RC]: Restraint (This unit cannot attack.)
+
+ACT [VC/RC]: [Soul Blast 3] This unit loses "Restraint" until end of turn.
+
+AUTO [VC]: When this unit is boosted by a «Dark Irregulars», this unit gets power +5000 until end of that battle.'
+}
+
+
+CardStat = 477
+{
+global.CardName[CardStat] = 'Knowledge Drunkard'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC/RC]: [Choose a card from your hand, and put it into your soul] When this unit’s attack hits a vanguard, if you have a «Dark Irregulars» vanguard, you may pay the cost. If you do, draw a card.'
+}
+
+
+CardStat = 478
+{
+global.CardName[CardStat] = 'Red Magma'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: When this unit attacks, if the number of «Dark Irregulars» in your soul is six or more, draw a card, choose a card from your hand, and put it on the bottom of your deck.'
+}
+
+
+CardStat = 479
+{
+global.CardName[CardStat] = 'Decadent Succubus'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO [VC]: When another of your «Dark Irregulars» is placed on RC, you may Soul Charge 1.'
+}
+
+
+CardStat = 480
+{
+global.CardName[CardStat] = 'Werwolf Sieger'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast'
+}
+
+
+CardStat = 481
+{
+global.CardName[CardStat] = 'Blade Wing Reijy'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [VC]: If the number of «Dark Irregulars» in your soul is fifteen or more, this unit gets critical +2.
+
+AUTO: When this unit is placed on VC, choose one of your «Dark Irregulars» rear-guards, search your deck for up to three cards with the same card name as that card, put them into your soul, and shuffle your deck.'
+}
+
+
+CardStat = 482
+{
+global.CardName[CardStat] = 'Dark Lord of Abyss'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [VC] Limit Break 4 (This ability is active if you have four or more damage): [Counter Blast 2] Soul Charge 2, this unit gets power +1000 for each «Dark Irregulars» in your soul until end of turn.
+
+CONT [VC/RC]: If you have a non-«Dark Irregulars» vanguard or rear-guard, this unit gets power -2000.'
+}
+
+
+CardStat = 483
+{
+global.CardName[CardStat] = 'Demon Chariot of the Witching Hour'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+CONT [VC/RC]: During your turn, this unit gets power +2000 for each card named "Demon Chariot of the Witching Hour" in your soul.'
+}
+
+
+CardStat = 484
+{
+global.CardName[CardStat] = 'Demon Eater'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [VC]: At the beginning of your main phase, Soul Charge 1, and this unit gets power +2000 until end of turn.
+
+AUTO [VC/RC]: [Soul Blast 8 & Counter Blast 5] When this unit’s attack hits, you may pay the cost. If you do, retire all of your opponent’s rear-guards.'
+}
+
+
+CardStat = 485
+{
+global.CardName[CardStat] = 'Demon World Marquis, Amon'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+CONT [VC]: During your turn, this unit gets power +1000 for each «Dark Irregulars» in your soul.
+
+ACT [VC]: [Counter Blast 1 & Choose one of your «Dark Irregulars» rear-guards, and put it into your soul] Your opponent chooses one of his or her rear-guards, and retires it.'
+}
+
+
+CardStat = 486
+{
+global.CardName[CardStat] = 'Edel Rose'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+ACT [VC]: [Counter Blast 2] If you have a card named "Werwolf Sieger" in your soul, this unit gets power +5000 / critical +1 until end of turn.
+
+ACT [Hand]: [Reveal this card to your opponent, and put it on top of your deck] Search your deck for up to one card named "Werwolf Sieger", reveal it to your opponent, put it into your hand, and shuffle your deck.'
+}
+
+
+CardStat = 487
+{
+global.CardName[CardStat] = 'King of Diptera, Beelzebub'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+CONT [VC]: If you have eight or more «Dark Irregulars» in your soul, this unit gets power +1000.
+
+AUTO [VC]: [Counter Blast 2] When this unit attacks, if you have six or more «Dark Irregulars» in your soul, you may pay the cost. If you do, choose up to two of your «Dark Irregulars» rear-guards, and they get power +3000 until end of that turn.'
+}
+
+
+CardStat = 488
+{
+global.CardName[CardStat] = 'Evil Eye Basilisk'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC/RC]: When this unit attacks a vanguard, if you have a «Dark Irregulars» vanguard, this unit gets power +2000 until end of that battle.'
+}
+
+
+CardStat = 489
+{
+global.CardName[CardStat] = 'No Life King, Death Anchor'
+global.CardText[CardStat] = 'Dark Irregulars/Ghost
+
+CONT [VC]: If you have eight or more «Dark Irregulars» in your soul, this unit gets power +1000.
+
+AUTO [VC]: At the beginning of your main phase, Soul Charge 1, and this unit gets power +2000 until end of turn.
+
+AUTO [VC]: [Choose five face up «Dark Irregulars» from your damage zone and put them into your soul] When this unit attacks, you may pay the cost. If you do, this unit gets power +10000 & critical +1 until end of turn. At the beginning of the end phase of that turn, put five cards from the top of your deck into your damage zone.'
+}
+
+
+CardStat = 490
+{
+global.CardName[CardStat] = 'Stil Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [VC]: At the beginning of your main phase, Soul Charge 1, and this unit gets power +2000 until end of turn.
+
+ACT [VC/RC]: [Soul Blast 8 & Counter Blast 5] Choose one of your opponent’s rear-guards, and put that unit on your opponent’s VC, and at the beginning of the end phase of that turn, your opponent chooses a card from his or her soul, and rides it.'
+}
+
+
+CardStat = 1117
+{
+global.CardName[CardStat] = 'Earth Gunner'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: When this unit is boosted by a «Dark Irregulars», this unit gets power +2000 until end of that battle.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1358
+{
+global.CardName[CardStat] = 'Story Teller'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: [Counter Blast 2] When this unit’s attack hits, if you have a «Dark Irregulars» vanguard, you may pay the cost. If you do, draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1416
+{
+global.CardName[CardStat] = 'King of Masks, Dantarian'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Dark Irregulars» rides this unit, choose one of your vanguards, that unit gets power +10000 until end of turn, choose up to three of your «Dark Irregulars» rear-guards, and those units get "CONT [RC]: This unit gets power +1000 for each «Dark Irregulars» in your soul." until end of turn.
+
+AUTO [VC]: When this unit attacks a vanguard, Soul Charge 1, and this unit gets power +1000 until end of that battle.
+
+CONT [VC/RC]: Lord (If you have a unit without a same clan as this unit, this unit cannot attack)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1417
+{
+global.CardName[CardStat] = 'Amon’s Follower, Hell’s Draw'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO: When this unit is placed on RC, if you have a vanguard with "Amon" in its card name, you may Soul Charge 2.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1418
+{
+global.CardName[CardStat] = 'Amon’s Follower, Ron Geenlin'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC]: When this unit attacks, if you have a vanguard with "Amon" in its card name, this unit gets power +3000 until end of battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1419
+{
+global.CardName[CardStat] = 'Amon’s Follower, Hell’s Deal'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO: When this unit is placed on RC, if you have a vanguard with "Amon" in its card name, you may Soul Charge 2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1420
+{
+global.CardName[CardStat] = 'Amon’s Follower, Fate Collector'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO: Forerunner (When another unit of the same clan rides this unit, you may call it to RC.)
+
+CONT [RC]: If the number of «Dark Irregulars» in your soul is six or more, this unit gets "AUTO [RC]: [Put this unit into your soul] At the end of the battle that this unit boosted a «Dark Irregulars», you may pay the cost. If you do, draw a card.".'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1421
+{
+global.CardName[CardStat] = 'Amon’s Follower, Hell’s Trick'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 4
+
+
+CardStat = 1422
+{
+global.CardName[CardStat] = 'Amon’s Follower, Cruel Hand'
+global.CardText[CardStat] = 'Dark Irregulars/Elf/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+
+
+CardStat = 1423
+{
+global.CardName[CardStat] = 'Amon’s Follower, Meteor Cracker'
+global.CardText[CardStat] = 'Dark Irregulars/Demon/Stand Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 3
+
+
+CardStat = 1424
+{
+global.CardName[CardStat] = 'Amon’s Follower, Psychic Waitress'
+global.CardText[CardStat] = 'Dark Irregulars/Elf/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 1
+
+
+CardStat = 1433
+{
+global.CardName[CardStat] = 'Amon’s Follower, Phu Geenlin'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC]: When this unit attacks, if you have a vanguard with "Amon" in its card name, this unit gets power +3000 until end of battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1435
+{
+global.CardName[CardStat] = 'Amon’s Follower, Vlad Specula'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+CONT: Sentinel (You may only have up to four cards with "Sentinel" in a deck.)
+
+AUTO: [Choose a «Dark Irregulars» from your hand, and discard it] When this unit is placed on GC, you may pay the cost. If you do, choose one of your «Dark Irregulars», and that unit cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1436
+{
+global.CardName[CardStat] = 'Master of Fifth Element'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+CONT [VC] Limit Break 4 (This ability is active if you have four or more damage): During your turn, if the number of «Dark Irregulars» in your soul is ten or more, all of your «Dark Irregulars» get power +3000.
+
+AUTO [VC]: [Counter Blast 1] When this unit’s attack hits a vanguard, you may pay the cost. If you do, Soul Charge 3.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1444
+{
+global.CardName[CardStat] = 'Indifferent Succubus'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+CONT [VC/RC]: If the number of «Dark Irregulars» in your soul is ten or more, this unit gets power +4000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1517
+{
+global.CardName[CardStat] = 'Demon Marquis, Amon "ßeverse"'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+ACT [VC] Limit Break 4 (This ability is active if you have four or more damage): [Choose one of your «Dark Irregulars» rear-guards, and lock it] This unit gets power +1000 for each «Dark Irregulars» in your soul until end of turn. If the number of «Dark Irregulars» in your soul is six or more, this unit gets critical +1 until end of turn. This ability cannot be used for the rest of that turn. (Locked cards are turned face down, and cannot do anything. Turn them face up at the end of its owners turn.)
+
+CONT [VC]: If you have a card named "Demon World Marquis, Amon" in your soul, this unit gets power +2000.
+
+CONT [VC/RC]: Lord (If you have a unit without a same clan as this unit, this unit cannot attack)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1518
+{
+global.CardName[CardStat] = 'Werbear Soldner'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of that battle.
+
+AUTO [RC]: When this unit attacks a vanguard, if you have a «Dark Irregulars» vanguard, this unit gets power +2000 until end of that battle.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1519
+{
+global.CardName[CardStat] = 'Number of Terror'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: When another grade 3 «Dark Irregulars» is placed on RC, this unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1520
+{
+global.CardName[CardStat] = 'Amon’s Follower, Psycho Grave'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO: [Counter Blast 1] When this unit is placed on VC or RC, if the number of «Dark Irregulars» in your soul is six or more, you may pay the cost. If you do, Soul Charge 1, and this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1521
+{
+global.CardName[CardStat] = 'Frog Knight'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: [Counter Blast 1-«Dark Irregulars»] When this unit attacks, if you have a «Dark Irregulars» vanguard, you may pay the cost. If you do, this unit gets power +4000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1522
+{
+global.CardName[CardStat] = 'Werleopard Soldat'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+AUTO [VC/RC]: When this unit attacks, if you have a «Dark Irregulars» vanguard or rear-guard with Limit Break 4, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1523
+{
+global.CardName[CardStat] = 'Amon’s Follower, Fools Palm'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on RC, if the number of «Dark Irregulars» in your soul is six or more, you may pay the cost. If you do, draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1524
+{
+global.CardName[CardStat] = 'Werhase Bandito'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+AUTO [RC]: [Counter Blast 1] When this unit boosts a «Dark Irregulars» with Limit Break 4, you may pay the cost. If you do, the boosted unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1525
+{
+global.CardName[CardStat] = 'Dimension Creeper'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+ACT [Soul]: COST [Put this card into drop], and if you have a «Dark Irregulars» vanguard, Soul Charge 2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 1526
+{
+global.CardName[CardStat] = 'Werfuchs Hexa'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+AUTO: Forerunner (When a unit of the same clan rides this unit, you may call this unit to RC.)
+
+AUTO [RC]: [Put this unit into your soul] When an attack hits a vanguard during the battle that this unit boosted a «Dark Irregulars» with Limit Break 4, you may pay the cost. If you do, draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2015
+{
+global.CardName[CardStat] = 'Echo of Nemesis'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks, if the amount of the cards in your soul is ten or greater, until end of that battle, this unit gets power +10000, and your opponent cannot call grade 1 or greater units to GC from his or her hand.
+
+ACT [VC]: [Soul Blast 1 grade 0 card] Soul Charge 2. This ability cannot be used for the rest of that turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2179
+{
+global.CardName[CardStat] = 'Psychic of Ash, Hadar'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [VC]: Legion 20000 "Psychic of Dust, Izaya" (If your opponent’s vanguard is grade 3 or greater, this unit may return four cards from your drop zone into your deck once, search your deck for the specified card, and Legion)
+
+AUTO [VC]: When this unit attacks a vanguard, if this unit is Legion, and the number of cards cards in your soul is six or more, this unit gets power +5000 until end of that battle. Then, if the number of cards in your soul is ten or more, choose two of your units, and those units get power +5000 until end of turn.
+
+ACT [VC]: [Soul Blast 1 grade 0 card] Soul Charge 2. This ability cannot be used for the rest of that turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2180
+{
+global.CardName[CardStat] = 'Psychic of Dust, Izaya'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC]: During your main phase, when a card is put into your soul, if your vanguard is Legion, this unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2515
+{
+global.CardName[CardStat] = 'Amon’s Leader, Astaroth'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+ACT [VC]: Legion 21000 "Demon World Marquis, Amon".
+
+CONT [VC]: If this unit is Legion, this unit gets critical +1 for each ten cards in your soul.
+
+AUTO [VC]: When your opponent’s rear-guard is put into the drop zone due to an effect from one of your cards, if you have another unit in your middle column with "Amon" in its card name, Soul Charge 3. This ability cannot be used for the rest of that turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2731
+{
+global.CardName[CardStat] = 'Great Demon, Soulless Demagogue'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO [VC]: During your main phase, when a card is put into your soul, until end of turn, this unit gets "CONT [VC]: During your turn, all units in your front row get power +1000.".'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 2798
+{
+global.CardName[CardStat] = 'Amon’s Talon, Marchocias'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+ACT [VC] 1/Turn: [Counter Blast 1] If you have a card in your heart with "Amon" in its card name, choose two of your rear-guards with "Amon" in its card name, and those units and this unit get power +3000 for every five cards in your soul until end of turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 2835
+{
+global.CardName[CardStat] = 'Visionary Gemini'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): During the battle that your vanguard is attacked, when this card is placed on GC, if the number of cards in your soul is six or more, this unit gets shield +5000 until end of that battle. Then, if the number of cards in your soul is ten or more, this unit gets shield +5000 until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2875
+{
+global.CardName[CardStat] = 'Flying Librarian'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): [Counter Blast 1] When this unit is placed on RC, you may pay the cost. If you do, Soul Charge 2. Then, if the number of cards in your soul is six or more, draw a card. Then, if the number of cards in your soul is ten or more, choose a card from your damage zone, and turn it face up. (Counter Charge 1)'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2876
+{
+global.CardName[CardStat] = 'Amon’s Follower, Mad Eye'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [RC]: Your vanguard’s "Limit Break 4" is active even when you have three or less damage.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2877
+{
+global.CardName[CardStat] = 'Amon’s Follower, Hell’s Nail'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO [RC]: [Counter Blast 1-card with "Amon" in its card name] When this unit attacks a vanguard, you may pay the cost. If you do, Soul Charge 3.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2886
+{
+global.CardName[CardStat] = 'Love Tempest, Kisskill Lira'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO [VC]: When this unit’s attack hits a vanguard, Soul Charge 2, and if the number of cards in your soul is six or more, draw a card.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 2887
+{
+global.CardName[CardStat] = 'Abominable One, Gilles de Rais'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+ACT [VC] 1/Turn: [Choose a face down card named "One Who is Abhorrent, Gilles de Rais" from your G zone, and turn it face up] If the number of cards in your soul is ten or more, this unit gets power +10000 until end of turn. Then, if the number of cards in your soul is fifteen or more, until end of turn, this unit gets "AUTO [VC]: When this unit attacks a vanguard, until end of that battle, your opponent cannot call grade 1 or greater cards from hand to GC.". If the number of face up cards in your G zone is two or more, this unit gets critical +1 until end of turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 2888
+{
+global.CardName[CardStat] = 'Amon’s Follower, Grausam'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire/Critical Trigger
+
+AUTO: [Counter Blast 1-card with "Amon" in its card name] When this card is put into your soul due to an effect from one of your cards, if you have a vanguard with "Amon" in its card name, and the number of cards in your soul is six or more, you may pay the cost. If you do, your opponent chooses one of his or her rear-guards, and retires it.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+
+
+CardStat = 2889
+{
+global.CardName[CardStat] = 'Amon’s Follower, Barmaid Grace'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: Forerunner (When a unit of the same clan rides this unit, you may call this unit to RC.)
+
+ACT [RC]: [Counter Blast 1 & rest this unit] If you have a vanguard with "Amon" in its card name, Soul Charge 2, choose one of your units with "Amon" in its card name, and until end of turn, it gets "CONT [VC/RC]: This unit gets power +1000 for each card in your soul.".'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2890
+{
+global.CardName[CardStat] = 'Scharhrot Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+CONT [VC] Generation Break 2: During your turn, if your soul has six or more cards, this unit gets power +10000, and if your soul has ten or more cards, it gets critical +1.
+
+AUTO [VC]: When your G unit Stride during your turn, COST [Counter Blast 1], Soul Charge 2, choose one of your vanguards, and it gets "AUTO [VC]: When this unit attacks a vanguard, if your soul has six or more cards, your opponent chooses one of their rear-guards, and retires it.". until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2891
+{
+global.CardName[CardStat] = 'Succubus of Pure Love'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO: When this unit is placed on RC from hand, COST [reveal a grade 3 card from hand], search your deck for up to one grade 3 card with "Scharhrot" in its card name, reveal it and put it into your hand, shuffle your deck, choose a card from your hand, and discard it.
+
+CONT [Hand]: While you are paying the cost for Stride, this card gets grade +2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2915
+{
+global.CardName[CardStat] = 'Psychic of Storm, Rigil'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [VC]: Legion 20000 "Psychic of Dust, Izaya".
+
+AUTO [VC]: [Counter Blast 2] When this unit attacks a vanguard, if this unit is Legion, and the number of cards in your soul is ten or more, you may pay the cost. If you do, choose two of your opponent’s rear-guards, and retire them. Then, if the number of cards in your soul is fifteen or more, choose one of your opponent’s rear-guards, and retire it.
+
+ACT [VC] 1/Turn: [Soul Blast 1 card with the same card name as a unit on your VC] Soul Charge 5.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2922
+{
+global.CardName[CardStat] = 'Sweet Predator'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [VC/RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): During your main phase, when a card is put into your soul, this unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2923
+{
+global.CardName[CardStat] = 'Squallmaker Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): [Counter Blast 1] When this unit attacks a vanguard, if this unit is boosted, you may pay the cost. If you do, Soul Charge 2, and this unit gets power +5000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2924
+{
+global.CardName[CardStat] = 'Knife Conductor'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): When this unit attacks a vanguard, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2925
+{
+global.CardName[CardStat] = 'Werwolf Jaeger'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2926
+{
+global.CardName[CardStat] = 'Flag Breaker'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT: Sentinel
+
+AUTO: When this unit is placed on GC from hand, COST [discard a card from hand], choose one of your vanguards being attacked, and it cannot be hit until end of that battle. If your drop has a "Flag Breaker", Counter Charge 1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2927
+{
+global.CardName[CardStat] = 'Killing Dollmaster'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [RC]: [Put this unit into your soul] At the beginning of your main phase, you may pay the cost. If you do, Soul Charge 2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2928
+{
+global.CardName[CardStat] = 'Lunatic Masquerade'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): During your turn, if the number of cards in your soul is six or more, this unit gets power +2000. Then, if the number of cards in your soul is ten or more, this unit gets power +2000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2929
+{
+global.CardName[CardStat] = 'Krise Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2930
+{
+global.CardName[CardStat] = 'Werfleder Ordonnaz'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+AUTO: Forerunner (When a unit of the same clan rides this unit, you may call this unit to RC.)
+
+ACT [RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): [Counter Blast 1 & Put this unit into your soul] Soul Charge 2, and if the number of cards in your soul is six or more, draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 2931
+{
+global.CardName[CardStat] = 'Alice of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 4
+
+
+CardStat = 2932
+{
+global.CardName[CardStat] = 'Wertigre Fanatica'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+
+
+CardStat = 2933
+{
+global.CardName[CardStat] = 'Monochrome of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/High Beast/Stand Trigger
+
+ACT [RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): [Put this unit on top of your deck] Shuffle your deck, Soul Charge 1, if the number of cards in your soul is six or more, choose a card from your damage zone, and turn it face up (Counter Charge 1). Then, if the number of cards in your soul is ten or more, draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 3
+
+
+CardStat = 2934
+{
+global.CardName[CardStat] = 'Endless Boozer'
+global.CardText[CardStat] = 'Dark Irregulars/Demon/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 1
+
+
+CardStat = 3289
+{
+global.CardName[CardStat] = 'Blade Wing Sullivan'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [VC]: If the number of cards in your soul is fifteen or more, this unit gets "CONT [VC]: All of your guardians get shield +10000." and "AUTO [VC]: At the end of the battle that this unit was attacked, Soul Blast 2.".
+
+AUTO: When this unit is placed on VC, choose one of your rear-guards, search your deck for up to three cards with the same card name as that card, put them into your soul, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+
+
+CardStat = 3435
+{
+global.CardName[CardStat] = 'Wings of Annihilation, Blade Wing Tibold'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO: When this unit is placed on VC, If you have a heart card with "Blade Wing" in its card name, return all the cards from your drop zone to your deck, and shuffle your deck. Then, if the number of cards in your soul is fifteen or more, until end of turn, this unit gets "CONT [VC]: All of your rear-guards in the front row gets power +10000.", and if not, Soul Charge 5.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 3760
+{
+global.CardName[CardStat] = 'Rebellious Retainer of Fresh Blood, Frederick'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+ACT [VC]: [Choose a card from your hand, and put it into your soul] This unit gets power +1000 for each card in your soul until end of turn. If the sum of power increased with this effect during this turn is 10000 or more, until end of turn, all of the rear-guards in your front row get power +5000. This ability cannot be used for the rest of that turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 3761
+{
+global.CardName[CardStat] = 'False Dark Wings, Agrat bat Mahlat'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+G guardian.
+
+AUTO: When this unit is placed on GC, Soul Charge 2. Then, if your soul has six or more cards, this unit gets shield +5000 until end of that battle.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 3777
+{
+global.CardName[CardStat] = 'Eccentric Dissector'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [RC]: At the beginning of your main phase, you may Soul Charge 1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 3782
+{
+global.CardName[CardStat] = 'Blade Wing Tyrwhitt'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT: Sentinel (You may only have up to four cards with "Sentinel" in a deck.)
+
+AUTO: [Counter Blast 1] When this unit is placed from hand to GC during the battle that your vanguard was attacked, you may pay the cost. If you do, call five cards from the top of your deck to GC, and if you have a vanguard with "Blade Wing" in its card name, choose any number of your grade 3 guardians, and put them into your soul.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 3783
+{
+global.CardName[CardStat] = 'Wings of Recurrence, Blade Wing Reijy'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC]: [Soul Blast 15] When this unit attacks a vanguard, if you have a card named "Blade Wing Reijy" in your soul, you may pay the cost. If you do, this unit gets power +15000 / critical +2 until end of that battle.
+
+AUTO [Soul]: [Counter Blast 1 & Choose three cards from your hand, and discard them] At the end of the battle that your grade 3 vanguard with "Blade Wing" in its card name not named "Wings of Recurrence, Blade Wing Reijy" attacked, if the attack did not hit during that battle, you may pay the cost. If you do, ride this card as stand.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 3808
+{
+global.CardName[CardStat] = 'Frosty Steeple'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC] Generation Break 1 Darkness (This ability is active if a card was put into your soul during this turn): When this unit attacks a vanguard, if the number of cards in your soul is ten or more, this unit gets power +10000 until end of that battle, and if the number of cards in your soul is fifteen or more, until end of that battle, your opponent cannot call grade 1 or greater cards from hand to GC.
+
+AUTO: [Counter Blast 1 & Soul Blast 1] When this unit is placed on VC, you may pay the cost. If you do, look at five cards from the top of your deck, search for up to one card with the darkness ability, show it to your opponent, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 3809
+{
+global.CardName[CardStat] = 'Doppel Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [RC] Generation Break 1 Darkness (This ability is active if a card was put into your soul during this turn): When this unit attacks a vanguard, if the number of cards in your soul is six or more, this unit gets power +5000 until end of that battle, and if the number of cards in your soul is fifteen or more, until end of that battle, your opponent cannot call grade 0 cards from hand to GC.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 3810
+{
+global.CardName[CardStat] = 'Enigmatic Assassin'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+(PREMIUM JP & EN & TH: Restricted to 1.)
+
+AUTO [Soul] Darkness: At the beginning of your attack step, if your soul has ten or more card, you may call this card to RC. If you called a card, until end of turn, this unit gets power +5000, then, if your soul has fifteen or more card, it gets power +10000.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 5000
+
+global.CardLimidet[CardStat] = 1
+
+
+CardStat = 3811
+{
+global.CardName[CardStat] = 'Nine-break Hustler'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO Generation Break 1: When this unit is placed on RC, choose up to two of your units, search your deck for up to three cards with the same card name as each of those units, put them into your soul, shuffle your deck, and until end of turn, this unit gets power +1000 for each card put into your soul this way.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 3812
+{
+global.CardName[CardStat] = 'Mask of Demonic Frenzy, Ericrius'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO [VC] Darkness (This ability is active if a card was put into your soul during this turn): When this unit attacks a vanguard, you may Soul Charge 2. If the number of cards in your soul is six or more, until end of turn, this unit gets "AUTO [VC]: When this unit’s attack hits, your opponent chooses one of his or her rear-guards, and retires it.". Then, if the number of cards in your soul is fifteen or more, this unit gets power +1000 for each card in your soul until end of that battle.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 3872
+{
+global.CardName[CardStat] = 'Nighttime Gentleman, Saint-Germain'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+G guardian [Choose a card with "HEAL" from your hand, and discard it] Call this card to your GC from face down.
+
+AUTO: When this unit is placed on GC, if the number of cards in your soul is ten or more, this unit gets shield +10000 until end of that battle. If the number of cards in your soul is fifteen or more, choose any number of your units, and until end of turn, they get "CONT [VC/RC/GC]: Resist".'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 3873
+{
+global.CardName[CardStat] = 'Blade Wing Sykes'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: When this unit is placed on RC, if you have a vanguard with "Blade Wing" in its card name, Soul Charge 1.
+
+ACT [Soul]: [Put this card into your drop zone] If you have a vanguard with "Blade Wing" in its card name, Soul Charge 2.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 3874
+{
+global.CardName[CardStat] = 'Tragic Claw'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [VC/RC]: When your other unit is placed in the same column as this unit, you may Soul Charge 1.
+
+AUTO [RC] Generation Break 1 Darkness (This ability is active if cards have been put into your soul during this turn): When your other unit is placed in the same column as this unit, if the number of cards in your soul is ten or more, this unit gets "Boost" until end of turn, and if the number of cards in your soul is fifteen or more, this unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 3875
+{
+global.CardName[CardStat] = 'Three-in the Dark'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [RC] Generation Break 1 Darkness (This ability is active if cards have been put into your soul during this turn): [Choose a card from your hand, and discard it] When this unit attacks a vanguard, if the number of cards in your soul is ten or more, you may pay the cost. If you do, draw two cards, choose a card from your hand, and put it into your soul. If the number of cards in your soul is fifteen or more, this unit gets power +5000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 3876
+{
+global.CardName[CardStat] = 'Serpent Charmer'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+CONT [RC] Darkness (This ability is active if cards have been put into your soul during this turn): If the number of cards in your soul is ten or more, this unit gets power +2000. If the number of cards in your soul is fifteen or more, this unit gets "AUTO [RC]: [Retire this unit] At the end of your turn, you may pay the cost. If you do, choose thirteen cards from your soul, return the rest of all cards from your soul to your deck, shuffle your deck, and draw a card.".'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 3877
+{
+global.CardName[CardStat] = 'Combust Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+ACT [RC] Generation Break 1: [Rest this unit] Soul Charge 1, and if you have six or more cards in your soul, choose one of your units, and it gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 3878
+{
+global.CardName[CardStat] = 'Blade Wing Rodbiss'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [RC]: [Put this unit into your soul] If you have a vanguard with "Blade Wing" in its card name, look three cards from the top of your deck, search for up to two cards with "Blade Wing" in their card names from among them, reveal them to your opponent, put up to one of them into your hand, put up to one of them into your soul, and put the rest of the cards you looked at into the drop zone.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 3879
+{
+global.CardName[CardStat] = 'One-eyed Succubus'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus/Critical Trigger
+
+AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a vanguard with "Scharhrot" in its card name, you may pay the cost. If you do, draw a card, choose up to one of your vanguards, and it gets power +5000 until end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 3880
+{
+global.CardName[CardStat] = 'Werbrummbar Soldat'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast/Stand Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 3939
+{
+global.CardName[CardStat] = 'Succubus of Avarice'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose up to one of your vanguards that is being attacked, and that unit cannot be hit until end of that battle.
+
+ACT [Soul] Generation Break 1 Darkness: [Choose one of your grade 1 or less rear-guards, and retire it] Put this card into your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 4039
+{
+global.CardName[CardStat] = 'One Steeped in Sin, Scharhrot'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+Stride.
+
+AUTO [VC] Generation Break 2 Darkness: [Counter Blast 1] When this unit attacks, you may pay the cost. If you do, put all of your rear-guards into your soul, and this unit gets power +10000 until end of that battle. If the number of cards in your soul is ten or more, retire all of your opponent’s rear-guards, and if the number of cards in your soul is fifteen or more, until end of that battle, your opponent cannot call cards with the sentinel ability from hand to GC.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4040
+{
+global.CardName[CardStat] = 'Glenzend Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [VC] Generation Break 1 Darkness: [Choose one of your rear-guards or a card from your hand with the darkness ability, and put it into your soul] At the end of your turn, if the number of cards in your soul is six or more, you may pay the cost. If you do, draw a card, and if the number of cards in your soul is fifteen or more, Counter Charge 1, choose one of your opponent’s rear-guards, and retire it.
+
+AUTO: [Counter Blast 1] When this unit is placed on VC or RC, you may pay the cost. If you do, look at five cards from the top of your deck, search for up to five cards with the darkness ability from among them, put them into your soul, and put the rest on the bottom of your deck in any order. This unit gets power +1000 for each card put into your soul with this effect until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 4041
+{
+global.CardName[CardStat] = 'Demonted Executioner'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+ACT [RC] 1/Turn Darkness: [Counter Blast 1] If the number of cards in your soul is six or more, this unit gets power +2000 until end of turn, and if the number of cards in your soul is ten or more, this unit gets power +3000 until end of turn.
+
+AUTO: When this unit is placed on RC, look at seven cards from the top of your deck, search for up to one card with the darkness ability from among them, put it into your soul, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4042
+{
+global.CardName[CardStat] = 'Succubus of Desire'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+CONT [RC] Generation Break 1 Darkness: If the number of cards in your soul is six or more, this unit gets "Boost".
+
+AUTO [RC]: [Put this unit into your soul] When your other unit attacks, you may pay the cost. If you do, choose one of your units, and it gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 4085
+{
+global.CardName[CardStat] = 'Queen of Nightmareland, Hartrud'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC] Generation Break 1: [Counter Blast 1 & Choose one of your rear-guards, and retire it] When this unit attacks or is attacked, you may pay the cost. If you do, until end of that battle, this unit gets power +1000 for each card in your soul with "Nightmareland" in its card name.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 4086
+{
+global.CardName[CardStat] = 'Dum of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [RC] Generation Break 1: If you have a card named "Dee of Nightmareland" in your soul, this unit gets power +2000.
+
+AUTO [RC]: When this unit attacks a vanguard, until end of that battle, this unit gets power +2000 for each card named "Dum of Nightmareland" in your soul.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4087
+{
+global.CardName[CardStat] = 'Blood Sacrifice, Ruthven'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on RC, if you have four or more cards in your soul, you may pay the cost. If you do, draw a card, and Soul Charge 1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4088
+{
+global.CardName[CardStat] = 'Edge in the Darkness'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+CONT [RC] Generation Break 1 Darkness: During your turn, if you have six or more cards in your soul, this unit gets power +3000.
+
+CONT [RC]: If you have ten or more cards in your soul, this unit gets "Intercept" and "CONT [RC]: This unit can intercept from the back row.".'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 4089
+{
+global.CardName[CardStat] = 'Dormouse of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+ACT [RC] Generation Break 1: [Rest this unit] Choose one of your vanguards, and until end of turn, that unit gets power +1000 for each card in your soul with "Nightmareland" in its card name.
+
+AUTO: When this unit is put into your drop zone from RC, Soul Charge 1. Then, if it is your turn, choose one of your units with "Nightmareland" in its card name, and that unit gets power +4000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 4090
+{
+global.CardName[CardStat] = 'Vroukalakas'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [RC]: [Choose two "Vrykolakas" from your RC, and put them into your soul] At the beginning of your main phase, you may pay the cost. If you do, choose one of your vanguards, and it gets power +3000 / critical +1 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 4091
+{
+global.CardName[CardStat] = 'Spade Jack of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO: When your unit rides this unit, draw a card, choose a card from your hand, and put it into your soul.
+
+AUTO [Soul]: During your turn, when your G unit Stride, you may call this card to RC. If you do, Soul Charge 1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 4092
+{
+global.CardName[CardStat] = 'Dee of Nightmareland'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Critical Trigger
+
+ACT [RC] Generation Break 1: [Put this unit into your soul] If you have a vanguard with "Nightmareland" in its card name, choose up to one of your units, until end of that turn, that unit gets power +1000 for each card in your soul with "Nightmareland" in its card name. If the unit chosen with this effect is named "Dum of Nightmareland", draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 4251
+{
+global.CardName[CardStat] = 'Wertiger Jaeger'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+AUTO: [Counter Blast 1] When this card is put into your soul for the cost or effect of your card during your turn, you may pay the cost. If you do, draw a card.
+
+ACT [Soul] Darkness: [Counter Blast 1 & Choose a card from your hand, and discard it] If the number of cards in your soul is six or more, Soul Charge 1. Then, if the number of cards in your soul is ten or more, return this card to your hand.
+
+CONT [Hand]: While you are paying the cost for Stride, if you have two or more cards in your soul with the darkness ability, this card gets grade +2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 4252
+{
+global.CardName[CardStat] = 'Covetous Succubus'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO Generation Break 1 Darkness: [Counter Blast 1] When this unit is placed on RC, you may pay the cost. If you do, Soul Charge 1. Then, if the number of cards in your soul is six or more, Counter Charge 1. Then, if the number of cards in your soul is ten or more, draw two cards, choose a card from your hand, and discard it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4701
+{
+global.CardName[CardStat] = 'Medical Specialist, Vincent'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)
+
+AUTO: When this card is discarded from hand for the cost of calling "Medical Studies of Extinction, Vincent" from your G zone, you may put this card into your soul.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 4702
+{
+global.CardName[CardStat] = 'Medical Studies of Extinction, Vincent'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+G guardian.
+
+AUTO Generation Break 1: When placed on GC, COST [Choose a face down G guardian from your G zone, and turn it face up], Soul Charge 1, and this unit gets shield +5000 until end of that battle for every five cards in your soul.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 4771
+{
+global.CardName[CardStat] = 'Casket of Absolute Zero, Rutland Betray'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+Stride.
+
+CONT [VC] Generation Break 8: All units in your front row get power +13000 / critical +1 for every thirteen cards in your soul.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4799
+{
+global.CardName[CardStat] = 'Amon’s Red Eye, Forneus'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+Stride.
+
+ACT [VC] 1/Turn: [Counter Blast 1 & Choose one of your rear-guards, and put it into your soul] Your opponent chooses one of his or her rear-guards, retires it, and this unit gets power +5000 for every five cards in your soul until end of turn. If the number of cards in your soul is twenty or more, choose two of your opponent’s rear-guards, retire them, and then, if you have a heart card with "Amon" in its card name, this unit gets critical +1 until end of turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4800
+{
+global.CardName[CardStat] = 'Amon’s Eye, Agares'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC]: When this unit is placed on VC or at the beginning of your ride phase, choose up to two of your units with "Amon" in its card name, and they get power +1000 for each card in your soul until end of turn.
+
+AUTO [VC]: [Counter Blast 1] When your G unit with "Amon" in its original card name Stride during your turn, you may pay the cost. If you do, Soul Charge the same number of cards as the number of cards in your soul.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 4815
+{
+global.CardName[CardStat] = 'Deranged Singular'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO: Forerunner.
+
+AUTO [RC] Darkness: When this unit boosts, this unit gets power +2000 until end of that battle.
+
+AUTO [RC]: When your G unit Stride, put this unit and all of your grade 1 or greater rear-guards into your soul, and draw two cards.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4816
+{
+global.CardName[CardStat] = 'Listig Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO Generation Break 1: [Choose a card from your hand, and put it into your soul] When this unit is placed on GC, if you have a vanguard with the darkness ability, you may pay the cost. If you do, choose a normal unit from your soul, and put it into your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 4835
+{
+global.CardName[CardStat] = 'Big Shaker'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO: [Counter Blast 1] When this unit is placed on RC, you may pay the cost. If you do, Soul Charge 1, if the number of cards in your soul is six or more, until end of turn, this unit gets power +3000, then, if the number of cards in your soul is ten or more, Counter Charge 1, and this unit gets power +3000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4836
+{
+global.CardName[CardStat] = 'Werkatze Rekrut'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast/Stand Trigger
+
+CONT [RC/GC] Generation Break 1 Darkness: If the number of cards in your soul is ten or more, this unit gets power +5000 / shield +5000.
+
+AUTO [GC]: When an attack did not hit, you may put this unit into your soul.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 4841
+{
+global.CardName[CardStat] = 'One who Scatters Sin, Scharhrot'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [VC]: When your G unit Stride, you may Soul Charge 2. If you do, and the number of cards with the darkness ability in your soul is four or more, your opponent chooses one of his or her rear-guards, and retires it.
+
+AUTO [VC/RC] Generation Break 2 Darkness: When this unit attacks, if the number of cards in your soul is ten or more, until end of that battle, this unit gets power +5000, and your opponent cannot call grade 0 cards from hand to GC.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 4843
+{
+global.CardName[CardStat] = 'Closet Balloon'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose one of your units that is being attacked, and it cannot be hit until end of that battle. If you have a "Closet Balloon" in your soul, and the number of cards in your soul is ten or more, you may draw a card.
+
+CONT [RC] Generation Break 1 Darkness: If the number of cards in your soul is six or more, this unit gets power +2000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 4860
+{
+global.CardName[CardStat] = 'Sorrowful Slice, Lujairus'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+Stride.
+
+ACT [VC] 1/Turn: [Counter Blast 1 & Choose a face down card from your G zone, and turn it face up] Soul Charge 3. Choose one of your rear-guards for each Soul Charge card with different grades, and they get power +5000 until end of turn. If a card with the darkness ability is Soul Charge with this effect, choose up to one grade 3 card from your soul, and put it into your hand.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4861
+{
+global.CardName[CardStat] = 'One who Splits Darkness, Bledermaus'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+Stride.
+
+AUTO [VC] 1/Turn Generation Break 2 Darkness: When it attacks, if the number of cards in your soul is ten or more, COST [Counter Blast 1 & Choose a face down card with the same card name as this unit from your G zone, turn it face up & Choose two cards from your hand, and put them into your soul], return all of the grade 0 cards from your RC and soul to your deck, shuffle your deck, choose two of your units, and they get power +5000 until end of turn. At the end of that battle, stand this unit, and it gets drive -2.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4862
+{
+global.CardName[CardStat] = 'Brennen Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [RC] Generation Break 1 Darkness: [Counter Blast 1] When this unit attacks a vanguard, if you have a vanguard with "Scharhrot" in its card name, you may pay the cost. If you do, this unit gets power +1000 for each card in your soul until end of that battle. At the end of that battle, put this unit into your soul, and draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4863
+{
+global.CardName[CardStat] = 'Cryptid Graw Liege, Sabnac'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+G guardian.
+
+AUTO: [Counter Blast 1] When this unit is placed on GC during the battle that your opponent’s vanguard attacked, if the number of cards in your soul is ten or more, you may pay the cost. If you do, this unit gets shield +5000, choose one of your vanguards, and it gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 4866
+{
+global.CardName[CardStat] = 'Amon’s Follower, Audios Thunder'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: When this unit is placed on RC, Soul Charge 1. If the card Soul Charge is a card with "Amon" in its card name, you may have this unit get power -4000 until end of turn. If you do, Soul Charge 1, and this unit gets power +5000 until end of turn for every five cards in your soul.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4891
+{
+global.CardName[CardStat] = 'Emotional Succubus'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4892
+{
+global.CardName[CardStat] = 'Amon’s Follower, Hateful Cyclone'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: When this unit is placed on RC, Soul Charge 1. If the card Soul Charge is a card with "Amon" in its card name, you may have this unit get power -2000 until end of turn. If you do, Soul Charge 1, and this unit gets power +5000 until end of turn for every five cards in your soul.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 4893
+{
+global.CardName[CardStat] = 'Spread Arson'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC] Darkness: When this unit’s attack hits a vanguard, Soul Charge 2, if the number of cards in your soul is ten or more, choose another of your unit, it gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 4903
+{
+global.CardName[CardStat] = 'Amon’s Hardwall, Bufstare'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+CONT: Sentinel.
+
+AUTO: [Counter Blast 1-card with "Amon" in its card name] When this unit is placed on GC from hand, you may pay the cost. If you do, call five cards from the top of your deck to GC.
+
+ACT [Soul] 1/Turn: [Counter Blast 1] If the number of cards in your soul is fifteen or more, choose three other normal units and trigger units each with "Amon" in its card name from your soul. If a total of six cards were chosen, return them to your deck, shuffle your deck, and Counter Charge 1 / Soul Charge 1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 4919
+{
+global.CardName[CardStat] = 'Sweetie Thirteen'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [VC/RC] Darkness: During your turn, this unit gets power +1000 for each card in your soul.
+
+AUTO [RC]: At the end of your turn, if the number of cards in your soul is thirteen or more, retire this unit.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 3000
+
+
+CardStat = 5444
+{
+global.CardName[CardStat] = 'Zeroth Dragon of End of the World, Dust'
+global.CardText[CardStat] = 'Dark Zone/Zeroth Dragon
+
+Ultimate Stride COST [Choose a card with the same card name as your vanguard from your hand, and discard it] Stride this card on your VC from face down.
+
+AUTO: When placed on VC, COST [Counter Blast 2], until end of turn, your opponent’s vanguards and rear-guards lose all of their abilities, and their grade and power increase or decrease to 1. If the number of cards in your opponent’s damage zone is four or less, choose one of your opponent’s vanguards, and deal one damage. (Perform a damage check. Triggers will also activate.)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11 //Dark Irregulars
+global.CardInClan2[CardStat] = 18 //Pale Moon
+global.CardInClan3[CardStat] = 14 //Spike Brothers
+global.CardInClan4[CardStat] = 26 //Gear Chronicle
+global.CardInClan5[CardStat] = 34 //Iconic
+global.ExtraDeck[CardStat] = 1
+global.DeleteAllExtraInEndPhase[CardStat] = 1
+}
+global.PowerStat[CardStat] = 25000
+
+
+CardStat = 5467
+{
+global.CardName[CardStat] = 'Gamboling Psychokiller'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [VC/RC] Darkness: This unit gets power +3000.
+
+AUTO [RC] Generation Break 1: [Counter Blast 1 card with the darkness ability] When this unit’s attack hits a vanguard, you may pay the cost. If you do, draw a card, and Soul Charge 1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5487
+{
+global.CardName[CardStat] = 'Wertiger Plunderer'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+CONT [RC] Darkness: During your turn, if you have a vanguard with "Scharhrot" in its card name, this unit gets power +1000 for each card in your soul.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5545
+{
+global.CardName[CardStat] = 'One who Proceeds Towards Daybreak, Scharhrot'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [VC]: When your G unit Stride, you may Soul Charge 2. If you do, choose a card with the darkness ability from your soul, put it into your hand, choose up to one card from your hand, and put it into your soul.
+
+AUTO [VC] Darkness: [Choose one of your grade 1 or greater rear-guards, and put it into your soul] At the end of your turn, you may pay the cost. If you do, your opponent chooses one of his or her rear-guards, retires it, and if the number of cards in your soul is eight or more, you Counter Charge 1.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 11000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 5548
+{
+global.CardName[CardStat] = 'Succubus of Jealousy'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO: When this unit is placed on RC, if you have a vanguard with the darkness ability, you may look at five cards from the top of your deck. If you do, put up to two grade 1 or greater cards with the darkness ability from among them into your soul, and shuffle your deck.
+
+CONT [RC] Generation Break 1 Darkness: This unit gets power +2000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5553
+{
+global.CardName[CardStat] = 'One who Hunts Souls, Balaam'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+Stride.
+
+ACT [VC] 1/Turn: [Counter Blast 1 & Choose a face down card from your G zone with the same card name as this unit, and turn it face up] Choose one of your opponent’s rear-guards, this unit gets that unit’s power, and drive +1. Retire that unit. You may Soul Charge 2 for each face up card in your G zone.
+
+CONT [VC] Generation Break 3 Darkness: If the number of cards in your soul is thirteen or more, your opponent cannot call grade 1 cards from hand to GC.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5554
+{
+global.CardName[CardStat] = 'Fallen Angel of Disconnection, Akrasiel'
+global.CardText[CardStat] = 'Dark Irregulars/Angel
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and put it into your soul] When this unit is placed on GC from hand, you may pay the cost. If you do, choose one of your units with the darkness ability, and it cannot be hit until end of that battle.
+
+ACT [Drop Zone] Generation Break 2 Darkness: [Counter Blast 1 & Choose another "Fallen Angel of Disconnection, Akrasiel" from your soul or drop zone, and bind it face up] Return this card to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 5555
+{
+global.CardName[CardStat] = 'Baleful Repressor'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [RC] Generation Break 2 Darkness: When this unit attacks, if the number of cards in your soul is eight or more, until end of that battle, this unit gets power +10000, and your opponent cannot call grade 0 cards from hand to GC.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5560
+{
+global.CardName[CardStat] = 'Werfrede Infromant'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast/Stand Trigger
+
+ACT [RC] Generation Break 1 Darkness: [Put this unit into your soul] If you have a grade 4 vanguard, draw a card, choose one of your rear-guards, and that unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 4000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 5561
+{
+global.CardName[CardStat] = 'Whitefang Wielder'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [RC] Darkness: [Retire this unit] If the number of cards in your soul is twenty or more, choose one card with the darkness ability from your soul for each different grade, return them into your deck, and shuffle it. If you returned four cards, choose up to five of your units, and they get power +6000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 5570
+{
+global.CardName[CardStat] = 'Revolting Bolt'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO: When this card is put into your soul by a card effect during your turn, if you have a vanguard with the darkness ability, choose one of your units, and it gets power +4000 until end of turn.
+
+CONT [RC] Generation Break 1 Darkness: Resist.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5571
+{
+global.CardName[CardStat] = 'Wackstum Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO: Forerunner.
+
+ACT [RC] Generation Break 1 Darkness: [Counter Blast 1 & Put this unit into your soul & Choose one of your other rear-guards, and retire it] Choose up to two grade 1 or greater cards with the darkness ability from your soul, and put them into your hand.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5572
+{
+global.CardName[CardStat] = 'Accumulated Attachment, Druj Nasu'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+G guardian.
+
+CONT [GC]: If the number of cards in your soul is eight or more, this unit gets shield +10000.
+
+AUTO: When this unit is placed on GC, choose one of your grade 1 or greater rear-guards with the darkness ability, and you may put it into your soul. If you put, draw a card.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 5573
+{
+global.CardName[CardStat] = 'Amon’s Follower, Abysm Lust'
+global.CardText[CardStat] = 'Dark Irregulars/Demon/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)
+
+AUTO: [Bind this card face up & Choose another card with "Heal" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5574
+{
+global.CardName[CardStat] = 'Forschung Vampir'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+CONT [VC/RC/GC] Generation Break 1 Darkness: If the number of cards in your soul is four or more, this unit gets power +2000 / shield +5000, and "Intercept". Then, if you have a vanguard with the darkness ability, and the number of cards in your soul is eight or more, this unit gets shield +5000.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 5586
+{
+global.CardName[CardStat] = 'Evil God Bishop, Gastille'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC/RC]: At the beginning of your ride phase, if the number of cards in your soul is eight or more, choose one of your grade 3 rear-guards with the darkness ability, and you may return it to your hand.
+
+CONT Generation Break 2 Darkness: When this unit would be placed on RC, choose up to two grade 2 cards from your soul, put them into your drop zone, and this unit has all abilities they have until end of turn. ("When placed on" abilities will also activate.)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5616
+{
+global.CardName[CardStat] = 'Darkness Unleashed, Freiheit'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+Stride.
+
+AUTO [VC] Darkness: When this unit attacks, you may Soul Charge 2. If you do, choose one of your units for every four cards in your soul, and they get power +5000 until end of turn. If the number of cards in your soul is thirteen or more, choose up to four cards from your soul with different grades, return them to your deck, and shuffle it, and this unit gets power +5000 until end of turn for each card returned.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5617
+{
+global.CardName[CardStat] = 'Werwolf Angreifer'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5618
+{
+global.CardName[CardStat] = 'Spirit Inviter'
+global.CardText[CardStat] = 'Dark Irregulars/Elf/Draw Trigger
+
+ACT [RC]: [Put this unit into your soul] Choose one of your units, and it gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5992
+{
+global.CardName[CardStat] = 'Blood Sacrifice, Ruthven '
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [RC]: When placed, put up to one card from your damage zone or drop zone into your soul, and if it was put from your damage zone, put the top card of your deck into your damage zone face down. If "Vroukalakas" was put into your soul, Counter Charge 1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5993
+{
+global.CardName[CardStat] = 'Vroukalakas '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO: When it is retired from GC, you may Soul Charge 1.
+
+AUTO: When it is put into your soul due to your ability of your card during your turn, one of your vanguards gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5999
+{
+global.CardName[CardStat] = 'Ghoulish Despoiler'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC]: When placed, COST [Counter Blast 1], Soul Charge 2, and return up to one grade 2 or less card from your soul to your hand.
+
+AUTO [VC]: When it attacks a vanguard, if your soul has ten or more cards, choose one of your opponent’s rear-guards, retire it, and this unit gets power +10000 until end of that battle.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6002
+{
+global.CardName[CardStat] = 'Werwolf Freiwilliger'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+ACT [RC]: COST [Put this unit into your soul], Soul Charge 1, and one of your units gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6003
+{
+global.CardName[CardStat] = 'Werbear Verfolger'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+AUTO [RC]: When it attacks a vanguard, COST [Counter Blast 1], Soul Charge 1, and this unit gets power +2000 until end of that battle for each card in your soul. (If it is used when your soul had three cards, power +8000 after Soul Charge 1.)'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6006
+{
+global.CardName[CardStat] = 'Terrifying Fist'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: When it attacks a vanguard, Soul Charge 1, and this unit gets power +5000 until end of that battle. If the card that was Soul Charge was a trigger unit, power +10000 instead of power +5000.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6007
+{
+global.CardName[CardStat] = 'Anomalous Esper'
+global.CardText[CardStat] = 'Dark Irregulars/Human'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6011
+{
+global.CardName[CardStat] = 'Demon Eater '
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [VC]: When your guardian is retired, you may put that card into your soul.
+
+AUTO [VC/RC]: When it attacks, COST [Counter Blast 1 & put one other rear-guards into your soul], draw a card, and until end of that battle, it gets power +10000, then, COST [Soul Blast 10], and your opponent cannot call sentinels from his or her hand.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6027
+{
+global.CardName[CardStat] = 'Gwynn the Ripper '
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [VC/RC]: When placed, Soul Charge 1. If your soul has ten or more cards, COST [Counter Blast 1], choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6031
+{
+global.CardName[CardStat] = 'No Life King, Death Anchor '
+global.CardText[CardStat] = 'Dark Irregulars/Ghost
+
+AUTO: When this unit is placed on VC, Soul Charge 1, and this unit gets power +2000 until end of turn for each card in your soul.
+
+AUTO [VC]: At the end of the battle that this unit attacked, if your soul has thirteen or more cards, COST [Counter Blast 1 & put a card from hand and three rear-guards into soul], ride a card from your soul as stand, and it gets critical +1 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6032
+{
+global.CardName[CardStat] = 'Werwolf Sieger '
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+CONT [VC/RC]: During your turn, if you have five or more cards in your soul, this unit gets power +5000.
+
+AUTO [VC]: When it attacks a vanguard, Soul Charge 2.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6033
+{
+global.CardName[CardStat] = 'Prisoner Beast '
+global.CardText[CardStat] = 'Dark Irregulars/Chimera
+
+AUTO [VC/RC]: When placed, you may Soul Charge 1.
+
+CONT [RC]: If you have five or more cards in your soul, this unit gets power +2000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6041
+{
+global.CardName[CardStat] = 'Doreen the Thruster '
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [VC/RC]: When your card is put into your soul by your card’s ability, this unit gets power +5000 until end of turn. (+10000 if Soul Charge 2 )
+
+(SHIFT + left click to count up activations.)
+(SHIFT + right click to count down activations.)
+(Middle click or hover and press SPACE to set number of activations.)'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+global.UseCounters[CardStat] = 1
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 6063
+{
+global.CardName[CardStat] = 'March Rabbit of Nightmareland '
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast/Draw Trigger
+
+CONT: Sentinel.
+
+AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6064
+{
+global.CardName[CardStat] = 'Succubus of Dedicated Love'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+CONT: Sentinel.
+
+AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6065
+{
+global.CardName[CardStat] = 'Obstacle Offender'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO: When it intercepts, if you have five or more cards in your soul, this unit gets shield +10000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6066
+{
+global.CardName[CardStat] = 'Succubus of Seductive Smile'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+CONT [RC]: If "Succubus of Seductive Smile" is in your soul, this unit gets "Boost" and "CONT [RC]: This unit can intercept from the back row.".'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6067
+{
+global.CardName[CardStat] = 'Vermillion Gatekeeper '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+global.QuickShieldAdd[CardStat] = 1
+
+
+CardStat = 6068
+{
+global.CardName[CardStat] = 'Werluchs Gefreiter'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6069
+{
+global.CardName[CardStat] = 'Blitzritter '
+global.CardText[CardStat] = 'Dark Irregulars/Elf/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6070
+{
+global.CardName[CardStat] = 'Hysteric Shirley '
+global.CardText[CardStat] = 'Dark Irregulars/Human/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6071
+{
+global.CardName[CardStat] = 'Cursed Doctor '
+global.CardText[CardStat] = 'Dark Irregulars/Human/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6090
+{
+global.CardName[CardStat] = 'Blue Dust '
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: When its attack hits, Soul Charge 1 for each grade of your opponent’s vanguard.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6091
+{
+global.CardName[CardStat] = 'Nightmare Baby '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [RC]: When it boosts, this unit gets power +2000 until end of turn for every five cards in your soul. (+4000 when you have thirteen cards in your soul.)'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6095
+{
+global.CardName[CardStat] = 'Imprisoned Fallen Angel, Saraqael '
+global.CardText[CardStat] = 'Dark Irregulars/Angel
+
+CONT [VC/RC]: When it would attack, it cannot attack unless you Soul Blast 1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6397
+{
+global.CardName[CardStat] = 'Demon Duke of Death, Baal'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [RC/GC]: When placed, if your soul has five or more cards, this unit gets power +5000 / shield +5000 until end of turn.
+
+AUTO [RC]: When it attacks, COST [Counter Blast 1 & put another grade 2 or greater rear-guard into your soul], choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 12000
+global.GreenTokenAdd[CardStat] = 1
+
+
+CardStat = 6398
+{
+global.CardName[CardStat] = 'Dark Soul Conductor '
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+AUTO [GC]: When placed, if you have a total of ten or more cards in your soul and damage zone, you may have this unit get shield +10000 until end of that battle. If you do, when this unit would be retired during that battle, put it on the bottom of your deck instead.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6440
+{
+global.CardName[CardStat] = 'Authority of Water'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO [RC] 1/Turn: When your opponent’s rear-guard is retired during your turn, if the number of cards in your soul is ten or more, Counter Charge 1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6441
+{
+global.CardName[CardStat] = 'Awful Nail'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: When placed, Soul Charge 1, and if the number of cards in your soul is five or more, this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6442
+{
+global.CardName[CardStat] = 'Silhouette Tracker'
+global.CardText[CardStat] = 'Dark Irregulars/Ghost
+
+AUTO [RC]: When your opponent’s rear-guard is retired during your turn, COST [Counter Blast 1], Soul Charge 1, and this unit gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6446
+{
+global.CardName[CardStat] = 'King of Masks, Dantarian '
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+(PREMIUM JP & EN & TH: You can only run this card if you do not have Steam Mage, Ashur-da in your deck.)
+
+CONT [VC]: While you are calling guardians, you may even call grade 2 or greater cards from your soul. (You may even call any number to GC.)
+
+AUTO [VC]: When your opponent’s rear-guard is retired during your turn, you may Soul Charge 2.
+
+AUTO [VC]: When a grade 2 or greater card is put into your soul due to an ability of card, three of your rear-guards get power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.CardLimidet[CardStat] = 1
+
+
+CardStat = 6447
+{
+global.CardName[CardStat] = 'Flirtatious Succubus '
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+AUTO [RC]: At the end of the battle it attacked a vanguard, COST [put this unit into your soul], choose one of your opponent’s rear-guards, and retire it.
+
+ACT [Soul]: COST [Counter Blast 1 & discard a card from your hand], and return this card to your hand.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6448
+{
+global.CardName[CardStat] = 'Alluring Succubus '
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+ACT [RC]: COST [Counter Blast 1 & put this unit into your soul], look at seven cards from the top of your deck, reveal up to two grade 3 cards from among them, put up to one card of them into your hand, put up to one card into your soul, and shuffle your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6449
+{
+global.CardName[CardStat] = 'Pathfinder of Wind'
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [RC]: When your drive check reveals a trigger unit, you may put that card into your soul. If you put, Soul Charge 2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6450
+{
+global.CardName[CardStat] = 'Direful Noise'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC]: When the attack it boosted hits a vanguard, COST [put this unit into your soul], choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6451
+{
+global.CardName[CardStat] = 'Dimension Creeper '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+CONT [RC]: If a grade 3 card is in your soul, this unit gets power +5000.
+
+ACT [Soul]: COST [Counter Blast 1 & put this card on the bottom of your deck], and you may Soul Charge 3.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6455
+{
+global.CardName[CardStat] = 'Cuticle Assassin, Sabina'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [RC]: If your vanguard is "Cuticle Killer, Mirche", this unit gets critical +1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6456
+{
+global.CardName[CardStat] = 'Cuticle Breaker, Pavla'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [RC]: If your vanguard is "Cuticle Killer, Mirche", this unit gets power +10000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6457
+{
+global.CardName[CardStat] = 'Cuticle Killer, Mirche'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC]: When it attacks, COST [Counter Blast 1 & discard a card], call a "Cuticle Assassin, Sabina" and "Cuticle Breaker, Pavla" from your soul to RC, and this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6484
+{
+global.CardName[CardStat] = 'Master of Fifth Element '
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [VC]: When it attacks, if you have fifteen or more cards in your soul, COST [put all cards from your hand and soul into the drop zone], and stand all of your units.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6485
+{
+global.CardName[CardStat] = 'Succubus of Worldly Affairs'
+global.CardText[CardStat] = 'Dark Irregulars/Succubus'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6637
+{
+global.CardName[CardStat] = 'Ignite Proposer'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [RC]: If your soul has five or more cards, this unit gets power +5000, and "Intercept".'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6685
+{
+global.CardName[CardStat] = 'Evil God Pontiff, Gastille Daimonas'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+(PREMIUM JP & EN & TH: Banned.)
+
+Stride.
+
+AUTO [VC]: When a card is put into your soul, all of your front row units get power +3000 until end of turn.
+
+ACT [VC] 1/Turn: COST [Counter Blast 1 & turn a card from your G zone face up], search your deck for up to two cards, put them into your soul, and shuffle your deck. This unit gets all of the abilities of the cards put into your soul by this effect until end of turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+global.CardBanned[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 6691
+{
+global.CardName[CardStat] = 'Progenitor Dragon of Gloomy Dark, Formido'
+global.CardText[CardStat] = 'Dark Zone/Abyss Dragon
+
+Stride COST [Discard a card with the same card name as a card on your VC], Stride this card on your VC from face down.
+
+CONT [G Zone]: This card cannot be turned face up by abilities. If this card is face up, you can Stride without paying the Stride cost.
+
+AUTO [VC]: When placed, COST [Counter Blast 1], your opponent chooses the same number of his or her rear-guards as the number of your open RC, and retires them. If three or more were retired, you Soul Charge 5, and draw a card.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11 //Dark Irregulars
+global.CardInClan2[CardStat] = 18 //Pale Moon
+global.CardInClan3[CardStat] = 14 //Spike Brothers
+global.CardInClan4[CardStat] = 26 //Gear Chronicle
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 6737
+{
+global.CardName[CardStat] = 'Liquid Fencer'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Critical Trigger
+
+AUTO [RC] Generation Break 1: When your vanguard attacks, COST [put this unit into your soul], draw a card, and one of your vanguards gets power +10000 until end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 6820
+{
+global.CardName[CardStat] = 'Metallic-winged Cursed Princess, Rhodia'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [VC/RC]: This unit gets power +1000 for each card in your soul.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6899
+{
+global.CardName[CardStat] = 'Variants Dragform'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: When placed, COST [Counter Blast 1], put a card from your damage zone into your soul, put a grade 2 or greater card from your soul into your hand, and put the top card of your deck into your damage zone face down.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6907
+{
+global.CardName[CardStat] = 'Icicle Resistant'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: When it is retired from GC during the battle it intercepted, you may put this card into your soul.
+
+ACT [Soul]: COST [Bind this card], and one of your units gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6908
+{
+global.CardName[CardStat] = 'Yellow Bolt '
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC]: When it attacks a grade 2 or greater unit, Soul Charge 1, and this unit gets power +5000 until end of that battle.
+
+AUTO: When rode upon, you may Soul Charge 2. If you Soul Charged one or more trigger units, draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6912
+{
+global.CardName[CardStat] = 'Variants Killertail'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [RC] 1/Turn: COST [Rest this unit], and put a card from your damage zone or drop zone into your soul. If you put a card from your damage zone, put the top card of your deck into your damage zone face down, and if your soul has three "Variants Killertail", Counter Charge 1, and stand this unit.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 6913
+{
+global.CardName[CardStat] = 'Emblem Master '
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [RC/GC]: If your soul has seven or more cards, this unit gets power +5000 / shield +5000.
+
+AUTO [VC/RC]: When placed, COST [Counter Blast 1], search your deck and drop zone for up to three cards in total with the same card name as one of your units and put them into your soul. If you searched the deck, shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6925
+{
+global.CardName[CardStat] = 'Muddy Toxic'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC]: When placed, put any number of cards from your hand on the bottom of your deck in any order, and if you put one or more cards, draw the same number of cards as the number of cards put, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6926
+{
+global.CardName[CardStat] = 'Hope on Damp'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+(PREMIUM EN: Banned.)
+
+AUTO [VC/RC]: When placed, if your soul has twenty or more cards, until end of turn, when your opponent would call cards from his or her hand to GC, he or she must call cards with sum of their original shield being 20000.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.CardBanned[CardStat] = 1
+
+
+CardStat = 6927
+{
+global.CardName[CardStat] = 'Variants Shutarm'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC]: When it attacks a vanguard while boosted, this unit gets power +6000 until end of that battle. If your soul has two or more "Variants Shutarm", then, COST [Counter Blast 1], choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6928
+{
+global.CardName[CardStat] = 'Variants Megawing'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [RC]: If your soul has two or more "Variants Megawing", this unit cannot be retired by card effects, and it gets power +10000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6941
+{
+global.CardName[CardStat] = 'Demonic Deep Phantasm Emperor, Brufas'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+ACT [VC] 1/Turn: COST [Counter Blast 1], look at all of your deck, search for up to three cards with the same card name and reveal them, and if your soul has a card with the same card name as those cards, put a card from among the revealed cards into your hand, and put the rest into your soul. Shuffle your deck.
+
+AUTO [VC]: When it attacks, if your soul has two or more grade 3, choose one of your or your opponent’s rear-guards, retire it, and this card gets the power and critical of that unit until end of that battle. (Added amount is included.)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6942
+{
+global.CardName[CardStat] = 'Wertiger Jaeger '
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+AUTO: When it is retired from RC or GC, COST [Counter Blast 1], and put this card into your soul.
+
+AUTO [Soul]: When your opponent’s rear-guard is retired by your card’s effect, COST [bind this card], and draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6943
+{
+global.CardName[CardStat] = 'Variants Hardleg'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+(PREMIUM EN: Banned.)
+(V PREMIUM JP & EN: Banned.)
+
+AUTO [RC]: When placed, if your soul has three or more cards with different card names and they have three or more cards with the same card name, until end of turn, when your opponent would call from his or her hand to GC, he or she must call three or more at the same time.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+global.CardBanned[CardStat] = 1
+
+
+CardStat = 6955
+{
+global.CardName[CardStat] = 'Dark Knight of Nightmareland '
+global.CardText[CardStat] = 'Dark Irregulars/Demon/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6956
+{
+global.CardName[CardStat] = 'Devil in Shadow '
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+global.QuickShieldAdd[CardStat] = 1
+
+
+CardStat = 6957
+{
+global.CardName[CardStat] = 'Warlike Poisoner'
+global.CardText[CardStat] = 'Dark Irregulars/Human'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6958
+{
+global.CardName[CardStat] = 'Evileye Artist'
+global.CardText[CardStat] = 'Dark Irregulars/Elf'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6959
+{
+global.CardName[CardStat] = 'Rigor Twister'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+CONT [RC]: If you have two or more "Rigor Twister" in your soul, this unit cannot be retired by card effects, and it gets power +15000.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6970
+{
+global.CardName[CardStat] = 'Number of Terror '
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC/GC]: When placed, if your soul has ten or more cards, this unit gets power +10000 / shield +10000 until end of turn.
+
+AUTO [RC]: When it attacks a vanguard, if your soul has ten or more cards, COST [put another rear-guard into your soul], and draw two cards.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6973
+{
+global.CardName[CardStat] = 'Appalling Thread'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT: Sentinel.
+
+AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.
+
+AUTO [VC]: When placed, draw a card, and discard a card from your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 7088
+{
+global.CardName[CardStat] = 'Somber Blower'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC]: When placed, COST [Counter Blast 1], put a card from your drop zone into your soul, choose one of your opponent’s rear-guards with the same grade of that card, and retire it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 7511
+{
+global.CardName[CardStat] = 'Ringleader of Uproar, Gharvans'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+Stride.
+
+AUTO [VC]: When it attacks, COST [Counter Blast 1 & turn a card from your G zone face up], Soul Charge 5, draw the same number of cards as the number of trigger units Soul Charge with this effect, and until end of that battle, when your opponent would call cards from hand to GC, he or she must call the same number as the number of normal units Soul Charge with this effect or more at the same time.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 7548
+{
+global.CardName[CardStat] = 'Bane Stinger'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Critical Trigger
+
+CONT [Hand]: While paying the cost for Stride, this card may be discarded as a grade 3.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+global.NewTriggerStat[CardStat] = 1
+
+
+CardStat = 7691
+{
+global.CardName[CardStat] = 'Werfleder Ordonnaz '
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 6000
+global.QuickShieldAdd[CardStat] = 1
+
+
+CardStat = 7692
+{
+global.CardName[CardStat] = 'Tornado Genitor'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [RC] 1/Turn: COST [Discard a card from your hand], and Soul Charge 2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7700
+{
+global.CardName[CardStat] = 'Inflict Stamper'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [RC]: If three or more "Inflict Stamper" are in your soul, this unit cannot retired by card effects, and gets critical +1.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 7701
+{
+global.CardName[CardStat] = 'Prognose Drei'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: When it attacks, if your soul has five or more cards, look at the top card of your deck. You may put that card into your soul.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 7711
+{
+global.CardName[CardStat] = 'Blemish Spire'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+(The original critical of this unit is 2.)'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 3000
+
+
+CardStat = 7712
+{
+global.CardName[CardStat] = 'Exact Frozen'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC]: When placed, COST [Counter Blast 2], and call up to one grade 2 or less card from your soul to RC.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 7713
+{
+global.CardName[CardStat] = 'Austere Heater'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [Soul]: COST [Counter Blast 1 & Discard a card from your hand], return this card to your hand, and put up to two cards from your drop zone into your soul.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 7715
+{
+global.CardName[CardStat] = 'Scharhrot Vampir '
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [VC]: At the beginning of your battle phase, all of your front row units get power +1000 until end of turn for each card in your soul.
+
+AUTO [VC]: When it attacks, COST [Counter Blast 1], and stand one of your front row rear-guards. If your soul has thirteen or more cards, stand two rear-guards instead of one.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 7716
+{
+global.CardName[CardStat] = 'Abominable One, Gilles de Rais '
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [VC/RC]: When placed, COST [Counter Blast 1], and call a grade 2 or less card from your soul to RC.
+
+AUTO [VC/RC]: When it attacks a vanguard, if your soul has ten or more cards, choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 7717
+{
+global.CardName[CardStat] = 'Edge in the Darkness '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC]: When placed, draw a card, and put a card from your hand into your soul.
+
+AUTO [RC]: When placed, Soul Charge 1. If it was placed by your card’s ability, Counter Charge 1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7750
+{
+global.CardName[CardStat] = 'Stone Framer'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: When put into your soul from RC during your turn, one of your vanguards gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7751
+{
+global.CardName[CardStat] = 'Succubus of Pure Love '
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+CONT [VC/RC]: During your turn, if one or more of your cards was put into your soul by a card’s ability this turn, this unit gets power +5000.
+
+AUTO [VC/RC]: When placed from hand, look at five cards from the top of your deck, reveal up to one grade 3 from among them and put it into your hand, shuffle your deck, and if you put a card, discard a card from your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7763
+{
+global.CardName[CardStat] = 'Pulse Taker'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 7764
+{
+global.CardName[CardStat] = 'Deflect Sweet'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [Soul]: This card gets grade +1.
+
+AUTO [RC]: When the attack it boosted hits, if your soul has five or more cards, COST [Counter Blast 1], and draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 7765
+{
+global.CardName[CardStat] = 'Gravitate Core Master'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC]: When it attacks, this unit gets power +2000 until end of turn for each card in your soul. If it got +30000 or more, choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 7776
+{
+global.CardName[CardStat] = 'One-eyed Succubus '
+global.CardText[CardStat] = 'Dark Irregulars/Succubus/Critical Trigger
+
+CONT: Sentinel.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 30000
+
+
+CardStat = 7777
+{
+global.CardName[CardStat] = 'Demonted Executioner '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC]: When it attacks a grade 2 or greater, this unit gets power +5000 until end of that battle.
+
+AUTO [VC/RC]: When placed, COST [Counter Blast 1], Soul Charge 3, and if you Soul Charge one or more trigger units, draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 7801
+{
+global.CardName[CardStat] = 'Flap Fixer'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [GC]: If you have a grade 3 or greater vanguard, this unit gets shield +10000.
+
+AUTO [VC/RC]: When placed from hand, search your deck for up to one grade 3 card, put it into your soul, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 7802
+{
+global.CardName[CardStat] = 'Doppel Vampir '
+global.CardText[CardStat] = 'Dark Irregulars/Vampire
+
+AUTO [VC/RC]: When it attacks, Soul Charge 1, and your opponent cannot intercept until end of that battle.
+
+ACT [Soul]: COST [Counter Blast 1], and return this card to your hand.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7803
+{
+global.CardName[CardStat] = 'Alice of Nightmareland '
+global.CardText[CardStat] = 'Dark Irregulars/Human/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 20000
+
+
+CardStat = 7840
+{
+global.CardName[CardStat] = 'Phantasma Executor'
+global.CardText[CardStat] = 'Dark Irregulars/Elf
+
+ACT [RC]: COST [Retire this unit], choose one of your opponent’s rear-guards, retire it, and Soul Charge 2.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 8174
+{
+global.CardName[CardStat] = 'Werwolf Ketzer'
+global.CardText[CardStat] = 'Dark Irregulars/Warbeast
+
+AUTO: When retired from GC, you may put this card in your soul.
+
+ACT [Soul]: COST [Bind this card], and Soul Charge 2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 8178
+{
+global.CardName[CardStat] = 'Evil God Bishop, Gastille '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO [VC]: At the beginning of your battle phase, COST [Counter Blast 1], draw a card, and your opponent chooses one of the following effects for every five cards in your soul. You perform the chosen effects in any order. (Each effect can only be chosen once.)
+• All of your front row units get critical +1 until end of turn.
+• Your opponent’s vanguards power increases or decreases to 1 until end of turn.
+• All of your opponent’s AUTO abilities do not activate until end of turn.
+• Your opponent chooses a card from his or her hand, and puts it into his or her damage zone face down.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 8179
+{
+global.CardName[CardStat] = 'Poisonic Abductor'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC]: When placed, COST [Counter Blast 1 & discard a card from your hand], search your deck for up to three grade 2 or less normal units with the same card name, put two cards from among them into your soul, call the rest to RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 8180
+{
+global.CardName[CardStat] = 'Ironheart Assassin'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [RC]: When it attacks or boosts, you may Soul Charge 1. If you Soul Charge, and your soul has three "Ironheart Assassin", Counter Charge 1.
+
+AUTO: When rode upon, you may call this card to RC.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 8972
+{
+global.CardName[CardStat] = 'Blade Wing Reijy '
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [VC]: If your soul has ten or less cards, COST [Soul Blast 1], choose a card from your soul, and bind it face down.
+
+CONT [VC]: Get all of the effects below depending on the number of face down cards in your bind zone.
+• 5 or more - This unit gets power +5000. (Active on opponent’s turn too)
+• 7 or more - During your turn, this unit gets power +10000 / drive +1.
+• 10 or more - During your turn, this unit gets power +10000 / critical +2.
+
+AUTO [VC]: When this unit attacks, if your bind zone has fifteen or more face down cards, choose one of your opponent’s vanguards, and deal two damage.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 8973
+{
+global.CardName[CardStat] = 'Blaze Foresight'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: When this unit is placed on VC or RC, COST [Counter Blast 1], choose up to two trigger units from your hand, put them into your soul, and draw a card for each card put.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 8974
+{
+global.CardName[CardStat] = 'Bestial Squeezer'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: When this unit is placed on RC, COST [put a normal unit from your drop on the bottom of your deck], and you may Soul Charge 1.
+
+ACT [Drop]: COST [Bind this unit], choose one of your rear-guards, and put it into your soul.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 8975
+{
+global.CardName[CardStat] = 'Cuticle Defender, Flavia'
+global.CardText[CardStat] = 'Dark Irregulars/Human/Heal Trigger
+
+AUTO: When this unit is put on GC from hand, if you did not ride a grade 3 or greater unit this fight, perform one of the following.
+• Choose one of your vanguards, and it gets power +10000 until end of turn.
+• Choose one of your opponent’s units, and it gets critical -2 until end of that battle.
+
+AUTO: When this unit is placed on RC from hand, if your damage zone has no cards, put the top card of your deck into the damage zone.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 15000
+
+
+CardStat = 9223
+{
+global.CardName[CardStat] = 'Megarock Gigant'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: The number of cards discarded from your hand for this cost is reduced by one for every five cards in your soul. When this unit is put on GC, COST [Counter Blast 1 & discard four cards from your hand], and perform one of the following:
+• Choose one of your units, and it gets power +10000 until end of turn.
+• Choose one of your units, and it cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 9462
+{
+global.CardName[CardStat] = 'Amon’s Follower, Phu Geenlin '
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+ACT [VC/RC] 1/Turn: COST [Put a card from your hand into your soul], draw a card, your opponent chooses a card from their hand, and puts it into their soul. Then, your opponent may draw a card.
+
+AUTO [RC]: At the beginning of your battle phase, if your opponent’s soul has six or more cards, you may Soul Charge 1. If you Soul Charge, choose one of your units, and it gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 9463
+{
+global.CardName[CardStat] = 'Amon’s Follower, Ron Geenlin '
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO: When this unit is placed on VC or RC, Soul Charge 1. Your opponent chooses up to one card from their hand or rear-guards, and puts it into their soul. If they did not put a card into their soul, you Soul Charge 1.
+
+CONT [RC/GC]: If your opponent’s soul has six or more cards, this unit gets power +10000 / shield +10000. (Active on opponent’s turn too)'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 9464
+{
+global.CardName[CardStat] = 'Demon World Marquis, Amon '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+ACT [VC] 1/Turn: COST [Put a card each from your rear-guards, hand, and drop into your soul], your opponent chooses two cards each from their rear-guards, hand, and drop, and puts them into their soul. If your opponent did not put six cards into their soul, this unit gets drive +1 until end of turn.
+
+CONT [VC/RC]: During your turn, this unit gets power +5000 for every six cards in your soul. If this unit is on VC, it gets power +10000 instead of +5000.
+
+CONT [VC]: This unit gets critical +1 for every six cards in your opponent’s soul.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 9802
+{
+global.CardName[CardStat] = 'Ultimate Deep Hades Emperor, Forfax'
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+Stride.
+
+AUTO [G Zone]: At the end of the battle your grade 3 vanguard attacked your opponent’s grade 3 or greater vanguard, if your vanguard is grade 3 and your soul has thirteen or more cards, COST [Counter Blast 1 & discard five cards from your hand], and Stride this card on your VC as stand from face down.
+
+AUTO: When this unit is placed on VC, if your deck has thirteen or less cards, choose up to three critical triggers from your soul, return them to your deck and shuffle it.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+global.OldCardStat[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 9803
+{
+global.CardName[CardStat] = 'Rebellious Storm Princess, Niljahbis'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+G guardian.
+
+AUTO: When this unit is put on GC, COST [Counter Blast 1], choose one of your opponent’s units for every ten cards in your soul, and they get critical -1 until end of turn. (Two units get critical -1 if your soul has twenty cards)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+global.OldCardStat[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+global.DefensePowerStat[CardStat] = 15000
+
+
+CardStat = 9960
+{
+global.CardName[CardStat] = 'Amon’s Follower, Atrocious Blow '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to one grade 3 card with "Amon" in its card name from among them, reveal it and put it into your hand, and shuffle your deck.
+
+ACT [RC]: COST [rest this unit], Soul Charge 1, choose one of your units with "Amon" in its card name, and it gets power +1000 until end of turn for each card in your soul.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 9961
+{
+global.CardName[CardStat] = 'Amon’s Follower, Soul Sucker '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+AUTO: When this unit is rode upon by a unit with "Amon" in its card name, Soul Charge 3.
+
+AUTO [RC]: When this unit attacks, COST [Counter Blast 1], Soul Charge 1, and this unit gets power +5000 until end of that battle. At the end of that battle, if you have a vanguard with "Amon" in its card name, and your soul has six or more cards, COST [put this unit into your soul], and draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+global.AttackFromRBuff[CardStat] = 5000
+
+
+CardStat = 9962
+{
+global.CardName[CardStat] = 'Demon Marquis, Amon "ßeverse" '
+global.CardText[CardStat] = 'Dark Irregulars/Demon
+
+ACT [VC] 1/Turn: COST [Lock two of your rear-guards], and this unit gets power +2000 until end of turn for each card in your soul. If this unit’s power is 40000 or greater, this unit gets critical +1 until end of turn.
+
+ACT [VC] 1/Turn: COST [Counter Blast 1], choose up to two cards from your soul with "Amon" in their card names, and call them to RC. At the end of that turn, put those called units into your soul.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 11
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 10255
+{
+global.CardName[CardStat] = 'Covetous Succubus '
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+CONT [GC]: If your soul has six or more cards, this unit gets shield +5000. If it has ten or more cards, it gets shield +10000 instead of +5000.
+
+AUTO [RC] 1/Turn: When this unit attacks, if your soul has six or more cards, COST [put one of your other rear-guards into your soul], and Counter Charge 1. Then, if your soul has ten or more cards, draw two cards, choose a card from your hand, and put it into your soul.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 10864
+{
+global.CardName[CardStat] = 'Deep Gelidus'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+AUTO [VC/RC] 1/Turn: When this unit attacks while boosted, COST [Soul Blast 1], choose one of your units, search your deck and drop for up to a total of three cards with the same card name as that unit, put them into your soul, and if you searched your deck, shuffle your deck.
+
+AUTO [Hand]: At the beginning of your ride phase, if your vanguard is grade 1 or less, COST [discard this card], look at the top five cards of your deck, choose up to one grade 2 or less card from among them, reveal it and put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 11130
+{
+global.CardName[CardStat] = 'Love Tempest, Kisskill Lira '
+global.CardText[CardStat] = 'Dark Irregulars/Succubus
+
+Stride.
+
+ACT [G Zone]: If your vanguard is a grade 3 "Scharhrot Vampir", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Protect.
+
+CONT [VC]: This unit’s "when attack hits" effects activate even if the attack did not hit.
+
+AUTO [VC]: When this unit’s attack hits a vanguard, Soul Charge 2, and if your soul has is six or more cards, draw a card.
+
+(SHIFT + left click to create Protect gifts.)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 11
+global.ExtraDeck[CardStat] = 1
+global.OldCardStat[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+global.ProtectAdd[CardStat] = 1
+
+
+CardStat = 11131
+{
+global.CardName[CardStat] = 'One-eyed Succubus  '
+global.CardText[CardStat] = 'Dark Irregulars/Succubus/Critical Trigger
+
+AUTO [RC]: When your grade 3 or greater vanguard with "Scharhrot" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.
+
+AUTO: When this card is revealed during your damage check, draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+global.DefensePowerStat[CardStat] = 15000
+global.OldCardStat[CardStat] = 1
+global.NewTriggerStat[CardStat] = 1
+
+
+CardStat = 11165
+{
+global.CardName[CardStat] = 'Amon’s Follower, Abysm Lust  '
+global.CardText[CardStat] = 'Dark Irregulars/Demon/Heal Trigger
+
+AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 11
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 4000
+global.DefensePowerStat[CardStat] = 15000
+global.OldCardStat[CardStat] = 1
+global.NewTriggerStat[CardStat] = 1
+
+
+CardStat = 12666
+{
+global.CardName[CardStat] = 'Malevolent Flammable'
+global.CardText[CardStat] = 'Dark Irregulars/Human
+
+CONT [Hand]: You may discard this card as a "HEAL" for the cost of calling a G guardian.
+
+AUTO: When this unit is put on GC from hand, if your soul has six or more cards, COST [remove a "HEAL" from hand or drop], and this unit gets shield +20000 until end of that battle. If your soul has ten or more cards, COST [Counter Blast 1], choose one of your vanguards, and it gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 11
+}
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 10000

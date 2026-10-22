@@ -1,0 +1,1483 @@
+CardStat = 5419
+{
+global.CardName[CardStat] = 'Sumo Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+Vote 4 - AUTO [VC]: Draw a card, choose one of your opponent’s rear-guards, and retire it.
+
+(Vote - Activates when the sum of grades of the cards drive checked during this turn is equal to or greater than the specified number.)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5420
+{
+global.CardName[CardStat] = 'Black Crow Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit.
+
+AUTO [RC] 1/Turn Generation Break 1: Increase this unit’s power by the original power of the unit retired due to this unit’s contest ability until end of turn.
+
+Contest - Compares the power of units competing, and retires the unit with less power. Your opponent may discard a card from his or her hand to retire the unit with greater power instead.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5421
+{
+global.CardName[CardStat] = 'Durian Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 4 - AUTO [VC] Generation Break 2: This unit gets power +10000 / critical +1 until end of turn.
+
+AUTO [VC]: During your turn, when your G unit Stride, choose one of your vanguards, and until end of turn, it gets "ACT [VC] 1/Turn: [Counter Blast 1] Choose one of your rear-guards, stand it, and draw a card.".
+
+(Vote - Activates when the sum of grades of the cards drive checked during this turn is equal to or greater than the specified number.)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5422
+{
+global.CardName[CardStat] = 'Drone Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 4 - AUTO [RC]: This unit gets power +8000 until end of turn.
+
+AUTO: [Rest this unit] When this unit is placed on RC from hand, you may pay the cost. If you do, choose one of your units, and that unit gets power +4000 until end of turn.
+
+(Vote - Activates when the sum of grades of the cards drive checked during this turn is equal to or greater than the specified number.)'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5423
+{
+global.CardName[CardStat] = 'Kangaroo Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 4 - AUTO [VC/RC]: This unit gets power +5000 until end of turn.
+
+CONT [Trigger Zone] Generation Break 1: This card gets grade +1.
+
+(Vote - Activates when the sum of grades of the cards drive checked during this turn is equal to or greater than the specified number.)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5424
+{
+global.CardName[CardStat] = 'Pony Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO: [Choose a grade 3 card from your hand, and reveal it] When this unit is placed on RC from hand, you may pay the cost. If you do, search your deck for up to one grade 3 card with "Durian" in its card name, reveal it to your opponent, put it into your hand, shuffle your deck, choose a card from your hand, and discard it.
+
+CONT [Hand]: While you are paying the cost for Stride, this card gets grade +2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5425
+{
+global.CardName[CardStat] = 'Jaguar Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 5426
+{
+global.CardName[CardStat] = 'Samurai Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards in the back row, and this unit competes against that unit. If your opponent’s rear-guard was retired with this effect, you draw a card.
+
+(Contest - Compares the power of units competing, and retires the unit with less power. Your opponent may discard a card from his or her hand to retire the unit with greater power instead.)'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5427
+{
+global.CardName[CardStat] = 'Boar Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+ACT [VC/RC] 1/Turn: [Rest this unit & Choose a card from your hand, and discard it] Draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5428
+{
+global.CardName[CardStat] = 'Baozi Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO: Forerunner.
+
+AUTO [RC] Generation Break 1: [Put this unit into your drop zone] When you drive check, you may pay the cost. If you do, choose a card from your trigger zone, and it gets grade +1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5429
+{
+global.CardName[CardStat] = 'Albino Crow Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+CONT: Sentinel.
+
+AUTO: [Choose a «The Mask Collection» from your hand, and discard it] When this unit is placed on GC, you may pay the cost. If you do, choose one of your «The Mask Collection» that is being attacked, and that unit cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 5430
+{
+global.CardName[CardStat] = 'Spider Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5431
+{
+global.CardName[CardStat] = 'Turtle Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5432
+{
+global.CardName[CardStat] = 'Dragon Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5433
+{
+global.CardName[CardStat] = 'Albino Monkey Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Stand Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5473
+{
+global.CardName[CardStat] = 'Queen of Makal, Sumo Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+CONT [VC]: When your opponent would discard cards to retire the unit with greater power for a contest ability, he or she discards one extra card.
+
+Vote 3 - AUTO [VC] 1/Turn Generation Break 2: [Choose a face down card from your G zone with "Sumo Mask" in its card name, and turn it face up] When this unit attacks a vanguard, you may pay the cost. If you do, choose one of your rear-guards, and until end of turn, that unit gets power +3000 for each face up card with "Sumo Mask" in its card name in your G zone, and "CONT [RC]: This unit can attack from the back row.".'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+global.EnableAttackFromBackRow[CardStat] = 1
+
+
+CardStat = 5490
+{
+global.CardName[CardStat] = 'Oracle of Maskelamek, Turtle Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO: [Counter Blast 1 & Soul Blast 1] When this unit is placed on RC, if you have a vanguard with "Jaguar Mask" or "Dragon Mask" in its card name, you may pay the cost. If you do, look at two cards from the top of your deck, search for one card from among them, put it into your hand, and put the rest on the top or the bottom of your deck, then, this unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5491
+{
+global.CardName[CardStat] = 'Beloved Pony Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 5 - AUTO [RC]: If you have a vanguard with "Durian Mask" in its card name, until end of turn, this unit gets power +5000, and "CONT [RC]: During the battle that this unit attacked a vanguard, your opponent cannot call grade 0 cards from hand to GC.".
+
+(Vote - Activates when the sum of grades of the cards drive checked during this turn is equal to or greater than the specified number.)'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5495
+{
+global.CardName[CardStat] = 'Port City Guardian, Oyster Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit. If your opponent’s unit was retired with this effect, you Counter Charge 1 or Soul Charge 1.
+
+AUTO: [Counter Blast 1 & Soul Blast 1] When this unit is placed on VC, you may pay the cost. If you do, look at five cards from the top of your deck, search for up to one card with the contest ability from among them, reveal it, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5500
+{
+global.CardName[CardStat] = 'Mischievous Warrior Albino Monkey Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit. If your opponent’s unit was retired with this effect, choose one of your units, and it gets power +5000 until end of turn.
+
+AUTO [RC] 1/Turn Generation Break 1: During your main phase, when your opponent discards a card, you choose a grade 2 or less rear-guard, and stand it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5501
+{
+global.CardName[CardStat] = 'Freedom-loving Kangaroo Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 2 - AUTO [VC/RC]: This unit gets power +3000 until end of turn.
+
+CONT [Trigger Zone] Generation Break 1: This card gets grade +1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5505
+{
+global.CardName[CardStat] = 'Heaven Message Recipient, Dragon Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO [VC] 1/Turn Generation Break 1: [Soul Blast 1] When your opponent draws a card other than during draw phase, you may pay the cost. If you do, your opponent chooses a card from his or her hand, and discards it.
+
+Vote 5 - AUTO [RC]: [Soul Blast 1 & Choose a card from your hand, and discard it] You may pay the cost. If you do, this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5506
+{
+global.CardName[CardStat] = 'Regulator of Makal, Bell Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 3 - AUTO [RC]: [Counter Blast 1 & Retire this unit] You may pay the cost. If you do, choose one of your opponent’s rear-guards, retire it, and you draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5507
+{
+global.CardName[CardStat] = 'Sumo Mask "The Fighter"'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit. If your opponent’s unit is retired with this effect, choose two of your rear-guards, return them to your deck, shuffle your deck, and draw a card.
+
+AUTO [VC]: [Counter Blast 1] During your turn, when your G unit Stride, you may pay the cost. If you do, choose a card with the contest ability from your drop zone, call it to RC, and your opponent calls the top card of his or her deck to RC.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5508
+{
+global.CardName[CardStat] = 'Durian Mask "The Fighter"'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 6 - AUTO [VC]: This unit gets power +8000 / critical +1 until end of turn.
+
+CONT [VC] Generation Break 1: All cards in your trigger zone get grade +1.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 13000
+
+
+CardStat = 5511
+{
+global.CardName[CardStat] = 'Assassin of Haya, Spider Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit. If your opponent’s unit was retired with this effect, put this unit into your soul, and Counter Charge 1.
+
+AUTO [RC] 1/Turn Generation Break 1: When your opponent’s unit competes against this unit due to this unit’s ability, that unit cannot stand during your opponent’s next stand phase.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5512
+{
+global.CardName[CardStat] = 'Durian Mask "The Legend"'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 5 - AUTO [VC] Generation Break 2: [Counter Blast 1 & Soul Blast 1] You may pay the cost. If you do, choose one of your opponent’s guardians, retire it, and that unit’s effects with "cannot be hit" are nullified.
+
+AUTO [VC]: During your turn, when your G unit Stride, choose up to one card from your hand, call it to RC, until end of turn, the unit called with this effect gets "Vote 3 - AUTO [RC]: This unit gets power +5000 until end of turn", choose one of your units with the vote ability, and that unit gets vote -1.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5513
+{
+global.CardName[CardStat] = 'Jungle Warrior, Lion Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Critical Trigger
+
+CONT [Trigger Zone] Generation Break 1: This card gets grade +1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5525
+{
+global.CardName[CardStat] = 'Armor of Heavenly Deity, Jaguar Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+ACT [VC] 1/Turn: [Soul Blast 1 & Choose a face down card from your G zone, and turn it face up] Until end of turn, this unit gets "CONT [VC]: When this unit attacks, it battles all units in your opponent’s front row in one battle.".
+
+CONT [VC] Generation Break 3: All units in your front row get power +2000 for each face up card with "Jaguar" or "Dragon" or "Turtle" in your G zone.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5526
+{
+global.CardName[CardStat] = 'White Mage, Albino Crow Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+G guardian.
+
+AUTO: When this unit is placed on GC, choose one of your opponent’s units, until end of turn, that unit gets power -10000, and "Vote 4 - AUTO [VC/RC]: This unit gets power +10000 until end of turn.".'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 5527
+{
+global.CardName[CardStat] = 'Legendary Gunman, Durian Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+ACT [VC] Generation Break 2: [Counter Blast 1 & Soul Blast 1 & Choose one of your rear-guards, and retire it & Choose a face down card with the vote ability from your G zone, and turn it face up] Reveal the top card of your deck, this unit gets vote-X until end of turn, and put the revealed card into your hand. (X is the sum of grades of the cards revealed and units retired with this effect.)
+
+Vote 9 - AUTO [VC] 1/Turn Generation Break 2: If the number of cards in your opponent’s damage zone is four or less, choose one of your opponent’s vanguards, and deal one damage.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5528
+{
+global.CardName[CardStat] = 'King of Haya, Jaguar Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+ACT [VC]: Legion 22000 "Heaven Message Recipient, Dragon Mask".
+
+Vote 4 - AUTO [VC] 1/Turn: [Counter Blast 2 & Choose two cards from your hand, and discard them] If this unit is Legion, you may pay the cost. If you do, stand all of your vanguards.
+
+AUTO [VC]: When this unit attacks, if you have a unit with "Turtle Mask" or "Dragon Mask" in its card name, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+global.AttackFromVBuff[CardStat] = 3000
+
+
+CardStat = 5529
+{
+global.CardName[CardStat] = 'Fighter Who Never Stops Practicing, Sumo Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO: Forerunner.
+
+ACT [RC]: [Counter Blast 1 & Retire this unit] Search your deck for up to one grade 1 or less card, reveal it, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5530
+{
+global.CardName[CardStat] = 'Strict Bell Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Critical Trigger
+
+ACT [RC]: [Put this unit into your soul] Draw up to one card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5531
+{
+global.CardName[CardStat] = 'Adventurer of Haya, Boar Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO: Forerunner.
+
+ACT [RC]: [Counter Blast 1 & Put this unit into your soul] Look at up to five cards from the top of your deck, search for up to one grade 3 or greater «The Mask Collection» from among them, reveal it, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5532
+{
+global.CardName[CardStat] = 'Deity of Liberation, Angel Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Stand Trigger
+
+AUTO [RC] Generation Break 1: [Put this unit on the bottom of your deck] When your other unit competes, you may pay the cost. If you do, Counter Charge 1, draw up to one card, and shuffle your deck.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5533
+{
+global.CardName[CardStat] = 'Beautiful Maiden of Makal, Geisha Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)
+
+AUTO: Forerunner.
+
+AUTO [RC]: When this unit boosts, the boosted unit gets power +3000 until end of that battle, and at the beginning of the end phase of that turn, return this unit to your deck, and shuffle your deck.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 3000
+
+
+CardStat = 5534
+{
+global.CardName[CardStat] = 'Noble Oyster Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Draw Trigger
+
+ACT [RC]: [Put this unit into your soul] Choose up to one of your «The Mask Collection», and that unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5535
+{
+global.CardName[CardStat] = 'Bomber of Makal, Baozi Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+AUTO [VC]: When this unit is placed on VC, reveal the top card of your deck, and this unit gets vote-X until end of turn. Then, put the revealed card into your soul. (X is the grade of card revealed.)
+
+Vote 6 - AUTO [VC]: Choose two of your units, those units get power +5000 until end of turn. If you chose a rear-guard, at the end of your turn, retire those rear-guards, and draw a card.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5536
+{
+global.CardName[CardStat] = 'Furious Dragon Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+Vote 5 - AUTO [VC]: [Counter Blast 1 & Choose a face down card named "Furious Dragon Mask" from your G zone, and turn it face up] You may pay the cost. If you do, choose one of your opponent’s rear-guards, and retire all of your opponent’s rear-guards in the same column as that unit.
+
+CONT [VC] Generation Break 3: During the turn that two or more of your opponent’s rear-guards are put into drop zone, this unit gets power +5000 / critical +1.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5537
+{
+global.CardName[CardStat] = 'Famous Leader, Lion Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO Generation Break 1: [Soul Blast 1] When this unit is placed on RC, you may pay the cost. If you do, choose a card from your opponent’s drop zone, your opponent calls that card to an open RC, and at the end of that turn, retire that unit.
+
+AUTO [RC] Generation Break 1: When your other unitcompetes, this unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5538
+{
+global.CardName[CardStat] = 'Knight of Haya, Black Crow Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+AUTO: [Choose a face down "Knight of Haya, Black Crow Mask" from your G zone, and turn it face up] When this unit is placed on VC, you may pay the cost. If you do, all units in your front row get power +3000 until end of turn, then, if the number of face up cards in your G zone is two or more, search your deck for up to one card with the vote ability, call it to RC, and shuffle your deck. If you called, your opponent calls the top card of his or her deck to RC.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5539
+{
+global.CardName[CardStat] = 'Victorious Fighter, Baozi Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO [RC] Generation Break 1: [Counter Blast 1] When this unit attacks a vanguard, if this unit is boosted, you may pay the cost. If you do, choose one of your units, and that unit gets vote -1 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5540
+{
+global.CardName[CardStat] = 'Futuristic Drone Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 3 - AUTO [RC]: [Put this unit into your soul] You may pay the cost. If you do, draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5541
+{
+global.CardName[CardStat] = 'Enlightened Turtle Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose one of your vanguards that is being attacked, and it cannot be hit until end of that battle. If there is a "Enlightened Turtle Mask" in your drop zone, Counter Charge 1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 5542
+{
+global.CardName[CardStat] = 'Advisor of Makal, Geisha Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO [RC]: [Soul Blast 1] When an attack hits a vanguard during the battle that this unit boosted, if you have a grade 3 or greater vanguard, you may pay the cost. If you do, choose one of your rear-guards, and stand it.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5543
+{
+global.CardName[CardStat] = 'Angel Mask Who Watches Over from the Heaven'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 3 - AUTO [Drop Zone] Generation Break 1: [Soul Blast 1] You may pay the cost. If you do, call this card to RC. Then, if you have a vanguard with the vote ability, this unit gets power +4000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5565
+{
+global.CardName[CardStat] = 'Leader of Rebellion Troop, Black Crow Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit. If your opponent’s unit is retired with this effect, you may look at the top card of your deck. If you do, call it to RC that this unit is not on.
+
+AUTO [RC] Generation Break 1: When this unit is placed on RC, until end of that turn’s main phase, this unit cannot be retired by card effects.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5566
+{
+global.CardName[CardStat] = 'Knight of Makal, Samurai Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+CONT [VC/RC]: Restraint.
+
+AUTO [VC/RC]: When your opponent’s rear-guard is put into the drop zone during your main phase, this unit loses "Restraint" until end of turn.
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit. If your opponent’s unit is retired with this effect, stand this unit.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5567
+{
+global.CardName[CardStat] = 'Street Performer of Haya, Kangaroo Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 4 - AUTO [VC/RC]: Until end of turn, this unit gets power +5000, and "AUTO [RC]: When this unit’s attack hits a vanguard, draw a card.".
+
+CONT [Trigger Zone] Generation Break 1: This card gets grade +1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5704
+{
+global.CardName[CardStat] = 'Red Crow Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit. If your opponent’s unit is retired by this effect, choose up to one card from your drop zone, and call it to RC.
+
+CONT [VC/RC] Generation Break 1: During your turn, if you have another unit with "Crow" in its card name, this unit gets power +3000.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5705
+{
+global.CardName[CardStat] = 'Powerful Insect Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit. If your opponent’s unit is retired by this card’s contest ability, bind the retired unit face up.
+
+AUTO: During your main phase, when this unit is put into your drop zone from RC due this card’s contest ability, you may return this card to your hand. If you do, you cannot normal call "Powerful Insect Mask" until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5706
+{
+global.CardName[CardStat] = 'Cherry Blossom Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO: Forerunner.
+
+ACT [RC]: [Counter Blast 1 & Put this unit into your soul] Choose up to one of your rear-guards, and until end of turn, that unit gets power +3000 and "AUTO: When this unit is put into your drop zone from RC during your main phase, you may return this card to your hand.".'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5717
+{
+global.CardName[CardStat] = 'Apple Mask SD'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 6 - AUTO [RC]: [Put this unit into your soul & Choose two of your other rear-guards, and put them into your soul] You may pay the cost. If you do, choose all of your vanguards, stand them, and they get drive -1 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5718
+{
+global.CardName[CardStat] = 'Loris Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+AUTO: When this unit is placed on VC, choose up to one card from your hand, call it to RC, and until end of turn, that unit gets "CONT [RC]: This unit cannot be retired by card effects.".'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.ExtraDeck[CardStat] = 1
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5719
+{
+global.CardName[CardStat] = 'Cold Moon Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 3 - AUTO [VC/RC]: [Counter Blast 1] You may pay the cost. If you do, choose one of your other rear-guards, and stand it.
+
+AUTO [RC] Generation Break 1: At the end of the battle that this unit boosted, you may return the boosted rear-guards to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5720
+{
+global.CardName[CardStat] = 'Cherry Blossom Mask Who Loves Novelty'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO [Drop Zone]: [Counter Blast 1] When your opponent’s or your rear-guard is put into the drop zone due to an effect from your cards contest ability, you may pay the cost. If you do, return this card to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5721
+{
+global.CardName[CardStat] = 'Green Tea Worm Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO [VC] Generation Break 2: [Soul Blast 1] During your turn, when your opponent’s or your rear-guard is put into the drop zone due to an effect from your cards contest ability, you may pay the cost. If you do, draw a card.
+
+AUTO [VC]: [Counter Blast 1] During your turn, when your G unit Stride, you may pay the cost. If you do, your opponent reveals the top card of his or her deck, and calls it to an open RC. Then, you may choose up to one card from your hand, and call it to RC. If you called, until end of turn, the called unit gets "CONT [RC]: This unit cannot be retired by card effects.".'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5740
+{
+global.CardName[CardStat] = 'Apple Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 2 - AUTO [RC]: [Put this unit into your soul] You may pay the cost. If you do, look at two cards from the top of your deck, choose a card from among them, put it on the top of your deck, and bind the rest face up.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5742
+{
+global.CardName[CardStat] = 'Pancake Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose one of your vanguards that is being attacked, and that unit cannot be hit until end of that battle. Then, if you have a card named "Pancake Mask" in your drop zone, draw a card, choose a card from your hand, and discard it.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 5743
+{
+global.CardName[CardStat] = 'Diamond Crown Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO [RC]: When your other rear-guard’s vote ability activates, this unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5744
+{
+global.CardName[CardStat] = 'Beautiful Diamond Crown Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO [RC]: When your other rear-guard’s vote ability activates, this unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5745
+{
+global.CardName[CardStat] = 'Doll Mask with Multiple Personality'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 1 - AUTO [RC]: [Choose a card from your drop zone, and bind it face up] You may pay the cost. If you do, this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5746
+{
+global.CardName[CardStat] = 'Insect Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5747
+{
+global.CardName[CardStat] = 'Black Elephant Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5741
+{
+global.CardName[CardStat] = 'Moon Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Draw Trigger
+
+ACT [RC]: [Put this unit into your soul] Counter Charge 1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5748
+{
+global.CardName[CardStat] = 'Candle Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Stand Trigger
+
+ACT [RC]: [Put this unit into your soul] Choose one of your units, and that unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5749
+{
+global.CardName[CardStat] = 'Squirrel Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 5750
+{
+global.CardName[CardStat] = 'Leopard Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5751
+{
+global.CardName[CardStat] = 'Doll Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 1 - AUTO [RC]: [Choose a card from your drop zone, and bind it face up] You may pay the cost. If you do, this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5788
+{
+global.CardName[CardStat] = 'Green Tea Worm Mask SD'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+CONT [RC]: Restraint.
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit. If your opponent’s unit is retired by this effect, choose one of your opponent’s rear-guards, and that unit cannot stand during your opponent’s next stand phase.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6134
+{
+global.CardName[CardStat] = 'Grass Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 3 - AUTO [VC/RC]: [Counter Blast 1] You may pay the cost. If you do, draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6135
+{
+global.CardName[CardStat] = 'Bee Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO: [Counter Blast 1] When this unit is placed on VC or RC, you may pay the cost. If you do, look at five cards from the top of your deck, reveal up to one card with vote or contest ability from among them, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 6136
+{
+global.CardName[CardStat] = 'Wizard Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit. If your opponent’s unit is retired with this effect, draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6137
+{
+global.CardName[CardStat] = 'Little Duck Mask "The Rocker"'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+Vote 3 - AUTO [VC]: Choose one of your opponent’s rear-guards, and retire it.
+
+Vote 5 - AUTO [VC]: Choose one of your opponent’s rear-guards, and retire it.
+
+Vote 7 - AUTO [VC]: Choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 6138
+{
+global.CardName[CardStat] = 'Bee Mask SD'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+G guardian.
+
+AUTO: [Choose a card from your drop zone, and bind it face up] When this unit is placed on GC, if the number of face up cards in your bind zone is three or more, you may pay the cost. If you do, choose one of your vanguards, and that unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 6264
+{
+global.CardName[CardStat] = 'Steel Bear Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+ACT [VC] 1/Turn: [Choose a face down card from your G zone, and turn it face up] This unit gets "CONT [VC] Generation Break 2: During your turn, all of your units get power +3000.".'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 6265
+{
+global.CardName[CardStat] = 'Little Duck Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO [VC] Generation Break 2: When this unit attacks a vanguard, until end of that battle, this unit gets power +5000, and your opponent cannot call normal units from his or her hand to GC.
+
+AUTO [VC]: [Counter Blast 1] During your turn, when your G unit Stride, you may pay the cost. If you do, choose one of your vanguards, and until end of turn, that unit gets "CONT [VC] Generation Break 2: During your turn, all of your units get power +2000.".'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+global.AttackFromVBuff[CardStat] = 5000
+
+
+CardStat = 6266
+{
+global.CardName[CardStat] = 'Reaper Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 2 - AUTO [VC/RC]: This unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 6267
+{
+global.CardName[CardStat] = 'Panda Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 6268
+{
+global.CardName[CardStat] = 'Giant Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 3 - AUTO [VC/RC]: [Counter Blast 1] You may pay the cost. If you do, choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6269
+{
+global.CardName[CardStat] = 'Hunter Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+CONT [RC]: Restraint.
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 6270
+{
+global.CardName[CardStat] = 'Pirate Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Vote 3 - AUTO [VC/RC]: [Counter Blast 2] You may pay the cost. If you do, choose a card from your drop zone, and return it to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6271
+{
+global.CardName[CardStat] = 'Black Elephant Mask with Great Authority'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+CONT [RC]: Restraint.
+
+Contest - ACT [RC] 1/Turn: [Rest this unit] Choose one of your opponent’s rear-guards, and this unit competes against that unit.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6272
+{
+global.CardName[CardStat] = 'Intelligent Apple Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC, you may pay the cost. If you do, choose one of your units that is being attacked, and that unit cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 6273
+{
+global.CardName[CardStat] = 'Striving Green Tea Worm Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO: Forerunner.
+
+ACT [RC]: [Put this unit into your soul] Draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6274
+{
+global.CardName[CardStat] = 'Skit-loving Cherry Blossom Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6275
+{
+global.CardName[CardStat] = 'Soaring Insect Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Stand Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6276
+{
+global.CardName[CardStat] = 'Silent Candle Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6277
+{
+global.CardName[CardStat] = 'Peaceful Flowering Grass Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 11570
+{
+global.CardName[CardStat] = 'Leopard Mask SD'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+CONT: Sentinel.
+
+AUTO: [Counter Blast 1] When this unit is placed on GC from your hand, you may pay the cost. If you do, call five cards from the top of your deck to GC as rest.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 6000
+global.OldCardStat[CardStat] = 1
+
+
+CardStat = 11571
+{
+global.CardName[CardStat] = 'Squirrel Mask SD'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Critical Trigger
+
+Vote 3 - AUTO [RC]: [Put this unit into your soul] If you have a grade 3 or greater vanguard, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.
+
+(Vote - Activates when the sum of grades of the cards drive checked during this turn is equal to or greater than the specified number.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+global.OldCardStat[CardStat] = 1
+
+
+CardStat = 11572
+{
+global.CardName[CardStat] = 'Iron Bear Mask SD'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+ACT [RC] 1/Turn Generation Break 1: COST [Choose a grade 3 card from your drop zone, put it on the bottom of your deck], shuffle your deck, choose one of your vanguards, that unit gets power +3000 and vote -1 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+global.OldCardStat[CardStat] = 1
+
+
+CardStat = 11573
+{
+global.CardName[CardStat] = 'Giant Mask SD'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+Stride.
+
+CONT [G zone]: During your turn, if this card is face up, all of the units on your VC get power +3000.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+global.OldCardStat[CardStat] = 1
+
+
+CardStat = 11574
+{
+global.CardName[CardStat] = 'Panda Mask SD'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO [VC] Limit Break 3: When this unit attacks a vanguard, COST [Counter Blast 1 & bind a card from your drop zone face up], choose one of your rear-guards, until end of turn, that unit gets vote -1 and power +2000 for every face up card in your bind zone.
+
+AUTO [VC]: When placed, COST [Counter Blast 1 & Soul Blast 1], look at up to five cards from the top of your deck, search for up to one card with the vote ability, reveal it to your opponent, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 11000
+global.OldCardStat[CardStat] = 1
+
+
+CardStat = 11575
+{
+global.CardName[CardStat] = 'Pirate Mask SD'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+ACT [VC/RC] 2/Turn: COST [Put a card from top of your deck into your drop zone], this unit gets power +1000 until end of turn.
+
+CONT [VC/RC]: Resist.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 9000
+global.OldCardStat[CardStat] = 1
+
+
+CardStat = 11592
+{
+global.CardName[CardStat] = 'Blooming White, Flowering Grass Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)
+
+CONT [Trigger Zone] Generation Break 1: This card gets grade +1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 4000
+global.TriggerUnit[CardStat] = 4
+global.OldCardStat[CardStat] = 1
+
+
+CardStat = 11593
+{
+global.CardName[CardStat] = 'Assassination Machine, Steel Bear Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Stand Trigger
+
+CONT [Trigger Zone] Generation Break 1: This card gets grade +1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 4000
+global.TriggerUnit[CardStat] = 3
+global.OldCardStat[CardStat] = 1
+
+
+CardStat = 11594
+{
+global.CardName[CardStat] = 'Acoustic Guitar, Little Duck Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human/Draw Trigger
+
+CONT [Trigger Zone] Generation Break 1: This card gets grade +1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 4000
+global.TriggerUnit[CardStat] = 1
+global.OldCardStat[CardStat] = 1
+
+
+CardStat = 11595
+{
+global.CardName[CardStat] = 'White Diamond Mask who uses White Magic'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose one of your vanguards that is being attacked, and that unit cannot be hit until end of that battle.
+
+Vote 3 - AUTO [RC]: At the end of turn, return this unit to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 6000
+global.OldCardStat[CardStat] = 1
+
+
+CardStat = 11596
+{
+global.CardName[CardStat] = 'Bird Wholly in Red, Red Crow Mask'
+global.CardText[CardStat] = 'The Mask Collection/Live Action/Human
+
+AUTO: When this unit is placed on RC from your hand, choose one of your rear-guards, and stand it. If the unit that stand has "Crow Mask" in its card name, that unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 28
+global.CardInClan2[CardStat] = 35
+}
+global.PowerStat[CardStat] = 7000
+global.OldCardStat[CardStat] = 1

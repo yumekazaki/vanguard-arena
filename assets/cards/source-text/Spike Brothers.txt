@@ -1,0 +1,2842 @@
+CardStat = 595
+{
+global.CardName[CardStat] = 'Cheer Girl, Tiara'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+}
+global.TriggerUnit[CardStat] = 4
+
+
+CardStat = 596
+{
+global.CardName[CardStat] = 'Cheerful Lynx'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast/Draw Trigger'
+}
+global.TriggerUnit[CardStat] = 1
+
+
+CardStat = 597
+{
+global.CardName[CardStat] = 'Kungfu Kicker'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast/Stand Trigger'
+}
+global.TriggerUnit[CardStat] = 3
+
+
+CardStat = 598
+{
+global.CardName[CardStat] = 'Mecha Trainer'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO [VC]: When another «Spike Brothers» rides this unit, you may call this card to RC.
+
+ACT [RC]: [Counter Blast 1 & Retire this unit] Search your deck for up to one grade 1 or less «Spike Brothers», reveal it to your opponent, put it into your hand, and shuffle your deck.'
+}
+
+
+CardStat = 599
+{
+global.CardName[CardStat] = 'Redshoe, Milly'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO: When this unit is put into the drop zone from GC, put this card into your soul.'
+}
+
+
+CardStat = 600
+{
+global.CardName[CardStat] = 'Silence Joker'
+global.CardText[CardStat] = 'Spike Brothers/Ghost/Critical Trigger
+
+ACT [RC]: [Put this unit into your soul] If you have a «Spike Brothers» vanguard, choose up to one card from your damage zone, and turn it face up. (Counter Charge 1)'
+}
+global.TriggerUnit[CardStat] = 2
+
+
+CardStat = 601
+{
+global.CardName[CardStat] = 'Smart Leader, Dark Bringer'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO: When another «Spike Brothers» rides this unit, you may call this card to RC.
+
+AUTO [RC]: [Put this unit into your soul] When this unit’s attack hits, you may pay the cost. If you do, choose up to one «Spike Brothers» from your hand, and call it to RC.'
+}
+
+
+CardStat = 602
+{
+global.CardName[CardStat] = 'Sonic Breaker'
+global.CardText[CardStat] = 'Spike Brothers/Ogre/Critical Trigger'
+}
+global.TriggerUnit[CardStat] = 2
+
+
+CardStat = 603
+{
+global.CardName[CardStat] = 'Cheer Girl, Marilyn'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+CONT: Sentinel.
+
+AUTO: [Choose a «Spike Brothers» from your hand, and discard it] When this unit is placed on GC, you may pay the cost. If you do, choose one of your «Spike Brothers» that is being attacked, and that unit cannot be hit until end of that battle.'
+}
+
+
+CardStat = 604
+{
+global.CardName[CardStat] = 'Commander, Garry Gannon'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: [Choose a card from your hand, and discard it] When an attack hits during the battle that this unit boosted, you may pay the cost. If you do, draw a card.'
+}
+
+
+CardStat = 605
+{
+global.CardName[CardStat] = 'Cyclone Blitz'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC/RC]: [Soul Blast 1] When this unit attacks, if you have a «Spike Brothers» vanguard, you may pay the cost. If you do, this unit gets power +3000 until end of that battle.'
+}
+
+
+CardStat = 606
+{
+global.CardName[CardStat] = 'Dudley Dan'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: [Counter Blast 2 & Choose one «Spike Brothers» from your hand, and put it into your soul] When this unit boosts a vanguard, you may pay the cost. If you do, search your deck for up to one «Spike Brothers», call it to an open RC, and shuffle the deck.'
+}
+
+
+CardStat = 607
+{
+global.CardName[CardStat] = 'Dudley Daisy'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO: [Counter Blast 1] During your battle phase, when this unit is placed on RC, if you have a «Spike Brothers» vanguard, you may pay the cost. If you do, this unit gets power +5000 until end of turn.'
+}
+
+
+CardStat = 608
+{
+global.CardName[CardStat] = 'Gyro Slinger'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+ACT [VC/RC]: [Counter Blast 1] This unit gets power +1000 until end of turn.'
+}
+
+
+CardStat = 609
+{
+global.CardName[CardStat] = 'Medical Manager'
+global.CardText[CardStat] = 'Spike Brothers/Goblin
+
+AUTO: When this unit is placed on VC or RC, if you have a «Spike Brothers» vanguard, you may Soul Charge 1.'
+}
+
+
+CardStat = 610
+{
+global.CardName[CardStat] = 'Reckless Express'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO [RC]: [Soul Blast 1] When this unit attacks, you may pay the cost. If you do, this unit gets power +5000 until end of that battle and at the beginning of the close step of that battle, return this unit to your deck, and shuffle your deck.'
+}
+
+
+CardStat = 611
+{
+global.CardName[CardStat] = 'Spike Brothers Assault Squad'
+global.CardText[CardStat] = 'Spike Brothers/Goblin
+
+AUTO [RC]: During the battle, that this unit has boosted a «Spike Brothers», if the attack hits, stand this card.'
+}
+
+
+CardStat = 612
+{
+global.CardName[CardStat] = 'Wonder Boy'
+global.CardText[CardStat] = 'Spike Brothers/Goblin'
+}
+
+
+CardStat = 613
+{
+global.CardName[CardStat] = 'Devil Summoner'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO: When this unit is placed on VC or RC, reveal the top card of your deck. If revealed card is a grade 1 or 2 «Spike Brothers», call it to RC. If it is not, shuffle your deck.'
+}
+
+
+CardStat = 614
+{
+global.CardName[CardStat] = 'Dudley Douglass'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO: [Counter Blast 1] During your battle phase, when this unit is placed on RC, if you have a «Spike Brothers» vanguard, you may pay the cost. If you do, this unit gets power +5000 until end of turn.'
+}
+
+
+CardStat = 615
+{
+global.CardName[CardStat] = 'Field Driller'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC/RC]: When this unit’s attack hits a vanguard, if the number of other «Spike Brothers» rear-guards you have is four or more, draw a card.'
+}
+
+
+CardStat = 616
+{
+global.CardName[CardStat] = 'Fierce Leader, Zachary'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: [Soul Blast 1] When this unit’s attack hits a vanguard, if you have a «Spike Brothers» vanguard, you may pay the cost. If you do, draw a card, and at the beginning of the close step of that battle, return this unit to your deck, and shuffle your deck.'
+}
+
+
+CardStat = 617
+{
+global.CardName[CardStat] = 'Highspeed, Brakki'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO [RC]: [Soul Blast 1] When this unit attacks, you may pay the cost. If you do, this unit gets power +5000 until end of that battle, and at the beginning of the close step of that battle, return this unit to your deck, and shuffle your deck.'
+}
+
+
+CardStat = 618
+{
+global.CardName[CardStat] = 'Panzer Gale'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO: When this unit intercepts, if you have a «Spike Brothers» vanguard, this unit gets shield +5000 until end of that battle.'
+}
+
+
+CardStat = 619
+{
+global.CardName[CardStat] = 'Spike Bouncer'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC/RC]: When an attack by another of your «Spike Brothers» hits a vanguard, this unit gets power +3000 until end of turn.'
+}
+
+
+CardStat = 620
+{
+global.CardName[CardStat] = 'Treasured, Black Panther'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast'
+}
+
+
+CardStat = 621
+{
+global.CardName[CardStat] = 'Demonic Lord, Dudley Emperor'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): [Counter Blast 2 & Choose two «Spike Brothers» from your hand, and put them into your soul] When this unit attacks a vanguard, you may pay the cost. If you do, search your deck for up to two «Spike Brothers», call them to separate open RC, and shuffle your deck.
+
+AUTO [VC]: When this unit is boosted by a «Spike Brothers», this unit gets power +3000 until end of that battle.'
+}
+
+
+CardStat = 622
+{
+global.CardName[CardStat] = 'General Seifried'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [VC]: When this unit’s drive check reveals a grade 3 «Spike Brothers», you may call that card to an open RC.
+
+AUTO [VC]: When this unit is boosted by a «Spike Brothers», this unit gets power +3000 until end of that battle.'
+}
+
+
+CardStat = 623
+{
+global.CardName[CardStat] = 'Jelly Beans'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+ACT [Hand]: COST [Reveal this card and put it on the bottom of the deck], if you have a «Spike Brothers» vanguard, search your deck for up to one grade 2 or less «Spike Brothers» card with "Dudley" in its card name, reveal it and put it into your hand, and shuffle your deck.'
+}
+
+
+CardStat = 624
+{
+global.CardName[CardStat] = 'Juggernaut Maximum'
+global.CardText[CardStat] = 'Spike Brothers/Giant
+
+CONT [VC/RC]: If you do not have another «Spike Brothers» vanguard or rear-guard, this unit gets power -2000.
+
+AUTO [RC]: [Soul Blast 1] When this unit attacks, you may pay the cost. If you do, this unit gets power +5000 until end of that battle and at the beginning of the close step of that battle, return this unit to your deck, and shuffle your deck.'
+}
+
+
+CardStat = 625
+{
+global.CardName[CardStat] = 'Sky Diver'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+CONT [VC/RC]: If you do not have another «Spike Brothers» vanguard or rear-guard, this unit gets power -2000.
+
+AUTO [RC]: [Put this unit into your soul] When this unit’s attack hits, you may pay the cost. If you do, choose up to one «Spike Brothers» from your hand, and call it to RC.'
+}
+
+
+CardStat = 626
+{
+global.CardName[CardStat] = 'Unite Attacker'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC]: At the beginning of your main phase, Soul Charge 1, and this unit gets power +2000 until end of turn.
+
+AUTO [VC/RC]: [Soul Blast 8 & Counter Blast 5] When this unit’s attack hits, you may pay the cost. If you do, look at the top five cards from the top of your deck, choose any number of «Spike Brothers» from among them, call the chosen cards to separate RC, and shuffle your deck.'
+}
+
+
+CardStat = 1095
+{
+global.CardName[CardStat] = 'Dudley Phantom'
+global.CardText[CardStat] = 'Spike Brothers/Ghost
+
+AUTO [RC]: When this unit boosts a «Spike Brothers», the boosted unit gets power +4000 until end of that battle, and at the beginning of the close step of that battle, put this unit on the bottom of your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1096
+{
+global.CardName[CardStat] = 'Dudley Mason'
+global.CardText[CardStat] = 'Spike Brothers/Giant
+
+AUTO [VC/RC]: [Counter Blast 1 & Choose one «Spike Brother» from your hand, and put it into your soul] When this unit’s attack hits a vanguard, you may pay the cost. If you do, search your deck for up to one «Spike Brothers», call it to an open RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1097
+{
+global.CardName[CardStat] = 'Grateful Catapult'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): [Counter Blast 2 & Choose a card named "Grateful Catapult" from your hand, and discard it] When this unit attacks a vanguard, you may pay the cost. If you do, search your deck for up to two «Spike Brothers», call them to separate open RC, and shuffle your deck.
+
+CONT [VC/RC]: Lord (If you have a unit without a same clan as this unit, this unit cannot attack)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1098
+{
+global.CardName[CardStat] = 'Bad End Dragger'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Spike Brothers» rides this unit, you may choose one of your vanguards, that unit gets power +10000, and gets "AUTO [VC]: When your «Spike Brothers» rear-guard attacks, that unit gets power +10000 until end of that battle, and at the beginning of the close step of that battle, put that unit on the bottom of your deck." until end of turn.
+
+AUTO [VC]: When this unit is boosted by a «Spike Brothers», this unit gets power +2000 until end of that battle.
+
+CONT [VC/RC]: Lord (If you have a unit without a same clan as this unit, this unit cannot attack)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1183
+{
+global.CardName[CardStat] = 'Rabbit House'
+global.CardText[CardStat] = 'Spike Brothers/Golem
+
+AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of that battle.
+
+AUTO [RC]: When this unit attacks a vanguard, if you have a «Spike Brothers» vanguard, this unit gets power +2000 until end of that battle.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1184
+{
+global.CardName[CardStat] = 'Anti-battleroid Gunner'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: When a grade 3 «Spike Brothers» is placed on your VC, this unit gets power +10000 until the end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1185
+{
+global.CardName[CardStat] = 'Blow Kiss Olivia'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO [RC]: [Soul Blast 2] When this unit’s attack hits a vanguard, if you have a «Spike Brothers» vanguard, you may pay the cost. If you do, choose one rear-guard in your opponent’s front row, retire it, and put this unit on the bottom of your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1186
+{
+global.CardName[CardStat] = 'Charging Bill Collector'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC/RC]: When this unit attacks, if you have a «Spike Brothers» vanguard or rear-guard with Limit Break 4, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1187
+{
+global.CardName[CardStat] = 'Go for Broke'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO [VC/RC]: [Counter Blast 1 - «Spike Brothers»] When this unit attacks, if you have a «Spike Brothers» vanguard, you may pay the cost. If you do, this unit gets power +4000 until the end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1188
+{
+global.CardName[CardStat] = 'Tyrant Receiver'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: [Counter Blast 1] When this unit boosts a «Spike Brothers» with Limit Break 4, you may pay the cost. If you do, the boosted unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1189
+{
+global.CardName[CardStat] = 'UFO (Unlucky Flying Object)'
+global.CardText[CardStat] = 'Spike Brothers/Goblin
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on RC during the battle phase, you may pay the cost. If you do, draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1190
+{
+global.CardName[CardStat] = 'Baby Face Izaac'
+global.CardText[CardStat] = 'Spike Brothers/Human
+
+AUTO: Forerunner (When another unit from the same clan rides this unit, you may call it to RC.)
+
+AUTO [RC]: [Put this unit into your soul] When an attack hits a vanguard during the battle that this unit boosted a «Spike Brothers» with Limit Break 4, you may pay the cost. If you do, draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1191
+{
+global.CardName[CardStat] = 'Reign of Terror, Thermidor'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO: Forerunner (When another unit from the same clan rides this unit, you may call it to RC.)
+
+AUTO [RC]: When this unit boosts a «Spike Brothers» normal unit rear-guard, you may give the boosted unit power +3000 until end of that battle. If you give it power +3000, put that unit on the bottom of your deck at the end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1822
+{
+global.CardName[CardStat] = 'Cheer Girl, Carol'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO: When this unit is placed on RC, choose another of your «Spike Brothers», and that unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1932
+{
+global.CardName[CardStat] = 'Demonic Lord, Dudley Lucifer'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): [Choose one of your rear-guards, and put it into your soul] At the end of the battle that this unit attacked a vanguard, you may pay the cost. If you do, choose up to one card from your hand, and call it to RC, and if that unit is a unit with "Dudley" in its card name, that unit gets power +10000 until the end of turn.
+
+ACT [VC]: [Counter Blast 1] This unit gets power +2000 until the end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1994
+{
+global.CardName[CardStat] = 'Emerald Blaze'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+ACT [VC]: Legion 20000 "Silver Blaze" (If your opponent’s vanguard is grade 3 or greater, this unit may return four cards from your drop zone into your deck once, search your deck for the specified card, and Legion)
+
+AUTO [VC]: [Counter Blast 3 & Choose a card with the same card name as a unit on your VC from your hand, and put it into your soul] When this unit attacks a vanguard, if this unit is Legion, you may pay the cost. If you do, search your deck for up to two cards, call them to separate open RC, and shuffle your deck.
+ 
+ACT [VC]: [Soul Blast 2] This unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1995
+{
+global.CardName[CardStat] = 'Silver Blaze'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC]: [Soul Blast 1] When this unit attacks a vanguard, if your vanguard is Legion, you may pay the cost. If you do, this unit gets power +10000 until end of that battle, and at the end of that battle, return this unit to your deck, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1996
+{
+global.CardName[CardStat] = 'Baron Amadeus'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+CONT: Sentinel (You may only have up to four cards with "Sentinel" in a deck.)
+
+AUTO: [Counter Blast 1] When this unit is placed on GC from your hand, you may pay the cost. If you do, call five cards from the top of your deck to GC at rest.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 1997
+{
+global.CardName[CardStat] = 'Cheer Girl, Adalaide'
+global.CardText[CardStat] = 'Spike Brothers/Goblin/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 4
+
+
+CardStat = 1998
+{
+global.CardName[CardStat] = 'Cheer Girl, Pauline'
+global.CardText[CardStat] = 'Spike Brothers/Ogre/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 1
+
+
+CardStat = 2021
+{
+global.CardName[CardStat] = 'Wild Hitter'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: [Counter Blast 1 & Put this card into your soul] When the drive check of the vanguard that this unit boosted reveals a grade 3 card, at the end of that battle, you may pay the cost. If you do, search your deck for one card, call it to an open RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 2055
+{
+global.CardName[CardStat] = 'Oasis Boy'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 2056
+{
+global.CardName[CardStat] = 'Cyclone Johnny'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO: Forerunner (When a unit of the same clan rides this unit, you may call this unit to RC.)
+
+AUTO [RC]: When this unit boosts a grade 1 or greater rear-guard, if your vanguard is Legion, you may give the boosted unit power +5000 until end of that battle. If you give it power +5000, put that unit on the bottom of your deck at the end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 2070
+{
+global.CardName[CardStat] = 'Bloody Ogle'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+ACT [VC]: Legion 20000 "Frozen Ogle" (If your opponent’s vanguard is grade 3 or greater, this unit may return four cards from your drop zone into your deck once, search your deck for the specified card, and Legion)
+
+AUTO [VC]: During the turn when your vanguard Legion, when your rear-guards attacks, that unit gets power +5000 until end of that battle, and at the end of that battle, put that unit on the bottom of your deck.
+
+AUTO [VC]: [Counter Blast 2 & Choose a card from your hand, and put it into your soul] When this unit attacks a vanguard, you may pay the cost. If you do, search your deck for a card, call it to an open RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 2071
+{
+global.CardName[CardStat] = 'Frozen Ogle'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: [Counter Blast 1 & Put this unit into your soul] During the turn when your vanguard Legion, at the end of the battle that this unit attacked a vanguard, you may pay the cost. If you do, search your deck for a card, and call it to an open RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 2072
+{
+global.CardName[CardStat] = 'Machine Gun, Gloria'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO [RC]: [Counter Blast 1] At the end of the battle that this unit boosted a grade 1 or greater rear-guard, you may pay the cost. If you do, draw a card, and put the boosted unit on the bottom of your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 2114
+{
+global.CardName[CardStat] = 'Dudley Monty'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 2115
+{
+global.CardName[CardStat] = 'Dudley Moses'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+ACT [VC]: Legion 20000 "Dudley Monty" (If your opponent’s vanguard is grade 3 or greater, this unit may return four cards from your drop zone into your deck once, search your deck for the specified card, and Legion)
+
+AUTO [VC]: When this unit attacks a vanguard, if this unit is Legion, this unit gets power +5000 until end of that battle.
+
+AUTO [RC]: When this unit attacks a vanguard, this unit gets power +2000 until end of that battle.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 2116
+{
+global.CardName[CardStat] = 'Prized, Mirage Panther'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO [RC]: When this unit attacks, if your vanguard is Legion, this unit gets power +4000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 2117
+{
+global.CardName[CardStat] = 'Jumbo the Stungun'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO: During your battle phase, when this unit is placed on RC, Soul Charge 1, choose a card from your damage zone, and turn it face up. (Counter Charge 1)'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 2805
+{
+global.CardName[CardStat] = 'Great Warrior, Dudley Geronimo'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+ACT [VC] 1/Turn: [Counter Blast 1 & Choose a face down card named "Great Warrior, Dudley Geronimo" from your G zone, and turn it face up] If you have a card in your heart with "Dudley" in its card name, until end of turn, this unit gets "AUTO [VC]: When your rear-guard attacks, that unit gets power +5000 until end of that battle, and at the end of that battle, put that unit on the bottom of your deck.". Then, if the number of face up cards in your G zone is two or more, until end of turn, this unit gets "CONT [VC]: Your rear-guards may attack a vanguard from the back row.".'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.EnableAttackFromBackRow[CardStat] = 1
+
+
+CardStat = 2806
+{
+global.CardName[CardStat] = 'Godly-speed, Flash Bruce'
+global.CardText[CardStat] = 'Spike Brothers/Elf
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO [VC]: [Choose a card from your hand, and put it into your soul] When this unit’s attack hits a vanguard, you may pay the cost. If you do, search your deck for a card, call it to RC, and shuffle your deck, and until end of turn, that unit gets power +5000.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 3429
+{
+global.CardName[CardStat] = 'Bulldozer Dobe'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO: Charge (During the turn that this unit is placed on RC by an effect, it becomes in Charge, and put it on the bottom of you deck at the end of the battle in which it participated.)
+
+CONT [RC] Generation Break 1: If this unit is in Charge, this unit gets power +10000.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 3460
+{
+global.CardName[CardStat] = 'Divine Hand, Good End Dragger'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO [VC]: [Counter Blast 1 & Choose a card from your hand, and put it into your soul] At the end of the battle that this unit attacked a vanguard, if you have a heart card with "Bad End" in its card name, you may pay the cost. If you do, put this unit into your G zone face up, search your deck for up to two grade 3 cards, choose a card from among them, call it to an open RC, ride the rest as rest, and shuffle your deck.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 3461
+{
+global.CardName[CardStat] = 'Death Flag Dragger'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO: [Choose a grade 3 card from your hand, and reveal it] During your battle phase, when this unit is placed on RC, you may pay the cost. If you do, search your deck for up to one card with "Bad End" in its card name, reveal it to your opponent, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 3473
+{
+global.CardName[CardStat] = 'Dudley Jessica'
+global.CardText[CardStat] = 'Spike Brothers/Elf
+
+CONT [VC] Generation Break 2: All of the units with "Dudley" in its card name in your front row get power +2000.
+
+AUTO [VC]: During your turn, when your G unit with "Dudley" in its original card name Stride, search your deck for up to one card with "Dudley" in its card name, call it to an open RC, shuffle your deck, and that unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 3474
+{
+global.CardName[CardStat] = 'Cobalt Impulse'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO: Charge (During the turn that this unit is placed on RC by an effect, you may have this unit become in Charge. If you do, put it on the bottom of your deck at the end of a battle in which it participated.)
+
+AUTO [RC] Generation Break 1: When this unit’s attack hits a vanguard, if this unit is in Charge, draw a card, choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 3475
+{
+global.CardName[CardStat] = 'Acrobat Verdi'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO: When this unit is placed on RC from hand, COST [reveal a grade 3 card from hand], search your deck for up to one grade 3 card with "Rising" in its card name, reveal it and put it into your hand, shuffle your deck, choose a card from your hand, and discard it.
+
+CONT [Hand]: While you are paying the cost for Stride, this card gets grade +2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 3476
+{
+global.CardName[CardStat] = 'Great Villainess, Dhampir Lily'
+global.CardText[CardStat] = 'Spike Brothers/Vampire
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO [VC]: When this unit’s attack hits a vanguard, choose up to one card with the Charge ability from your hand, call it to RC, until end of turn, that unit gets power +5000, and "AUTO: When this unit is put into the deck from RC, draw a card.".'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 3487
+{
+global.CardName[CardStat] = 'Cheer Girl, Lucy'
+global.CardText[CardStat] = 'Spike Brothers/Elf
+
+AUTO [RC] Generation Break 1: When this unit boosts a rear-guard with the Charge ability, the boosted unit gets power +5000 until end of that battle, and at the end of that battle, put that unit on the bottom of your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 3488
+{
+global.CardName[CardStat] = 'Wink-killer Misery'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO [RC] Generation Break 1: [Counter Blast 1 & Choose a card from your hand, and put it into your soul] When this unit attacks a vanguard, if this unit is boosted, you may pay the cost. If you do, search your deck for up to one card not named "Wink-killer Misery", call it to an open RC, shuffle your deck, and that unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+
+
+CardStat = 3490
+{
+global.CardName[CardStat] = 'Moodmaker Nyanrook'
+global.CardText[CardStat] = 'Spike Brothers/High Beast
+
+AUTO: Charge (When this unit is placed on RC due to an effect, you may have it become charging for that turn. If you do, put it on the bottom of your deck at the end of its battle.)
+
+CONT [RC] Generation Break 1: If this unit is charging, this unit gets power +4000, and "AUTO: When this unit is put into your deck from RC, choose up to one of your other rear-guards, and it gets power +4000 until end of turn.".'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 3491
+{
+global.CardName[CardStat] = 'Kiss-mark, Alma'
+global.CardText[CardStat] = 'Spike Brothers/Vampire
+
+CONT: Sentinel
+
+AUTO: When this unit is placed on GC from hand, COST [discard a card from hand], choose one of your vanguards being attacked, and it cannot be hit until end of that battle. If your drop has a "Kiss-mark Alma", Counter Charge 1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 3492
+{
+global.CardName[CardStat] = 'Untouchable, Milly'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose up to one of your vanguards that is being attacked, and that unit cannot be hit until end of that battle.
+
+AUTO: Charge (When this unit is placed on RC due to an effect, you may have it become charging for that turn. If you do, put it on the bottom of your deck at the end of its battle.)
+
+AUTO [RC] Generation Break 1: [Choose a card from your hand, and discard it] When this unit’s attack hits a vanguard, if this unit is charging, you may pay the cost. If you do, return this unit to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 3493
+{
+global.CardName[CardStat] = 'Exceptional Expertise, Rising Nova'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC] Generation Break 2: When this unit attacks a vanguard, COST [put a card from hand into soul], search your deck for up to one card, call it to an open RC, and shuffle your deck.
+
+AUTO [VC]: When your G unit Stride during your turn, choose up to one of your vanguards, and it gets "AUTO [VC]: When this unit attacks a vanguard, COST [Counter Blast 1 & put a card from hand into soul], search your deck for up to one card, call it to an open RC, and it gets power +5000 until end of turn. Shuffle your deck." until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 3494
+{
+global.CardName[CardStat] = 'Shootdown King, Miracle Ace'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+ACT [VC] 1/Turn: [Counter Blast 1 & Choose a face down card named "Shootdown King, Miracle Ace" from your G zone, and turn it face up] Until end of turn, this unit gets "AUTO [VC]: When your rear-guard is put into your deck, choose up to one of your units, and it gets power +5000 until end of turn." and "AUTO [VC] Generation Break 3: [Soul Blast 2] When your rear-guard is put into your deck, you may pay the cost. If you do, choose up to one card from your hand, and call it to an open RC.".'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 3495
+{
+global.CardName[CardStat] = 'Axe Diver'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO: Charge (When this unit is placed on RC due to an effect, you may have it become charging for that turn. If you do, put it on the bottom of your deck at the end of its battle.)
+
+AUTO Generation Break 1: [Counter Blast 1 & Soul Blast 1] When this unit is placed on RC, if you have a vanguard with "Rising" in its card name, you may pay the cost. If you do, choose up to one of your other rear-guards, bind it face up, and call that card from the bind zone to an open RC. Then, if this unit is charging, the unit called with this effect and this unit get power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 3496
+{
+global.CardName[CardStat] = 'Cheer Girl, Elza'
+global.CardText[CardStat] = 'Spike Brothers/Vampire
+
+CONT [RC]: Your vanguard’s "Limit Break 4" is active even when you have three or less damage.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 3497
+{
+global.CardName[CardStat] = 'Liar Lips'
+global.CardText[CardStat] = 'Spike Brothers/Succubus/Critical Trigger
+
+AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a grade 3 or greater vanguard with "Rising" in its card name, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 3498
+{
+global.CardName[CardStat] = 'Great Villain, Dirty Picaro'
+global.CardText[CardStat] = 'Spike Brothers/Battleroid
+
+Stride.
+
+AUTO [VC] Generation Break 3: When it attacks a vanguard, COST [Counter Blast 2 & Choose a face down card from your G zone, turn it face up & Choose a card from your hand, and put it into your soul], and search your deck for up to one card for each face up card in your G zone. Call the searched cards to open RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 3499
+{
+global.CardName[CardStat] = 'Frog Raider'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC] Generation Break 1: When your unit with the charge ability is placed on RC in the same column as this unit due to an effect from one of your cards, if you have a vanguard with "Rising" in its card name, stand this unit.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 3500
+{
+global.CardName[CardStat] = 'Heave Wheeze'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO: Charge (When this unit is placed on RC due to an effect, you may have it become charging for that turn. If you do, put it on the bottom of your deck at the end of its battle.)
+
+CONT [RC] Generation Break 1: If this unit is charging, this unit gets power +10000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 3501
+{
+global.CardName[CardStat] = 'Hive Maker'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO: Charge (When this unit is placed on RC due to an effect, you may have it become charging for that turn. If you do, put it on the bottom of your deck at the end of its battle.)
+
+CONT [RC] Generation Break 1: If this unit is charging, this unit gets "AUTO: [Counter Blast 1] When this unit is put into the deck from RC, you may pay the cost. If you do, choose up to one card from your hand, and call it to open RC.".
+
+AUTO: [Counter Blast 1 & Soul Blast 1] When this unit is placed on VC, you may pay the cost. If you do, look at five cards from the top of your deck, search for up to one card with the charge ability, show it to your opponent, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 3502
+{
+global.CardName[CardStat] = 'Mecha Analyzer'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO: Forerunner.
+
+AUTO [RC] Generation Break 1: [Put this unit into your soul] When another of your rear-guards is put into the deck, you may pay the cost. If you do, choose up to one of your other rear-guards, bind it face up, call that card from bind zone to open RC, and that unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 3503
+{
+global.CardName[CardStat] = 'Mecha Advisor'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid/Draw Trigger
+'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 3504
+{
+global.CardName[CardStat] = 'Genie, Lamp Receiver'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC] Generation Break 1: When this unit attacks a vanguard, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 3505
+{
+global.CardName[CardStat] = 'Psychic Mel'
+global.CardText[CardStat] = 'Spike Brothers/Human
+
+AUTO: Forerunner.
+
+ACT [RC]: [Counter Blast 1 & Put this unit into your soul] Look at up to five cards from the top of your deck, search for up to one grade 3 or greater card from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 3506
+{
+global.CardName[CardStat] = 'Devil Watch'
+global.CardText[CardStat] = 'Spike Brothers/Demon/Stand Trigger
+
+AUTO: Charge (When this unit is placed on RC due to an effect, you may have it become charging for that turn. If you do, put it on the bottom of your deck at the end of its battle.)
+
+AUTO [RC] Generation Break 1: When this unit attacks or boosts, if this unit is charging, Counter Charge 1 / Soul Charge 1, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 3507
+{
+global.CardName[CardStat] = 'Magical Manager'
+global.CardText[CardStat] = 'Spike Brothers/Elf/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 3561
+{
+global.CardName[CardStat] = 'Devildom Chemist'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC]: [Soul Blast 1] When this unit attacks a vanguard, you may pay the cost. If you do, increase this unit’s power by its power until end of that battle. At the end of that battle, put this unit on the bottom of your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 3674
+{
+global.CardName[CardStat] = 'Super Heavy Chariot, Tiger Centurion'
+global.CardText[CardStat] = 'Spike Brothers/Giant
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+ACT [VC] 1/Turn: [Counter Blast 1] Choose any number of your rear-guards with the charge ability, and they become charging until end of turn. Choose up to five of your rear-guards other than the chosen units with this effect, and they get power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 3739
+{
+global.CardName[CardStat] = 'Excellent Cheer Leader, Aery'
+global.CardText[CardStat] = 'Spike Brothers/Elf
+
+G guardian [Choose a "HEAL" from your hand, and discard it] Call this card to your GC from face down.
+
+AUTO: When this unit is placed on GC, if you have three or less rear-guards, this unit gets shield +5000 until end of that battle.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 4142
+{
+global.CardName[CardStat] = 'Lethal Forward'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO: Charge.
+
+AUTO [RC] Generation Break 1: When this unit becomes charging, until end of turn, this unit gets power +2000, and "AUTO [RC]: When this unit’s attack hits a vanguard, if you have a vanguard with "Rising" in its card name, search your deck for up to one card not named "Lethal Forward", call it to an open RC, and shuffle your deck.".'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4269
+{
+global.CardName[CardStat] = 'Fullspeed Specter'
+global.CardText[CardStat] = 'Spike Brothers/Ghost
+
+AUTO: Charge.
+
+AUTO [RC] Generation Break 1: [Counter Blast 1] When this unit becomes charging, you may pay the cost. If you do, until end of turn, this unit gets power +4000, and "CONT [RC]: This unit can attack a vanguard from the back row.".'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+global.CanAttackFromBackRow[CardStat] = 1
+
+
+CardStat = 4270
+{
+global.CardName[CardStat] = 'Mecha Coach'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO: Forerunner.
+
+AUTO [RC]: [Put this unit into your soul] At the end of the battle that another of your charging rear-guards attacked, you may pay the cost. If you do, bind all of your rear-guards in the same column as the unit that attacked face up, and call them to separate open RC as rest.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4232
+{
+global.CardName[CardStat] = 'Airforce Eliza'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO: Charge.
+
+AUTO [RC] Generation Break 1: [Counter Blast 1] At the end of the battle that this unit boosted a charging rear-guard, you may pay the cost. If you do, bind the boosted unit face up, call that card to an open RC, and if this unit is charging, that unit gets power +2000 until end of turn. Put this unit on the bottom of your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 4275
+{
+global.CardName[CardStat] = 'Mayhem Tiger'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO: Charge.
+
+AUTO [RC] Generation Break 1: [Soul Blast 1] When your opponent’s unit is put into GC during the battle that this unit attacked a vanguard, if this unit is charging, you may pay the cost. If you do, choose one of your opponent’s grade 2 or less guardians, and retire it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4276
+{
+global.CardName[CardStat] = 'Great Hero, Rising Supernova'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+Stride.
+
+AUTO [VC]: [Choose a face down card from your G zone, and turn it face up] When this unit attacks a vanguard, you may pay the cost. If you do, choose up to the same number of your rear-guards as the number of face up "Great Hero, Rising Supernova" in your G zone, they become charging, and if four or more of your rear-guards are charging, all of your units get power +10000 until end of turn. (Units without the charge ability can be charging too.)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4284
+{
+global.CardName[CardStat] = 'Dudley Jetter'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC] Generation Break 1: [Retire this unit] At the beginning of your ride phase, if you have a vanguard with "Dudley" in its card name, you may pay the cost. If you do, until end of turn, if the G unit you Stride has "Dudley" in its card name, you may Stride without paying the cost of the next Stride.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 4285
+{
+global.CardName[CardStat] = 'Dudley Cheers, Linda'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+CONT: Sentinel.
+
+AUTO: [Soul Blast 2-card with "Dudley" in its card name] When this unit is placed on GC from hand, you may pay the cost. If you do, reveal seven cards from the top of your deck, call all of the cards with "Dudley" in its card name from among them to GC, they get shield +5000 until end of that battle, and put the rest into your soul.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 4304
+{
+global.CardName[CardStat] = 'Dudley Littleroad'
+global.CardText[CardStat] = 'Spike Brothers/Human
+
+AUTO: Forerunner.
+
+AUTO [RC]: [Soul Blast 1] When your vanguard with "Dudley" in its card name attacks, you may pay the cost. If you do, bind this unit face up, call this card to an open RC, and if you have two or more other rear-guards with "Dudley" in its card name, this unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4306
+{
+global.CardName[CardStat] = 'Dudley Ingram'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC] Generation Break 1: During your battle phase, when your other units with "Dudley" in its card name is placed on RC, this unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4310
+{
+global.CardName[CardStat] = 'Juggernaut Maximum Maximum'
+global.CardText[CardStat] = 'Spike Brothers/Giant
+
+G guardian.
+
+AUTO: When this unit is placed on GC, choose one of your grade 2 or less rear-guards, and you may have that unit get power +10000 until end of turn. If you do, this unit gets shield +10000 until end of that battle, and at the end of that turn, put that rear-guard on the bottom of your deck.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+global.DefensePowerStat[CardStat] = 15000
+
+
+CardStat = 4312
+{
+global.CardName[CardStat] = 'Outrage Lineback'
+global.CardText[CardStat] = 'Spike Brothers/Giant
+
+AUTO: Charge.
+
+AUTO [VC/RC] Generation Break 1: When this unit attacks a vanguard, it gets power +4000 until end of that battle.
+
+AUTO [RC]: [Put this unit into your soul] When this unit’s attack hits a vanguard, if this unit is charging, you may pay the cost. If you do, choose a card from your hand, and call it to open RC.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 4325
+{
+global.CardName[CardStat] = 'Dudley Turborappler'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO [VC] 1/Turn Generation Break 1: When your unit with "Dudley" in its card name is placed on RC during the battle phase of your turn, this unit gets power +5000 until end of turn.
+
+AUTO [VC]: During your turn, when your G unit Stride, choose one of your vanguards, and until end of turn, it gets "AUTO [VC]: [Soul Blast 1] When your rear-guard with "Dudley" in its card name attacks, you may pay the cost. If you do, the unit that attacked gets power +5000 until end of that battle, and at the end of that battle, put that unit into your soul.".'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 4326
+{
+global.CardName[CardStat] = 'King of Sadism, Dudley Caligula'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+Stride.
+
+AUTO [VC]: [Counter Blast 1 & Choose two cards from your hand, and put them into your soul & Choose a face down card named "King of Sadism, Dudley Caligula" from your G zone, and turn it face up] When this unit attacks a vanguard, if you have a heart card with "Dudley" in its card name, you may pay the cost. If you do, reveal eleven cards from the top of your deck, choose up to three cards with "Dudley" in its card name from among them, call them to separate open RC, and they get power +2000 until end of turn. Shuffle your deck.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4327
+{
+global.CardName[CardStat] = 'Serial Bomber'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO: Charge.
+
+AUTO [VC/RC] Generation Break 1: When your other rear-guard becomes charging, this unit gets power +4000 until end of turn.
+
+AUTO: When this unit is placed on VC, choose up to one card from your hand, call it to an open RC, and it gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 4328
+{
+global.CardName[CardStat] = 'Dandy Regista'
+global.CardText[CardStat] = 'Spike Brothers/Demon/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4329
+{
+global.CardName[CardStat] = 'Cheer Girl, Sundra'
+global.CardText[CardStat] = 'Spike Brothers/Succubus/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4685
+{
+global.CardName[CardStat] = 'King of Interference, Terrible Linus'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+G guardian.
+
+AUTO Generation Break 1: When placed on GC, COST [Choose a face down G guardian from your G zone, and turn it face up], choose one of your rear-guards, and you may put it into your soul. This unit gets shield +10000 until end of that battle for every two of your open circles.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 4686
+{
+global.CardName[CardStat] = 'Reserver Linus'
+global.CardText[CardStat] = 'Spike Brothers/Ogre/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)
+
+AUTO: When this card is discarded from hand for the cost of calling "King of Interference, Terrible Linus" from your G zone, you may put this card into your soul.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 4770
+{
+global.CardName[CardStat] = 'Temerarious Cataclysmic Rogue, Hellhard Eight'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+Stride.
+
+AUTO [VC] Generation Break 8: When your unit attacks, choose one of your units, until end of turn, it gets power +10000, and "AUTO [RC]: [Choose a card from your hand, put this unit and the chosen card into your soul] At the end of the battle that this unit attacked or boosted, you may pay the cost. If you do, search your deck for up to one card, call it to an open RC, and shuffle your deck.".'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5203
+{
+global.CardName[CardStat] = 'Jet Power Dusty'
+global.CardText[CardStat] = 'Spike Brothers/Elf
+
+AUTO: Charge.
+
+AUTO [RC] Generation Break 1: When this unit is boosted, if this unit is charging, it gets power +5000 until end of that battle, and if the boosting unit is "Jet Motor Dosty", until end of that battle, your opponent cannot intercept.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5204
+{
+global.CardName[CardStat] = 'Jet Motor Dosty'
+global.CardText[CardStat] = 'Spike Brothers/Elf
+
+AUTO: Charge.
+
+AUTO [RC] Generation Break 1: When this unit boosts a rear-guard with the charge ability, until end of that battle, this unit gets power +3000, and if the boosted unit is "Jet Power Dusty", you may have it become charging.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 5206
+{
+global.CardName[CardStat] = 'Prompt Cheetah'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO: Charge.
+
+AUTO [RC] Generation Break 1: [Soul Blast 1] When this charging unit attacks a vanguard, this unit gets power +5000 until end of battle, and at the end of that battle, you may pay the cost. If you do, bind this unit face up, and call this unit to an open RC as rest.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5207
+{
+global.CardName[CardStat] = 'Giant, Rising Great Star'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: Charge.
+
+AUTO: [Counter Blast 1 & Choose a card from your hand, and put it into your soul] When this unit is placed on VC or RC, you may pay the cost. If you do, search your deck for up to one grade 2 or less card with the charge ability, call it to an open RC, shuffle your deck, and if this unit is charging, this unit gets power +3000 until end of turn.
+
+AUTO [VC] Generation Break 2: At the end of each turn, if the number of your rear-guards is two or less, choose one of your rear-guards, and you may put it into your soul. If you do, draw a card.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5208
+{
+global.CardName[CardStat] = 'Cold-blooded Advisor, Cunning Brain'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+CONT: Sentinel.
+
+AUTO [RC]: Charge.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose one of your units that is being attacked, and it cannot be hit until end of that battle.
+
+AUTO: When this unit is put into your deck from RC, choose up to three cards from your drop zone, bind them face up, choose one of your units, and it gets power +10000 until end of turn for each face up "Cold-blooded Advisor, Cunning Brain" in your bind zone.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 6000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 5209
+{
+global.CardName[CardStat] = 'Black Horn King, Bullpower Agrias'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+Stride.
+
+AUTO [VC]: [Counter Blast 1 & Choose a face down card from your G zone with the same card name as this unit, and turn it face up] When this unit attacks, you may pay the cost. If you do, choose any number of your rear-guards, and bind them face up. If three or more cards were bound, draw a card, choose up to two cards from your bind zone for each face up card in your G zone, and call them to separate open RC.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5215
+{
+global.CardName[CardStat] = 'Prospective Starkie'
+global.CardText[CardStat] = 'Spike Brothers/Human
+
+AUTO: Forerunner.
+
+AUTO [RC]: Charge.
+
+CONT [RC]: If this unit is charging, all of your charging units get power +2000, and this unit gets "AUTO: When this unit is put into your deck from RC, Counter Charge 1.".'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5226
+{
+global.CardName[CardStat] = 'Fake Bomber'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO: Charge.
+
+CONT [RC]: If this unit is charging, this unit gets power +5000, and "AUTO [RC] Generation Break 1: [Soul Blast 2] When this unit boosts, if you have a vanguard with "Rising" in its card name, you may pay the cost. If you do, choose a card from your hand, call it to an open RC, and Counter Charge 1.".'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5310
+{
+global.CardName[CardStat] = 'Dudley Cheers, Linsey'
+global.CardText[CardStat] = 'Spike Brothers/Succubus/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)
+
+AUTO: [Bind this card face up & Choose another card with "Heal" from your drop zone, and bind it face up] When this card is discarded from hand for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5311
+{
+global.CardName[CardStat] = 'Durable Barrier, Hecaton Gyace'
+global.CardText[CardStat] = 'Spike Brothers/Battleroid
+
+G guardian.
+
+AUTO: When this unit is placed on GC, choose up to three cards with different grades from your soul or drop, and put them on the bottom of your deck in any order. If you put three cards, this unit gets shield +10000 until end of that battle.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 5312
+{
+global.CardName[CardStat] = 'Power Flicker'
+global.CardText[CardStat] = 'Spike Brothers/Giant
+
+AUTO [VC/RC] Generation Break 1: [Counter Blast 1] At the end of the battle that this unit attacked, you may pay the cost. If you do, choose up to one card from your hand, call it to an open RC, until end of turn, it gets power +2000, and if this unit is on VC, the called unit gets power +2000.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5313
+{
+global.CardName[CardStat] = 'Laser Blackguard'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO: Charge.
+
+CONT [RC] Generation Break 1: If this unit is charging, this unit gets power +5000.
+
+AUTO Generation Break 1: [Counter Blast 1 & Choose a card from your hand, and put it into your soul] When this charging unit is put from RC into the deck, you may pay the cost. If you do, search your deck for up to one non-grade 2 card with the charge ability, call it to an open RC that this unit was not on, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5314
+{
+global.CardName[CardStat] = 'Dudley Striker'
+global.CardText[CardStat] = 'Spike Brothers/Vampire/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5315
+{
+global.CardName[CardStat] = 'Dudley Schemer'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast/Draw Trigger
+
+ACT [RC]: [Put this unit into your soul] Choose one of your units, and it gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5316
+{
+global.CardName[CardStat] = 'Mecha Instructor'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid/Stand Trigger
+
+AUTO: Charge.
+
+AUTO Generation Break 1: [Choose a card from your hand, and put it into your soul] When this unit is put into the deck from RC, you may pay the cost. If you do, choose one of your rear-guards, bind it face up, and call the bound card to an open RC.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5815
+{
+global.CardName[CardStat] = 'Funky Bazooka'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC]: When your other rear-guard is placed on RC in the same column as this unit, this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5823
+{
+global.CardName[CardStat] = 'Highspeed, Brakki '
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO [RC]: When placed, this unit gets power +10000 until end of turn.
+
+AUTO [RC]: At the beginning of your main phase, COST [put this unit into your soul], search your deck for up to one "Highspeed, Brakki", call it to RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 5824
+{
+global.CardName[CardStat] = 'Wonder Boy '
+global.CardText[CardStat] = 'Spike Brothers/Human
+
+AUTO [RC]: When placed, COST [put a non-grade 1 card from your drop zone on the bottom of your deck], and this unit gets power +5000 until end of turn.
+
+AUTO [RC]: At the beginning of your main phase, COST [put this unit into your soul], search your deck for up to one "Wonder Boy", call it to RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5825
+{
+global.CardName[CardStat] = 'Juggernaut Maximum '
+global.CardText[CardStat] = 'Spike Brothers/Giant
+
+AUTO [VC/RC]: When placed, this unit gets power +10000 until end of turn.
+
+AUTO [RC]: At the beginning of your main phase, COST [put this unit into your soul], search your deck for up to one "Juggernaut Maximum", call it to RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+
+
+CardStat = 5827
+{
+global.CardName[CardStat] = 'Front-line Command, Sigiswald'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC]: At the beginning of your main phase, COST [put this unit into your soul, put a card from your drop zone on the bottom of your deck], draw a card, and Counter Charge 1.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 13000
+
+
+CardStat = 5828
+{
+global.CardName[CardStat] = 'Diabolic Middle Guard'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+CONT [GC]: During the battle that your grade 3 unit was attacked, this unit gets shield +10000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5842
+{
+global.CardName[CardStat] = 'Cheer Girl, Marilyn '
+global.CardText[CardStat] = 'Spike Brothers/Succubus/Draw Trigger
+
+CONT: Sentinel.
+
+AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5844
+{
+global.CardName[CardStat] = 'Fierce Leader, Zachary '
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: When placed from hand, COST [Counter Blast 1], look at the top card of your deck, and call it to RC. At the end of that turn, put that unit into your soul.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5846
+{
+global.CardName[CardStat] = 'White Tight End'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO [RC]: When it attacks, if you have four or more rear-guards, this unit gets power +10000 until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5850
+{
+global.CardName[CardStat] = 'Unite Attacker '
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+ACT [VC] 1/Turn: COST [Soul Blast 7], look at five cards from the top of your deck, call up to five cards from among them to RC, and put the rest on the bottom of your deck in any order. Three of your units in the front row get power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+
+
+CardStat = 5853
+{
+global.CardName[CardStat] = 'Mecha Trainer '
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 6000
+global.QuickShieldAdd[CardStat] = 1
+
+
+CardStat = 5854
+{
+global.CardName[CardStat] = 'Gyro Slinger '
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC/RC]: When placed, COST [put a card from your hand into your soul], look at cards from the top of your deck equal to your vanguards grade, call up to one card from among them to RC, put the rest on the bottom of your deck in any order, and the called unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5856
+{
+global.CardName[CardStat] = 'Treasured, Black Panther '
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO [RC]: When it attacks, COST [Soul Blast 1], this unit gets either power +5000 or power +15000 until end of that battle. If power +15000, at the end of that battle, put this unit into the soul.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 5857
+{
+global.CardName[CardStat] = 'General Seifried '
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+ACT [VC]: COST [Counter Blast 1 & put one of your rear-guards into your soul], search your deck for up to one card with the same card name as the card you put into the soul for the cost, call it to RC, until end of turn, this unit and that unit get power +10000, and shuffle your deck.
+
+AUTO [VC]: When its attack hits, COST [Soul Blast 2], stand one of your rear-guards, choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+
+
+CardStat = 5858
+{
+global.CardName[CardStat] = 'Cheer Girl, Franny'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+ACT [RC]: COST [Put this unit into your soul, and put a card on the bottom of your deck from your drop zone], and Counter Charge 1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5874
+{
+global.CardName[CardStat] = 'Cheer Girl, Tiara '
+global.CardText[CardStat] = 'Spike Brothers/Workeroid/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5875
+{
+global.CardName[CardStat] = 'Sonic Breaker '
+global.CardText[CardStat] = 'Spike Brothers/Ogre/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5876
+{
+global.CardName[CardStat] = 'Cheerful Lynx '
+global.CardText[CardStat] = 'Spike Brothers/Warbeast/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5877
+{
+global.CardName[CardStat] = 'Silence Joker '
+global.CardText[CardStat] = 'Spike Brothers/Ghost/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5884
+{
+global.CardName[CardStat] = 'Spike Bouncer '
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC/RC]: When placed, COST [Counter Blast 1 & Soul Blast 1], and look at cards from the top of your deck equal to the grade of your vanguard, call up to one card from among them to RC, and put the rest on the bottom of your deck.
+
+AUTO [RC]: At the end of the battle that it attacked, COST [Counter Blast 1 & Put this unit into your soul], and draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 5887
+{
+global.CardName[CardStat] = 'Commander, Garry Gannon '
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: When an attack that it boosted hits a vanguard, COST [put this unit into your soul], draw two cards, and put a card from your hand on the bottom of your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5889
+{
+global.CardName[CardStat] = 'Bombing Tail-back'
+global.CardText[CardStat] = 'Spike Brothers/Demon'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 5895
+{
+global.CardName[CardStat] = 'Cheer Girl, Jamie'
+global.CardText[CardStat] = 'Spike Brothers/Elf
+
+CONT: Sentinel.
+
+AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6101
+{
+global.CardName[CardStat] = 'Concealed Angela'
+global.CardText[CardStat] = 'Spike Brothers/Vampire
+
+CONT [RC]: If two or more of your cards were placed or two or more of your cards were put into your soul this turn by your card’s ability, this unit gets power +10000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6716
+{
+global.CardName[CardStat] = 'Shootdown Sovereign, Violence Ace'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+Stride.
+
+ACT [VC] 1/Turn: COST [Counter Blast 1 & turn a card from your G zone face up], draw cards equal to the number of face up cards in your G zone, and until end of turn, this unit gets "ACT [VC]: COST [Soul Blast 1], and one of your units gets power +10000 until end of turn.".
+
+AUTO [VC]: When the number of your opponent’s guardians become two or more, COST [Counter Blast 1 & put a rear-guard into your soul], and call a card from your hand to RC.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 6736
+{
+global.CardName[CardStat] = 'Machinery Slotback'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid/Critical Trigger
+
+AUTO [RC] Generation Break 1: When your vanguard attacks, COST [put this unit into your soul], draw a card, and one of your vanguards gets power +10000 until end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 6976
+{
+global.CardName[CardStat] = 'Offensive Punter'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC]: When it boosts, COST [Soul Blast 1], and this unit gets power +2000 until end of that battle. At the end of that battle, draw a card, and put this unit on the bottom of your deck.
+
+AUTO: When rode upon, you may call this card to RC.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6989
+{
+global.CardName[CardStat] = 'Deadheat Bullspike'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [VC]: When your unit attacks, COST [Soul Blast 1], and move all of your force markers to that unit’s circle.
+
+AUTO [VC] 1/Turn: When the attack of your unit on a circle with a force marker does not hit, draw a card, choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+
+
+CardStat = 6990
+{
+global.CardName[CardStat] = 'Provoke Needle'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+CONT [RC]: If it is on a RC with a force marker, this unit gets power +10000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 6991
+{
+global.CardName[CardStat] = 'Derange Thaddeus'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC]: When it attacks, COST [Counter Blast 1], and move all of your force markers to this unit’s circle.
+
+AUTO [RC]: When its attack hits, if this unit’s circle has a force marker, choose one of your opponent’s rear-guards, and retire it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 6992
+{
+global.CardName[CardStat] = 'Jackknife Janice'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC]: At the end of the battle it boosted a rear-guard, and that unit’s circle has a force marker, COST [Counter Blast 1], put that rear-guard into your soul, and draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6993
+{
+global.CardName[CardStat] = 'Breaking Granmobile'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: When your vanguard attacks, COST [Counter Blast 1 & Soul Blast 1 "Breaking Granmobile"], and stand this unit.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 13000
+
+
+CardStat = 6994
+{
+global.CardName[CardStat] = 'Elevation Wideout'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+CONT [RC]: If it is on a RC with a force marker, this unit gets power +10000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6995
+{
+global.CardName[CardStat] = 'Flareblast Coyote'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO [RC]: When it attacks, COST [Soul Blast 9], until end of that battle, this unit gets power +30000, and your opponent cannot call sentinels from his or her hand. At the end of that battle, put all of your rear-guards on the bottom of your deck in any order.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6996
+{
+global.CardName[CardStat] = 'Bad End Dragger '
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [VC/RC]: When it attacks, COST [Counter Blast 1 & put a rear-guard on the bottom of your deck], and this unit gets power +5000 / critical +1 until end of that battle.
+
+AUTO: When rode upon, call this card to RC, and retire all of your opponent’s rear-guards in the column where it was called.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+
+
+CardStat = 6997
+{
+global.CardName[CardStat] = 'Detonate Bahrel'
+global.CardText[CardStat] = 'Spike Brothers/Human
+
+AUTO [RC]: When it attacks, COST [Soul Blast 1 "Detonate Bahrel"], draw a card, and this unit gets power +10000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 6998
+{
+global.CardName[CardStat] = 'Killparade Mevis'
+global.CardText[CardStat] = 'Spike Brothers/Demon/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 7012
+{
+global.CardName[CardStat] = 'Big Blow Ted'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC]: When placed, COST [put a grade 2 or greater card from your drop zone on the bottom of your deck], and this unit gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7013
+{
+global.CardName[CardStat] = 'Snapper Devil'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [VC]: When its attack hits, draw a card.
+
+AUTO [RC]: When it boosts, COST [Counter Blast 1], and move all of your force markers to the boosted units circle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7016
+{
+global.CardName[CardStat] = 'Powerback Renaldo'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [VC/RC]: When placed from hand, COST [Counter Blast 1 & put a card from your hand into your soul], look at the same number of cards from the top of your deck as your vanguards grade, call up to three cards from among them to RC, and put the rest on the bottom of your deck in any order.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 7017
+{
+global.CardName[CardStat] = 'Gunwild Wolf'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO [VC/RC]: When it attacks, COST [Soul Blast 3 grade 3 & put any number of rear-guards on the bottom of your deck in any order], and until end of that battle, when your opponent would call cards from his or her hand to GC, he or she can only call the number of cards or more as the number of cards put on the bottom of your deck for this cost.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+
+
+CardStat = 7018
+{
+global.CardName[CardStat] = 'Sweety Guard'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+CONT: Sentinel.
+
+AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.
+
+AUTO [VC]: When placed, draw a card, and discard a card from your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 7019
+{
+global.CardName[CardStat] = 'Intrigue Center'
+global.CardText[CardStat] = 'Spike Brothers/Demon'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 7020
+{
+global.CardName[CardStat] = 'Knockout Strong'
+global.CardText[CardStat] = 'Spike Brothers/Ogre'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 7044
+{
+global.CardName[CardStat] = 'Egocentric Flanker'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: When placed by a card’s ability, COST [put this unit into your soul], and three of your units get power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 7547
+{
+global.CardName[CardStat] = 'Cheer Girl, Lynette'
+global.CardText[CardStat] = 'Spike Brothers/Succubus/Critical Trigger
+
+CONT [Hand]: While paying the cost for Stride, this card may be discarded as a grade 3.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+global.NewTriggerStat[CardStat] = 1
+
+
+CardStat = 7597
+{
+global.CardName[CardStat] = 'Great Titlist, Villain Verminous'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+Stride.
+
+AUTO [VC]: When the attack of a rear-guard on a circle with a force marker does not hit, COST [Soul Blast 2 & turn a card from your G zone face up], draw a card, and call a card from your hand to RC.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 7805
+{
+global.CardName[CardStat] = 'Cheer Girl, Pauline '
+global.CardText[CardStat] = 'Spike Brothers/Ogre/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7806
+{
+global.CardName[CardStat] = 'Running Sniper'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 6000
+global.DefensePowerStat[CardStat] = 10000
+global.QuickShieldAdd[CardStat] = 1
+
+
+CardStat = 7807
+{
+global.CardName[CardStat] = 'Meteoric Panthera'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+CONT [VC/RC]: If two or more rear-guards were called by your card’s ability this turn, this unit gets power +10000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7825
+{
+global.CardName[CardStat] = 'Defensive Evilhater'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: When placed by your card’s ability, COST [Counter Blast 1], and this unit gets power +15000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7826
+{
+global.CardName[CardStat] = 'Cheer Girl, Courtney'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO [RC]: When placed by your card’s ability, if your damage zone has no face up cards, Counter Charge 1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 7842
+{
+global.CardName[CardStat] = 'Exceptional Expertise, Rising Nova '
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+CONT [VC]: When this unit is placed by riding and would get Imaginary Gift:Force, get both I and II instead of I or II.
+
+ACT [VC]: COST [Soul Blast 1], choose up to two of your grade 3 rear-guards, and this unit gets all of their abilities until end of turn. This ability may only be used by a card with the same card name once a turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.BlueTokenBoth[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 7843
+{
+global.CardName[CardStat] = 'Ambush Dexter'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [VC]: When placed, COST [discard a card from your hand], and draw a card.
+
+AUTO [RC]: When placed, COST [Counter Blast 1 & put a grade 2 or greater rear-guard into your soul], search your deck for up to two cards with the same grade as the card put into your soul for this cost, call them to RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 7844
+{
+global.CardName[CardStat] = 'Adorbs Perm Rona'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO [VC/RC]: When placed, COST [Counter Blast 1], search your deck for up to one grade 3 card, call it to RC, and shuffle your deck.
+
+CONT [RC]: If you have a grade 3 unit in the same column as this unit, this unit gets "Boost".'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7845
+{
+global.CardName[CardStat] = 'Cheer Girl, Adalaide '
+global.CardText[CardStat] = 'Spike Brothers/Goblin/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 20000
+
+
+CardStat = 7846
+{
+global.CardName[CardStat] = 'Outside Rabbit'
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO [RC]: When placed by your card’s ability, COST [Soul Blast 1], until end of turn, this unit can attack the vanguard from the back row, and gets power +5000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+global.DefensePowerStat[CardStat] = 10000
+global.CanAttackFromBackRow[CardStat] = 1
+
+
+CardStat = 7847
+{
+global.CardName[CardStat] = 'Spiking Cyclone'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+CONT [VC]: During your turn, this unit gets power +5000 for each force marker on your circles.
+
+AUTO [VC]: When it attacks, COST [Counter Blast 1], and stand one of your rear-guards.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 7861
+{
+global.CardName[CardStat] = 'Bullet Liner'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+CONT [VC/RC]: During your turn, if this unit’s circle has a force marker, this unit gets power +10000.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 7862
+{
+global.CardName[CardStat] = 'Assaulting Barvarius'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+CONT [GC]: This unit gets shield +5000 for each force marker on your circles.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7863
+{
+global.CardName[CardStat] = 'Liar Lips '
+global.CardText[CardStat] = 'Spike Brothers/Succubus/Critical Trigger
+
+CONT: Sentinel.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 30000
+
+
+CardStat = 7870
+{
+global.CardName[CardStat] = 'Acrobat Verdi '
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+CONT [VC/RC]: If a rear-guard was called by your card’s ability this turn, this unit gets power +5000.
+
+AUTO [VC/RC]: When placed from hand, look at five cards from the top of your deck, reveal up to one grade 3 card from among them, put it into your hand, shuffle your deck, and if you put a card, discard a card from your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 7871
+{
+global.CardName[CardStat] = 'Breach Spurt'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC]: When it attacks a vanguard, COST [put a normal unit from your drop zone on the bottom of your deck], and your opponent’s units must intercept as much as possible until end of that battle. At the end of that battle, put this unit into your soul, and draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7872
+{
+global.CardName[CardStat] = 'Mecha Referee'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 7000
+global.DefensePowerStat[CardStat] = 15000
+
+
+CardStat = 7896
+{
+global.CardName[CardStat] = 'Punting Cannon'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+ACT [VC] 1/Turn: COST [Put a card from your hand into your soul], look at the same number of cards from the top of your deck as the number of your grade 3 units, call up to one card from among them to RC, put the rest on the bottom of your deck in any order, and the called unit gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 7897
+{
+global.CardName[CardStat] = 'Bigback Warlord'
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+CONT [VC]: During the battle it attacked, when your opponent would call cards from his or her hand to GC, he or she must call two or more at the same time.
+
+CONT [RC]: If your circles have a force marker I and II, this unit gets "Intercept", and "AUTO: When intercepts, this unit gets shield +10000 until end of that battle.".'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 13000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 7898
+{
+global.CardName[CardStat] = 'Mecha Manager'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+ACT [RC]: COST [rest this unit], one of your other rear-guards gets power +10000 until end of turn, and at the end of the battle that unit attacked, put that unit on the bottom of your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 8050
+{
+global.CardName[CardStat] = 'Gunburst Linebacker'
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO [RC]: When it attacks, COST [Counter Blast 1 & Soul Blast 1], this unit gets power +5000 until end of that battle for each force marker on your circles.
+
+CONT [RC]: If you have a grade 3 unit in the same column as this unit, this unit can attack and intercept from the back row.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+global.CanAttackFromBackRow[CardStat] = 1
+
+
+CardStat = 8202
+{
+global.CardName[CardStat] = 'Demonic Lord, Dudley Lucifer '
+global.CardText[CardStat] = 'Spike Brothers/Ogre
+
+AUTO [RC]: When placed by your card’s ability, COST [Soul Blast 1], and Counter Charge 1.
+
+AUTO [VC]: When it attacks, COST [Counter Blast 1 & put a rear-guard into your soul], draw a card, call up to one card with "Dudley" in its card name from your hand to RC, and if your opponent’s vanguard is grade 3 or greater, that called unit gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 8203
+{
+global.CardName[CardStat] = 'Dudley Davie'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [VC/RC]: When placed, COST [Counter Blast 1], search your deck for up to one non-grade 2 card with "Dudley" in its card name, call it to RC, and shuffle your deck.
+
+AUTO [RC] 1/Turn: When a force marker is put on this unit’s circle, you may Soul Charge 1. (Includes moving the marker too.)'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 8204
+{
+global.CardName[CardStat] = 'Dudley William'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [RC]: At the end of the battle that it boosted, COST [put this unit into your soul], choose one of your units, and move all of the force marker on your circles to that unit’s circle.
+
+AUTO: When rode upon, you may call this card to RC.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 8957
+{
+global.CardName[CardStat] = 'Demonic Lord, Dudley Emperor '
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO: When this unit attacks from VC or is rode upon, COST [Counter Blast 1], search your deck for up to one grade 2 or greater card with "Dudley" in its card name, call it to an open RC, and shuffle your deck. Choose one of your vanguards, and it gets power +10000 until end of turn.
+
+AUTO [VC/RC]: When your rear-guard attacks, if you have a vanguard with "Dudley" in its card name, that rear-guard gets power +5000 until end of that battle, and at the end of that battle, put that rear-guard on the bottom of your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 8958
+{
+global.CardName[CardStat] = 'Dudley Mason '
+global.CardText[CardStat] = 'Spike Brothers/Giant
+
+AUTO [RC]: When this unit’s attack hits, if you have a vanguard with "Dudley" in its card name, COST [Counter Blast 1 & put this unit on the bottom of your deck], choose up to one non-grade 2 card with "Dudley" in its card name from your hand, and call it to RC.
+
+AUTO: When this unit is put into your deck from RC during your turn, choose one of your units, and move all force markers from your circles to the circle that unit is on.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 8959
+{
+global.CardName[CardStat] = 'Dudley Daisy '
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO: When this unit is placed on RC by the ability of a card with "Dudley" in its card name, COST [Soul Blast 1], search your deck for up to one grade 3 card with "Dudley" in its card name, call it to an open RC, and shuffle your deck. At the end of that turn, put that called unit and this unit on the bottom of your deck in any order.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 9034
+{
+global.CardName[CardStat] = 'Precious Cheer Girl, Cameron'
+global.CardText[CardStat] = 'Spike Brothers/Demon/Heal Trigger
+
+AUTO: When this unit is put on GC from hand, if you did not ride a grade 3 or greater unit this fight, perform one of the following.
+• Choose one of your vanguards, and it gets power +10000 until end of turn.
+• Choose one of your opponent’s units, and it gets critical -2 until end of that battle.
+
+AUTO: When this unit is placed on RC from hand, if your damage zone has no cards, put the top card of your deck into the damage zone.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 15000
+
+
+CardStat = 9293
+{
+global.CardName[CardStat] = 'Cheer Girl, Fiona'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO: When this unit is placed on RC or put on GC, COST [Soul Blast 1], choose one of any players other rear-guards, and until end of turn, it gets power +10000, and cannot pay the costs of any of its AUTO abilities.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 9456
+{
+global.CardName[CardStat] = 'Machine Gun Gloria '
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+AUTO: When this unit is retired from GC, COST [Counter Blast 1], and call this card to an open RC.
+
+AUTO [RC]: At the end of the battle this unit boosted a rear-guard, COST [put two of your rear-guards in the same column as this unit on the bottom of your deck in any order], and draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 9457
+{
+global.CardName[CardStat] = 'Agile Fullback '
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO: When this unit is placed on your back row center RC, until end of turn, this unit can attack from the back row, and if this unit was placed by a card’s ability, this unit gets power +10000.
+
+AUTO [RC]: At the beginning of your main phase, COST [put this unit into your soul], search your deck for up to one "Agile Fullback", call it to RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+global.CanAttackFromBackRow[CardStat] = 1
+
+
+CardStat = 9458
+{
+global.CardName[CardStat] = 'Great Demon Emperor, Dudley Emperor "ßeverse" '
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO [VC]: When your rear-guard is put into your deck during your battle phase, COST [lock one of your stand rear-guards], until end of turn, this unit gets power +10000 and if your opponent’s vanguard is grade 3 or greater, COST [discard a card from your hand], and this unit gets drive +1.
+
+AUTO [VC]: When this unit attacks, if you have no grade 2 or less units, COST [Counter Blast 1 & Soul Blast 1], search your deck for up to one normal unit, call it to an open RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 9821
+{
+global.CardName[CardStat] = 'Lawless King, Gally Gabalus'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+Stride.
+
+AUTO [VC]: When your rear-guard attacks, that unit gets power +10000 until end of that battle. At the end of that battle, put that unit on the bottom of your deck. (This effect is mandatory)
+
+AUTO [VC]: When this unit attacks, COST [Soul Blast 1], search your deck for up to two grade 2 or less cards, call them to open RC, and shuffle your deck. Then, all of your rear-guards get "Boost" until end of turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+global.OldCardStat[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 9822
+{
+global.CardName[CardStat] = 'Queen of Sympathy, Villainous Evita'
+global.CardText[CardStat] = 'Spike Brothers/Succubus
+
+G guardian.
+
+AUTO: When this unit is put on GC, COST [Counter Blast 1], choose three normal units from your drop, and this unit gets their original shield until end of that battle. If you chose one or more grade 3 cards, draw a card. Put all of the cards chosen with this effect on the bottom of your deck in any order.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+global.OldCardStat[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+global.DefensePowerStat[CardStat] = 15000
+
+
+CardStat = 9969
+{
+global.CardName[CardStat] = 'Reckless Express '
+global.CardText[CardStat] = 'Spike Brothers/Workeroid
+
+AUTO: If this unit is on VC, you may pay "Soul Blast 1" for this cost. When this unit is placed on VC or RC, COST [Counter Blast 1], look at the top seven cards of your deck, choose up to one normal unit from among them, call it to RC as rest, and shuffle your deck.
+
+AUTO [RC]: At the beginning of your main phase, COST [put this unit into your soul], search your deck for up to one "Reckless Express", call it to RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 9998
+{
+global.CardName[CardStat] = 'Juggernaut Maximum Maximum '
+global.CardText[CardStat] = 'Spike Brothers/Giant
+
+AUTO [VC]: At the beginning of each main phase, if your opponent’s vanguard is grade 3 or greater, until end of turn, this unit gets "CONT [VC]: All of your units placed this turn gets power +5000 / shield +5000.".
+
+AUTO [VC] 1/Turn: At the end of the battle this unit attacked, if four or more of your rear-guards were placed this turn, COST [Soul Blast 3], choose a column, and stand all of your units in that column. If you stand this unit, this unit gets drive -1 until end of turn, and at the end of that turn, put all of your rear-guards on the bottom of your deck in any order.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 9999
+{
+global.CardName[CardStat] = 'Sky Diver '
+global.CardText[CardStat] = 'Spike Brothers/Giant
+
+AUTO: When this unit is placed on VC or RC, choose up to two normal units from your drop, put them on the bottom of your deck in any order, and this unit gets power +5000 until end of turn for each card put on the bottom of your deck.
+
+AUTO [RC]: At the beginning of your main phase, COST [put this unit into your soul], search your deck for up to one "Sky Diver", call it to RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 14
+}
+global.BlueTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 13000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 10473
+{
+global.CardName[CardStat] = 'Jumbo the Stungun '
+global.CardText[CardStat] = 'Spike Brothers/Warbeast
+
+AUTO: When this unit is put on GC, COST [Counter Blast 1 & Soul Blast 3], choose one of your opponent’s front row units, and move all force markers on your opponent’s circles to that unit’s circle.
+
+AUTO [RC] 1/Turn: When a force marker is put on this unit’s circle, Soul Charge 1, and if you did not Counter Charge this turn, Counter Charge 1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 11050
+{
+global.CardName[CardStat] = 'Wild Shot Rupert'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+AUTO [VC/RC] 1/Turn: When this unit attacks while boosted, COST [Counter Blast 1], search your deck for up to one grade 3 card, call it to RC, and shuffle the deck.
+
+AUTO [Hand]: At the beginning of your ride phase, if your vanguard is grade 1 or less, COST [discard this card], look at the top five cards of your deck, choose up to one grade 2 or less card from among them, reveal it and put it into hand, and shuffle the deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 11128
+{
+global.CardName[CardStat] = 'Godly-speed, Flash Bruce '
+global.CardText[CardStat] = 'Spike Brothers/Elf
+
+Stride.
+ACT [G Zone]: If your vanguard is a grade 3 "Exceptional Expertise, Rising Nova", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Force.
+
+CONT [VC]: This unit’s "when attack hits" effects activate even if the attack did not hit.
+
+AUTO [VC]: When this unit’s attack hits a vanguard, COST [put a card from hand into soul], search your deck for up to one card, call it to RC, and it gets power +5000 until end of turn. Shuffle your deck.
+
+(SHIFT + left click to create Force gifts.)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 14
+global.ExtraDeck[CardStat] = 1
+global.OldCardStat[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+global.ForceAdd[CardStat] = 1
+
+
+CardStat = 11129
+{
+global.CardName[CardStat] = 'Liar Lips  '
+global.CardText[CardStat] = 'Spike Brothers/Succubus/Critical Trigger
+
+AUTO [RC]: When your grade 3 or greater vanguard with "Rising" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.
+
+AUTO: When this card is revealed during your damage check, draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+global.DefensePowerStat[CardStat] = 15000
+global.OldCardStat[CardStat] = 1
+global.NewTriggerStat[CardStat] = 1
+
+
+CardStat = 11164
+{
+global.CardName[CardStat] = 'Dudley Cheers, Linsey  '
+global.CardText[CardStat] = 'Spike Brothers/Succubus/Heal Trigger
+
+AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 14
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 4000
+global.DefensePowerStat[CardStat] = 15000
+global.OldCardStat[CardStat] = 1
+global.NewTriggerStat[CardStat] = 1
+
+
+CardStat = 13260
+{
+global.CardName[CardStat] = 'Exclude Havoc'
+global.CardText[CardStat] = 'Spike Brothers/Demon
+
+CONT [Hand]: You may discard this card as a "HEAL" for the cost of calling a G guardian.
+
+AUTO: When this unit is put on GC from hand, COST [remove a "HEAL" from hand or drop], choose up to three normal units without sentinel and with different grades from your drop, put them on the bottom of the deck in any order, and perform all of the following.
+• If you chose a grade 3 or greater card, this unit gets shield +20000 until end of that battle.
+• If you chose three cards, COST [Counter Blast 1], choose one of your vanguards, and it gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 14
+}
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 10000

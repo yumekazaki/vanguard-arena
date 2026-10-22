@@ -1,0 +1,3107 @@
+CardStat = 1202
+{
+global.CardName[CardStat] = 'Stealth Beast, Hagakure'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO: [Counter Blast 1] When this unit is placed on GC, if you have a «Nubatama» vanguard, and the number of cards in your hand is less than your opponent’s, you may pay the cost. If you do, your opponent chooses a card from his or her hand, and discards it.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1203
+{
+global.CardName[CardStat] = 'Stealth Dragon, Dreadmaster'
+global.CardText[CardStat] = 'Nubatama/Shadow Dragon
+
+AUTO [RC]: [Counter Blast 1] When an attack hits during the battle that this unit boosted a «Nubatama», if the number of cards in your hand is less than your opponent’s, you may pay the cost. If you do, your opponent chooses a card from his or her hand, and discards it.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1204
+{
+global.CardName[CardStat] = 'Stealth Beast, Chigasumi'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [VC/RC]: When this unit attacks, if the number of cards in your hand is greater than your opponent’s, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1205
+{
+global.CardName[CardStat] = 'Stealth Dragon, Voidmaster'
+global.CardText[CardStat] = 'Nubatama/Shadow Dragon
+
+AUTO [VC]: When this unit attacks, if the number of cards in your hand is greater than your opponent’s, this unit gets power +3000 until end of that battle.
+
+AUTO [VC/RC]: [Counter Blast 1] When this unit’s attack hits, if the number of cards in your hand is less than your opponent’s, you may pay the cost. If you do, your opponent chooses a card from his or her hand, and discards it.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1538
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Kujikiricongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Nubatama» rides this unit, choose your vanguard, that unit gets power +10000 until end of turn, your opponent chooses a card from his or her hand, discards it, chooses a card from his or her hand, binds it face down, and at the end of that turn, puts that card into his or her hand.
+
+AUTO [VC]: When this unit attacks, if the number of cards in your opponent’s hand is three or less, this unit gets power +2000 until end of that battle
+
+CONT [VC/RC]: Lord (If you have a unit without a same clan as this unit, this unit cannot attack)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1539
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Kabukicongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): [Counter Blast 1] When this unit attacks a vanguard, you may pay the cost. If you do, bind all of your opponent’s rear-guards face up, if the number of cards in your opponent’s bind zone is three or more, this unit gets power +10000 until end of that battle, and at the end of that turn, your opponent puts all those cards that were bound with this effect into his or her hand.
+
+ACT [VC]: [Counter Blast 1] This unit gets power +2000 until end of turn.
+
+CONT [VC/RC]: Lord (If you have a unit without a same clan as this unit, this unit cannot attack)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1540
+{
+global.CardName[CardStat] = 'Stealth Beast, Tamahagane'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO: When this unit is placed on VC or RC, if you have a «Nubatama» vanguard, choose up to one of your opponent’s rear-guards, bind it face up, and at the end of that turn, your opponent puts that card into his or her hand.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1541
+{
+global.CardName[CardStat] = 'Stealth Rogue of a Thousand Blades, Oborozakura'
+global.CardText[CardStat] = 'Nubatama/Demon'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1542
+{
+global.CardName[CardStat] = 'Stealth Fiend, Daidarahoushi'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of that battle.
+
+AUTO [RC]: When this unit attacks a vanguard, if you have a «Nubatama» vanguard, this unit gets power +2000 until end of that battle.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1543
+{
+global.CardName[CardStat] = 'Stealth Beast, Mijingakure'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+CONT: Sentinel (You may only have up to four cards with "Sentinel" in a deck.)
+
+AUTO: [Choose a «Nubatama» from your hand, and discard it] When this unit is placed on GC, you may pay the cost. If you do, choose one of your «Nubatama» that is being attacked, and that unit cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1544
+{
+global.CardName[CardStat] = 'Tempest Stealth Rogue, Fuuki'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+ACT [RC]: [Counter Blast 1 & Put this unit into your soul] If you have a «Nubatama» vanguard, and if the number of cards in your opponent’s hand is three or more, you may pay the cost. If you do, choose a card at random from your opponent’s hand, bind it face down, and at the end of that turn, your opponent puts that card into his or her hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1545
+{
+global.CardName[CardStat] = 'Stealth Rogue of the Night, Sakurafubuki'
+global.CardText[CardStat] = 'Nubatama/Demon'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1546
+{
+global.CardName[CardStat] = 'Stealth Beast, Kuroko'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO: Forerunner (When a unit of the same clan rides this unit, you may call this unit to RC.)
+
+AUTO [RC]: [Soul Blast 1] When an attack hits a vanguard during the battle that this unit boosted, if you have a «Nubatama» vanguard, you may pay the cost. If you do, choose up to two cards in your opponent’s bind zone, and put them into the drop zone.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1547
+{
+global.CardName[CardStat] = 'Stealth Fiend, Zashikihime'
+global.CardText[CardStat] = 'Nubatama/Ghost/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 4
+
+
+CardStat = 1548
+{
+global.CardName[CardStat] = 'Stealth Dragon, Kurogane'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+
+
+CardStat = 1549
+{
+global.CardName[CardStat] = 'Stealth Fiend, Mashiromomen'
+global.CardText[CardStat] = 'Nubatama/Ghost/Stand Trigger
+
+ACT [RC]: [Put this unit into your soul] Choose up to one of your «Nubatama», and that unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 3
+
+
+CardStat = 1550
+{
+global.CardName[CardStat] = 'Stealth Fiend, Ohtsuzura'
+global.CardText[CardStat] = 'Nubatama/Warbeast/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 1
+
+
+CardStat = 1600
+{
+global.CardName[CardStat] = 'Stealth Fiend, Gozuou'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [VC/RC]: When this unit attacks, if you have a «Nubatama» vanguard or rear-guard with Limit Break 4, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1601
+{
+global.CardName[CardStat] = 'Stealth Dragon, Kokujyo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: During your turn, when your opponent’s card is placed in his or her bind zone, if you have a «Nubatama» vanguard, this unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1629
+{
+global.CardName[CardStat] = 'Stealth Dragon, Kodachifubuki'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [VC/RC]: [Counter Blast 1] This unit gets power +1000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1630
+{
+global.CardName[CardStat] = 'Stealth Fiend, Mezuou'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC]: [Counter Blast 1] When this unit boosts a «Nubatama» with Limit Break 4, you may pay the cost. If you do, the boosted unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 1631
+{
+global.CardName[CardStat] = 'Banquet Stealth Rogue, Shutenmaru'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO: Forerunner (When a unit of the same clan rides this unit, you may call this unit to RC.)
+
+AUTO [RC]: [Put this unit into your soul] When an attack hits a vanguard during the battle that this unit boosted a «Nubatama» with Limit Break 4, you may pay the cost. If you do, draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 2004
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Yozakuracongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [VC] Limit Break 4 (This ability is active if you have four or more damage): [Counter Blast 1 & Choose two cards from your hand, and discard them] This unit gets power +10000 until end of turn, if the number of cards in your opponent’s hand is four or greater, choose two cards from your opponent’s hand at random, and bind them face down, and at the end of that turn, your opponent puts all those cards that were bound with this effect into his or her hand. This ability cannot be used for the rest of that turn.
+
+AUTO [VC]: When this unit attacks, if the number of cards in your hand is greater than your opponent’s, this unit gets power +2000 until end of that battle.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 2289
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Daranicongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: When this unit attacks a vanguard, if your vanguard is Legion, until end of that battle, this unit gets power +2000 and "AUTO [RC]: [Soul Blast 1] When this unit’s attack hits a vanguard, you may pay the cost. If you do, choose up to two cards from your opponent’s bind zone, and put them into his or her drop zone.".'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 2290
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Mantoracongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [VC]: Legion 20000 "Shura Stealth Dragon, Daranicongo".
+
+ACT [VC]: [Counter Blast 1 & Choose one card with the same card name as a unit on your VC from your hand, and discard it] If this unit is Legion, and the number of cards in your opponent’s hand is four or more, choose two cards at random from your opponent’s hand, bind them face down, choose one of your opponent’s rear-guards, bind it face up, and at the end of that turn, your opponent puts those cards bound by this effect into his or her hand.
+
+AUTO [VC]: When this unit attacks a vanguard, if you have another unit in the center column, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 2451
+{
+global.CardName[CardStat] = 'Stealth Beast, Tobihiko'
+global.CardText[CardStat] = 'Nubatama/Warbeast/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+
+
+CardStat = 2801
+{
+global.CardName[CardStat] = 'Rikudo Stealth Dragon, Gedatsurakan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO [VC]: When this unit’s attack hits a vanguard, your opponent chooses a card from his or her hand, and discards it.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 2802
+{
+global.CardName[CardStat] = 'Rikudo Stealth Dragon, Jorurirakan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO [VC]: [Counter Blast 2] When this unit attacks a vanguard, you may pay the cost. If you do, choose one of your opponent’s rear-guards, bind it face up, your opponent chooses one card from his or her hand, and bind it face down. At the end of that turn, if you have a heart with "Shura Stealth Dragon" in its card name, put the cards bound by this effect to his or her drop zone, otherwise, return the cards to your opponent’s hand.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 3428
+{
+global.CardName[CardStat] = 'Stealth Dragon, Shiranui'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [VC] Generation Break 2: When this unit attacks, if the number of cards in your hand is less than your opponent’s, this unit gets power +5000 / critical +1 until end of that battle.
+
+AUTO [VC]: [Counter Blast 1] During your turn, when your G unit Stride, you may pay the cost. If you do, choose up to one of your opponent’s rear-guards, bind it face up, your opponent chooses a card from his or her hand, discards it, and at the end of that turn, your opponent puts the card bound with this effect into his or her hand.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 3462
+{
+global.CardName[CardStat] = 'Steel Blade Shura Stealth Dragon, Hayakujirakan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+ACT [VC] 1/Turn Generation Break 2: [Counter Blast 1] If you have a heart card with "Shura Stealth Dragon" in its card name, choose a card at random from your opponent’s hand, and bind it face down. Then, if the number of cards in your opponent’s hand is three or less, bind all of your opponent’s rear-guards face up. At the end of that turn, your opponent puts the cards bound with this effect into his or her hand.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+
+
+CardStat = 3463
+{
+global.CardName[CardStat] = 'Stealth Rogue of Night Fog, Agitomaru'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [VC/RC]: When this unit’s attack hits a vanguard, choose up to one card from your opponent’s bind zone, and put it into his or her drop zone.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 3467
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Murasamecongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: [Soul Blast 1 & Choose a card from your hand, and discard it] When this unit is placed on RC, if you have two or more cards with "Shura Stealth Dragon" in its original card name on your VC, you may pay the cost. If you do, search your deck for up to one grade 3 card with "Shura Stealth Dragon" in its card name, reveal it to your opponent, put it into your hand, shuffle your deck, your opponent chooses a card from his or her bind zone, and puts it into his or her drop zone. If he or she put that card into the drop zone, this unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 3468
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Hokagecongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [VC]: Legion 20000 "Shura Stealth Dragon, Daranicongo" or "Shura Stealth Dragon, Murasamecongo".
+
+AUTO [VC]: [Counter Blast 1] When this unit Legion, you may pay the cost. If you do, bind all of your opponent’s rear-guards face up, your opponent chooses a card at random from his or her hand, binds it face down, and at the end of that turn, your opponent puts the cards bound with this effect into his or her hand.
+
+ACT [VC]: [Soul Blast 1] If you have another unit in the middle column, this unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 3469
+{
+global.CardName[CardStat] = 'Stealth Dragon, Hashiribi'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: Afterimage (When your opponent puts a bound card into his or her hand, if your hand has six or less cards, you may return this unit to your hand.)
+
+AUTO Generation Break 1: [Choose a card from your hand, and discard it] When this unit is placed on RC, if the number of cards in your opponent’s bind zone is one or more, you may pay the cost. If you do, draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 3470
+{
+global.CardName[CardStat] = 'Stealth Dragon, Nibikatabira'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: Afterimage (When your opponent puts a bound card into his or her hand, if your hand has six or less cards, you may return this unit to your hand.)
+
+AUTO Generation Break 1: [Counter Blast 1 & Soul Blast 1] When this unit is placed on RC, if you have a grade 3 or greater vanguard with "Shiranui" in its card name, you may pay the cost. If you do, choose up to one of your other rear-guards, until end of turn, that unit and this unit get power +3000, and "AUTO [RC]: Afterimage.".'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 3471
+{
+global.CardName[CardStat] = 'Stealth Dragon, Chigiregumo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: Afterimage (When your opponent puts a bound card into his or her hand, if your hand has six or less cards, you may return this unit to your hand.)
+
+AUTO Generation Break 1: [Soul Blast 1] When this unit is placed on RC, if you have a vanguard with "Shiranui" in its card name, you may pay the cost. If you do, look at the three cards from the top of your deck, search for up to one card with the afterimage ability from among them, call it to RC, and shuffle your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 3472
+{
+global.CardName[CardStat] = 'Stealth Beast, Katarigitsune'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO: When this unit is placed on RC from hand, COST [reveal a grade 3 card from hand], search your deck for up to one grade 3 card with "Shiranui" in its card name, reveal it and put it into your hand, shuffle your deck, choose a card from your hand, and discard it.
+
+CONT [Hand]: While you are paying the cost for Stride, this card gets grade +2.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+
+
+CardStat = 3489
+{
+global.CardName[CardStat] = 'Rikudo Stealth Dragon, Tsukumorakan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+(PREMIUM EN: Banned.)
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO Generation Break 2: [Counter Blast 2 & Choose a face down card from your G zone, and turn it face up] When this unit is placed on VC, you may pay the cost. If you do, your opponent chooses four cards from his or her hand, binds all the rest of cards face down, and at the end of that turn, your opponent puts the cards bound with this effect into his or her hand.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.CardBanned[CardStat] = 1
+
+
+CardStat = 3508
+{
+global.CardName[CardStat] = 'Rikudo Stealth Dragon, Zaramerakan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO [VC]: When this unit’s attack hits a vanguard, choose a card at random from your opponent’s hand, bind it face down, if you have three or more rear-guards with the afterimage ability, your opponent chooses a card from his or her bind zone, and puts it into his or her drop zone. At the end of that turn, your opponent puts the card bound with this effect into his or her hand.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 3509
+{
+global.CardName[CardStat] = 'Stealth Rogue of the Mirrored Moon, Tsubakuro'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: Afterimage (When your opponent puts a bound card into his or her hand, if your hand has six or less cards, you may return this unit to your hand.)
+
+CONT [GC] Generation Break 1: This unit gets shield +5000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 3510
+{
+global.CardName[CardStat] = 'Stealth Beast, Kurosakazuki'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+CONT [RC]: Your vanguard’s "Limit Break 4" is active even when you have three or less damage.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 3511
+{
+global.CardName[CardStat] = 'Stealth Dragon, Noroi'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon/Critical Trigger
+
+AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a grade 3 or greater vanguard with "Shiranui" in its card name, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 3512
+{
+global.CardName[CardStat] = 'Stealth Dragon, Onibidoshi'
+global.CardText[CardStat] = 'Nubatama/Winged Dragon/Stand Trigger
+
+AUTO [RC]: Afterimage (When your opponent puts a bound card into his or her hand, if your hand has six or less cards, you may return this unit to your hand.)
+
+AUTO Generation Break 1: When this unit is placed on RC, if the number of cards in your hand is less than your opponent’s, draw a card, put this unit on the top of your deck, shuffle your deck, choose one of your units, and it gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 3513
+{
+global.CardName[CardStat] = 'Stealth Beast, Aramatatabi'
+global.CardText[CardStat] = 'Nubatama/High Beast
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose up to one of your vanguards that is being attacked, and that unit cannot be hit until end of that battle.
+
+AUTO [RC]: Afterimage.
+
+AUTO [RC] Generation Break 1: [Soul Blast 1] When this unit boosts, if you have a card named "Stealth Beast, Aramatatabi" in your drop zone, you may pay the cost. If you do, your opponent chooses a card from his or her bind zone, and puts it into his or her drop zone.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 3514
+{
+global.CardName[CardStat] = 'Stealth Rogue of Veils, Kurenai'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+CONT: Sentinel
+
+AUTO: When this unit is placed on GC from hand, COST [discard a card from hand], choose one of your vanguards being attacked, and it cannot be hit until end of that battle. If your drop has a "Stealth Rogue of Veils, Kurenai", Counter Charge 1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 3515
+{
+global.CardName[CardStat] = 'Rikudo Stealth Rogue, Atagolord'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO [VC] Generation Break 2: [Counter Blast 1 & Choose a face down card named "Rikudo Stealth Rogue, Atagolord" from your G zone, and turn it face up] When this unit attacks a vanguard, you may pay the cost. If you do, your opponent chooses a card from his or her hand, and binds it face down. Then, if the number of cards in your opponent’s hand is three or less, this unit gets critical +1 until end of that battle. At the end of that turn, your opponent puts the card that was bound with this effect into his or her hand.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 3516
+{
+global.CardName[CardStat] = 'Stealth Rogue of Night Fog, Miyabi'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC] Generation Break 1: [Counter Blast 1] When this unit attacks a vanguard, if this unit is boosted, you may pay the cost. If you do, this unit gets power +3000 until end of that battle. Then, if the number of cards in your hand is less than your opponent’s, choose a card at random from your opponent’s hand, bind it face down, and at the end of that turn, your opponent puts the card bound with this effect into his or her hand.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 3517
+{
+global.CardName[CardStat] = 'Stealth Beast, Hagurejishi'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC]: Afterimage (When your opponent puts a bound card into his or her hand, if your hand has six or less cards, you may return this unit to your hand.)
+
+AUTO [VC/RC] Generation Break 1: When your other unit with the afterimage ability is placed on RC, this unit gets power +4000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 3518
+{
+global.CardName[CardStat] = 'Stealth Beast, Kibamaru'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC] Generation Break 1: When this unit attacks a vanguard, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 3519
+{
+global.CardName[CardStat] = 'Stealth Beast, Karasudoji'
+global.CardText[CardStat] = 'Nubatama/High Beast
+
+AUTO: Forerunner.
+
+ACT [RC]: [Counter Blast 1 & Put this unit into your soul] Look at up to five cards from the top of your deck, search for up to one grade 3 or greater card from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 3521
+{
+global.CardName[CardStat] = 'Stealth Fiend, Warashibehime'
+global.CardText[CardStat] = 'Nubatama/Ghost/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 3522
+{
+global.CardName[CardStat] = 'Living Method Stealth Rogue, Shigure'
+global.CardText[CardStat] = 'Nubatama/Demon/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 3523
+{
+global.CardName[CardStat] = 'Stealth Dragon, Kegareshinmyo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: Afterimage (When your opponent puts a bound card into his or her hand, if your hand has six or less cards, you may return this unit to your hand.)
+
+AUTO Generation Break 1: When this unit is placed on RC, choose up to one of your other units, and it gets power +3000 until end of turn.
+
+AUTO: [Counter Blast 1 & Soul Blast 1] When this unit is placed on VC, you may pay the cost. If you do, look at the five cards from the top of your deck, search for up to one card with the afterimage ability from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 3524
+{
+global.CardName[CardStat] = 'Stealth Rogue of the Wintry Wind, Kamojigusa'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO: Forerunner.
+
+AUTO [RC]: Afterimage (When your opponent puts a bound card into his or her hand, if your hand has six or less cards, you may return this unit to your hand.)
+
+AUTO Generation Break 1: When this unit is placed on RC, you may play "Your opponent chooses a card from his or her bind zone, put it into his or her drop zone. If a card was put, you Counter Charge 1.".'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 3520
+{
+global.CardName[CardStat] = 'Killing Method Stealth Rogue, Samidare'
+global.CardText[CardStat] = 'Nubatama/Demon/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 3563
+{
+global.CardName[CardStat] = 'Stealth Rogue of Running Off, Ichinose'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): When this unit boosts a vanguard, the boosted unit gets power +4000 until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 3699
+{
+global.CardName[CardStat] = 'Rikudo Stealth Dragon, Gounrakan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride [Choose one or more cards with the sum of their grades being 3 or greater from your hand, and discard them] Stride this card on your VC from face down.
+
+AUTO: When this unit is placed on VC, your opponent chooses two of his or her rear-guards, and binds all of his or her other rear-guards face up. If three or more units were bound, your opponent chooses two cards from his or her bind zone, and puts them into his or her drop zone. At the end of that turn, your opponent put the cards bound with this effect into his or her hand.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 3742
+{
+global.CardName[CardStat] = 'Jinx Stealth Hermit, Abudataishi'
+global.CardText[CardStat] = 'Nubatama/Human
+
+G guardian [Choose a "HEAL" from your hand, and discard it] Call this card to your GC from face down.
+
+AUTO: When this unit is placed on GC, if the number of cards in your opponent’s hand is six or less, this unit gets shield +5000 until end of that battle.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 4734
+{
+global.CardName[CardStat] = 'Lucky Smile, Zashikihime'
+global.CardText[CardStat] = 'Nubatama/Ghost/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)
+
+AUTO: [Choose a grade 1 or less card from your hand, and discard it] When this card is discarded from your hand for a cost to call "Jinx Stealth Fiend, Zashikihime" from your G zone, you may pay the cost. If you do, draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 4735
+{
+global.CardName[CardStat] = 'Jinx Stealth Fiend, Zashikihime'
+global.CardText[CardStat] = 'Nubatama/Ghost
+
+G guardian.
+
+AUTO Generation Break 1: When placed on GC, COST [Choose a face down G guardian from your G zone, and turn it face up], your opponent chooses a card from his or her hand, and he or she may discard it. If he or she did not discard it, this unit gets shield +20000 until end of that battle.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 4784
+{
+global.CardName[CardStat] = 'Rikudo Stealth Dragon, Rokushikirakan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride.
+
+AUTO [VC] Generation Break 8: When your opponent’s unit is placed on GC from hand, you may pay Counter Blast 1 or Soul Blast 1. If you do, your opponent chooses two cards from his or her hand, and discards them.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4787
+{
+global.CardName[CardStat] = 'Hardworking Stealth Rogue, Torasada'
+global.CardText[CardStat] = 'Nubatama/Demon/Critical Trigger
+
+ACT [RC]: [Put this unit into your soul] Counter Charge 1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 4801
+{
+global.CardName[CardStat] = 'Isolation Stealth Rogue, Matsuba'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC, you may pay the cost. If you do, choose one of your units that is being attacked, and that unit cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 4802
+{
+global.CardName[CardStat] = 'Secret Message Stealth Hermit, Abudataishi'
+global.CardText[CardStat] = 'Nubatama/Human
+
+G guardian.
+
+AUTO: When this unit is placed on GC, if the number of cards in your hand is less than your opponent’s, this unit gets shield +5000 until end of that battle.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+global.DefensePowerStat[CardStat] = 15000
+
+
+CardStat = 4827
+{
+global.CardName[CardStat] = 'Demon Stealth Dragon, Shiranui "Oboro"'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+(PREMIUM EN: You can only run this card if you do not have D Stealth Dragon, Seizui in your deck.)
+(STANDARD JP & EN: You can only run this card if you do not have Dragon Deity King of Resurgence, Dragveda in your deck.)
+
+AUTO [VC]: At the beginning of your ride phase, choose up to one card from your opponent’s drop, your opponent calls that card to RC, and at the end of that turn, retires that unit.
+
+Dominate - AUTO [VC]: When your G unit Stride, choose up to one of your opponent’s rear-guards, stand and dominate it, until end of turn, that unit gets power +4000, and attacks your opponent’s other unit.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+global.DCards[CardStat] = 1
+}
+global.PowerStat[CardStat] = 11000
+global.CardLimidet[CardStat] = 1
+
+
+CardStat = 4828
+{
+global.CardName[CardStat] = 'Enma Stealth Dragon, Kingoku Tenbu'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride.
+
+Domination - AUTO [VC]: At the beginning of your battle phase, choose up to one of your opponent’s rear-guards, stand and dominate it, and attack your opponent’s other unit.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4829
+{
+global.CardName[CardStat] = 'Stealth Dragon, Madoi'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: Forerunner.
+
+AUTO [RC] Generation Break 1: [Put this unit into your soul] When a dominated unit attacks during your turn, you may pay the cost. If you do, draw a card, choose up to one of any rear-guards, and it gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4832
+{
+global.CardName[CardStat] = 'Enma Stealth Rogue, Mujinlord'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+Stride.
+
+Domination - ACT [VC] 1/Turn: [Counter Blast 1 & Choose a face down card from your G zone with the same card name as this unit, and turn it face up] Choose up to the same number of any rear-guards as the number of face up cards in your G zone, and they get power +4000 until end of turn. Dominate all of your opponent’s chosen units as stand, and each of those units attack your opponent’s vanguard. (You pay the cost to use its abilities as well.)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4833
+{
+global.CardName[CardStat] = 'Stealth Dragon, Tenrei'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+CONT [RC] Generation Break 1: During your turn, your vanguard with "Shiranui" in its card name gets all of your opponent’s vanguards card names, clans, races, and nations.
+
+AUTO [RC] Generation Break 1: [Put this unit into your soul] When an attack hits a vanguard during the battle that this unit attacked or boosted, you may pay the cost. If you do, your opponent chooses a card from his or her hand, and discards it.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 4834
+{
+global.CardName[CardStat] = 'Stealth Dragon, Fuurai'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [RC] 1/Turn Generation Break 1: [Soul Blast 1] Choose a card from your opponent’s drop zone, your opponent calls that card to his or her open RC, and at the end of that turn, retires that unit.
+
+AUTO [RC] Generation Break 1: When another unit attacks during your turn, if you have a vanguard with "Shiranui" in its card name, this unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4837
+{
+global.CardName[CardStat] = 'Stealth Fiend, Daruma Collapse'
+global.CardText[CardStat] = 'Nubatama/Ghost/Stand Trigger
+
+AUTO [RC] Generation Break 1: [Retire this unit] When any players’ unit stand due to the effect of a cards during your turn, you may pay the cost. If you do, choose any number of any players’ units in the same column as that unit, and they get power +2000 until end of turn. If you chose one or more units, draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 4838
+{
+global.CardName[CardStat] = 'Stealth Beast, Uzuitachi'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC] Generation Break 1: [Retire this unit] When a dominated units attack hits during your turn, you may pay the cost. If you do, your opponent chooses a card from his or her hand, and discards it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4844
+{
+global.CardName[CardStat] = 'Rikudo Stealth Dragon, Gehourakan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+G guardian.
+
+Domination - AUTO: [Counter Blast 1 & Soul Blast 1] When this unit is placed on GC, you may pay the cost. If you do, choose one of your opponent’s grade 1 rear-guards in the back row, dominate it, and move it to your GC. (It is regarded as your guardian during that battle.)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 4845
+{
+global.CardName[CardStat] = 'Stealth Dragon, Tengai'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: When a dominated unit attacks during your turn, until end of turn, this unit gets "AUTO [RC]: [Put this unit into your soul] At the end of your turn, you may pay the cost. If you do, Counter Charge 1.".'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 4850
+{
+global.CardName[CardStat] = 'Stealth Dragon, Utsuroi'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+CONT: Sentinel.
+
+AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose one of your units that is being attacked, and it cannot be hit until end of that battle.
+
+AUTO [Drop Zone]: [Choose one other "Stealth Dragon, Utsuroi" from your drop zone, and put it on the bottom of your deck] When a dominated unit’s attack hits a vanguard during your turn, you may pay the cost. If you do, return this card to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 4852
+{
+global.CardName[CardStat] = 'Stealth Dragon, Genkai'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC] Generation Break 1: [Counter Blast 1 & Soul Blast 1] When a dominated unit attacks during your turn, if you have a vanguard with "Shiranui" in its card name, you may pay the cost. If you do, draw a card, and this unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4855
+{
+global.CardName[CardStat] = 'Scattering Stealth Rogue, Tsuruchiyo'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO Generation Break 1: When this unit is placed on RC, choose up two of any fighter’s other units in the same column as this unit, and they get power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 4859
+{
+global.CardName[CardStat] = 'Enma Stealth Dragon, Maguntenbu'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride.
+
+Domination - ACT [VC] 1/Turn: [Counter Blast 1 & Choose a face down card from your G zone with the same card name as this unit, and turn it face up] Choose one of your opponent’s rear-guards, and it gets power +3000 for each face up card in your G zone until end of turn. Dominate that unit as stand, it attacks another of your opponent’s unit, and at the end of that battle, retire the dominated unit. (You pay the cost to use its abilities as well.)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4868
+{
+global.CardName[CardStat] = 'Remarkable Stealth Rogue, Morishige'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+ACT [VC/RC] 1/Turn Generation Break 1: [Choose another of your rear-guards, and rest it] Your opponent chooses one of his or her rear-guards, and it gets power +3000 until end of turn. If he or she does, this unit gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 4869
+{
+global.CardName[CardStat] = 'Demon Stealth Rogue, Genba'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+Domination - AUTO [VC] Generation Break 1: [Soul Blast 1] At the beginning of your battle phase, you may pay the cost. If you do, choose one of your opponent’s rear-guards in the front row, stand and dominate it, and attack your opponent’s other unit.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 4870
+{
+global.CardName[CardStat] = 'Demon Stealth Dragon, Jaken Myouou'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Domination - AUTO: When this unit is placed on VC during your turn, choose uo to one of your opponent’s rear-guards, stand and dominate it, and attack your opponent’s vanguard.
+
+AUTO [VC/RC] Generation Break 1: When any players’ other rear-guard attack a vanguard during your turn, this unit gets power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 4871
+{
+global.CardName[CardStat] = 'Stealth Rogue of Departed Soul, Toranaga'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+ACT [RC]: [Soul Blast 1] This unit gets power +1000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 4872
+{
+global.CardName[CardStat] = 'Stealth Dragon, Shibari Kusari'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 10000
+
+
+CardStat = 4873
+{
+global.CardName[CardStat] = 'Stealth Beast, Kabe Itachi'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO Generation Break 1: When this unit intercepts, this unit gets shield +10000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 4874
+{
+global.CardName[CardStat] = 'Stealth Dragon, Seizui'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC] Generation Break 1: When a dominated unit attacks during your turn, this unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 4875
+{
+global.CardName[CardStat] = 'Stealth Dragon, Gouka'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 4876
+{
+global.CardName[CardStat] = 'Stealth Dragon, Kokusha'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4877
+{
+global.CardName[CardStat] = 'Stealth Fiend, Kakuregama'
+global.CardText[CardStat] = 'Nubatama/Warbeast/Stand Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4878
+{
+global.CardName[CardStat] = 'Voracious Stealth Rogue, Kosode'
+global.CardText[CardStat] = 'Nubatama/Demon/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4879
+{
+global.CardName[CardStat] = 'Almsgiving Stealth Rogue, Jirokichi'
+global.CardText[CardStat] = 'Nubatama/Demon/Draw Trigger
+
+ACT [RC]: [Put this unit into your soul] Choose one of any player’s rear-guards, and it gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 4894
+{
+global.CardName[CardStat] = 'Aggressive Stealth Rogue, Cheenah'
+global.CardText[CardStat] = 'Nubatama/Demon/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 4896
+{
+global.CardName[CardStat] = 'Demon Stealth Rogue, Kassen Myouou'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Domination - AUTO [VC] Generation Break 1: At the beginning of your battle phase, choose all of your opponent’s rear-guards in the front row, dominate them as stand, and they attack your opponent’s rear-guards in the back row. (You pay the cost to use its abilities as well.)
+
+AUTO: [Counter Blast 1 & Soul Blast 1] When this unit is placed on VC, you may pay the cost. If you do, look at the top five cards of your deck, search for up to one card with domination ability from among them, put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 11000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 4909
+{
+global.CardName[CardStat] = 'Rikudou Stealth Rogue, Kurehalord'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+Stride.
+
+AUTO [VC]: When this unit attacks a vanguard, if the number of cards in your hand is less than your opponent’s, your opponent chooses a card from his or her hand, and binds it face down. At the end of that turn, your opponent returns the card bound by this effect into his or her hand.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 4956
+{
+global.CardName[CardStat] = 'Stealth Beast, Higanguma'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO: When this unit is retired from RC during your opponent’s turn, if the number of cards in your opponent’s hand is four or more, your opponent chooses a card from his or her hand, and discards it.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5000
+{
+global.CardName[CardStat] = 'Stealth Dragon, Houjin'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO Generation Break 1: When this unit is placed on RC, your opponent chooses a card from his or her bind zone, and puts it into his or her drop zone. If there is a card in your opponent’s bind zone, this unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5009
+{
+global.CardName[CardStat] = 'Stealth Rogue of Detonation, Teruyoshi'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: Afterimage.
+
+AUTO Generation Break 1: When this unit is placed on RC, if the number of cards in your opponent’s hand is five or less, you Soul Charge 1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5010
+{
+global.CardName[CardStat] = 'Stealth Rogue of Repudiation, Yorihira'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: Afterimage.
+
+CONT [RC] Generation Break 1: During your turn, if the number of cards in your opponent’s bind zone is two or more, this unit gets power +5000.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5016
+{
+global.CardName[CardStat] = 'Stealth Dragon, Ungai'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: [Choose a card from your hand, and discard it] When a dominated unit attacks during your turn, you may pay the cost. If you do, draw a card, this unit loses this ability until end of turn.
+
+AUTO Generation Break 1: When this unit is placed on RC, choose up to two of your rear-guards and up to one of your opponent’s units. Until end of turn, increase or decrease the power of those units until it becomes 11000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5027
+{
+global.CardName[CardStat] = 'Evil-eye Hades Emperor, Shiranui "Mukuro"'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride.
+
+Dominate - ACT [VC] 1/Turn Generation Break 2: COST [Soul Blast 2 & Choose a face down card from your G zone, turn it face up & Choose a card from your hand, and discard it], stand and dominate all of your opponent’s vanguards, and attack. For that battle, that vanguard battles all of your opponent’s rear-guards.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5028
+{
+global.CardName[CardStat] = 'Stealth Beast, Tamahagane "Metsu"'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO: When this unit is placed on VC or RC, bind up to one card from the top of your deck face down. (Only the owner of the face down bound cards may look at them.)
+
+AUTO [RC] 1/Turn Generation Break 1: [Counter Blast 1] When adominatedunit attacks during your turn, you may pay the cost. If you do, choose a face down card from your bind zone, and you may put it into your hand. If you do, this unit gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5029
+{
+global.CardName[CardStat] = 'Stealth Beast, Meimoudanuki'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO: When this unit is placed on VC or RC, bind up to two cards from the top of your deck face down. (Only the owner of the face down bound cards may look at them.)
+
+AUTO [RC] 1/Turn Generation Break 1: When a dominated unit attacks during your turn, choose a face down card from your bind zone, and you may put it into your soul. If you do, this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5051
+{
+global.CardName[CardStat] = 'Stealth Beast, Gekisou Ookami'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC]: Afterimage.
+
+ACT [RC] Generation Break 1: [Rest this unit] Choose one of your units, until end of turn, it gets power +2000, choose one of your opponent’s rear-guards, bind it face up, and at the end of that turn, your opponent puts that card bound by this effect into his or her hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5063
+{
+global.CardName[CardStat] = 'Fast Speed Stealth Rogue, Genzou'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: Afterimage.
+
+AUTO Generation Break 1: When this unit is placed on RC, choose one of your other rear-guards, and it gets power +2000 for each card in your opponent’s bind zone until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5085
+{
+global.CardName[CardStat] = 'Stealth Beast, Kazemomo'
+global.CardText[CardStat] = 'Nubatama/High Beast
+
+AUTO: Forerunner.
+
+AUTO [RC]: Afterimage.
+
+ACT [RC] Generation Break 1: [Rest this unit] Choose one of your opponent’s rear-guards, bind it face up, and at the end of that turn, your opponent puts that card into his or her hand.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5417
+{
+global.CardName[CardStat] = 'Stealth Beast, Musou Byakko'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO: [Counter Blast 1 & Soul Blast 1] When this unit is placed on VC or RC, you may pay the cost. If you do, look at seven cards from the top of your deck, reveal up to one card with the dominate ability from among them, put it into your hand, and shuffle your deck.
+
+AUTO [RC] Generation Break 1: When this unit attacks a vanguard, if the number of cards in your hand is greater than your opponent’s, this unit gets power +3000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5466
+{
+global.CardName[CardStat] = 'Stealth Dragon, Enbai'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC] Generation Break 1: When another dominated unit attacks during your turn, this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5496
+{
+global.CardName[CardStat] = 'Rikudo Stealth Dragon, Gandokurakan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+G guardian.
+
+AUTO: When this unit is placed on GC, if the number of cards in your opponent’s hand is three or more, until end of that battle, this unit gets shield +5000, then, if it is six or more, this unit gets shield +10000.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 5497
+{
+global.CardName[CardStat] = 'Stealth Beast, Mistfrog'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC] Generation Break 1: [Put this unit into your soul] When another dominated unit attacks during your turn, you may pay the cost. If you do, draw a card, and that unit gets power +6000 until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+
+
+CardStat = 5577
+{
+global.CardName[CardStat] = 'Blazing Demon Stealth Dragon, Shiranui "Zanki"'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Dominate - AUTO [VC]: During your turn, when this unit is placed on VC, or when your G unit Stride, choose up to one of any player’s rear-guards, and it gets power +2000 until end of turn. If that unit is your opponent’s rear-guard, stand and dominate it, and attack your opponent’s other unit. (You may use its abilities if you pay the cost.)
+
+AUTO [VC]: [Soul Blast 1] At the beginning of your ride phase, you may pay the cost. If you do, draw a card, all players choose a card from their hand, and call it to RC. Your opponent cannot activate the AUTO abilities of the card called with this effect until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5578
+{
+global.CardName[CardStat] = 'Stealth Dragon, Burai'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: Forerunner.
+
+AUTO [RC]: [Put this unit into your soul] When your vanguard with the dominate ability is placed on VC, you may pay the cost. If you do, draw a card, choose a card from your opponent’s drop zone, your opponent calls that card to RC, and at the end of that turn, retire that unit.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 5584
+{
+global.CardName[CardStat] = 'Evil-eye Vidya Emperor, Shiranui "Rinne"'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride.
+
+Dominate - ACT [VC] 1/Turn: [Counter Blast 1 & Choose a face down card from your G zone with the same card name as this unit, and turn it face up] Your opponent chooses two cards from his or her hand, calls them to separate RC, and they get power +5000 until end of turn. Dominate them, and attack your opponent’s vanguard one at a time. Your opponent cannot activate the AUTO abilities of cards called due to this effect until end of turn.
+
+CONT [VC] Generation Break 3: All dominated units get power +10000 / critical +1.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 5585
+{
+global.CardName[CardStat] = 'Stealth Rogue of Liquidation, Sadatsugu'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: When this unit attacks a vanguard, if you have a vanguard with "Shiranui" in its card name, this unit gets power +2000 until end of that battle.
+
+AUTO [RC] Generation Break 1: [Counter Blast 1] At the end of the battle that your other rear-guard attacked a vanguard, you may pay the cost. If you do, retire the unit that attacked, draw a card, and this unit loses this ability until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 5594
+{
+global.CardName[CardStat] = 'Stealth Fiend, Quesera Basara'
+global.CardText[CardStat] = 'Nubatama/Ghost/Heal Trigger
+
+AUTO: [Bind this card face up & Choose another card with "Heal" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 5595
+{
+global.CardName[CardStat] = 'Spirit-calling Stealth Master, Suzu'
+global.CardText[CardStat] = 'Nubatama/Human
+
+AUTO [RC] Generation Break 1: When a dominated units attack hits during your turn, this unit gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 11000
+
+
+CardStat = 5596
+{
+global.CardName[CardStat] = 'Stealth Dragon, Bakuren'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO Generation Break 1: When this unit is placed on RC from hand, if your opponent does not have any cards in his or her bind zone, your opponent chooses a card from his or her hand, binds it face down, and at the end of that turn, your opponent puts the card bound by this effect into his or her hand.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 5597
+{
+global.CardName[CardStat] = 'Stealth Rogue of Vista, Ayagiri'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC] Generation Break 1: When your other dominated unit attacks during your turn, this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5598
+{
+global.CardName[CardStat] = 'Stealth Dragon, Ouzai'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: [Soul Blast 1] When your other dominated unit attacks a vanguard, you may pay the cost. If you do, until end of that battle, that unit gets power +3000. If you have a grade 4 vanguard, this unit gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 5599
+{
+global.CardName[CardStat] = 'Stealth Fiend, Kageusa'
+global.CardText[CardStat] = 'Nubatama/Ghost/Stand Trigger
+
+ACT [RC]: [Bind this unit face down] Choose up to two of any fighter’s rear-guards, and they get power +2000 until end of turn.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 3
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 6165
+{
+global.CardName[CardStat] = 'Demon Stealth Beast of Reckless Hunger, Mousu'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+G guardian.
+
+AUTO: When this unit is placed on GC, if your hand has two or less cards, this unit gets shield +15000 until end of that battle.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+}
+global.ExtraDeck[CardStat] = 1
+global.PowerStat[CardStat] = 0
+
+
+CardStat = 6305
+{
+global.CardName[CardStat] = 'Covert Demonic Dragon, Magatsu Storm '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [VC]: When it is attacked by your opponent’s vanguard, COST [Counter Blast 1 & retire two rear-guards], and this unit cannot be hit until end of that battle.
+
+AUTO [VC] 1/Turn: When your rear-guard is returned to your hand during your turn, COST [Soul Blast 1 grade 3], draw a card, call three cards from your hand to RC, and they get power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6306
+{
+global.CardName[CardStat] = 'Stealth Dragon, Magatsu Breath '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: When placed, if you have a vanguard with "Magatsu" in its card name, this unit gets power +3000 until end of turn.
+
+AUTO [RC]: At the end of the battle that it attacked or boosted, COST [Soul Blast 1 & discard a card from your hand], and return all of your rear-guards in the same column as this unit to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6325
+{
+global.CardName[CardStat] = 'Stealth Dragon, Dan Breach'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+CONT [RC]: If a rear-guard was returned to your hand during this turn, this unit gets power +6000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6330
+{
+global.CardName[CardStat] = 'Stealth Fiend, Zashikihime '
+global.CardText[CardStat] = 'Nubatama/Ghost/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6331
+{
+global.CardName[CardStat] = 'Stealth Dragon, Magatsu Wind '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+global.QuickShieldAdd[CardStat] = 1
+
+
+CardStat = 6338
+{
+global.CardName[CardStat] = 'Stealth Fiend, Oboro Cart '
+global.CardText[CardStat] = 'Nubatama/Ghost
+
+AUTO [RC]: When placed, COST [discard a card from your hand], and double the power of one of your grade 3 or greater units in the same column as this unit until end of turn. (Increase by its power when chosen.)
+
+AUTO [RC]: At the end of the battle that it attacked or boosted, COST [Counter Blast 1], and return this unit to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6340
+{
+global.CardName[CardStat] = 'Stealth Beast, Mijingakure '
+global.CardText[CardStat] = 'Nubatama/Warbeast/Draw Trigger
+
+CONT: Sentinel.
+
+AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6344
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Kujikiricongo '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [VC] 1/Turn: If your opponent’s hand has four or more cards, COST [Counter Blast 1], your opponent chooses a card from his or her hand, and discards it.
+
+AUTO [VC]: When your opponent’s rear-guard is returned to the hand due to your card’s ability, your opponent cannot call cards with the same grade as the returned cards grade until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6345
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Kabukicongo '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: When placed, if your vanguard is "Shura Stealth Dragon, Kujikiricongo", this unit gets power +3000 until end of turn. Then, COST [Counter Blast 2], return all of your opponent’s rear-guards in the same column as this unit to the hand, your opponent chooses the same number of cards from his or her hand as the number of returned cards, and discards them.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6346
+{
+global.CardName[CardStat] = 'Stealth Dragon, Dreadmaster '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [VC/RC]: When placed, COST [discard a card from your hand], and draw a card. If your vanguard is "Shura Stealth Dragon, Kujikiricongo", then, COST [Soul Blast 1], your opponent chooses one of his or her rear-guards, returns it to the hand, chooses a card from his or her hand, and discards it.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6353
+{
+global.CardName[CardStat] = 'Stealth Rogue of a Thousand Blades, Oborozakura '
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: When placed, if you have three or more units, COST [Counter Blast 1], this unit gets power +6000 until end of turn, and if you have one or less face up cards in your damage zone, Soul Charge 1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6354
+{
+global.CardName[CardStat] = 'Stealth Rogue of the Night, Sakurafubuki '
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: When placed, if you have three or more units, COST [discard a card from your hand], this unit gets power +3000 until end of turn, if you have one or less face up cards in your damage zone, draw a card, and Counter Charge 1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6362
+{
+global.CardName[CardStat] = 'Stealth Dragon, Magatsu Gale '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [VC/RC]: When placed, COST [Counter Blast 1 & Soul Blast 1], draw a card, and this unit gets power +6000 until end of turn.
+
+AUTO [RC]: At the end of the battle it attacked, COST [put this unit into your soul], and return one of your rear-guards to your hand.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6363
+{
+global.CardName[CardStat] = 'Stealth Beast, Kokushigarasu'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+(PREMIUM JP & EN & TH: Banned.)
+(V PREMIUM JP & EN: Banned.)
+
+ACT [VC/RC]: COST [Soul Blast 3 & discard two sentinels from your hand], this unit gets power +15000 until end of turn, if your opponent’s vanguard is grade 3 or greater, return all of your opponent’s rear-guards to the hand, if you returned one or more, your opponent chooses five cards from his or her hand, and discards them.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 11000
+global.CardBanned[CardStat] = 1
+
+
+CardStat = 6367
+{
+global.CardName[CardStat] = 'Stealth Dragon, Voidmaster '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [VC/RC]: When placed, until end of turn, your opponent cannot intercept, and this unit gets power +3000.
+
+AUTO [VC/RC]: At the end of the battle it attacked, COST [Counter Blast 1], choose one of your or your opponent’s rear-guards, and return it to the hand.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6368
+{
+global.CardName[CardStat] = 'Stealth Beast, Chigasumi '
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC]: When it attacks, COST [discard a card from your hand], and this unit gets power +15000 until end of that battle.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6369
+{
+global.CardName[CardStat] = 'Momentary Stealth Rogue, Tsunamasa'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: When placed, one of your units gets power +3000 until end of turn. If that unit is grade 3, Soul Charge 1.
+
+AUTO [RC]: At the end of the battle it attacked, COST [Soul Blast 1], and return this unit to your hand.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6370
+{
+global.CardName[CardStat] = 'Stealth Beast, Hagakure '
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC/GC]: When placed, choose one of your units, and until end of turn, increase or decrease the power and the shield of this unit to the same number as that unit. (Increase or decrease when it is chosen.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 6371
+{
+global.CardName[CardStat] = 'Stealth Dragon, Kurogane '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6372
+{
+global.CardName[CardStat] = 'Stealth Beast, Tobihiko '
+global.CardText[CardStat] = 'Nubatama/Warbeast/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6379
+{
+global.CardName[CardStat] = 'Tempest Stealth Rogue, Fuuki '
+global.CardText[CardStat] = 'Nubatama/Demon
+
+CONT [RC]: If your or your opponent’s rear-guard was returned to a hand during this turn, this unit gets power +6000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6381
+{
+global.CardName[CardStat] = 'Stealth Beast, Etekon'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+CONT: Sentinel.
+
+AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6382
+{
+global.CardName[CardStat] = 'Stealth Rogue of Intimidation, Kirihage'
+global.CardText[CardStat] = 'Nubatama/Demon'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6383
+{
+global.CardName[CardStat] = 'Stealth Fiend, Ohtsuzura '
+global.CardText[CardStat] = 'Nubatama/Warbeast/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 6401
+{
+global.CardName[CardStat] = 'Stealth Dragon, Togajuji'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: When your grade 3 unit attacks, COST [Counter Blast 1 & retire this unit], and your opponent cannot call sentinels from his or her hand until end of that battle.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6541
+{
+global.CardName[CardStat] = 'Stealth Fiend, Kurobane Tengu'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC]: When placed, COST [Soul Blast 1], your opponent chooses a trigger unit from his or her hand, and he or she may discard it. If he or she did not discard, you draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6713
+{
+global.CardName[CardStat] = 'Enma Stealth King, Mujinlord "Dagoku"'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+Stride.
+
+Dominate - ACT [VC] 1/Turn: COST [Counter Blast 1 & turn a card from your G zone face up], your opponent chooses two face up G units with power from his or her G zone, and calls them to RC. Your opponent cannot use their AUTO abilities. Dominate them, and attack your opponent’s vanguard one at a time. During that battle, their AUTO abilities can be used as if they were on VC. (At the end of the turn, return them to the G zone.)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 6730
+{
+global.CardName[CardStat] = 'Stealth Dragon, Yamisaki'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon/Critical Trigger
+
+AUTO [RC] Generation Break 1: When your vanguard attacks, COST [put this unit into your soul], draw a card, and one of your vanguards gets power +10000 until end of that battle.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+
+
+CardStat = 6822
+{
+global.CardName[CardStat] = 'Stealth Dragon, Antenbrand'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [RC] 1/Turn: COST [Rest this unit], your opponent chooses one of his or her rear-guards in the same column as this unit, and returns it to the hand. If he or she returned, stand this unit, and it gets power +3000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6838
+{
+global.CardName[CardStat] = 'Stealth Dragon, Kokujyo '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC/GC]: When placed from hand, if there are no face up cards in your damage zone, Counter Charge 1.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 6839
+{
+global.CardName[CardStat] = 'Stealth Fiend, Tsumujibashou'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+ACT [RC] 1/Turn: COST [Soul Blast 1], your opponent chooses a card from his or her hand, discards it, and this unit gets power +10000 until end of turn for each grade of that card. Your opponent reveals the top card of his or her deck and puts it into his or her hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 6844
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Tendocongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: When it is retired from RC in the front row during your opponent’s turn, you may draw a card.
+
+AUTO: When rode upon, if there are four or less cards in your opponent’s hand, you may call this card to RC.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6845
+{
+global.CardName[CardStat] = 'Stealth Rogue of Proscription, Mizukaze'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+(PREMIUM EN: Banned.)
+
+AUTO [RC]: When placed, COST [Soul Blast 1 grade 3], and until end of turn, your opponent cannot call cards from his or her hand to GC with the same grade that he or she called during this turn. (Cards can be called at the same time. If one is called, no more cards can be called.)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 12000
+global.CardBanned[CardStat] = 1
+
+
+CardStat = 6853
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Jamyocongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+(PREMIUM JP & EN & TH: Banned.)
+
+AUTO [VC]: When placed and at the end of each turn, your opponent chooses six cards from his or her hand, and discards the rest from hand. If your soul has a grade 3, he or she chooses four cards instead of six.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.CardBanned[CardStat] = 1
+
+
+CardStat = 6854
+{
+global.CardName[CardStat] = 'Stealth Rogue of Reckless Action, Suou'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: When placed, if your vanguard is "Shura Stealth Dragon, Jamyocongo", until end of turn, this unit gets power +5000, and when your opponent would call cards from his or her hand to GC for the battles that this unit attacked, he or she must call two or more at the same time.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6869
+{
+global.CardName[CardStat] = 'Stealth Beast, Tamahagane '
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC]: When placed, COST [Soul Blast 1], choose one of your opponent’s rear-guards, and return it to the hand. If you returned, your opponent chooses a card from his or her hand, and discards it.
+
+CONT [RC]: If your opponent’s hand has four or less cards, this unit gets power +5000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6871
+{
+global.CardName[CardStat] = 'Stealth Dragon, Daidoku'
+global.CardText[CardStat] = 'Nubatama/Winged Dragon
+
+AUTO: When it is retired from RC during your opponent’s turn, you may draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 6882
+{
+global.CardName[CardStat] = 'Stealth Beast, Muhogaro'
+global.CardText[CardStat] = 'Nubatama/Warbeast'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 6883
+{
+global.CardName[CardStat] = 'Stealth Beast, Arakuregitsune'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+(The original critical of this unit is 2.)'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 3000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7033
+{
+global.CardName[CardStat] = 'Stealth Beast, Konjikitenko'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC]: When the attack it boosted hits a vanguard, COST [Counter Blast 1], and return this unit to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7051
+{
+global.CardName[CardStat] = 'Stealth Beast, Moukagitsune'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC]: At the end of the battle it boosted a grade 3 rear-guard, return the boosted rear-guard to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7052
+{
+global.CardName[CardStat] = 'Stealth Rogue of Grudgeful Gaze, Daimaru'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: When placed, if you have five rear-guards, this unit gets power +15000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 7053
+{
+global.CardName[CardStat] = 'Evil Cenobite, Gamigyobu'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+ACT [RC]: COST [Soul Blast 1 & return this unit to your hand], and call an Evil Decoy Token to RC. (Evil Decoy Tokens are grade 0 / shield 5000 and have intercept.)
+
+AUTO [RC]: When it is attacked, you may change the attack target to one of your Evil Decoy Tokens on RC. If you do, return this unit to your hand.
+
+(SHIFT + left click to call Evil Decoy Token.)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.TokenSummoner[CardStat] = 7069
+global.TokenSummonerPosition[CardStat] = 'SHIFT'
+
+
+CardStat = 7076
+{
+global.CardName[CardStat] = 'Evil Stealth Dragon Akatsuki, Hanzo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [VC] 1/Turn: COST [Retire two grade 0 rear-guards], until end of turn, this unit gets power +20000, choose any number from all rear-guards, and return them to hand. If your opponent’s vanguard is grade 3 or greater, your opponent chooses cards from their hand equal to the number of cards returned to their hand by this effect, and discards them.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 7077
+{
+global.CardName[CardStat] = 'Stealth Fiend, Tataribue'
+global.CardText[CardStat] = 'Nubatama/Ghost
+
+AUTO [VC]: When its attack hits a vanguard, draw a card.
+
+CONT [RC]: During your turn, if you have a grade 0 rear-guard, this unit gets power +5000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7078
+{
+global.CardName[CardStat] = 'Evil Stealth Dragon, Kurogiri'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [RC]: COST [Soul Blast 2 & Return this unit to your hand], and call up to two evil decoy tokens to RC. (Evil decoys are grade 0 / shield 5000 and have intercept.)
+
+(SHIFT + left click to call Evil Decoy Tokens.)'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.TokenSummoner[CardStat] = 7069
+global.TokenSummonerPosition[CardStat] = 'SHIFT'
+
+
+CardStat = 7094
+{
+global.CardName[CardStat] = 'Stealth Dragon, Mugen Oboro'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: When placed, COST [Soul Blast 1 & call a grade 0 card from your hand to RC], and draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 7105
+{
+global.CardName[CardStat] = 'Stealth Rogue of Gold Hooks, Aogita'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: When it attacks or boosts, if your opponent has one or less rear-guards, put a grade 2 or less from your drop zone into your soul.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7106
+{
+global.CardName[CardStat] = 'Stealth Fiend, Goinohi'
+global.CardText[CardStat] = 'Nubatama/Ghost
+
+AUTO [RC]: At the end of the battle it attacked, COST [Counter Blast 2 & return this unit to your hand], call up to one "Stealth Fiend, Goinohi" from your hand to RC, and that unit gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 7107
+{
+global.CardName[CardStat] = 'Hoodlum Stealth Rogue, Tagamaru'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [VC/RC] 1/Turn: When any rear-guard is returned to hand during your turn, you may have this unit get power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 7108
+{
+global.CardName[CardStat] = 'Evil Stealth Dragon, Zangetsu'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [VC/RC]: COST [Counter Blast 1], call an evil decoy token to RC, and until end of turn, all of your tokens get "Boost", and power +5000. (Evil decoys are grade 0 / shield 5000 and have intercept.)
+
+AUTO [RC]: When it is attacked, you may change the attack target to one of your tokens on RC. If you do, return this unit to your hand.
+
+(SHIFT + left click to call Evil Decoy Token.)'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.TokenSummoner[CardStat] = 7069
+global.TokenSummonerPosition[CardStat] = 'SHIFT'
+
+
+CardStat = 7113
+{
+global.CardName[CardStat] = 'Stealth Fiend, Dododome'
+global.CardText[CardStat] = 'Nubatama/Ghost
+
+AUTO [RC]: When placed, COST [discard a card from your hand], draw a card, COST [retire a grade 0 card], and this unit gets power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7114
+{
+global.CardName[CardStat] = 'Stealth Rogue of Barbarity, Akurao'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: When placed, COST [retire two grade 0], draw a card, until end of turn, this unit can attack a vanguard from the back row, and it gets power +15000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.CanAttackFromBackRow[CardStat] = 1
+
+
+CardStat = 7115
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Fuzencongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [VC/RC]: When it attacks, if your damage zone has five cards, COST [Soul Blast 1 grade 3], bind any number of cards from the drop zone, until end of that battle, this unit gets power +5000 for each card in your bind zone, and your opponent cannot call sentinels from his or her hand.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+
+
+CardStat = 7116
+{
+global.CardName[CardStat] = 'Stealth Dragon, Ganbaku'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon/Critical Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+
+
+CardStat = 7117
+{
+global.CardName[CardStat] = 'Evil Stealth Dragon, Ushimitsumaru'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+global.QuickShieldAdd[CardStat] = 1
+
+
+CardStat = 7118
+{
+global.CardName[CardStat] = 'Stealth Fiend, Yukiouji'
+global.CardText[CardStat] = 'Nubatama/Ghost'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 7119
+{
+global.CardName[CardStat] = 'Stealth Dragon, Gouten'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+CONT [RC]: If you called a grade 0 this turn, this unit gets power +3000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+
+
+CardStat = 7120
+{
+global.CardName[CardStat] = 'Stealth Beast, Hametsukiba'
+global.CardText[CardStat] = 'Nubatama/High Beast
+
+CONT [RC]: If your opponent has one or less rear-guards, this unit gets power +15000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 7121
+{
+global.CardName[CardStat] = 'Stealth Fiend, Sunabenten'
+global.CardText[CardStat] = 'Nubatama/Ghost
+
+CONT: Sentinel.
+
+AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.
+
+AUTO [VC]: When placed, draw a card, and discard a card from your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 7000
+
+
+CardStat = 7144
+{
+global.CardName[CardStat] = 'Stealth Dragon, Jaenjin'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: When it attacks a vanguard, if you called two or more grade 0 this turn, this unit gets power +5000 until end of that battle. At the end of that battle, [put this unit into your soul], and Counter Charge 1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+
+
+CardStat = 7532
+{
+global.CardName[CardStat] = 'Rikudo Demonic Dragon, Jakumesso'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride.
+
+AUTO [VC]: When it attacks, COST [retire two grade 0 cards & turn a card from your G zone face up], draw two cards, return all of your rear-guards to your hand, and call up to two cards from your hand to RC. If you called two cards, this unit gets power +10000 / critical +1 until end of turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 7533
+{
+global.CardName[CardStat] = 'Stealth Dragon, Eizan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon/Critical Trigger
+
+CONT [Hand]: While paying the cost for Stride, this card may be discarded as a grade 3.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+global.NewTriggerStat[CardStat] = 1
+
+
+CardStat = 7899
+{
+global.CardName[CardStat] = 'Stealth Rogue of Ophiomancy, Ujihime'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: When placed, one of your units gets power +5000 until end of turn.
+
+AUTO: When rode upon, you may call this card to RC.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 7900
+{
+global.CardName[CardStat] = 'Stealth Beast, Gekihasai'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+CONT [RC]: This unit gets power +5000 for each of your token units.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7901
+{
+global.CardName[CardStat] = 'Stealth Dragon, Madoi '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 6000
+global.DefensePowerStat[CardStat] = 10000
+global.QuickShieldAdd[CardStat] = 1
+
+
+CardStat = 7922
+{
+global.CardName[CardStat] = 'Stealth Rogue of Truthfulness, Mafusa'
+global.CardText[CardStat] = 'Nubatama/Demon'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 7923
+{
+global.CardName[CardStat] = 'Stealth Beast, Katarigitsune '
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+CONT [RC]: During your turn, if you have a token unit, this unit gets power +5000.
+
+AUTO [VC/RC]: When placed from hand, look at five cards from the top of your deck, reveal up to one grade 3 from among them and put it into your hand, shuffle your deck, and if you put a card, discard a card from your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 7934
+{
+global.CardName[CardStat] = 'Stealth Dragon, Noroi '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon/Critical Trigger
+
+CONT: Sentinel.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 30000
+
+
+CardStat = 7935
+{
+global.CardName[CardStat] = 'Stealth Beast, Zokuhihi'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [VC]: When it attacks a vanguard, COST [Counter Blast 1], choose two each of your and your opponent’s rear-guards, and return them to the hand. If four or more cards were returned, your opponent chooses two cards from his or her hand, and discards them.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 7936
+{
+global.CardName[CardStat] = 'Stealth Beast, Ibudanuki'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC]: When the attack it boosted hits a vanguard, COST [Soul Blast 1], choose one of your opponent’s rear-guards, and return it to the hand. If a card was returned, your opponent chooses a card from his or her hand, and discards it.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 7937
+{
+global.CardName[CardStat] = 'Stealth Beast, Jagunrou'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO: When retired from RC during your opponent’s turn, search your deck for up to one "Stealth Beast, Jagunrou", reveal it and put it into your hand, and shuffle your deck.
+
+AUTO [Hand]: When your rear-guard is placed by your card’s ability, COST [Counter Blast 1], and call this card to RC.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 7941
+{
+global.CardName[CardStat] = 'Voracious Stealth Rogue, Kosode '
+global.CardText[CardStat] = 'Nubatama/Demon/Heal Trigger
+
+(You may only have up to four cards with "HEAL" in a deck.)'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 20000
+
+
+CardStat = 7942
+{
+global.CardName[CardStat] = 'Stealth Beast, Yamiyamaneko'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO: When discarded from hand during your turn, Soul Charge 1.
+
+CONT [RC]: During the battle it boosted, this unit gets power +3000.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 7943
+{
+global.CardName[CardStat] = 'Stealth Beast, Gyumadou'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+AUTO [RC]: When placed, COST [Counter Blast 1], your opponent chooses a card from his or her hand, and calls to RC. Your opponent’s AUTO abilities cannot activate by this call.
+
+AUTO [RC]: When it attacks, if your vanguard is grade 3, this unit gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7947
+{
+global.CardName[CardStat] = 'Demon Stealth Dragon, Shiranui "Oboro" '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+CONT [VC]: During your turn, if you have two or more cards in your soul with "Shiranui" in their card names, this unit gets power +15000, and you perform drive checks for the battles your Mask of Domination token attacked.
+
+ACT [VC] 1/Turn: COST [Counter Blast 1 & Discard a card from your hand], choose a unit card from your opponent’s RC or drop zone, and bind it. If you bound a card, call a Mask of Domination token to your back row center RC, and until end of turn, that token gets the original grade, power, critical, and abilities of the card bound by this effect, and can attack from your back row center RC. At the end of that turn, remove that token.
+
+(SHIFT + left click to call a token.)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+global.TokenSummoner[CardStat] = 7949
+global.TokenSummonerPosition[CardStat] = 'SHIFT'
+
+
+CardStat = 7948
+{
+global.CardName[CardStat] = 'Stealth Dragon, Shiranui '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [VC]: COST [Discard a card from your hand], search your deck for up to one "Demon Stealth Dragon, Shiranui "Oboro"", ride it as stand, and shuffle your deck.
+
+AUTO [RC]: When it attacks a vanguard, if you have a vanguard with "Shiranui" in its card name, this unit gets power +10000 until end of turn. Then, at the end of that battle, COST [put this unit into your soul], draw a card, choose up to one of your opponent’s rear-guards, and return it to his or her hand. If it was returned, your opponent chooses a card from his or her hand, and discards it.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 7951
+{
+global.CardName[CardStat] = 'Stealth Beast, Tobiitachi'
+global.CardText[CardStat] = 'Nubatama/High Beast
+
+CONT [RC]: During your turn, if you have a token unit, all of your token units and this unit get power +5000.
+
+AUTO [VC/RC]: If your and your opponent’s vanguards have the same grade, this ability’s cost may be paid with "Soul Blast 1". When placed, COST [Counter Blast 1], look at seven cards from the top of your deck, reveal up to one card with "Shiranui" in its card name from among them and put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 7952
+{
+global.CardName[CardStat] = 'Stealth Rogue of Apportion, Sadamune'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [VC]: When placed, look at seven cards from the top of your deck, reveal up to one card with "Shiranui" in its card name from among them and put it into your hand, and shuffle your deck.
+
+AUTO [RC]: When placed, COST [Soul Blast 1], your opponent chooses a card from his or her hand, discards it, and increase this unit’s power by the shield of that card until end of turn. Your opponent draws a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 7953
+{
+global.CardName[CardStat] = 'Almsgiving Stealth Rogue, Jirokichi '
+global.CardText[CardStat] = 'Nubatama/Demon/Draw Trigger'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 1
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7975
+{
+global.CardName[CardStat] = 'Stealth Dragon, Fuurai '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [VC]: When placed, your opponent chooses a card from his or her hand, discards it, and draws a card. If a grade 0 was discarded, you draw a card.
+
+AUTO [VC/RC]: When it attacks, COST [Counter Blast 1 & return another rear-guard to your hand], and one of your units gets power +6000 until end of turn. If this unit is on VC, draw a card.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7976
+{
+global.CardName[CardStat] = 'Stealth Dragon, Genkai '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+CONT [RC]: During your turn, if you have a token unit, all of your token units and this unit gets power +5000.
+
+AUTO [RC]: When placed, choose one of your rear-guards, and it gets "Boost" until end of turn. If you chose a unit other than this unit, Soul Charge 1.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 7981
+{
+global.CardName[CardStat] = 'Stealth Rogue of Incantation, Hyoue'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [VC/RC]: When it attacks, if you have two or more grade 3 cards in your soul, COST [Counter Blast 1 & discard two cards from your hand], and until end of that battle, this unit gets power +15000 / critical +1, and your opponent cannot call sentinels to GC from hand.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 7982
+{
+global.CardName[CardStat] = 'Stealth Rogue of Bonds, Yura'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO [RC]: When your grade 3 vanguard is placed, COST [Counter Blast 1], and return all of your opponent’s rear-guards in the same column as this unit to his or her hand. Your opponent chooses cards from his or her hand equal to the number of cards returned, and discards them.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 8028
+{
+global.CardName[CardStat] = 'Stealth Dragon, Gengan'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [RC]: When your Mask of Domination token attacks, COST [Counter Blast 1 & Soul Blast 1], search your deck for up to one card with the same card name as your vanguard, put it into your soul, and shuffle your deck. If you put a card, this unit gets power +15000 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 8135
+{
+global.CardName[CardStat] = 'Stealth Beast, Jadouneko'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+CONT [Soul]: If you have a vanguard with "Magatsu" in its card name, this card gets grade +2.
+
+AUTO [RC]: At the end of the battle it boosted, if you have a vanguard with "Magatsu" in its card name, COST [put this unit into your soul], choose any number of your normal units on RC, and return them to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 8191
+{
+global.CardName[CardStat] = 'Stealth Rogue of Invasions, Rui'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+AUTO: When this unit is rode upon, COST [Soul Blast 1], if your opponent’s vanguard is grade 2 or greater, your opponent chooses a card from their hand, and discards it. If it is grade 1 or less, you draw a card.
+
+AUTO: When this unit is placed on RC, COST [Soul Blast 1], your opponent chooses a card from their hand, and discards it. Then, If your opponent’s hand has five or less cards, they draw a card.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 8205
+{
+global.CardName[CardStat] = 'Evil Stealth Dragon Tasogare, Hanzo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [Hand]: At the beginning of your opponent’s turn, if your vanguard is "Evil Stealth Dragon Akatsuki, Hanzo", COST [discard two cards from your hand], ride this card as rest, and all of your rear-guards get shield +5000 until end of turn. At the end of that turn, ride a "Evil Stealth Dragon Akatsuki, Hanzo" from your soul as rest.
+
+AUTO [Soul]: When your vanguard with "Hanzo" in its card name attacks, COST [retire a grade 0], call this card to RC, and until end of turn, this unit gets power +20000 and can attack from the back row. At the end of that turn, put this unit into your soul. If you put it into your soul, call an Evil Decoy token to RC.
+
+(SHIFT + left click to call Evil Decoy Token.)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+global.TokenSummoner[CardStat] = 7069
+global.TokenSummonerPosition[CardStat] = 'SHIFT'
+global.CanAttackFromBackRow[CardStat] = 1
+
+
+CardStat = 8206
+{
+global.CardName[CardStat] = 'Evil Stealth Dragon, Yamishibuki'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+CONT [RC]: During your turn, this unit gets power +5000 for each of your grade 0 rear-guards.
+
+AUTO [VC/RC]: When it attacks, COST [Counter Blast 1 & return another rear-guard to your hand], and call up to two Evil Decoy tokens to RC.
+
+(SHIFT + left click to call Evil Decoy Tokens.)'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+global.TokenSummoner[CardStat] = 7069
+global.TokenSummonerPosition[CardStat] = 'SHIFT'
+
+
+CardStat = 8207
+{
+global.CardName[CardStat] = 'Evil Stealth Dragon, Kagesarashi'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+ACT [RC]: COST [Retire this unit], call up to two Evil Decoy tokens to RC, then if you have a vanguard with "Hanzo" in its card name, COST [put a card from your hand into your soul], search your deck for up to one card with "Hanzo" in its card name, reveal it and put it into your hand, and shuffle your deck. This ability may only be used by a card with the same card name once a turn.
+
+(SHIFT + left click to call Evil Decoy Tokens.)'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+global.TokenSummoner[CardStat] = 7069
+global.TokenSummonerPosition[CardStat] = 'SHIFT'
+
+
+CardStat = 8220
+{
+global.CardName[CardStat] = 'Stealth Beast, Shishi Ressou'
+global.CardText[CardStat] = 'Nubatama/Warbeast
+
+CONT [RC/GC]: If three or more of any player’s rear-guards were called this turn, this unit gets shield +5000, and if your vanguards grade is 3 or greater, it gets power +10000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 8976
+{
+global.CardName[CardStat] = 'Sword Saint of Invincibility, Daihouzan'
+global.CardText[CardStat] = 'Nubatama/Human
+
+AUTO [VC]: When this unit attacks a vanguard, COST [Counter Blast 1 & Soul Blast 1], choose one of your opponent’s rear-guards, return it to their hand, until end of that battle, this unit gets power +5000 / drive +1, and if your opponent’s vanguard is grade 3 or greater and they have one or less rear-guards, this unit gets power +10000 / critical +1.
+
+AUTO [VC]: When your opponent’s normal unit is placed on RC during their turn, if your opponent’s hand has four or more cards, your opponent chooses a card from their hand, and discards it.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 8977
+{
+global.CardName[CardStat] = 'Sword Master of Successive Victory, Houzan'
+global.CardText[CardStat] = 'Nubatama/Human
+
+AUTO [VC/RC]: When this unit attacks a vanguard, choose one of your opponent’s rear-guards, return it to their hand, and if your opponent’s vanguard is grade 2 or greater, this unit gets power +10000 until end of that battle. (This effect is mandatory.)
+
+AUTO: When this unit is rode upon by a grade 3, if your opponent has three or more rear-guards, choose one of your vanguards, and it gets critical +1 / drive +1 until end of turn.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 8978
+{
+global.CardName[CardStat] = 'Martial Artist of Laceration, Houzan'
+global.CardText[CardStat] = 'Nubatama/Human
+
+AUTO: When this unit is placed on VC, look at seven cards from the top of your deck, choose up to one grade 2 or greater card with "Houzan" in its card name from among them, reveal it and put it into your hand, and shuffle your deck.
+
+AUTO [RC]: At the end of the battle this unit attacked or boosted, choose one of your opponent’s rear-guards, and return it to their hand. (This effect is mandatory.)'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 8979
+{
+global.CardName[CardStat] = 'Shura Stealth Dragon, Mumyocongo'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon/Heal Trigger
+
+AUTO: When this unit is put on GC from hand, if you did not ride a grade 3 or greater unit this fight, perform one of the following.
+• Choose one of your vanguards, and it gets power +10000 until end of turn.
+• Choose one of your opponent’s units, and it gets critical -2 until end of that battle.
+
+AUTO: When this unit is placed on RC from hand, if your damage zone has no cards, put the top card of your deck into the damage zone.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 10000
+global.DefensePowerStat[CardStat] = 15000
+
+
+CardStat = 9291
+{
+global.CardName[CardStat] = 'Evil Stealth Dragon, Gyokusen'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [Drop]: When your grade 3 vanguard is placed, COST [Counter Blast 1], put this card into your hand, or choose a grade 3 card from your soul, and put it into your hand. If you put a card from soul to hand, bind this card.
+
+AUTO: When this unit is returned to hand from RC by your card’s ability, COST [Soul Blast 1], and call up to two Evil Decoy tokens to open RC.
+
+(SHIFT + left click to call Evil Decoy Token.)'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+global.TokenSummoner[CardStat] = 7069
+global.TokenSummonerPosition[CardStat] = 'SHIFT'
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 9483
+{
+global.CardName[CardStat] = 'Stealth Dragon, Unen '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: When this unit is rode upon, COST [Soul Blast 1 & reveal a grade 3 normal unit from your hand], search your deck for up to one grade 3 card with a different card name from the card revealed for this cost, reveal it and put it into your hand, shuffle your deck, choose a card from your hand, and put it on the bottom of your deck.
+
+AUTO [RC]: At the end of the battle this unit boosted a rear-guard, COST [put that boosted unit into your soul], choose two of your rear-guards, and return them to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 9484
+{
+global.CardName[CardStat] = 'Stealth Dragon, Royale Nova '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: When this unit is placed on VC or RC, look at two cards from the top of your deck, choose up to one card with "Magatsu" in its card name from among them, reveal it and put it into hand, and put the rest on the bottom of your deck in any order.
+
+AUTO [RC]: When this unit attacks, you may have this unit get power +6000 until end of that battle. If you do, at the end of that turn, put this unit on the bottom of your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+global.AttackFromRBuff[CardStat] = 6000
+
+
+CardStat = 9485
+{
+global.CardName[CardStat] = 'Covert Demonic Dragon, Magatsu Storm "ßeverse"'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: When this unit is placed on RC by the ability of your vanguard with "Magatsu" in its card name, lock all of your rear-guards without "Magatsu" in their card names, and all of your units get power +5000 until end of turn. If your opponent’s vanguard is grade 3 or greater, COST [Counter Blast 1 & discard two cards from your hand], and you perform drive checks for the battles this unit attacked until end of turn.
+
+AUTO: When this unit is retired from RC during your opponent’s turn, COST [Soul Blast 1], put this card to your hand, your opponent chooses a card from their hand, and discard it.'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+
+
+CardStat = 9876
+{
+global.CardName[CardStat] = 'Rikudo Stealth Rogue, Yatsukalord'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+Stride.
+
+ACT [VC] 1/Turn: COST [Counter Blast 1 & Soul Blast 1], you choose three unit cards from your opponent’s drop, your opponent chooses any number of cards from among them, and calls them to RC. Your opponent’s cards’ AUTO abilities do not activate from this call. Your opponent chooses a card from their hand for each called unit, and discards it. For each card that was not called from the cards you chose, you draw a card, and all of your front row units get power +10000 until end of turn.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+global.OldCardStat[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+
+
+CardStat = 9877
+{
+global.CardName[CardStat] = 'Rikudo Stealth Rogue, Moreilord'
+global.CardText[CardStat] = 'Nubatama/Demon
+
+G guardian.
+
+AUTO: When this unit is put on GC, COST [Counter Blast 1], and this unit gets shield +5000 until end of that battle for each card in your opponent’s hand. If your opponent’s hand has four or less cards, you draw a card.'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+global.OldCardStat[CardStat] = 1
+}
+global.PowerStat[CardStat] = 0
+global.DefensePowerStat[CardStat] = 15000
+
+
+CardStat = 9978
+{
+global.CardName[CardStat] = 'Stealth Beast, Magami'
+global.CardText[CardStat] = 'Nubatama/High Beast
+
+ACT [RC] 1/Turn: COST [Retire one of your grade 0 rear-guards], and Soul Charge 1.
+
+AUTO [RC]: At the end of the battle this unit boosted a rear-guard, COST [Soul Blast 1], and return this unit and the boosted rear-guard to your hand.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 8000
+global.DefensePowerStat[CardStat] = 10000
+
+
+CardStat = 9979
+{
+global.CardName[CardStat] = 'Evil Stealth Dragon, Kageugachi'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO: When this unit is placed on VC or RC, call up to one Evil Decoy token to RC.
+
+ACT [VC/RC] 1/Turn: COST [Soul Blast 1], and until end of turn, all of your Evil Decoy tokens get "Boost", and power +5000.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+global.TokenSummoner[CardStat] = 7069
+global.TokenSummonerPosition[CardStat] = 'VR'
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 9980
+{
+global.CardName[CardStat] = 'Evil Stealth Dragon, Magoroku "Fugen"'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+CONT [VC]: During your turn, all of your front row units get power +5000 for each of your Evil Decoy tokens.
+
+CONT [VC]: If your opponent’s vanguard is grade 3 or greater, and you have three or more Evil Decoy tokens, all of your front row units get critical +1.
+
+AUTO [VC]: When your rear-guard is returned to your hand by your card’s ability, call up to one Evil Decoy token to an open RC, COST [Counter Blast 1], get an Imaginary Gift:Protect, and put it on that circle. (You do not put if you chose Protect 1)
+
+(SHIFT + left click to call Evil Decoy Token or create a Protect gift.)'
+global.UnitGrade[CardStat] = 3
+global.CardInClan[CardStat] = 23
+global.TokenSummoner[CardStat] = 7069
+global.TokenSummonerPosition[CardStat] = 'SHIFT'
+}
+global.GreenTokenAdd[CardStat] = 1
+global.PowerStat[CardStat] = 12000
+global.DefensePowerStat[CardStat] = 0
+global.ProtectAdd[CardStat] = 1
+
+
+CardStat = 10635
+{
+global.CardName[CardStat] = 'Stealth Dragon, Seiengeki'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+AUTO [VC/RC] 1/Turn: When this unit attacks while boosted, COST [Soul Blast 1], if your opponent’s hand has four or more cards, your opponent chooses a card from their hand, and discards it.
+
+AUTO [Hand]: At the beginning of your ride phase, if your vanguard is grade 1 or less, COST [discard this card], look at the top five cards of your deck, choose up to one grade 2 or less card from among them, reveal it and put it into your hand, and shuffle your deck.'
+global.UnitGrade[CardStat] = 2
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 9000
+global.DefensePowerStat[CardStat] = 5000
+
+
+CardStat = 11019
+{
+global.CardName[CardStat] = 'Stealth Fiend, Quesera Basara  '
+global.CardText[CardStat] = 'Nubatama/Ghost/Heal Trigger
+
+AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 4
+global.PowerStat[CardStat] = 4000
+global.DefensePowerStat[CardStat] = 15000
+global.OldCardStat[CardStat] = 1
+global.NewTriggerStat[CardStat] = 1
+
+
+CardStat = 11114
+{
+global.CardName[CardStat] = 'Rikudo Stealth Dragon, Gedatsurakan '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+Stride.
+
+ACT [G Zone]: If your vanguard is a grade 3 "Demon Stealth Dragon, Shiranui "Oboro"", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Protect.
+
+CONT [VC]: This unit’s "when attack hits" effects activate even if the attack did not hit.
+
+AUTO [VC]: When this unit’s attack hits a vanguard, your opponent chooses a card from their hand, and discards it.
+
+(SHIFT + left click to create Protect gifts.)'
+global.UnitGrade[CardStat] = 4
+global.CardInClan[CardStat] = 23
+global.ExtraDeck[CardStat] = 1
+global.OldCardStat[CardStat] = 1
+}
+global.PowerStat[CardStat] = 15000
+global.ProtectAdd[CardStat] = 1
+
+
+CardStat = 11115
+{
+global.CardName[CardStat] = 'Stealth Dragon, Noroi  '
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon/Critical Trigger
+
+AUTO [RC]: When your grade 3 or greater vanguard with "Shiranui" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.
+
+AUTO: When this card is revealed during your damage check, draw a card.'
+global.UnitGrade[CardStat] = 0
+global.CardInClan[CardStat] = 23
+}
+global.TriggerUnit[CardStat] = 2
+global.PowerStat[CardStat] = 4000
+global.DefensePowerStat[CardStat] = 15000
+global.OldCardStat[CardStat] = 1
+global.NewTriggerStat[CardStat] = 1
+
+
+CardStat = 12228
+{
+global.CardName[CardStat] = 'Stealth Beast, Meigetsu'
+global.CardText[CardStat] = 'Nubatama/Abyss Dragon
+
+CONT [Hand]: You may discard this card as a "HEAL" for the cost of calling a G guardian.
+
+AUTO: When this unit is put on GC from hand, COST [remove a "HEAL" from hand or drop], and this unit gets shield +10000 until end of that battle for every two cards in your opponent’s hand. If your opponent’s hand has four or less cards, COST [Counter Blast 1], choose one of your vanguards, and it gets power +5000 until end of turn.'
+global.UnitGrade[CardStat] = 1
+global.CardInClan[CardStat] = 23
+}
+global.PowerStat[CardStat] = 5000
+global.DefensePowerStat[CardStat] = 10000
