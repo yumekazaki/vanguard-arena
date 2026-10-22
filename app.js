@@ -391,7 +391,7 @@
     $$(".phase-segment").forEach((el, i) => { el.classList.toggle("done", i < match.phase); el.classList.toggle("current", i === match.phase); });
     $("#human-deck-count").textContent = you.deck.length; $("#bot-deck-count").textContent = bot.deck.length; $("#human-drop-count").textContent = you.drop.length; $("#bot-drop-count").textContent = bot.drop.length;
     $("#soul-count").textContent = String(you.soul.length);
-    $("#human-gdeck-count").textContent = you.gDeck?.length || 0; $("#bot-gdeck-count").textContent = bot.gDeck?.length || 0; $("#human-bind-count").textContent = you.bind?.length || 0;
+    $("#human-gdeck-count").textContent = you.gDeck?.length || 0; $("#bot-gdeck-count").textContent = bot.gDeck?.length || 0; $("#human-bind-count").textContent = you.bind?.length || 0; $("#bot-soul-count").textContent = bot.soul?.length || 0;
     $("#human-order-zone").innerHTML = renderOrderCards(you.orders, "human"); $("#bot-order-zone").innerHTML = renderOrderCards(bot.orders, "bot");
     $("#human-gzone").innerHTML = renderGZone(you); $("#bot-gzone").innerHTML = renderGZone(bot);
     $("#gift-count").textContent = String(you.gifts || 0);
@@ -466,8 +466,12 @@
     $$(".manual-actions [data-manual-action]").forEach((button) => { const defenseAction = button.dataset.manualAction === "g-guard"; button.disabled = online.role === "watcher" || (!humanTurn && !(pending && defenseAction)); });
     const selectedToDrop = $("[data-manual-action='selected-to-drop']");
     if (selectedToDrop) selectedToDrop.disabled = online.role === "watcher" || !humanTurn || (!handCard && fieldCard?.side !== "human");
+    const selectedToSoul = $("[data-manual-action='selected-to-soul']");
+    if (selectedToSoul) selectedToSoul.disabled = online.role === "watcher" || !humanTurn || (!handCard && fieldCard?.side !== "human");
     const moveRearButton = $("[data-manual-action='move-rear']");
     if (moveRearButton) moveRearButton.disabled = online.role === "watcher" || !humanTurn || fieldCard?.side !== "human" || fieldCard.zone === "vanguard";
+    const selectedVanguardSoul = $("[data-manual-action='view-selected-soul']");
+    if (selectedVanguardSoul) selectedVanguardSoul.disabled = online.role === "watcher" || !fieldCard || fieldCard.side !== "human" || fieldCard.zone !== "vanguard";
     $("#advance-phase").innerHTML = match.phase === phases.length - 1 ? `End turn <span>→</span>` : `Continue ${phases[match.phase + 1].toLowerCase()} phase <span>→</span>`;
     if (match.selected) {
       const cardId = handCard?.cardId || fieldCard?.instance.cardId; const c = cardMap.get(cardId);
@@ -663,19 +667,29 @@
       const count = Math.max(1, Math.min(player.deck.length, Number(action.split(":")[1]) || 1)); const cards = []; for (let i = 0; i < count; i++) cards.push(player.deck.pop());
       match.revealed = { owner: "human", cards }; addLog(`${player.name} revealed ${cards.length} card${cards.length === 1 ? "" : "s"} from the top of the deck.`); renderSharedReveal();
     } else if (action.startsWith("zone-move:")) {
-      const [, source, choice, uid] = action.split(":");
-      const sourceZones = { deck: player.deck, bind: player.bind || [], gdeck: player.gDeck || [] };
+      const [, source, choice, uid, targetZone] = action.split(":");
+      const sourceZones = { deck: player.deck, bind: player.bind || [], gdeck: player.gDeck || [], soul: player.soul || [] };
       const sourceCards = sourceZones[source], index = sourceCards?.findIndex((item) => item.uid === uid) ?? -1;
       if (index < 0) return;
+      if (choice === "field") {
+        const instance = sourceCards[index], card = cardMap.get(instance.cardId);
+        if (!/Unit/i.test(card?.type || "")) { toast("Only a Unit can be placed on the field."); return; }
+        const rearZones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
+        if (targetZone === "vanguard") { sourceCards.splice(index, 1); if (player.vanguard) player.soul.push(player.vanguard); player.vanguard = { ...instance, rested: false }; }
+        else { const rearIndex = rearZones.indexOf(targetZone); if (rearIndex < 0 || player.rear[rearIndex]) { toast("Choose an empty Rear-Guard circle."); return; } sourceCards.splice(index, 1); player.rear[rearIndex] = { ...instance, rested: false }; }
+        match.selected = null;
+        addLog(`${player.name} moved ${card?.name || "a Unit"} from ${source === "soul" ? "Soul" : "a zone"} to the field.`); return;
+      }
       const instance = sourceCards.splice(index, 1)[0];
       if (choice === "hand") player.hand.push(instance);
       else if (choice === "soul") player.soul.push(instance);
       else if (choice === "bind") { player.bind ||= []; player.bind.push(instance); }
+      else if (choice === "field") return;
       else if (choice === "deck-top") player.deck.push(instance);
       else if (choice === "deck-bottom") player.deck.unshift(instance);
       else player.drop.push(instance);
       const destination = { hand: "hand", soul: "Soul", bind: "Bind", drop: "Drop", "deck-top": "the top of the deck", "deck-bottom": "the bottom of the deck" }[choice] || "Drop";
-      addLog(`${player.name} moved ${cardMap.get(instance.cardId)?.name || "a card"} from ${source === "gdeck" ? "the G deck" : source === "bind" ? "Bind" : "the deck"} to ${destination}.`);
+      addLog(`${player.name} moved ${cardMap.get(instance.cardId)?.name || "a card"} from ${source === "gdeck" ? "the G deck" : source === "bind" ? "Bind" : source === "soul" ? "Soul" : "the deck"} to ${destination}.`);
     } else if (action.startsWith("deck-action:")) {
       const [, choice, uid] = action.split(":"); const index = player.deck.findIndex((item) => item.uid === uid); if (index < 0) return; const instance = player.deck.splice(index, 1)[0];
       if (choice === "hand") player.hand.push(instance); else if (choice === "soul") player.soul.push(instance); else player.drop.push(instance);
@@ -686,9 +700,9 @@
       $("#damage-dialog").close(); addLog(`${player.name} ${choice === "heal" ? "healed" : choice === "counter-blast" ? "Counter-Blasted" : "Counter-Charged"} ${cardMap.get(damage.cardId)?.name || "a damage card"}${choice === "heal" ? " to Drop" : ""}.`);
     } else if (action.startsWith("drop-action:")) {
       const [, choice, uid, zone] = action.split(":"); const index=player.drop.findIndex((item)=>item.uid===uid); if(index<0)return; const instance=player.drop[index];
-      if(choice==="hand"){player.hand.push(player.drop.splice(index,1)[0]);} else if(choice==="deck-top"){player.deck.push(player.drop.splice(index,1)[0]);} else if(choice==="deck-bottom"){player.deck.unshift(player.drop.splice(index,1)[0]);}
+      if(choice==="hand"){player.hand.push(player.drop.splice(index,1)[0]);} else if(choice==="soul"){player.soul.push(player.drop.splice(index,1)[0]);} else if(choice==="bind"){player.bind.push(player.drop.splice(index,1)[0]);} else if(choice==="deck-top"){player.deck.push(player.drop.splice(index,1)[0]);} else if(choice==="deck-bottom"){player.deck.unshift(player.drop.splice(index,1)[0]);}
       else if(choice==="field"){const fields=["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:player.accelZones||0},(_,i)=>"accel-"+(i+1))];if(zone==="vanguard"){if(player.vanguard)player.soul.push(player.vanguard);player.vanguard={...player.drop.splice(index,1)[0],rested:false};}else{const ix=fields.indexOf(zone);if(ix<0||player.rear[ix]){toast("Choose an empty field circle first.");return;}player.rear[ix]={...player.drop.splice(index,1)[0],rested:false};}}
-      addLog(`${player.name} moved ${cardMap.get(instance.cardId)?.name||"a Drop card"} ${choice==="hand"?"to hand":choice==="field"?"to the field":choice==="deck-top"?"to the top of the deck":"to the bottom of the deck"}.`);
+      addLog(`${player.name} moved ${cardMap.get(instance.cardId)?.name||"a Drop card"} ${choice==="hand"?"to hand":choice==="soul"?"to Soul":choice==="bind"?"to Bind":choice==="field"?"to the field":choice==="deck-top"?"to the top of the deck":"to the bottom of the deck"}.`);
     } else if (action === "counter-blast" || action === "counter-charge" || action === "heal-damage") { openDamageDialog(action); return;
     } else if (action.startsWith("soul-blast:")) {
       const wanted = new Set(action.slice("soul-blast:".length).split(",").filter(Boolean));
@@ -757,6 +771,12 @@
       const hand = selectedHandCard(), field = findFieldCard(match.selected);
       if (hand) { player.hand = player.hand.filter((item) => item.uid !== hand.uid); player.drop.push(hand); addLog(`${player.name} moved ${cardMap.get(hand.cardId)?.name || "a card"} from hand to Drop.`); }
       else if (field?.side === "human") { if (field.zone === "vanguard") player.vanguard = null; else player.rear[field.index] = null; player.drop.push(field.instance); addLog(`${player.name} moved ${cardMap.get(field.instance.cardId)?.name || "a unit"} from the field to Drop.`); }
+      else { toast("Select a card in your hand or on your field first."); return; }
+      match.selected = null;
+    } else if (action === "selected-to-soul") {
+      const hand = selectedHandCard(), field = findFieldCard(match.selected);
+      if (hand) { player.hand = player.hand.filter((item) => item.uid !== hand.uid); player.soul.push(hand); addLog(`${player.name} moved ${cardMap.get(hand.cardId)?.name || "a card"} from hand to Soul.`); }
+      else if (field?.side === "human") { if (field.zone === "vanguard") player.vanguard = null; else player.rear[field.index] = null; player.soul.push(field.instance); addLog(`${player.name} moved ${cardMap.get(field.instance.cardId)?.name || "a unit"} from the field to Soul.`); }
       else { toast("Select a card in your hand or on your field first."); return; }
       match.selected = null;
     } else if (action === "add-damage" || action === "hand-to-damage") {
@@ -837,7 +857,7 @@
     match.log = (match.log || []).map((entry) => ({ ...entry, time: new Date(entry.time) }));
     selectedCard = null; selectedZone = null;
     if (online.role === "guest" && match.players?.human) match.players.human.name = online.localName || match.players.human.name;
-    revealLocalMatch(); renderMatch(); if($("#deck-view-dialog").open)openMyDeck(); if($("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); if($("#bind-dialog").open)openBindDialog(); if($("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind);
+    revealLocalMatch(); renderMatch(); if($("#deck-view-dialog").open)openMyDeck(); if($("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); if($("#bind-dialog").open)openBindDialog(); if($("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if($("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human");
   }
   function handleRemoteMessage(message) {
     if (!message || typeof message !== "object") return;
@@ -961,14 +981,16 @@
     $("#gift-zone").innerHTML = '<option value="">Choose a circle…</option>' + zones.map((zone) => `<option value="${zone}">${names[zone] || `Accel ${zone.split("-")[1]}`}</option>`).join("");
     dialog.dataset.kind = kind; dialog.showModal();
   }
-  function openSoulDialog(blast = false) {
+  function openSoulDialog(blast = false, side = "human") {
     if (!match) { toast("Start a match to view Soul."); return; }
-    const soul = match.players.human.soul || [];
-    $("#soul-dialog-title").textContent = blast ? "Choose Soul Blast cards" : "Cards under your Vanguard";
-    $("#soul-dialog-help").textContent = blast ? "Select the cards to move from Soul to Drop." : `${soul.length} card${soul.length === 1 ? "" : "s"} in Soul.`;
+    const player = match.players[side], soul = player?.soul || [], canAct = side === "human" && online.role !== "watcher";
+    blast = Boolean(blast && canAct);
+    $("#soul-dialog-title").textContent = blast ? "Choose Soul Blast cards" : `${player.name}'s Soul`;
+    $("#soul-dialog-help").textContent = blast ? "Select Soul cards to move to Drop." : `${soul.length} card${soul.length === 1 ? "" : "s"} under this Vanguard.`;
     $("#soul-blast-confirm").classList.toggle("hidden", !blast);
-    $("#soul-card-list").innerHTML = soul.length ? soul.map((instance) => { const card = cardMap.get(instance.cardId); return card ? `<button class="zone-view-card${blast ? " selectable" : ""}" type="button" data-soul-uid="${escapeHtml(instance.uid)}" data-card-zoom="${escapeHtml(card.id)}">${card.image ? `<img src="${escapeHtml(card.image)}" alt=""/>` : `<span>${escapeHtml(card.name)}</span>`}<b>${escapeHtml(card.name)}</b></button>` : ""; }).join("") : '<p class="zone-empty-message">Your Soul is empty.</p>';
-    $("#soul-dialog").dataset.blast = blast ? "1" : "0"; $("#soul-dialog").showModal();
+    $("#soul-blast-cancel").textContent = blast ? "Cancel" : "Stop viewing Soul";
+    $("#soul-card-list").innerHTML = soul.length ? soul.map((instance) => { const card = cardMap.get(instance.cardId); return card ? `<article class="zone-view-card"><button class="zone-card-face${blast ? " selectable" : ""}" type="button" data-soul-uid="${escapeHtml(instance.uid)}" data-card-zoom="${escapeHtml(card.id)}">${cardImage(card)}<b>${escapeHtml(card.name)}</b></button>${canAct && !blast ? zoneMoveControls(instance,"soul") : ""}</article>` : ""; }).join("") : `<p class="zone-empty-message">${escapeHtml(player.name)}'s Soul is empty.</p>`;
+    $("#soul-dialog").dataset.blast = blast ? "1" : "0"; $("#soul-dialog").dataset.side = side; if (!$("#soul-dialog").open) $("#soul-dialog").showModal();
   }
   function openDropDialog(side = "human") {
     if (!match) { toast("Start a match to view Drop."); return; }
@@ -977,18 +999,21 @@
     const zones=["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:player.accelZones||0},(_,i)=>"accel-"+(i+1))];
     const labels={"rear-left":"Front left Rear-Guard","rear-right":"Front right Rear-Guard","rear-back-left":"Back left Rear-Guard","rear-back-center":"Back center Rear-Guard","rear-back-right":"Back right Rear-Guard"};
     const fieldOptions='<option value="">Move to field…</option><option value="vanguard">Vanguard</option>'+zones.map((zone,i)=>({zone,i,label:labels[zone]||("Accel "+(i-4))})).filter(({i})=>!player.rear[i]).map(({zone,label})=>'<option value="'+zone+'">'+label+'</option>').join("");
-    $("#drop-card-list").innerHTML=cards.length?cards.map((instance)=>{const c=cardMap.get(instance.cardId);if(!c)return "";const unit=/Unit/i.test(c.type||"");const moves=own?'<div class="peek-actions"><button class="button" data-drop-action="hand:'+escapeHtml(instance.uid)+'">Add to hand</button>'+(unit?'<select class="text-input drop-field-select" data-drop-uid="'+escapeHtml(instance.uid)+'">'+fieldOptions+'</select>':'')+'<button class="button" data-drop-action="deck-top:'+escapeHtml(instance.uid)+'">Return to deck top</button><button class="button" data-drop-action="deck-bottom:'+escapeHtml(instance.uid)+'">Return to deck bottom</button></div>':'';return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(c.id)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>'+moves+'</article>';}).join(""):'<p class="zone-empty-message">No cards in Drop yet.</p>';
+    $("#drop-card-list").innerHTML=cards.length?cards.map((instance)=>{const c=cardMap.get(instance.cardId);if(!c)return "";const unit=/Unit/i.test(c.type||"");const moves=own?'<div class="peek-actions"><button class="button" data-drop-action="hand:'+escapeHtml(instance.uid)+'">Add to hand</button><button class="button" data-drop-action="soul:'+escapeHtml(instance.uid)+'">Add to Soul</button><button class="button" data-drop-action="bind:'+escapeHtml(instance.uid)+'">Bind card</button>'+(unit?'<select class="text-input drop-field-select" data-drop-uid="'+escapeHtml(instance.uid)+'">'+fieldOptions+'</select>':'')+'<button class="button" data-drop-action="deck-top:'+escapeHtml(instance.uid)+'">Return to deck top</button><button class="button" data-drop-action="deck-bottom:'+escapeHtml(instance.uid)+'">Return to deck bottom</button></div>':'';return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(c.id)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>'+moves+'</article>';}).join(""):'<p class="zone-empty-message">No cards in Drop yet.</p>';
     $("#drop-dialog").dataset.side=side;if(!$("#drop-dialog").open)$("#drop-dialog").showModal();
   }
   function zoneMoveControls(instance, source, canAct = true) {
     if (!canAct) return "";
     const card = cardMap.get(instance.cardId), unit = /Unit/i.test(card?.type || "");
     const button = (choice, label) => `<button class="button" type="button" data-zone-move="${source}:${choice}:${escapeHtml(instance.uid)}">${label}</button>`;
-    return `<div class="peek-actions">${button("hand", "Add to hand")}${unit ? button("soul", "Add to Soul") : ""}${button("drop", "Send to Drop")}${source !== "deck" ? button("deck-top", "Return to deck top") : ""}${source !== "deck" ? button("deck-bottom", "Return to deck bottom") : ""}</div>`;
+    const zones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: match.players.human.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
+    const fieldOptions = zones.map((zone, i) => match.players.human.rear[i] ? "" : '<option value="' + zone + '">' + zone.replace("rear-", "").replace("back-", "back ").replaceAll("-", " ") + '</option>').join("");
+    const fieldControl = source === "soul" && unit ? '<select class="text-input drop-field-select" data-soul-field-uid="' + escapeHtml(instance.uid) + '"><option value="">Move Unit to field…</option><option value="vanguard">Vanguard</option>' + fieldOptions + '</select>' : "";
+    return '<div class="peek-actions">' + button("hand", "Add to hand") + (source !== "soul" ? button("soul", "Add to Soul") : "") + button("drop", "Send to Drop") + (source !== "bind" ? button("bind", "Bind card") : "") + (source !== "deck" ? button("deck-top", "Return to deck top") : "") + (source !== "deck" ? button("deck-bottom", "Return to deck bottom") : "") + fieldControl + '</div>';
   }
   function renderInteractiveCards(instances, prefix, canAct = true) {
     if (!instances?.length) return '<p class="zone-empty-message">No cards here.</p>';
-    return instances.map((instance) => { const card=cardMap.get(instance.cardId); if(!card)return ""; const unit=/Unit/i.test(card.type||""); const controls=canAct?(prefix==="deck-action"?zoneMoveControls(instance,"deck"): '<div class="peek-actions"><button class="button" type="button" data-peek-action="'+prefix+':hand:'+escapeHtml(instance.uid)+'">Add to hand</button>'+(unit?'<button class="button" type="button" data-peek-action="'+prefix+':soul:'+escapeHtml(instance.uid)+'">Add to Soul</button>':'')+'<button class="button" type="button" data-peek-action="'+prefix+':drop:'+escapeHtml(instance.uid)+'">Send to Drop</button></div>'):''; return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(card.id)+'">'+cardImage(card)+'<b>'+escapeHtml(card.name)+'</b></button>'+controls+'</article>'; }).join("");
+    return instances.map((instance) => { const card=cardMap.get(instance.cardId); if(!card)return ""; const controls=canAct?(prefix==="deck-action"?zoneMoveControls(instance,"deck"): '<div class="peek-actions"><button class="button" type="button" data-peek-action="'+prefix+':hand:'+escapeHtml(instance.uid)+'">Add to hand</button><button class="button" type="button" data-peek-action="'+prefix+':soul:'+escapeHtml(instance.uid)+'">Add to Soul</button><button class="button" type="button" data-peek-action="'+prefix+':drop:'+escapeHtml(instance.uid)+'">Send to Drop</button></div>'):''; return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(card.id)+'">'+cardImage(card)+'<b>'+escapeHtml(card.name)+'</b></button>'+controls+'</article>'; }).join("");
   }
   function openMyDeck() { if(!match){toast("Start a match to look through your deck.");return;} const cards=match.players.human.deck.slice().reverse(); $("#deck-view-title").textContent="Your deck · "+cards.length+" cards"; $("#deck-view-help").textContent="Choose any card to add to your hand, add a Unit to Soul, or send it to Drop."; $("#deck-view-list").innerHTML=renderInteractiveCards(cards,"deck-action"); if(!$("#deck-view-dialog").open)$("#deck-view-dialog").showModal(); }
   function openGDeckDialog(kind) {
@@ -1012,11 +1037,12 @@
   function openBindDialog() { if(!match)return;const cards=match.players.human.bind||[];$("#bind-card-list").innerHTML=cards.length?cards.map((item)=>{const c=cardMap.get(item.cardId);return c?'<article class="zone-view-card"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(c.id)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>'+zoneMoveControls(item,"bind")+'</article>':"";}).join(""):'<p class="zone-empty-message">No cards are bound.</p>';if(!$("#bind-dialog").open)$("#bind-dialog").showModal(); }
   function openDamageDialog(action) { if(!match){toast("Start a match first.");return;}const damage=match.players.human.damage||[];const eligible=damage.filter((item)=>action==="heal-damage"?true:action==="counter-blast"?!item.faceDown:item.faceDown);$("#damage-dialog-title").textContent=action==="heal-damage"?"Heal damage · choose a damage card":action==="counter-blast"?"Counter-Blast · choose face-up damage":"Counter-Charge · choose face-down damage";$("#damage-card-list").innerHTML=eligible.length?eligible.map((item)=>{const c=cardMap.get(item.cardId);return c?'<button class="zone-view-card" type="button" data-damage-action="'+(action==="heal-damage"?"heal":action)+':'+escapeHtml(item.uid)+'" title="Choose '+escapeHtml(c.name)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>':"";}).join(""):'<p class="zone-empty-message">No eligible damage cards.</p>';$("#damage-dialog").dataset.action=action;$("#damage-dialog").showModal(); }
   function performManualAction(action) {
+    if (action === "view-selected-soul") { openSoulDialog(false, "human"); return; }
     if (online.role === "watcher") { toast("Spectators can watch but cannot change the match."); return; }
     if (action === "soul-blast") { openSoulDialog(true); return; }
     if (action === "stride" || action === "g-guard") { if(action === "g-guard" && !match?.pendingAttack){toast("Use G-guard while defending an attack.");return;} openGDeckDialog(action); return; }
     if (action === "counter-blast" || action === "counter-charge" || action === "heal-damage") { openDamageDialog(action); return; }
-    if (action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action === "reveal-done") { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.connection.send({type:"action",action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
+    if (action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action === "reveal-done") { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.connection.send({type:"action",action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
     if (action === "reveal-top-cards") { if (!match) { toast("Start a match first."); return; } $("#reveal-count-dialog").showModal(); return; }
     if (action === "gift-force" || action === "gift-accel") { openGiftDialog(action === "gift-force" ? "force" : "accel"); return; }
     if (online.role === "guest") {
@@ -1057,7 +1083,8 @@
   $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && match?.moveRearUid && zone.dataset.zone !== "vanguard") { performManualAction(`move-rear-to:${match.moveRearUid}:${zone.dataset.zone}`); return; } if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; const uid = field.dataset.fieldUid; if (match.moveRearUid) { if (field.dataset.zone === "vanguard") { toast("Choose a Rear-Guard circle, not the Vanguard circle."); return; } performManualAction(`move-rear-to:${match.moveRearUid}:${field.dataset.zone}`); return; } match.selected = match.selected === uid ? null : uid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
   $("#gift-cancel").addEventListener("click", () => $("#gift-dialog").close()); $("#gift-close").addEventListener("click", () => $("#gift-dialog").close());
   $("#gift-confirm").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind === "force") { const zone = $("#gift-zone").value; if (!zone) { toast("Choose a circle for the Force marker."); return; } performManualAction(`gift-force:${type}:${zone}`); } else performManualAction(`gift-accel:${type}`); dialog.close(); });
-  $("#view-soul").addEventListener("click", () => openSoulDialog(false)); $("#open-drop-zone").addEventListener("click", () => openDropDialog("human"));
+  $("#view-soul").addEventListener("click", () => openSoulDialog(false,"human")); $("#view-opponent-soul").addEventListener("click", () => openSoulDialog(false,"bot")); $("#open-drop-zone").addEventListener("click", () => openDropDialog("human"));
+  $(".opponent-field .vanguard-zone").addEventListener("click", (e) => { if (match && !e.target.closest("[data-card-zoom]") && e.target.closest("[data-field-uid]")) openSoulDialog(false,"bot"); });
   $("#open-my-deck").addEventListener("click", openMyDeck); $("#open-bind-zone").addEventListener("click", openBindDialog);
   $("#open-opponent-drop-zone").addEventListener("click",()=>openDropDialog("bot"));
   $$('[data-close-dialog]').forEach((button)=>button.addEventListener("click",()=>$("#"+button.dataset.closeDialog)?.close()));
@@ -1072,7 +1099,8 @@
   $("#bind-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
   $("#damage-card-list").addEventListener("click",(e)=>{const action=e.target.closest("[data-damage-action]");if(action){$("#damage-dialog").close();performManualAction("damage-action:"+action.dataset.damageAction);}});
   $("#close-soul-dialog").addEventListener("click", () => $("#soul-dialog").close()); $("#soul-blast-cancel").addEventListener("click", () => $("#soul-dialog").close());
-  $("#soul-card-list").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom && !$("#soul-dialog").dataset.blast) { showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-soul-uid]"); if (card && $("#soul-dialog").dataset.blast) card.classList.toggle("selected"); });
+  $("#soul-card-list").addEventListener("click", (e) => { const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const zoom=e.target.closest("[data-card-zoom]");if(zoom&&!$("#soul-dialog").dataset.blast){showCardDetails(zoom.dataset.cardZoom);return;}const card=e.target.closest("[data-soul-uid]");if(card&&$("#soul-dialog").dataset.blast)card.classList.toggle("selected"); });
+  $("#soul-card-list").addEventListener("change",(e)=>{const select=e.target.closest("[data-soul-field-uid]");if(select?.value)performManualAction("zone-move:soul:field:"+select.dataset.soulFieldUid+":"+select.value);});
   $("#soul-blast-confirm").addEventListener("click", () => { const ids = [...$$("#soul-card-list [data-soul-uid].selected")].map((node) => node.dataset.soulUid); if (!ids.length) { toast("Select at least one card to Soul Blast."); return; } performManualAction(`soul-blast:${ids.join(",")}`); $("#soul-dialog").close(); });
   $("#close-drop-dialog").addEventListener("click", () => $("#drop-dialog").close()); $("#drop-dialog-close").addEventListener("click", () => $("#drop-dialog").close());
   $("#drop-card-list").addEventListener("click", (e) => { const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const action=e.target.closest("[data-drop-action]");if(action)performManualAction("drop-action:"+action.dataset.dropAction); });

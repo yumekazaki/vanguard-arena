@@ -33,3 +33,5 @@
 .drop-field-select{width:100%;height:31px;padding:0 5px;font-size:9px}.zone-view-card>.zone-card-face{font:inherit}.zone-view-card>.zone-card-face b{color:#f2f0f7}.bind-zone-button{min-width:66px}.damage-card{cursor:pointer}
 
 .zone-stack.drop-zone{width:52px;height:48px;transition:.15s}.zone-stack.drop-zone:hover{background:#262439;border-color:#c6a4df;transform:translateY(-1px)}
+
+.opponent-soul-button{font-size:7px;padding:4px 5px;white-space:nowrap}.zone-view-card.selectable.selected,.zone-card-face.selectable.selected{outline:2px solid var(--pink);border-color:var(--pink)}
