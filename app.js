@@ -248,9 +248,9 @@
     if (!total) { validation.className = "deck-validation"; validation.textContent = "Add cards from the library to start building."; }
     else if (total !== 50) { validation.className = "deck-validation invalid"; validation.textContent = `${total}/50 main-deck cards. Premium format legality is not verified.`; }
     else { validation.className = "deck-validation valid"; validation.textContent = "50 main-deck cards · Premium format legality is not verified."; }
-    const starterOptions = Object.entries(builder.cards || {}).filter(([id, qty]) => qty > 0 && Number(cardMap.get(id)?.grade) === 0 && /Unit/i.test(cardMap.get(id)?.type || "")).map(([id]) => cardMap.get(id)).filter(Boolean).sort((a, b) => a.name.localeCompare(b.name));
-    if (builder.starterCardId && !starterOptions.some((card) => card.id === builder.starterCardId)) builder.starterCardId = "";
-    $("#starter-vanguard").innerHTML = `<option value="">Choose a Grade 0 unit…</option>${starterOptions.map((card) => `<option value="${escapeHtml(card.id)}">${escapeHtml(card.name)}</option>`).join("")}`;
+    const starterOptions = Object.entries(builder.cards || {}).filter(([id, qty]) => qty > 0 && Number(cardMap.get(id)?.grade) === 0 && /Unit/i.test(cardMap.get(id)?.type || "")).map(([id, qty]) => ({ card: cardMap.get(id), qty })).filter((entry) => entry.card).sort((a, b) => a.card.name.localeCompare(b.card.name));
+    if (builder.starterCardId && !starterOptions.some(({ card }) => card.id === builder.starterCardId)) builder.starterCardId = "";
+    $("#starter-vanguard").innerHTML = `<option value="">Choose a Grade 0 unit…</option>${starterOptions.map(({ card, qty }) => `<option value="${escapeHtml(card.id)}">${escapeHtml(card.name)} · ×${qty}</option>`).join("")}`;
     $("#starter-vanguard").value = builder.starterCardId || "";
     $("#starter-vanguard-help").textContent = builder.starterCardId ? `${cardMap.get(builder.starterCardId)?.name || "Selected unit"} will begin on your Vanguard circle.` : "Choose a Grade 0 unit from your deck. It starts on your Vanguard circle.";
     const rows = Object.entries(builder.cards || {}).filter(([, qty]) => qty > 0).map(([id, qty]) => ({ card: cardMap.get(id), qty })).filter((x) => x.card).sort((a, b) => a.card.grade - b.card.grade || a.card.name.localeCompare(b.card.name));
@@ -305,11 +305,13 @@
     const index = existing.findIndex((d) => d.id === id);
     if (index >= 0) existing[index] = saved; else existing.unshift(saved);
     builder = { ...saved }; writeSavedDecks(existing); renderBuilder(); renderSavedDecks();
-    toast("Deck saved in this browser");
+    toast(account.user ? "Deck saved to your account folder" : "Deck saved in this browser");
   }
   function loadDeck(deck) { builder = { id: deck.id, name: deck.name, cards: { ...deck.cards }, starterCardId: deck.starterCardId || "" }; renderBuilder(); showView("decks"); toast(`Loaded “${deck.name}” into the builder`); }
   function renderSavedDecks() {
     const decks = readSavedDecks(); $("#saved-deck-subtitle").textContent = decks.length ? `${decks.length} deck${decks.length === 1 ? "" : "s"}` : "No decks yet";
+    $("#saved-deck-eyebrow").textContent = account.user ? "ONLINE ACCOUNT DECK FOLDER" : "DECK FOLDER · THIS BROWSER";
+    $("#deck-folder-help").textContent = account.user ? "This folder syncs to your account. Your saved decks load here whenever you sign in." : "Sign in to sync this folder across devices. Save decks here, then they load whenever you sign in.";
     $("#saved-decks").innerHTML = decks.length ? decks.map((d) => { const s = deckSummary(d); const preview = Object.keys(d.cards || {}).slice(0, 5).map((id) => cardMap.get(id)).filter(Boolean); return `<article class="saved-deck-card"><h3>${escapeHtml(d.name)}</h3><div class="saved-deck-meta">${deckCount(d)} cards · G${s.counts.join(" / ")} · ${escapeHtml(new Date(d.updatedAt || Date.now()).toLocaleDateString())}</div><div class="saved-deck-preview">${preview.map((c) => `<button class="saved-deck-preview-card" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom ${escapeHtml(c.name)}">${c.image ? `<img src="${escapeHtml(c.image)}" alt="" onerror="this.remove()"/>` : escapeHtml(c.glyph)}</button>`).join("")}</div><div class="saved-deck-actions"><button class="button button-primary" data-load-deck="${escapeHtml(d.id)}">Open</button><button class="button" data-duplicate-deck="${escapeHtml(d.id)}">Duplicate</button><button class="button" data-export-saved="${escapeHtml(d.id)}">Export</button><button class="button" data-delete-deck="${escapeHtml(d.id)}" title="Delete">×</button></div></article>`; }).join("") : `<div class="empty-saved">Saved decks appear here. Build a deck and choose Save deck.</div>`;
     updateDeckCount();
   }
@@ -451,6 +453,8 @@
     const fieldCard = findFieldCard(match.selected);
     const pending = Boolean(match.pendingAttack);
     $("#draw-card").disabled = !humanTurn || pending || match.phase !== 1 || match.drewThisTurn || match.players.human.deck.length === 0;
+    const returnTop = $("[data-manual-action='hand-to-top']"), returnBottom = $("[data-manual-action='hand-to-bottom']");
+    [returnTop, returnBottom].forEach((button) => { if (button) button.disabled = !humanTurn || pending || !handCard || online.role === "watcher"; });
     $("#ride-card").disabled = !humanTurn || pending || match.phase !== 2 || !handCard;
     $("#call-card").disabled = !humanTurn || pending || match.phase !== 3 || !handCard || !match.players.human.rear.includes(null);
     $("#attack-card").disabled = !humanTurn || pending || match.phase !== 4 || !fieldCard || fieldCard.instance.rested || fieldCard.instance.locked;
@@ -591,7 +595,16 @@
   function manualGameAction(action) {
     if (!match || match.ended) return;
     const player = match.players.human, card = selectedHandCard();
-    if (action === "damage-check" || action === "drive-check" || action === "trigger-check") {
+    if (action === "draw-card") {
+      const card = draw("human"); if (!card) { toast("Your deck is empty."); return; }
+      addLog(`${player.name} drew a card manually.`);
+    } else if (action === "hand-to-top" || action === "hand-to-bottom") {
+      const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; }
+      player.hand = player.hand.filter((item) => item.uid !== instance.uid);
+      if (action === "hand-to-top") player.deck.push(instance); else player.deck.unshift(instance);
+      match.selected = null;
+      addLog(`${player.name} returned ${cardMap.get(instance.cardId)?.name || "a card"} to the ${action === "hand-to-top" ? "top" : "bottom"} of the deck.`);
+    } else if (action === "damage-check" || action === "drive-check" || action === "trigger-check") {
       const top = player.deck.pop(); if (!top) { toast("Your deck is empty."); return; }
       if (action === "damage-check") player.damage.push({ ...top, faceDown: false }); else player.hand.push(top);
       const checkName = action === "damage-check" ? "damage" : action === "trigger-check" ? "trigger" : "drive";
