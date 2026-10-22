@@ -19,7 +19,11 @@
 .zone-stack.drop-zone{cursor:pointer;color:#e3d4f2}.zone-stack.drop-zone span{font:6px var(--mono);color:#c7b8d5;margin-top:2px}.soul-view-button{border:1px solid #d9ca8c55;border-radius:5px;background:#22251f;color:#f1e2b0;padding:4px 6px;font:7px var(--mono);cursor:pointer}.zone-view-dialog{width:min(760px,calc(100vw - 28px));max-height:85vh;overflow:auto}.zone-card-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:9px;max-height:58vh;overflow:auto;padding:8px 2px}.zone-view-card{position:relative;min-height:136px;border:1px solid #ffffff24;border-radius:8px;background:#101218;color:#eee;padding:5px;display:flex;flex-direction:column;gap:4px;overflow:hidden}.zone-view-card img{width:100%;height:104px;object-fit:contain;background:#08090e}.zone-view-card b{font:8px var(--mono);line-height:1.3}.zone-view-card.selectable.selected{outline:2px solid var(--pink);border-color:var(--pink)}.zone-empty-message{grid-column:1/-1;padding:25px;text-align:center;color:#aaa;font-size:12px}
 .room-browser{border:1px solid #ffffff13;border-radius:9px;padding:5px 10px 10px;margin:12px 0;background:#ffffff05}.room-browser-heading{display:flex;align-items:center;justify-content:space-between}.room-browser-heading .input-label{margin:8px 0}.room-browser .text-input{height:34px}
 
-/* Align both three-circle back rows; put the opponent's rear guards behind the front Vanguard row. */
-.rear-row{display:grid;grid-template-columns:1fr 1.1fr 1fr;max-width:570px;margin:14px auto;gap:17px;align-items:center}.rear-row-zone{height:111px}
-@media(max-width:1100px){.rear-row{max-width:490px;gap:10px}}@media(max-width:760px){.rear-row{gap:7px;margin:10px auto}}@media(max-width:430px){.rear-row{grid-template-columns:1fr 1fr 1fr}}
-.opponent-side{display:flex;flex-direction:column}.opponent-side .player-line{order:0}.opponent-side .zone-strip{order:1}.opponent-side .opponent-rear-row{order:2}.opponent-side .opponent-field{order:3}.opponent-side #bot-accel-row{order:4}.opponent-side .opponent-hand-row{order:5}
+/* Keep the back-row circles aligned in columns behind Vanguard and the front-row rear-guards. */
+.rear-row{display:grid;grid-template-columns:1fr 1.1fr 1fr;max-width:570px;margin:14px auto;gap:17px;align-items:center}
+.rear-row-zone{height:111px}
+@media(max-width:1100px){.rear-row{max-width:490px;gap:10px}}
+@media(max-width:760px){.rear-row{gap:7px;margin:10px auto}}
+@media(max-width:430px){.rear-row{grid-template-columns:1fr 1fr 1fr}}
+.hand-management{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding-top:10px;border-top:1px solid #ffffff10;margin-top:10px}.hand-management .muted-text{margin-right:auto;font-size:10px}.hand-management .button{font-size:10px;padding:8px 10px}
+@media(max-width:600px){.hand-management{flex-wrap:wrap;justify-content:flex-start}.hand-management .muted-text{width:100%}}
