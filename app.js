@@ -464,6 +464,10 @@
     $("#end-turn").disabled = !humanTurn || pending;
     $("#advance-phase").disabled = !humanTurn || pending;
     $$(".manual-actions [data-manual-action]").forEach((button) => { const defenseAction = button.dataset.manualAction === "g-guard"; button.disabled = online.role === "watcher" || (!humanTurn && !(pending && defenseAction)); });
+    const selectedToDrop = $("[data-manual-action='selected-to-drop']");
+    if (selectedToDrop) selectedToDrop.disabled = online.role === "watcher" || !humanTurn || (!handCard && fieldCard?.side !== "human");
+    const moveRearButton = $("[data-manual-action='move-rear']");
+    if (moveRearButton) moveRearButton.disabled = online.role === "watcher" || !humanTurn || fieldCard?.side !== "human" || fieldCard.zone === "vanguard";
     $("#advance-phase").innerHTML = match.phase === phases.length - 1 ? `End turn <span>→</span>` : `Continue ${phases[match.phase + 1].toLowerCase()} phase <span>→</span>`;
     if (match.selected) {
       const cardId = handCard?.cardId || fieldCard?.instance.cardId; const c = cardMap.get(cardId);
@@ -482,6 +486,17 @@
     return null;
   }
   function selectedHandCard() { return match?.players.human.hand.find((x) => x.uid === match.selected); }
+  function moveRearCardToZone(uid, zone) {
+    const player = match.players.human;
+    const rearZones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
+    const from = player.rear.findIndex((item) => item?.uid === uid), to = rearZones.indexOf(zone);
+    if (from < 0 || to < 0 || from === to) { match.moveRearUid = null; toast(from === to ? "That card is already in this circle." : "Choose an available Rear-Guard circle."); renderMatch(); return; }
+    const moved = player.rear[from], displaced = player.rear[to];
+    player.rear[to] = moved; player.rear[from] = displaced || null;
+    match.moveRearUid = null; match.selected = null;
+    addLog(displaced ? `${player.name} swapped two Rear-Guards.` : `${player.name} moved a Rear-Guard to another circle.`);
+    renderMatch();
+  }
   function draw(side) {
     const p = match.players[side]; if (!p.deck.length) return null;
     const card = p.deck.pop(); p.hand.push(card); return card;
@@ -698,15 +713,14 @@
       const type = action.slice("gift-accel:".length); player.accelZones = (player.accelZones || 0) + 1; player.rear.push(null); player.gifts = (player.gifts || 0) + 1; addLog(`${player.name} created an ${type} circle.`);
     } else if (action === "shuffle") {
       shuffle(player.deck); addLog(`${player.name} shuffled their deck.`);
-    } else if (action === "swap-rear") {
-      match.swapRearPending = !match.swapRearPending; match.swapRearFirst = null; match.selected = null;
-      toast(match.swapRearPending ? "Choose two Rear-Guards to swap. Click Swap Rear-Guards again to cancel." : "Rear-Guard swap canceled.");
-    } else if (action.startsWith("swap-rear:")) {
-      const [, firstUid, secondUid] = action.split(":");
-      const first = player.rear.findIndex((item) => item?.uid === firstUid), second = player.rear.findIndex((item) => item?.uid === secondUid);
-      if (first < 0 || second < 0 || first === second) { toast("Choose two different Rear-Guards."); return; }
-      [player.rear[first], player.rear[second]] = [player.rear[second], player.rear[first]]; match.swapRearPending = false;
-      addLog(`${player.name} swapped two Rear-Guards.`);
+    } else if (action === "move-rear") {
+      const field = findFieldCard(match.selected);
+      if (field?.side !== "human" || field.zone === "vanguard") { toast("Select one of your Rear-Guards first."); return; }
+      match.moveRearUid = field.instance.uid; toast("Choose a Rear-Guard circle. An occupied circle swaps the units.");
+    } else if (action.startsWith("move-rear-to:")) {
+      const [, uid, zone] = action.split(":");
+      if (match.moveRearUid !== uid) { toast("Select a Rear-Guard and choose Move / Swap again."); return; }
+      moveRearCardToZone(uid, zone); return;
     } else if (action === "stride" || action.startsWith("stride:")) {
       if (action === "stride") { openGDeckDialog("stride"); return; }
       const uid = action.slice("stride:".length); const unitIndex = player.gDeck?.findIndex((item) => item.uid === uid) ?? -1;
@@ -739,6 +753,12 @@
       const uid = action.slice("order-to-drop:".length), index = player.orders.findIndex((item) => item.uid === uid);
       if (index < 0) return;
       player.drop.push(player.orders.splice(index, 1)[0]); addLog(`${player.name} moved an Order from the Order zone to drop.`);
+    } else if (action === "selected-to-drop") {
+      const hand = selectedHandCard(), field = findFieldCard(match.selected);
+      if (hand) { player.hand = player.hand.filter((item) => item.uid !== hand.uid); player.drop.push(hand); addLog(`${player.name} moved ${cardMap.get(hand.cardId)?.name || "a card"} from hand to Drop.`); }
+      else if (field?.side === "human") { if (field.zone === "vanguard") player.vanguard = null; else player.rear[field.index] = null; player.drop.push(field.instance); addLog(`${player.name} moved ${cardMap.get(field.instance.cardId)?.name || "a unit"} from the field to Drop.`); }
+      else { toast("Select a card in your hand or on your field first."); return; }
+      match.selected = null;
     } else if (action === "add-damage" || action === "hand-to-damage") {
       if (!card) { toast("Select a card in your hand first."); return; }
       player.hand = player.hand.filter((item) => item.uid !== card.uid); player.damage.push(card); match.selected = null;
@@ -1034,10 +1054,10 @@
   $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher" || match.side !== "human") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
-  $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; const uid = field.dataset.fieldUid; if (match.swapRearPending && field.dataset.zone !== "vanguard") { if (!match.swapRearFirst) { match.swapRearFirst = uid; toast("Now choose the Rear-Guard to swap with."); renderMatch(); return; } const first = match.swapRearFirst; match.swapRearPending = false; match.swapRearFirst = null; performManualAction(`swap-rear:${first}:${uid}`); return; } match.selected = match.selected === uid ? null : uid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
+  $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && match?.moveRearUid && zone.dataset.zone !== "vanguard") { performManualAction(`move-rear-to:${match.moveRearUid}:${zone.dataset.zone}`); return; } if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; const uid = field.dataset.fieldUid; if (match.moveRearUid) { if (field.dataset.zone === "vanguard") { toast("Choose a Rear-Guard circle, not the Vanguard circle."); return; } performManualAction(`move-rear-to:${match.moveRearUid}:${field.dataset.zone}`); return; } match.selected = match.selected === uid ? null : uid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
   $("#gift-cancel").addEventListener("click", () => $("#gift-dialog").close()); $("#gift-close").addEventListener("click", () => $("#gift-dialog").close());
   $("#gift-confirm").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind === "force") { const zone = $("#gift-zone").value; if (!zone) { toast("Choose a circle for the Force marker."); return; } performManualAction(`gift-force:${type}:${zone}`); } else performManualAction(`gift-accel:${type}`); dialog.close(); });
-  $("#view-soul").addEventListener("click", () => openSoulDialog(false)); $("#open-drop-zone").addEventListener("click", openDropDialog);
+  $("#view-soul").addEventListener("click", () => openSoulDialog(false)); $("#open-drop-zone").addEventListener("click", () => openDropDialog("human"));
   $("#open-my-deck").addEventListener("click", openMyDeck); $("#open-bind-zone").addEventListener("click", openBindDialog);
   $("#open-opponent-drop-zone").addEventListener("click",()=>openDropDialog("bot"));
   $$('[data-close-dialog]').forEach((button)=>button.addEventListener("click",()=>$("#"+button.dataset.closeDialog)?.close()));
