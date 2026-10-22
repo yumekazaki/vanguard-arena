@@ -115,3 +115,34 @@
 .field-card .field-card-stats{font-size:clamp(6px,.72vw,8px);gap:2px;white-space:nowrap}.field-card .field-card-stats b{font-variant-numeric:tabular-nums}.turn-effect-badge{font-size:clamp(5px,.62vw,7px);max-width:calc(100% - 6px);overflow:hidden;text-overflow:ellipsis}
 
 .field-card .field-card-stats{left:3px;right:3px;bottom:3px;display:block;height:auto;font-size:clamp(7px,.72vw,9px);text-align:center}.field-card .field-card-stats b{display:block;width:100%;padding:3px 1px;border:1px solid #ffe08b;background:#080a10f2;border-radius:4px;color:#fff1b8;font-size:clamp(9px,1vw,13px);font-weight:800;line-height:1.15;letter-spacing:-.03em;text-shadow:0 1px 2px #000;font-variant-numeric:tabular-nums;box-shadow:0 1px 5px #000b}.field-card .field-card-stats>span{position:absolute;right:2px;bottom:calc(100% + 3px);padding:2px 4px;border-radius:3px;background:#080a10e8;color:#fff;font-size:clamp(6px,.62vw,8px);font-weight:700;text-shadow:none}.field-card .field-card-name{bottom:29px;padding:1px 3px;border-radius:3px;background:#080a10c9;text-align:center}
+
+/* Phone layout: put the table and its touch controls first, then keep the board readable without desktop sidebars. */
+@media(max-width:600px){
+  html{overflow-x:hidden;-webkit-text-size-adjust:100%}
+  body{font-size:14px;overflow-x:hidden}
+  .app-shell{max-width:none;padding:0 10px}
+  .topbar{height:auto;min-height:64px;padding:9px 0 0;gap:7px;flex-wrap:wrap}
+  .brand{gap:8px;font-size:12px}.brand-mark{width:32px;height:32px;border-radius:10px;font-size:20px}.brand small{font-size:8px}
+  .topbar-right{gap:6px;margin-left:auto}.local-pill{font-size:8px;padding:6px 8px}.icon-button{width:34px;height:34px}
+  .main-nav{order:3;width:100%;height:42px;justify-content:space-around;overflow-x:auto;gap:2px}
+  .nav-button{height:38px;padding:0 11px;font-size:12px;white-space:nowrap}.nav-button.active:after{bottom:0;left:10px;right:10px}
+  .view{padding:16px 0 28px}
+  .page-heading{align-items:stretch;gap:13px;margin:0 0 14px}.page-heading h1{font-size:clamp(26px,8vw,36px)}.subheading{font-size:12px}
+  .heading-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:100%}.heading-actions .button{min-height:44px;white-space:normal;padding:8px;font-size:11px}
+  .match-layout{display:flex;flex-direction:column;gap:12px}.table-column{order:1;width:100%;min-width:0}.match-rail{order:2;width:100%;display:flex;flex-direction:column;gap:9px}
+  .game-table{width:100%;height:clamp(560px,175vw,690px);min-height:0;border-radius:11px}
+  .field-row,.rear-row{left:11%;width:78%;gap:2px}
+  .field-zone{min-width:0;overflow:visible}.field-card{max-width:94%}
+  .player-line{gap:5px}.player-title{min-width:0}.player-title b{font-size:9px}.player-title small{font-size:6px}.player-line .avatar{width:22px;height:22px;font-size:12px}
+  .damage-track{max-width:38%;overflow-x:auto;scrollbar-width:none}.damage-track::-webkit-scrollbar{display:none}.damage-card{flex:0 0 20px;width:20px;height:29px}
+  .deck-zone,.zone-stack.drop-zone{min-width:30px}.zone-stack{margin-left:2px}.back-card,.gdeck-button{min-width:28px}
+  .zone-strip{gap:4px;max-height:24%;overflow:auto;scrollbar-width:thin}.zone-label{font-size:6px}.order-zone,.g-zone{min-width:0;max-width:100%;overflow-x:auto}
+  .hand-panel{padding:10px;margin-top:9px}.hand-heading{gap:7px}.hand-heading .eyebrow{font-size:8px}.hand-heading b{font-size:11px}.hand-cards{min-height:143px;scroll-snap-type:x proximity;overscroll-behavior-x:contain;touch-action:pan-x}.game-card-wrap{scroll-snap-align:start}
+  .action-bar{gap:8px;padding:9px;margin-top:8px}.action-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:none;overflow:visible}.action-buttons .button,.manual-actions .button,.manual-quick-actions .button,.selected-card-actions .button,.hand-management .button{min-height:42px;padding:8px 9px;font-size:11px;white-space:normal;touch-action:manipulation}
+  .selected-summary{width:100%;min-width:0}.manual-actions .selected-card-actions,.manual-quick-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:7px}.manual-command-drawer{width:100%}.manual-command-drawer summary{min-height:42px;display:flex;align-items:center;font-size:11px}.manual-command-drawer .action-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-height:36vh;overflow:auto}
+  .match-rail .rail-card{padding:12px}.phase-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:10px}.status-names{margin-top:12px}
+  dialog{max-width:calc(100vw - 20px);max-height:calc(100dvh - 24px);overflow:auto}.help-dialog,.zone-view-dialog{width:calc(100vw - 20px);padding:18px 14px}.zone-card-list,.trigger-target-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:58dvh;overflow:auto}.zone-view-card .button,.zone-card-zoom{min-height:38px}.input-label{margin-top:12px}.text-input,select,textarea{min-height:44px;font-size:16px}
+}
+@media(max-width:600px) and (orientation:landscape){
+  .page-heading{display:flex;align-items:center}.page-heading>div:first-child{display:none}.heading-actions{grid-template-columns:repeat(4,minmax(0,1fr));width:100%}.game-table{height:min(126vw,calc(100dvh - 86px));min-height:390px}.field-row,.rear-row{left:14%;width:72%}.match-layout{gap:8px}.manual-quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
