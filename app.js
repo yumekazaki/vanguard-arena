@@ -34,7 +34,7 @@
   let builderPage = 0;
   let libraryPage = 0;
   const cardPageSize = 48;
-  const phases = ["Ride", "Main", "Battle", "End"];
+  const phases = ["Stand", "Draw", "Ride", "Main", "Battle", "End"];
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => [...document.querySelectorAll(q)];
   let view = "play";
@@ -347,15 +347,18 @@
   }
   function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
   function makePlayer(deck, name, human = false) {
-    const pile = shuffle(cardInstances(deck)); return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], vanguard: null, rear: [null, null], extra: [], gZone: [], quickShields: 0, human };
+    const allCards = cardInstances(deck);
+    const gDeck = allCards.filter((instance) => /G Unit/i.test(cardMap.get(instance.cardId)?.type || ""));
+    const pile = shuffle(allCards.filter((instance) => !gDeck.includes(instance)));
+    return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], vanguard: null, rear: [null, null], orders: [], extra: [], gDeck: shuffle(gDeck), gZone: [], quickShields: 0, gifts: 0, human };
   }
   function startMatch(deck = null) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
-    match = { players: { human: makePlayer(readyDeck, "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: "human", phase: 0, selected: null, pendingAttack: null, botAttacks: [], log: [], ended: false, deckName: readyDeck.name };
+    match = { players: { human: makePlayer(readyDeck, "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: "human", phase: 0, drewThisTurn: false, selected: null, pendingAttack: null, botAttacks: [], log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
-    addLog(`${online.role ? "Online match" : "Practice match"} started with ${readyDeck.name}.`); setMessage("Your turn — ride a unit or advance the phase."); renderMatch(); showView("play");
+    addLog(`${online.role ? "Online match" : "Practice match"} started with ${readyDeck.name}.`); setMessage("Your turn — advance through Stand and Draw."); renderMatch(); showView("play");
   }
   function addLog(message) { if (!match) return; match.log.unshift({ time: new Date(), message }); match.log = match.log.slice(0, 15); renderLog(); }
   function renderLog() { if (!match) return; $("#match-log").innerHTML = match.log.map((entry) => `<div class="log-entry"><time>${entry.time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</time><span>${escapeHtml(entry.message)}</span></div>`).join(""); }
@@ -368,12 +371,16 @@
     $("#match-status").textContent = online.role === "watcher" ? "SPECTATING · LIVE" : online.role ? "ONLINE MATCH" : "PRACTICE MATCH";
     $("#opponent-deck-label").textContent = online.role ? "OPPONENT" : "DEMO DECK";
     $("#turn-label").textContent = match.side === "human" ? "YOUR TURN" : "OPPONENT TURN";
-    $("#phase-label").textContent = match.side === "human" ? `${phases[match.phase]} phase` : "Practice Bot";
+    $("#phase-label").textContent = match.side === "human" ? `${phases[match.phase]} phase` : `Practice Bot · ${phases[match.phase]} phase`;
     $("#turn-number").textContent = String(match.turn).padStart(2, "0"); $("#table-turn").textContent = String(match.turn).padStart(2, "0");
     $("#phase-count").textContent = `${match.phase + 1} / ${phases.length}`;
     $("#phase-list").innerHTML = phases.map((p, i) => `<div class="phase-item${i === match.phase ? " active" : ""}${i < match.phase ? " past" : ""}"><span class="phase-bullet">${i < match.phase ? "✓" : i + 1}</span>${p} phase</div>`).join("");
     $$(".phase-segment").forEach((el, i) => { el.classList.toggle("done", i < match.phase); el.classList.toggle("current", i === match.phase); });
     $("#human-deck-count").textContent = you.deck.length; $("#bot-deck-count").textContent = bot.deck.length; $("#human-drop-count").textContent = you.drop.length;
+    $("#human-gdeck-count").textContent = you.gDeck?.length || 0; $("#bot-gdeck-count").textContent = bot.gDeck?.length || 0;
+    $("#human-order-zone").innerHTML = renderOrderCards(you.orders, "human"); $("#bot-order-zone").innerHTML = renderOrderCards(bot.orders, "bot");
+    $("#human-gzone").innerHTML = renderGZone(you); $("#bot-gzone").innerHTML = renderGZone(bot);
+    $("#gift-count").textContent = String(you.gifts || 0);
     $(".human-line .player-title small").textContent = `YOUR SIDE · G ${you.gZone?.length || 0} · QUICK SHIELD ${you.quickShields || 0}`;
     $(".opponent-line .player-title small").textContent = `${online.role ? "OPPONENT" : "DEMO DECK"} · G ${bot.gZone?.length || 0} · QUICK SHIELD ${bot.quickShields || 0}`;
     $("#human-damage").innerHTML = Array.from({ length: 6 }, (_, i) => `<span class="damage-heart${i < you.damage.length ? " filled" : ""}"></span>`).join("");
@@ -394,9 +401,16 @@
     el.innerHTML = `<span>${zone === "vanguard" ? "VANGUARD" : "REAR-GUARD"}</span>`;
     if (!instance) return;
     const c = cardMap.get(instance.cardId); if (!c) return;
-    const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; field.innerHTML = `<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">G${c.grade}</span><span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${Math.round(c.power / 1000)}k</b><span>${escapeHtml(c.trigger || "UNIT")}</span></span>`;
+    const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; field.innerHTML = `<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade}`}</span><span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${Math.round((Number(c.power) + Number(instance.powerBoost || 0)) / 1000)}k</b><span>${escapeHtml(c.trigger || "UNIT")}</span></span>`;
     if (c.image) { field.style.backgroundImage = `linear-gradient(#1118,#111c),url("${String(c.image).replace(/["\\]/g, "")}")`; field.style.backgroundSize = "cover"; }
     el.appendChild(field);
+  }
+  function renderOrderCards(orders = [], side) {
+    return (orders || []).map((instance) => { const c = cardMap.get(instance.cardId); return c ? `<span class="zone-card-wrap"><button class="zone-card" data-order-uid="${escapeHtml(instance.uid)}" data-side="${side}" title="Move ${escapeHtml(c.name)} to drop">${escapeHtml(c.name)}</button><button class="zone-zoom" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}">⤢</button></span>` : ""; }).join("") || `<span class="zone-empty">No orders</span>`;
+  }
+  function renderGZone(player) {
+    const faceUp = (player.gZone || []).map((instance) => { const c = cardMap.get(instance.cardId); return c ? `<button class="zone-card" data-card-zoom="${escapeHtml(c.id)}" title="Zoom ${escapeHtml(c.name)}">${escapeHtml(c.name)}</button>` : ""; }).join("");
+    return `${faceUp}<span class="zone-empty">${(player.extra || []).length} face down</span>`;
   }
   function updateActionAvailability() {
     if (!match) return;
@@ -404,13 +418,15 @@
     const handCard = match.players.human.hand.find((x) => x.uid === match.selected);
     const fieldCard = findFieldCard(match.selected);
     const pending = Boolean(match.pendingAttack);
-    $("#draw-card").disabled = !humanTurn || pending || match.players.human.deck.length === 0;
-    $("#ride-card").disabled = !humanTurn || pending || match.phase !== 0 || !handCard;
-    $("#call-card").disabled = !humanTurn || pending || match.phase !== 1 || !handCard || !match.players.human.rear.includes(null);
-    $("#attack-card").disabled = !humanTurn || pending || match.phase !== 2 || !fieldCard || fieldCard.instance.rested;
+    $("#draw-card").disabled = !humanTurn || pending || match.phase !== 1 || match.drewThisTurn || match.players.human.deck.length === 0;
+    $("#ride-card").disabled = !humanTurn || pending || match.phase !== 2 || !handCard;
+    $("#call-card").disabled = !humanTurn || pending || match.phase !== 3 || !handCard || !match.players.human.rear.includes(null);
+    $("#attack-card").disabled = !humanTurn || pending || match.phase !== 4 || !fieldCard || fieldCard.instance.rested || fieldCard.instance.locked;
+    $("#play-order").disabled = !humanTurn || pending || match.phase !== 3 || !handCard || !/Order/i.test(cardMap.get(handCard.cardId)?.type || "");
     $("#guard-card").disabled = !pending || match.side === "human" || match.players.human.hand.length === 0;
     $("#end-turn").disabled = !humanTurn || pending;
     $("#advance-phase").disabled = !humanTurn || pending;
+    $$(".manual-actions [data-manual-action]").forEach((button) => { const defenseAction = button.dataset.manualAction === "g-guard"; button.disabled = online.role === "watcher" || (!humanTurn && !(pending && defenseAction)); });
     $("#advance-phase").innerHTML = match.phase === phases.length - 1 ? `End turn <span>→</span>` : `Continue ${phases[match.phase + 1].toLowerCase()} phase <span>→</span>`;
     if (match.selected) {
       const cardId = handCard?.cardId || fieldCard?.instance.cardId; const c = cardMap.get(cardId);
@@ -434,24 +450,24 @@
     const card = p.deck.pop(); p.hand.push(card); return card;
   }
   function drawForHuman() {
-    if (!match || match.side !== "human" || match.pendingAttack) return;
+    if (!match || match.side !== "human" || match.pendingAttack || match.phase !== 1 || match.drewThisTurn) return;
     const card = draw("human"); if (!card) { setMessage("Your deck is empty."); return; }
-    addLog("You drew a card."); setMessage("Card drawn."); renderMatch();
+    match.drewThisTurn = true; addLog("You drew a card."); setMessage("Card drawn."); renderMatch();
   }
   function rideHuman() {
-    const instance = selectedHandCard(); if (!instance || match.phase !== 0) return;
+    const instance = selectedHandCard(); if (!instance || match.phase !== 2) return;
     const p = match.players.human; p.hand = p.hand.filter((x) => x.uid !== instance.uid); if (p.vanguard) p.soul.push(p.vanguard); p.vanguard = { ...instance, rested: false };
     match.selected = null; addLog(`You rode ${cardMap.get(instance.cardId)?.name || "a card"}.`); setMessage("Ride complete."); renderMatch();
   }
   function callHuman() {
-    const instance = selectedHandCard(); if (!instance || match.phase !== 1) return;
+    const instance = selectedHandCard(); if (!instance || match.phase !== 3) return;
     const p = match.players.human; const empty = p.rear.indexOf(null); if (empty < 0) return;
     p.hand = p.hand.filter((x) => x.uid !== instance.uid); p.rear[empty] = { ...instance, rested: false }; match.selected = null;
     addLog(`You called ${cardMap.get(instance.cardId)?.name || "a card"} to the rear-guard circle.`); setMessage("Unit called."); renderMatch();
   }
   function attackerPower(entry) { return Number(cardMap.get(entry.instance.cardId)?.power || 0); }
   function resolveHumanAttack() {
-    const field = findFieldCard(match.selected); if (!field || field.side !== "human" || field.instance.rested || match.phase !== 2 || !match.players.bot.vanguard) return;
+    const field = findFieldCard(match.selected); if (!field || field.side !== "human" || field.instance.rested || field.instance.locked || match.phase !== 4 || !match.players.bot.vanguard) return;
     field.instance.rested = true;
     const attackPower = attackerPower(field); const defenderPower = Number(cardMap.get(match.players.bot.vanguard.cardId)?.power || 0);
     if (online.role) {
@@ -513,48 +529,108 @@
   function finishBotTurn() {
     if (!match || match.ended) return;
     match.players.human.vanguard && (match.players.human.vanguard.rested = false); match.players.human.rear.forEach((x) => x && (x.rested = false));
-    match.side = "human"; match.phase = 0; match.pendingAttack = null; match.selected = null; match.turn += 1; const drawn = draw("human");
-    if (drawn) addLog("Your turn began — you drew a card.");
-    setMessage("Your turn — ride, build your field, and attack."); renderMatch();
+    match.side = "human"; match.phase = 0; match.drewThisTurn = false; match.pendingAttack = null; match.selected = null; match.turn += 1;
+    addLog("Your turn began — advance to Draw to draw a card.");
+    setMessage("Your turn — Stand phase."); renderMatch();
   }
   function endTurn() {
     if (!match || match.side !== "human" || match.pendingAttack || match.ended) return;
     if (online.role) {
       addLog(`${match.players.human.name} ended their turn.`); match.selected = null;
       match.players.human.vanguard && (match.players.human.vanguard.rested = false); match.players.human.rear.forEach((x) => x && (x.rested = false));
-      match.side = "bot"; match.phase = 0; const drawn = draw("bot"); if (drawn) addLog(`${match.players.bot.name}'s turn began — they drew a card.`);
-      setMessage(`${match.players.bot.name}'s turn.`); renderMatch(); return;
+      match.side = "bot"; match.phase = 0; match.drewThisTurn = false;
+      setMessage(`${match.players.bot.name}'s turn — Stand phase.`); renderMatch(); return;
     }
     addLog("You ended your turn."); match.selected = null; renderMatch(); botTurn();
   }
   function advancePhase() {
     if (!match || match.side !== "human" || match.pendingAttack || match.ended) return;
     if (match.phase >= phases.length - 1) { endTurn(); return; }
-    match.phase += 1; match.selected = null; setMessage(`${phases[match.phase]} phase.`); addLog(`You entered ${phases[match.phase].toLowerCase()} phase.`); renderMatch();
+    match.phase += 1; match.selected = null;
+    if (match.phase === 1 && !match.drewThisTurn) {
+      const drawn = draw("human"); match.drewThisTurn = true;
+      addLog(drawn ? `${match.players.human.name} drew a card for the Draw phase.` : `${match.players.human.name} has no cards to draw.`);
+    }
+    if (match.phase === 0) {
+      const player = match.players.human; [player.vanguard, ...player.rear].forEach((unit) => { if (unit) unit.rested = false; });
+    }
+    setMessage(`${phases[match.phase]} phase.`); addLog(`You entered ${phases[match.phase].toLowerCase()} phase.`); renderMatch();
   }
   function manualGameAction(action) {
     if (!match || match.ended) return;
     const player = match.players.human, card = selectedHandCard();
-    if (action === "damage-check" || action === "drive-check") {
+    if (action === "damage-check" || action === "drive-check" || action === "trigger-check") {
       const top = player.deck.pop(); if (!top) { toast("Your deck is empty."); return; }
       (action === "damage-check" ? player.damage : player.hand).push(top);
-      addLog(`${player.name} performed a ${action === "damage-check" ? "damage" : "drive"} check and revealed ${cardMap.get(top.cardId)?.name || "a card"}. Resolve trigger effects manually.`);
+      const checkName = action === "damage-check" ? "damage" : action === "trigger-check" ? "trigger" : "drive";
+      addLog(`${player.name} performed a ${checkName} check and revealed ${cardMap.get(top.cardId)?.name || "a card"}. Resolve trigger effects manually.`);
+    } else if (action.startsWith("place:")) {
+      const zone = action.slice(6);
+      if (zone === "vanguard") {
+        const instance = selectedHandCard();
+        if (!instance || match.phase !== 2) { toast("Select a card during Ride phase to ride it."); return; }
+        player.hand = player.hand.filter((item) => item.uid !== instance.uid); if (player.vanguard) player.soul.push(player.vanguard); player.vanguard = { ...instance, rested: false }; match.selected = null;
+        addLog(`${player.name} rode ${cardMap.get(instance.cardId)?.name || "a card"} to vanguard.`);
+        renderMatch(); return;
+      }
+      const index = zone === "rear-right" ? 1 : zone === "rear-left" ? 0 : -1;
+      const instance = selectedHandCard();
+      if (!instance || index < 0 || player.rear[index]) { toast("Select a card and choose an empty rear-guard circle."); return; }
+      player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.rear[index] = { ...instance, rested: false }; match.selected = null;
+      addLog(`${player.name} placed ${cardMap.get(instance.cardId)?.name || "a card"} in the ${zone} circle.`);
+    } else if (action === "play-order") {
+      const instance = selectedHandCard();
+      if (!instance || !/Order/i.test(cardMap.get(instance.cardId)?.type || "")) { toast("Select an Order card in your hand first."); return; }
+      player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.orders.push(instance); match.selected = null;
+      addLog(`${player.name} played ${cardMap.get(instance.cardId)?.name || "an Order"} to the Order zone.`);
+    } else if (action === "counter-blast") {
+      if (!player.damage.length) { toast("There are no face-up damage cards to Counter-Blast."); return; }
+      player.drop.push(player.damage.shift()); addLog(`${player.name} Counter-Blasted 1 damage.`);
+    } else if (action === "soul-charge") {
+      const top = player.deck.pop(); if (!top) { toast("Your deck is empty."); return; }
+      player.soul.push(top); addLog(`${player.name} Soul-Charged ${cardMap.get(top.cardId)?.name || "a card"}.`);
+    } else if (action === "lock") {
+      const field = findFieldCard(match.selected); if (!field || field.side !== "human" || field.zone === "vanguard") { toast("Select one of your rear-guards to lock or unlock it."); return; }
+      field.instance.locked = !field.instance.locked; addLog(`${player.name} ${field.instance.locked ? "locked" : "unlocked"} a rear-guard.`);
+    } else if (action === "power") {
+      const field = findFieldCard(match.selected); if (!field || field.side !== "human") { toast("Select one of your units first."); return; }
+      field.instance.powerBoost = Number(field.instance.powerBoost || 0) + 5000; addLog(`${player.name} gave ${cardMap.get(field.instance.cardId)?.name || "a unit"} +5000 power.`);
+    } else if (action === "gift") {
+      player.gifts = (player.gifts || 0) + 1; addLog(`${player.name} added an Imaginary Gift marker (${player.gifts}).`);
+    } else if (action === "shuffle") {
+      shuffle(player.deck); addLog(`${player.name} shuffled their deck.`);
+    } else if (action === "stride") {
+      const unit = player.gDeck?.pop(); if (!unit) { toast("Your G deck is empty. Add G Units to your deck list first."); return; }
+      if (player.vanguard) player.gZone.push({ ...player.vanguard, faceUp: true });
+      player.vanguard = { ...unit, rested: false }; match.selected = null; addLog(`${player.name} strode ${cardMap.get(unit.cardId)?.name || "a G Unit"} from the G deck.`);
+    } else if (action === "gdeck-to-g") {
+      const unit = player.gDeck?.pop(); if (!unit) { toast("Your G deck is empty."); return; }
+      player.gZone.push({ ...unit, faceUp: true }); addLog(`${player.name} placed a G-deck card face up in the G zone.`);
+    } else if (action === "field-to-g") {
+      const field = findFieldCard(match.selected); if (!field || field.side !== "human") { toast("Select a unit on your field first."); return; }
+      const playerZone = field.zone === "vanguard" ? "vanguard" : "rear";
+      if (playerZone === "vanguard") player.vanguard = null; else player.rear[field.index] = null;
+      player.gZone.push({ ...field.instance, faceUp: true }); match.selected = null; addLog(`${player.name} moved a field unit face up to the G zone.`);
+    } else if (action === "flip-g-unit") {
+      if (!player.gZone?.length) { toast("Your G zone is empty."); return; }
+      player.extra.push(player.gZone.shift()); addLog(`${player.name} turned a G-zone card face down.`);
+    } else if (action === "g-guard") {
+      if (!match.pendingAttack) { toast("Use G-guard while defending an attack."); return; }
+      const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand to pay the G-guard cost."); return; }
+      player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.drop.push(instance); match.pendingAttack = null; match.selected = null;
+      addLog(`${player.name} paid the G-guard cost and defended. Resolve shield effects manually.`);
+      if (!online.role) setTimeout(nextBotAttack, 450);
+    } else if (action === "guard") {
+      if (!match.pendingAttack) { toast("There is no incoming attack to guard."); return; }
+      humanGuard(); return;
+    } else if (action.startsWith("order-to-drop:")) {
+      const uid = action.slice("order-to-drop:".length), index = player.orders.findIndex((item) => item.uid === uid);
+      if (index < 0) return;
+      player.drop.push(player.orders.splice(index, 1)[0]); addLog(`${player.name} moved an Order from the Order zone to drop.`);
     } else if (action === "add-damage") {
       if (!card) { toast("Select a card in your hand first."); return; }
       player.hand = player.hand.filter((item) => item.uid !== card.uid); player.damage.push(card); match.selected = null;
       addLog(`${player.name} moved ${cardMap.get(card.cardId)?.name || "a card"} from hand to damage.`);
-    } else if (action === "g-guard") {
-      if (!card) { toast("Select the card to pay the G-guard cost."); return; }
-      player.hand = player.hand.filter((item) => item.uid !== card.uid); player.drop.push(card); match.selected = null;
-      addLog(`${player.name} paid the manual G-guard cost with ${cardMap.get(card.cardId)?.name || "a card"}. Resolve shield and effects manually.`);
-    } else if (action === "stride") {
-      if (!card || !/G Unit/i.test(cardMap.get(card.cardId)?.type || "")) { toast("Select a G Unit from your hand. Add an Extra Deck/G zone manager before playing G Units from a separate deck."); return; }
-      if (player.vanguard) player.gZone.push(player.vanguard);
-      player.hand = player.hand.filter((item) => item.uid !== card.uid); player.vanguard = { ...card, rested: false }; match.selected = null;
-      addLog(`${player.name} strode ${cardMap.get(card.cardId)?.name || "a G Unit"}; resolve the discard cost manually.`);
-    } else if (action === "flip-g-unit") {
-      if (!player.gZone?.length) { toast("Your G zone is empty. A dedicated Extra Deck list is not set up yet."); return; }
-      const unit = player.gZone.shift(); player.extra.push(unit); addLog(`${player.name} turned a G-zone card face down in the Extra Deck.`);
     } else if (action === "quick-shield") {
       player.quickShields = (player.quickShields || 0) + 1; addLog(`${player.name} created a Quick Shield token (${player.quickShields}). Move it to drop when used.`);
     }
@@ -754,10 +830,12 @@
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });
   $("#copy-spectate").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#spectate-link").value); toast("Spectator link copied."); } catch { $("#spectate-link").select(); document.execCommand("copy"); toast("Spectator link copied."); } });
   $("#new-match").addEventListener("click", () => { endOnlineSession(); startMatch(); }); $("#empty-start").addEventListener("click", () => { endOnlineSession(); startMatch(); }); $("#reset-match").addEventListener("click", newMatchButton);
-  $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
+  $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher" || match.side !== "human") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
-  $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; match.selected = match.selected === field.dataset.fieldUid ? null : field.dataset.fieldUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
+  $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; match.selected = match.selected === field.dataset.fieldUid ? null : field.dataset.fieldUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
+  $("#human-damage").addEventListener("click", () => performManualAction("counter-blast"));
+  $("#human-order-zone").addEventListener("click", (e) => { if (e.target.closest("[data-card-zoom]")) return; const order = e.target.closest("[data-order-uid]"); if (order) performManualAction(`order-to-drop:${order.dataset.orderUid}`); });
   $("#advance-phase").addEventListener("click", () => { if (match?.pendingAttack) return; });
   const noGuardButton = document.createElement("button"); noGuardButton.id = "no-guard"; noGuardButton.className = "button button-quiet hidden"; noGuardButton.textContent = "No guard"; noGuardButton.addEventListener("click", () => performOnlineAction("noGuard")); $(".action-buttons").insertBefore(noGuardButton, $("#guard-card"));
   $("#sort-hand").addEventListener("click", () => { if (!match) return; match.players.human.hand.sort((a, b) => { const ca = cardMap.get(a.cardId), cb = cardMap.get(b.cardId); return (ca?.grade || 0) - (cb?.grade || 0) || ca?.name.localeCompare(cb?.name); }); renderMatch(); });
