@@ -1,6 +1,6 @@
 # Vanguard Arena — early online prototype
 
-A browser project with local practice and two-player online rooms. Saved decks stay in each player's browser. Use **Export JSON** to keep or move a copy.
+A browser project with local practice and two-player online rooms. Without account setup, saved decks stay in the current browser. The optional account feature stores decks under player accounts with Supabase; see [`supabase/SETUP.md`](supabase/SETUP.md).
 
 ## Included now
 
@@ -9,6 +9,7 @@ A browser project with local practice and two-player online rooms. Saved decks s
 - Two-player peer-to-peer rooms: host creates an invite link, friend opens it, and game actions synchronize while both pages stay open.
 - Deck builder with local save, open, duplicate, delete, and JSON import/export.
 - Tap the expand icon on cards in the builder, saved deck previews, deck list, or match field/hand to open a large card image and its details.
+- Optional email accounts and per-account deck sync after a free Supabase project is configured; existing local decks can be explicitly imported.
 - Card catalog with search by name or database number and filters for grade and clan.
 - 10,476 catalog records matched to the supplied card art by numeric image ID.
 

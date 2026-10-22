@@ -44,13 +44,132 @@
   let selectedZone = null;
   let botTimer = null;
   let online = { role: null, peer: null, connection: null, roomId: null, applyingRemote: false, dialogMode: "host" };
+  const localDeckStorageKey = "vanguardArenaDecks";
+  const account = { client: null, user: null, syncing: false, recovery: false };
 
+  function deckStorageKey() { return account.user ? `${localDeckStorageKey}:${account.user.id}` : localDeckStorageKey; }
   function readSavedDecks() {
-    try { return JSON.parse(localStorage.getItem("vanguardArenaDecks") || "[]"); } catch { return []; }
+    try { return JSON.parse(localStorage.getItem(deckStorageKey()) || "[]"); } catch { return []; }
   }
-  function writeSavedDecks(decks) { localStorage.setItem("vanguardArenaDecks", JSON.stringify(decks)); updateDeckCount(); }
+  function writeSavedDecks(decks) { localStorage.setItem(deckStorageKey(), JSON.stringify(decks)); updateDeckCount(); if (account.user && !account.syncing) void persistCloudDecks(decks); }
   function updateDeckCount() { $("#deck-count").textContent = readSavedDecks().length; }
   function escapeHtml(value) { return String(value ?? "").replace(/[&<>\"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+  function accountMessage(message, isError = false) { const el = $("#account-message"); if (!el) return; el.textContent = message; el.classList.toggle("error", isError); }
+  function refreshAccountUI() {
+    const config = window.VANGUARD_CLOUD_CONFIG;
+    const ready = Boolean(account.client);
+    $("#account-setup-needed").classList.toggle("hidden", ready);
+    $("#account-form").classList.toggle("hidden", !ready || (Boolean(account.user) && !account.recovery));
+    $("#account-signed-in").classList.toggle("hidden", !account.user || account.recovery);
+    $("#account-signin").classList.toggle("hidden", account.recovery);
+    $("#account-signup").classList.toggle("hidden", account.recovery);
+    $("#account-reset").classList.toggle("hidden", account.recovery);
+    $("#account-update-password").classList.toggle("hidden", !account.recovery);
+    if (account.user) $("#account-email-label").textContent = account.user.email || "Signed-in player";
+    $("#account-button").textContent = account.user ? `Account · ${(account.user.email || "Player").split("@")[0]}` : "Account";
+    $("#account-import-local").classList.toggle("hidden", !account.user || !localDecksToImport().length);
+    if (config?.url && config?.publishableKey && !window.supabase?.createClient) {
+      $("#account-setup-needed").classList.remove("hidden");
+      $("#account-setup-needed").innerHTML = "The account service library did not load. Check your internet connection and reload the page.";
+    }
+  }
+  function localDecksToImport() { try { return JSON.parse(localStorage.getItem(localDeckStorageKey) || "[]"); } catch { return []; } }
+  function cloudDeckRows(decks, userId = account.user?.id) { return decks.map((deck) => ({ user_id: userId, deck_id: String(deck.id), name: String(deck.name || "Untitled deck"), cards: deck.cards && typeof deck.cards === "object" ? deck.cards : {}, updated_at: deck.updatedAt || new Date().toISOString() })); }
+  async function persistCloudDecks(decks) {
+    if (!account.client || !account.user || !decks.length) return;
+    $("#account-sync-status").textContent = "Saving decks to your account…";
+    const { error } = await account.client.from("player_decks").upsert(cloudDeckRows(decks), { onConflict: "user_id,deck_id" });
+    if (error) { $("#account-sync-status").textContent = `Cloud save failed: ${error.message}`; accountMessage("Decks are still saved in this browser, but cloud sync failed. Check the account setup guide.", true); }
+    else $("#account-sync-status").textContent = `Synced ${decks.length} deck${decks.length === 1 ? "" : "s"} to your account.`;
+  }
+  async function deleteCloudDeck(deckId) {
+    if (!account.client || !account.user) return;
+    const { error } = await account.client.from("player_decks").delete().eq("user_id", account.user.id).eq("deck_id", String(deckId));
+    if (error) { $("#account-sync-status").textContent = `Cloud delete failed: ${error.message}`; accountMessage("The deck was removed from this browser, but cloud deletion failed.", true); }
+  }
+  async function syncCloudDecks() {
+    if (!account.client || !account.user || account.syncing) return;
+    const userId = account.user.id;
+    account.syncing = true;
+    $("#account-sync-status").textContent = "Loading your saved decks…";
+    try {
+      const { data, error } = await account.client.from("player_decks").select("deck_id,name,cards,updated_at").eq("user_id", userId).order("updated_at", { ascending: false });
+      if (error) throw error;
+      const decks = new Map();
+      [...readSavedDecks(), ...(data || []).map((row) => ({ id: row.deck_id, name: row.name, cards: row.cards || {}, updatedAt: row.updated_at }))].forEach((deck) => {
+        const current = decks.get(String(deck.id));
+        if (!current || Date.parse(deck.updatedAt || 0) > Date.parse(current.updatedAt || 0)) decks.set(String(deck.id), deck);
+      });
+      const merged = [...decks.values()].sort((a, b) => Date.parse(b.updatedAt || 0) - Date.parse(a.updatedAt || 0));
+      localStorage.setItem(deckStorageKey(), JSON.stringify(merged)); updateDeckCount(); renderSavedDecks();
+      if (merged.length) {
+        const result = await account.client.from("player_decks").upsert(cloudDeckRows(merged, userId), { onConflict: "user_id,deck_id" });
+        if (result.error) throw result.error;
+      }
+      $("#account-sync-status").textContent = `Synced ${merged.length} deck${merged.length === 1 ? "" : "s"} to your account.`;
+    } catch (error) {
+      $("#account-sync-status").textContent = `Deck sync failed: ${error.message}`;
+      accountMessage("You are signed in, but deck sync failed. Check the database setup guide.", true);
+    } finally { account.syncing = false; }
+  }
+  function openAccountDialog() { refreshAccountUI(); $("#account-dialog").showModal(); }
+  function initializeAccounts() {
+    const config = window.VANGUARD_CLOUD_CONFIG;
+    if (!config?.url || !config?.publishableKey || !window.supabase?.createClient) { refreshAccountUI(); return; }
+    try {
+      account.client = window.supabase.createClient(config.url, config.publishableKey);
+      account.client.auth.onAuthStateChange((event, session) => {
+        account.user = session?.user || null; account.recovery = event === "PASSWORD_RECOVERY";
+        refreshAccountUI(); updateDeckCount(); renderSavedDecks();
+        if (account.user && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) setTimeout(() => void syncCloudDecks(), 0);
+        if (account.recovery) { accountMessage("Enter a new password, then choose Save new password."); setTimeout(openAccountDialog, 0); }
+        if (!account.user) $("#account-sync-status").textContent = "Your account is signed out. Local decks remain in this browser.";
+      });
+      account.client.auth.getSession().then(({ data, error }) => {
+        if (error) throw error;
+        account.user = data.session?.user || null; refreshAccountUI(); updateDeckCount(); renderSavedDecks();
+        if (account.user) void syncCloudDecks();
+      }).catch((error) => accountMessage(`Couldn't restore your account session: ${error.message}`, true));
+    } catch (error) { accountMessage(`Account setup error: ${error.message}`, true); }
+    refreshAccountUI();
+  }
+  async function accountSignUp() {
+    if (!account.client) return;
+    const email = $("#account-email").value.trim(); const password = $("#account-password").value;
+    if (!email || password.length < 8) { accountMessage("Enter a valid email and a password with at least 8 characters.", true); return; }
+    accountMessage("Creating your account…");
+    const { data, error } = await account.client.auth.signUp({ email, password, options: { emailRedirectTo: `${location.origin}${location.pathname}` } });
+    if (error) accountMessage(error.message, true);
+    else if (data.session) accountMessage("Account created and signed in.");
+    else accountMessage("Account created. Check your email for the confirmation link before signing in.");
+  }
+  async function accountSignIn() {
+    if (!account.client) return;
+    const { error } = await account.client.auth.signInWithPassword({ email: $("#account-email").value.trim(), password: $("#account-password").value });
+    if (error) accountMessage(error.message, true); else accountMessage("Signed in. Loading your decks…");
+  }
+  async function accountSignOut() { if (account.client) { const { error } = await account.client.auth.signOut(); if (error) accountMessage(error.message, true); else { account.user = null; accountMessage("Signed out. Your local decks are still here."); } } }
+  async function resetAccountPassword() {
+    if (!account.client) return;
+    const email = $("#account-email").value.trim();
+    if (!email) { accountMessage("Enter your email address first.", true); return; }
+    const { error } = await account.client.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}${location.pathname}` });
+    accountMessage(error ? error.message : "If that email has an account, a password reset link is on the way.", Boolean(error));
+  }
+  async function updateAccountPassword() {
+    if (!account.client || !account.recovery) return;
+    const password = $("#account-password").value;
+    if (password.length < 8) { accountMessage("Choose a new password with at least 8 characters.", true); return; }
+    const { error } = await account.client.auth.updateUser({ password });
+    if (error) accountMessage(error.message, true);
+    else { account.recovery = false; refreshAccountUI(); accountMessage("Password updated."); }
+  }
+  async function importLocalDecks() {
+    if (!account.user) return;
+    const incoming = localDecksToImport(); const current = readSavedDecks(); const decks = new Map(current.map((d) => [String(d.id), d]));
+    incoming.forEach((deck) => { const old = decks.get(String(deck.id)); if (!old || Date.parse(deck.updatedAt || 0) > Date.parse(old.updatedAt || 0)) decks.set(String(deck.id), deck); });
+    writeSavedDecks([...decks.values()]); renderSavedDecks(); accountMessage(`Imported ${incoming.length} browser-saved deck${incoming.length === 1 ? "" : "s"}.`);
+  }
   function cardImage(card, className = "card-image") {
     if (!card?.image) return `<span class="card-art-glyph">${escapeHtml(card?.glyph || "✦")}</span>`;
     return `<img class="${className}" src="${escapeHtml(card.image)}" alt="${escapeHtml(card.name)}" onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden')" /><span class="card-art-glyph hidden">${escapeHtml(card.glyph || "✦")}</span>`;
@@ -516,6 +635,8 @@
   $$('[data-goto]').forEach((b) => b.addEventListener("click", () => showView(b.dataset.goto)));
   $("#host-online").addEventListener("click", () => openOnlineDialog("host")); $("#host-online-empty").addEventListener("click", () => openOnlineDialog("host"));
   $("#join-online").addEventListener("click", () => openOnlineDialog("join")); $("#join-online-empty").addEventListener("click", () => openOnlineDialog("join"));
+  $("#account-button").addEventListener("click", openAccountDialog); $("#close-account-dialog").addEventListener("click", () => $("#account-dialog").close());
+  $("#account-signup").addEventListener("click", accountSignUp); $("#account-signin").addEventListener("click", accountSignIn); $("#account-signout").addEventListener("click", accountSignOut); $("#account-reset").addEventListener("click", resetAccountPassword); $("#account-update-password").addEventListener("click", updateAccountPassword); $("#account-import-local").addEventListener("click", importLocalDecks);
   $("#online-confirm").addEventListener("click", () => online.dialogMode === "host" ? beginHosting() : beginJoining());
   $("#online-cancel").addEventListener("click", () => $("#online-dialog").close()); $("#close-online-dialog").addEventListener("click", () => $("#online-dialog").close());
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });
@@ -533,7 +654,7 @@
   $("#builder-prev").addEventListener("click", () => { builderPage = Math.max(0, builderPage - 1); renderBuilderCards(); }); $("#builder-next").addEventListener("click", () => { builderPage += 1; renderBuilderCards(); });
   $("#builder-card-grid").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const node = e.target.closest("[data-card-id]"); if (!node) return; const id = node.dataset.cardId; builder.cards[id] = Math.min(4, (builder.cards[id] || 0) + 1); renderBuilder(); });
   $("#deck-list").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const q = e.target.closest("[data-qty]"); const r = e.target.closest("[data-remove]"); if (q) { const id = q.dataset.id; builder.cards[id] = Math.max(0, Math.min(4, (builder.cards[id] || 0) + Number(q.dataset.qty))); if (!builder.cards[id]) delete builder.cards[id]; renderBuilder(); } if (r) { delete builder.cards[r.dataset.remove]; renderBuilder(); } });
-  $("#saved-decks").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const load = e.target.closest("[data-load-deck]"); const duplicate = e.target.closest("[data-duplicate-deck]"); const remove = e.target.closest("[data-delete-deck]"); const exp = e.target.closest("[data-export-saved]"); const decks = readSavedDecks(); if (load) { const d = decks.find((x) => x.id === load.dataset.loadDeck); if (d) loadDeck(d); } if (duplicate) { const d = decks.find((x) => x.id === duplicate.dataset.duplicateDeck); if (d) { const copy = { ...d, id: crypto.randomUUID?.() || String(Date.now()), name: `${d.name} Copy`, updatedAt: new Date().toISOString() }; decks.unshift(copy); writeSavedDecks(decks); renderSavedDecks(); toast("Deck duplicated"); } } if (remove) { const d = decks.find((x) => x.id === remove.dataset.deleteDeck); if (d && confirm(`Delete “${d.name}” from this browser?`)) { writeSavedDecks(decks.filter((x) => x.id !== d.id)); renderSavedDecks(); } } if (exp) { const d = decks.find((x) => x.id === exp.dataset.exportSaved); if (d) exportDeck(d, `${d.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`); } });
+  $("#saved-decks").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const load = e.target.closest("[data-load-deck]"); const duplicate = e.target.closest("[data-duplicate-deck]"); const remove = e.target.closest("[data-delete-deck]"); const exp = e.target.closest("[data-export-saved]"); const decks = readSavedDecks(); if (load) { const d = decks.find((x) => x.id === load.dataset.loadDeck); if (d) loadDeck(d); } if (duplicate) { const d = decks.find((x) => x.id === duplicate.dataset.duplicateDeck); if (d) { const copy = { ...d, id: crypto.randomUUID?.() || String(Date.now()), name: `${d.name} Copy`, updatedAt: new Date().toISOString() }; decks.unshift(copy); writeSavedDecks(decks); renderSavedDecks(); toast("Deck duplicated"); } } if (remove) { const d = decks.find((x) => x.id === remove.dataset.deleteDeck); if (d && confirm(`Delete “${d.name}” from this browser?`)) { writeSavedDecks(decks.filter((x) => x.id !== d.id)); void deleteCloudDeck(d.id); renderSavedDecks(); } } if (exp) { const d = decks.find((x) => x.id === exp.dataset.exportSaved); if (d) exportDeck(d, `${d.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`); } });
   $("#export-deck").addEventListener("click", () => exportDeck(builder, `${builder.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`));
   $("#import-deck").addEventListener("click", () => $("#deck-file").click()); $("#deck-file").addEventListener("change", (e) => { if (e.target.files[0]) importDeckFile(e.target.files[0]); e.target.value = ""; });
   $("#library-search").addEventListener("input", () => { libraryPage = 0; renderLibrary(); }); $("#library-grade").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-clan").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-prev").addEventListener("click", () => { libraryPage = Math.max(0, libraryPage - 1); renderLibrary(); }); $("#library-next").addEventListener("click", () => { libraryPage += 1; renderLibrary(); }); $("#library-grid").addEventListener("click", (e) => { const node = e.target.closest("[data-card-detail]"); if (node) showCardDetails(node.dataset.cardDetail); });
@@ -545,6 +666,7 @@
   $("#match-menu").addEventListener("click", () => { if (confirm("Start a new practice match? The current match will end.")) { endOnlineSession(); startMatch(); } });
   $("#card-dialog").addEventListener("click", (e) => { if (e.target === $("#card-dialog")) $("#card-dialog").close(); });
   populateClanFilters(); updateDeckCount(); renderBuilder(); renderLibrary(); renderArtGallery(); renderSavedDecks();
+  initializeAccounts();
   const initial = ["play", "decks", "cards"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "play"; showView(initial);
   if (!readSavedDecks().length) { $("#match-layout").classList.add("hidden"); $("#match-empty").classList.remove("hidden"); }
   const joinInvite = new URLSearchParams(location.search).get("join"); if (joinInvite) openOnlineDialog("join", location.href);
