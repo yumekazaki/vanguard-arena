@@ -1368,7 +1368,7 @@
     online.applyingRemote = true;
     try {
       if (message.type === "select") renderMatch();
-      else if (message.action?.startsWith("manual:")) manualGameAction(message.action.slice(8));
+      else if (message.action?.startsWith("manual:")) manualGameAction(message.action.slice("manual:".length));
       else ({ draw: drawForHuman, ride: rideHuman, call: callHuman, attack: resolveHumanAttack, guard: humanGuard, noGuard, endTurn, advance: advancePhase }[message.action] || (() => {}))();
     } finally {
       match.players = players;
