@@ -31,6 +31,7 @@
   cardMap.set("token-quick-shield", { id: "token-quick-shield", name: "Quick Shield", grade: 0, nation: "Token", power: 0, shield: 5000, type: "Quick Shield Token", text: "Provides 5,000 shield when used to guard.", color: "#a39bff", glyph: "◇", source: "Vanguard Arena token" });
   cardMap.set("token-protect", { id: "token-protect", name: "Protect Marker", grade: 0, nation: "Token", power: 0, shield: 0, type: "Protect Marker", text: "When used to guard, discard one other card from your hand to completely stop the attack.", color: "#81d9ee", glyph: "◇", source: "Vanguard Arena token" });
   const artIds = Array.isArray(window.CARD_ART_IDS) ? window.CARD_ART_IDS : [];
+  const isUnitCard = (card) => /\b(?:unit|trigger)\b/i.test(card?.type || "");
   const artPageSize = 60;
   let artPage = 0;
   let builderPage = 0;
@@ -231,7 +232,7 @@
     const cards = {};
     const pool = cardList.filter((c) => c.type === "Unit" || c.type === "Trigger");
     for (let i = 0; i < 50; i++) { const card = pool[(i * 7 + Math.floor(i / pool.length)) % pool.length]; cards[card.id] = (cards[card.id] || 0) + 1; }
-    const starterCardId = Object.keys(cards).find((id) => Number(cardMap.get(id)?.grade) === 0 && /Unit/i.test(cardMap.get(id)?.type || "")) || "";
+    const starterCardId = Object.keys(cards).find((id) => Number(cardMap.get(id)?.grade) === 0 && isUnitCard(cardMap.get(id))) || "";
     return { id: crypto.randomUUID?.() || String(Date.now()), name: "Demo Practice Deck", cards, starterCardId };
   }
   function deckCount(deck) { return Object.values(deck.cards || {}).reduce((a, b) => a + Number(b || 0), 0); }
@@ -251,7 +252,7 @@
     if (!total) { validation.className = "deck-validation"; validation.textContent = "Add cards from the library to start building."; }
     else if (total !== 50) { validation.className = "deck-validation invalid"; validation.textContent = `${total}/50 main-deck cards. Premium format legality is not verified.`; }
     else { validation.className = "deck-validation valid"; validation.textContent = "50 main-deck cards · Premium format legality is not verified."; }
-    const starterOptions = Object.entries(builder.cards || {}).filter(([id, qty]) => qty > 0 && Number(cardMap.get(id)?.grade) === 0 && /Unit/i.test(cardMap.get(id)?.type || "")).map(([id, qty]) => ({ card: cardMap.get(id), qty })).filter((entry) => entry.card).sort((a, b) => a.card.name.localeCompare(b.card.name));
+    const starterOptions = Object.entries(builder.cards || {}).filter(([id, qty]) => qty > 0 && Number(cardMap.get(id)?.grade) === 0 && isUnitCard(cardMap.get(id))).map(([id, qty]) => ({ card: cardMap.get(id), qty })).filter((entry) => entry.card).sort((a, b) => a.card.name.localeCompare(b.card.name));
     if (builder.starterCardId && !starterOptions.some(({ card }) => card.id === builder.starterCardId)) builder.starterCardId = "";
     $("#starter-vanguard").innerHTML = `<option value="">Choose a Grade 0 unit…</option>${starterOptions.map(({ card, qty }) => `<option value="${escapeHtml(card.id)}">${escapeHtml(card.name)} · ×${qty}</option>`).join("")}`;
     $("#starter-vanguard").value = builder.starterCardId || "";
@@ -362,7 +363,7 @@
     const allCards = cardInstances(deck);
     const gDeck = allCards.filter((instance) => /G Unit|G Guardian|G-Guard/i.test(cardMap.get(instance.cardId)?.type || ""));
     const pile = allCards.filter((instance) => !gDeck.includes(instance));
-    const starterId = deck.starterCardId || pile.find((instance) => Number(cardMap.get(instance.cardId)?.grade) === 0 && /Unit/i.test(cardMap.get(instance.cardId)?.type || ""))?.cardId;
+    const starterId = deck.starterCardId || pile.find((instance) => Number(cardMap.get(instance.cardId)?.grade) === 0 && isUnitCard(cardMap.get(instance.cardId)))?.cardId;
     const starterIndex = pile.findIndex((instance) => instance.cardId === starterId);
     const vanguard = starterIndex >= 0 ? { ...pile.splice(starterIndex, 1)[0], rested: false } : null;
     shuffle(pile);
@@ -516,13 +517,15 @@
     if (!instance) return;
     const c = cardMap.get(instance.cardId); if (!c) return;
     const turnPower = Number(instance.turnPowerBoost || 0), turnCrit = Number(instance.turnCriticalBoost || 0);
+    const attackBoost = match.pendingAttack?.attackerUid === instance.uid ? Number(match.pendingAttack.boostPower || 0) : match.pendingAttackSetup?.attackerUid === instance.uid ? Number(match.pendingAttackSetup.boostPower || 0) : 0;
     const forcePower = match.side === side ? markers.filter((gift) => /^Force I$/i.test(gift.type || "")).length * 10000 : 0;
     const effectLabels = [];
     if (turnPower) effectLabels.push(`+${Math.round(turnPower / 1000)}k`);
     if (turnCrit) effectLabels.push(`+${turnCrit} CRIT`);
+    if (attackBoost) effectLabels.push(`+${Math.round(attackBoost / 1000)}k BOOST · THIS ATTACK`);
     if (forcePower) effectLabels.push(`+${Math.round(forcePower / 1000)}k FORCE I`);
     const heartPower = Number(cardMap.get(instance.strideHeart?.cardId)?.power || 0) + Number(instance.strideHeart?.powerBoost || 0) + Number(instance.strideHeart?.turnPowerBoost || 0);
-    const calculatedPower = Number(c.power || 0) + heartPower + Number(instance.powerBoost || 0) + turnPower + forcePower;
+    const calculatedPower = Number(c.power || 0) + heartPower + Number(instance.powerBoost || 0) + turnPower + forcePower + attackBoost;
     const guardPower = match.pendingAttack?.targetUid === instance.uid ? Math.max(0, Number(match.pendingAttack.targetPower || 0) - calculatedPower) : 0;
     const effectivePower = calculatedPower + guardPower;
     const effectivePowerLabel = effectivePower.toLocaleString();
@@ -580,8 +583,6 @@
     if (selectedToDrop) selectedToDrop.disabled = !canAct;
     const selectedToSoul = $("[data-manual-action='selected-to-soul']");
     if (selectedToSoul) selectedToSoul.disabled = !canAct;
-    const moveRearButton = $("[data-manual-action='move-rear']");
-    if (moveRearButton) moveRearButton.disabled = !canAct;
     const selectedVanguardSoul = $("[data-manual-action='view-selected-soul']");
     if (selectedVanguardSoul) selectedVanguardSoul.disabled = !canAct;
     const restSelected = $("[data-manual-action='rest-selected']");
@@ -592,7 +593,7 @@
     const contextualActions = {
       bind: onHumanField || onHumanHand, "selected-to-drop": onHumanField || onHumanHand, "selected-to-soul": onHumanField || onHumanHand,
       "view-selected-soul": onHumanField && fieldCard.zone === "vanguard", "rest-selected": onHumanField && !fieldCard.instance.rested,
-      "stand-selected": onHumanField && fieldCard.instance.rested, "move-rear": onHumanField && fieldCard.zone !== "vanguard",
+      "stand-selected": onHumanField && fieldCard.instance.rested,
       "hand-to-damage": onHumanHand, lock: onHumanField, power: onHumanField
     };
     Object.keys(contextualActions).forEach((action) => $$(`.selected-card-actions [data-manual-action="${action}"]`).forEach((button) => { button.hidden = false; }));
@@ -605,15 +606,15 @@
     } else {
       const attackHint = !pending ? "Select a card to see actions" : attack.attackerSide === "human" ? (attack.defenderDone ? "Defense complete — finish your attack" : "Your attack — waiting for defense") : "Opponent attacking — choose Guard or No guard";
       const attackTitle = !pending ? "No card selected" : attack.attackerSide === "human" ? "Your attack is in progress" : "Attack incoming";
-      const attackHelp = !pending ? "Choose a card from your hand or field" : attack.attackerSide === "human" ? (attack.defenderDone ? "Confirm Finish attack to continue." : "The defender is choosing whether to guard.") : "Use Guard or No guard";
+      const attackHelp = !pending ? "Choose a card from your hand or field" : attack.attackerSide === "human" ? (attack.defenderDone ? "Choose End this attack to continue." : "The defender is choosing whether to guard.") : "Use Guard or No guard";
       $("#selection-hint").textContent = attackHint;
       $("#selected-summary").innerHTML = `<span class="selected-card-icon">✦</span><span><b>${attackTitle}</b><small>${attackHelp}</small></span>`;
     }
     const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.toggle("hidden", !canDefend); noGuard.textContent = (attack?.guardCards?.length || 0) ? "Done guarding" : "No guard"; noGuard.disabled = !canAct || !canDefend; }
     const finishAttackButton = $("#finish-attack");
     if (finishAttackButton) {
-      finishAttackButton.hidden = !attack || attack.attackerSide !== "human" || !attack.defenderDone || Number(attack.driveChecksRemaining || 0) > 0;
-      finishAttackButton.disabled = !canAct || finishAttackButton.hidden;
+      finishAttackButton.hidden = !attack || attack.attackerSide !== "human";
+      finishAttackButton.disabled = !canAct || !attack?.defenderDone || Number(attack?.driveChecksRemaining || 0) > 0;
     }
     if (online.role === "watcher") $$(".action-buttons button").forEach((button) => { button.disabled = true; });
   }
@@ -808,7 +809,7 @@
   function callHuman() {
     const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; }
     const p = match.players.human, card = cardMap.get(instance.cardId), empty = p.rear.indexOf(null);
-    if (!/Unit/i.test(card?.type || "") || Number(card.grade || 0) > Number(cardMap.get(p.vanguard?.cardId)?.grade || 0)) { toast("You can only call a Unit whose grade is no higher than your Vanguard."); return; }
+    if (!isUnitCard(card) || Number(card.grade || 0) > Number(cardMap.get(p.vanguard?.cardId)?.grade || 0)) { toast("You can only call a Unit whose grade is no higher than your Vanguard."); return; }
     if (empty < 0) return;
     p.hand = p.hand.filter((x) => x.uid !== instance.uid); p.rear[empty] = { ...instance, rested: false }; match.selected = null;
     addLog(`You called ${cardMap.get(instance.cardId)?.name || "a card"} to the rear-guard circle.`); setMessage("Unit called."); renderMatch();
@@ -850,7 +851,7 @@
     if(!target){toast("That attack target is no longer in its circle.");return;}
     attacker.instance.rested=true;
     const attackerCard=cardMap.get(attacker.instance.cardId),driveText=String(attackerCard?.text||""),driveChecks=attacker.zone==="vanguard"?(/Triple Drive/i.test(driveText)?3:Number(attackerCard?.grade||0)>=3||/Twin Drive/i.test(driveText)?2:1):0;
-    match.pendingAttack={attacker:attackerCard?.name||"unit",attackerUid:attacker.instance.uid,attackerSide:setup.attackerSide,attackerZone:attacker.zone,defenderSide,targetUid,targetZone:zone,power:attackerPower(attacker)+Number(setup.boostPower||0),targetPower:attackerPower({instance:target}),critical:attackerCritical(attacker),guardCards:[],driveChecksRemaining:driveChecks};
+    match.pendingAttack={attacker:attackerCard?.name||"unit",attackerUid:attacker.instance.uid,attackerSide:setup.attackerSide,attackerZone:attacker.zone,defenderSide,targetUid,targetZone:zone,boostPower:Number(setup.boostPower||0),power:attackerPower(attacker)+Number(setup.boostPower||0),targetPower:attackerPower({instance:target}),critical:attackerCritical(attacker),guardCards:[],driveChecksRemaining:driveChecks};
     match.pendingAttackSetup=null;$("#attack-prompt-dialog").close();addLog(`${match.pendingAttack.attacker} attacked ${match.players[defenderSide].name}'s ${zone==="vanguard"?"Vanguard":"Rear-Guard"}.`);
     if(!online.role&&defenderSide==="bot"){
       const bot=match.players.bot,candidates=bot.hand.map(x=>({x,shield:Number(cardMap.get(x.cardId)?.shield||0)})).sort((a,b)=>b.shield-a.shield),needed=Math.max(0,match.pendingAttack.power-match.pendingAttack.targetPower);
@@ -945,7 +946,7 @@
       const ride = bot.hand.map((x) => ({ x, c: cardMap.get(x.cardId) })).filter((item) => item.c && Number(item.c.grade) >= currentGrade && Number(item.c.grade) <= currentGrade + 1).sort((a, b) => Number(b.c.grade) - Number(a.c.grade))[0];
       if (ride) { bot.hand = bot.hand.filter((x) => x.uid !== ride.x.uid); if (bot.vanguard) bot.soul.push(bot.vanguard); bot.vanguard = { ...ride.x, rested: false }; addLog(`Practice Bot rode ${ride.c.name}.`); }
       let calls = 0;
-      while (bot.rear.includes(null) && calls < 2) { const unit = bot.hand.find((x) => { const card = cardMap.get(x.cardId); return /Unit/i.test(card?.type || "") && Number(card.grade || 0) <= Number(cardMap.get(bot.vanguard?.cardId)?.grade || 0); }); if (!unit) break; bot.hand = bot.hand.filter((x) => x.uid !== unit.uid); bot.rear[bot.rear.indexOf(null)] = { ...unit, rested: false }; addLog(`Practice Bot called ${cardMap.get(unit.cardId)?.name}.`); calls++; }
+      while (bot.rear.includes(null) && calls < 2) { const unit = bot.hand.find((x) => { const card = cardMap.get(x.cardId); return isUnitCard(card) && Number(card.grade || 0) <= Number(cardMap.get(bot.vanguard?.cardId)?.grade || 0); }); if (!unit) break; bot.hand = bot.hand.filter((x) => x.uid !== unit.uid); bot.rear[bot.rear.indexOf(null)] = { ...unit, rested: false }; addLog(`Practice Bot called ${cardMap.get(unit.cardId)?.name}.`); calls++; }
       renderMatch(); setMessage("Practice Bot is attacking…");
       const attackers = (match.initialBotTurn && match.firstSide === "bot" ? [] : [bot.vanguard, ...bot.rear]).filter((x) => { if(!x||x.rested||x.locked)return false;const field=findFieldCard(x.uid);return field&&(field.zone==="vanguard"||field.zone==="rear-left"||field.zone==="rear-right"||field.zone.startsWith("accel-")||canAttackFromBackRow(field)); });
       match.botAttacks = attackers.map((x) => x.uid);
@@ -1044,7 +1045,7 @@
       const index = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)].indexOf(zone);
       const instance = selectedHandCard();
       if (!instance || index < 0 || player.rear[index]) { toast("Select a card and choose an empty rear-guard circle."); return; }
-      if (!/Unit/i.test(cardMap.get(instance.cardId)?.type || "") || Number(cardMap.get(instance.cardId)?.grade || 0) > Number(cardMap.get(player.vanguard?.cardId)?.grade || 0)) { toast("You can only call a Unit whose grade is no higher than your Vanguard."); return; }
+      if (!isUnitCard(cardMap.get(instance.cardId)) || Number(cardMap.get(instance.cardId)?.grade || 0) > Number(cardMap.get(player.vanguard?.cardId)?.grade || 0)) { toast("You can only call a Unit whose grade is no higher than your Vanguard."); return; }
       player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.rear[index] = { ...instance, rested: false }; match.selected = null;
       addLog(`${player.name} placed ${cardMap.get(instance.cardId)?.name || "a card"} in the ${zone} circle.`);
     } else if (action === "play-order") {
@@ -1077,7 +1078,7 @@
       if (index < 0) return;
       if (choice === "field") {
         const instance = sourceCards[index], card = cardMap.get(instance.cardId);
-        if (!/Unit/i.test(card?.type || "")) { toast("Only a Unit can be placed on the field."); return; }
+        if (!isUnitCard(card)) { toast("Only a Unit can be placed on the field."); return; }
         const rearZones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
         if (targetZone === "vanguard") { sourceCards.splice(index, 1); if (player.vanguard) player.soul.push(player.vanguard); player.vanguard = { ...instance, rested: false }; }
         else { const rearIndex = rearZones.indexOf(targetZone); if (rearIndex < 0 || player.rear[rearIndex]) { toast("Choose an empty Rear-Guard circle."); return; } sourceCards.splice(index, 1); player.rear[rearIndex] = { ...instance, rested: false }; }
@@ -1139,13 +1140,10 @@
       const type = action.slice("gift-accel:".length); player.accelZones = (player.accelZones || 0) + 1; player.rear.push(null); player.gifts = (player.gifts || 0) + 1; addLog(`${player.name} created an ${type} circle.`);
     } else if (action === "shuffle") {
       shuffle(player.deck); addLog(`${player.name} shuffled their deck.`);
-    } else if (action === "move-rear") {
-      const field = findFieldCard(match.selected);
-      if (field?.side !== "human" || field.zone === "vanguard") { toast("Select one of your Rear-Guards first."); return; }
-      match.moveRearUid = field.instance.uid; toast("Choose a Rear-Guard circle. An occupied circle swaps the units.");
     } else if (action.startsWith("move-rear-to:")) {
       const [, uid, zone] = action.split(":");
-      if (match.moveRearUid !== uid) { toast("Select a Rear-Guard and choose Move / Swap again."); return; }
+      const selectedField = findFieldCard(uid);
+      if (match.selected !== uid || selectedField?.side !== "human" || selectedField.zone === "vanguard") { toast("Select one of your Rear-Guards first."); return; }
       moveRearCardToZone(uid, zone); return;
     } else if (action === "stride" || action.startsWith("stride:")) {
       if (action === "stride") { openGDeckDialog("stride"); return; }
@@ -1536,12 +1534,12 @@
     const zones=["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:player.accelZones||0},(_,i)=>"accel-"+(i+1))];
     const labels={"rear-left":"Front left Rear-Guard","rear-right":"Front right Rear-Guard","rear-back-left":"Back left Rear-Guard","rear-back-center":"Back center Rear-Guard","rear-back-right":"Back right Rear-Guard"};
     const fieldOptions='<option value="">Move to field…</option><option value="vanguard">Vanguard</option>'+zones.map((zone,i)=>({zone,i,label:labels[zone]||("Accel "+(i-4))})).filter(({i})=>!player.rear[i]).map(({zone,label})=>'<option value="'+zone+'">'+label+'</option>').join("");
-    $("#drop-card-list").innerHTML=cards.length?cards.map((instance)=>{const c=cardMap.get(instance.cardId);if(!c)return "";const unit=/Unit/i.test(c.type||"");const moves=own?'<div class="peek-actions" hidden><button class="button" data-drop-action="hand:'+escapeHtml(instance.uid)+'">Add to hand</button><button class="button" data-drop-action="soul:'+escapeHtml(instance.uid)+'">Add to Soul</button><button class="button" data-drop-action="bind:'+escapeHtml(instance.uid)+'">Bind card</button>'+(unit?'<select class="text-input drop-field-select" data-drop-uid="'+escapeHtml(instance.uid)+'">'+fieldOptions+'</select>':'')+'<button class="button" data-drop-action="deck-top:'+escapeHtml(instance.uid)+'">Return to deck top</button><button class="button" data-drop-action="deck-bottom:'+escapeHtml(instance.uid)+'">Return to deck bottom</button></div>':'';return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button><button class="zone-card-zoom" type="button" data-card-zoom="'+escapeHtml(c.id)+'" aria-label="Zoom '+escapeHtml(c.name)+'">⤢</button>'+moves+'</article>';}).join(""):'<p class="zone-empty-message">No cards in Drop yet.</p>';
+    $("#drop-card-list").innerHTML=cards.length?cards.map((instance)=>{const c=cardMap.get(instance.cardId);if(!c)return "";const unit=isUnitCard(c);const moves=own?'<div class="peek-actions" hidden><button class="button" data-drop-action="hand:'+escapeHtml(instance.uid)+'">Add to hand</button><button class="button" data-drop-action="soul:'+escapeHtml(instance.uid)+'">Add to Soul</button><button class="button" data-drop-action="bind:'+escapeHtml(instance.uid)+'">Bind card</button>'+(unit?'<select class="text-input drop-field-select" data-drop-uid="'+escapeHtml(instance.uid)+'">'+fieldOptions+'</select>':'')+'<button class="button" data-drop-action="deck-top:'+escapeHtml(instance.uid)+'">Return to deck top</button><button class="button" data-drop-action="deck-bottom:'+escapeHtml(instance.uid)+'">Return to deck bottom</button></div>':'';return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button><button class="zone-card-zoom" type="button" data-card-zoom="'+escapeHtml(c.id)+'" aria-label="Zoom '+escapeHtml(c.name)+'">⤢</button>'+moves+'</article>';}).join(""):'<p class="zone-empty-message">No cards in Drop yet.</p>';
     $("#drop-dialog").dataset.side=side;if(!$("#drop-dialog").open)$("#drop-dialog").showModal();
   }
   function zoneMoveControls(instance, source, canAct = true) {
     if (!canAct) return "";
-    const card = cardMap.get(instance.cardId), unit = /Unit/i.test(card?.type || "");
+    const card = cardMap.get(instance.cardId), unit = isUnitCard(card);
     const button = (choice, label) => `<button class="button" type="button" data-zone-move="${source}:${choice}:${escapeHtml(instance.uid)}">${label}</button>`;
     const zones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: match.players.human.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
     const fieldOptions = zones.map((zone, i) => match.players.human.rear[i] ? "" : '<option value="' + zone + '">' + zone.replace("rear-", "").replace("back-", "back ").replaceAll("-", " ") + '</option>').join("");
@@ -1631,7 +1629,7 @@
   $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#finish-attack").addEventListener("click", () => performOnlineAction("finishAttack")); $("#intercept-card").addEventListener("click", () => performManualAction("intercept")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
-  $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && match?.moveRearUid && zone.dataset.zone !== "vanguard") { performManualAction(`move-rear-to:${match.moveRearUid}:${zone.dataset.zone}`); return; } if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; const uid = field.dataset.fieldUid; if (match.moveRearUid) { if (field.dataset.zone === "vanguard") { toast("Choose a Rear-Guard circle, not the Vanguard circle."); return; } performManualAction(`move-rear-to:${match.moveRearUid}:${field.dataset.zone}`); return; } match.selected = match.selected === uid ? null : uid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
+  $(".game-table").addEventListener("click", (e) => { const zoom=e.target.closest("[data-card-zoom]"); if(zoom){e.stopPropagation();showCardDetails(zoom.dataset.cardZoom);return;} const zone=e.target.closest(".field-zone[data-side='human']"); if(zone&&match&&online.role!=="watcher"){const selectedField=findFieldCard(match.selected);if(selectedField?.side==="human"&&selectedField.zone!=="vanguard"&&zone.dataset.zone!=="vanguard"&&zone.dataset.zone!==selectedField.zone){performManualAction(`move-rear-to:${match.selected}:${zone.dataset.zone}`);return;}if(!e.target.closest("[data-field-uid]")&&match.selected&&selectedHandCard()){performManualAction(`place:${zone.dataset.zone}`);return;}}if(e.target.closest("[data-gdeck-side='human']")){performManualAction("stride");return;}const field=e.target.closest("[data-field-uid]");if(!field||!match||online.role==="watcher"||field.dataset.side!=="human")return;const uid=field.dataset.fieldUid;match.selected=match.selected===uid?null:uid;if(online.role==="guest"&&online.connection?.open)online.connection.send({type:"select",selected:match.selected});renderMatch();});
   $("#gift-cancel").addEventListener("click", () => $("#gift-dialog").close()); $("#gift-close").addEventListener("click", () => $("#gift-dialog").close());
   $("#gift-confirm").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind === "force") { const zone = $("#gift-zone").value; if (!zone) { toast("Choose a circle for the Force marker."); return; } performManualAction(`gift-force:${type}:${zone}`); } else performManualAction(`gift-accel:${type}`); dialog.close(); });
   $("#gift-place-vanguard").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind !== "force") return; performManualAction(`gift-force:${type}:vanguard`); dialog.close(); });
