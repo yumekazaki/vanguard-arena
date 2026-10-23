@@ -788,14 +788,14 @@
     addLog(`${match.players.human.name} drew a card.`); setMessage("Card drawn."); renderMatch();
   }
   function rideHuman() {
-    const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; } if (match.phase !== 2) { toast("You can use Ride during the Ride phase. The manual Place action can ride at other times."); return; }
+    const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; }
     const p = match.players.human, grade = Number(cardMap.get(instance.cardId)?.grade || 0), currentGrade = Number(cardMap.get(p.vanguard?.cardId)?.grade || 0);
     if (match.ridePerformed || grade < currentGrade || grade > currentGrade + 1) { toast("A normal ride is once per turn and must be the same grade or one grade higher than your Vanguard."); return; }
     p.hand = p.hand.filter((x) => x.uid !== instance.uid); if (p.vanguard) p.soul.push(p.vanguard); p.vanguard = { ...instance, rested: false }; match.ridePerformed = true;
     match.selected = null; addLog(`You rode ${cardMap.get(instance.cardId)?.name || "a card"}.`); setMessage("Ride complete."); renderMatch();
   }
   function callHuman() {
-    const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; } if (match.phase !== 3) { toast("You can use Call during the Main phase. Use Place from your selected card actions to call at other times."); return; }
+    const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; }
     const p = match.players.human, card = cardMap.get(instance.cardId), empty = p.rear.indexOf(null);
     if (!/Unit/i.test(card?.type || "") || Number(card.grade || 0) > Number(cardMap.get(p.vanguard?.cardId)?.grade || 0)) { toast("You can only call a Unit whose grade is no higher than your Vanguard."); return; }
     if (empty < 0) return;
@@ -814,9 +814,7 @@
   function resolveHumanAttack() {
     if (!match || match.ended) { toast("Start a match before attacking."); return; }
     if (match.pendingAttack || match.pendingAttackSetup) { toast("Finish the current attack before starting another."); return; }
-    if (match.side !== "human") { toast("You can choose an attacker now; attacks resolve during your turn."); return; }
-    if (match?.turn === 1 && match.firstSide === "human") { toast("The player going first cannot attack during their first turn."); return; }
-    const field=findFieldCard(match.selected); if(!field||field.side!=="human"){toast("Select one of your units on the field to attack.");return;} if(field.instance.rested){toast("That unit is already rested.");return;} if(field.instance.locked){toast("That unit is locked and cannot attack.");return;} if(match.phase!==4){toast("Attacking is available during the Battle phase.");return;}
+    const field=findFieldCard(match.selected); if(!field||field.side!=="human"){toast("Select one of your units on the field to attack.");return;} if(field.instance.rested){toast("That unit is already rested.");return;} if(field.instance.locked){toast("That unit is locked and cannot attack.");return;}
     const front=field.zone==="vanguard"||field.zone==="rear-left"||field.zone==="rear-right"||field.zone.startsWith("accel-");
     if(!front&&!canAttackFromBackRow(field)){toast("Only a Vanguard or front-row Rear-Guard can attack unless its card text allows a back-row attack.");return;}
     const booster=(field.zone==="vanguard"||field.zone==="rear-left"||field.zone==="rear-right")?directlyBehind(field):null;
@@ -1006,7 +1004,7 @@
       const zone = action.slice(6);
       if (zone === "vanguard") {
         const instance = selectedHandCard();
-        if (!instance || match.phase !== 2) { toast("Select a card during Ride phase to ride it."); return; }
+        if (!instance) { toast("Select a card in your hand first."); return; }
         const grade = Number(cardMap.get(instance.cardId)?.grade || 0), currentGrade = Number(cardMap.get(player.vanguard?.cardId)?.grade || 0);
         if (match.ridePerformed || grade < currentGrade || grade > currentGrade + 1) { toast("A normal ride is once per turn and must be the same grade or one grade higher than your Vanguard."); return; }
         player.hand = player.hand.filter((item) => item.uid !== instance.uid); if (player.vanguard) player.soul.push(player.vanguard); player.vanguard = { ...instance, rested: false }; match.selected = null;
