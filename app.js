@@ -564,7 +564,10 @@
     $("#call-card").disabled = !canAct;
     $("#attack-card").disabled = !canAct;
     $("#play-order").disabled = !canAct;
-    $("#guard-card").disabled = !canAct;
+    const attack = match.pendingAttack;
+    const canDefend = Boolean(attack && attack.defenderSide === "human" && !attack.defenderDone && Number(attack.driveChecksRemaining || 0) <= 0);
+    $("#guard-card").hidden = !canDefend;
+    $("#guard-card").disabled = !canAct || !canDefend;
     const interceptButton = $("#intercept-card");
     if (interceptButton) { interceptButton.hidden = false; interceptButton.disabled = !canAct; }
     const gGuardButton=$(".action-buttons [data-manual-action='g-guard']");
@@ -600,10 +603,18 @@
       $("#selection-hint").textContent = c ? `${c.name} · G${c.grade}` : "Selected";
       $("#selected-summary").innerHTML = c ? `<span class="selected-card-icon">${escapeHtml(c.glyph || "✦")}</span><span><b>${escapeHtml(c.name)}</b><small>Grade ${c.grade} · ${escapeHtml(c.type)} · ${Math.round(c.power / 1000)}k power</small></span>` : `<span class="selected-card-icon">✦</span><span><b>Card selected</b><small>Choose an action</small></span>`;
     } else {
-      $("#selection-hint").textContent = pending ? "Opponent attacking — choose Guard or No guard" : "Select a card to see actions";
-      $("#selected-summary").innerHTML = `<span class="selected-card-icon">✦</span><span><b>${pending ? "Attack incoming" : "No card selected"}</b><small>${pending ? "Use Guard or No guard" : "Choose a card from your hand or field"}</small></span>`;
+      const attackHint = !pending ? "Select a card to see actions" : attack.attackerSide === "human" ? (attack.defenderDone ? "Defense complete — finish your attack" : "Your attack — waiting for defense") : "Opponent attacking — choose Guard or No guard";
+      const attackTitle = !pending ? "No card selected" : attack.attackerSide === "human" ? "Your attack is in progress" : "Attack incoming";
+      const attackHelp = !pending ? "Choose a card from your hand or field" : attack.attackerSide === "human" ? (attack.defenderDone ? "Confirm Finish attack to continue." : "The defender is choosing whether to guard.") : "Use Guard or No guard";
+      $("#selection-hint").textContent = attackHint;
+      $("#selected-summary").innerHTML = `<span class="selected-card-icon">✦</span><span><b>${attackTitle}</b><small>${attackHelp}</small></span>`;
     }
-    const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.remove("hidden"); noGuard.textContent = (match.pendingAttack?.guardCards?.length || 0) ? "Done guarding" : "No guard"; noGuard.disabled = !canAct; }
+    const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.toggle("hidden", !canDefend); noGuard.textContent = (attack?.guardCards?.length || 0) ? "Done guarding" : "No guard"; noGuard.disabled = !canAct || !canDefend; }
+    const finishAttackButton = $("#finish-attack");
+    if (finishAttackButton) {
+      finishAttackButton.hidden = !attack || attack.attackerSide !== "human" || !attack.defenderDone || Number(attack.driveChecksRemaining || 0) > 0;
+      finishAttackButton.disabled = !canAct || finishAttackButton.hidden;
+    }
     if (online.role === "watcher") $$(".action-buttons button").forEach((button) => { button.disabled = true; });
   }
   function findFieldCard(uid) {
@@ -877,6 +888,7 @@
   }
   function humanGuard() {
     if (!match?.pendingAttack) return;
+    if(match.pendingAttack.defenderSide!=="human"||match.pendingAttack.defenderDone){toast("Only the defending player can guard before finishing their defense.");return;}
     if(Number(match.pendingAttack.driveChecksRemaining||0)>0){toast("The attacking Vanguard must finish its drive checks before you guard.");return;}
     const instance = selectedHandCard();
     if (!instance) { toast("Select a card in your hand, then choose Guard. You can add more cards before choosing Done guarding."); return; }
@@ -898,12 +910,29 @@
     if(!attack||attack.defenderSide!=="human"||Number(attack.driveChecksRemaining||0)>0){toast("A perfect guard can only be used after the Vanguard finishes its drive checks.");return;}
     const marker=player.hand.find(item=>item.uid===markerUid&&Number(cardMap.get(item.cardId)?.shield||0)===0),cost=player.hand.find(item=>item.uid===costUid&&item.uid!==markerUid);
     if(!marker||!cost){toast("Choose a zero-shield card and a different card to discard.");return;}
-    player.hand=player.hand.filter(item=>item.uid!==markerUid&&item.uid!==costUid);player.drop.push(cost);player.guardCircle||=[];attack.guardCards||[];player.guardCircle.push(marker);attack.guardCards.push(marker);addLog(`${player.name} discarded ${cardMap.get(cost.cardId)?.name||"a card"} with ${cardMap.get(marker.cardId)?.name||"a zero-shield card"}. The attack was stopped.`);match.selected=null;finishAttack(true);
+    player.hand=player.hand.filter(item=>item.uid!==markerUid&&item.uid!==costUid);player.drop.push(cost);player.guardCircle||=[];attack.guardCards||[];player.guardCircle.push(marker);attack.guardCards.push(marker);addLog(`${player.name} discarded ${cardMap.get(cost.cardId)?.name||"a card"} with ${cardMap.get(marker.cardId)?.name||"a zero-shield card"}. The attack was stopped.`);match.selected=null;completeAttackDefense(true);
+  }
+  function completeAttackDefense(blocked) {
+    if (!match?.pendingAttack) return;
+    if (!online.role) { finishAttack(blocked); return; }
+    match.pendingAttack.defenderDone = true;
+    match.pendingAttack.blocked = Boolean(blocked);
+    setMessage(`${match.players[match.pendingAttack.attackerSide].name} can finish the attack.`);
+    renderMatch();
+  }
+  function confirmAttackFinished() {
+    const attack = match?.pendingAttack;
+    if (!attack || attack.attackerSide !== "human" || !attack.defenderDone || Number(attack.driveChecksRemaining || 0) > 0) {
+      toast("Wait until the defender is done guarding before finishing this attack."); return;
+    }
+    finishAttack(Boolean(attack.blocked));
   }
   function noGuard() {
     if (!match?.pendingAttack) { toast("No attack is waiting to be resolved."); return; }
+    if(match.pendingAttack.defenderSide!=="human"){toast("The attacker must wait for the defending player to finish guarding.");return;}
     if(Number(match.pendingAttack.driveChecksRemaining||0)>0){toast("The attacking Vanguard must finish its drive checks before the attack resolves.");return;}
-    finishAttack(Number(match.pendingAttack.power||0)<Number(match.pendingAttack.targetPower||0));
+    if (match.pendingAttack.defenderDone) return;
+    completeAttackDefense(Number(match.pendingAttack.power||0)<Number(match.pendingAttack.targetPower||0));
   }
   function botTurn() {
     if (!match || match.ended) return;
@@ -1373,7 +1402,7 @@
     try {
       if (message.type === "select") renderMatch();
       else if (message.action?.startsWith("manual:")) manualGameAction(message.action.slice("manual:".length));
-      else ({ draw: drawForHuman, ride: rideHuman, call: callHuman, attack: resolveHumanAttack, guard: humanGuard, noGuard, endTurn, advance: advancePhase }[message.action] || (() => {}))();
+      else ({ draw: drawForHuman, ride: rideHuman, call: callHuman, attack: resolveHumanAttack, guard: humanGuard, noGuard, finishAttack: confirmAttackFinished, endTurn, advance: advancePhase }[message.action] || (() => {}))();
     } finally {
       match.players = players;
       flipTurnBonusOwners(match.players);
@@ -1477,7 +1506,7 @@
       if (!online.connection?.open) { toast("You are disconnected from the match."); return; }
       online.connection.send({ type: "action", action, selected: match?.selected || null }); return;
     }
-    ({ draw: drawForHuman, ride: rideHuman, call: callHuman, attack: resolveHumanAttack, guard: humanGuard, noGuard, endTurn, advance: advancePhase }[action] || (() => {}))();
+    ({ draw: drawForHuman, ride: rideHuman, call: callHuman, attack: resolveHumanAttack, guard: humanGuard, noGuard, finishAttack: confirmAttackFinished, endTurn, advance: advancePhase }[action] || (() => {}))();
   }
   function openGiftDialog(kind) {
     const dialog = $("#gift-dialog"), force = kind === "force";
@@ -1599,7 +1628,7 @@
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });
   $("#copy-spectate").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#spectate-link").value); toast("Spectator link copied."); } catch { $("#spectate-link").select(); document.execCommand("copy"); toast("Spectator link copied."); } });
   $("#new-match").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#empty-start").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#practice-start-confirm").addEventListener("click", () => { const firstSide = $("#practice-first-player").value; $("#practice-setup-dialog").close(); startMatch(null, firstSide); }); $("#reset-match").addEventListener("click", newMatchButton);
-  $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#intercept-card").addEventListener("click", () => performManualAction("intercept")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
+  $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#finish-attack").addEventListener("click", () => performOnlineAction("finishAttack")); $("#intercept-card").addEventListener("click", () => performManualAction("intercept")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
   $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && match?.moveRearUid && zone.dataset.zone !== "vanguard") { performManualAction(`move-rear-to:${match.moveRearUid}:${zone.dataset.zone}`); return; } if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; const uid = field.dataset.fieldUid; if (match.moveRearUid) { if (field.dataset.zone === "vanguard") { toast("Choose a Rear-Guard circle, not the Vanguard circle."); return; } performManualAction(`move-rear-to:${match.moveRearUid}:${field.dataset.zone}`); return; } match.selected = match.selected === uid ? null : uid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
