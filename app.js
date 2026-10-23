@@ -313,6 +313,12 @@
     toast(account.user ? "Deck saved to your account folder" : "Deck saved in this browser");
   }
   function loadDeck(deck) { builder = { id: deck.id, name: deck.name, cards: { ...deck.cards }, starterCardId: deck.starterCardId || "" }; renderBuilder(); showView("decks"); toast(`Loaded “${deck.name}” into the builder`); }
+  function openLoadDeckDialog() {
+    const decks = readSavedDecks(), select = $("#load-deck-choice"), confirm = $("#load-deck-confirm");
+    select.innerHTML = decks.length ? decks.map((deck) => `<option value="${escapeHtml(deck.id)}">${escapeHtml(deck.name)} · ${deckCount(deck)} cards</option>`).join("") : '<option value="">No saved decks yet</option>';
+    confirm.disabled = !decks.length;
+    $("#load-deck-dialog").showModal();
+  }
   function renderSavedDecks() {
     const decks = readSavedDecks(); $("#saved-deck-subtitle").textContent = decks.length ? `${decks.length} deck${decks.length === 1 ? "" : "s"}` : "No decks yet";
     $("#saved-deck-eyebrow").textContent = account.user ? "ONLINE ACCOUNT DECK FOLDER" : "DECK FOLDER · THIS BROWSER";
@@ -1694,7 +1700,7 @@
   $("#sort-hand").addEventListener("click", () => { if (!match) return; match.players.human.hand.sort((a, b) => { const ca = cardMap.get(a.cardId), cb = cardMap.get(b.cardId); return (ca?.grade || 0) - (cb?.grade || 0) || ca?.name.localeCompare(cb?.name); }); renderMatch(); });
   $("#clear-log").addEventListener("click", () => { if (match) { match.log = []; renderLog(); } });
   $("#create-deck").addEventListener("click", () => { emptyDeck(); showView("decks"); $("#deck-name").focus(); });
-  $("#save-deck").addEventListener("click", saveDeck); $("#starter-vanguard").addEventListener("change", () => { builder.starterCardId = $("#starter-vanguard").value; renderBuilder(); }); $("#deck-name").addEventListener("input", () => { builder.name = $("#deck-name").value; $("#builder-title").textContent = builder.name || "Untitled deck"; });
+  $("#save-deck").addEventListener("click", saveDeck); $("#load-deck-editor").addEventListener("click", openLoadDeckDialog); $("#load-deck-confirm").addEventListener("click", () => { const deck = readSavedDecks().find((item) => item.id === $("#load-deck-choice").value); if (!deck) { toast("Choose a saved deck first."); return; } $("#load-deck-dialog").close(); loadDeck(deck); }); $("#starter-vanguard").addEventListener("change", () => { builder.starterCardId = $("#starter-vanguard").value; renderBuilder(); }); $("#deck-name").addEventListener("input", () => { builder.name = $("#deck-name").value; $("#builder-title").textContent = builder.name || "Untitled deck"; });
   $("#card-search").addEventListener("input", () => { builderPage = 0; renderBuilderCards(); }); $("#grade-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-clan-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-nation-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); });
   $("#builder-prev").addEventListener("click", () => { builderPage = Math.max(0, builderPage - 1); renderBuilderCards(); }); $("#builder-next").addEventListener("click", () => { builderPage += 1; renderBuilderCards(); });
   $("#builder-card-grid").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const node = e.target.closest("[data-card-id]"); if (!node) return; const id = node.dataset.cardId; builder.cards[id] = Math.min(4, (builder.cards[id] || 0) + 1); renderBuilder(); });
