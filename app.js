@@ -1241,7 +1241,7 @@
       emit(event, value) { (handlers[event] || []).slice().forEach((callback) => callback(value)); },
       async send(message) {
         if (!this.open) return;
-        let event = "to-host", senderRole = role;
+        let event = "to-host", senderRole = role === "guest" ? "player" : role;
         if (role === "host") event = message.type === "watch-state" ? "to-watchers" : "to-player";
         try {
           const status = await channel.send({ type: "broadcast", event, payload: { senderRole, message } });
