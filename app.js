@@ -553,39 +553,38 @@
   function renderGuardCircle(player) { return (player.guardCircle || []).map((instance) => { const c = cardMap.get(instance.cardId); return c ? `<span class="zone-card guard-card" title="${escapeHtml(c.name)} · ${Number(c.shield || 0).toLocaleString()} shield">${escapeHtml(c.name)}</span>` : ""; }).join("") || '<span class="zone-empty">Empty</span>'; }
   function updateActionAvailability() {
     if (!match) return;
-    const humanTurn = match.side === "human" && !match.ended;
+    const canAct = !match.ended && online.role !== "watcher";
     const handCard = match.players.human.hand.find((x) => x.uid === match.selected);
     const fieldCard = findFieldCard(match.selected);
     const pending = Boolean(match.pendingAttack);
-    $("#draw-card").disabled = !humanTurn || pending || match.phase !== 1 || match.drewThisTurn || match.players.human.deck.length === 0;
+    $("#draw-card").disabled = !canAct;
     const returnTop = $("[data-manual-action='hand-to-top']"), returnBottom = $("[data-manual-action='hand-to-bottom']");
-    [returnTop, returnBottom].forEach((button) => { if (button) button.disabled = !humanTurn || pending || !handCard || online.role === "watcher"; });
-    $("#ride-card").disabled = !humanTurn || pending || match.phase !== 2 || !handCard;
-    $("#call-card").disabled = !humanTurn || pending || match.phase !== 3 || !handCard || !match.players.human.rear.includes(null);
-    $("#attack-card").disabled = !humanTurn || pending || match.phase !== 4 || !fieldCard || fieldCard.instance.rested || fieldCard.instance.locked;
-    $("#play-order").disabled = !humanTurn || pending || match.phase !== 3 || !handCard || !/Order/i.test(cardMap.get(handCard.cardId)?.type || "");
-    const defendingHuman = pending && match.pendingAttack?.defenderSide === "human" && Number(match.pendingAttack?.driveChecksRemaining||0) === 0;
-    $("#guard-card").disabled = !defendingHuman || match.players.human.hand.length === 0 || online.role === "watcher";
+    [returnTop, returnBottom].forEach((button) => { if (button) button.disabled = !canAct; });
+    $("#ride-card").disabled = !canAct;
+    $("#call-card").disabled = !canAct;
+    $("#attack-card").disabled = !canAct;
+    $("#play-order").disabled = !canAct;
+    $("#guard-card").disabled = !canAct;
     const interceptButton = $("#intercept-card");
-    if (interceptButton) { interceptButton.hidden = !eligibleInterceptors().length; interceptButton.disabled = !defendingHuman || online.role === "watcher"; }
-    const gGuardButton=$(".action-buttons [data-manual-action='g-guard']"),guardianAvailable=(match.players.human.gDeck||[]).some((item)=>/G\s*-?Guardian|G\s*-?Guard/i.test(cardMap.get(item.cardId)?.type||"")),healAvailable=match.players.human.hand.some((item)=>triggerKind(item)==="heal"),grade=Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade||0);
-    if(gGuardButton){gGuardButton.hidden=!(pending&&match.pendingAttack?.defenderSide==="human"&&Number(match.pendingAttack?.driveChecksRemaining||0)===0&&grade>=3&&healAvailable&&guardianAvailable);gGuardButton.disabled=online.role==="watcher";}
-    const driveButton=$("[data-manual-action='drive-check']");if(driveButton)driveButton.disabled=online.role==="watcher"||!pending||match.pendingAttack?.attackerSide!=="human"||match.pendingAttack?.attackerZone!=="vanguard"||Number(match.pendingAttack?.driveChecksRemaining||0)<=0;
-    $("#end-turn").disabled = !humanTurn || pending;
-    $("#advance-phase").disabled = !humanTurn || pending;
-    $$(".manual-actions [data-manual-action]").forEach((button) => { const defenseAction = button.dataset.manualAction === "g-guard" && pending && match.pendingAttack?.defenderSide === "human"; const driveAction = button.dataset.manualAction === "drive-check" && pending && match.pendingAttack?.attackerSide === "human" && match.pendingAttack?.attackerZone === "vanguard" && Number(match.pendingAttack?.driveChecksRemaining || 0) > 0; button.disabled = online.role === "watcher" || (!humanTurn && !defenseAction) || (button.dataset.manualAction === "g-guard" && !defenseAction) || (button.dataset.manualAction === "drive-check" && !driveAction); });
+    if (interceptButton) { interceptButton.hidden = false; interceptButton.disabled = !canAct; }
+    const gGuardButton=$(".action-buttons [data-manual-action='g-guard']");
+    if(gGuardButton){gGuardButton.hidden=false;gGuardButton.disabled=!canAct;}
+    const driveButton=$("[data-manual-action='drive-check']");if(driveButton)driveButton.disabled=!canAct;
+    $("#end-turn").disabled = !canAct;
+    $("#advance-phase").disabled = !canAct;
+    $$(".manual-actions [data-manual-action]").forEach((button) => { button.disabled = !canAct; });
     const selectedToDrop = $("[data-manual-action='selected-to-drop']");
-    if (selectedToDrop) selectedToDrop.disabled = online.role === "watcher" || !humanTurn || (!handCard && fieldCard?.side !== "human");
+    if (selectedToDrop) selectedToDrop.disabled = !canAct;
     const selectedToSoul = $("[data-manual-action='selected-to-soul']");
-    if (selectedToSoul) selectedToSoul.disabled = online.role === "watcher" || !humanTurn || (!handCard && fieldCard?.side !== "human");
+    if (selectedToSoul) selectedToSoul.disabled = !canAct;
     const moveRearButton = $("[data-manual-action='move-rear']");
-    if (moveRearButton) moveRearButton.disabled = online.role === "watcher" || !humanTurn || fieldCard?.side !== "human" || fieldCard.zone === "vanguard";
+    if (moveRearButton) moveRearButton.disabled = !canAct;
     const selectedVanguardSoul = $("[data-manual-action='view-selected-soul']");
-    if (selectedVanguardSoul) selectedVanguardSoul.disabled = online.role === "watcher" || !fieldCard || fieldCard.side !== "human" || fieldCard.zone !== "vanguard";
+    if (selectedVanguardSoul) selectedVanguardSoul.disabled = !canAct;
     const restSelected = $("[data-manual-action='rest-selected']");
-    if (restSelected) restSelected.disabled = online.role === "watcher" || match.ended || fieldCard?.side !== "human" || fieldCard.instance.rested;
+    if (restSelected) restSelected.disabled = !canAct;
     const standSelected = $("[data-manual-action='stand-selected']");
-    if (standSelected) standSelected.disabled = online.role === "watcher" || match.ended || fieldCard?.side !== "human" || !fieldCard.instance.rested;
+    if (standSelected) standSelected.disabled = !canAct;
     const onHumanField = fieldCard?.side === "human", onHumanHand = Boolean(handCard);
     const contextualActions = {
       bind: onHumanField || onHumanHand, "selected-to-drop": onHumanField || onHumanHand, "selected-to-soul": onHumanField || onHumanHand,
@@ -593,7 +592,7 @@
       "stand-selected": onHumanField && fieldCard.instance.rested, "move-rear": onHumanField && fieldCard.zone !== "vanguard",
       "hand-to-damage": onHumanHand, lock: onHumanField, power: onHumanField
     };
-    Object.entries(contextualActions).forEach(([action, visible]) => $$(`.selected-card-actions [data-manual-action="${action}"]`).forEach((button) => { button.hidden = !visible; }));
+    Object.keys(contextualActions).forEach((action) => $$(`.selected-card-actions [data-manual-action="${action}"]`).forEach((button) => { button.hidden = false; }));
     $("#manual-selection-help").textContent = onHumanHand ? "Hand card selected · choose where to move or play it." : onHumanField ? `${fieldCard.zone === "vanguard" ? "Vanguard" : "Rear-Guard"} selected · choose a card action.` : "Select a card on your hand or field to see its actions.";
     $("#advance-phase").innerHTML = match.phase === phases.length - 1 ? `End turn <span>→</span>` : `Continue ${phases[match.phase + 1].toLowerCase()} phase <span>→</span>`;
     if (match.selected) {
@@ -604,7 +603,7 @@
       $("#selection-hint").textContent = pending ? "Opponent attacking — choose Guard or No guard" : "Select a card to see actions";
       $("#selected-summary").innerHTML = `<span class="selected-card-icon">✦</span><span><b>${pending ? "Attack incoming" : "No card selected"}</b><small>${pending ? "Use Guard or No guard" : "Choose a card from your hand or field"}</small></span>`;
     }
-    const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.toggle("hidden", !pending || match.pendingAttack?.defenderSide !== "human"); noGuard.textContent = (match.pendingAttack?.guardCards?.length || 0) ? "Done guarding" : "No guard"; noGuard.disabled=Number(match.pendingAttack?.driveChecksRemaining||0)>0; }
+    const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.remove("hidden"); noGuard.textContent = (match.pendingAttack?.guardCards?.length || 0) ? "Done guarding" : "No guard"; noGuard.disabled = !canAct; }
     if (online.role === "watcher") $$(".action-buttons button").forEach((button) => { button.disabled = true; });
   }
   function findFieldCard(uid) {
@@ -783,19 +782,19 @@
     renderMatch();
   }
   function drawForHuman() {
-    if (!match || match.side !== "human" || match.pendingAttack || match.phase !== 1 || match.drewThisTurn) return;
+    if (!match || match.side !== "human" || match.pendingAttack || match.phase !== 1 || match.drewThisTurn) { toast("The Draw button is for your Draw phase. Use Draw card under Other game controls to draw at another time."); return; }
     const card = draw("human"); if (!card) { setMessage("Your deck is empty."); return; }
     match.drewThisTurn = true; addLog("You drew a card."); setMessage("Card drawn."); renderMatch();
   }
   function rideHuman() {
-    const instance = selectedHandCard(); if (!instance || match.phase !== 2) return;
+    const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; } if (match.phase !== 2) { toast("You can use Ride during the Ride phase. The manual Place action can ride at other times."); return; }
     const p = match.players.human, grade = Number(cardMap.get(instance.cardId)?.grade || 0), currentGrade = Number(cardMap.get(p.vanguard?.cardId)?.grade || 0);
     if (match.ridePerformed || grade < currentGrade || grade > currentGrade + 1) { toast("A normal ride is once per turn and must be the same grade or one grade higher than your Vanguard."); return; }
     p.hand = p.hand.filter((x) => x.uid !== instance.uid); if (p.vanguard) p.soul.push(p.vanguard); p.vanguard = { ...instance, rested: false }; match.ridePerformed = true;
     match.selected = null; addLog(`You rode ${cardMap.get(instance.cardId)?.name || "a card"}.`); setMessage("Ride complete."); renderMatch();
   }
   function callHuman() {
-    const instance = selectedHandCard(); if (!instance || match.phase !== 3) return;
+    const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; } if (match.phase !== 3) { toast("You can use Call during the Main phase. Use Place from your selected card actions to call at other times."); return; }
     const p = match.players.human, card = cardMap.get(instance.cardId), empty = p.rear.indexOf(null);
     if (!/Unit/i.test(card?.type || "") || Number(card.grade || 0) > Number(cardMap.get(p.vanguard?.cardId)?.grade || 0)) { toast("You can only call a Unit whose grade is no higher than your Vanguard."); return; }
     if (empty < 0) return;
@@ -812,8 +811,11 @@
   function canAttackFromBackRow(field) { const text=String(cardMap.get(field.instance.cardId)?.text||""); return /attack(?:s|ing)? from (?:the )?back row|back row[^.\n]*can attack/i.test(text); }
   function directlyBehind(field) { const rear=match.players[field.side].rear;if(field.zone==="vanguard")return rear[3]||null;if(field.zone==="rear-left")return rear[2]||null;if(field.zone==="rear-right")return rear[4]||null;return null; }
   function resolveHumanAttack() {
+    if (!match || match.ended) { toast("Start a match before attacking."); return; }
+    if (match.pendingAttack || match.pendingAttackSetup) { toast("Finish the current attack before starting another."); return; }
+    if (match.side !== "human") { toast("You can choose an attacker now; attacks resolve during your turn."); return; }
     if (match?.turn === 1 && match.firstSide === "human") { toast("The player going first cannot attack during their first turn."); return; }
-    const field=findFieldCard(match.selected); if(!field||field.side!=="human"||field.instance.rested||field.instance.locked||match.phase!==4)return;
+    const field=findFieldCard(match.selected); if(!field||field.side!=="human"){toast("Select one of your units on the field to attack.");return;} if(field.instance.rested){toast("That unit is already rested.");return;} if(field.instance.locked){toast("That unit is locked and cannot attack.");return;} if(match.phase!==4){toast("Attacking is available during the Battle phase.");return;}
     const front=field.zone==="vanguard"||field.zone==="rear-left"||field.zone==="rear-right"||field.zone.startsWith("accel-");
     if(!front&&!canAttackFromBackRow(field)){toast("Only a Vanguard or front-row Rear-Guard can attack unless its card text allows a back-row attack.");return;}
     const booster=(field.zone==="vanguard"||field.zone==="rear-left"||field.zone==="rear-right")?directlyBehind(field):null;
@@ -900,7 +902,7 @@
     player.hand=player.hand.filter(item=>item.uid!==markerUid&&item.uid!==costUid);player.drop.push(cost);player.guardCircle||=[];attack.guardCards||[];player.guardCircle.push(marker);attack.guardCards.push(marker);addLog(`${player.name} discarded ${cardMap.get(cost.cardId)?.name||"a card"} with ${cardMap.get(marker.cardId)?.name||"a zero-shield card"}. The attack was stopped.`);match.selected=null;finishAttack(true);
   }
   function noGuard() {
-    if (!match?.pendingAttack) return;
+    if (!match?.pendingAttack) { toast("No attack is waiting to be resolved."); return; }
     if(Number(match.pendingAttack.driveChecksRemaining||0)>0){toast("The attacking Vanguard must finish its drive checks before the attack resolves.");return;}
     finishAttack(Number(match.pendingAttack.power||0)<Number(match.pendingAttack.targetPower||0));
   }
@@ -941,7 +943,8 @@
     setMessage("Your turn — Stand phase."); renderMatch();
   }
   function endTurn() {
-    if (!match || match.side !== "human" || match.pendingAttack || match.ended) return;
+    if (!match || match.ended) return;
+    if (match.side !== "human" || match.pendingAttack) { toast("You can end your turn after your opponent finishes any pending attack."); return; }
     if (online.role) {
       addLog(`${match.players.human.name} ended their turn.`); clearTurnBonuses("human"); returnStriddenVanguard("human"); match.ridePerformed = false; match.selected = null;
       match.players.human.vanguard && (match.players.human.vanguard.rested = false); match.players.human.rear.forEach((x) => x && (x.rested = false));
@@ -954,7 +957,8 @@
   function clearTurnBonuses(side) { const seen=new Set();const walk=(value)=>{if(!value||typeof value!=="object"||seen.has(value))return;seen.add(value);if(value.turnPowerExpiry===side||value.turnPowerExpiry==null){value.turnPowerBoost=0;delete value.turnPowerExpiry;}if(value.turnCriticalExpiry===side||value.turnCriticalExpiry==null){value.turnCriticalBoost=0;delete value.turnCriticalExpiry;}Object.values(value).forEach(walk);};Object.values(match?.players||{}).forEach(walk); }
   function flipTurnBonusOwners(players) { const seen=new Set();const walk=(value)=>{if(!value||typeof value!=="object"||seen.has(value))return;seen.add(value);if(value.turnPowerExpiry)value.turnPowerExpiry=flipSide(value.turnPowerExpiry);if(value.turnCriticalExpiry)value.turnCriticalExpiry=flipSide(value.turnCriticalExpiry);Object.values(value).forEach(walk);};Object.values(players||{}).forEach(walk); }
   function advancePhase() {
-    if (!match || match.side !== "human" || match.pendingAttack || match.ended) return;
+    if (!match || match.ended) return;
+    if (match.side !== "human" || match.pendingAttack) { toast("Wait until it is your turn and any pending attack is resolved."); return; }
     if (match.phase >= phases.length - 1) { endTurn(); return; }
     match.phase += 1; match.selected = null;
     if (match.phase === 1 && !match.drewThisTurn) {
@@ -1534,7 +1538,7 @@
   $("#new-match").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#empty-start").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#practice-start-confirm").addEventListener("click", () => { const firstSide = $("#practice-first-player").value; $("#practice-setup-dialog").close(); startMatch(null, firstSide); }); $("#reset-match").addEventListener("click", newMatchButton);
   $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#intercept-card").addEventListener("click", () => performManualAction("intercept")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
-  $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); const canSelectForDefense = Boolean(match?.pendingAttack?.defenderSide === "human" && Number(match.pendingAttack.driveChecksRemaining || 0) === 0); if (!card || !match || online.role === "watcher" || (match.side !== "human" && !canSelectForDefense)) return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
+  $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
   $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && match?.moveRearUid && zone.dataset.zone !== "vanguard") { performManualAction(`move-rear-to:${match.moveRearUid}:${zone.dataset.zone}`); return; } if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; const uid = field.dataset.fieldUid; if (match.moveRearUid) { if (field.dataset.zone === "vanguard") { toast("Choose a Rear-Guard circle, not the Vanguard circle."); return; } performManualAction(`move-rear-to:${match.moveRearUid}:${field.dataset.zone}`); return; } match.selected = match.selected === uid ? null : uid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
   $("#gift-cancel").addEventListener("click", () => $("#gift-dialog").close()); $("#gift-close").addEventListener("click", () => $("#gift-dialog").close());
   $("#gift-confirm").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind === "force") { const zone = $("#gift-zone").value; if (!zone) { toast("Choose a circle for the Force marker."); return; } performManualAction(`gift-force:${type}:${zone}`); } else performManualAction(`gift-accel:${type}`); dialog.close(); });
