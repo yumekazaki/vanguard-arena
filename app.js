@@ -45,7 +45,7 @@
   let match = null;
   let selectedZone = null;
   let botTimer = null;
-  let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
+  let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
   const localDeckStorageKey = "vanguardArenaDecks";
   const account = { client: null, user: null, syncing: false, recovery: false, profile: null };
 
@@ -1228,6 +1228,55 @@
     const message = error?.type === "peer-unavailable" ? "That invite is no longer active. Ask your friend to create a new one." : `Online connection error: ${error?.message || error?.type || "please try again"}`;
     setOnlineError(message); toast(message);
   }
+  function createRelayConnection(secret, role) {
+    const handlers = { open: [], data: [], close: [], error: [] };
+    const incomingEvent = role === "host" ? "to-host" : role === "guest" ? "to-player" : "to-watchers";
+    const channel = account.client.channel(`vanguard-match:${secret}`, { config: { broadcast: { self: false } } });
+    const connection = {
+      open: false,
+      isRelay: true,
+      on(event, callback) { (handlers[event] ||= []).push(callback); return this; },
+      off(event, callback) { handlers[event] = (handlers[event] || []).filter((item) => item !== callback); return this; },
+      emit(event, value) { (handlers[event] || []).slice().forEach((callback) => callback(value)); },
+      async send(message) {
+        if (!this.open) return;
+        let event = "to-host", senderRole = role;
+        if (role === "host") event = message.type === "watch-state" ? "to-watchers" : "to-player";
+        try {
+          const status = await channel.send({ type: "broadcast", event, payload: { senderRole, message } });
+          if (status !== "ok") this.emit("error", { type: "relay-error", message: "The online relay could not send an update." });
+        } catch (error) { this.emit("error", { type: "relay-error", message: error?.message || "The online relay could not send an update." }); }
+      },
+      close() { if (!this.open) return; this.open = false; void account.client.removeChannel(channel); this.emit("close"); }
+    };
+    channel.on("broadcast", { event: incomingEvent }, (payload) => {
+      const envelope = payload?.payload || {};
+      const message = envelope.message;
+      if (!message) return;
+      if (role === "host") {
+        if (envelope.senderRole === "watcher" && message.type === "watch") {
+          const watcher = { open: true, send: (data) => connection.send(data), close() { this.open = false; online.watchers = online.watchers.filter((item) => item !== this); } };
+          online.watchers.push(watcher); sendOnlineSnapshot(); return;
+        }
+        if (envelope.senderRole !== "player") return;
+        if (message.type === "join") {
+          if (online.relayPlayerJoined) return;
+          online.relayPlayerJoined = true; setConnectionPill("CONNECTED"); setMessage("Opponent connected — your turn.");
+        }
+      } else if (envelope.senderRole !== "host") return;
+      connection.emit("data", message);
+    });
+    channel.subscribe((status) => {
+      if (status === "SUBSCRIBED") { connection.open = true; connection.emit("open"); }
+      else if (["CHANNEL_ERROR", "TIMED_OUT", "CLOSED"].includes(status)) connection.emit("error", { type: "relay-error", message: `The online relay ${status.toLowerCase().replace(/_/g, " ")}.` });
+    });
+    return connection;
+  }
+  function randomHex(length) {
+    const bytes = new Uint8Array(Math.ceil(length / 2));
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("").slice(0, length);
+  }
   function getInviteId(value) {
     const text = String(value || "").trim();
     if (!text) return "";
@@ -1336,8 +1385,10 @@
     online.connection = connection;
     connection.on("open", () => {
       if (role === "guest") connection.send({ type: "join", name: online.localName, deck: onlineDeck() });
+      else if (role === "watcher") connection.send({ type: "watch", name: online.localName });
+      else if (connection.isRelay) { setMessage("Invite link ready — waiting for your friend to join."); setConnectionPill("WAITING"); sendOnlineSnapshot(); }
       else { setMessage("Opponent connected — waiting for their deck."); sendOnlineSnapshot(); }
-      $("#match-status").textContent = "ONLINE · CONNECTED"; setConnectionPill("CONNECTED");
+      if (role !== "host" || !connection.isRelay) { $("#match-status").textContent = "ONLINE · CONNECTED"; setConnectionPill("CONNECTED"); }
     });
     connection.on("data", handleRemoteMessage);
     connection.on("close", () => { $("#match-status").textContent = "ONLINE · DISCONNECTED"; setConnectionPill("DISCONNECTED"); toast("Friend disconnected. The match is still on this device."); });
@@ -1345,36 +1396,23 @@
   }
   function beginHosting() {
     if (!selectOnlineDeck()) return;
-    if (!window.Peer) { setOnlineError("The online connection library did not load. Check your internet connection and reload."); return; }
     if (!account.client) { setOnlineError("Room discovery needs the configured Supabase connection."); return; }
     if (!$("#room-password").value.trim()) { setOnlineError("Set a room password before creating the room."); return; }
     online.localName = String($("#online-name").value.trim() || "Player").slice(0, 24); localStorage.setItem("vanguardArenaPlayerName", online.localName);
-    online.role = "host"; setConnectionPill("CONNECTING"); online.peer = new Peer();
-    online.peer.on("open", async (id) => {
-      const roomCode = crypto.randomUUID().replace(/-/g, "").slice(0, 8).toUpperCase();
-      const { error } = await account.client.rpc("create_match_room", { p_room_code: roomCode, p_peer_id: id, p_room_name: $("#room-name").value.trim() || "Vanguard room", p_host_name: online.localName, p_password: $("#room-password").value });
-      if (error) { setOnlineError("Could not publish this room. Run supabase/match-rooms.sql in the Supabase SQL Editor, then try again."); online.peer.destroy(); online.peer = null; online.role = null; return; }
-      online.roomId = id; online.publicRoomCode = roomCode; $("#online-dialog").close(); startMatch(onlineDeck(), "human", true);
+    online.role = "host"; online.relayPlayerJoined = false; setConnectionPill("CONNECTING");
+    void (async () => {
+      const roomCode = randomHex(8).toUpperCase();
+      const secret = randomHex(32);
+      const { error } = await account.client.rpc("create_match_room", { p_room_code: roomCode, p_peer_id: `relay:${secret}`, p_room_name: $("#room-name").value.trim() || "Vanguard room", p_host_name: online.localName, p_password: $("#room-password").value });
+      if (error) { setOnlineError("Could not publish this room. Run supabase/match-rooms.sql in the Supabase SQL Editor, then try again."); online.role = null; return; }
+      online.roomId = secret; online.publicRoomCode = roomCode; $("#online-dialog").close(); startMatch(onlineDeck(), "human", true);
       online.heartbeat = setInterval(() => { if (account.client && online.publicRoomCode) void account.client.rpc("touch_match_room", { p_room_code: online.publicRoomCode }); }, 60000);
       match.players.human.name = online.localName; $("#online-invite").classList.remove("hidden");
       const invite = new URL(location.href); invite.searchParams.set("join", roomCode); invite.hash = "play"; $("#invite-link").value = invite.toString();
       const watch = new URL(location.href); watch.searchParams.delete("join"); watch.searchParams.set("watch", roomCode); watch.hash = "play"; $("#spectate-link").value = watch.toString();
-      setConnectionPill("WAITING"); setMessage("Invite link ready — waiting for your friend to join."); renderMatch();
-    });
-    online.peer.on("connection", (connection) => {
-      const onFirstData = (message) => {
-        connection.off("data", onFirstData);
-        if (message?.type === "watch") {
-          online.watchers.push(connection);
-          connection.on("close", () => { online.watchers = online.watchers.filter((item) => item !== connection); sendOnlineSnapshot(); });
-          connection.on("error", onlinePeerError); sendOnlineSnapshot();
-        } else if (message?.type === "join" && !online.connection?.open) {
-          bindOnlineConnection(connection, "host"); handleRemoteMessage(message);
-        } else connection.close();
-      };
-      connection.on("data", onFirstData);
-    });
-    online.peer.on("error", onlinePeerError);
+      bindOnlineConnection(createRelayConnection(secret, "host"), "host");
+      setMessage("Invite link ready — waiting for your friend to join."); renderMatch();
+    })().catch((error) => { online.role = null; setOnlineError(`Could not start the online relay: ${error.message}`); });
   }
   async function beginJoining() {
     const watching = $("#online-join-role").value === "spectator" || new URLSearchParams(location.search).has("watch");
@@ -1385,9 +1423,16 @@
     const { data: roomPeer, error: roomError } = await account.client.rpc("resolve_match_room", { p_room_code: roomCode, p_password: $("#join-password").value });
     const roomId = typeof roomPeer === "string" ? roomPeer : Array.isArray(roomPeer) ? roomPeer[0]?.peer_id : roomPeer?.peer_id;
     if (roomError || !roomId) { setOnlineError("Room not found, closed, or password is incorrect."); return; }
-    if (!window.Peer) { setOnlineError("The online connection library did not load. Check your internet connection and reload."); return; }
     online.localName = String($("#online-name").value.trim() || "Player").slice(0, 24); localStorage.setItem("vanguardArenaPlayerName", online.localName);
-    online.role = watching ? "watcher" : "guest"; online.roomId = roomId; online.publicRoomCode = roomCode; setConnectionPill("CONNECTING"); online.peer = new Peer();
+    online.role = watching ? "watcher" : "guest"; online.publicRoomCode = roomCode; setConnectionPill("CONNECTING");
+    if (typeof roomId === "string" && roomId.startsWith("relay:")) {
+      if (!account.client) { setOnlineError("The online relay needs the configured Supabase connection."); online.role = null; return; }
+      const secret = roomId.slice("relay:".length); online.roomId = secret;
+      bindOnlineConnection(createRelayConnection(secret, online.role), online.role);
+      $("#online-dialog").close(); setMessage("Connecting to your friend's match…"); return;
+    }
+    if (!window.Peer) { setOnlineError("This room uses the older direct connection mode, which this browser does not support. Ask the host to create a new room after updating the site."); online.role = null; return; }
+    online.roomId = roomId; online.peer = new Peer();
     online.peer.on("open", () => {
       if (watching) {
         const connection = online.peer.connect(roomId, { reliable: true }); online.connection = connection;
@@ -1403,7 +1448,7 @@
     if (online.heartbeat) clearInterval(online.heartbeat);
     if (online.role === "host" && online.publicRoomCode && account.client) void account.client.rpc("close_match_room", { p_room_code: online.publicRoomCode });
     try { online.connection?.close(); online.watchers?.forEach((connection) => connection.close()); online.peer?.destroy(); } catch {}
-    online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
+    online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
     setConnectionPill("READY");
     $("#online-invite").classList.add("hidden");
   }
