@@ -16,15 +16,20 @@ revoke all on public.match_rooms from anon, authenticated;
 create or replace function public.create_match_room(p_room_code text,p_peer_id text,p_room_name text,p_host_name text,p_password text)
 returns void language plpgsql security definer set search_path=public,extensions as $$
 begin
+  delete from public.match_rooms where updated_at <= now()-interval '10 minutes';
   if length(p_password)<1 or length(p_password)>48 then raise exception 'Invalid room password'; end if;
   insert into public.match_rooms(room_code,peer_id,room_name,host_name,password_hash)
   values(upper(p_room_code),p_peer_id,left(coalesce(nullif(trim(p_room_name),''),'Vanguard room'),32),left(coalesce(nullif(trim(p_host_name),''),'Player'),24),extensions.crypt(p_password,extensions.gen_salt('bf')));
 end $$;
 
 create or replace function public.list_match_rooms()
-returns table(room_code text,room_name text,host_name text) language sql security definer set search_path=public as $$
-  select r.room_code,r.room_name,r.host_name from public.match_rooms r
-  where r.updated_at > now()-interval '10 minutes' order by r.updated_at desc limit 50;
+returns table(room_code text,room_name text,host_name text) language plpgsql security definer set search_path=public as $$
+begin
+  delete from public.match_rooms where updated_at <= now()-interval '10 minutes';
+  return query
+    select r.room_code,r.room_name,r.host_name from public.match_rooms r
+    order by r.updated_at desc limit 50;
+end;
 $$;
 
 create or replace function public.resolve_match_room(p_room_code text,p_password text)
@@ -35,8 +40,11 @@ returns text language sql security definer set search_path=public,extensions as 
 $$;
 
 create or replace function public.touch_match_room(p_room_code text)
-returns void language sql security definer set search_path=public as $$
+returns void language plpgsql security definer set search_path=public as $$
+begin
+  delete from public.match_rooms where updated_at <= now()-interval '10 minutes';
   update public.match_rooms set updated_at=now() where room_code=upper(p_room_code);
+end;
 $$;
 
 create or replace function public.close_match_room(p_room_code text)

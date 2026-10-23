@@ -45,7 +45,7 @@
   let match = null;
   let selectedZone = null;
   let botTimer = null;
-  let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, dialogMode: "host" };
+  let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
   const localDeckStorageKey = "vanguardArenaDecks";
   const account = { client: null, user: null, syncing: false, recovery: false, profile: null };
 
@@ -372,7 +372,7 @@
   function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
-    match = { players: { human: makePlayer(readyDeck, "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { rolls: { human: null, bot: null }, winner: null } : null, phase: 0, drewThisTurn: false, ridePerformed: false, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, log: [], ended: false, deckName: readyDeck.name };
+    match = { players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, phase: 0, drewThisTurn: false, ridePerformed: false, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
     if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
@@ -401,25 +401,61 @@
       online.connection?.send({ type: "setup-choice", firstSide: localChoice });
       return;
     }
-    beginOnlineTurns(localChoice);
+    beginOnlineMulligan(localChoice);
   }
-  function beginOnlineTurns(firstSide) {
+  function beginOnlineMulligan(firstSide) {
     if (!match?.preMatch || !["human", "bot"].includes(firstSide)) return;
-    match.firstSide = firstSide; match.side = firstSide; match.preMatch = null;
-    addLog(`${match.players.human.name} and ${match.players.bot.name} finished the dice roll. ${match.players[firstSide].name} goes first.`);
-    setMessage(firstSide === "human" ? "Your turn — advance through Stand and Draw." : `${match.players.bot.name} goes first.`);
+    match.preMatch.stage = "mulligan"; match.preMatch.firstSide = firstSide;
+    online.mulliganSelection = []; online.mulliganSubmitted = false;
+    addLog(`${match.players.human.name} and ${match.players.bot.name} finished the dice roll. ${match.players[firstSide].name} will go first after mulligans.`);
+    setMessage("Both players may return any number of cards from their opening hands, then confirm to start.");
     renderMatch();
+  }
+  function finishOnlineMulligan() {
+    const setup = match?.preMatch;
+    if (!setup || !setup.mulliganDone?.human || !setup.mulliganDone?.bot) return;
+    const firstSide = setup.firstSide;
+    match.preMatch = null; match.firstSide = firstSide; match.side = firstSide; match.phase = 0; match.turn = 1; match.drewThisTurn = false; match.ridePerformed = false;
+    addLog(`Both players completed their opening-hand mulligans. ${match.players[firstSide].name} goes first.`);
+    setMessage(firstSide === "human" ? "Your turn — advance through Stand and Draw." : `${match.players.bot.name} goes first.`);
+  }
+  function completeOnlineMulligan(side, uids = []) {
+    const setup = match?.preMatch, player = match?.players?.[side];
+    if (!setup || setup.stage !== "mulligan" || !player || setup.mulliganDone?.[side]) return;
+    const selected = new Set(Array.isArray(uids) ? uids : []);
+    const returned = player.hand.filter((item) => selected.has(item.uid));
+    player.hand = player.hand.filter((item) => !selected.has(item.uid));
+    player.deck.unshift(...returned);
+    for (let i = 0; i < returned.length; i++) draw(side);
+    setup.mulliganDone[side] = true;
+    addLog(`${player.name} ${returned.length ? `returned ${returned.length} card${returned.length === 1 ? "" : "s"} and drew ${returned.length} replacement${returned.length === 1 ? "" : "s"}` : "kept their opening hand"} and confirmed the mulligan.`);
+    finishOnlineMulligan(); renderMatch();
   }
   function renderOnlineSetup() {
     const dialog = $("#online-start-dialog");
     if (!match?.preMatch) { if (dialog.open) dialog.close(); return; }
-    const rolls = match.preMatch.rolls, winner = match.preMatch.winner || (rolls.human !== null && rolls.bot !== null ? (rolls.human > rolls.bot ? "human" : rolls.bot > rolls.human ? "bot" : null) : null);
-    $("#online-roll-status").textContent = rolls.human === null || rolls.bot === null ? "Both players roll one die. Higher roll chooses who goes first." : winner ? `${match.players[winner].name} rolled higher and chooses first or second.` : `Tie at ${rolls.human}. Both players roll again.`;
-    $("#online-local-roll").textContent = rolls.human === null ? "—" : String(rolls.human);
-    $("#online-opponent-roll").textContent = rolls.bot === null ? "—" : String(rolls.bot);
-    $("#roll-online-die").disabled = online.role === "watcher" || rolls.human !== null;
-    $("#roll-online-die").textContent = rolls.human === null ? "Roll your die" : "You rolled";
-    $("#online-first-choice").classList.toggle("hidden", winner !== "human" || online.role === "watcher");
+    if (online.role === "watcher") { if (dialog.open) dialog.close(); return; }
+    const isMulligan = match.preMatch.stage === "mulligan";
+    $("#online-roll-stage").classList.toggle("hidden", isMulligan);
+    $("#online-mulligan-stage").classList.toggle("hidden", !isMulligan);
+    $("#online-start-title").textContent = isMulligan ? "Opening hand mulligan" : "Roll for first turn";
+    if (isMulligan) {
+      const done = match.preMatch.mulliganDone || { human: false, bot: false }, submitted = online.mulliganSubmitted || done.human;
+      const selection = new Set(online.mulliganSelection || []), hand = match.players.human.hand || [];
+      $("#online-roll-status").textContent = done.human && done.bot ? "Both players confirmed." : done.human ? `${match.players.human.name} confirmed. Waiting for ${match.players.bot.name}.` : done.bot ? `${match.players.bot.name} confirmed. Choose any cards to return, or keep your hand.` : "Select any number of cards to put on the bottom of your deck, then draw that many. Or confirm with none selected.";
+      $("#online-mulligan-cards").innerHTML = submitted ? `<p class="mulligan-waiting">${done.human ? "You’re done. Waiting for the other player…" : "Mulligan sent. Waiting for the host…"}</p>` : hand.map((item) => { const c = cardMap.get(item.cardId); return c ? `<button class="zone-view-card mulligan-card${selection.has(item.uid) ? " selected" : ""}" type="button" data-mulligan-uid="${escapeHtml(item.uid)}" aria-pressed="${selection.has(item.uid)}">${cardImage(c)}<b>${escapeHtml(c.name)}</b><small>${selection.has(item.uid) ? "Will return to deck" : "Keep in hand"}</small></button>` : ""; }).join("");
+      const confirm = $("#online-mulligan-confirm"); confirm.textContent = online.role === "guest" ? "Confirm mulligan" : "Done mulliganing"; confirm.disabled = submitted || done.human;
+      $("#online-mulligan-count").textContent = submitted ? "Waiting for the other player" : `${selection.size} card${selection.size === 1 ? "" : "s"} selected`;
+    }
+    if (!isMulligan) {
+      const rolls = match.preMatch.rolls, winner = match.preMatch.winner || (rolls.human !== null && rolls.bot !== null ? (rolls.human > rolls.bot ? "human" : rolls.bot > rolls.human ? "bot" : null) : null);
+      $("#online-roll-status").textContent = rolls.human === null || rolls.bot === null ? "Both players roll one die. Higher roll chooses who goes first." : winner ? `${match.players[winner].name} rolled higher and chooses first or second.` : `Tie at ${rolls.human}. Both players roll again.`;
+      $("#online-local-roll").textContent = rolls.human === null ? "—" : String(rolls.human);
+      $("#online-opponent-roll").textContent = rolls.bot === null ? "—" : String(rolls.bot);
+      $("#roll-online-die").disabled = online.role === "watcher" || rolls.human !== null;
+      $("#roll-online-die").textContent = rolls.human === null ? "Roll your die" : "You rolled";
+      $("#online-first-choice").classList.toggle("hidden", winner !== "human" || online.role === "watcher");
+    }
     if (!dialog.open) dialog.showModal();
   }
   function addLog(message) { if (!match) return; match.log.unshift({ time: new Date(), message }); match.log = match.log.slice(0, 15); renderLog(); }
@@ -871,8 +907,7 @@
   function botTurn() {
     if (!match || match.ended) return;
     match.side = "bot"; match.phase = 0; match.players.bot.vanguard && (match.players.bot.vanguard.rested = false); match.players.bot.rear.forEach((x) => x && (x.rested = false));
-    const skipFirstDraw = match.initialBotTurn && match.firstSide === "bot";
-    const card = skipFirstDraw ? null : draw("bot"); if (card) addLog("Practice Bot drew a card.");
+    const card = draw("bot"); if (card) addLog("Practice Bot drew a card for the Draw phase.");
     renderMatch(); setMessage("Practice Bot is taking its turn…");
     botTimer = setTimeout(() => {
       const bot = match.players.bot;
@@ -923,9 +958,8 @@
     if (match.phase >= phases.length - 1) { endTurn(); return; }
     match.phase += 1; match.selected = null;
     if (match.phase === 1 && !match.drewThisTurn) {
-      const skipsFirstDraw = match.turn === 1 && match.firstSide === "human";
-      const drawn = skipsFirstDraw ? null : draw("human"); match.drewThisTurn = true;
-      addLog(skipsFirstDraw ? `${match.players.human.name} skipped the first-turn Draw.` : drawn ? `${match.players.human.name} drew a card for the Draw phase.` : `${match.players.human.name} has no cards to draw.`);
+      const drawn = draw("human"); match.drewThisTurn = true;
+      addLog(drawn ? `${match.players.human.name} drew a card for the Draw phase.` : `${match.players.human.name} has no cards to draw.`);
     }
     if (match.phase === 0) {
       const player = match.players.human; [player.vanguard, ...player.rear].forEach((unit) => { if (unit) unit.rested = false; });
@@ -1148,8 +1182,22 @@
   }
   function flipSide(side) { return side === "human" ? "bot" : side === "bot" ? "human" : side; }
   function onlineDeck() {
+    if (online.selectedDeck && deckCount(online.selectedDeck)) return { name: online.selectedDeck.name, cards: { ...online.selectedDeck.cards }, starterCardId: online.selectedDeck.starterCardId || "" };
     if (builder.cards && deckCount(builder)) return { name: builder.name || "My Deck", cards: { ...builder.cards }, starterCardId: builder.starterCardId || "" };
     return defaultDeck();
+  }
+  function renderOnlineDeckChoices() {
+    const select = $("#online-deck-choice"), decks = readSavedDecks();
+    select.innerHTML = decks.length ? decks.map((deck) => `<option value="${escapeHtml(deck.id)}">${escapeHtml(deck.name)} · ${deckCount(deck)} cards</option>`).join("") : '<option value="">No saved decks — save a deck first</option>';
+    const preferred = online.selectedDeck?.id || (decks.some((deck) => deck.id === builder.id) ? builder.id : decks[0]?.id) || "";
+    if (preferred) select.value = preferred;
+    $("#online-deck-help").textContent = decks.length ? "Choose the saved deck you’ll use for this online match." : "Create and save a deck in Deck folder before hosting or joining as a player.";
+    $("#online-deck-wrap").classList.toggle("hidden", online.dialogMode === "join" && $("#online-join-role").value === "spectator");
+  }
+  function selectOnlineDeck() {
+    const deck = readSavedDecks().find((item) => item.id === $("#online-deck-choice").value);
+    if (!deck || !deckCount(deck)) { setOnlineError("Choose a saved deck before starting an online match. Save a deck from the Deck folder first."); return false; }
+    online.selectedDeck = { ...deck, cards: { ...deck.cards } }; return true;
   }
   function setOnlineError(message = "") { $("#online-error").textContent = message; }
   function setConnectionPill(label) { $("#connection-pill").innerHTML = `<i></i> ${escapeHtml(label)}`; }
@@ -1161,6 +1209,7 @@
     $("#join-code-wrap").classList.toggle("hidden", mode !== "join"); $("#host-room-fields").classList.toggle("hidden", mode !== "host");
     $("#online-name").value = localStorage.getItem("vanguardArenaPlayerName") || "Player";
     $("#join-code").value = invite;
+    renderOnlineDeckChoices();
     if (mode === "join") void loadOpenRooms();
     setOnlineError("");
     $("#online-dialog").showModal();
@@ -1199,6 +1248,8 @@
     if (snapshot.preMatch) {
       snapshot.preMatch.rolls = { human: snapshot.preMatch.rolls.bot, bot: snapshot.preMatch.rolls.human };
       if (snapshot.preMatch.winner) snapshot.preMatch.winner = flipSide(snapshot.preMatch.winner);
+      if (snapshot.preMatch.firstSide) snapshot.preMatch.firstSide = flipSide(snapshot.preMatch.firstSide);
+      if (snapshot.preMatch.mulliganDone) snapshot.preMatch.mulliganDone = { human: snapshot.preMatch.mulliganDone.bot, bot: snapshot.preMatch.mulliganDone.human };
     }
     const visibleIds = new Set(snapshot.players.human.hand.map((card) => card.uid));
     [snapshot.players.human.vanguard, ...snapshot.players.human.rear].filter(Boolean).forEach((card) => visibleIds.add(card.uid));
@@ -1232,7 +1283,7 @@
       const deck = sanitizedDeck(message.deck);
       const playerName = String(message.name || "Opponent").slice(0, 24);
       match.players.bot = makePlayer(deck.cards && deckCount(deck) ? deck : defaultDeck(), playerName);
-      match.deckName = builder.name || "Online match";
+      match.deckName = online.selectedDeck?.name || builder.name || "Online match";
       addLog(`${playerName} joined with ${deck.name}.`); setMessage("Opponent connected — your turn."); renderMatch();
       return;
     }
@@ -1240,7 +1291,11 @@
     if (online.role === "watcher" && message.type === "watch-state") { updateGuestState(message.match); $("#match-status").textContent = "SPECTATING · LIVE"; return; }
     if (online.role === "host" && match?.preMatch && message.type === "setup-roll") { rollOnlineDieFor("bot"); return; }
     if (online.role === "host" && match?.preMatch && message.type === "setup-choice") {
-      if (match.preMatch.winner === "bot" && ["human", "bot"].includes(message.firstSide)) beginOnlineTurns(flipSide(message.firstSide));
+      if (match.preMatch.winner === "bot" && ["human", "bot"].includes(message.firstSide)) beginOnlineMulligan(flipSide(message.firstSide));
+      return;
+    }
+    if (online.role === "host" && match?.preMatch && message.type === "setup-mulligan") {
+      completeOnlineMulligan("bot", message.handUids || []);
       return;
     }
     if (online.role !== "host" || !match || !["action", "select"].includes(message.type)) return;
@@ -1286,6 +1341,7 @@
     connection.on("error", onlinePeerError);
   }
   function beginHosting() {
+    if (!selectOnlineDeck()) return;
     if (!window.Peer) { setOnlineError("The online connection library did not load. Check your internet connection and reload."); return; }
     if (!account.client) { setOnlineError("Room discovery needs the configured Supabase connection."); return; }
     if (!$("#room-password").value.trim()) { setOnlineError("Set a room password before creating the room."); return; }
@@ -1318,6 +1374,8 @@
     online.peer.on("error", onlinePeerError);
   }
   async function beginJoining() {
+    const watching = $("#online-join-role").value === "spectator" || new URLSearchParams(location.search).has("watch");
+    if (!watching && !selectOnlineDeck()) return;
     const roomCode = getInviteId($("#join-code").value);
     if (!roomCode) { setOnlineError("Choose an open room or enter a room code."); return; }
     if (!account.client) { setOnlineError("Room discovery needs the configured Supabase connection."); return; }
@@ -1326,7 +1384,6 @@
     if (roomError || !roomId) { setOnlineError("Room not found, closed, or password is incorrect."); return; }
     if (!window.Peer) { setOnlineError("The online connection library did not load. Check your internet connection and reload."); return; }
     online.localName = String($("#online-name").value.trim() || "Player").slice(0, 24); localStorage.setItem("vanguardArenaPlayerName", online.localName);
-    const watching = $("#online-join-role").value === "spectator" || new URLSearchParams(location.search).has("watch");
     online.role = watching ? "watcher" : "guest"; online.roomId = roomId; online.publicRoomCode = roomCode; setConnectionPill("CONNECTING"); online.peer = new Peer();
     online.peer.on("open", () => {
       if (watching) {
@@ -1343,7 +1400,7 @@
     if (online.heartbeat) clearInterval(online.heartbeat);
     if (online.role === "host" && online.publicRoomCode && account.client) void account.client.rpc("close_match_room", { p_room_code: online.publicRoomCode });
     try { online.connection?.close(); online.watchers?.forEach((connection) => connection.close()); online.peer?.destroy(); } catch {}
-    online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, dialogMode: "host" };
+    online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
     setConnectionPill("READY");
     $("#online-invite").classList.add("hidden");
   }
@@ -1467,6 +1524,9 @@
   $("#account-signup").addEventListener("click", accountSignUp); $("#account-signin").addEventListener("click", accountSignIn); $("#account-signout").addEventListener("click", accountSignOut); $("#account-reset").addEventListener("click", resetAccountPassword); $("#account-update-password").addEventListener("click", updateAccountPassword); $("#account-import-local").addEventListener("click", importLocalDecks);
   $("#profile-save").addEventListener("click", savePlayerProfile);
   $("#online-confirm").addEventListener("click", () => online.dialogMode === "host" ? beginHosting() : beginJoining());
+  $("#online-join-role").addEventListener("change", renderOnlineDeckChoices);
+  $("#online-mulligan-cards").addEventListener("click", (event) => { const card = event.target.closest("[data-mulligan-uid]"); if (!card || online.mulliganSubmitted || match?.preMatch?.mulliganDone?.human) return; const selected = new Set(online.mulliganSelection || []); selected.has(card.dataset.mulliganUid) ? selected.delete(card.dataset.mulliganUid) : selected.add(card.dataset.mulliganUid); online.mulliganSelection = [...selected]; renderOnlineSetup(); });
+  $("#online-mulligan-confirm").addEventListener("click", () => { if (!match?.preMatch || match.preMatch.stage !== "mulligan") return; if (online.role === "guest") { if (!online.connection?.open) { toast("You are disconnected from the match."); return; } online.mulliganSubmitted = true; online.connection.send({ type: "setup-mulligan", handUids: online.mulliganSelection || [] }); renderOnlineSetup(); } else if (online.role === "host") completeOnlineMulligan("human", online.mulliganSelection || []); });
   $("#refresh-rooms").addEventListener("click", () => void loadOpenRooms()); $("#room-list").addEventListener("change", () => { if ($("#room-list").value) $("#join-code").value = $("#room-list").value; });
   $("#online-cancel").addEventListener("click", () => $("#online-dialog").close()); $("#close-online-dialog").addEventListener("click", () => $("#online-dialog").close());
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });
@@ -1538,6 +1598,7 @@
   $("#close-card-dialog").addEventListener("click", () => $("#card-dialog").close()); $("#help-button").addEventListener("click", () => $("#help-dialog").showModal()); $("#close-help-dialog").addEventListener("click", () => $("#help-dialog").close());
   $("#match-menu").addEventListener("click", () => { if (confirm("Start a new practice match? The current match will end.")) { endOnlineSession(); openPracticeSetup(); } });
   $("#roll-online-die").addEventListener("click", () => { if (online.role === "guest") { if (!online.connection?.open) { toast("Wait for the host to connect, then roll again."); return; } online.connection.send({ type: "setup-roll" }); } else if (online.role === "host") rollOnlineDieFor("human"); });
+  window.addEventListener("pagehide", () => { if (online.role === "host" && online.publicRoomCode && account.client) void account.client.rpc("close_match_room", { p_room_code: online.publicRoomCode }); });
   $$("[data-first-choice]").forEach((button) => button.addEventListener("click", () => chooseOnlineFirstPlayer(button.dataset.firstChoice)));
   $("#online-start-dialog").addEventListener("cancel", (event) => event.preventDefault());
   $("#card-dialog").addEventListener("click", (e) => { if (e.target === $("#card-dialog")) $("#card-dialog").close(); });
@@ -1545,5 +1606,5 @@
   initializeAccounts();
   const initial = ["play", "decks", "cards"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "play"; showView(initial);
   if (!readSavedDecks().length) { $("#match-layout").classList.add("hidden"); $("#match-empty").classList.remove("hidden"); }
-  const inviteParams = new URLSearchParams(location.search); if (inviteParams.has("join") || inviteParams.has("watch")) { openOnlineDialog("join", location.href); if (inviteParams.has("watch")) $("#online-join-role").value = "spectator"; }
+  const inviteParams = new URLSearchParams(location.search); if (inviteParams.has("join") || inviteParams.has("watch")) { openOnlineDialog("join", location.href); if (inviteParams.has("watch")) { $("#online-join-role").value = "spectator"; renderOnlineDeckChoices(); } }
 })();
