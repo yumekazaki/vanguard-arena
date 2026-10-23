@@ -528,7 +528,10 @@
     $("#call-card").disabled = !humanTurn || pending || match.phase !== 3 || !handCard || !match.players.human.rear.includes(null);
     $("#attack-card").disabled = !humanTurn || pending || match.phase !== 4 || !fieldCard || fieldCard.instance.rested || fieldCard.instance.locked;
     $("#play-order").disabled = !humanTurn || pending || match.phase !== 3 || !handCard || !/Order/i.test(cardMap.get(handCard.cardId)?.type || "");
-    $("#guard-card").disabled = !pending || match.side === "human" || match.players.human.hand.length === 0 || Number(match.pendingAttack?.driveChecksRemaining||0)>0;
+    const defendingHuman = pending && match.pendingAttack?.defenderSide === "human" && Number(match.pendingAttack?.driveChecksRemaining||0) === 0;
+    $("#guard-card").disabled = !defendingHuman || match.players.human.hand.length === 0 || online.role === "watcher";
+    const interceptButton = $("#intercept-card");
+    if (interceptButton) { interceptButton.hidden = !eligibleInterceptors().length; interceptButton.disabled = !defendingHuman || online.role === "watcher"; }
     const gGuardButton=$(".action-buttons [data-manual-action='g-guard']"),guardianAvailable=(match.players.human.gDeck||[]).some((item)=>/G\s*-?Guardian|G\s*-?Guard/i.test(cardMap.get(item.cardId)?.type||"")),healAvailable=match.players.human.hand.some((item)=>triggerKind(item)==="heal"),grade=Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade||0);
     if(gGuardButton){gGuardButton.hidden=!(pending&&match.pendingAttack?.defenderSide==="human"&&Number(match.pendingAttack?.driveChecksRemaining||0)===0&&grade>=3&&healAvailable&&guardianAvailable);gGuardButton.disabled=online.role==="watcher";}
     const driveButton=$("[data-manual-action='drive-check']");if(driveButton)driveButton.disabled=online.role==="watcher"||!pending||match.pendingAttack?.attackerSide!=="human"||match.pendingAttack?.attackerZone!=="vanguard"||Number(match.pendingAttack?.driveChecksRemaining||0)<=0;
@@ -565,7 +568,7 @@
       $("#selection-hint").textContent = pending ? "Opponent attacking — choose Guard or No guard" : "Select a card to see actions";
       $("#selected-summary").innerHTML = `<span class="selected-card-icon">✦</span><span><b>${pending ? "Attack incoming" : "No card selected"}</b><small>${pending ? "Use Guard or No guard" : "Choose a card from your hand or field"}</small></span>`;
     }
-    const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.toggle("hidden", !pending || match.side === "human"); noGuard.disabled=Number(match.pendingAttack?.driveChecksRemaining||0)>0; }
+    const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.toggle("hidden", !pending || match.pendingAttack?.defenderSide !== "human"); noGuard.textContent = (match.pendingAttack?.guardCards?.length || 0) ? "Done guarding" : "No guard"; noGuard.disabled=Number(match.pendingAttack?.driveChecksRemaining||0)>0; }
     if (online.role === "watcher") $$(".action-buttons button").forEach((button) => { button.disabled = true; });
   }
   function findFieldCard(uid) {
@@ -574,6 +577,27 @@
     return null;
   }
   function selectedHandCard() { return match?.players.human.hand.find((x) => x.uid === match.selected); }
+  function eligibleInterceptors() {
+    const attack = match?.pendingAttack;
+    if (!attack || attack.defenderSide !== "human" || attack.targetZone !== "vanguard" || Number(attack.driveChecksRemaining || 0) > 0) return [];
+    return match.players.human.rear.slice(0, 2).filter((unit) => unit && Number(cardMap.get(unit.cardId)?.grade) === 2);
+  }
+  function openInterceptDialog() {
+    const choices = eligibleInterceptors();
+    if (!choices.length) { toast("Only a Grade 2 in either front Rear-Guard circle can intercept for your Vanguard."); return; }
+    $("#intercept-card-list").innerHTML = choices.map((unit) => { const c = cardMap.get(unit.cardId); return c ? `<button class="zone-view-card" type="button" data-intercept-uid="${escapeHtml(unit.uid)}">${cardImage(c)}<b>Intercept · ${escapeHtml(c.name)}</b><small>${Number(c.shield || 0).toLocaleString()} shield</small></button>` : ""; }).join("");
+    $("#intercept-dialog").showModal();
+  }
+  function interceptWith(uid) {
+    const unit = eligibleInterceptors().find((item) => item.uid === uid);
+    if (!unit) { toast("That unit can no longer intercept."); return; }
+    const player = match.players.human, index = player.rear.findIndex((item) => item?.uid === uid), shield = Number(cardMap.get(unit.cardId)?.shield || 0);
+    if (index < 0) return;
+    player.rear[index] = null; player.guardCircle ||= []; match.pendingAttack.guardCards ||= [];
+    player.guardCircle.push(unit); match.pendingAttack.guardCards.push(unit); match.pendingAttack.targetPower += shield;
+    addLog(`${player.name} intercepted with ${cardMap.get(unit.cardId)?.name || "a Grade 2 Rear-Guard"} (+${shield.toLocaleString()} shield).`);
+    match.selected = null; renderMatch();
+  }
   function moveRearCardToZone(uid, zone) {
     const player = match.players.human;
     const rearZones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
@@ -817,14 +841,13 @@
   function humanGuard() {
     if (!match?.pendingAttack) return;
     if(Number(match.pendingAttack.driveChecksRemaining||0)>0){toast("The attacking Vanguard must finish its drive checks before you guard.");return;}
-    let instance = selectedHandCard();
-    if (!instance && match.players.human.hand.length) instance = match.players.human.hand.slice().sort((a, b) => Number(cardMap.get(b.cardId)?.shield || 0) - Number(cardMap.get(a.cardId)?.shield || 0))[0];
-    if (!instance) { toast("Choose a card from your hand to guard, or choose No guard."); return; }
+    const instance = selectedHandCard();
+    if (!instance) { toast("Select a card in your hand, then choose Guard. You can add more cards before choosing Done guarding."); return; }
     if(Number(cardMap.get(instance.cardId)?.shield||0)===0){openProtectDiscardDialog(instance);return;}
     match.players.human.hand = match.players.human.hand.filter((x) => x.uid !== instance.uid);match.players.human.guardCircle.push(instance);match.pendingAttack.guardCards.push(instance);
     const shield=Number(cardMap.get(instance.cardId)?.shield||0);match.pendingAttack.targetPower+=shield;
     addLog(`${match.players.human.name} guarded with ${cardMap.get(instance.cardId)?.name||"a card"} for ${shield.toLocaleString()} shield.`);
-    match.selected=null;if(match.pendingAttack.power<match.pendingAttack.targetPower)finishAttack(true);else renderMatch();
+    match.selected=null;renderMatch();
   }
   function openProtectDiscardDialog(marker) {
     const hand=match.players.human.hand.filter(item=>item.uid!==marker.uid),list=$("#protect-discard-list");
@@ -1086,9 +1109,13 @@
       if(grade<3||healIndex<0||index<0||!/G\s*-?Guardian|G\s*-?Guard/i.test(guardian?.type||"")){toast("G-Guard needs a grade 3+ Vanguard, a Heal trigger to discard, and a face-down G Guardian.");return;}
       const cost=player.hand.splice(healIndex,1)[0],instance=player.gDeck.splice(index,1)[0];player.guardCircle||=[];match.pendingAttack.guardCards||=[];player.drop.push(cost);player.guardCircle.push(instance);match.pendingAttack.guardCards.push(instance);match.pendingAttack.targetPower+=Number(guardian.shield||0);
       addLog(`${player.name} discarded ${cardMap.get(cost.cardId)?.name||"a Heal trigger"} to G-Guard with ${guardian.name} (+${Number(guardian.shield||0).toLocaleString()} shield).`);match.selected=null;
-      if(match.pendingAttack.power<match.pendingAttack.targetPower)finishAttack(true);
+      renderMatch();
     } else if (action.startsWith("guard-perfect:")) {
       const [,markerUid,costUid]=action.split(":");resolveProtectGuard(markerUid,costUid);return;
+    } else if (action === "intercept") {
+      openInterceptDialog(); return;
+    } else if (action.startsWith("intercept:")) {
+      interceptWith(action.slice("intercept:".length));
     } else if (action === "guard") {
       if (!match.pendingAttack) { toast("There is no incoming attack to guard."); return; }
       humanGuard(); return;
@@ -1405,6 +1432,7 @@
   function openDamageDialog(action) { if(!match){toast("Start a match first.");return;}const damage=match.players.human.damage||[];const eligible=damage.filter((item)=>action==="heal-damage"?true:action==="counter-blast"?!item.faceDown:item.faceDown);$("#damage-dialog-title").textContent=action==="heal-damage"?"Heal damage · choose a damage card":action==="counter-blast"?"Counter-Blast · choose face-up damage":"Counter-Charge · choose face-down damage";$("#damage-card-list").innerHTML=eligible.length?eligible.map((item)=>{const c=cardMap.get(item.cardId);return c?'<button class="zone-view-card" type="button" data-damage-action="'+(action==="heal-damage"?"heal":action)+':'+escapeHtml(item.uid)+'" title="Choose '+escapeHtml(c.name)+'">'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button>':"";}).join(""):'<p class="zone-empty-message">No eligible damage cards.</p>';$("#damage-dialog").dataset.action=action;$("#damage-dialog").showModal(); }
   function performManualAction(action) {
     if (action === "view-selected-soul") { openSoulDialog(false, "human"); return; }
+    if (action === "intercept") { openInterceptDialog(); return; }
     if (online.role === "watcher") { toast("Spectators can watch but cannot change the match."); return; }
     if (action === "soul-blast") { openSoulDialog(true); return; }
     if (action === "stride" || action === "g-guard") { if(action === "g-guard" && !match?.pendingAttack){toast("Use G-guard while defending an attack.");return;} openGDeckDialog(action); return; }
@@ -1444,9 +1472,9 @@
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });
   $("#copy-spectate").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#spectate-link").value); toast("Spectator link copied."); } catch { $("#spectate-link").select(); document.execCommand("copy"); toast("Spectator link copied."); } });
   $("#new-match").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#empty-start").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#practice-start-confirm").addEventListener("click", () => { const firstSide = $("#practice-first-player").value; $("#practice-setup-dialog").close(); startMatch(null, firstSide); }); $("#reset-match").addEventListener("click", newMatchButton);
-  $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
+  $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#intercept-card").addEventListener("click", () => performManualAction("intercept")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
-  $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher" || match.side !== "human") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
+  $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); const canSelectForDefense = Boolean(match?.pendingAttack?.defenderSide === "human" && Number(match.pendingAttack.driveChecksRemaining || 0) === 0); if (!card || !match || online.role === "watcher" || (match.side !== "human" && !canSelectForDefense)) return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
   $(".game-table").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const zone = e.target.closest(".field-zone[data-side='human']"); if (zone && match?.moveRearUid && zone.dataset.zone !== "vanguard") { performManualAction(`move-rear-to:${match.moveRearUid}:${zone.dataset.zone}`); return; } if (zone && !e.target.closest("[data-field-uid]") && match?.selected && selectedHandCard()) { performManualAction(`place:${zone.dataset.zone}`); return; } if (e.target.closest("[data-gdeck-side='human']")) { performManualAction("stride"); return; } const field = e.target.closest("[data-field-uid]"); if (!field || !match || online.role === "watcher" || field.dataset.side !== "human") return; const uid = field.dataset.fieldUid; if (match.moveRearUid) { if (field.dataset.zone === "vanguard") { toast("Choose a Rear-Guard circle, not the Vanguard circle."); return; } performManualAction(`move-rear-to:${match.moveRearUid}:${field.dataset.zone}`); return; } match.selected = match.selected === uid ? null : uid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
   $("#gift-cancel").addEventListener("click", () => $("#gift-dialog").close()); $("#gift-close").addEventListener("click", () => $("#gift-dialog").close());
   $("#gift-confirm").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind === "force") { const zone = $("#gift-zone").value; if (!zone) { toast("Choose a circle for the Force marker."); return; } performManualAction(`gift-force:${type}:${zone}`); } else performManualAction(`gift-accel:${type}`); dialog.close(); });
@@ -1475,6 +1503,7 @@
   $("#g-guard-heal-cost").addEventListener("change",()=>{if($("#gdeck-dialog").open&&$("#gdeck-dialog").dataset.kind==="g-guard")openGDeckDialog("g-guard");});
   $("#attack-choice-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
   $("#protect-discard-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-protect-cost]");if(!button)return;const marker=$("#protect-discard-dialog").dataset.markerUid;$("#protect-discard-dialog").close();performManualAction(`guard-perfect:${marker}:${button.dataset.protectCost}`);});
+  $("#intercept-card-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-intercept-uid]");if(!button)return;$("#intercept-dialog").close();performManualAction(`intercept:${button.dataset.interceptUid}`);});
   $("#bind-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
   $("#damage-card-list").addEventListener("click",(e)=>{const action=e.target.closest("[data-damage-action]");if(action){$("#damage-dialog").close();performManualAction("damage-action:"+action.dataset.damageAction);}});
   $("#trigger-prompt-targets").addEventListener("click",(e)=>{const target=e.target.closest("[data-trigger-pick]");if(target)performManualAction("trigger-pick:"+target.dataset.triggerPick);});
