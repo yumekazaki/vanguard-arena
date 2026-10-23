@@ -593,7 +593,7 @@
     if (standSelected) standSelected.disabled = !canAct;
     const onHumanField = fieldCard?.side === "human", onHumanHand = Boolean(handCard);
     const contextualActions = {
-      bind: onHumanField || onHumanHand, "selected-to-drop": onHumanField || onHumanHand, "selected-to-soul": onHumanField || onHumanHand,
+      bind: onHumanField || onHumanHand, "selected-to-hand": onHumanField, "selected-to-drop": onHumanField || onHumanHand, "selected-to-soul": onHumanField || onHumanHand,
       "view-selected-soul": onHumanField && fieldCard.zone === "vanguard", "rest-selected": onHumanField && !fieldCard.instance.rested,
       "stand-selected": onHumanField && fieldCard.instance.rested,
       "hand-to-damage": onHumanHand, lock: onHumanField, power: onHumanField
@@ -1197,6 +1197,12 @@
       const uid = action.slice("order-to-drop:".length), index = player.orders.findIndex((item) => item.uid === uid);
       if (index < 0) return;
       player.drop.push(player.orders.splice(index, 1)[0]); addLog(`${player.name} moved an Order from the Order zone to drop.`);
+    } else if (action === "selected-to-hand") {
+      const field = findFieldCard(match.selected);
+      if (field?.side !== "human") { toast("Select one of your field cards first."); return; }
+      if (field.zone === "vanguard") player.vanguard = null; else player.rear[field.index] = null;
+      player.hand.push(field.instance); match.selected = null;
+      addLog(`${player.name} returned ${cardMap.get(field.instance.cardId)?.name || "a card"} from the field to hand.`);
     } else if (action === "selected-to-drop") {
       const hand = selectedHandCard(), field = findFieldCard(match.selected);
       if (hand) { player.hand = player.hand.filter((item) => item.uid !== hand.uid); player.drop.push(hand); addLog(`${player.name} moved ${cardMap.get(hand.cardId)?.name || "a card"} from hand to Drop.`); }
