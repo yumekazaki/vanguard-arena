@@ -681,7 +681,7 @@
     const dialog = $("#attack-prompt-dialog"),panel=$("#attack-choice-panel"),setup = match?.pendingAttackSetup;
     if (dialog?.open) dialog.close();
     if(!panel)return;
-    if(!setup||online.role==="watcher"){panel.hidden=true;return;}
+    if(!setup||online.role==="watcher"||setup.attackerSide!=="human"){panel.hidden=true;return;}
     const attacker = findFieldCard(setup.attackerUid);
     if (!attacker) { match.pendingAttackSetup = null; panel.hidden=true; return; }
     const attackerName = cardMap.get(attacker.instance.cardId)?.name || "Unit";
@@ -1298,6 +1298,8 @@
     snapshot.side = flipSide(snapshot.side);
     if (snapshot.revealed?.owner) snapshot.revealed.owner = flipSide(snapshot.revealed.owner);
     if (snapshot.firstSide) snapshot.firstSide = flipSide(snapshot.firstSide);
+    if (snapshot.pendingAttack) { snapshot.pendingAttack.attackerSide = flipSide(snapshot.pendingAttack.attackerSide); snapshot.pendingAttack.defenderSide = flipSide(snapshot.pendingAttack.defenderSide); }
+    if (snapshot.pendingAttackSetup) { snapshot.pendingAttackSetup.attackerSide = flipSide(snapshot.pendingAttackSetup.attackerSide); snapshot.pendingAttackSetup.defenderSide = flipSide(snapshot.pendingAttackSetup.defenderSide); }
     if (snapshot.pendingTrigger?.side) snapshot.pendingTrigger.side = flipSide(snapshot.pendingTrigger.side);
     if (snapshot.pendingTrigger?.turnOwner) snapshot.pendingTrigger.turnOwner=flipSide(snapshot.pendingTrigger.turnOwner);
     if (snapshot.preMatch) {
