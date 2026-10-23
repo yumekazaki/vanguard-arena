@@ -1133,14 +1133,14 @@
       const cardName = cardMap.get(field.instance.cardId)?.name || "a card";
       addLog(`${player.name} ${actionWord} ${cardName}.`);
       toast(`${cardName} ${actionWord}.`);
-    } else if (action === "power" || action === "minus-power") {
+    } else if (["power", "minus-power", "power-1000", "minus-power-1000"].includes(action)) {
       const field = findFieldCard(match.selected); if (!field || field.side !== "human") { toast("Select one of your units first."); return; }
-      const amount = action === "power" ? 5000 : -5000;
-      if (amount < 0 && Number(field.instance.powerBoost || 0) < 5000) { toast("This unit has no +5000 power bonus to remove."); return; }
+      const step = action.endsWith("1000") ? 1000 : 5000, amount = action.startsWith("minus-") ? -step : step;
+      if (amount < 0 && Number(field.instance.powerBoost || 0) < step) { toast(`This unit has no +${step} power bonus to remove.`); return; }
       field.instance.powerBoost = Math.max(0, Number(field.instance.powerBoost || 0) + amount);
       if (match.pendingAttack?.attackerUid === field.instance.uid) match.pendingAttack.power = Math.max(0, Number(match.pendingAttack.power || 0) + amount);
       if (match.pendingAttack?.targetUid === field.instance.uid) match.pendingAttack.targetPower = Math.max(0, Number(match.pendingAttack.targetPower || 0) + amount);
-      addLog(`${player.name} ${amount > 0 ? "gave" : "removed"} 5000 power ${amount > 0 ? "to" : "from"} ${cardMap.get(field.instance.cardId)?.name || "a unit"}.`);
+      addLog(`${player.name} ${amount > 0 ? "gave" : "removed"} ${step} power ${amount > 0 ? "to" : "from"} ${cardMap.get(field.instance.cardId)?.name || "a unit"}.`);
     } else if (action.startsWith("gift-force:")) {
       const [, type, zone] = action.split(":");
       const zones = ["vanguard", "rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
