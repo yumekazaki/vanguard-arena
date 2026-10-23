@@ -28,8 +28,8 @@
   const importedCatalog = Array.isArray(window.CARD_CATALOG) ? window.CARD_CATALOG : [];
   const cardList = importedCatalog.length ? [...importedCatalog, ...userCards] : [...sampleCards, ...userCards];
   const cardMap = new Map(cardList.map((c) => [c.id, c]));
-  cardMap.set("token-quick-shield", { id: "token-quick-shield", name: "Quick Shield", grade: 0, nation: "Token", power: 0, shield: 5000, type: "Quick Shield Token", text: "Placeholder token for a Quick Shield. Resolve its shield value manually.", color: "#a39bff", glyph: "◇", source: "Vanguard Arena token" });
-  cardMap.set("token-protect", { id: "token-protect", name: "Protect Marker", grade: 0, nation: "Token", power: 0, shield: 0, type: "Protect Marker", text: "Protect marker added to your hand. Resolve its protection effect manually.", color: "#81d9ee", glyph: "◇", source: "Vanguard Arena token" });
+  cardMap.set("token-quick-shield", { id: "token-quick-shield", name: "Quick Shield", grade: 0, nation: "Token", power: 0, shield: 5000, type: "Quick Shield Token", text: "Provides 5,000 shield when used to guard.", color: "#a39bff", glyph: "◇", source: "Vanguard Arena token" });
+  cardMap.set("token-protect", { id: "token-protect", name: "Protect Marker", grade: 0, nation: "Token", power: 0, shield: 0, type: "Protect Marker", text: "When used to guard, discard one other card from your hand to completely stop the attack.", color: "#81d9ee", glyph: "◇", source: "Vanguard Arena token" });
   const artIds = Array.isArray(window.CARD_ART_IDS) ? window.CARD_ART_IDS : [];
   const artPageSize = 60;
   let artPage = 0;
@@ -366,13 +366,13 @@
     const starterIndex = pile.findIndex((instance) => instance.cardId === starterId);
     const vanguard = starterIndex >= 0 ? { ...pile.splice(starterIndex, 1)[0], rested: false } : null;
     shuffle(pile);
-    return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rear: [null, null, null, null, null], accelZones: 0, giftZones: [], orders: [], extra: [], gDeck: shuffle(gDeck), gZone: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
+    return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rear: [null, null, null, null, null], accelZones: 0, giftZones: [], orders: [], guardCircle: [], extra: [], gDeck: shuffle(gDeck), gZone: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
   }
   function openPracticeSetup() { $("#practice-setup-dialog").showModal(); }
   function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
-    match = { players: { human: makePlayer(readyDeck, "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { rolls: { human: null, bot: null }, winner: null } : null, phase: 0, drewThisTurn: false, ridePerformed: false, selected: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, log: [], ended: false, deckName: readyDeck.name };
+    match = { players: { human: makePlayer(readyDeck, "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { rolls: { human: null, bot: null }, winner: null } : null, phase: 0, drewThisTurn: false, ridePerformed: false, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
     if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
@@ -443,6 +443,7 @@
     $("#human-gdeck-count").textContent = you.gDeck?.length || 0; $("#bot-gdeck-count").textContent = bot.gDeck?.length || 0; $("#human-bind-count").textContent = you.bind?.length || 0; $("#bot-soul-count").textContent = bot.soul?.length || 0;
     $("#human-order-zone").innerHTML = renderOrderCards(you.orders, "human"); $("#bot-order-zone").innerHTML = renderOrderCards(bot.orders, "bot");
     $("#human-gzone").innerHTML = renderGZone(you); $("#bot-gzone").innerHTML = renderGZone(bot);
+    $("#human-guard-circle").innerHTML = renderGuardCircle(you); $("#bot-guard-circle").innerHTML = renderGuardCircle(bot);
     $("#gift-count").textContent = String(you.gifts || 0);
     $(".human-line .player-title small").textContent = `YOUR SIDE · G ${you.gZone?.length || 0} · QUICK SHIELD ${you.quickShields || 0} · PROTECT ${you.protectMarkers || 0}`;
     $(".opponent-line .player-title small").textContent = `${online.role ? "OPPONENT" : "DEMO DECK"} · G ${bot.gZone?.length || 0} · QUICK SHIELD ${bot.quickShields || 0} · PROTECT ${bot.protectMarkers || 0}`;
@@ -468,7 +469,7 @@
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog();
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
-    renderOnlineSetup(); renderTriggerPrompt();
+    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt();
     if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
   }
   function renderZone(side, zone, instance) {
@@ -484,14 +485,17 @@
     if (turnPower) effectLabels.push(`+${Math.round(turnPower / 1000)}k`);
     if (turnCrit) effectLabels.push(`+${turnCrit} CRIT`);
     if (forcePower) effectLabels.push(`+${Math.round(forcePower / 1000)}k FORCE I`);
-    const effectivePower = Number(c.power || 0) + Number(instance.powerBoost || 0) + turnPower + forcePower;
+    const heartPower = Number(cardMap.get(instance.strideHeart?.cardId)?.power || 0) + Number(instance.strideHeart?.powerBoost || 0) + Number(instance.strideHeart?.turnPowerBoost || 0);
+    const calculatedPower = Number(c.power || 0) + heartPower + Number(instance.powerBoost || 0) + turnPower + forcePower;
+    const guardPower = match.pendingAttack?.targetUid === instance.uid ? Math.max(0, Number(match.pendingAttack.targetPower || 0) - calculatedPower) : 0;
+    const effectivePower = calculatedPower + guardPower;
     const effectivePowerLabel = effectivePower.toLocaleString();
     const forceCrit = markers.filter((gift) => /^Force II$/i.test(gift.type || "")).length;
     const effectiveCrit = Math.max(1, Number(c.critical || 1) + turnCrit + forceCrit);
     if (forceCrit) effectLabels.push(`+${forceCrit} CRIT FORCE II`);
     const effectTag = effectLabels.length ? `<span class="turn-effect-badge">${escapeHtml(effectLabels.join(" · "))}</span>` : "";
     const shieldLabel = Number(c.shield || 0) > 0 ? Number(c.shield).toLocaleString() : "—";
-    const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; const powerBreakdown = [`base ${Number(c.power || 0).toLocaleString()}`, Number(instance.powerBoost || 0) ? `+${Number(instance.powerBoost).toLocaleString()} manual` : "", turnPower ? `+${turnPower.toLocaleString()} temporary until end of turn` : "", forcePower ? `+${forcePower.toLocaleString()} Force I for this turn` : ""].filter(Boolean).join(" · "); field.title = `${c.name}\nPower: ${effectivePowerLabel}${effectiveCrit > 1 ? ` · ${effectiveCrit} critical` : ""}\nShield: ${shieldLabel}\n${powerBreakdown}`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade}`}</span>${effectTag}<span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${effectivePowerLabel}</b><span>${effectiveCrit} CRIT</span><small>SHIELD ${shieldLabel}</small></span>`;
+    const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; const powerBreakdown = [`base ${Number(c.power || 0).toLocaleString()}`, heartPower ? `+${heartPower.toLocaleString()} heart` : "", Number(instance.powerBoost || 0) ? `+${Number(instance.powerBoost).toLocaleString()} manual` : "", turnPower ? `+${turnPower.toLocaleString()} temporary until end of turn` : "", forcePower ? `+${forcePower.toLocaleString()} Force I for this turn` : "", guardPower ? `+${guardPower.toLocaleString()} guard shield for this attack` : ""].filter(Boolean).join(" · "); field.title = `${c.name}${heartPower ? ` · Heart: ${cardMap.get(instance.strideHeart.cardId)?.name || "Grade 3"}` : ""}\nPower: ${effectivePowerLabel}${effectiveCrit > 1 ? ` · ${effectiveCrit} critical` : ""}\nShield: ${shieldLabel}\n${powerBreakdown}`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade}`}</span>${effectTag}${guardPower ? `<span class="turn-effect-badge">+${guardPower.toLocaleString()} GUARD</span>` : ""}<span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${effectivePowerLabel}</b><span>${effectiveCrit} CRIT</span><small>SHIELD ${shieldLabel}</small></span>`;
     if (c.image) { field.style.backgroundImage = `linear-gradient(#1118,#111c),url("${String(c.image).replace(/["\\]/g, "")}")`; field.style.backgroundSize = "cover"; }
     el.appendChild(field);
   }
@@ -508,8 +512,9 @@
   }
   function renderGZone(player) {
     const faceUp = (player.gZone || []).map((instance) => { const c = cardMap.get(instance.cardId); return c ? `<button class="zone-card" data-card-zoom="${escapeHtml(c.id)}" title="Zoom ${escapeHtml(c.name)}">${escapeHtml(c.name)}</button>` : ""; }).join("");
-    return `${faceUp}<span class="zone-empty">${(player.extra || []).length} face down</span>`;
+    return `${faceUp}<span class="zone-empty">${(player.gDeck || []).length} face down</span>`;
   }
+  function renderGuardCircle(player) { return (player.guardCircle || []).map((instance) => { const c = cardMap.get(instance.cardId); return c ? `<span class="zone-card guard-card" title="${escapeHtml(c.name)} · ${Number(c.shield || 0).toLocaleString()} shield">${escapeHtml(c.name)}</span>` : ""; }).join("") || '<span class="zone-empty">Empty</span>'; }
   function updateActionAvailability() {
     if (!match) return;
     const humanTurn = match.side === "human" && !match.ended;
@@ -523,10 +528,13 @@
     $("#call-card").disabled = !humanTurn || pending || match.phase !== 3 || !handCard || !match.players.human.rear.includes(null);
     $("#attack-card").disabled = !humanTurn || pending || match.phase !== 4 || !fieldCard || fieldCard.instance.rested || fieldCard.instance.locked;
     $("#play-order").disabled = !humanTurn || pending || match.phase !== 3 || !handCard || !/Order/i.test(cardMap.get(handCard.cardId)?.type || "");
-    $("#guard-card").disabled = !pending || match.side === "human" || match.players.human.hand.length === 0;
+    $("#guard-card").disabled = !pending || match.side === "human" || match.players.human.hand.length === 0 || Number(match.pendingAttack?.driveChecksRemaining||0)>0;
+    const gGuardButton=$(".action-buttons [data-manual-action='g-guard']"),guardianAvailable=(match.players.human.gDeck||[]).some((item)=>/G\s*-?Guardian|G\s*-?Guard/i.test(cardMap.get(item.cardId)?.type||"")),healAvailable=match.players.human.hand.some((item)=>triggerKind(item)==="heal"),grade=Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade||0);
+    if(gGuardButton){gGuardButton.hidden=!(pending&&match.pendingAttack?.defenderSide==="human"&&Number(match.pendingAttack?.driveChecksRemaining||0)===0&&grade>=3&&healAvailable&&guardianAvailable);gGuardButton.disabled=online.role==="watcher";}
+    const driveButton=$("[data-manual-action='drive-check']");if(driveButton)driveButton.disabled=online.role==="watcher"||!pending||match.pendingAttack?.attackerSide!=="human"||match.pendingAttack?.attackerZone!=="vanguard"||Number(match.pendingAttack?.driveChecksRemaining||0)<=0;
     $("#end-turn").disabled = !humanTurn || pending;
     $("#advance-phase").disabled = !humanTurn || pending;
-    $$(".manual-actions [data-manual-action]").forEach((button) => { const defenseAction = button.dataset.manualAction === "g-guard"; button.disabled = online.role === "watcher" || (!humanTurn && !(pending && defenseAction)); });
+    $$(".manual-actions [data-manual-action]").forEach((button) => { const defenseAction = button.dataset.manualAction === "g-guard" && pending && match.pendingAttack?.defenderSide === "human"; const driveAction = button.dataset.manualAction === "drive-check" && pending && match.pendingAttack?.attackerSide === "human" && match.pendingAttack?.attackerZone === "vanguard" && Number(match.pendingAttack?.driveChecksRemaining || 0) > 0; button.disabled = online.role === "watcher" || (!humanTurn && !defenseAction) || (button.dataset.manualAction === "g-guard" && !defenseAction) || (button.dataset.manualAction === "drive-check" && !driveAction); });
     const selectedToDrop = $("[data-manual-action='selected-to-drop']");
     if (selectedToDrop) selectedToDrop.disabled = online.role === "watcher" || !humanTurn || (!handCard && fieldCard?.side !== "human");
     const selectedToSoul = $("[data-manual-action='selected-to-soul']");
@@ -557,7 +565,7 @@
       $("#selection-hint").textContent = pending ? "Opponent attacking — choose Guard or No guard" : "Select a card to see actions";
       $("#selected-summary").innerHTML = `<span class="selected-card-icon">✦</span><span><b>${pending ? "Attack incoming" : "No card selected"}</b><small>${pending ? "Use Guard or No guard" : "Choose a card from your hand or field"}</small></span>`;
     }
-    const noGuard = $("#no-guard"); if (noGuard) noGuard.classList.toggle("hidden", !pending || match.side === "human");
+    const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.toggle("hidden", !pending || match.side === "human"); noGuard.disabled=Number(match.pendingAttack?.driveChecksRemaining||0)>0; }
     if (online.role === "watcher") $$(".action-buttons button").forEach((button) => { button.disabled = true; });
   }
   function findFieldCard(uid) {
@@ -610,6 +618,36 @@
     $("#trigger-prompt-skip").hidden = stage !== "heal-target";
     if (!dialog.open) dialog.showModal();
   }
+  function renderAttackPrompt() {
+    const dialog = $("#attack-prompt-dialog"), setup = match?.pendingAttackSetup;
+    if (!dialog || !setup || online.role === "watcher") { if (dialog?.open) dialog.close(); return; }
+    const attacker = findFieldCard(setup.attackerUid);
+    if (!attacker) { match.pendingAttackSetup = null; if (dialog.open) dialog.close(); return; }
+    const attackerName = cardMap.get(attacker.instance.cardId)?.name || "Unit";
+    let choices = [];
+    if (setup.stage === "boost") {
+      const booster = findFieldCard(setup.boosterUid);
+      $("#attack-prompt-title").textContent = "Boost this attack?";
+      $("#attack-prompt-help").textContent = `${booster ? cardMap.get(booster.instance.cardId)?.name : "Your rear-guard"} can boost ${attackerName}. Boosting rests it and adds its power for this attack only.`;
+      choices = [
+        { value: `boost:${setup.boosterUid}`, label: `Boost with ${booster ? cardMap.get(booster.instance.cardId)?.name : "rear-guard"}` },
+        { value: "boost:none", label: "Attack without a boost" }
+      ];
+    } else {
+      const defenderSide = setup.defenderSide || flipSide(setup.attackerSide);
+      const defender = match.players[defenderSide];
+      $("#attack-prompt-title").textContent = "Choose an attack target";
+      $("#attack-prompt-help").textContent = "Attack the Vanguard or a unit in the opponent’s front row.";
+      if (defender.vanguard) choices.push({ value: `target:vanguard:${defender.vanguard.uid}`, label: `Vanguard · ${cardMap.get(defender.vanguard.cardId)?.name || "Unit"}` });
+      defender.rear.forEach((unit, index) => {
+        if (!unit) return;
+        const zone = index === 0 ? "rear-left" : index === 1 ? "rear-right" : index >= 5 ? `accel-${index - 4}` : "";
+        if (zone) choices.push({ value: `target:${zone}:${unit.uid}`, label: `Front Rear-Guard · ${cardMap.get(unit.cardId)?.name || "Unit"}` });
+      });
+    }
+    $("#attack-prompt-options").innerHTML = choices.map((choice) => `<button class="button button-primary" type="button" data-attack-choice="${escapeHtml(choice.value)}">${escapeHtml(choice.label)}</button>`).join("");
+    if (!dialog.open) dialog.showModal();
+  }
   function finishTriggerResolution() {
     const pending = match?.pendingTrigger;
     if (!pending) return;
@@ -618,8 +656,10 @@
     if (pending.after) pending.after();
     checkDamageEnd(pending.side);
     resolveDamageQueue();
+    resolvePracticeAttackAfterDrives();
     if (!online.role && match.side === "bot" && !match.ended && !match.pendingTrigger && !match.pendingDamageQueue.length) setTimeout(nextBotAttack, 250);
   }
+  function resolvePracticeAttackAfterDrives() { const attack=match?.pendingAttack;if(!attack?.awaitingDrive||Number(attack.driveChecksRemaining||0)>0||match.pendingTrigger||match.pendingDamageQueue?.length)return;attack.awaitingDrive=false;finishAttack(attack.power<attack.targetPower); }
   function checkDamageEnd(side) {
     const player = match.players[side];
     if (player.damage.length < 6 || match.pendingTrigger) return;
@@ -630,14 +670,15 @@
   function beginTriggerResolution(side, instance, checkName) {
     const kind = triggerKind(instance); if (!kind) return false;
     const player = match.players[side], power = triggerPower(instance), cardName = cardMap.get(instance.cardId)?.name || `${kind} trigger`;
-    const pending = { side, uid: instance.uid, cardName, kind, checkName, power, stage: "power-target" };
+    const turnOwner = match.side;
+    const pending = { side, uid: instance.uid, cardName, kind, checkName, power, turnOwner, stage: "power-target" };
     if (kind === "over") {
       player.removed ||= []; player.removed.push(instance);
       if (checkName === "drive") {
         draw(side);
         if (!fieldUnits(side).length) { addLog(`${player.name} revealed an Over Trigger and drew 1; it was removed from the game.`); return false; }
-        const pendingOver = { side, uid: instance.uid, cardName, kind, checkName, power: 100000000, stage: "over-target" };
-        if (side === "bot" && !online.role) { fieldUnits(side)[0].instance.turnPowerBoost = Number(fieldUnits(side)[0].instance.turnPowerBoost || 0) + 100000000; addLog("Practice Bot resolved its Over Trigger."); return false; }
+        const pendingOver = { side, uid: instance.uid, cardName, kind, checkName, power: 100000000, turnOwner, stage: "over-target" };
+        if (side === "bot" && !online.role) { const target=fieldUnits(side)[0]?.instance;if(target){target.turnPowerBoost=Number(target.turnPowerBoost||0)+100000000;target.turnPowerExpiry=turnOwner;} addLog("Practice Bot resolved its Over Trigger."); return false; }
         match.pendingTrigger = pendingOver;
       } else addLog(`${player.name} revealed an Over Trigger during a damage check; it was removed from the game and did not count as damage.`);
       return false;
@@ -647,13 +688,13 @@
     if (kind === "stand") pending.stage = "stand-target";
     if (kind === "heal") pending.stage = player.damage.length && player.damage.length >= match.players[flipSide(side)].damage.length ? "heal-target" : "power-target";
     if (kind === "front") {
-      fieldUnits(side).filter((unit) => unit.zone === "vanguard" || unit.zone === "rear-0" || unit.zone === "rear-1").forEach((unit) => { unit.instance.turnPowerBoost = Number(unit.instance.turnPowerBoost || 0) + power; });
+      fieldUnits(side).filter((unit) => unit.zone === "vanguard" || unit.zone === "rear-0" || unit.zone === "rear-1").forEach((unit) => { unit.instance.turnPowerBoost = Number(unit.instance.turnPowerBoost || 0) + power; unit.instance.turnPowerExpiry=turnOwner; if(match.pendingAttack?.attackerUid===unit.instance.uid)match.pendingAttack.power+=power; });
       addLog(`${side === "human" ? "Your" : "Practice Bot's"} Front Trigger gave the front row +${Math.round(power / 1000)}k until end of turn.`); return false;
     }
     if (side === "bot" && !online.role) {
-      if (pending.stage === "critical-target") { const target = fieldUnits(side).sort((a, b) => Number(a.zone !== "vanguard") - Number(b.zone !== "vanguard"))[0]?.instance; if (target) target.turnCriticalBoost = Number(target.turnCriticalBoost || 0) + 1; pending.stage = "power-target"; }
+      if (pending.stage === "critical-target") { const target = fieldUnits(side).sort((a, b) => Number(a.zone !== "vanguard") - Number(b.zone !== "vanguard"))[0]?.instance; if (target) { target.turnCriticalBoost = Number(target.turnCriticalBoost || 0) + 1; target.turnCriticalExpiry=turnOwner; } pending.stage = "power-target"; }
       if (pending.stage === "stand-target") { const target = fieldUnits(side).find((unit) => unit.zone !== "vanguard" && unit.instance.rested); if (target) target.instance.rested = false; pending.stage = "power-target"; }
-      const target = fieldUnits(side)[0]?.instance; if (target) target.turnPowerBoost = Number(target.turnPowerBoost || 0) + power;
+      const target = fieldUnits(side)[0]?.instance; if (target) { target.turnPowerBoost = Number(target.turnPowerBoost || 0) + power; target.turnPowerExpiry=turnOwner; }
       if (pending.stage === "heal-target") { const healed = player.damage.pop(); if (healed) player.drop.push(healed); }
       addLog(`Practice Bot resolved its ${kind} trigger.`); return false;
     }
@@ -671,9 +712,9 @@
       if (!fieldUnits("human").length) finishTriggerResolution();
     } else {
       const unit = fieldUnits("human").find((item) => item.instance.uid === uid && (pending.stage !== "stand-target" || (item.zone !== "vanguard" && item.instance.rested))); if (!unit) return;
-      if (pending.stage === "critical-target") { unit.instance.turnCriticalBoost = Number(unit.instance.turnCriticalBoost || 0) + 1; addLog(`${cardMap.get(unit.instance.cardId)?.name || "A unit"} gets +1 critical until end of turn.`); pending.stage = "power-target"; }
+      if (pending.stage === "critical-target") { unit.instance.turnCriticalBoost = Number(unit.instance.turnCriticalBoost || 0) + 1; unit.instance.turnCriticalExpiry=pending.turnOwner; addLog(`${cardMap.get(unit.instance.cardId)?.name || "A unit"} gets +1 critical until end of turn.`); pending.stage = "power-target"; }
       else if (pending.stage === "stand-target") { unit.instance.rested = false; addLog(`${cardMap.get(unit.instance.cardId)?.name || "A Rear-Guard"} stood.`); pending.stage = "power-target"; }
-      else { unit.instance.turnPowerBoost = Number(unit.instance.turnPowerBoost || 0) + pending.power; addLog(`${cardMap.get(unit.instance.cardId)?.name || "A unit"} gets +${pending.power >= 1000000 ? `${Math.round(pending.power / 1000000)}M` : `${Math.round(pending.power / 1000)}k`} power until end of turn.`); finishTriggerResolution(); }
+      else { unit.instance.turnPowerBoost = Number(unit.instance.turnPowerBoost || 0) + pending.power; unit.instance.turnPowerExpiry=pending.turnOwner; if(match.pendingAttack?.attackerUid===unit.instance.uid)match.pendingAttack.power+=pending.power; addLog(`${cardMap.get(unit.instance.cardId)?.name || "A unit"} gets +${pending.power >= 1000000 ? `${Math.round(pending.power / 1000000)}M` : `${Math.round(pending.power / 1000)}k`} power until end of turn.`); finishTriggerResolution(); }
     }
     renderMatch();
   }
@@ -701,24 +742,59 @@
     const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid);
     const card = cardMap.get(entry.instance.cardId);
     const forcePower = field && match.side === field.side ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force I$/i.test(gift.type || "")).length * 10000 : 0;
-    return Number(card?.power || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0) + forcePower;
+    return Number(card?.power || 0) + Number(cardMap.get(entry.instance.strideHeart?.cardId)?.power || 0) + Number(entry.instance.strideHeart?.powerBoost || 0) + Number(entry.instance.strideHeart?.turnPowerBoost || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0) + forcePower;
   }
   function attackerCritical(entry) { const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid); const forceCrit = field ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force II$/i.test(gift.type || "")).length : 0; return Math.max(1, Number(cardMap.get(entry.instance.cardId)?.critical || 1) + Number(entry.instance.turnCriticalBoost || 0) + forceCrit); }
+  function canAttackFromBackRow(field) { const text=String(cardMap.get(field.instance.cardId)?.text||""); return /attack(?:s|ing)? from (?:the )?back row|back row[^.\n]*can attack/i.test(text); }
+  function directlyBehind(field) { if(field.zone==="rear-left")return match.players[field.side].rear[2]; if(field.zone==="rear-right")return match.players[field.side].rear[4]; return null; }
   function resolveHumanAttack() {
     if (match?.turn === 1 && match.firstSide === "human") { toast("The player going first cannot attack during their first turn."); return; }
-    const field = findFieldCard(match.selected); if (!field || field.side !== "human" || field.instance.rested || field.instance.locked || match.phase !== 4 || !match.players.bot.vanguard) return;
-    field.instance.rested = true;
-    const attackPower = attackerPower(field); const defenderPower = attackerPower({ instance: match.players.bot.vanguard });
-    if (online.role) {
-      match.pendingAttack = { attacker: cardMap.get(field.instance.cardId)?.name || "unit", power: attackPower, targetPower: defenderPower, critical: attackerCritical(field) };
-      match.selected = null; addLog(`${match.pendingAttack.attacker} attacked ${match.players.bot.name}'s vanguard.`); setMessage(`${match.players.bot.name} is defending — guard or take the hit.`); renderMatch(); return;
+    const field=findFieldCard(match.selected); if(!field||field.side!=="human"||field.instance.rested||field.instance.locked||match.phase!==4)return;
+    const front=field.zone==="vanguard"||field.zone==="rear-left"||field.zone==="rear-right"||field.zone.startsWith("accel-");
+    if(!front&&!canAttackFromBackRow(field)){toast("Only a Vanguard or front-row Rear-Guard can attack unless its card text allows a back-row attack.");return;}
+    const booster=(field.zone==="rear-left"||field.zone==="rear-right")?directlyBehind(field):null;
+    match.pendingAttackSetup={attackerUid:field.instance.uid,attackerSide:"human",defenderSide:"bot",boosterUid:booster&&!booster.rested&&!booster.locked?booster.uid:null,stage:booster&&!booster.rested&&!booster.locked?"boost":"target"};
+    match.selected=null;renderMatch();
+  }
+  function beginChosenAttack(choice) {
+    const setup=match?.pendingAttackSetup;if(!setup)return;
+    if(setup.stage==="boost"){
+      if(choice.startsWith("boost:")&&choice!=="boost:none"){
+        const uid=choice.slice("boost:".length),booster=findFieldCard(uid);
+        if(!booster||booster.side!==setup.attackerSide||booster.instance.rested||booster.instance.locked||uid!==setup.boosterUid){toast("That Rear-Guard can no longer boost this attack.");return;}
+        booster.instance.rested=true;setup.boostUid=uid;setup.boostPower=attackerPower(booster);addLog(`${cardMap.get(booster.instance.cardId)?.name||"A Rear-Guard"} boosted for +${setup.boostPower.toLocaleString()} this attack.`);
+      } else if(choice!=="boost:none")return;
+      setup.stage="target";renderMatch();return;
     }
-    const candidates = match.players.bot.hand.map((x) => ({ x, shield: Number(cardMap.get(x.cardId)?.shield || 0) })).sort((a, b) => b.shield - a.shield);
-    let guarded = false;
-    if (candidates[0]?.shield > Math.max(0, attackPower - defenderPower) && Math.random() < 0.28) { match.players.bot.hand = match.players.bot.hand.filter((x) => x.uid !== candidates[0].x.uid); match.players.bot.drop.push(candidates[0].x); guarded = true; }
-    addLog(`You attacked the opposing vanguard${guarded ? "; the bot guarded." : "."}`);
-    if (!guarded && attackPower >= defenderPower) dealDamage("bot", attackerCritical(field));
-    match.selected = null; renderMatch();
+    if(!choice.startsWith("target:"))return;
+    const [,zone,targetUid]=choice.split(":"),attacker=findFieldCard(setup.attackerUid),defenderSide=setup.defenderSide||flipSide(setup.attackerSide),defender=match.players[defenderSide];if(!attacker)return;
+    let target=null,index=-1;
+    if(zone==="vanguard")target=defender.vanguard?.uid===targetUid?defender.vanguard:null;
+    else {index=defender.rear.findIndex(unit=>unit?.uid===targetUid);target=index>=0?defender.rear[index]:null;const targetZone=index===0?"rear-left":index===1?"rear-right":index>=5?`accel-${index-4}`:"";if(targetZone!==zone)target=null;}
+    if(!target){toast("That attack target is no longer in its circle.");return;}
+    attacker.instance.rested=true;
+    const attackerCard=cardMap.get(attacker.instance.cardId),driveText=String(attackerCard?.text||""),driveChecks=attacker.zone==="vanguard"?(/Triple Drive/i.test(driveText)?3:Number(attackerCard?.grade||0)>=3||/Twin Drive/i.test(driveText)?2:1):0;
+    match.pendingAttack={attacker:attackerCard?.name||"unit",attackerUid:attacker.instance.uid,attackerSide:setup.attackerSide,attackerZone:attacker.zone,defenderSide,targetUid,targetZone:zone,power:attackerPower(attacker)+Number(setup.boostPower||0),targetPower:attackerPower({instance:target}),critical:attackerCritical(attacker),guardCards:[],driveChecksRemaining:driveChecks};
+    match.pendingAttackSetup=null;$("#attack-prompt-dialog").close();addLog(`${match.pendingAttack.attacker} attacked ${match.players[defenderSide].name}'s ${zone==="vanguard"?"Vanguard":"Rear-Guard"}.`);
+    if(!online.role&&defenderSide==="bot"){
+      const bot=match.players.bot,candidates=bot.hand.map(x=>({x,shield:Number(cardMap.get(x.cardId)?.shield||0)})).sort((a,b)=>b.shield-a.shield),needed=Math.max(0,match.pendingAttack.power-match.pendingAttack.targetPower);
+      const perfect=bot.hand.find(item=>Number(cardMap.get(item.cardId)?.shield||0)===0),cost=bot.hand.find(item=>item.uid!==perfect?.uid);
+      if(perfect&&cost&&match.pendingAttack.power>=match.pendingAttack.targetPower&&Math.random()<0.2){bot.hand=bot.hand.filter(item=>item.uid!==perfect.uid&&item.uid!==cost.uid);bot.drop.push(cost);match.pendingAttack.guardCards.push(perfect);match.players.bot.guardCircle.push(perfect);addLog(`Practice Bot used ${cardMap.get(perfect.cardId)?.name||"a zero-shield card"} as a perfect guard and discarded ${cardMap.get(cost.cardId)?.name||"a card"}.`);finishAttack(true);return;}
+      if(candidates[0]?.shield>needed&&Math.random()<0.28){bot.hand=bot.hand.filter(x=>x.uid!==candidates[0].x.uid);match.pendingAttack.guardCards.push(candidates[0].x);match.pendingAttack.targetPower+=candidates[0].shield;addLog(`Practice Bot guarded with ${cardMap.get(candidates[0].x.cardId)?.name||"a card"}.`);}
+      if(match.pendingAttack.attackerZone==="vanguard"&&match.pendingAttack.driveChecksRemaining>0){match.pendingAttack.awaitingDrive=true;setMessage(`Practice Bot is defending — perform ${match.pendingAttack.driveChecksRemaining} Vanguard drive check${match.pendingAttack.driveChecksRemaining===1?"":"s"} before the attack resolves.`);renderMatch();return;}
+      finishAttack(match.pendingAttack.power<match.pendingAttack.targetPower);return;
+    }
+    setMessage(`${match.players[defenderSide].name} is defending — guard or take the hit.`);renderMatch();
+  }
+  function finishAttack(blocked) {
+    const attack=match?.pendingAttack;if(!attack)return;const defender=match.players[attack.defenderSide];
+    for(const guard of attack.guardCards||[]){const card=cardMap.get(guard.cardId);if(/G\s*-?Guardian|G\s*-?Guard/i.test(card?.type||""))defender.gZone.push({...guard,faceUp:true,guarding:false});else defender.drop.push(guard);}
+    defender.guardCircle=[];
+    if(blocked)addLog(`${attack.attacker} was stopped by ${defender.name}'s guard.`);
+    else if(attack.targetZone==="vanguard"){addLog(`${attack.attacker} hit ${defender.name}'s Vanguard for ${attack.critical} damage.`);dealDamage(attack.defenderSide,attack.critical);}
+    else {const index=defender.rear.findIndex(unit=>unit?.uid===attack.targetUid);if(index>=0){const unit=defender.rear.splice(index,1,null)[0];defender.drop.push(unit);addLog(`${cardMap.get(unit.cardId)?.name||"The Rear-Guard"} was hit and sent to Drop.`);}else addLog(`${attack.attacker} did not hit its Rear-Guard target.`);}
+    const attackerSide=attack.attackerSide;match.pendingAttack=null;match.pendingAttackSetup=null;match.selected=null;if($("#attack-prompt-dialog").open)$("#attack-prompt-dialog").close();renderMatch();
+    if(!online.role&&attackerSide==="bot"&&!match.ended)setTimeout(nextBotAttack,450);
   }
   function dealDamage(side, amount = 1) {
     match.pendingDamageQueue ||= [];
@@ -736,20 +812,34 @@
   }
   function humanGuard() {
     if (!match?.pendingAttack) return;
+    if(Number(match.pendingAttack.driveChecksRemaining||0)>0){toast("The attacking Vanguard must finish its drive checks before you guard.");return;}
     let instance = selectedHandCard();
     if (!instance && match.players.human.hand.length) instance = match.players.human.hand.slice().sort((a, b) => Number(cardMap.get(b.cardId)?.shield || 0) - Number(cardMap.get(a.cardId)?.shield || 0))[0];
-    if (!instance) return noGuard();
-    match.players.human.hand = match.players.human.hand.filter((x) => x.uid !== instance.uid); match.players.human.drop.push(instance);
-    addLog(`${match.players.human.name} guarded with ${cardMap.get(instance.cardId)?.name || "a card"}.`); match.pendingAttack = null; match.selected = null; renderMatch();
-    if (!online.role) setTimeout(nextBotAttack, 450);
+    if (!instance) { toast("Choose a card from your hand to guard, or choose No guard."); return; }
+    if(Number(cardMap.get(instance.cardId)?.shield||0)===0){openProtectDiscardDialog(instance);return;}
+    match.players.human.hand = match.players.human.hand.filter((x) => x.uid !== instance.uid);match.players.human.guardCircle.push(instance);match.pendingAttack.guardCards.push(instance);
+    const shield=Number(cardMap.get(instance.cardId)?.shield||0);match.pendingAttack.targetPower+=shield;
+    addLog(`${match.players.human.name} guarded with ${cardMap.get(instance.cardId)?.name||"a card"} for ${shield.toLocaleString()} shield.`);
+    match.selected=null;if(match.pendingAttack.power<match.pendingAttack.targetPower)finishAttack(true);else renderMatch();
+  }
+  function openProtectDiscardDialog(marker) {
+    const hand=match.players.human.hand.filter(item=>item.uid!==marker.uid),list=$("#protect-discard-list");
+    if(!hand.length){toast("Protect Marker needs another card in your hand to discard.");return;}
+    $("#protect-discard-dialog").dataset.markerUid=marker.uid;
+    list.innerHTML=hand.map(item=>{const c=cardMap.get(item.cardId);return c?`<button class="zone-view-card" type="button" data-protect-cost="${escapeHtml(item.uid)}">${cardImage(c)}<b>Discard ${escapeHtml(c.name)}</b></button>`:"";}).join("");
+    $("#protect-discard-dialog").showModal();
+  }
+  function resolveProtectGuard(markerUid,costUid) {
+    const attack=match?.pendingAttack,player=match?.players?.human;
+    if(!attack||attack.defenderSide!=="human"||Number(attack.driveChecksRemaining||0)>0){toast("A perfect guard can only be used after the Vanguard finishes its drive checks.");return;}
+    const marker=player.hand.find(item=>item.uid===markerUid&&Number(cardMap.get(item.cardId)?.shield||0)===0),cost=player.hand.find(item=>item.uid===costUid&&item.uid!==markerUid);
+    if(!marker||!cost){toast("Choose a zero-shield card and a different card to discard.");return;}
+    player.hand=player.hand.filter(item=>item.uid!==markerUid&&item.uid!==costUid);player.drop.push(cost);player.guardCircle||=[];attack.guardCards||[];player.guardCircle.push(marker);attack.guardCards.push(marker);addLog(`${player.name} discarded ${cardMap.get(cost.cardId)?.name||"a card"} with ${cardMap.get(marker.cardId)?.name||"a zero-shield card"}. The attack was stopped.`);match.selected=null;finishAttack(true);
   }
   function noGuard() {
     if (!match?.pendingAttack) return;
-    const attack = match.pendingAttack; match.pendingAttack = null; match.selected = null;
-    if (Number(attack.power || 0) >= Number(attack.targetPower || 0)) { addLog(`${match.players.human.name} did not guard ${attack.attacker} — taking ${attack.critical || 1} damage.`); dealDamage("human", attack.critical || 1); }
-    else addLog(`${match.players.human.name} did not guard ${attack.attacker}; its power was too low to deal damage.`);
-    renderMatch();
-    if (!online.role && !match.ended) setTimeout(nextBotAttack, 450);
+    if(Number(match.pendingAttack.driveChecksRemaining||0)>0){toast("The attacking Vanguard must finish its drive checks before the attack resolves.");return;}
+    finishAttack(Number(match.pendingAttack.power||0)<Number(match.pendingAttack.targetPower||0));
   }
   function botTurn() {
     if (!match || match.ended) return;
@@ -765,7 +855,7 @@
       let calls = 0;
       while (bot.rear.includes(null) && calls < 2) { const unit = bot.hand.find((x) => { const card = cardMap.get(x.cardId); return /Unit/i.test(card?.type || "") && Number(card.grade || 0) <= Number(cardMap.get(bot.vanguard?.cardId)?.grade || 0); }); if (!unit) break; bot.hand = bot.hand.filter((x) => x.uid !== unit.uid); bot.rear[bot.rear.indexOf(null)] = { ...unit, rested: false }; addLog(`Practice Bot called ${cardMap.get(unit.cardId)?.name}.`); calls++; }
       renderMatch(); setMessage("Practice Bot is attacking…");
-      const attackers = (match.initialBotTurn && match.firstSide === "bot" ? [] : [bot.vanguard, ...bot.rear]).filter((x) => x && !x.rested && !x.locked);
+      const attackers = (match.initialBotTurn && match.firstSide === "bot" ? [] : [bot.vanguard, ...bot.rear]).filter((x) => { if(!x||x.rested||x.locked)return false;const field=findFieldCard(x.uid);return field&&(field.zone==="vanguard"||field.zone==="rear-left"||field.zone==="rear-right"||field.zone.startsWith("accel-")||canAttackFromBackRow(field)); });
       match.botAttacks = attackers.map((x) => x.uid);
       setTimeout(nextBotAttack, 550);
     }, 750);
@@ -775,14 +865,15 @@
     const bot = match.players.bot; const uid = match.botAttacks.shift();
     if (!uid) { finishBotTurn(); return; }
     const attacker = [bot.vanguard, ...bot.rear].find((x) => x?.uid === uid); if (!attacker) { nextBotAttack(); return; }
-    attacker.rested = true; const c = cardMap.get(attacker.cardId); const target = match.players.human.vanguard; const targetPower = target ? attackerPower({ instance: target }) : 0;
-    match.pendingAttack = { attacker: c?.name || "unit", power: attackerPower({ instance: attacker }), targetPower, critical: attackerCritical({ instance: attacker }) };
+    const c = cardMap.get(attacker.cardId), field = findFieldCard(uid); if (!field) { nextBotAttack(); return; }
+    attacker.rested = true; const target = match.players.human.vanguard; const targetPower = target ? attackerPower({ instance: target }) : 0;
+    match.pendingAttack = { attacker: c?.name || "unit", attackerUid: uid, attackerSide: "bot", attackerZone: field.zone, defenderSide: "human", targetUid: target?.uid, targetZone: "vanguard", power: attackerPower(field), targetPower, critical: attackerCritical(field), guardCards: [] };
     match.selected = null; setMessage(`Practice Bot attacks with ${c?.name || "a unit"}. Guard or take the hit.`); renderMatch();
   }
   function finishBotTurn() {
     if (!match || match.ended) return;
     match.players.human.vanguard && (match.players.human.vanguard.rested = false); match.players.human.rear.forEach((x) => x && (x.rested = false));
-    clearTurnBonuses("bot"); match.side = "human"; match.phase = 0; match.drewThisTurn = false; match.ridePerformed = false; match.pendingAttack = null; match.selected = null;
+    clearTurnBonuses("bot"); returnStriddenVanguard("bot"); match.side = "human"; match.phase = 0; match.drewThisTurn = false; match.ridePerformed = false; match.pendingAttack = null; match.selected = null;
     if (match.initialBotTurn) match.initialBotTurn = false; else match.turn += 1;
     addLog("Your turn began — advance to Draw to draw a card.");
     setMessage("Your turn — Stand phase."); renderMatch();
@@ -790,14 +881,15 @@
   function endTurn() {
     if (!match || match.side !== "human" || match.pendingAttack || match.ended) return;
     if (online.role) {
-      addLog(`${match.players.human.name} ended their turn.`); clearTurnBonuses("human"); match.ridePerformed = false; match.selected = null;
+      addLog(`${match.players.human.name} ended their turn.`); clearTurnBonuses("human"); returnStriddenVanguard("human"); match.ridePerformed = false; match.selected = null;
       match.players.human.vanguard && (match.players.human.vanguard.rested = false); match.players.human.rear.forEach((x) => x && (x.rested = false));
       match.side = "bot"; match.phase = 0; match.drewThisTurn = false;
       setMessage(`${match.players.bot.name}'s turn — Stand phase.`); renderMatch(); return;
     }
-    addLog("You ended your turn."); clearTurnBonuses("human"); match.ridePerformed = false; match.selected = null; renderMatch(); botTurn();
+    addLog("You ended your turn."); clearTurnBonuses("human"); returnStriddenVanguard("human"); match.ridePerformed = false; match.selected = null; renderMatch(); botTurn();
   }
-  function clearTurnBonuses(side) { fieldUnits(side).forEach(({ instance }) => { instance.turnPowerBoost = 0; instance.turnCriticalBoost = 0; }); }
+  function returnStriddenVanguard(side) { const player=match?.players?.[side],unit=player?.vanguard;if(!unit?.strideHeart)return;const heart=unit.strideHeart,stride={...unit};delete stride.strideHeart;player.vanguard={...heart};player.gZone.push({...stride,faceUp:true});addLog(`${cardMap.get(stride.cardId)?.name||"The G Unit"} returned face up to the G zone and ${cardMap.get(heart.cardId)?.name||"the heart"} returned to the Vanguard circle.`); }
+  function clearTurnBonuses(side) { const clear=(instance)=>{if(!instance)return;if(instance.turnPowerExpiry===side||instance.turnPowerExpiry==null){instance.turnPowerBoost=0;delete instance.turnPowerExpiry;}if(instance.turnCriticalExpiry===side||instance.turnCriticalExpiry==null){instance.turnCriticalBoost=0;delete instance.turnCriticalExpiry;}};Object.values(match?.players||{}).forEach((player)=>[player.vanguard,...player.rear].filter(Boolean).forEach((instance)=>{clear(instance);clear(instance.strideHeart);})); }
   function advancePhase() {
     if (!match || match.side !== "human" || match.pendingAttack || match.ended) return;
     if (match.phase >= phases.length - 1) { endTurn(); return; }
@@ -818,6 +910,10 @@
     if (action === "draw-card") {
       const card = draw("human"); if (!card) { toast("Your deck is empty."); return; }
       addLog(`${player.name} drew a card manually.`);
+    } else if (action === "top-to-drop") {
+      const top=player.deck.pop();if(!top){toast("Your deck is empty.");return;}player.drop.push(top);addLog(`${player.name} sent ${cardMap.get(top.cardId)?.name||"the top card"} of the deck to Drop.`);
+    } else if (action.startsWith("attack-choice:")) {
+      beginChosenAttack(action.slice("attack-choice:".length));return;
     } else if (action === "hand-to-top" || action === "hand-to-bottom") {
       const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; }
       player.hand = player.hand.filter((item) => item.uid !== instance.uid);
@@ -825,6 +921,8 @@
       match.selected = null;
       addLog(`${player.name} returned ${cardMap.get(instance.cardId)?.name || "a card"} to the ${action === "hand-to-top" ? "top" : "bottom"} of the deck.`);
     } else if (action === "damage-check" || action === "drive-check" || action === "trigger-check") {
+      if(action==="drive-check"&&(!match.pendingAttack||match.pendingAttack.attackerSide!=="human"||match.pendingAttack.attackerZone!=="vanguard"||Number(match.pendingAttack.driveChecksRemaining||0)<=0)){toast("Only your Vanguard can perform a drive check, during its attack.");return;}
+      if(action==="drive-check")match.pendingAttack.driveChecksRemaining-=1;
       const top = player.deck.pop(); if (!top) { toast("Your deck is empty."); return; }
       const kind = triggerKind(top), over = kind === "over";
       if (action === "damage-check") { if (!over) player.damage.push(top); } else if (!over) player.hand.push(top);
@@ -832,6 +930,7 @@
       addLog(`${player.name} performed a ${checkName} check and revealed ${cardMap.get(top.cardId)?.name || "a card"}.`);
       beginTriggerResolution("human", top, checkName);
       checkDamageEnd("human");
+      if(action==="drive-check")resolvePracticeAttackAfterDrives();
     } else if (action.startsWith("trigger-pick:")) {
       chooseTriggerTarget(action.slice("trigger-pick:".length)); return;
     } else if (action === "trigger-skip") {
@@ -958,8 +1057,12 @@
       if (action === "stride") { openGDeckDialog("stride"); return; }
       const uid = action.slice("stride:".length); const unitIndex = player.gDeck?.findIndex((item) => item.uid === uid) ?? -1;
       const unit = unitIndex >= 0 ? player.gDeck.splice(unitIndex, 1)[0] : null; if (!unit) { toast("Choose a G Unit still in your G deck."); return; }
-      if (player.vanguard) player.gZone.push({ ...player.vanguard, faceUp: true });
-      player.vanguard = { ...unit, rested: false }; match.selected = null; addLog(`${player.name} strode ${cardMap.get(unit.cardId)?.name || "a G Unit"} from the G deck.`);
+      if(Number(cardMap.get(unit.cardId)?.grade||0)<4||!/G\s*Unit/i.test(cardMap.get(unit.cardId)?.type||"")){toast("Only a face-down G Unit can be used to stride.");player.gDeck.splice(unitIndex,0,unit);return;}
+      const previous=player.vanguard,heart=previous?.strideHeart||previous;
+      if(previous?.strideHeart){const oldStride={...previous};delete oldStride.strideHeart;player.gZone.push({...oldStride,faceUp:true});}
+      player.vanguard = { ...unit, rested: false, strideHeart: heart||null }; match.selected = null; addLog(`${player.name} strode ${cardMap.get(unit.cardId)?.name || "a G Unit"} over ${cardMap.get(heart?.cardId)?.name||"their Vanguard"}. The heart's power is added.`);
+    } else if (action.startsWith("gdeck-flip-up:")) {
+      const uid=action.slice("gdeck-flip-up:".length),index=player.gDeck.findIndex(item=>item.uid===uid);if(index<0){toast("That card is no longer face down in the G deck.");return;}const instance=player.gDeck.splice(index,1)[0];player.gZone.push({...instance,faceUp:true});addLog(`${player.name} turned ${cardMap.get(instance.cardId)?.name||"a G card"} face up in the G zone.`);
     } else if (action === "gdeck-to-g") {
       const unit = player.gDeck?.pop(); if (!unit) { toast("Your G deck is empty."); return; }
       player.gZone.push({ ...unit, faceUp: true }); addLog(`${player.name} placed a G-deck card face up in the G zone.`);
@@ -970,15 +1073,17 @@
       player.gZone.push({ ...field.instance, faceUp: true }); match.selected = null; addLog(`${player.name} moved a field unit face up to the G zone.`);
     } else if (action === "flip-g-unit") {
       if (!player.gZone?.length) { toast("Your G zone is empty."); return; }
-      player.extra.push(player.gZone.shift()); addLog(`${player.name} turned a G-zone card face down.`);
+      player.gDeck.push(player.gZone.shift()); addLog(`${player.name} turned a G-zone card face down and returned it to the G deck.`);
     } else if (action === "g-guard" || action.startsWith("g-guard:")) {
-      if (!match.pendingAttack) { toast("Use G-guard while defending an attack."); return; }
+      if (!match.pendingAttack||match.pendingAttack.defenderSide!=="human"||Number(match.pendingAttack.driveChecksRemaining||0)>0) { toast("Use G-Guard after the attacking Vanguard finishes its drive checks."); return; }
       if (action === "g-guard") { openGDeckDialog("g-guard"); return; }
-      const uid = action.slice("g-guard:".length); const index = player.gDeck?.findIndex((item) => item.uid === uid) ?? -1;
-      const instance = index >= 0 ? player.gDeck.splice(index, 1)[0] : null; if (!instance) { toast("Choose a G-guard from your G deck."); return; }
-      player.gZone.push({ ...instance, faceUp: true, guarding: true }); match.pendingAttack = null; match.selected = null;
-      addLog(`${player.name} paid the G-guard cost and defended. Resolve shield effects manually.`);
-      if (!online.role) setTimeout(nextBotAttack, 450);
+      const [,uid,healUid]=action.split(":"),grade=Number(cardMap.get(player.vanguard?.cardId)?.grade||0),healIndex=player.hand.findIndex(item=>item.uid===healUid&&triggerKind(item)==="heal"),index=player.gDeck?.findIndex(item=>item.uid===uid)??-1,guardian=index>=0?cardMap.get(player.gDeck[index].cardId):null;
+      if(grade<3||healIndex<0||index<0||!/G\s*-?Guardian|G\s*-?Guard/i.test(guardian?.type||"")){toast("G-Guard needs a grade 3+ Vanguard, a Heal trigger to discard, and a face-down G Guardian.");return;}
+      const cost=player.hand.splice(healIndex,1)[0],instance=player.gDeck.splice(index,1)[0];player.guardCircle||=[];match.pendingAttack.guardCards||=[];player.drop.push(cost);player.guardCircle.push(instance);match.pendingAttack.guardCards.push(instance);match.pendingAttack.targetPower+=Number(guardian.shield||0);
+      addLog(`${player.name} discarded ${cardMap.get(cost.cardId)?.name||"a Heal trigger"} to G-Guard with ${guardian.name} (+${Number(guardian.shield||0).toLocaleString()} shield).`);match.selected=null;
+      if(match.pendingAttack.power<match.pendingAttack.targetPower)finishAttack(true);
+    } else if (action.startsWith("guard-perfect:")) {
+      const [,markerUid,costUid]=action.split(":");resolveProtectGuard(markerUid,costUid);return;
     } else if (action === "guard") {
       if (!match.pendingAttack) { toast("There is no incoming attack to guard."); return; }
       humanGuard(); return;
@@ -1111,6 +1216,8 @@
     if (match.firstSide) match.firstSide = flipSide(match.firstSide);
     if (match.revealed?.owner) match.revealed.owner = flipSide(match.revealed.owner);
     if (match.pendingTrigger?.side) match.pendingTrigger.side = flipSide(match.pendingTrigger.side);
+    if(match.pendingAttack){match.pendingAttack.attackerSide=flipSide(match.pendingAttack.attackerSide);match.pendingAttack.defenderSide=flipSide(match.pendingAttack.defenderSide);}
+    if(match.pendingAttackSetup){match.pendingAttackSetup.attackerSide=flipSide(match.pendingAttackSetup.attackerSide);match.pendingAttackSetup.defenderSide=flipSide(match.pendingAttackSetup.defenderSide);}
     match.selected = message.selected || null;
     online.applyingRemote = true;
     try {
@@ -1123,6 +1230,8 @@
       if (match.firstSide) match.firstSide = flipSide(match.firstSide);
       if (match.revealed?.owner) match.revealed.owner = flipSide(match.revealed.owner);
       if (match.pendingTrigger?.side) match.pendingTrigger.side = flipSide(match.pendingTrigger.side);
+      if(match.pendingAttack){match.pendingAttack.attackerSide=flipSide(match.pendingAttack.attackerSide);match.pendingAttack.defenderSide=flipSide(match.pendingAttack.defenderSide);}
+      if(match.pendingAttackSetup){match.pendingAttackSetup.attackerSide=flipSide(match.pendingAttackSetup.attackerSide);match.pendingAttackSetup.defenderSide=flipSide(match.pendingAttackSetup.defenderSide);}
       online.applyingRemote = false;
     }
     renderMatch();
@@ -1261,16 +1370,21 @@
     if (!match) { toast("Start a match first."); return; }
     if (kind === "stride" && Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade || 0) < 3) { toast("Stride requires a grade 3 or greater Vanguard under the modeled Premium rules."); return; }
     const isGuard = kind === "g-guard";
+    const player=match.players.human,healCards=player.hand.filter(item=>triggerKind(item)==="heal"),vanguardGrade=Number(cardMap.get(player.vanguard?.cardId)?.grade||0);
+    if(isGuard&&(!match.pendingAttack||match.pendingAttack.defenderSide!=="human"||Number(match.pendingAttack.driveChecksRemaining||0)>0||vanguardGrade<3||!healCards.length)){toast("G-Guard needs an incoming attack after drive checks, a grade 3 or greater Vanguard, and a Heal trigger to discard.");return;}
     const allCards = match.players.human.gDeck || [];
     const cards = allCards.filter((item) => {
       const type = cardMap.get(item.cardId)?.type || "";
       return isGuard ? /G\s*-?Guardian|G\s*-?Guard/i.test(type) : /G\s*Unit/i.test(type) && !/G\s*-?Guardian|G\s*-?Guard/i.test(type);
     });
-    $("#gdeck-dialog-title").textContent = isGuard ? "Choose a G-guard" : "Choose a G Unit to stride";
-    $("#gdeck-dialog-help").textContent = isGuard ? "Choose a G Guardian from your G deck to place face up in the G zone." : "Choose which G Unit to ride over your Vanguard.";
+    $("#gdeck-dialog-title").textContent = isGuard ? "Choose a G-Guard" : "Choose a G Unit to stride";
+    $("#gdeck-dialog-help").textContent = isGuard ? "Discard a Heal trigger, then place a face-down G Guardian in your Guardian Circle. Its shield lasts for this attack." : "Only face-down G Units can stride. You can turn cards face up here; those cards will no longer be eligible to stride.";
+    $("#g-guard-cost-wrap").classList.toggle("hidden",!isGuard);$("#g-guard-heal-cost").classList.toggle("hidden",!isGuard);$("#g-guard-heal-cost").innerHTML=healCards.map(item=>`<option value="${escapeHtml(item.uid)}">${escapeHtml(cardMap.get(item.cardId)?.name||"Heal trigger")}</option>`).join("");
     $("#gdeck-card-list").innerHTML = cards.length ? cards.map((item) => {
       const card = cardMap.get(item.cardId);
-      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions" hidden><button class="button button-primary" type="button" data-gdeck-action="' + (isGuard ? "g-guard" : "stride") + ':' + escapeHtml(item.uid) + '">' + (isGuard ? "G-guard" : "Stride") + '</button>' + zoneMoveControls(item,"gdeck") + '</div></article>' : "";
+      const flip=`<button class="button" type="button" data-gdeck-flip="${escapeHtml(item.uid)}">Flip face up into G zone</button>`;
+      const play=isGuard?`<button class="button button-primary" type="button" data-gdeck-action="g-guard:${escapeHtml(item.uid)}:${escapeHtml($("#g-guard-heal-cost").value)}">G-Guard</button>`:`<button class="button button-primary" type="button" data-gdeck-action="stride:${escapeHtml(item.uid)}">Stride</button>`;
+      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions" hidden>' + play + flip + zoneMoveControls(item,"gdeck") + '</div></article>' : "";
     }).join("") : '<p class="zone-empty-message">No ' + (isGuard ? "G Guardians" : "G Units") + ' are available in your G deck.</p>';
     $("#gdeck-dialog").dataset.kind = kind;
     if (!$("#gdeck-dialog").open) $("#gdeck-dialog").showModal();
@@ -1284,7 +1398,7 @@
     if (action === "soul-blast") { openSoulDialog(true); return; }
     if (action === "stride" || action === "g-guard") { if(action === "g-guard" && !match?.pendingAttack){toast("Use G-guard while defending an attack.");return;} openGDeckDialog(action); return; }
     if (action === "counter-blast" || action === "counter-charge" || action === "heal-damage") { openDamageDialog(action); return; }
-    if (action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done") { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.connection.send({type:"action",action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
+    if (action.startsWith("attack-choice:") || action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done") { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.connection.send({type:"action",action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
     if (action === "reveal-top-cards") { if (!match) { toast("Start a match first."); return; } $("#reveal-count-dialog").showModal(); return; }
     if (action === "gift-force" || action === "gift-accel") { openGiftDialog(action === "gift-force" ? "force" : "accel"); return; }
     if (online.role === "guest") {
@@ -1346,7 +1460,10 @@
   $("#reveal-close").addEventListener("click",()=>$("#reveal-dialog").close());
   $("#deck-view-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
   $("#reveal-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const action=e.target.closest("[data-peek-action]");if(action)performManualAction(action.dataset.peekAction);});
-  $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
+  $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const flip=e.target.closest("[data-gdeck-flip]");if(flip){performManualAction("gdeck-flip-up:"+flip.dataset.gdeckFlip);if(match)openGDeckDialog($("#gdeck-dialog").dataset.kind);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
+  $("#g-guard-heal-cost").addEventListener("change",()=>{if($("#gdeck-dialog").open&&$("#gdeck-dialog").dataset.kind==="g-guard")openGDeckDialog("g-guard");});
+  $("#attack-prompt-options").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
+  $("#protect-discard-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-protect-cost]");if(!button)return;const marker=$("#protect-discard-dialog").dataset.markerUid;$("#protect-discard-dialog").close();performManualAction(`guard-perfect:${marker}:${button.dataset.protectCost}`);});
   $("#bind-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
   $("#damage-card-list").addEventListener("click",(e)=>{const action=e.target.closest("[data-damage-action]");if(action){$("#damage-dialog").close();performManualAction("damage-action:"+action.dataset.damageAction);}});
   $("#trigger-prompt-targets").addEventListener("click",(e)=>{const target=e.target.closest("[data-trigger-pick]");if(target)performManualAction("trigger-pick:"+target.dataset.triggerPick);});
