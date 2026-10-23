@@ -1259,7 +1259,9 @@
           const watcher = { open: true, send: (data) => connection.send(data), close() { this.open = false; online.watchers = online.watchers.filter((item) => item !== this); } };
           online.watchers.push(watcher); sendOnlineSnapshot(); return;
         }
-        if (envelope.senderRole !== "player") return;
+        // This channel uses the unguessable room secret as its access boundary.
+        // Older clients labeled the joining player "guest", so do not reject
+        // their match actions based on optional role metadata.
         if (message.type === "join") {
           if (online.relayPlayerJoined) { sendOnlineSnapshot(); return; }
           online.relayPlayerJoined = true; setConnectionPill("CONNECTED"); setMessage("Opponent connected — your turn.");
