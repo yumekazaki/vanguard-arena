@@ -1337,6 +1337,7 @@
       match.players.bot = makePlayer(deck.cards && deckCount(deck) ? deck : defaultDeck(), playerName);
       match.deckName = online.selectedDeck?.name || builder.name || "Online match";
       addLog(`${playerName} joined with ${deck.name}.`); setMessage("Opponent connected — your turn."); renderMatch();
+      sendOnlineSnapshot();
       return;
     }
     if (online.role === "guest" && message.type === "state") { updateGuestState(message.match); return; }
