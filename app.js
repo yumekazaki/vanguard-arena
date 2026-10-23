@@ -45,7 +45,7 @@
   let match = null;
   let selectedZone = null;
   let botTimer = null;
-  let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
+  let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, joinRetry: null, relayStateReceived: false, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
   const localDeckStorageKey = "vanguardArenaDecks";
   const account = { client: null, user: null, syncing: false, recovery: false, profile: null };
 
@@ -1260,7 +1260,7 @@
         }
         if (envelope.senderRole !== "player") return;
         if (message.type === "join") {
-          if (online.relayPlayerJoined) return;
+          if (online.relayPlayerJoined) { sendOnlineSnapshot(); return; }
           online.relayPlayerJoined = true; setConnectionPill("CONNECTED"); setMessage("Opponent connected — your turn.");
         }
       } else if (envelope.senderRole !== "host") return;
@@ -1326,6 +1326,7 @@
     match.log = (match.log || []).map((entry) => ({ ...entry, time: new Date(entry.time) }));
     selectedCard = null; selectedZone = null;
     if (online.role === "guest" && match.players?.human) match.players.human.name = online.localName || match.players.human.name;
+    if (online.role === "guest" && online.connection?.isRelay) { online.relayStateReceived = true; if (online.joinRetry) { clearInterval(online.joinRetry); online.joinRetry = null; } }
     revealLocalMatch(); renderMatch(); if($("#deck-view-dialog").open)openMyDeck(); if($("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); if($("#bind-dialog").open)openBindDialog(); if($("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if($("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human");
   }
   function handleRemoteMessage(message) {
@@ -1385,7 +1386,15 @@
   function bindOnlineConnection(connection, role) {
     online.connection = connection;
     connection.on("open", () => {
-      if (role === "guest") connection.send({ type: "join", name: online.localName, deck: onlineDeck() });
+      if (role === "guest") {
+        const sendJoin = () => connection.send({ type: "join", name: online.localName, deck: onlineDeck() });
+        sendJoin();
+        if (connection.isRelay) {
+          online.relayStateReceived = false;
+          if (online.joinRetry) clearInterval(online.joinRetry);
+          online.joinRetry = setInterval(() => { if (online.connection === connection && !online.relayStateReceived && connection.open) sendJoin(); }, 2500);
+        }
+      }
       else if (role === "watcher") connection.send({ type: "watch", name: online.localName });
       else if (connection.isRelay) { setMessage("Invite link ready — waiting for your friend to join."); setConnectionPill("WAITING"); sendOnlineSnapshot(); }
       else { setMessage("Opponent connected — waiting for their deck."); sendOnlineSnapshot(); }
@@ -1447,9 +1456,10 @@
   }
   function endOnlineSession() {
     if (online.heartbeat) clearInterval(online.heartbeat);
+    if (online.joinRetry) clearInterval(online.joinRetry);
     if (online.role === "host" && online.publicRoomCode && account.client) void account.client.rpc("close_match_room", { p_room_code: online.publicRoomCode });
     try { online.connection?.close(); online.watchers?.forEach((connection) => connection.close()); online.peer?.destroy(); } catch {}
-    online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
+    online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, joinRetry: null, relayStateReceived: false, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
     setConnectionPill("READY");
     $("#online-invite").classList.add("hidden");
   }
