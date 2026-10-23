@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const root = __dirname;
+const bundledCardSpriteDir = process.env.VANGUARD_BUNDLED_CARDSPRITE_DIR || '';
+const upstreamArtBase = 'https://raw.githubusercontent.com/justkidding047356/cardfight-area/c2a5aad1f1e348500f1942a890c7e39a95953719/CardSprite';
+const upstreamArtIds = new Set(JSON.parse(fs.readFileSync(path.join(root, 'source-art-overrides.json'), 'utf8')));
 const sourceDir = path.join(root, 'source-text');
 const artDir = path.join(root, 'full');
 const miniDir = path.join(root, 'mini');
@@ -87,7 +90,10 @@ const result = [];
 for (const card of cards.values()) {
   const full = path.join(artDir, `n${card.dbId}.jpg`);
   const mini = path.join(miniDir, `n${card.dbId}.jpg`);
-  if (!fs.existsSync(full) && !fs.existsSync(mini)) continue;
+  const bundledFull = bundledCardSpriteDir ? path.join(bundledCardSpriteDir, `n${card.dbId}.jpg`) : '';
+  const hasLocalFull = fs.existsSync(full);
+  const hasBundledFull = Boolean(bundledFull && fs.existsSync(bundledFull));
+  const hasMini = fs.existsSync(mini);
   const primary = card.clans[0] || '';
   const firstLine = card.text.split(/\r?\n/)[0].trim();
   if (card.grade === null && /\b(Draw|Critical|Stand|Heal|Front|Over) Trigger\b/i.test(firstLine)) card.grade = 0;
@@ -104,8 +110,8 @@ for (const card of cards.values()) {
   if (typeMatch) card.type = typeMatch[1];
   card.clan = card.clans[0] || '';
   card.id = `cfa-${card.dbId}`;
-  card.image = fs.existsSync(full) ? `assets/cards/full/n${card.dbId}.jpg` : `assets/cards/mini/n${card.dbId}.jpg`;
-  card.source = 'Cardfight Area card database';
+  card.image = upstreamArtIds.has(card.dbId) ? `${upstreamArtBase}/n${card.dbId}.jpg` : hasLocalFull || hasBundledFull ? `assets/cards/full/n${card.dbId}.jpg` : hasMini ? `assets/cards/mini/n${card.dbId}.jpg` : `${upstreamArtBase}/n${card.dbId}.jpg`;
+  card.source = 'Cardfight Area card database (snapshot 2025-05-09)';
   card.permission = 'Personal local use';
   card.color = '#a39bff';
   card.glyph = '✦';

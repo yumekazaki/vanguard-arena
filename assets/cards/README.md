@@ -1,37 +1,26 @@
 # Card catalog and card art
 
-The local prototype includes the card pictures you supplied:
+The site includes a searchable card catalog and card images for the available Vanguard cards.
 
-- `full/n<number>.jpg` contains the larger pictures.
-- `mini/n<number>.jpg` contains the smaller gallery pictures.
-- `catalog-data.js` contains card names and available card details joined to the picture with the same database number.
-- `art-index.js` lists the picture filenames for the image gallery.
-- `import-cards.js` rebuilds the catalog from the included `source-text/` files.
+- `catalog-data.js` contains the card records used by the library and deck builder.
+- `source-text/` contains the source data used to rebuild the catalog.
+- `source-art-overrides.json` lists cards whose matching images come from the pinned upstream database snapshot.
+- `full/` and `mini/` contain the images already bundled with this site. Cards in the override list use their matching images from the pinned upstream image archive to keep the GitHub Pages package within a practical size.
+- `cards.js` contains manually added alternate-art entries from the supplied CardSprite folder.
+- `art-index.js` lists image numbers for the image gallery.
 
-The Card Library and deck builder can search card names/numbers and filter by grade and clan. The card data was taken from the public Cardfight Area database repository: <https://github.com/justkidding047356/cardfight-area>. This is a community-maintained data export, not a Bushiroad API. The official card-list link is included in the site for reference.
+## Catalog coverage
 
-The supplied art contains 10,482 mini images and 10,481 full-size files. The generated catalog contains 10,476 records with matching images. The source text provides a grade for 9,583 records and clan data for 8,693; records without a source value are labeled as unknown and can be found with the corresponding filter option. Several image-only files have no matching record in the text data.
+The catalog contains 14,022 records from the Cardfight Area community database snapshot at commit `c2a5aad1f1e348500f1942a890c7e39a95953719` (May 9, 2025). It adds 3,546 records beyond the previous website catalog. The matching remote images are pinned to that same commit, so each card's artwork stays aligned with its data.
 
-The app matches images to card records by the shared numeric database ID in `n<number>.jpg`. Example: database entry 1, Flogal, uses `full/n1.jpg`.
+The official card-list website was showing a maintenance page during this update. This is the latest complete public database snapshot I could verify, but it does not confirm releases published after May 9, 2025.
 
-To add or correct a card manually, add a record to `cards.js`:
+## Rebuilding the catalog
 
-```js
-window.USER_CARDS = [
-  {
-    id: "my-unique-card-id",
-    name: "Verified card name",
-    grade: 1,
-    clan: "Royal Paladin",
-    power: 8000,
-    shield: 5000,
-    type: "Unit",
-    text: "Card text you are authorized to use.",
-    image: "assets/cards/full/n123.jpg"
-  }
-];
+From the repository root, run:
+
+```sh
+node assets/cards/import-cards.js
 ```
 
-Decks are saved in this browser and can be exported as JSON. The current deck builder does not validate every Premium rule or manage the G Zone separately.
-
-Before publishing the site, make sure you have permission to publish card images and text. Keep the included attribution and source notes with this local project.
+The source data is community-maintained and is not a Bushiroad API. Keep the attribution and source date with this project. Card text and images belong to their respective rights holders; publish them only as permitted.

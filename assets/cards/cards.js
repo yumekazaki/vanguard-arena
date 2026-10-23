@@ -1,19 +1,19 @@
-/* Add user-authorized card records to this array. See README.md in this folder. */
+/* Alternate artwork supplied in the CardSprite folder. */
 window.USER_CARDS = [
   {
-    id: "user-n10492",
-    name: "恋に囚われしシンデレラ プリンセス シュシュエット",
+    id: "user-n10492-alt-art",
+    name: "Ryugu’s Lovely Princess of Blissful Blue Sea, Otohime",
     grade: 0,
-    clan: "Lyrical Monasterio",
+    clan: "Monster Strike",
     power: 5000,
     shield: 15000,
     type: "Trigger",
-    trigger: "Front",
-    text: "Front trigger. When revealed during a drive check or damage check, give +10000 power to one of your units for the turn.",
+    trigger: "Heal",
+    text: "Heal trigger. When revealed during a drive check or damage check, recover one damage if you have four or fewer damage, and give +10000 power to one of your units for the turn.",
     image: "assets/cards/full/n10492.jpg"
   },
   {
-    id: "user-n1365",
+    id: "user-n1365-alt-art",
     name: "Ancient Dragon, Beamankylo",
     grade: 2,
     clan: "Tachikaze",
@@ -24,8 +24,8 @@ window.USER_CARDS = [
     image: "assets/cards/full/n1365.jpg"
   },
   {
-    id: "user-n2193-alt",
-    name: "Oath Liberator, Aglovale (Legion Rare)",
+    id: "user-n2193-alt-art",
+    name: "Oath Liberator, Aglovale",
     grade: 2,
     clan: "Gold Paladin",
     power: 9000,
@@ -35,7 +35,7 @@ window.USER_CARDS = [
     image: "assets/cards/full/n2193 (1).jpg"
   },
   {
-    id: "user-n8783",
+    id: "user-n8783-alt-art",
     name: "Divine Arsenal’s Shining Armor, Kamui",
     grade: 0,
     clan: "Monster Strike",
@@ -47,7 +47,7 @@ window.USER_CARDS = [
     image: "assets/cards/full/n8783.jpg"
   },
   {
-    id: "user-n9593",
+    id: "user-n9593-alt-art",
     name: "Clumsy Assistant",
     grade: 1,
     clan: "Dark States",

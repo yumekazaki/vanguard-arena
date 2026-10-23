@@ -28,6 +28,18 @@
   const importedCatalog = Array.isArray(window.CARD_CATALOG) ? window.CARD_CATALOG : [];
   const cardList = importedCatalog.length ? [...importedCatalog, ...userCards] : [...sampleCards, ...userCards];
   const cardMap = new Map(cardList.map((c) => [c.id, c]));
+  const cardArtByDatabaseId = new Map(cardList.filter((c) => Number.isFinite(Number(c.dbId))).map((c) => [Number(c.dbId), c.image]));
+  const upstreamCardArtBase = "https://raw.githubusercontent.com/justkidding047356/cardfight-area/c2a5aad1f1e348500f1942a890c7e39a95953719";
+  function artThumbnailUrl(id) {
+    const image = cardArtByDatabaseId.get(Number(id));
+    if (image?.startsWith("https://")) return `${upstreamCardArtBase}/CardSpriteMini2/n${id}.jpg`;
+    return Number(id) > 10504 ? `${upstreamCardArtBase}/CardSpriteMini2/n${id}.jpg` : `assets/cards/mini/n${id}.jpg`;
+  }
+  function artFullImageUrl(id) {
+    const image = cardArtByDatabaseId.get(Number(id));
+    if (image) return image;
+    return Number(id) > 10504 ? `${upstreamCardArtBase}/CardSprite/n${id}.jpg` : `assets/cards/full/n${id}.jpg`;
+  }
   cardMap.set("token-quick-shield", { id: "token-quick-shield", name: "Quick Shield", grade: 0, nation: "Token", power: 0, shield: 5000, type: "Quick Shield Token", text: "Provides 5,000 shield when used to guard.", color: "#a39bff", glyph: "◇", source: "Vanguard Arena token" });
   cardMap.set("token-protect", { id: "token-protect", name: "Protect Marker", grade: 0, nation: "Token", power: 0, shield: 0, type: "Protect Marker", text: "When used to guard, discard one other card from your hand to completely stop the attack.", color: "#81d9ee", glyph: "◇", source: "Vanguard Arena token" });
   const artIds = Array.isArray(window.CARD_ART_IDS) ? window.CARD_ART_IDS : [];
@@ -348,11 +360,11 @@
     $("#art-page").textContent = `${artPage + 1} / ${pages}`;
     $("#art-prev").disabled = artPage === 0;
     $("#art-next").disabled = artPage >= pages - 1;
-    $("#art-grid").innerHTML = pageItems.map((id) => `<button class="art-tile" data-art-id="${id}" title="Open image n${id}"><img loading="lazy" src="assets/cards/mini/n${id}.jpg" alt="Card image n${id}"><span>n${id}</span></button>`).join("") || `<div class="empty-saved">No image numbers match.</div>`;
+    $("#art-grid").innerHTML = pageItems.map((id) => `<button class="art-tile" data-art-id="${id}" title="Open image n${id}"><img loading="lazy" src="${artThumbnailUrl(id)}" alt="Card image n${id}"><span>n${id}</span></button>`).join("") || `<div class="empty-saved">No image numbers match.</div>`;
   }
   function showArtImage(id) {
     if (!artIds.includes(id)) return;
-    $("#card-dialog-content").innerHTML = `<div class="art-dialog"><img src="assets/cards/full/n${id}.jpg" alt="Card image n${id}" onerror="this.onerror=null;this.src='assets/cards/mini/n${id}.jpg'"><p>Image file <b>n${id}.jpg</b> · Card name and rules not matched</p></div>`;
+    $("#card-dialog-content").innerHTML = `<div class="art-dialog"><img src="${artFullImageUrl(id)}" alt="Card image n${id}" onerror="this.onerror=null;this.src='${artThumbnailUrl(id)}'"><p>Image file <b>n${id}.jpg</b> · Card name and rules not matched</p></div>`;
     $("#card-dialog").showModal();
   }
   function showCardDetails(id) {
