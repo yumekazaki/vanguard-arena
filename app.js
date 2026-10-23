@@ -1206,6 +1206,7 @@
   function setConnectionPill(label) { $("#connection-pill").innerHTML = `<i></i> ${escapeHtml(label)}`; }
   function openOnlineDialog(mode, invite = "") {
     online.dialogMode = mode;
+    $("#online-confirm").disabled = false;
     $("#online-dialog-title").textContent = mode === "host" ? "Host an online match" : "Join an online match";
     $("#online-dialog-copy").textContent = mode === "host" ? "Create a link and send it to your friend. Keep this page open while you play." : "Paste the invite link or room code your friend sent you.";
     $("#online-confirm").textContent = mode === "host" ? "Create invite" : "Join match";
@@ -1226,7 +1227,7 @@
   }
   function onlinePeerError(error) {
     const message = error?.type === "peer-unavailable" ? "That invite is no longer active. Ask your friend to create a new one." : `Online connection error: ${error?.message || error?.type || "please try again"}`;
-    setOnlineError(message); toast(message);
+    $("#online-confirm").disabled = false; setOnlineError(message); toast(message);
   }
   function createRelayConnection(secret, role) {
     const handlers = { open: [], data: [], close: [], error: [] };
@@ -1326,7 +1327,7 @@
     match.log = (match.log || []).map((entry) => ({ ...entry, time: new Date(entry.time) }));
     selectedCard = null; selectedZone = null;
     if (online.role === "guest" && match.players?.human) match.players.human.name = online.localName || match.players.human.name;
-    if (online.role === "guest" && online.connection?.isRelay) { online.relayStateReceived = true; if (online.joinRetry) { clearInterval(online.joinRetry); online.joinRetry = null; } }
+    if (online.role === "guest" && online.connection?.isRelay) { online.relayStateReceived = true; if (online.joinRetry) { clearInterval(online.joinRetry); online.joinRetry = null; } $("#online-confirm").disabled = false; if ($("#online-dialog").open) $("#online-dialog").close(); }
     revealLocalMatch(); renderMatch(); if($("#deck-view-dialog").open)openMyDeck(); if($("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); if($("#bind-dialog").open)openBindDialog(); if($("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if($("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human");
   }
   function handleRemoteMessage(message) {
@@ -1390,6 +1391,7 @@
         const sendJoin = () => connection.send({ type: "join", name: online.localName, deck: onlineDeck() });
         sendJoin();
         if (connection.isRelay) {
+          setOnlineError("Connected to the relay. Waiting for the host to send the match…");
           online.relayStateReceived = false;
           if (online.joinRetry) clearInterval(online.joinRetry);
           online.joinRetry = setInterval(() => { if (online.connection === connection && !online.relayStateReceived && connection.open) sendJoin(); }, 2500);
@@ -1439,7 +1441,9 @@
       if (!account.client) { setOnlineError("The online relay needs the configured Supabase connection."); online.role = null; return; }
       const secret = roomId.slice("relay:".length); online.roomId = secret;
       bindOnlineConnection(createRelayConnection(secret, online.role), online.role);
-      $("#online-dialog").close(); setMessage("Connecting to your friend's match…"); return;
+      if (watching) { $("#online-dialog").close(); setMessage("Connecting to the live match…"); }
+      else { $("#online-dialog-copy").textContent = "Connecting to the room. Keep this window open while we wait for the host’s match."; $("#online-confirm").disabled = true; setOnlineError("Connecting to the room…"); }
+      return;
     }
     if (!window.Peer) { setOnlineError("This room uses the older direct connection mode, which this browser does not support. Ask the host to create a new room after updating the site."); online.role = null; return; }
     online.roomId = roomId; online.peer = new Peer();
