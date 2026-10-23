@@ -43,6 +43,7 @@
   let view = "play";
   let builder = { id: null, name: "Untitled deck", cards: {}, starterCardId: "" };
   let selectedCard = null;
+  let zoneFieldSelection = null;
   let match = null;
   let selectedZone = null;
   let botTimer = null;
@@ -568,8 +569,9 @@
     $("#attack-card").disabled = !canAct;
     $("#play-order").disabled = !canAct;
     const attack = match.pendingAttack;
-    const canDefend = Boolean(attack && attack.defenderSide === "human" && !attack.defenderDone && Number(attack.driveChecksRemaining || 0) <= 0);
-    $("#guard-card").hidden = !canDefend;
+    const defending = Boolean(attack && attack.defenderSide === "human" && !attack.defenderDone);
+    const canDefend = defending && Number(attack.driveChecksRemaining || 0) <= 0;
+    $("#guard-card").hidden = !defending;
     $("#guard-card").disabled = !canAct || !canDefend;
     const interceptButton = $("#intercept-card");
     if (interceptButton) { interceptButton.hidden = false; interceptButton.disabled = !canAct; }
@@ -610,7 +612,7 @@
       $("#selection-hint").textContent = attackHint;
       $("#selected-summary").innerHTML = `<span class="selected-card-icon">✦</span><span><b>${attackTitle}</b><small>${attackHelp}</small></span>`;
     }
-    const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.toggle("hidden", !canDefend); noGuard.textContent = (attack?.guardCards?.length || 0) ? "Done guarding" : "No guard"; noGuard.disabled = !canAct || !canDefend; }
+    const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.toggle("hidden", !defending); noGuard.textContent = (attack?.guardCards?.length || 0) ? "Done guarding" : "No guard"; noGuard.disabled = !canAct || !canDefend; }
     const finishAttackButton = $("#finish-attack");
     if (finishAttackButton) {
       finishAttackButton.hidden = !attack || attack.attackerSide !== "human";
@@ -734,7 +736,8 @@
     resolvePracticeAttackAfterDrives();
     if (!online.role && match.side === "bot" && !match.ended && !match.pendingTrigger && !match.pendingDamageQueue.length) setTimeout(nextBotAttack, 250);
   }
-  function resolvePracticeAttackAfterDrives() { const attack=match?.pendingAttack;if(!attack?.awaitingDrive||Number(attack.driveChecksRemaining||0)>0||match.pendingTrigger||match.pendingDamageQueue?.length)return;attack.awaitingDrive=false;finishAttack(attack.power<attack.targetPower); }
+  function resolvePracticeAttackAfterDrives() { const attack=match?.pendingAttack;if(!attack?.awaitingDrive||Number(attack.driveChecksRemaining||0)>0||match.pendingTrigger||match.pendingDamageQueue?.length)return;attack.awaitingDrive=false;finishAttack(!attackHits(attack)); }
+  function attackHits(attack) { return Number(attack?.power || 0) >= Number(attack?.targetPower || 0); }
   function checkDamageEnd(side) {
     const player = match.players[side];
     if (player.damage.length < 6 || match.pendingTrigger) return;
@@ -859,7 +862,7 @@
       if(perfect&&cost&&match.pendingAttack.power>=match.pendingAttack.targetPower&&Math.random()<0.2){bot.hand=bot.hand.filter(item=>item.uid!==perfect.uid&&item.uid!==cost.uid);bot.drop.push(cost);match.pendingAttack.guardCards.push(perfect);match.players.bot.guardCircle.push(perfect);addLog(`Practice Bot used ${cardMap.get(perfect.cardId)?.name||"a zero-shield card"} as a perfect guard and discarded ${cardMap.get(cost.cardId)?.name||"a card"}.`);finishAttack(true);return;}
       if(candidates[0]?.shield>needed&&Math.random()<0.28){bot.hand=bot.hand.filter(x=>x.uid!==candidates[0].x.uid);match.pendingAttack.guardCards.push(candidates[0].x);match.pendingAttack.targetPower+=candidates[0].shield;addLog(`Practice Bot guarded with ${cardMap.get(candidates[0].x.cardId)?.name||"a card"}.`);}
       if(match.pendingAttack.attackerZone==="vanguard"&&match.pendingAttack.driveChecksRemaining>0){match.pendingAttack.awaitingDrive=true;setMessage(`Practice Bot is defending — perform ${match.pendingAttack.driveChecksRemaining} Vanguard drive check${match.pendingAttack.driveChecksRemaining===1?"":"s"} before the attack resolves.`);renderMatch();return;}
-      finishAttack(match.pendingAttack.power<match.pendingAttack.targetPower);return;
+      finishAttack(!attackHits(match.pendingAttack));return;
     }
     setMessage(`${match.players[defenderSide].name} is defending — guard or take the hit.`);renderMatch();
   }
@@ -933,7 +936,7 @@
     if(match.pendingAttack.defenderSide!=="human"){toast("The attacker must wait for the defending player to finish guarding.");return;}
     if(Number(match.pendingAttack.driveChecksRemaining||0)>0){toast("The attacking Vanguard must finish its drive checks before the attack resolves.");return;}
     if (match.pendingAttack.defenderDone) return;
-    completeAttackDefense(Number(match.pendingAttack.power||0)<Number(match.pendingAttack.targetPower||0));
+    completeAttackDefense(!attackHits(match.pendingAttack));
   }
   function botTurn() {
     if (!match || match.ended) return;
@@ -1073,16 +1076,18 @@
       match.revealed = { owner: "human", cards }; addLog(`${player.name} revealed ${cards.length} card${cards.length === 1 ? "" : "s"} from the top of the deck.`); renderSharedReveal();
     } else if (action.startsWith("zone-move:")) {
       const [, source, choice, uid, targetZone] = action.split(":");
-      const sourceZones = { deck: player.deck, bind: player.bind || [], gdeck: player.gDeck || [], soul: player.soul || [] };
+      const sourceZones = { deck: player.deck, bind: player.bind || [], gdeck: player.gDeck || [], soul: player.soul || [], drop: player.drop || [], reveal: match.revealed?.owner === "human" ? match.revealed.cards || [] : [] };
       const sourceCards = sourceZones[source], index = sourceCards?.findIndex((item) => item.uid === uid) ?? -1;
       if (index < 0) return;
       if (choice === "field") {
         const instance = sourceCards[index], card = cardMap.get(instance.cardId);
         if (!isUnitCard(card)) { toast("Only a Unit can be placed on the field."); return; }
+        if (source === "reveal" && match.revealed?.owner !== "human") { toast("Only your revealed cards can be moved to the field."); return; }
         const rearZones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
         if (targetZone === "vanguard") { sourceCards.splice(index, 1); if (player.vanguard) player.soul.push(player.vanguard); player.vanguard = { ...instance, rested: false }; }
         else { const rearIndex = rearZones.indexOf(targetZone); if (rearIndex < 0 || player.rear[rearIndex]) { toast("Choose an empty Rear-Guard circle."); return; } sourceCards.splice(index, 1); player.rear[rearIndex] = { ...instance, rested: false }; }
-        match.selected = null;
+        if (source === "reveal" && !sourceCards.length) match.revealed = null;
+        match.selected = null; zoneFieldSelection = null;
         addLog(`${player.name} moved ${card?.name || "a Unit"} from ${source === "soul" ? "Soul" : "a zone"} to the field.`); return;
       }
       const instance = sourceCards.splice(index, 1)[0];
@@ -1128,9 +1133,14 @@
       const cardName = cardMap.get(field.instance.cardId)?.name || "a card";
       addLog(`${player.name} ${actionWord} ${cardName}.`);
       toast(`${cardName} ${actionWord}.`);
-    } else if (action === "power") {
+    } else if (action === "power" || action === "minus-power") {
       const field = findFieldCard(match.selected); if (!field || field.side !== "human") { toast("Select one of your units first."); return; }
-      field.instance.powerBoost = Number(field.instance.powerBoost || 0) + 5000; addLog(`${player.name} gave ${cardMap.get(field.instance.cardId)?.name || "a unit"} +5000 power.`);
+      const amount = action === "power" ? 5000 : -5000;
+      if (amount < 0 && Number(field.instance.powerBoost || 0) < 5000) { toast("This unit has no +5000 power bonus to remove."); return; }
+      field.instance.powerBoost = Math.max(0, Number(field.instance.powerBoost || 0) + amount);
+      if (match.pendingAttack?.attackerUid === field.instance.uid) match.pendingAttack.power = Math.max(0, Number(match.pendingAttack.power || 0) + amount);
+      if (match.pendingAttack?.targetUid === field.instance.uid) match.pendingAttack.targetPower = Math.max(0, Number(match.pendingAttack.targetPower || 0) + amount);
+      addLog(`${player.name} ${amount > 0 ? "gave" : "removed"} 5000 power ${amount > 0 ? "to" : "from"} ${cardMap.get(field.instance.cardId)?.name || "a unit"}.`);
     } else if (action.startsWith("gift-force:")) {
       const [, type, zone] = action.split(":");
       const zones = ["vanguard", "rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: player.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
@@ -1534,23 +1544,24 @@
     const zones=["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:player.accelZones||0},(_,i)=>"accel-"+(i+1))];
     const labels={"rear-left":"Front left Rear-Guard","rear-right":"Front right Rear-Guard","rear-back-left":"Back left Rear-Guard","rear-back-center":"Back center Rear-Guard","rear-back-right":"Back right Rear-Guard"};
     const fieldOptions='<option value="">Move to field…</option><option value="vanguard">Vanguard</option>'+zones.map((zone,i)=>({zone,i,label:labels[zone]||("Accel "+(i-4))})).filter(({i})=>!player.rear[i]).map(({zone,label})=>'<option value="'+zone+'">'+label+'</option>').join("");
-    $("#drop-card-list").innerHTML=cards.length?cards.map((instance)=>{const c=cardMap.get(instance.cardId);if(!c)return "";const unit=isUnitCard(c);const moves=own?'<div class="peek-actions" hidden><button class="button" data-drop-action="hand:'+escapeHtml(instance.uid)+'">Add to hand</button><button class="button" data-drop-action="soul:'+escapeHtml(instance.uid)+'">Add to Soul</button><button class="button" data-drop-action="bind:'+escapeHtml(instance.uid)+'">Bind card</button>'+(unit?'<select class="text-input drop-field-select" data-drop-uid="'+escapeHtml(instance.uid)+'">'+fieldOptions+'</select>':'')+'<button class="button" data-drop-action="deck-top:'+escapeHtml(instance.uid)+'">Return to deck top</button><button class="button" data-drop-action="deck-bottom:'+escapeHtml(instance.uid)+'">Return to deck bottom</button></div>':'';return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button><button class="zone-card-zoom" type="button" data-card-zoom="'+escapeHtml(c.id)+'" aria-label="Zoom '+escapeHtml(c.name)+'">⤢</button>'+moves+'</article>';}).join(""):'<p class="zone-empty-message">No cards in Drop yet.</p>';
+    $("#drop-card-list").innerHTML=cards.length?cards.map((instance)=>{const c=cardMap.get(instance.cardId);if(!c)return "";const unit=isUnitCard(c);const moves=own?'<div class="peek-actions" hidden><button class="button" data-drop-action="hand:'+escapeHtml(instance.uid)+'">Add to hand</button><button class="button" data-drop-action="soul:'+escapeHtml(instance.uid)+'">Add to Soul</button><button class="button" data-drop-action="bind:'+escapeHtml(instance.uid)+'">Bind card</button>'+(unit?'<button class="button" data-zone-field-select="drop:'+escapeHtml(instance.uid)+'">Select to place on field</button><select class="text-input drop-field-select" data-drop-uid="'+escapeHtml(instance.uid)+'">'+fieldOptions+'</select>':'')+'<button class="button" data-drop-action="deck-top:'+escapeHtml(instance.uid)+'">Return to deck top</button><button class="button" data-drop-action="deck-bottom:'+escapeHtml(instance.uid)+'">Return to deck bottom</button></div>':'';return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>'+cardImage(c)+'<b>'+escapeHtml(c.name)+'</b></button><button class="zone-card-zoom" type="button" data-card-zoom="'+escapeHtml(c.id)+'" aria-label="Zoom '+escapeHtml(c.name)+'">⤢</button>'+moves+'</article>';}).join(""):'<p class="zone-empty-message">No cards in Drop yet.</p>';
     $("#drop-dialog").dataset.side=side;if(!$("#drop-dialog").open)$("#drop-dialog").showModal();
   }
   function zoneMoveControls(instance, source, canAct = true) {
     if (!canAct) return "";
     const card = cardMap.get(instance.cardId), unit = isUnitCard(card);
     const button = (choice, label) => `<button class="button" type="button" data-zone-move="${source}:${choice}:${escapeHtml(instance.uid)}">${label}</button>`;
+    const fieldPick = unit && ["deck", "soul", "bind", "drop", "reveal", "gdeck"].includes(source) ? `<button class="button" type="button" data-zone-field-select="${source}:${escapeHtml(instance.uid)}">Select to place on field</button>` : "";
     const zones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: match.players.human.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
     const fieldOptions = zones.map((zone, i) => match.players.human.rear[i] ? "" : '<option value="' + zone + '">' + zone.replace("rear-", "").replace("back-", "back ").replaceAll("-", " ") + '</option>').join("");
     const fieldControl = source === "soul" && unit ? '<select class="text-input drop-field-select" data-soul-field-uid="' + escapeHtml(instance.uid) + '"><option value="">Call Unit to Rear-Guard…</option>' + fieldOptions + '</select>' : "";
-    return '<div class="peek-actions"' + (source === "deck" ? "" : " hidden") + '>' + button("hand", "Add to hand") + (source !== "soul" ? button("soul", "Add to Soul") : "") + button("drop", "Send to Drop") + (source !== "bind" ? button("bind", "Bind card") : "") + (source !== "deck" ? button("deck-top", "Return to deck top") : "") + (source !== "deck" ? button("deck-bottom", "Return to deck bottom") : "") + fieldControl + '</div>';
+    return '<div class="peek-actions"' + (source === "deck" ? "" : " hidden") + '>' + button("hand", "Add to hand") + (source !== "soul" ? button("soul", "Add to Soul") : "") + button("drop", "Send to Drop") + (source !== "bind" ? button("bind", "Bind card") : "") + (source !== "deck" ? button("deck-top", "Return to deck top") : "") + (source !== "deck" ? button("deck-bottom", "Return to deck bottom") : "") + fieldControl + fieldPick + '</div>';
   }
   function renderInteractiveCards(instances, prefix, canAct = true) {
     if (!instances?.length) return '<p class="zone-empty-message">No cards here.</p>';
     return instances.map((instance) => {
       const card = cardMap.get(instance.cardId); if (!card) return "";
-      const controls = canAct ? (prefix === "deck-action" ? zoneMoveControls(instance, "deck") : '<div class="peek-actions" hidden><button class="button" type="button" data-peek-action="' + prefix + ':hand:' + escapeHtml(instance.uid) + '">Add to hand</button><button class="button" type="button" data-peek-action="' + prefix + ':soul:' + escapeHtml(instance.uid) + '">Add to Soul</button><button class="button" type="button" data-peek-action="' + prefix + ':drop:' + escapeHtml(instance.uid) + '">Send to Drop</button></div>') : '';
+      const controls = canAct ? (prefix === "deck-action" ? zoneMoveControls(instance, "deck") : '<div class="peek-actions" hidden><button class="button" type="button" data-peek-action="' + prefix + ':hand:' + escapeHtml(instance.uid) + '">Add to hand</button><button class="button" type="button" data-peek-action="' + prefix + ':soul:' + escapeHtml(instance.uid) + '">Add to Soul</button><button class="button" type="button" data-peek-action="' + prefix + ':drop:' + escapeHtml(instance.uid) + '">Send to Drop</button>' + (isUnitCard(card) ? '<button class="button" type="button" data-zone-field-select="reveal:' + escapeHtml(instance.uid) + '">Select to place on field</button>' : '') + '</div>') : '';
       return '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select aria-label="Select actions for ' + escapeHtml(card.name) + '">' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button>' + controls + '</article>';
     }).join("");
   }
@@ -1629,7 +1640,7 @@
   $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#finish-attack").addEventListener("click", () => performOnlineAction("finishAttack")); $("#intercept-card").addEventListener("click", () => performManualAction("intercept")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) online.connection.send({ type: "select", selected: match.selected }); renderMatch(); });
-  $(".game-table").addEventListener("click", (e) => { const zoom=e.target.closest("[data-card-zoom]"); if(zoom){e.stopPropagation();showCardDetails(zoom.dataset.cardZoom);return;} const zone=e.target.closest(".field-zone[data-side='human']"); if(zone&&match&&online.role!=="watcher"){const selectedField=findFieldCard(match.selected);if(selectedField?.side==="human"&&selectedField.zone!=="vanguard"&&zone.dataset.zone!=="vanguard"&&zone.dataset.zone!==selectedField.zone){performManualAction(`move-rear-to:${match.selected}:${zone.dataset.zone}`);return;}if(!e.target.closest("[data-field-uid]")&&match.selected&&selectedHandCard()){performManualAction(`place:${zone.dataset.zone}`);return;}}if(e.target.closest("[data-gdeck-side='human']")){performManualAction("stride");return;}const field=e.target.closest("[data-field-uid]");if(!field||!match||online.role==="watcher"||field.dataset.side!=="human")return;const uid=field.dataset.fieldUid;match.selected=match.selected===uid?null:uid;if(online.role==="guest"&&online.connection?.open)online.connection.send({type:"select",selected:match.selected});renderMatch();});
+  $(".game-table").addEventListener("click", (e) => { const zoom=e.target.closest("[data-card-zoom]"); if(zoom){e.stopPropagation();showCardDetails(zoom.dataset.cardZoom);return;} const zone=e.target.closest(".field-zone[data-side='human']"); if(zone&&match&&online.role!=="watcher"){if(zoneFieldSelection){const {source,uid}=zoneFieldSelection;zoneFieldSelection=null;performManualAction(`zone-move:${source}:field:${uid}:${zone.dataset.zone}`);return;}const selectedField=findFieldCard(match.selected);if(selectedField?.side==="human"&&selectedField.zone!=="vanguard"&&zone.dataset.zone!=="vanguard"&&zone.dataset.zone!==selectedField.zone){performManualAction(`move-rear-to:${match.selected}:${zone.dataset.zone}`);return;}if(!e.target.closest("[data-field-uid]")&&match.selected&&selectedHandCard()){performManualAction(`place:${zone.dataset.zone}`);return;}}if(e.target.closest("[data-gdeck-side='human']")){performManualAction("stride");return;}const field=e.target.closest("[data-field-uid]");if(!field||!match||online.role==="watcher"||field.dataset.side!=="human")return;const uid=field.dataset.fieldUid;match.selected=match.selected===uid?null:uid;if(online.role==="guest"&&online.connection?.open)online.connection.send({type:"select",selected:match.selected});renderMatch();});
   $("#gift-cancel").addEventListener("click", () => $("#gift-dialog").close()); $("#gift-close").addEventListener("click", () => $("#gift-dialog").close());
   $("#gift-confirm").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind === "force") { const zone = $("#gift-zone").value; if (!zone) { toast("Choose a circle for the Force marker."); return; } performManualAction(`gift-force:${type}:${zone}`); } else performManualAction(`gift-accel:${type}`); dialog.close(); });
   $("#gift-place-vanguard").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind !== "force") return; performManualAction(`gift-force:${type}:vanguard`); dialog.close(); });
@@ -1645,6 +1656,7 @@
     list.querySelectorAll(".zone-view-card").forEach((card) => { card.classList.remove("selected"); card.querySelectorAll(".peek-actions").forEach((panel) => { panel.hidden = true; }); });
     if (!wasSelected) { article.classList.add("selected"); article.querySelectorAll(".peek-actions").forEach((panel) => { panel.hidden = false; }); }
   }));
+  document.addEventListener("click", (event) => { const button = event.target.closest("[data-zone-field-select]"); if (!button || !match) return; const [source, uid] = button.dataset.zoneFieldSelect.split(":"); zoneFieldSelection = { source, uid }; button.closest("dialog")?.close(); toast("Card selected. Click a Vanguard or empty Rear-Guard circle to place it."); });
   $$('[data-close-dialog]').forEach((button)=>button.addEventListener("click",()=>$("#"+button.dataset.closeDialog)?.close()));
   $$("dialog").forEach((dialog) => dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); }));
   $("#reveal-top-cards").addEventListener("click",()=>performManualAction("reveal-top-cards"));
