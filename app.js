@@ -782,9 +782,10 @@
     renderMatch();
   }
   function drawForHuman() {
-    if (!match || match.side !== "human" || match.pendingAttack || match.phase !== 1 || match.drewThisTurn) { toast("The Draw button is for your Draw phase. Use Draw card under Other game controls to draw at another time."); return; }
+    if (!match || match.ended) { toast("Start a match before drawing."); return; }
     const card = draw("human"); if (!card) { setMessage("Your deck is empty."); return; }
-    match.drewThisTurn = true; addLog("You drew a card."); setMessage("Card drawn."); renderMatch();
+    if (match.phase === 1 && match.side === "human") match.drewThisTurn = true;
+    addLog(`${match.players.human.name} drew a card.`); setMessage("Card drawn."); renderMatch();
   }
   function rideHuman() {
     const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; } if (match.phase !== 2) { toast("You can use Ride during the Ride phase. The manual Place action can ride at other times."); return; }
@@ -1454,7 +1455,7 @@
     const zones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right", ...Array.from({ length: match.players.human.accelZones || 0 }, (_, i) => `accel-${i + 1}`)];
     const fieldOptions = zones.map((zone, i) => match.players.human.rear[i] ? "" : '<option value="' + zone + '">' + zone.replace("rear-", "").replace("back-", "back ").replaceAll("-", " ") + '</option>').join("");
     const fieldControl = source === "soul" && unit ? '<select class="text-input drop-field-select" data-soul-field-uid="' + escapeHtml(instance.uid) + '"><option value="">Call Unit to Rear-Guard…</option>' + fieldOptions + '</select>' : "";
-    return '<div class="peek-actions" hidden>' + button("hand", "Add to hand") + (source !== "soul" ? button("soul", "Add to Soul") : "") + button("drop", "Send to Drop") + (source !== "bind" ? button("bind", "Bind card") : "") + (source !== "deck" ? button("deck-top", "Return to deck top") : "") + (source !== "deck" ? button("deck-bottom", "Return to deck bottom") : "") + fieldControl + '</div>';
+    return '<div class="peek-actions"' + (source === "deck" ? "" : " hidden") + '>' + button("hand", "Add to hand") + (source !== "soul" ? button("soul", "Add to Soul") : "") + button("drop", "Send to Drop") + (source !== "bind" ? button("bind", "Bind card") : "") + (source !== "deck" ? button("deck-top", "Return to deck top") : "") + (source !== "deck" ? button("deck-bottom", "Return to deck bottom") : "") + fieldControl + '</div>';
   }
   function renderInteractiveCards(instances, prefix, canAct = true) {
     if (!instances?.length) return '<p class="zone-empty-message">No cards here.</p>';
