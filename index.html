@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#101118" />
     <title>Vanguard Arena — Card Game Sandbox</title>
-    <link rel="stylesheet" href="./styles.css?v=premium-combat-1" />
+    <link rel="stylesheet" href="./styles.css?v=battle-flow-fix-2" />
   </head>
   <body>
     <div class="app-shell">
@@ -63,6 +63,7 @@
               </div>
               <div class="hand-panel"><div class="hand-heading"><div><span class="eyebrow">YOUR HAND</span><b id="hand-count">5 cards</b></div><span class="selection-hint" id="selection-hint">Select a card to see actions</span><button class="text-button" id="sort-hand">SORT BY GRADE</button></div><div class="hand-cards" id="hand-cards"></div><div class="hand-management"><span class="muted-text">Selected card:</span><button class="button" data-manual-action="hand-to-top" disabled>Return to deck top</button><button class="button" data-manual-action="hand-to-bottom" disabled>Return to deck bottom</button></div></div>
               <div class="action-bar"><div class="selected-summary" id="selected-summary"><span class="selected-card-icon">✦</span><span><b>No card selected</b><small>Choose a card from your hand or field</small></span></div><div class="action-buttons"><button class="button button-quiet" id="draw-card">Draw</button><button class="button button-quiet" id="ride-card" disabled>Ride</button><button class="button button-quiet" id="call-card" disabled>Call</button><button class="button button-quiet" id="play-order" disabled>Play Order</button><button class="button button-quiet" id="attack-card" disabled>Attack</button><button class="button button-quiet" id="guard-card" disabled>Guard</button><button class="button button-quiet" data-manual-action="g-guard" hidden>G-Guard</button><button class="button button-primary" id="end-turn">End turn <span>→</span></button></div></div>
+              <div class="attack-choice-panel" id="attack-choice-panel" hidden><b id="attack-choice-title">Choose attack options</b><p id="attack-choice-help"></p><div id="attack-choice-buttons" class="empty-actions"></div></div>
               <div class="action-bar manual-actions" aria-label="Manual Vanguard actions">
                 <div class="selected-summary"><span class="selected-card-icon">✦</span><span><b>Card actions</b><small id="manual-selection-help">Select a card on your hand or field to see its actions.</small></span></div>
                 <div class="selected-card-actions"><button class="button" data-manual-action="bind">Bind card</button><button class="button" data-manual-action="selected-to-drop">Send to Drop</button><button class="button" data-manual-action="selected-to-soul">Move to Soul</button><button class="button" data-manual-action="view-selected-soul">View Vanguard Soul</button><button class="button" data-manual-action="rest-selected">Rest selected</button><button class="button" data-manual-action="stand-selected">Stand selected</button><button class="button" data-manual-action="move-rear">Move / Swap Rear-Guard</button><button class="button" data-manual-action="hand-to-damage">Move to Damage</button><button class="button" data-manual-action="lock">Lock / Unlock</button><button class="button" data-manual-action="power">+5000 power</button></div>
@@ -111,8 +112,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js" defer></script>
     <script src="assets/cards/cards.js" defer></script>
-    <script src="assets/cards/catalog-data.js?v=premium-combat-1" defer></script>
+    <script src="assets/cards/catalog-data.js?v=battle-flow-fix-2" defer></script>
     <script src="assets/cards/art-index.js" defer></script>
-    <script src="app.js?v=premium-combat-1" defer></script>
+    <script src="app.js?v=battle-flow-fix-2" defer></script>
   </body>
 </html>

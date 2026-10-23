@@ -619,16 +619,19 @@
     if (!dialog.open) dialog.showModal();
   }
   function renderAttackPrompt() {
-    const dialog = $("#attack-prompt-dialog"), setup = match?.pendingAttackSetup;
-    if (!dialog || !setup || online.role === "watcher") { if (dialog?.open) dialog.close(); return; }
+    const dialog = $("#attack-prompt-dialog"),panel=$("#attack-choice-panel"),setup = match?.pendingAttackSetup;
+    if (dialog?.open) dialog.close();
+    if(!panel)return;
+    if(!setup||online.role==="watcher"){panel.hidden=true;return;}
     const attacker = findFieldCard(setup.attackerUid);
-    if (!attacker) { match.pendingAttackSetup = null; if (dialog.open) dialog.close(); return; }
+    if (!attacker) { match.pendingAttackSetup = null; panel.hidden=true; return; }
     const attackerName = cardMap.get(attacker.instance.cardId)?.name || "Unit";
     let choices = [];
     if (setup.stage === "boost") {
       const booster = findFieldCard(setup.boosterUid);
-      $("#attack-prompt-title").textContent = "Boost this attack?";
-      $("#attack-prompt-help").textContent = `${booster ? cardMap.get(booster.instance.cardId)?.name : "Your rear-guard"} can boost ${attackerName}. Boosting rests it and adds its power for this attack only.`;
+      $("#attack-choice-title").textContent = "Boost this attack?";
+      $("#attack-choice-help").textContent = `${booster ? cardMap.get(booster.instance.cardId)?.name : "Your Rear-Guard"} is directly behind ${attackerName}. Boosting rests it and adds its power for this attack only.`;
+      setMessage(`Choose whether to boost ${attackerName} before selecting an attack target.`);
       choices = [
         { value: `boost:${setup.boosterUid}`, label: `Boost with ${booster ? cardMap.get(booster.instance.cardId)?.name : "rear-guard"}` },
         { value: "boost:none", label: "Attack without a boost" }
@@ -636,8 +639,9 @@
     } else {
       const defenderSide = setup.defenderSide || flipSide(setup.attackerSide);
       const defender = match.players[defenderSide];
-      $("#attack-prompt-title").textContent = "Choose an attack target";
-      $("#attack-prompt-help").textContent = "Attack the Vanguard or a unit in the opponent’s front row.";
+      $("#attack-choice-title").textContent = "Choose an attack target";
+      $("#attack-choice-help").textContent = "Choose the opponent’s Vanguard or one of their front-row Rear-Guards.";
+      setMessage(`Choose whether ${attackerName} attacks the Vanguard or a front-row Rear-Guard.`);
       if (defender.vanguard) choices.push({ value: `target:vanguard:${defender.vanguard.uid}`, label: `Vanguard · ${cardMap.get(defender.vanguard.cardId)?.name || "Unit"}` });
       defender.rear.forEach((unit, index) => {
         if (!unit) return;
@@ -645,8 +649,8 @@
         if (zone) choices.push({ value: `target:${zone}:${unit.uid}`, label: `Front Rear-Guard · ${cardMap.get(unit.cardId)?.name || "Unit"}` });
       });
     }
-    $("#attack-prompt-options").innerHTML = choices.map((choice) => `<button class="button button-primary" type="button" data-attack-choice="${escapeHtml(choice.value)}">${escapeHtml(choice.label)}</button>`).join("");
-    if (!dialog.open) dialog.showModal();
+    $("#attack-choice-buttons").innerHTML = choices.map((choice) => `<button class="button button-primary" type="button" data-attack-choice="${escapeHtml(choice.value)}">${escapeHtml(choice.label)}</button>`).join("");
+    panel.hidden=false;
   }
   function finishTriggerResolution() {
     const pending = match?.pendingTrigger;
@@ -746,13 +750,13 @@
   }
   function attackerCritical(entry) { const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid); const forceCrit = field ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force II$/i.test(gift.type || "")).length : 0; return Math.max(1, Number(cardMap.get(entry.instance.cardId)?.critical || 1) + Number(entry.instance.turnCriticalBoost || 0) + forceCrit); }
   function canAttackFromBackRow(field) { const text=String(cardMap.get(field.instance.cardId)?.text||""); return /attack(?:s|ing)? from (?:the )?back row|back row[^.\n]*can attack/i.test(text); }
-  function directlyBehind(field) { if(field.zone==="rear-left")return match.players[field.side].rear[2]; if(field.zone==="rear-right")return match.players[field.side].rear[4]; return null; }
+  function directlyBehind(field) { const rear=match.players[field.side].rear;if(field.zone==="vanguard")return rear[3]||null;if(field.zone==="rear-left")return rear[2]||null;if(field.zone==="rear-right")return rear[4]||null;return null; }
   function resolveHumanAttack() {
     if (match?.turn === 1 && match.firstSide === "human") { toast("The player going first cannot attack during their first turn."); return; }
     const field=findFieldCard(match.selected); if(!field||field.side!=="human"||field.instance.rested||field.instance.locked||match.phase!==4)return;
     const front=field.zone==="vanguard"||field.zone==="rear-left"||field.zone==="rear-right"||field.zone.startsWith("accel-");
     if(!front&&!canAttackFromBackRow(field)){toast("Only a Vanguard or front-row Rear-Guard can attack unless its card text allows a back-row attack.");return;}
-    const booster=(field.zone==="rear-left"||field.zone==="rear-right")?directlyBehind(field):null;
+    const booster=(field.zone==="vanguard"||field.zone==="rear-left"||field.zone==="rear-right")?directlyBehind(field):null;
     match.pendingAttackSetup={attackerUid:field.instance.uid,attackerSide:"human",defenderSide:"bot",boosterUid:booster&&!booster.rested&&!booster.locked?booster.uid:null,stage:booster&&!booster.rested&&!booster.locked?"boost":"target"};
     match.selected=null;renderMatch();
   }
@@ -889,7 +893,8 @@
     addLog("You ended your turn."); clearTurnBonuses("human"); returnStriddenVanguard("human"); match.ridePerformed = false; match.selected = null; renderMatch(); botTurn();
   }
   function returnStriddenVanguard(side) { const player=match?.players?.[side],unit=player?.vanguard;if(!unit?.strideHeart)return;const heart=unit.strideHeart,stride={...unit};delete stride.strideHeart;player.vanguard={...heart};player.gZone.push({...stride,faceUp:true});addLog(`${cardMap.get(stride.cardId)?.name||"The G Unit"} returned face up to the G zone and ${cardMap.get(heart.cardId)?.name||"the heart"} returned to the Vanguard circle.`); }
-  function clearTurnBonuses(side) { const clear=(instance)=>{if(!instance)return;if(instance.turnPowerExpiry===side||instance.turnPowerExpiry==null){instance.turnPowerBoost=0;delete instance.turnPowerExpiry;}if(instance.turnCriticalExpiry===side||instance.turnCriticalExpiry==null){instance.turnCriticalBoost=0;delete instance.turnCriticalExpiry;}};Object.values(match?.players||{}).forEach((player)=>[player.vanguard,...player.rear].filter(Boolean).forEach((instance)=>{clear(instance);clear(instance.strideHeart);})); }
+  function clearTurnBonuses(side) { const seen=new Set();const walk=(value)=>{if(!value||typeof value!=="object"||seen.has(value))return;seen.add(value);if(value.turnPowerExpiry===side||value.turnPowerExpiry==null){value.turnPowerBoost=0;delete value.turnPowerExpiry;}if(value.turnCriticalExpiry===side||value.turnCriticalExpiry==null){value.turnCriticalBoost=0;delete value.turnCriticalExpiry;}Object.values(value).forEach(walk);};Object.values(match?.players||{}).forEach(walk); }
+  function flipTurnBonusOwners(players) { const seen=new Set();const walk=(value)=>{if(!value||typeof value!=="object"||seen.has(value))return;seen.add(value);if(value.turnPowerExpiry)value.turnPowerExpiry=flipSide(value.turnPowerExpiry);if(value.turnCriticalExpiry)value.turnCriticalExpiry=flipSide(value.turnCriticalExpiry);Object.values(value).forEach(walk);};Object.values(players||{}).forEach(walk); }
   function advancePhase() {
     if (!match || match.side !== "human" || match.pendingAttack || match.ended) return;
     if (match.phase >= phases.length - 1) { endTurn(); return; }
@@ -1158,10 +1163,12 @@
   function snapshotForGuest() {
     const snapshot = JSON.parse(JSON.stringify(match));
     snapshot.players = { human: snapshot.players.bot, bot: snapshot.players.human };
+    flipTurnBonusOwners(snapshot.players);
     snapshot.side = flipSide(snapshot.side);
     if (snapshot.revealed?.owner) snapshot.revealed.owner = flipSide(snapshot.revealed.owner);
     if (snapshot.firstSide) snapshot.firstSide = flipSide(snapshot.firstSide);
     if (snapshot.pendingTrigger?.side) snapshot.pendingTrigger.side = flipSide(snapshot.pendingTrigger.side);
+    if (snapshot.pendingTrigger?.turnOwner) snapshot.pendingTrigger.turnOwner=flipSide(snapshot.pendingTrigger.turnOwner);
     if (snapshot.preMatch) {
       snapshot.preMatch.rolls = { human: snapshot.preMatch.rolls.bot, bot: snapshot.preMatch.rolls.human };
       if (snapshot.preMatch.winner) snapshot.preMatch.winner = flipSide(snapshot.preMatch.winner);
@@ -1212,10 +1219,12 @@
     if (online.role !== "host" || !match || !["action", "select"].includes(message.type)) return;
     const players = match.players;
     match.players = { human: players.bot, bot: players.human };
+    flipTurnBonusOwners(match.players);
     match.side = flipSide(match.side);
     if (match.firstSide) match.firstSide = flipSide(match.firstSide);
     if (match.revealed?.owner) match.revealed.owner = flipSide(match.revealed.owner);
     if (match.pendingTrigger?.side) match.pendingTrigger.side = flipSide(match.pendingTrigger.side);
+    if (match.pendingTrigger?.turnOwner) match.pendingTrigger.turnOwner=flipSide(match.pendingTrigger.turnOwner);
     if(match.pendingAttack){match.pendingAttack.attackerSide=flipSide(match.pendingAttack.attackerSide);match.pendingAttack.defenderSide=flipSide(match.pendingAttack.defenderSide);}
     if(match.pendingAttackSetup){match.pendingAttackSetup.attackerSide=flipSide(match.pendingAttackSetup.attackerSide);match.pendingAttackSetup.defenderSide=flipSide(match.pendingAttackSetup.defenderSide);}
     match.selected = message.selected || null;
@@ -1226,10 +1235,12 @@
       else ({ draw: drawForHuman, ride: rideHuman, call: callHuman, attack: resolveHumanAttack, guard: humanGuard, noGuard, endTurn, advance: advancePhase }[message.action] || (() => {}))();
     } finally {
       match.players = players;
+      flipTurnBonusOwners(match.players);
       match.side = flipSide(match.side);
       if (match.firstSide) match.firstSide = flipSide(match.firstSide);
       if (match.revealed?.owner) match.revealed.owner = flipSide(match.revealed.owner);
       if (match.pendingTrigger?.side) match.pendingTrigger.side = flipSide(match.pendingTrigger.side);
+      if (match.pendingTrigger?.turnOwner) match.pendingTrigger.turnOwner=flipSide(match.pendingTrigger.turnOwner);
       if(match.pendingAttack){match.pendingAttack.attackerSide=flipSide(match.pendingAttack.attackerSide);match.pendingAttack.defenderSide=flipSide(match.pendingAttack.defenderSide);}
       if(match.pendingAttackSetup){match.pendingAttackSetup.attackerSide=flipSide(match.pendingAttackSetup.attackerSide);match.pendingAttackSetup.defenderSide=flipSide(match.pendingAttackSetup.defenderSide);}
       online.applyingRemote = false;
@@ -1462,7 +1473,7 @@
   $("#reveal-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const action=e.target.closest("[data-peek-action]");if(action)performManualAction(action.dataset.peekAction);});
   $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const flip=e.target.closest("[data-gdeck-flip]");if(flip){performManualAction("gdeck-flip-up:"+flip.dataset.gdeckFlip);if(match)openGDeckDialog($("#gdeck-dialog").dataset.kind);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
   $("#g-guard-heal-cost").addEventListener("change",()=>{if($("#gdeck-dialog").open&&$("#gdeck-dialog").dataset.kind==="g-guard")openGDeckDialog("g-guard");});
-  $("#attack-prompt-options").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
+  $("#attack-choice-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
   $("#protect-discard-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-protect-cost]");if(!button)return;const marker=$("#protect-discard-dialog").dataset.markerUid;$("#protect-discard-dialog").close();performManualAction(`guard-perfect:${marker}:${button.dataset.protectCost}`);});
   $("#bind-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
   $("#damage-card-list").addEventListener("click",(e)=>{const action=e.target.closest("[data-damage-action]");if(action){$("#damage-dialog").close();performManualAction("damage-action:"+action.dataset.damageAction);}});
