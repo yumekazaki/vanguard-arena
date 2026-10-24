@@ -35,6 +35,21 @@ for (const file of fs.readdirSync(sourceDir).filter(x => x.toLowerCase().endsWit
     cards.set(id, old);
   }
 }
+// Some older records omit UnitGrade. Copy it only when same-name printings
+// agree on one grade; do not guess grades from power alone.
+const normalizeCardName = value => String(value || '').normalize('NFKD').toLowerCase().replace(/[^a-z0-9]/g, '');
+const gradesByName = new Map();
+for (const card of cards.values()) {
+  if (card.grade === null) continue;
+  const key = normalizeCardName(card.name);
+  if (!gradesByName.has(key)) gradesByName.set(key, new Set());
+  gradesByName.get(key).add(card.grade);
+}
+for (const card of cards.values()) {
+  if (card.grade !== null) continue;
+  const grades = gradesByName.get(normalizeCardName(card.name));
+  if (grades?.size === 1) card.grade = [...grades][0];
+}
 // Older CFA records keep printed stats in indexed UnitPower.txt arrays rather
 // than beside each card's name and text. Merge those values by CardStat ID.
 const unitPowerPath = path.join(sourceDir, 'UnitPower.txt');
@@ -78,13 +93,17 @@ for (const card of cards.values()) {
 // CFA has a few records whose indexed stats do not match their card image.
 // Keep these verified corrections here so a catalog rebuild preserves them.
 const printedStatCorrections = {
-  2275: { power: 9000, shield: 5000 } // Spirited Brawler, Kohkin (BT16/090EN)
+  2275: { power: 9000, shield: 5000 }, // Spirited Brawler, Kohkin (BT16/090EN)
+  12245: { power: 0, shield: 0 } // Energy Generator is a Ride Deck Crest, not a Grade 0 Unit
 };
+const printedTypeCorrections = { 12245: "Ride Deck Crest" };
 for (const [id, stats] of Object.entries(printedStatCorrections)) {
   const card = cards.get(Number(id));
   if (!card) continue;
   if (stats.power !== undefined) card.power = stats.power;
   if (stats.shield !== undefined) card.shield = stats.shield;
+  if (printedTypeCorrections[id]) card.type = printedTypeCorrections[id];
+  if (id === "12245") card.grade = null;
 }
 const result = [];
 for (const card of cards.values()) {
@@ -97,10 +116,9 @@ for (const card of cards.values()) {
   const primary = card.clans[0] || '';
   const firstLine = card.text.split(/\r?\n/)[0].trim();
   if (card.grade === null && /\b(Draw|Critical|Stand|Heal|Front|Over) Trigger\b/i.test(firstLine)) card.grade = 0;
-  if (!card.trigger) {
-    const triggerMatch = firstLine.match(/\b(Draw|Critical|Stand|Heal|Front|Over) Trigger\b/i);
-    if (triggerMatch) card.trigger = triggerMatch[1][0].toUpperCase() + triggerMatch[1].slice(1).toLowerCase();
-  }
+  // Trigger belongs to the final printed card line, not a stale duplicate row.
+  const triggerMatch = firstLine.match(/\b(Draw|Critical|Stand|Heal|Front|Over) Trigger\b/i);
+  card.trigger = triggerMatch ? triggerMatch[1][0].toUpperCase() + triggerMatch[1].slice(1).toLowerCase() : '';
   if (card.trigger) card.type = 'Trigger';
   const nationNames = ['Dragon Empire','Dark States','Keter Sanctuary','Stoicheia','Brandt Gate','Lyrical Monasterio','Cray Elemental','Touken Ranbu','BanG Dream!','Monster Strike','SHAMAN KING','Record of Ragnarok','CoroCoro','VSPO!'];
   card.nation = nationNames.find(n => firstLine.includes(n)) || '';
