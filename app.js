@@ -59,6 +59,9 @@
   let match = null;
   let selectedZone = null;
   let botTimer = null;
+  let activeCheckRevealId = null;
+  let checkRevealTimer = null;
+  const shownCheckRevealIds = new Set();
   let online = { role: null, peer: null, connection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, joinRetry: null, relayStateReceived: false, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false };
   const localDeckStorageKey = "vanguardArenaDecks";
   const account = { client: null, user: null, syncing: false, recovery: false, profile: null };
@@ -392,7 +395,7 @@
   function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
-    match = { players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, phase: 0, drewThisTurn: false, ridePerformed: false, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, log: [], ended: false, deckName: readyDeck.name };
+    match = { players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, phase: 0, drewThisTurn: false, ridePerformed: false, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
     if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
@@ -526,7 +529,7 @@
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog();
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
-    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderCrestPrompt();
+    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal();
     if (!online.applyingRemote && match.pendingAttack?.awaitingDrive) setTimeout(resolvePracticeAttackAfterDrives, 0);
     if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
   }
@@ -593,7 +596,7 @@
   }
   function showDeckMenu() {
     if (!match || online.role === "watcher") return;
-    const actions = [["deck-view", "View deck"], ["draw", "Draw a card"], ["trigger-check", "Trigger check"], ["damage-check", "Damage check"], ["shuffle", "Shuffle deck"], ["soul-charge", "Soul Charge"], ["reveal-top-cards", "Look at top cards"]];
+    const actions = [["deck-view", "View deck"], ["draw", "Draw a card"], ["top-to-drop", "Mill top card to Drop"], ["trigger-check", "Trigger check"], ["damage-check", "Damage check"], ["shuffle", "Shuffle deck"], ["soul-charge", "Soul Charge"], ["reveal-top-cards", "Look at top cards"]];
     $("#context-menu-title").textContent = "Deck actions";
     $("#context-menu-help").textContent = "Choose an action for your deck.";
     $("#context-menu-actions").innerHTML = actions.map(([action, label]) => `<button class="button" type="button" data-context-action="${action}">${label}</button>`).join("");
@@ -610,7 +613,7 @@
       if (order) actions.push(["play-order", "Play Order"]);
       else if (crest) actions.push(["crest-place", "Place Crest"]);
       else actions.push(["place:vanguard", "Ride"], ["selected-to-soul", "Put into Soul"]);
-      actions.push(["bind", "Bind"], ["hand-to-top", "Return to deck top"], ["hand-to-bottom", "Return to deck bottom"], ["hand-to-damage", "Move to Damage"]);
+      actions.push(["selected-to-drop", "Move to Drop"], ["bind", "Move to Bind"], ["hand-to-order", "Move to Order zone"], ["public-reveal", "Reveal to opponent"], ["hand-to-top", "Return to deck top"], ["hand-to-bottom", "Return to deck bottom"], ["hand-to-damage", "Move to Damage"]);
     } else if (field?.side === "human") {
       if (field.zone === "vanguard") {
         if (match.phase === 4 && !match.pendingAttack) actions.push(["attack", "Attack"]);
@@ -782,6 +785,17 @@
     if (!cardMap.has(id)) cardMap.set(id, { id, name, grade: 0, power: 0, shield: 0, type: "Crest", text: `${name} Crest`, color: "#d7bd7b", glyph: "✧" });
     return id;
   }
+
+  function renderPublicReveal() {
+    const reveal = match?.publicReveal, dialog = $("#public-reveal-dialog");
+    if (!reveal?.instance) { if (dialog.open) dialog.close(); return; }
+    const card = cardMap.get(reveal.instance.cardId);
+    if (!card) return;
+    $("#public-reveal-title").textContent = `${reveal.owner === "human" ? match.players.human.name : match.players.bot.name} revealed a card`;
+    $("#public-reveal-card").innerHTML = `<button class="zone-card-zoom" type="button" data-card-zoom="${escapeHtml(card.id)}" aria-label="Zoom ${escapeHtml(card.name)}">⤢</button>${cardImage(card)}<b>${escapeHtml(card.name)}</b>`;
+    $("#public-reveal-close").classList.toggle("hidden", reveal.owner !== "human");
+    if (!dialog.open) dialog.showModal();
+  }
   function renderAttackPrompt() {
     const panel = $("#attack-choice-panel"), setup = match?.pendingAttackSetup, attack = match?.pendingAttack;
     if (!panel) return;
@@ -831,8 +845,9 @@
   }
   function resolvePracticeAttackAfterDrives() {
     const attack = match?.pendingAttack;
-    const driveSide = online.role ? "human" : attack?.attackerSide;
-    if (!attack?.awaitingDrive || !attack.defenderDone || !["human", "bot"].includes(driveSide) || (online.role && driveSide !== "human") || match.pendingTrigger || match.pendingDamageQueue?.length) return;
+    if (online.role === "guest") return;
+    const driveSide = attack?.attackerSide;
+    if (!attack?.awaitingDrive || !attack.defenderDone || !["human", "bot"].includes(driveSide) || match.pendingTrigger || match.pendingDamageQueue?.length) return;
     if (Number(attack.driveChecksRemaining || 0) <= 0) {
       attack.awaitingDrive = false; attack.blocked = Boolean(attack.perfectGuard || !attackHits(attack));
       if (!online.role) finishAttack(Boolean(attack.perfectGuard || !attackHits(attack)));
@@ -862,7 +877,26 @@
     const winner = match.players[flipSide(side)].name;
     addLog(`${winner} wins the match.`); setMessage(`${winner} wins — start a new match to play again.`);
   }
-  function beginTriggerResolution(side, instance, checkName) {
+  function queueCheckReveal(side, instance, checkName) {
+    if (!instance || !match) return;
+    match.checkReveals ||= [];
+    match.checkReveals.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, side, cardId: instance.cardId, checkName });
+    if (match.checkReveals.length > 40) match.checkReveals.splice(0, match.checkReveals.length - 40);
+  }
+  function renderCheckReveal() {
+    const panel = $("#check-reveal-flash");
+    if (!match) { if (checkRevealTimer) clearTimeout(checkRevealTimer); checkRevealTimer = null; activeCheckRevealId = null; shownCheckRevealIds.clear(); panel.hidden = true; return; }
+    if (activeCheckRevealId) return;
+    const reveal = (match.checkReveals || []).find((item) => !shownCheckRevealIds.has(item.id));
+    if (!reveal) { panel.hidden = true; return; }
+    const card = cardMap.get(reveal.cardId);
+    shownCheckRevealIds.add(reveal.id); activeCheckRevealId = reveal.id;
+    $("#check-reveal-label").textContent = `${match.players[reveal.side]?.name || "A player"} · ${({ damage: "Damage check", trigger: "Trigger check", drive: "Drive check" })[reveal.checkName] || "Card revealed"}`;
+    $("#check-reveal-card").innerHTML = card ? `${cardImage(card, "check-reveal-art")}<b>${escapeHtml(card.name)}</b>` : "Card revealed";
+    panel.hidden = false; panel.classList.remove("flash"); void panel.offsetWidth; panel.classList.add("flash");
+    checkRevealTimer = setTimeout(() => { panel.hidden = true; panel.classList.remove("flash"); activeCheckRevealId = null; checkRevealTimer = null; renderCheckReveal(); }, 650);
+  }  function beginTriggerResolution(side, instance, checkName) {
+    queueCheckReveal(side, instance, checkName);
     const kind = triggerKind(instance); if (!kind) return false;
     const player = match.players[side], power = triggerPower(instance), cardName = cardMap.get(instance.cardId)?.name || `${kind} trigger`;
     const turnOwner = match.side;
@@ -957,9 +991,10 @@
     const pendingAttack = match?.pendingAttack;
     if (pendingAttack?.driveCountPrompt && choice.startsWith("drive-count:")) {
       const count = Math.max(0, Math.min(Number(pendingAttack.maxDriveChecks) || 0, Number(choice.slice("drive-count:".length)) || 0));
-      pendingAttack.driveChecksRemaining = count; pendingAttack.driveCountPrompt = false;
-      if (!online.role && pendingAttack.defenderSide === "bot") { practiceBotDefend(); return; }
-      setMessage(`${match.players[pendingAttack.defenderSide].name} is defending — choose Guard or No guard.`); renderMatch(); return;
+      pendingAttack.driveChecksRemaining = count; pendingAttack.driveCountPrompt = false; pendingAttack.driveCountChosen = true;
+      pendingAttack.awaitingDrive = count > 0;
+      if (!count) resolvePracticeAttackAfterDrives();
+      renderMatch(); return;
     }
     const setup=match?.pendingAttackSetup;if(!setup)return;
     if(setup.stage==="boost"){
@@ -978,10 +1013,10 @@
     if(!target){toast("That attack target is no longer in its circle.");return;}
     attacker.instance.rested=true;
     const attackerCard=cardMap.get(attacker.instance.cardId),driveText=String(attackerCard?.text||""),driveChecks=attacker.zone==="vanguard"?(/Triple Drive/i.test(driveText)?3:Number(attackerCard?.grade||0)>=3||/Twin Drive/i.test(driveText)?2:1):0;
-    match.pendingAttack={attacker:attackerCard?.name||"unit",attackerUid:attacker.instance.uid,attackerSide:setup.attackerSide,attackerZone:attacker.zone,defenderSide,targetUid,targetZone:zone,boostPower:Number(setup.boostPower||0),power:attackerPower(attacker)+Number(setup.boostPower||0),targetPower:attackerPower({instance:target}),critical:attackerCritical(attacker),guardCards:[],driveChecksRemaining:0,maxDriveChecks:driveChecks,driveCountPrompt:driveChecks>0};
+    match.pendingAttack={attacker:attackerCard?.name||"unit",attackerUid:attacker.instance.uid,attackerSide:setup.attackerSide,attackerZone:attacker.zone,defenderSide,targetUid,targetZone:zone,boostPower:Number(setup.boostPower||0),power:attackerPower(attacker)+Number(setup.boostPower||0),targetPower:attackerPower({instance:target}),critical:attackerCritical(attacker),guardCards:[],driveChecksRemaining:0,maxDriveChecks:driveChecks,driveCountPrompt:false,driveCountChosen:false,awaitingDrive:false};
     match.pendingAttackSetup=null;$("#attack-prompt-dialog").close();addLog(`${match.pendingAttack.attacker} attacked ${match.players[defenderSide].name}'s ${zone==="vanguard"?"Vanguard":"Rear-Guard"}.`);
-    if (!online.role && defenderSide === "bot" && !match.pendingAttack.driveCountPrompt) { practiceBotDefend(); return; }
-    setMessage(driveChecks ? "Choose the number of Vanguard drive checks." : `${match.players[defenderSide].name} is defending — guard or take the hit.`);renderMatch();
+    if (!online.role && defenderSide === "bot") { practiceBotDefend(); return; }
+    setMessage(`${match.players[defenderSide].name} is defending — choose Guard or No guard.`);renderMatch();
   }
   function practiceBotDefend() {
     const attack = match?.pendingAttack; if (!attack || attack.defenderSide !== "bot") return;
@@ -1052,6 +1087,12 @@
     const attack = match?.pendingAttack; if (!attack) return;
     attack.defenderDone = true;
     attack.blocked = Boolean(attack.perfectGuard || !attackHits(attack));
+    if (Number(attack.maxDriveChecks || 0) > 0 && !attack.driveCountChosen) {
+      attack.driveCountPrompt = true; attack.awaitingDrive = false;
+      setMessage(`${match.players[attack.attackerSide].name} choose the number of drive checks.`);
+      renderMatch(); return;
+    }
+    attack.driveCountPrompt = false;
     if (Number(attack.driveChecksRemaining || 0) > 0) {
       attack.awaitingDrive = true;
       setMessage(`${match.players[attack.attackerSide].name} must complete ${attack.driveChecksRemaining} Vanguard drive check${attack.driveChecksRemaining === 1 ? "" : "s"}.`);
@@ -1063,7 +1104,7 @@
   }
   function confirmAttackFinished() {
     const attack = match?.pendingAttack;
-    if (!attack || attack.attackerSide !== "human" || !attack.defenderDone || Number(attack.driveChecksRemaining || 0) > 0) {
+    if (!attack || attack.attackerSide !== "human" || !attack.defenderDone || attack.driveCountPrompt || Number(attack.driveChecksRemaining || 0) > 0) {
       toast("Wait until the defender is done guarding before finishing this attack."); return;
     }
     finishAttack(Boolean(attack.perfectGuard || !attackHits(attack)));
@@ -1101,7 +1142,7 @@
     const c = cardMap.get(attacker.cardId), field = findFieldCard(uid); if (!field) { nextBotAttack(); return; }
     attacker.rested = true; const target = match.players.human.vanguard; const targetPower = target ? attackerPower({ instance: target }) : 0;
     const cardText = String(c?.text || ""), driveCount = field.zone === "vanguard" ? (/Triple Drive/i.test(cardText) ? 3 : Number(c?.grade || 0) >= 3 || /Twin Drive/i.test(cardText) ? 2 : 1) : 0;
-    match.pendingAttack = { attacker: c?.name || "unit", attackerUid: uid, attackerSide: "bot", attackerZone: field.zone, defenderSide: "human", targetUid: target?.uid, targetZone: "vanguard", power: attackerPower(field), targetPower, critical: attackerCritical(field), guardCards: [], driveChecksRemaining: driveCount, maxDriveChecks: driveCount };
+    match.pendingAttack = { attacker: c?.name || "unit", attackerUid: uid, attackerSide: "bot", attackerZone: field.zone, defenderSide: "human", targetUid: target?.uid, targetZone: "vanguard", power: attackerPower(field), targetPower, critical: attackerCritical(field), guardCards: [], driveChecksRemaining: driveCount, maxDriveChecks: driveCount, driveCountChosen: true, driveCountPrompt: false };
     match.selected = null; setMessage(`Practice Bot attacks with ${c?.name || "a unit"}. Guard or take the hit.`); renderMatch();
   }
   function finishBotTurn() {
@@ -1146,7 +1187,7 @@
     if (action === "draw-card") {
       const card = draw("human"); if (!card) { toast("Your deck is empty."); return; }
       addLog(`${player.name} drew a card manually.`);
-    } else if (action === "top-to-drop") {
+    } else if (action === "top-to-drop" || action === "mill") {
       const top=player.deck.pop();if(!top){toast("Your deck is empty.");return;}player.drop.push(top);addLog(`${player.name} sent ${cardMap.get(top.cardId)?.name||"the top card"} of the deck to Drop.`);
     } else if (action.startsWith("attack-choice:")) {
       beginChosenAttack(action.slice("attack-choice:".length));return;
@@ -1206,7 +1247,17 @@
     } else if (action === "crest-place") {
       const instance = selectedHandCard();
       if (!instance || cardMap.get(instance.cardId)?.type !== "Crest") { toast("Select a Crest in your hand first."); return; }
-      player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.crests ||= []; player.crests.push(instance); match.selected = null; addLog(`${player.name} placed ${cardMap.get(instance.cardId)?.name} in the Crest zone.`);    } else if (action === "play-order") {
+      player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.crests ||= []; player.crests.push(instance); match.selected = null; addLog(`${player.name} placed ${cardMap.get(instance.cardId)?.name} in the Crest zone.`);    } else if (action === "hand-to-order") {
+      const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; }
+      player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.orders ||= []; player.orders.push(instance); match.selected = null;
+      addLog(`${player.name} moved ${cardMap.get(instance.cardId)?.name || "a card"} from hand to the Order zone.`);
+    } else if (action === "public-reveal") {
+      const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; }
+      match.publicReveal = { owner: "human", instance: { ...instance } };
+      addLog(`${player.name} revealed ${cardMap.get(instance.cardId)?.name || "a card"} from hand to the opponent.`);
+    } else if (action === "public-reveal-close") {
+      if (match.publicReveal?.owner === "human") match.publicReveal = null;
+    } else if (action === "play-order") {
       const instance = selectedHandCard();
       if (!instance || !/Order/i.test(cardMap.get(instance.cardId)?.type || "")) { toast("Select an Order card in your hand first."); return; }
       player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.orders.push(instance); match.selected = null;
@@ -1505,6 +1556,8 @@
     flipTurnBonusOwners(snapshot.players);
     snapshot.side = flipSide(snapshot.side);
     if (snapshot.revealed?.owner) snapshot.revealed.owner = flipSide(snapshot.revealed.owner);
+    if (snapshot.publicReveal?.owner) snapshot.publicReveal.owner = flipSide(snapshot.publicReveal.owner);
+    (snapshot.checkReveals || []).forEach((item) => { item.side = flipSide(item.side); });
     if (snapshot.firstSide) snapshot.firstSide = flipSide(snapshot.firstSide);
     if (snapshot.pendingAttack) { snapshot.pendingAttack.attackerSide = flipSide(snapshot.pendingAttack.attackerSide); snapshot.pendingAttack.defenderSide = flipSide(snapshot.pendingAttack.defenderSide); }
     if (snapshot.pendingAttackSetup) { snapshot.pendingAttackSetup.attackerSide = flipSide(snapshot.pendingAttackSetup.attackerSide); snapshot.pendingAttackSetup.defenderSide = flipSide(snapshot.pendingAttackSetup.defenderSide); }
@@ -1572,6 +1625,8 @@
     match.side = flipSide(match.side);
     if (match.firstSide) match.firstSide = flipSide(match.firstSide);
     if (match.revealed?.owner) match.revealed.owner = flipSide(match.revealed.owner);
+    if (match.publicReveal?.owner) match.publicReveal.owner = flipSide(match.publicReveal.owner);
+    (match.checkReveals || []).forEach((item) => { item.side = flipSide(item.side); });
     if (match.pendingTrigger?.side) match.pendingTrigger.side = flipSide(match.pendingTrigger.side);
     if (match.pendingTrigger?.turnOwner) match.pendingTrigger.turnOwner=flipSide(match.pendingTrigger.turnOwner); if (match.pendingCrest?.side) match.pendingCrest.side=flipSide(match.pendingCrest.side);
     if(match.pendingAttack){match.pendingAttack.attackerSide=flipSide(match.pendingAttack.attackerSide);match.pendingAttack.defenderSide=flipSide(match.pendingAttack.defenderSide);}
@@ -1588,6 +1643,8 @@
       match.side = flipSide(match.side);
       if (match.firstSide) match.firstSide = flipSide(match.firstSide);
       if (match.revealed?.owner) match.revealed.owner = flipSide(match.revealed.owner);
+      if (match.publicReveal?.owner) match.publicReveal.owner = flipSide(match.publicReveal.owner);
+      (match.checkReveals || []).forEach((item) => { item.side = flipSide(item.side); });
       if (match.pendingTrigger?.side) match.pendingTrigger.side = flipSide(match.pendingTrigger.side);
       if (match.pendingTrigger?.turnOwner) match.pendingTrigger.turnOwner=flipSide(match.pendingTrigger.turnOwner); if (match.pendingCrest?.side) match.pendingCrest.side=flipSide(match.pendingCrest.side);
       if(match.pendingAttack){match.pendingAttack.attackerSide=flipSide(match.pendingAttack.attackerSide);match.pendingAttack.defenderSide=flipSide(match.pendingAttack.defenderSide);}
@@ -1811,6 +1868,8 @@
   $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#finish-attack").addEventListener("click", () => performOnlineAction("finishAttack")); $("#intercept-card").addEventListener("click", () => performManualAction("intercept")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#power-change-apply").addEventListener("click", () => { const value = Number($("#power-change-value").value); if (!Number.isFinite(value)) { toast("Enter a valid power amount."); return; } $("#power-input-dialog").close(); performManualAction(`set-power:${value}`); });
+  $("#public-reveal-close").addEventListener("click", () => performManualAction("public-reveal-close"));
+  document.addEventListener("click", (event) => { const zoom = event.target.closest?.("[data-card-zoom]"); if (!zoom) return; event.preventDefault(); event.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); }, true);
   $("#context-menu-actions").addEventListener("click", (event) => {
     const button = event.target.closest("[data-context-action]"); if (!button) return;
     const action = button.dataset.contextAction; $("#context-menu-dialog").close();
