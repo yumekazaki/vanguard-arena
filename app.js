@@ -523,9 +523,9 @@
         }
         const zoneElement = $(`.field-zone[data-side="${side}"][data-zone="${zone}"]`); const frontRow = $(`.${side === "bot" ? "opponent-field" : "human-field"}`); if (zone.startsWith("accel-") && zoneElement && frontRow && zoneElement.parentElement !== frontRow) frontRow.appendChild(zoneElement); renderZone(side, zone, player.rear[index]);
       });
-    });
       const frontRow = $(`.${side === "bot" ? "opponent-field" : "human-field"}`); if (frontRow) { const leftAccelCount = Math.ceil(player.accelZones / 2); frontRow.style.direction = "ltr"; frontRow.style.gridTemplateColumns = `repeat(${3 + player.accelZones}, minmax(0, 1fr))`; const columns = { "rear-left": leftAccelCount + 1, vanguard: leftAccelCount + 2, "rear-right": leftAccelCount + 3 }; for (let i = 1; i <= player.accelZones; i++) columns[`accel-${i}`] = i % 2 ? leftAccelCount - Math.floor((i - 1) / 2) : leftAccelCount + 3 + Math.floor((i - 1) / 2); Object.entries(columns).forEach(([zoneId, column]) => { const circle = $(`.field-zone[data-side="${side}"][data-zone="${zoneId}"]`); if (circle) circle.style.gridColumn = String(column); }); }
-        $("#soul-pips").innerHTML = you.soul.slice(0, 7).map(() => `<span class="soul-pip"></span>`).join("");
+    });
+            $("#soul-pips").innerHTML = you.soul.slice(0, 7).map(() => `<span class="soul-pip"></span>`).join("");
     $("#hand-count").textContent = `${you.hand.length} card${you.hand.length === 1 ? "" : "s"}`;
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog();
