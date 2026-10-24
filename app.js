@@ -407,7 +407,7 @@
   function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
-    match = { players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, phase: 0, drewThisTurn: false, ridePerformed: false, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
+    match = { players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, phase: 0, drewThisTurn: false, ridePerformed: false, stridePerformed: false, turnStartGrades: { human: 0, bot: 0 }, pendingStride: null, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
     if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
@@ -1163,6 +1163,30 @@
     if (match.pendingAttack.defenderDone) return;
     completeAttackDefense(!attackHits(match.pendingAttack));
   }
+  function canStrideForSide(side, turnStartGrade = -1) {
+    const ownGrade = Number(cardMap.get(match?.players?.[side]?.vanguard?.cardId)?.grade ?? -1), opponentGrade = Number(cardMap.get(match?.players?.[flipSide(side)]?.vanguard?.cardId)?.grade ?? -1);
+    return (ownGrade >= 3 && opponentGrade >= 3) || Number(turnStartGrade) >= 3;
+  }
+  function isStrideUnit(card) { return /G Unit/i.test(String(card?.type || "")) && !isGGuardian(card) && /\bStride\b/i.test(String(card?.text || "")); }
+  function strideGrade(instance) { const card = cardMap.get(instance?.cardId); return /while paying[^.\n]*stride[^.\n]*grade\s*3/i.test(String(card?.text || "")) ? 3 : Number(card?.grade ?? 0); }
+  function botStrideCost(strideCard, player) {
+    const hand = player.hand || [], vanguard = cardMap.get(player.vanguard?.cardId), heartName = cardMap.get(player.vanguard?.strideHeart?.cardId)?.name;
+    if (/Ultimate\s+Stride/i.test(String(strideCard?.text || ""))) { const payment = hand.find((item) => [vanguard?.name, heartName].includes(cardMap.get(item.cardId)?.name)); return payment ? [payment] : null; }
+    const cards = hand.map((item) => ({ item, grade: strideGrade(item) }));
+    for (const c of cards) if (c.grade >= 3) return [c.item];
+    for (let i=0;i<cards.length;i++) for (let j=i+1;j<cards.length;j++) if (cards[i].grade+cards[j].grade>=3) return [cards[i].item,cards[j].item];
+    for (let i=0;i<cards.length;i++) for (let j=i+1;j<cards.length;j++) for (let k=j+1;k<cards.length;k++) if (cards[i].grade+cards[j].grade+cards[k].grade>=3) return [cards[i].item,cards[j].item,cards[k].item];
+    return null;
+  }
+  function performStrideForPlayer(player, stride, payment) {
+    if (!stride || !payment?.length) return false;
+    payment.forEach((cost) => { player.hand = player.hand.filter((item) => item.uid !== cost.uid); player.drop.push(cost); });
+    const previous = player.vanguard, hearts = (previous?.strideHearts || (previous?.strideHeart ? [previous.strideHeart] : [])).map((item) => ({ ...item }));
+    if (previous) { const old = { ...previous }; delete old.strideHeart; delete old.strideHearts; hearts.push(old); }
+    const heart = hearts.find((item) => !isGDeckCard(cardMap.get(item.cardId)) && !isGGuardian(cardMap.get(item.cardId))) || null;
+    player.vanguard = { ...stride, rested: Boolean(previous?.rested), strideHeart: heart, strideHearts: hearts };
+    return true;
+  }
   function botTurn() {
     if (!match || match.ended) return;
     match.side = "bot"; match.phase = 0; match.players.bot.vanguard && (match.players.bot.vanguard.rested = false); match.players.bot.rear.forEach((x) => x && (x.rested = false));
@@ -1170,19 +1194,25 @@
     renderMatch(); setMessage("Practice Bot is taking its turn…");
     botTimer = setTimeout(() => {
       const bot = match.players.bot;
-      const currentGrade = Number(cardMap.get(bot.vanguard?.cardId)?.grade || 0);
+      const currentGrade = Number(cardMap.get(bot.vanguard?.cardId)?.grade ?? 0); match.turnStartGrades ||= {}; match.turnStartGrades.bot = currentGrade;
       if (canGAssist(bot)) {
         const revealed=[];for(let i=0;i<5&&bot.deck.length;i++)revealed.push(bot.deck.pop());
         const assistGrade=Number(cardMap.get(bot.vanguard?.cardId)?.grade||0)+1,found=revealed.find(item=>isUnitCard(cardMap.get(item.cardId))&&Number(cardMap.get(item.cardId)?.grade)===assistGrade);
-        if(found){bot.hand.push(found);const costs=bot.hand.slice().sort((a,b)=>Number(cardMap.get(a.cardId)?.shield||0)-Number(cardMap.get(b.cardId)?.shield||0)).slice(0,2);bot.hand=bot.hand.filter(item=>!costs.some(cost=>cost.uid===item.uid));bot.removed||=[];bot.removed.push(...costs);addLog("Practice Bot used G Assist, added a grade-up Unit, and removed two hand cards from the game.");}
+        if(found){bot.hand.push(found);const costs=bot.hand.filter(item=>item.uid!==found.uid).sort((a,b)=>Number(cardMap.get(a.cardId)?.shield||0)-Number(cardMap.get(b.cardId)?.shield||0)).slice(0,2);bot.hand=bot.hand.filter(item=>!costs.some(cost=>cost.uid===item.uid));bot.removed||=[];bot.removed.push(...costs);addLog("Practice Bot used G Assist, added a grade-up Unit, and removed two hand cards from the game.");}
         else addLog("Practice Bot used G Assist but found no eligible Unit.");
         bot.deck.push(...revealed.filter(item=>item!==found));shuffle(bot.deck);
       }
-      const ride = bot.hand.map((x) => ({ x, c: cardMap.get(x.cardId) })).filter((item) => item.c && Number(item.c.grade) >= currentGrade && Number(item.c.grade) <= currentGrade + 1).sort((a, b) => Number(b.c.grade) - Number(a.c.grade))[0];
-      if (ride) { bot.hand = bot.hand.filter((x) => x.uid !== ride.x.uid); if (bot.vanguard) bot.soul.push(bot.vanguard); bot.vanguard = { ...ride.x, rested: false }; addLog(`Practice Bot rode ${ride.c.name}.`); }
-      const botGrade = Number(cardMap.get(bot.vanguard?.cardId)?.grade || 0);
-      const strideIndex = botGrade >= 3 ? bot.gDeck.findIndex((item) => !item.faceUp && Number(cardMap.get(item.cardId)?.grade || 0) >= 4 && /G\s*Unit/i.test(cardMap.get(item.cardId)?.type || "") && !isGGuardian(cardMap.get(item.cardId))) : -1;
-      if (strideIndex >= 0) { const stride = bot.gDeck.splice(strideIndex, 1)[0], previous = bot.vanguard, heart = previous?.strideHeart || previous; if (previous?.strideHeart) { const old = { ...previous }; delete old.strideHeart; bot.gZone.push({ ...old, faceUp: true }); } bot.vanguard = { ...stride, rested: false, strideHeart: heart || null }; addLog("Practice Bot strode " + (cardMap.get(stride.cardId)?.name || "a G Unit") + "."); }
+      if (currentGrade < 3) {
+        const nextRide = bot.hand.map((x) => ({ x, c: cardMap.get(x.cardId) })).find((item) => isUnitCard(item.c) && Number(item.c.grade) === currentGrade + 1);
+        const sameGradeRide = nextRide ? null : bot.hand.map((x) => ({ x, c: cardMap.get(x.cardId) })).find((item) => isUnitCard(item.c) && Number(item.c.grade) === currentGrade);
+        const ride = nextRide || sameGradeRide;
+        if (ride) { bot.hand = bot.hand.filter((x) => x.uid !== ride.x.uid); if (bot.vanguard) bot.soul.push(bot.vanguard); bot.vanguard = { ...ride.x, rested: false }; addLog(`Practice Bot ${nextRide ? "rode up to" : "rode"} ${ride.c.name}.`); }
+      } else addLog("Practice Bot is grade 3 or greater and will not make a normal ride.");
+      const botGrade = Number(cardMap.get(bot.vanguard?.cardId)?.grade ?? 0);
+      if (canStrideForSide("bot", match.turnStartGrades.bot)) {
+        const choice = bot.gDeck.filter((item) => !item.faceUp && isStrideUnit(cardMap.get(item.cardId))).map((item) => ({ item, card: cardMap.get(item.cardId), payment: botStrideCost(cardMap.get(item.cardId), bot) })).find((entry) => entry.payment);
+        if (choice) { const strideIndex = bot.gDeck.findIndex((item) => item.uid === choice.item.uid), stride = bot.gDeck.splice(strideIndex, 1)[0]; performStrideForPlayer(bot, stride, choice.payment); match.stridePerformed = true; addLog(`Practice Bot discarded cards to stride ${choice.card.name}.`); }
+      }
       let calls = 0;
       while (bot.rear.includes(null) && calls < 2) { const unit = bot.hand.find((x) => { const card = cardMap.get(x.cardId); return isUnitCard(card) && Number(card.grade || 0) <= Number(cardMap.get(bot.vanguard?.cardId)?.grade || 0); }); if (!unit) break; bot.hand = bot.hand.filter((x) => x.uid !== unit.uid); bot.rear[bot.rear.indexOf(null)] = { ...unit, rested: false }; addLog(`Practice Bot called ${cardMap.get(unit.cardId)?.name}.`); calls++; }
       renderMatch(); setMessage("Practice Bot is attacking…");
@@ -1205,7 +1235,7 @@
   function finishBotTurn() {
     if (!match || match.ended) return;
     match.players.human.vanguard && (match.players.human.vanguard.rested = false); match.players.human.rear.forEach((x) => x && (x.rested = false));
-    clearTurnBonuses("bot"); returnStriddenVanguard("bot"); match.side = "human"; match.phase = 0; match.drewThisTurn = false; match.ridePerformed = false; match.ordersPlayedThisTurn = 0; match.pendingAttack = null; match.selected = null;
+    returnStriddenVanguard("bot"); clearTurnBonuses("bot"); match.side = "human"; match.phase = 0; match.drewThisTurn = false; match.ridePerformed = false; match.stridePerformed = false; match.turnStartGrades ||= {}; match.turnStartGrades.human = Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade ?? -1); match.ordersPlayedThisTurn = 0; match.pendingAttack = null; match.selected = null;
     if (match.initialBotTurn) match.initialBotTurn = false; else match.turn += 1; match.firstTurnComplete = true;
     addLog("Your turn began — advance to Draw to draw a card.");
     setMessage("Your turn — Stand phase."); renderMatch();
@@ -1214,14 +1244,14 @@
     if (!match || match.ended) return;
     if (match.side !== "human" || match.phase !== phases.length - 1 || match.pendingAttack) { toast("Finish the End phase after any pending attack before ending your turn."); return; }
     if (online.role) {
-      addLog(`${match.players.human.name} ended their turn.`); match.firstTurnComplete = true; clearTurnBonuses("human"); returnStriddenVanguard("human"); match.ridePerformed = false; match.ordersPlayedThisTurn = 0; match.selected = null;
+      addLog(`${match.players.human.name} ended their turn.`); match.firstTurnComplete = true; returnStriddenVanguard("human"); clearTurnBonuses("human"); match.ridePerformed = false; match.stridePerformed = false; match.ordersPlayedThisTurn = 0; match.selected = null;
       match.players.human.vanguard && (match.players.human.vanguard.rested = false); match.players.human.rear.forEach((x) => x && (x.rested = false));
       match.side = "bot"; match.phase = 0; match.drewThisTurn = false;
       setMessage(`${match.players.bot.name}'s turn — Stand phase.`); renderMatch(); return;
     }
-    addLog("You ended your turn."); match.firstTurnComplete = true; clearTurnBonuses("human"); returnStriddenVanguard("human"); match.ridePerformed = false; match.ordersPlayedThisTurn = 0; match.selected = null; renderMatch(); botTurn();
+    addLog("You ended your turn."); match.firstTurnComplete = true; returnStriddenVanguard("human"); clearTurnBonuses("human"); match.ridePerformed = false; match.stridePerformed = false; match.ordersPlayedThisTurn = 0; match.selected = null; renderMatch(); botTurn();
   }
-  function returnStriddenVanguard(side) { const player=match?.players?.[side],unit=player?.vanguard;if(!unit?.strideHeart)return;const heart=unit.strideHeart,stride={...unit};delete stride.strideHeart;player.vanguard={...heart};player.gZone.push({...stride,faceUp:true});addLog(`${cardMap.get(stride.cardId)?.name||"The G Unit"} returned face up to the G zone and ${cardMap.get(heart.cardId)?.name||"the heart"} returned to the Vanguard circle.`); }
+  function returnStriddenVanguard(side) { const player=match?.players?.[side],unit=player?.vanguard;if(!unit?.strideHeart)return;const hearts=unit.strideHearts||[unit.strideHeart],heart=hearts.find((item)=>!isGDeckCard(cardMap.get(item.cardId))&&!isGGuardian(cardMap.get(item.cardId)))||unit.strideHeart,stride={...unit};delete stride.strideHeart;delete stride.strideHearts;const gHearts=hearts.filter((item)=>isGDeckCard(cardMap.get(item.cardId))&&!isGGuardian(cardMap.get(item.cardId)));gHearts.forEach((item)=>player.gZone.push({...item,faceUp:true,rested:false}));hearts.filter((item)=>item.uid!==heart.uid&&!gHearts.some((g)=>g.uid===item.uid)).forEach((item)=>player.soul.push(item));player.vanguard={...heart,rested:Boolean(unit.rested)};player.gZone.push({...stride,faceUp:true,rested:false});addLog(`${cardMap.get(stride.cardId)?.name||"The G Unit"} and its G-unit heart cards returned face up to the G zone; ${cardMap.get(heart.cardId)?.name||"the heart"} returned to the Vanguard circle.`); }
   function clearTurnBonuses(side) { const seen=new Set();const walk=(value)=>{if(!value||typeof value!=="object"||seen.has(value))return;seen.add(value);if(value.turnPowerExpiry===side||value.turnPowerExpiry==null){value.turnPowerBoost=0;delete value.turnPowerExpiry;}if(value.turnCriticalExpiry===side||value.turnCriticalExpiry==null){value.turnCriticalBoost=0;delete value.turnCriticalExpiry;}Object.values(value).forEach(walk);};Object.values(match?.players||{}).forEach(walk); }
   function flipTurnBonusOwners(players) { const seen=new Set();const walk=(value)=>{if(!value||typeof value!=="object"||seen.has(value))return;seen.add(value);if(value.turnPowerExpiry)value.turnPowerExpiry=flipSide(value.turnPowerExpiry);if(value.turnCriticalExpiry)value.turnCriticalExpiry=flipSide(value.turnCriticalExpiry);Object.values(value).forEach(walk);};Object.values(players||{}).forEach(walk); }
   function advancePhase() {
@@ -1438,15 +1468,28 @@
       const selectedField = findFieldCard(uid);
       if (match.selected !== uid || selectedField?.side !== "human" || selectedField.zone === "vanguard") { toast("Select one of your Rear-Guards first."); return; }
       moveRearCardToZone(uid, zone); return;
-    } else if (action === "stride" || action.startsWith("stride:")) {
-      if (action === "stride") { if (match.side !== "human" || match.phase !== 3) { toast("Stride during your Stride phase."); return; } openGDeckDialog("stride"); return; }
-      const uid = action.slice("stride:".length); const unitIndex = player.gDeck?.findIndex((item) => item.uid === uid) ?? -1;
-      if (match.side !== "human" || match.phase !== 3) { toast("Stride during your Stride phase."); return; }
-      const unit = unitIndex >= 0 ? player.gDeck.splice(unitIndex, 1)[0] : null; if (!unit) { toast("Choose a G Unit still in your G deck."); return; }
-      if(unit.faceUp||Number(cardMap.get(unit.cardId)?.grade||0)<4||!/G\s*Unit/i.test(cardMap.get(unit.cardId)?.type||"")){toast("Only a face-down G Unit can be used to stride.");player.gDeck.splice(unitIndex,0,unit);return;}
-      const previous=player.vanguard,heart=previous?.strideHeart||previous;
-      if(previous?.strideHeart){const oldStride={...previous};delete oldStride.strideHeart;player.gZone.push({...oldStride,faceUp:true});}
-      player.vanguard = { ...unit, rested: false, strideHeart: heart||null }; match.selected = null; addLog(`${player.name} strode ${cardMap.get(unit.cardId)?.name || "a G Unit"} over ${cardMap.get(heart?.cardId)?.name||"their Vanguard"}. The heart's power is added.`);
+    } else if (action === "stride" || action.startsWith("stride:") || action.startsWith("stride-cost:") || action === "stride-confirm") {
+      if (action === "stride") { if (match.side !== "human" || match.phase !== 3) { toast("Stride during your Stride step."); return; } openGDeckDialog("stride"); return; }
+      if (action.startsWith("stride:")) {
+        const uid = action.slice("stride:".length), stride = player.gDeck.find((item) => item.uid === uid), strideCard = cardMap.get(stride?.cardId);
+        if (match.side !== "human" || match.phase !== 3 || match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human)) { toast("Stride is once per turn and requires both Vanguards at grade 3, or a grade 3 Vanguard at the start of your turn."); return; }
+        if (!stride || stride.faceUp || !isStrideUnit(strideCard)) { toast("Choose a face-down G Unit with a Stride ability."); return; }
+        match.pendingStride = { ownerSide: "human", unitUid: uid, costUids: [], costValue: 0 }; renderStrideCostDialog(); return;
+      }
+      if (action.startsWith("stride-cost:")) {
+        const state = match.pendingStride, uid = action.slice("stride-cost:".length); if (!state || state.ownerSide !== "human") return;
+        const item = player.hand.find((card) => card.uid === uid); if (!item) return;
+        const stride = player.gDeck.find((card) => card.uid === state.unitUid), strideCard = cardMap.get(stride?.cardId), ultimate = /Ultimate\s+Stride/i.test(String(strideCard?.text || ""));
+        if (ultimate) state.costUids = state.costUids.includes(uid) ? [] : [uid];
+        else { const selected = new Set(state.costUids); selected.has(uid) ? selected.delete(uid) : selected.add(uid); state.costUids = [...selected]; }
+        renderStrideCostDialog(); return;
+      }
+      const state = match.pendingStride; if (!state || state.ownerSide !== "human") return;
+      const strideIndex = player.gDeck.findIndex((item) => item.uid === state.unitUid), stride = strideIndex >= 0 ? player.gDeck[strideIndex] : null, strideCard = cardMap.get(stride?.cardId), payment = player.hand.filter((item) => state.costUids.includes(item.uid));
+      const ultimate = /Ultimate\s+Stride/i.test(String(strideCard?.text || "")), names = [cardMap.get(player.vanguard?.cardId)?.name, cardMap.get(player.vanguard?.strideHeart?.cardId)?.name];
+      const validCost = ultimate ? payment.length === 1 && names.includes(cardMap.get(payment[0]?.cardId)?.name) : payment.length > 0 && payment.reduce((sum, item) => sum + strideGrade(item), 0) >= 3;
+      if (!stride || stride.faceUp || !isStrideUnit(strideCard) || !validCost || match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human)) { toast("Choose a legal Stride cost and eligible face-down G Unit."); return; }
+      player.gDeck.splice(strideIndex, 1); performStrideForPlayer(player, stride, payment); match.stridePerformed = true; match.pendingStride = null; $("#stride-cost-dialog").close(); addLog(`${player.name} strode ${strideCard.name} over ${cardMap.get(player.vanguard.strideHeart?.cardId)?.name || "their Vanguard"}.`); return;
     } else if (action.startsWith("gdeck-flip-up:")) {
       const uid=action.slice("gdeck-flip-up:".length),index=player.gDeck.findIndex(item=>item.uid===uid);if(index<0){toast("That card is no longer face down in the G deck.");return;}const instance=player.gDeck.splice(index,1)[0];player.gZone.push({...instance,faceUp:true});addLog(`${player.name} turned ${cardMap.get(instance.cardId)?.name||"a G card"} face up in the G zone.`);
     } else if (action === "gdeck-to-g") {
@@ -1889,20 +1932,35 @@
     }).join("");
     $("#g-guard-cost-dialog").showModal();
   }
+  function renderStrideCostDialog() {
+    const state = match?.pendingStride;
+    if (!state || state.ownerSide !== "human") { if ($("#stride-cost-dialog")?.open) $("#stride-cost-dialog").close(); return; }
+    const player = match.players.human, stride = player.gDeck.find((item) => item.uid === state.unitUid), strideCard = cardMap.get(stride?.cardId);
+    if (!strideCard) { match.pendingStride = null; $("#stride-cost-dialog").close(); return; }
+    const ultimate = /Ultimate\s+Stride/i.test(String(strideCard.text || "")), heartName = cardMap.get(player.vanguard?.strideHeart?.cardId)?.name, vanguardName = cardMap.get(player.vanguard?.cardId)?.name;
+    $("#stride-cost-title").textContent = `Stride ${strideCard.name}`;
+    $("#stride-cost-help").textContent = ultimate ? "Choose a card with the same name as your Vanguard to discard." : `Choose card(s) to discard with total grade 3 or more. Stride grade selected: ${state.costValue || 0}.`;
+    $("#stride-cost-cards").innerHTML = player.hand.map((item) => { const card = cardMap.get(item.cardId), selected = state.costUids.includes(item.uid), allowed = !ultimate || [vanguardName, heartName].includes(card?.name); return card ? `<button class="zone-view-card${selected ? " selected" : ""}${allowed ? "" : " disabled"}" type="button" data-stride-cost="${escapeHtml(item.uid)}" ${allowed ? "" : "disabled"}>${cardImage(card)}<b>${escapeHtml(card.name)}</b><small>${ultimate ? (allowed ? "Same name · discard" : "Does not match Vanguard") : `Stride grade ${strideGrade(item)}${selected ? " · selected" : ""}`}</small></button>` : ""; }).join("") || '<p class="zone-empty-message">No cards in hand to pay the Stride cost.</p>';
+    const selected = player.hand.filter((item) => state.costUids.includes(item.uid));
+    state.costValue = selected.reduce((sum, item) => sum + strideGrade(item), 0);
+    const valid = ultimate ? selected.length === 1 && [vanguardName, heartName].includes(cardMap.get(selected[0].cardId)?.name) : selected.length > 0 && state.costValue >= 3;
+    $("#stride-cost-confirm").disabled = !valid;
+    if (!$("#stride-cost-dialog").open) $("#stride-cost-dialog").showModal();
+  }
   function openGDeckDialog(kind, healUid = "") {
     if (!match) { toast("Start a match first."); return; }
-    if (kind === "stride" && Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade || 0) < 3) { toast("Stride requires a grade 3 or greater Vanguard under the modeled Premium rules."); return; }
+    if (kind === "stride" && (match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human))) { toast("Stride is once per turn. You need both Vanguards at grade 3, or you must have started this turn with a grade 3 Vanguard."); return; }
     const isGuard = kind === "g-guard";
     const player=match.players.human,healCards=player.hand.filter(item=>triggerKind(item)==="heal"),vanguardGrade=Number(cardMap.get(player.vanguard?.cardId)?.grade||0),attackerGrade=Number(cardMap.get(match.players[match.pendingAttack?.attackerSide]?.vanguard?.cardId)?.grade||0),selectedHeal=healCards.find(item=>item.uid===healUid);
     if(isGuard&&(!match.pendingAttack||match.pendingAttack.defenderSide!=="human"||match.pendingAttack.defenderDone||(vanguardGrade<3||attackerGrade<3))){toast("G-Guard needs an active defense with both Vanguards at grade 3 or greater.");return;}
     if(isGuard&&!selectedHeal){openGGuardCostDialog();return;}
     const allCards = match.players.human.gDeck || [];
     const cards = allCards.filter((item) => {
-      const type = cardMap.get(item.cardId)?.type || "";
-      return !item.faceUp && (isGuard ? /G\s*-?Guardian|G\s*-?Guard/i.test(type) : /G\s*Unit/i.test(type) && !/G\s*-?Guardian|G\s*-?Guard/i.test(type));
+      const card = cardMap.get(item.cardId);
+      return !item.faceUp && (isGuard ? isGGuardian(card) : isStrideUnit(card));
     });
     $("#gdeck-dialog-title").textContent = isGuard ? "Choose a G-Guard" : "Choose a G Unit to stride";
-    $("#gdeck-dialog-help").textContent = isGuard ? "Choose a face-down G-Guardian. It adds its shield for this defense and returns face up to your G deck when the attack ends." : "Only face-down G Units can stride. You can turn cards face up here; those cards will no longer be eligible to stride.";
+    $("#gdeck-dialog-help").textContent = isGuard ? "Choose a face-down G-Guardian. It adds its shield for this defense and returns face up to your G deck when the attack ends." : "Stride during your Stride step. Pay the ability cost, place the G Unit on your Vanguard, then return it face up to the G zone at end of turn.";
     const healNotice=$("#g-guard-selected-heal");healNotice.classList.toggle("hidden",!isGuard);if(isGuard)healNotice.textContent="Selected Heal trigger: "+(cardMap.get(selectedHeal.cardId)?.name||"Heal trigger")+" (discarded when you choose a G-Guardian).";
     $("#gdeck-card-list").innerHTML = cards.length ? cards.map((item) => {
       const card = cardMap.get(item.cardId);
@@ -2013,6 +2071,9 @@
   $("#g-assist-none").addEventListener("click",()=>performManualAction("g-assist-none"));
   $("#g-assist-finish").addEventListener("click",()=>performManualAction("g-assist-finish"));  $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const flip=e.target.closest("[data-gdeck-flip]");if(flip){performManualAction("gdeck-flip-up:"+flip.dataset.gdeckFlip);if(match)openGDeckDialog($("#gdeck-dialog").dataset.kind);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
   $("#g-guard-heal-list").addEventListener("click",(event)=>{const button=event.target.closest("[data-g-guard-heal]");if(!button)return;const uid=button.dataset.gGuardHeal;$("#g-guard-cost-dialog").close();openGDeckDialog("g-guard",uid);});
+  $("#stride-cost-cards").addEventListener("click",(event)=>{const button=event.target.closest("[data-stride-cost]");if(button)performManualAction("stride-cost:"+button.dataset.strideCost);});
+  $("#stride-cost-confirm").addEventListener("click",()=>performManualAction("stride-confirm"));
+  ["#stride-cost-cancel","#stride-cost-cancel-button"].forEach((selector)=>$(selector).addEventListener("click",()=>{if(match)match.pendingStride=null;$("#stride-cost-dialog").close();}));
   $("#attack-choice-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
   $("#protect-discard-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-protect-cost]");if(!button)return;const marker=$("#protect-discard-dialog").dataset.markerUid;$("#protect-discard-dialog").close();performManualAction(`guard-perfect:${marker}:${button.dataset.protectCost}`);});
   $("#intercept-card-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-intercept-uid]");if(!button)return;$("#intercept-dialog").close();performManualAction(`intercept:${button.dataset.interceptUid}`);});
