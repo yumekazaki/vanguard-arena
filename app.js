@@ -251,7 +251,17 @@
     const starterCardId = Object.keys(cards).find((id) => Number(cardMap.get(id)?.grade) === 0 && isUnitCard(cardMap.get(id))) || "";
     return { id: crypto.randomUUID?.() || String(Date.now()), name: "Demo Practice Deck", cards, starterCardId };
   }
-  function isGDeckCard(card) { return /G Unit|G Guardian|G-Guard/i.test(String(card?.type || "")+" "+String(card?.name||"")); }
+  function practiceBotDeck() {
+    const cards = {
+      "cfa-7560": 4, "cfa-3570": 4, "cfa-7602": 4, "cfa-5973": 4,
+      "cfa-7528": 2, "cfa-7381": 4, "cfa-7493": 4, "cfa-6870": 1,
+      "cfa-3573": 4, "cfa-6826": 1, "cfa-3575": 4, "cfa-2594": 2,
+      "cfa-5708": 3, "cfa-7557": 3, "cfa-5679": 4, "cfa-7472": 2,
+      "cfa-4789": 3, "cfa-4755": 2, "cfa-7494": 3, "cfa-6635": 3,
+      "cfa-5486": 1, "cfa-4826": 2, "cfa-4757": 1, "cfa-3767": 1
+    };
+    return { id: "practice-bot-83ua", name: "[MLB] deck · Deck Log 83UA", cards, starterCardId: "cfa-6826" };
+  }  function isGDeckCard(card) { return /G Unit|G Guardian|G-Guard/i.test(String(card?.type || "")+" "+String(card?.name||"")); }
   function isGGuardian(card) { const info=(String(card?.type||"")+" "+String(card?.text||"")+" "+String(card?.name||"")).toLowerCase(); return info.includes("g guardian") || info.includes("g-guard") || info.includes("g guard") || (isGDeckCard(card) && Number(card?.grade)>=4 && Number(card?.power||0)===0 && Number(card?.shield||0)>0); }
   function deckCount(deck) { return Object.entries(deck.cards || {}).reduce((total, [id, qty]) => total + (isGDeckCard(cardMap.get(id)) ? 0 : Number(qty || 0)), 0); }
   function gDeckCount(deck) { return Object.entries(deck.cards || {}).reduce((total, [id, qty]) => total + (isGDeckCard(cardMap.get(id)) ? Number(qty || 0) : 0), 0); }
@@ -397,7 +407,7 @@
   function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
-    match = { players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(defaultDeck(), "Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, phase: 0, drewThisTurn: false, ridePerformed: false, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
+    match = { players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, phase: 0, drewThisTurn: false, ridePerformed: false, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingTrigger: null, pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
     if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
