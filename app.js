@@ -389,7 +389,7 @@
     const starterIndex = pile.findIndex((instance) => instance.cardId === starterId);
     const vanguard = starterIndex >= 0 ? { ...pile.splice(starterIndex, 1)[0], rested: false } : null;
     shuffle(pile);
-    return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rear: [null, null, null, null, null], accelZones: 0, giftZones: [], orders: [], crests: [], guardCircle: [], extra: [], gDeck: shuffle(gDeck), gZone: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
+    return { name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rear: [null, null, null, null, null], accelZones: 0, accelTypes: [], giftZones: [], orders: [], crests: [], guardCircle: [], extra: [], gDeck: shuffle(gDeck), gZone: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
   }
   function openPracticeSetup() { $("#practice-setup-dialog").showModal(); }
   function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
@@ -516,14 +516,16 @@
     ["human", "bot"].forEach((side) => {
       const player = match.players[side]; player.accelZones = Math.max(0, Number(player.accelZones) || 0);
       while (player.rear.length < standardRearZones.length + player.accelZones) player.rear.push(null);
+      player.accelTypes ||= [];
+      while (player.accelTypes.length < player.accelZones) player.accelTypes.push("Accel I");
       const zoneIds = [...standardRearZones, ...Array.from({ length: player.accelZones }, (_, i) => `accel-${i + 1}`)];
       zoneIds.forEach((zone, index) => {
         if (zone.startsWith("accel-") && !$(`.field-zone[data-side="${side}"][data-zone="${zone}"]`)) {
-          const row = $(`.${side === "bot" ? "opponent-field" : "human-field"}`); if (row) row.insertAdjacentHTML("beforeend", `<div class="field-zone side-zone accel-zone" data-side="${side}" data-zone="${zone}"><span>ACCEL CIRCLE</span></div>`);
+          const row = $(`#${side}-accel-row`); if (row) row.insertAdjacentHTML("beforeend", `<div class="field-zone side-zone accel-zone" data-side="${side}" data-zone="${zone}"><span>ACCEL CIRCLE</span></div>`);
         }
-        const zoneElement = $(`.field-zone[data-side="${side}"][data-zone="${zone}"]`); const frontRow = $(`.${side === "bot" ? "opponent-field" : "human-field"}`); if (zone.startsWith("accel-") && zoneElement && frontRow && zoneElement.parentElement !== frontRow) frontRow.appendChild(zoneElement); renderZone(side, zone, player.rear[index]);
+        const zoneElement = $(`.field-zone[data-side="${side}"][data-zone="${zone}"]`); const accelRow = $(`#${side}-accel-row`); if (zone.startsWith("accel-") && zoneElement && accelRow && zoneElement.parentElement !== accelRow) accelRow.appendChild(zoneElement); renderZone(side, zone, player.rear[index]);
       });
-      const frontRow = $(`.${side === "bot" ? "opponent-field" : "human-field"}`); if (frontRow) { const leftAccelCount = Math.ceil(player.accelZones / 2); frontRow.style.direction = "ltr"; frontRow.style.gridTemplateColumns = `repeat(${3 + player.accelZones}, minmax(0, 1fr))`; const columns = { "rear-left": leftAccelCount + 1, vanguard: leftAccelCount + 2, "rear-right": leftAccelCount + 3 }; for (let i = 1; i <= player.accelZones; i++) columns[`accel-${i}`] = i % 2 ? leftAccelCount - Math.floor((i - 1) / 2) : leftAccelCount + 4 + Math.floor((i - 1) / 2); Object.entries(columns).forEach(([zoneId, column]) => { const circle = $(`.field-zone[data-side="${side}"][data-zone="${zoneId}"]`); if (circle) circle.style.gridColumn = String(column); }); }
+      const accelRow = $(`#${side}-accel-row`); if (accelRow) { accelRow.style.display = player.accelZones ? "grid" : "none"; accelRow.style.gridTemplateColumns = `repeat(${3 + player.accelZones}, minmax(0, 1fr))`; accelRow.style.width = `calc(68% * ${(3 + player.accelZones) / 3})`; accelRow.style.left = `calc(50% - (68% * ${(3 + player.accelZones) / 3}) / 2)`; const leftAccelCount = Math.ceil(player.accelZones / 2); for (let i = 1; i <= player.accelZones; i++) { const column = i % 2 ? leftAccelCount - Math.floor((i - 1) / 2) : leftAccelCount + 4 + Math.floor((i - 1) / 2); const circle = $(`.field-zone[data-side="${side}"][data-zone="accel-${i}"]`); if (circle) { circle.style.gridColumn = String(column); circle.style.transform = i % 2 ? "translateX(-50%)" : "translateX(50%)"; } } }
     });
             $("#soul-pips").innerHTML = you.soul.slice(0, 7).map(() => `<span class="soul-pip"></span>`).join("");
     $("#hand-count").textContent = `${you.hand.length} card${you.hand.length === 1 ? "" : "s"}`;
@@ -543,12 +545,12 @@
     const c = cardMap.get(instance.cardId); if (!c) return;
     const turnPower = Number(instance.turnPowerBoost || 0), turnCrit = Number(instance.turnCriticalBoost || 0);
     const attackBoost = match.pendingAttack?.attackerUid === instance.uid ? Number(match.pendingAttack.boostPower || 0) : match.pendingAttackSetup?.attackerUid === instance.uid ? Number(match.pendingAttackSetup.boostPower || 0) : 0;
-    const forcePower = match.side === side ? markers.filter((gift) => /^Force I$/i.test(gift.type || "")).length * 10000 : 0; const accelPower = match.side === side && zone.startsWith("accel-") ? 10000 : 0;
+    const accelIndex = zone.startsWith("accel-") ? Number(zone.slice(6)) - 1 : -1; const accelType = accelIndex >= 0 ? (match.players[side].accelTypes?.[accelIndex] || "Accel I") : ""; const accelPower = match.side === side && accelType ? (/II/i.test(accelType) ? 5000 : 10000) : 0; const forcePower = match.side === side ? markers.filter((gift) => /^Force I$/i.test(gift.type || "")).length * 10000 : 0;
     const effectLabels = [];
     if (turnPower) effectLabels.push(`+${Math.round(turnPower / 1000)}k`);
     if (turnCrit) effectLabels.push(`+${turnCrit} CRIT`);
     if (attackBoost) effectLabels.push(`+${Math.round(attackBoost / 1000)}k BOOST · THIS ATTACK`);
-    if (forcePower) effectLabels.push(`+${Math.round(forcePower / 1000)}k FORCE I`); if (accelPower) effectLabels.push("+10k FORCE I · ACCEL · YOUR TURN");
+    if (forcePower) effectLabels.push(`+${Math.round(forcePower / 1000)}k FORCE I`); if (accelPower) effectLabels.push(`+${Math.round(accelPower / 1000)}k ACCEL ${/II/i.test(accelType) ? "II" : "I"} · YOUR TURN`);
     const heartPower = Number(cardMap.get(instance.strideHeart?.cardId)?.power || 0) + Number(instance.strideHeart?.powerBoost || 0) + Number(instance.strideHeart?.turnPowerBoost || 0);
     const calculatedPower = Number(c.power || 0) + heartPower + Number(instance.powerBoost || 0) + turnPower + forcePower + accelPower + attackBoost;
     const guardPower = match.pendingAttack?.targetUid === instance.uid ? Math.max(0, Number(match.pendingAttack.targetPower || 0) - calculatedPower) : 0;
@@ -802,8 +804,8 @@
     if (!panel) return;
     if (attack?.driveCountPrompt && attack.attackerSide === "human" && online.role !== "watcher") {
       $("#attack-choice-title").textContent = "Choose the number of drive checks";
-      $("#attack-choice-help").textContent = "Choose 0–10 drive checks for this Vanguard attack after the defender finishes guarding.";
-      const count = Math.max(1, Math.min(10, Number(attack.maxDriveChecks) || 1));
+      $("#attack-choice-help").textContent = "Resolve this Vanguard drive value after the defender finishes guarding.";
+      const count = Math.max(0, Number(attack.maxDriveChecks) || 0);
       $("#attack-choice-buttons").innerHTML = Array.from({ length: count + 1 }, (_, n) => `<button class="button button-primary" type="button" data-attack-choice="drive-count:${n}">${n} drive check${n === 1 ? "" : "s"}</button>`).join("");
       panel.hidden = false; return;
     }
@@ -973,9 +975,10 @@
     const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid);
     const card = cardMap.get(entry.instance.cardId);
     const forcePower = field && match.side === field.side ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force I$/i.test(gift.type || "")).length * 10000 : 0;
-    const accelPower = field && field.zone.startsWith("accel-") && match.side === field.side ? 10000 : 0; return Number(card?.power || 0) + Number(cardMap.get(entry.instance.strideHeart?.cardId)?.power || 0) + Number(entry.instance.strideHeart?.powerBoost || 0) + Number(entry.instance.strideHeart?.turnPowerBoost || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0) + forcePower + accelPower;
+    const accelIndex = field?.zone.startsWith("accel-") ? Number(field.zone.slice(6)) - 1 : -1; const accelType = accelIndex >= 0 ? (match.players[field.side].accelTypes?.[accelIndex] || "Accel I") : ""; const accelPower = field && accelType && match.side === field.side ? (/II/i.test(accelType) ? 5000 : 10000) : 0; return Number(card?.power || 0) + Number(cardMap.get(entry.instance.strideHeart?.cardId)?.power || 0) + Number(entry.instance.strideHeart?.powerBoost || 0) + Number(entry.instance.strideHeart?.turnPowerBoost || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0) + forcePower + accelPower;
   }
   function attackerCritical(entry) { const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid); const forceCrit = field ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force II$/i.test(gift.type || "")).length : 0; return Math.max(1, Number(cardMap.get(entry.instance.cardId)?.critical || 1) + Number(entry.instance.turnCriticalBoost || 0) + forceCrit); }
+  function getDriveValue(card) { const text = String(card?.text || ""); if (/Triple Drive/i.test(text)) return 3; if (/Twin Drive/i.test(text)) return 2; return 1; }
   function canAttackFromBackRow(field) { const text=String(cardMap.get(field.instance.cardId)?.text||""); return /attack(?:s|ing)? from (?:the )?back row|back row[^.\n]*can attack/i.test(text); }
   function directlyBehind(field) { const rear=match.players[field.side].rear;if(field.zone==="vanguard")return rear[3]||null;if(field.zone==="rear-left")return rear[2]||null;if(field.zone==="rear-right")return rear[4]||null;return null; }
   function resolveHumanAttack() {
@@ -1013,8 +1016,8 @@
     else {index=defender.rear.findIndex(unit=>unit?.uid===targetUid);target=index>=0?defender.rear[index]:null;const targetZone=index===0?"rear-left":index===1?"rear-right":index>=5?`accel-${index-4}`:"";if(targetZone!==zone)target=null;}
     if(!target){toast("That attack target is no longer in its circle.");return;}
     attacker.instance.rested=true;
-    const attackerCard=cardMap.get(attacker.instance.cardId),driveChecks=attacker.zone==="vanguard"?10:0;
-    match.pendingAttack={attacker:attackerCard?.name||"unit",attackerUid:attacker.instance.uid,attackerSide:setup.attackerSide,attackerZone:attacker.zone,defenderSide,targetUid,targetZone:zone,boostPower:Number(setup.boostPower||0),power:attackerPower(attacker)+Number(setup.boostPower||0),targetPower:attackerPower({instance:target}),critical:attackerCritical(attacker),guardCards:[],driveChecksRemaining:0,maxDriveChecks:driveChecks,driveCountPrompt:false,driveCountChosen:false,awaitingDrive:false};
+    const attackerCard=cardMap.get(attacker.instance.cardId),driveChecks=attacker.zone==="vanguard"?getDriveValue(attackerCard):0;
+    match.pendingAttack={attacker:attackerCard?.name||"unit",attackerUid:attacker.instance.uid,attackerSide:setup.attackerSide,attackerZone:attacker.zone,defenderSide,targetUid,targetZone:zone,boostPower:Number(setup.boostPower||0),power:attackerPower(attacker)+Number(setup.boostPower||0),targetPower:attackerPower({instance:target}),critical:attackerCritical(attacker),guardCards:[],driveChecksRemaining:driveChecks,maxDriveChecks:driveChecks,driveCountPrompt:false,driveCountChosen:true,awaitingDrive:driveChecks>0};
     match.pendingAttackSetup=null;$("#attack-prompt-dialog").close();addLog(`${match.pendingAttack.attacker} attacked ${match.players[defenderSide].name}'s ${zone==="vanguard"?"Vanguard":"Rear-Guard"}.`);
     if (!online.role && defenderSide === "bot") { practiceBotDefend(); return; }
     setMessage(`${match.players[defenderSide].name} is defending — choose Guard or No guard.`);renderMatch();
@@ -1142,7 +1145,7 @@
     const attacker = [bot.vanguard, ...bot.rear].find((x) => x?.uid === uid); if (!attacker) { nextBotAttack(); return; }
     const c = cardMap.get(attacker.cardId), field = findFieldCard(uid); if (!field) { nextBotAttack(); return; }
     attacker.rested = true; const human = match.players.human; const frontRear = human.rear.map((unit, index) => ({ unit, zone: index === 0 ? "rear-left" : index === 1 ? "rear-right" : index >= 5 ? "accel-" + (index - 4) : "" })).filter((item) => item.unit && item.zone); const attackRear = frontRear.length && Math.random() < 0.33; const target = attackRear ? frontRear[Math.floor(Math.random() * frontRear.length)].unit : human.vanguard; const targetZone = attackRear ? frontRear.find((item) => item.unit.uid === target.uid).zone : "vanguard"; const targetPower = target ? attackerPower({ instance: target }) : 0;
-    const cardText = String(c?.text || ""), driveCount = field.zone === "vanguard" ? (/Triple Drive/i.test(cardText) ? 3 : Number(c?.grade || 0) >= 3 || /Twin Drive/i.test(cardText) ? 2 : 1) : 0;
+    const driveCount = field.zone === "vanguard" ? getDriveValue(c) : 0;
     match.pendingAttack = { attacker: c?.name || "unit", attackerUid: uid, attackerSide: "bot", attackerZone: field.zone, defenderSide: "human", targetUid: target?.uid, targetZone, power: attackerPower(field), targetPower, critical: attackerCritical(field), guardCards: [], driveChecksRemaining: driveCount, maxDriveChecks: driveCount, driveCountChosen: true, driveCountPrompt: false };
     match.selected = null; setMessage("Practice Bot attacks with " + (c?.name || "a unit") + (targetZone === "vanguard" ? "" : " at your " + (targetZone.startsWith("accel-") ? "Accel circle" : "Rear-Guard")) + ". Guard or take the hit."); renderMatch();
   }
@@ -1354,7 +1357,7 @@
       if (!zones.includes(zone)) { toast("Choose a circle for the Force marker."); return; }
       player.giftZones.push({ type, zone }); player.gifts = (player.gifts || 0) + 1; const stackCount = player.giftZones.filter((gift) => gift.zone === zone && gift.type === type).length; addLog(`${player.name} placed ${type} on ${zone}${stackCount > 1 ? ` (stack ${stackCount})` : ""}.`);
     } else if (action.startsWith("gift-accel:")) {
-      const type = action.slice("gift-accel:".length); player.accelZones = (player.accelZones || 0) + 1; player.rear.push(null); player.gifts = (player.gifts || 0) + 1; addLog(`${player.name} created an ${type} circle.`);
+      const type = action.slice("gift-accel:".length); player.accelZones = (player.accelZones || 0) + 1; player.accelTypes ||= []; player.accelTypes.push(type); player.rear.push(null); player.gifts = (player.gifts || 0) + 1; if (/II/i.test(type)) { const drawn = draw(match.side); addLog(drawn ? `${player.name} drew a card for Accel II.` : `${player.name} could not draw for Accel II because the deck is empty.`); } addLog(`${player.name} created an ${type} circle.`);
     } else if (action === "shuffle") {
       shuffle(player.deck); addLog(`${player.name} shuffled their deck.`);
     } else if (action.startsWith("move-rear-to:")) {
