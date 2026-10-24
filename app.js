@@ -1384,8 +1384,8 @@
       if (!player.gZone?.length) { toast("Your G zone is empty."); return; }
       player.gDeck.push(player.gZone.shift()); addLog(`${player.name} turned a G-zone card face down and returned it to the G deck.`);
     } else if (action === "g-guard" || action.startsWith("g-guard:")) {
-      if (!match.pendingAttack||match.pendingAttack.defenderSide!=="human") { toast("Use G-Guard while defending an attack."); return; }
-      if (action === "g-guard") { openGDeckDialog("g-guard"); return; }
+      if (!match.pendingAttack||match.pendingAttack.defenderSide!=="human"||match.pendingAttack.defenderDone) { toast("Use G-Guard while you are defending an attack."); return; }
+      if (action === "g-guard") { openGGuardCostDialog(); return; }
       const [,uid,healUid]=action.split(":"),grade=Number(cardMap.get(player.vanguard?.cardId)?.grade||0),healIndex=player.hand.findIndex(item=>item.uid===healUid&&triggerKind(item)==="heal"),index=player.gDeck?.findIndex(item=>item.uid===uid)??-1,guardian=index>=0?cardMap.get(player.gDeck[index].cardId):null;
       if(grade<3||healIndex<0||index<0||!/G\s*-?Guardian|G\s*-?Guard/i.test(guardian?.type||"")){toast("G-Guard needs a grade 3+ Vanguard, a Heal trigger to discard, and a face-down G Guardian.");return;}
       const cost=player.hand.splice(healIndex,1)[0],instance=player.gDeck.splice(index,1)[0];player.guardCircle||=[];match.pendingAttack.guardCards||=[];player.drop.push(cost);player.guardCircle.push(instance);match.pendingAttack.guardCards.push(instance);match.pendingAttack.targetPower+=Number(guardian.shield||0);
@@ -1594,7 +1594,7 @@
     selectedCard = null; selectedZone = null;
     if (online.role === "guest" && match.players?.human) match.players.human.name = online.localName || match.players.human.name;
     if (online.role === "guest" && online.connection?.isRelay) { online.relayStateReceived = true; if (online.joinRetry) { clearInterval(online.joinRetry); online.joinRetry = null; } $("#online-confirm").disabled = false; if ($("#online-dialog").open) $("#online-dialog").close(); }
-    revealLocalMatch(); renderMatch(); if($("#deck-view-dialog").open)openMyDeck(); if($("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); if($("#bind-dialog").open)openBindDialog(); if($("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if($("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human");
+    revealLocalMatch(); renderMatch(); if($("#deck-view-dialog").open)openMyDeck(); if($("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); if($("#bind-dialog").open)openBindDialog(); if($("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind,$("#gdeck-dialog").dataset.gGuardHealUid||""); if($("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human");
   }
   function handleRemoteMessage(message) {
     if (!message || typeof message !== "object") return;
@@ -1796,27 +1796,41 @@
     }).join("");
   }
   function openMyDeck() { if(!match){toast("Start a match to look through your deck.");return;} const cards=match.players.human.deck.slice().reverse(); $("#deck-view-title").textContent="Your deck · "+cards.length+" cards"; $("#deck-view-help").textContent="Choose any card to add to your hand, add a Unit to Soul, or send it to Drop."; $("#deck-view-list").innerHTML=renderInteractiveCards(cards,"deck-action"); if(!$("#deck-view-dialog").open)$("#deck-view-dialog").showModal(); }
-  function openGDeckDialog(kind) {
+  function openGGuardCostDialog() {
+    const attack = match?.pendingAttack, player = match?.players?.human;
+    if (!attack || attack.defenderSide !== "human" || attack.defenderDone) { toast("Use G-Guard while you are defending an attack."); return; }
+    const grade = Number(cardMap.get(player.vanguard?.cardId)?.grade || 0);
+    if (grade < 3) { toast("G-Guard requires a grade 3 or greater Vanguard."); return; }
+    const healCards = player.hand.filter((item) => triggerKind(item) === "heal");
+    if (!healCards.length) { toast("G-Guard requires a Heal trigger in your hand."); return; }
+    $("#g-guard-heal-list").innerHTML = healCards.map((item) => {
+      const card = cardMap.get(item.cardId); if (!card) return "";
+      return '<button class="zone-view-card" type="button" data-g-guard-heal="' + escapeHtml(item.uid) + '">' + cardImage(card) + '<b>Discard ' + escapeHtml(card.name) + '</b><small>Heal trigger · G-Guard cost</small></button>';
+    }).join("");
+    $("#g-guard-cost-dialog").showModal();
+  }
+  function openGDeckDialog(kind, healUid = "") {
     if (!match) { toast("Start a match first."); return; }
     if (kind === "stride" && Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade || 0) < 3) { toast("Stride requires a grade 3 or greater Vanguard under the modeled Premium rules."); return; }
     const isGuard = kind === "g-guard";
-    const player=match.players.human,healCards=player.hand.filter(item=>triggerKind(item)==="heal"),vanguardGrade=Number(cardMap.get(player.vanguard?.cardId)?.grade||0);
-    if(isGuard&&(!match.pendingAttack||match.pendingAttack.defenderSide!=="human"||vanguardGrade<3||!healCards.length)){toast("G-Guard needs an incoming attack, a grade 3 or greater Vanguard, and a Heal trigger to discard.");return;}
+    const player=match.players.human,healCards=player.hand.filter(item=>triggerKind(item)==="heal"),vanguardGrade=Number(cardMap.get(player.vanguard?.cardId)?.grade||0),selectedHeal=healCards.find(item=>item.uid===healUid);
+    if(isGuard&&(!match.pendingAttack||match.pendingAttack.defenderSide!=="human"||match.pendingAttack.defenderDone||vanguardGrade<3)){toast("G-Guard needs an active defense and a grade 3 or greater Vanguard.");return;}
+    if(isGuard&&!selectedHeal){openGGuardCostDialog();return;}
     const allCards = match.players.human.gDeck || [];
     const cards = allCards.filter((item) => {
       const type = cardMap.get(item.cardId)?.type || "";
       return isGuard ? /G\s*-?Guardian|G\s*-?Guard/i.test(type) : /G\s*Unit/i.test(type) && !/G\s*-?Guardian|G\s*-?Guard/i.test(type);
     });
     $("#gdeck-dialog-title").textContent = isGuard ? "Choose a G-Guard" : "Choose a G Unit to stride";
-    $("#gdeck-dialog-help").textContent = isGuard ? "Discard a Heal trigger, then place a face-down G Guardian in your Guardian Circle. Its shield lasts for this attack." : "Only face-down G Units can stride. You can turn cards face up here; those cards will no longer be eligible to stride.";
-    $("#g-guard-cost-wrap").classList.toggle("hidden",!isGuard);$("#g-guard-heal-cost").classList.toggle("hidden",!isGuard);$("#g-guard-heal-cost").innerHTML=healCards.map(item=>`<option value="${escapeHtml(item.uid)}">${escapeHtml(cardMap.get(item.cardId)?.name||"Heal trigger")}</option>`).join("");
+    $("#gdeck-dialog-help").textContent = isGuard ? "Choose a face-down G-Guardian. It adds its shield for this defense and returns face up to your G zone when the attack ends." : "Only face-down G Units can stride. You can turn cards face up here; those cards will no longer be eligible to stride.";
+    const healNotice=$("#g-guard-selected-heal");healNotice.classList.toggle("hidden",!isGuard);if(isGuard)healNotice.textContent="Selected Heal trigger: "+(cardMap.get(selectedHeal.cardId)?.name||"Heal trigger")+" (discarded when you choose a G-Guardian).";
     $("#gdeck-card-list").innerHTML = cards.length ? cards.map((item) => {
       const card = cardMap.get(item.cardId);
       const flip=`<button class="button" type="button" data-gdeck-flip="${escapeHtml(item.uid)}">Flip face up into G zone</button>`;
-      const play=isGuard?`<button class="button button-primary" type="button" data-gdeck-action="g-guard:${escapeHtml(item.uid)}:${escapeHtml($("#g-guard-heal-cost").value)}">G-Guard</button>`:`<button class="button button-primary" type="button" data-gdeck-action="stride:${escapeHtml(item.uid)}">Stride</button>`;
-      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions" hidden>' + play + flip + zoneMoveControls(item,"gdeck") + '</div></article>' : "";
+      const play=isGuard?'<button class="button button-primary" type="button" data-gdeck-action="g-guard:'+escapeHtml(item.uid)+':'+escapeHtml(selectedHeal.uid)+'">Guard with this G-Guardian</button>':'<button class="button button-primary" type="button" data-gdeck-action="stride:'+escapeHtml(item.uid)+'">Stride</button>';
+      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions"' + (isGuard ? '' : ' hidden') + '>' + play + (isGuard ? '' : flip + zoneMoveControls(item,"gdeck")) + '</div></article>' : "";
     }).join("") : '<p class="zone-empty-message">No ' + (isGuard ? "G Guardians" : "G Units") + ' are available in your G deck.</p>';
-    $("#gdeck-dialog").dataset.kind = kind;
+    $("#gdeck-dialog").dataset.kind = kind; $("#gdeck-dialog").dataset.gGuardHealUid = isGuard ? selectedHeal.uid : "";
     if (!$("#gdeck-dialog").open) $("#gdeck-dialog").showModal();
   }
   function renderSharedReveal() { const reveal=match?.revealed;if(!reveal?.cards?.length)return;const canAct=reveal.owner==="human"&&online.role!=="watcher";$("#reveal-dialog-title").textContent="Revealed cards · "+reveal.cards.length;$("#reveal-dialog-help").textContent=canAct?"Both players can see these cards. Move each to hand, Soul, or Drop, or finish looking to return the rest to the deck.":match.players.human.name+" revealed these cards. Both players can see them.";$("#reveal-card-list").innerHTML=renderInteractiveCards(reveal.cards,"reveal-action",canAct);$("#reveal-done").classList.toggle("hidden",!canAct);$("#reveal-close").classList.toggle("hidden",canAct);if(!$("#reveal-dialog").open)$("#reveal-dialog").showModal(); }
@@ -1827,7 +1841,7 @@
     if (action === "intercept") { openInterceptDialog(); return; }
     if (online.role === "watcher") { toast("Spectators can watch but cannot change the match."); return; }
     if (action === "soul-blast") { openSoulDialog(true); return; }
-    if (action === "stride" || action === "g-guard") { if(action === "g-guard" && !match?.pendingAttack){toast("Use G-guard while defending an attack.");return;} openGDeckDialog(action); return; }
+    if (action === "stride") { openGDeckDialog(action); return; } if (action === "g-guard") { openGGuardCostDialog(); return; }
     if (action === "counter-blast" || action === "counter-charge" || action === "heal-damage") { openDamageDialog(action); return; }
     if (action.startsWith("attack-choice:") || action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done") { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.connection.send({type:"action",action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
     if (action === "reveal-top-cards") { if (!match) { toast("Start a match first."); return; } $("#reveal-count-dialog").showModal(); return; }
@@ -1916,7 +1930,7 @@
   $("#deck-view-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
   $("#reveal-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const action=e.target.closest("[data-peek-action]");if(action)performManualAction(action.dataset.peekAction);});
   $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const flip=e.target.closest("[data-gdeck-flip]");if(flip){performManualAction("gdeck-flip-up:"+flip.dataset.gdeckFlip);if(match)openGDeckDialog($("#gdeck-dialog").dataset.kind);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
-  $("#g-guard-heal-cost").addEventListener("change",()=>{if($("#gdeck-dialog").open&&$("#gdeck-dialog").dataset.kind==="g-guard")openGDeckDialog("g-guard");});
+  $("#g-guard-heal-list").addEventListener("click",(event)=>{const button=event.target.closest("[data-g-guard-heal]");if(!button)return;const uid=button.dataset.gGuardHeal;$("#g-guard-cost-dialog").close();openGDeckDialog("g-guard",uid);});
   $("#attack-choice-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
   $("#protect-discard-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-protect-cost]");if(!button)return;const marker=$("#protect-discard-dialog").dataset.markerUid;$("#protect-discard-dialog").close();performManualAction(`guard-perfect:${marker}:${button.dataset.protectCost}`);});
   $("#intercept-card-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-intercept-uid]");if(!button)return;$("#intercept-dialog").close();performManualAction(`intercept:${button.dataset.interceptUid}`);});
