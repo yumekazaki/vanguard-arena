@@ -519,12 +519,13 @@
       const zoneIds = [...standardRearZones, ...Array.from({ length: player.accelZones }, (_, i) => `accel-${i + 1}`)];
       zoneIds.forEach((zone, index) => {
         if (zone.startsWith("accel-") && !$(`.field-zone[data-side="${side}"][data-zone="${zone}"]`)) {
-          const row = $(`#${side}-accel-row`); if (row) row.insertAdjacentHTML("beforeend", `<div class="field-zone accel-zone" data-side="${side}" data-zone="${zone}"><span>ACCEL CIRCLE</span></div>`);
+          const row = $(`.${side === "bot" ? "opponent-field" : "human-field"}`); if (row) row.insertAdjacentHTML("beforeend", `<div class="field-zone side-zone accel-zone" data-side="${side}" data-zone="${zone}"><span>ACCEL CIRCLE</span></div>`);
         }
-        renderZone(side, zone, player.rear[index]);
+        const zoneElement = $(`.field-zone[data-side="${side}"][data-zone="${zone}"]`); const frontRow = $(`.${side === "bot" ? "opponent-field" : "human-field"}`); if (zone.startsWith("accel-") && zoneElement && frontRow && zoneElement.parentElement !== frontRow) frontRow.appendChild(zoneElement); renderZone(side, zone, player.rear[index]);
       });
     });
-    $("#soul-pips").innerHTML = you.soul.slice(0, 7).map(() => `<span class="soul-pip"></span>`).join("");
+      const frontRow = $(`.${side === "bot" ? "opponent-field" : "human-field"}`); if (frontRow) { const leftAccelCount = Math.ceil(player.accelZones / 2); frontRow.style.direction = "ltr"; frontRow.style.gridTemplateColumns = `repeat(${3 + player.accelZones}, minmax(0, 1fr))`; const columns = { "rear-left": leftAccelCount + 1, vanguard: leftAccelCount + 2, "rear-right": leftAccelCount + 3 }; for (let i = 1; i <= player.accelZones; i++) columns[`accel-${i}`] = i % 2 ? leftAccelCount - Math.floor((i - 1) / 2) : leftAccelCount + 3 + Math.floor((i - 1) / 2); Object.entries(columns).forEach(([zoneId, column]) => { const circle = $(`.field-zone[data-side="${side}"][data-zone="${zoneId}"]`); if (circle) circle.style.gridColumn = String(column); }); }
+        $("#soul-pips").innerHTML = you.soul.slice(0, 7).map(() => `<span class="soul-pip"></span>`).join("");
     $("#hand-count").textContent = `${you.hand.length} card${you.hand.length === 1 ? "" : "s"}`;
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog();
@@ -542,14 +543,14 @@
     const c = cardMap.get(instance.cardId); if (!c) return;
     const turnPower = Number(instance.turnPowerBoost || 0), turnCrit = Number(instance.turnCriticalBoost || 0);
     const attackBoost = match.pendingAttack?.attackerUid === instance.uid ? Number(match.pendingAttack.boostPower || 0) : match.pendingAttackSetup?.attackerUid === instance.uid ? Number(match.pendingAttackSetup.boostPower || 0) : 0;
-    const forcePower = match.side === side ? markers.filter((gift) => /^Force I$/i.test(gift.type || "")).length * 10000 : 0;
+    const forcePower = match.side === side ? markers.filter((gift) => /^Force I$/i.test(gift.type || "")).length * 10000 : 0; const accelPower = match.side === side && zone.startsWith("accel-") ? 10000 : 0;
     const effectLabels = [];
     if (turnPower) effectLabels.push(`+${Math.round(turnPower / 1000)}k`);
     if (turnCrit) effectLabels.push(`+${turnCrit} CRIT`);
     if (attackBoost) effectLabels.push(`+${Math.round(attackBoost / 1000)}k BOOST · THIS ATTACK`);
-    if (forcePower) effectLabels.push(`+${Math.round(forcePower / 1000)}k FORCE I`);
+    if (forcePower) effectLabels.push(`+${Math.round(forcePower / 1000)}k FORCE I`); if (accelPower) effectLabels.push("+10k ACCEL · YOUR TURN");
     const heartPower = Number(cardMap.get(instance.strideHeart?.cardId)?.power || 0) + Number(instance.strideHeart?.powerBoost || 0) + Number(instance.strideHeart?.turnPowerBoost || 0);
-    const calculatedPower = Number(c.power || 0) + heartPower + Number(instance.powerBoost || 0) + turnPower + forcePower + attackBoost;
+    const calculatedPower = Number(c.power || 0) + heartPower + Number(instance.powerBoost || 0) + turnPower + forcePower + accelPower + attackBoost;
     const guardPower = match.pendingAttack?.targetUid === instance.uid ? Math.max(0, Number(match.pendingAttack.targetPower || 0) - calculatedPower) : 0;
     const effectivePower = calculatedPower + guardPower;
     const effectivePowerLabel = effectivePower.toLocaleString();
@@ -617,10 +618,10 @@
     } else if (field?.side === "human") {
       if (field.zone === "vanguard") {
         if (match.phase === 4 && !match.pendingAttack) actions.push(["attack", "Attack"]);
-        actions.push(["view-selected-soul", "View Soul"], ["rest-selected", field.instance.rested ? "Stand" : "Rest"], ["alter-power", "Alter power"]);
+        actions.push(["view-selected-soul", "View Soul"], ["rest-selected", field.instance.rested ? "Stand" : "Rest"], ["selected-to-soul", "Put into Soul"], ["alter-power", "Alter power"]);
       } else {
         if (match.phase === 4 && !match.pendingAttack) actions.push(["attack", "Attack"]);
-        actions.push(["rest-selected", field.instance.rested ? "Stand" : "Rest"], ["move-select", "Move / Swap Rear-Guard"], ["selected-to-hand", "Return to hand"], ["selected-to-top", "Return to deck top"], ["selected-to-bottom", "Return to deck bottom"], ["selected-to-drop", "Move to Drop"], ["bind", "Move to Bind"], ["alter-power", "Alter power"]);
+        actions.push(["rest-selected", field.instance.rested ? "Stand" : "Rest"], ["move-select", "Move / Swap Rear-Guard"], ["selected-to-hand", "Return to hand"], ["selected-to-soul", "Put into Soul"], ["selected-to-top", "Return to deck top"], ["selected-to-bottom", "Return to deck bottom"], ["selected-to-drop", "Move to Drop"], ["bind", "Move to Bind"], ["alter-power", "Alter power"]);
       }
     }
     $("#context-menu-title").textContent = card.name;
@@ -972,7 +973,7 @@
     const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid);
     const card = cardMap.get(entry.instance.cardId);
     const forcePower = field && match.side === field.side ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force I$/i.test(gift.type || "")).length * 10000 : 0;
-    return Number(card?.power || 0) + Number(cardMap.get(entry.instance.strideHeart?.cardId)?.power || 0) + Number(entry.instance.strideHeart?.powerBoost || 0) + Number(entry.instance.strideHeart?.turnPowerBoost || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0) + forcePower;
+    const accelPower = field && field.zone.startsWith("accel-") && match.side === field.side ? 10000 : 0; return Number(card?.power || 0) + Number(cardMap.get(entry.instance.strideHeart?.cardId)?.power || 0) + Number(entry.instance.strideHeart?.powerBoost || 0) + Number(entry.instance.strideHeart?.turnPowerBoost || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0) + forcePower + accelPower;
   }
   function attackerCritical(entry) { const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid); const forceCrit = field ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force II$/i.test(gift.type || "")).length : 0; return Math.max(1, Number(cardMap.get(entry.instance.cardId)?.critical || 1) + Number(entry.instance.turnCriticalBoost || 0) + forceCrit); }
   function canAttackFromBackRow(field) { const text=String(cardMap.get(field.instance.cardId)?.text||""); return /attack(?:s|ing)? from (?:the )?back row|back row[^.\n]*can attack/i.test(text); }
@@ -1669,12 +1670,13 @@
       else if (role === "watcher") connection.send({ type: "watch", name: online.localName });
       else if (connection.isRelay) { setMessage("Invite link ready — waiting for your friend to join."); setConnectionPill("WAITING"); sendOnlineSnapshot(); }
       else { setMessage("Opponent connected — waiting for their deck."); sendOnlineSnapshot(); }
-      if (role !== "host" || !connection.isRelay) { $("#match-status").textContent = "ONLINE · CONNECTED"; setConnectionPill("CONNECTED"); }
+      if (role !== "host" || !connection.isRelay) { $("#match-status").textContent = "ONLINE · CONNECTED"; setConnectionPill("CONNECTED"); } const reconnectButton = $("#reconnect-match"); if (reconnectButton) reconnectButton.hidden = true;
     });
     connection.on("data", handleRemoteMessage);
-    connection.on("close", () => { $("#match-status").textContent = "ONLINE · DISCONNECTED"; setConnectionPill("DISCONNECTED"); toast("Friend disconnected. The match is still on this device."); });
+    connection.on("close", () => { $("#match-status").textContent = "ONLINE · DISCONNECTED"; setConnectionPill("DISCONNECTED"); const reconnectButton = $("#reconnect-match"); if (role === "guest" && reconnectButton) reconnectButton.hidden = false; toast("Connection lost. Reconnect to continue this match."); });
     connection.on("error", onlinePeerError);
   }
+  function reconnectOnlineMatch() { if (online.role !== "guest" || !online.roomId) { toast("Rejoin using the room code and password."); return; } if (online.joinRetry) { clearInterval(online.joinRetry); online.joinRetry = null; } const wasRelay = Boolean(online.connection?.isRelay); online.connection?.close?.(); if (wasRelay) bindOnlineConnection(createRelayConnection(online.roomId, "guest"), "guest"); else if (online.peer && !online.peer.destroyed) bindOnlineConnection(online.peer.connect(online.roomId, { reliable: true }), "guest"); else { toast("Rejoin using the room code and password."); return; } setConnectionPill("CONNECTING"); }
   function beginHosting() {
     if (!selectOnlineDeck()) return;
     if (!account.client) { setOnlineError("Room discovery needs the configured Supabase connection."); return; }
@@ -1865,6 +1867,7 @@
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });
   $("#copy-spectate").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#spectate-link").value); toast("Spectator link copied."); } catch { $("#spectate-link").select(); document.execCommand("copy"); toast("Spectator link copied."); } });
   $("#new-match").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#empty-start").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#practice-start-confirm").addEventListener("click", () => { const firstSide = $("#practice-first-player").value; $("#practice-setup-dialog").close(); startMatch(null, firstSide); }); $("#reset-match").addEventListener("click", newMatchButton);
+  $("#reconnect-match")?.addEventListener("click", reconnectOnlineMatch);
   $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#finish-attack").addEventListener("click", () => performOnlineAction("finishAttack")); $("#intercept-card").addEventListener("click", () => performManualAction("intercept")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#power-change-apply").addEventListener("click", () => { const value = Number($("#power-change-value").value); if (!Number.isFinite(value)) { toast("Enter a valid power amount."); return; } $("#power-input-dialog").close(); performManualAction(`set-power:${value}`); });
