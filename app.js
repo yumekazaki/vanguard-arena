@@ -548,7 +548,7 @@
     if (turnPower) effectLabels.push(`+${Math.round(turnPower / 1000)}k`);
     if (turnCrit) effectLabels.push(`+${turnCrit} CRIT`);
     if (attackBoost) effectLabels.push(`+${Math.round(attackBoost / 1000)}k BOOST · THIS ATTACK`);
-    if (forcePower) effectLabels.push(`+${Math.round(forcePower / 1000)}k FORCE I`); if (accelPower) effectLabels.push("+10k ACCEL · YOUR TURN");
+    if (forcePower) effectLabels.push(`+${Math.round(forcePower / 1000)}k FORCE I`); if (accelPower) effectLabels.push("+10k FORCE I · ACCEL · YOUR TURN");
     const heartPower = Number(cardMap.get(instance.strideHeart?.cardId)?.power || 0) + Number(instance.strideHeart?.powerBoost || 0) + Number(instance.strideHeart?.turnPowerBoost || 0);
     const calculatedPower = Number(c.power || 0) + heartPower + Number(instance.powerBoost || 0) + turnPower + forcePower + accelPower + attackBoost;
     const guardPower = match.pendingAttack?.targetUid === instance.uid ? Math.max(0, Number(match.pendingAttack.targetPower || 0) - calculatedPower) : 0;
@@ -802,8 +802,8 @@
     if (!panel) return;
     if (attack?.driveCountPrompt && attack.attackerSide === "human" && online.role !== "watcher") {
       $("#attack-choice-title").textContent = "Choose the number of drive checks";
-      $("#attack-choice-help").textContent = "Choose how many checks this Vanguard performs after the defender finishes guarding.";
-      const count = Math.max(1, Number(attack.maxDriveChecks) || 1);
+      $("#attack-choice-help").textContent = "Choose 0–10 drive checks for this Vanguard attack after the defender finishes guarding.";
+      const count = Math.max(1, Math.min(10, Number(attack.maxDriveChecks) || 1));
       $("#attack-choice-buttons").innerHTML = Array.from({ length: count + 1 }, (_, n) => `<button class="button button-primary" type="button" data-attack-choice="drive-count:${n}">${n} drive check${n === 1 ? "" : "s"}</button>`).join("");
       panel.hidden = false; return;
     }
@@ -1013,7 +1013,7 @@
     else {index=defender.rear.findIndex(unit=>unit?.uid===targetUid);target=index>=0?defender.rear[index]:null;const targetZone=index===0?"rear-left":index===1?"rear-right":index>=5?`accel-${index-4}`:"";if(targetZone!==zone)target=null;}
     if(!target){toast("That attack target is no longer in its circle.");return;}
     attacker.instance.rested=true;
-    const attackerCard=cardMap.get(attacker.instance.cardId),driveText=String(attackerCard?.text||""),driveChecks=attacker.zone==="vanguard"?(/Triple Drive/i.test(driveText)?3:Number(attackerCard?.grade||0)>=3||/Twin Drive/i.test(driveText)?2:1):0;
+    const attackerCard=cardMap.get(attacker.instance.cardId),driveChecks=attacker.zone==="vanguard"?10:0;
     match.pendingAttack={attacker:attackerCard?.name||"unit",attackerUid:attacker.instance.uid,attackerSide:setup.attackerSide,attackerZone:attacker.zone,defenderSide,targetUid,targetZone:zone,boostPower:Number(setup.boostPower||0),power:attackerPower(attacker)+Number(setup.boostPower||0),targetPower:attackerPower({instance:target}),critical:attackerCritical(attacker),guardCards:[],driveChecksRemaining:0,maxDriveChecks:driveChecks,driveCountPrompt:false,driveCountChosen:false,awaitingDrive:false};
     match.pendingAttackSetup=null;$("#attack-prompt-dialog").close();addLog(`${match.pendingAttack.attacker} attacked ${match.players[defenderSide].name}'s ${zone==="vanguard"?"Vanguard":"Rear-Guard"}.`);
     if (!online.role && defenderSide === "bot") { practiceBotDefend(); return; }
@@ -1200,7 +1200,7 @@
       addLog(`${player.name} returned ${cardMap.get(instance.cardId)?.name || "a card"} to the ${action === "hand-to-top" ? "top" : "bottom"} of the deck.`);
     } else if (action === "damage-check" || action === "drive-check" || action === "trigger-check") {
       if(action==="drive-check"&&(!match.pendingAttack||match.pendingAttack.attackerSide!=="human"||match.pendingAttack.attackerZone!=="vanguard"||Number(match.pendingAttack.driveChecksRemaining||0)<=0)){toast("Only your Vanguard can perform a drive check, during its attack.");return;}
-      if(action==="drive-check"){if(!player.deck.length){toast("Your deck is empty.");return;}match.pendingAttack.driveChecksRemaining-=1;}
+      if(action==="drive-check"){if(!player.deck.length){match.pendingAttack.driveChecksRemaining=0;match.pendingAttack.awaitingDrive=true;addLog(`${player.name} has no cards left to reveal; remaining drive checks were skipped.`);resolvePracticeAttackAfterDrives();return;}match.pendingAttack.driveChecksRemaining-=1;}
       const top = player.deck.pop(); if (!top) { toast("Your deck is empty."); return; }
       const kind = triggerKind(top), over = kind === "over";
       if (action === "damage-check") { if (!over) player.damage.push(top); } else if (!over) player.hand.push(top);
