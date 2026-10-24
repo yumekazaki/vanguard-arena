@@ -71,25 +71,8 @@ for (const card of cards.values()) {
     card._powerKnown = true;
   }
 }
-// A few duplicate CFA records have no stat entry while another printing of
-// the same named card does. Use the closest database printing as a last resort.
-const normalizeName = value => String(value || '').normalize('NFKD').toLowerCase().replace(/[^a-z0-9]/g, '');
-const cardsByName = new Map();
-for (const card of cards.values()) {
-  const key = normalizeName(card.name);
-  if (!cardsByName.has(key)) cardsByName.set(key, []);
-  cardsByName.get(key).push(card);
-}
-for (const card of cards.values()) {
-  const candidates = (cardsByName.get(normalizeName(card.name)) || []).filter(other => other !== card);
-  const nearestWith = key => candidates.filter(other => other[key] > 0).sort((a,b) => {
-    const gradeA = a.grade === card.grade ? 0 : (a.grade == null || card.grade == null ? 1 : 2);
-    const gradeB = b.grade === card.grade ? 0 : (b.grade == null || card.grade == null ? 1 : 2);
-    return gradeA - gradeB || Math.abs(a.dbId - card.dbId) - Math.abs(b.dbId - card.dbId);
-  })[0];
-  if (!card._powerKnown && !card.power) { const source = nearestWith('power'); if (source) { card.power = source.power; card._powerKnown = true; } }
-  if (!card._shieldKnown && !card.shield) { const source = nearestWith('shield'); if (source) { card.shield = source.shield; card._shieldKnown = true; } }
-}
+// Do not copy stats from a different printing of the same card name. Reprints can
+// have different grades, power, or shield; missing source values remain unknown.
 // CFA has a few records whose indexed stats do not match their card image.
 // Keep these verified corrections here so a catalog rebuild preserves them.
 const printedStatCorrections = {
@@ -100,8 +83,8 @@ const printedTypeCorrections = { 12245: "Ride Deck Crest" };
 for (const [id, stats] of Object.entries(printedStatCorrections)) {
   const card = cards.get(Number(id));
   if (!card) continue;
-  if (stats.power !== undefined) card.power = stats.power;
-  if (stats.shield !== undefined) card.shield = stats.shield;
+  if (stats.power !== undefined) { card.power = stats.power; card._powerKnown = true; }
+  if (stats.shield !== undefined) { card.shield = stats.shield; card._shieldKnown = true; }
   if (printedTypeCorrections[id]) card.type = printedTypeCorrections[id];
   if (id === "12245") card.grade = null;
 }
@@ -133,6 +116,8 @@ for (const card of cards.values()) {
   card.permission = 'Personal local use';
   card.color = '#a39bff';
   card.glyph = '✦';
+  if (!card._powerKnown) card.power = null;
+  if (!card._shieldKnown) card.shield = null;
   const { _powerKnown, _shieldKnown, ...exportCard } = card;
   result.push(exportCard);
 }
