@@ -1203,7 +1203,7 @@
     return (ownGrade >= 3 && opponentGrade >= 3) || Number(turnStartGrade) >= 3;
   }
   function isStrideUnit(card) { return /G Unit/i.test(String(card?.type || "")) && !isGGuardian(card) && /\bStride\b/i.test(String(card?.text || "")); }
-  function strideGrade(instance) { const card = cardMap.get(instance?.cardId); return /while paying[^.\n]*stride[^.\n]*grade\s*3/i.test(String(card?.text || "")) ? 3 : Number(card?.grade ?? 0); }
+  function strideGrade(instance) { const card=cardMap.get(instance?.cardId),text=String(card?.text||""); const payingForStride=/(?:pay(?:ing)?[^.\n]*stride|stride[^.\n]*(?:pay|cost))/i.test(text); const countsAsGradeThree=/(?:grade\s*(?:is\s*)?(?:regarded|treated|considered)\s*(?:as\s*)?3|(?:regarded|treated|considered)\s+as\s+grade\s*3|counts?\s+as\s+grade\s*3|grade\s*3\s+(?:for|when paying)[^.\n]*stride)/i.test(text); return payingForStride&&countsAsGradeThree?3:Number(card?.grade??0); }
   function botStrideCost(strideCard, player) {
     const hand = player.hand || [], vanguard = cardMap.get(player.vanguard?.cardId), heartName = cardMap.get(player.vanguard?.strideHeart?.cardId)?.name;
     if (/Ultimate\s+Stride/i.test(String(strideCard?.text || ""))) { const payment = hand.find((item) => [vanguard?.name, heartName].includes(cardMap.get(item.cardId)?.name)); return payment ? [payment] : null; }
@@ -2014,7 +2014,7 @@
     if (!strideCard) { match.pendingStride = null; $("#stride-cost-dialog").close(); return; }
     const ultimate = /Ultimate\s+Stride/i.test(String(strideCard.text || "")), heartName = cardMap.get(player.vanguard?.strideHeart?.cardId)?.name, vanguardName = cardMap.get(player.vanguard?.cardId)?.name;
     $("#stride-cost-title").textContent = `Stride ${strideCard.name}`;
-    $("#stride-cost-help").textContent = ultimate ? "Choose a card with the same name as your Vanguard to discard." : `Choose card(s) to discard with total grade 3 or more. Stride grade selected: ${state.costValue || 0}.`;
+    $("#stride-cost-help").textContent = ultimate ? "Choose a card with the same name as your Vanguard to discard." : `Choose card(s) to discard with total grade 3 or more. Cards with a Stride-cost ability may count as grade 3. Selected grade: ${state.costValue || 0}.`;
     $("#stride-cost-cards").innerHTML = player.hand.map((item) => { const card = cardMap.get(item.cardId), selected = state.costUids.includes(item.uid), allowed = !ultimate || [vanguardName, heartName].includes(card?.name); return card ? `<button class="zone-view-card${selected ? " selected" : ""}${allowed ? "" : " disabled"}" type="button" data-stride-cost="${escapeHtml(item.uid)}" ${allowed ? "" : "disabled"}>${cardImage(card)}<b>${escapeHtml(card.name)}</b><small>${ultimate ? (allowed ? "Same name · discard" : "Does not match Vanguard") : `Stride grade ${strideGrade(item)}${selected ? " · selected" : ""}`}</small></button>` : ""; }).join("") || '<p class="zone-empty-message">No cards in hand to pay the Stride cost.</p>';
     const selected = player.hand.filter((item) => state.costUids.includes(item.uid));
     state.costValue = selected.reduce((sum, item) => sum + strideGrade(item), 0);
