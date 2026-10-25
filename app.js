@@ -1843,13 +1843,6 @@
       if(currentMatches)match.pendingAbility=null;
       $("#ability-dialog").close();showNextAbilityPrompt();renderMatch();return;
     }
-      const pending=match.pendingAbility,selection=message.selection||{};
-      pending.costSelections={cb:[...(selection.costSelections?.cb||[])],sb:[...(selection.costSelections?.sb||[])],discard:[...(selection.costSelections?.discard||[])]};
-      pending.effectUid=selection.effectUid||null;pending.callZone=selection.callZone||null;pending.targetUid=selection.targetUid||null;pending.optionalNoTarget=Boolean(selection.optionalNoTarget);
-      if(message.accept){if(!resolveAbility(pending)){renderMatch();return;}}
-      else addLog((cardMap.get(pending.instance.cardId)?.name||"A unit")+" ability was declined.");
-      match.pendingAbility=null;$("#ability-dialog").close();showNextAbilityPrompt();renderMatch();return;
-    }
     if (online.role === "watcher" && message.type === "watch-state") { updateGuestState(message.match); $("#match-status").textContent = "SPECTATING · LIVE"; return; }
     if (online.role === "host" && match?.preMatch && message.type === "setup-roll") { rollOnlineDieFor("bot"); return; }
     if (online.role === "host" && match?.preMatch && message.type === "setup-choice") {
