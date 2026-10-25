@@ -4,6 +4,7 @@ const root = __dirname;
 const bundledCardSpriteDir = process.env.VANGUARD_BUNDLED_CARDSPRITE_DIR || '';
 const upstreamArtBase = 'https://raw.githubusercontent.com/justkidding047356/cardfight-area/c2a5aad1f1e348500f1942a890c7e39a95953719/CardSprite';
 const upstreamArtIds = new Set(JSON.parse(fs.readFileSync(path.join(root, 'source-art-overrides.json'), 'utf8')));
+const printedGradeCorrections = JSON.parse(fs.readFileSync(path.join(root, 'grade-corrections.json'), 'utf8'));
 const sourceDir = path.join(root, 'source-text');
 const artDir = path.join(root, 'full');
 const miniDir = path.join(root, 'mini');
@@ -87,6 +88,11 @@ for (const [id, stats] of Object.entries(printedStatCorrections)) {
   if (stats.shield !== undefined) { card.shield = stats.shield; card._shieldKnown = true; }
   if (printedTypeCorrections[id]) card.type = printedTypeCorrections[id];
   if (id === "12245") card.grade = null;
+}
+// Older source entries omit UnitGrade. These corrections are transcribed from matching card images.
+for (const [id, grade] of Object.entries(printedGradeCorrections)) {
+  const card = cards.get(Number(id));
+  if (card && Number.isInteger(grade)) card.grade = grade;
 }
 const result = [];
 for (const card of cards.values()) {

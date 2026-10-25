@@ -15,6 +15,8 @@ The catalog contains 14,022 records from the Cardfight Area community database s
 
 The official card-list website was showing a maintenance page during this update. This is the latest complete public database snapshot I could verify, but it does not confirm releases published after May 9, 2025.
 
+The snapshot omitted grades for some older records. grade-corrections.json restores the printed grades for 477 units by reading their matching card images from the pinned image archive. Oracle Guardian, Hermes remains unknown because it is an unreleased anime-only entry with no printed card grade; Energy Generator is a Ride Deck Crest rather than a unit.
+
 ## Rebuilding the catalog
 
 From the repository root, run:
@@ -24,3 +26,4 @@ node assets/cards/import-cards.js
 ```
 
 The source data is community-maintained and is not a Bushiroad API. Keep the attribution and source date with this project. Card text and images belong to their respective rights holders; publish them only as permitted.
+
