@@ -517,7 +517,7 @@
     $("#soul-count").textContent = String(you.soul.length);
     $("#human-gdeck-count").textContent = you.gDeck?.length || 0; $("#bot-gdeck-count").textContent = bot.gDeck?.length || 0; $("#human-bind-count").textContent = you.bind?.length || 0; $("#bot-soul-count").textContent = bot.soul?.length || 0;
     $("#human-order-zone").innerHTML = renderOrderCards(you.orders, "human"); $("#bot-order-zone").innerHTML = renderOrderCards(bot.orders, "bot"); $("#human-crest-zone").innerHTML = renderCrests(you.crests); $("#bot-crest-zone").innerHTML = renderCrests(bot.crests);
-    $("#human-gzone").innerHTML = renderGZone(you); $("#bot-gzone").innerHTML = renderGZone(bot);
+    $("#human-gzone").innerHTML = renderGZone(you, true); $("#bot-gzone").innerHTML = renderGZone(bot, false);
     $("#human-guard-circle").innerHTML = renderGuardCircle(you); $("#bot-guard-circle").innerHTML = renderGuardCircle(bot);
     $("#gift-count").textContent = String(you.gifts || 0);
     $(".human-line .player-title small").textContent = `YOUR SIDE · G ${you.gZone?.length || 0} · QUICK SHIELD ${you.quickShields || 0} · PROTECT ${you.protectMarkers || 0}`;
@@ -608,8 +608,8 @@
       $("#g-assist-none").hidden=true; $("#g-assist-finish").hidden=false; $("#g-assist-finish").disabled=state.discardUids.length!==2;
     }
     if (!$("#g-assist-dialog").open) $("#g-assist-dialog").showModal();
-  }  function renderGZone(player) {
-    const faceUp = (player.gZone || []).map((instance) => { const c = cardMap.get(instance.cardId); return c ? `<button class="zone-card" data-card-zoom="${escapeHtml(c.id)}" title="Zoom ${escapeHtml(c.name)}">${escapeHtml(c.name)}</button>` : ""; }).join("");
+  }  function renderGZone(player, canFlip = false) {
+    const faceUp = (player.gZone || []).map((instance) => { const c = cardMap.get(instance.cardId); if (!c) return ""; return instance.faceUp ? `<button class="zone-card" data-card-zoom="${escapeHtml(c.id)}" title="Zoom ${escapeHtml(c.name)}">${escapeHtml(c.name)}</button>` : canFlip ? `<button class="zone-card" type="button" data-gzone-flip-up="${escapeHtml(instance.uid)}" title="Flip this G-zone card face up">Face-down G card · Flip face up</button>` : `<span class="zone-card" aria-label="Face-down G-zone card">Face-down G card</span>`; }).join("");
     const deck = player.gDeck || [], faceDownCount = deck.filter((item) => !item.faceUp).length, faceUpCount = deck.filter((item) => item.faceUp).length;
     return `${faceUp}<span class="zone-empty">${faceDownCount} face down · ${faceUpCount} face up in G deck</span>`;
   }
@@ -1596,7 +1596,9 @@
       if (!stride || stride.faceUp || !isStrideUnit(strideCard) || !validCost || match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human)) { toast("Choose a legal Stride cost and eligible face-down G Unit."); return; }
       player.gDeck.splice(strideIndex, 1); performStrideForPlayer(player, stride, payment); match.stridePerformed = true; match.pendingStride = null; $("#stride-cost-dialog").close(); addLog(`${player.name} strode ${strideCard.name} over ${cardMap.get(player.vanguard.strideHeart?.cardId)?.name || "their Vanguard"}.`); return;
     } else if (action.startsWith("gdeck-flip-up:")) {
-      const uid=action.slice("gdeck-flip-up:".length),index=player.gDeck.findIndex(item=>item.uid===uid);if(index<0){toast("That card is no longer face down in the G deck.");return;}const instance=player.gDeck.splice(index,1)[0];player.gZone.push({...instance,faceUp:true});addLog(`${player.name} turned ${cardMap.get(instance.cardId)?.name||"a G card"} face up in the G zone.`);
+      const uid=action.slice("gdeck-flip-up:".length),index=player.gDeck.findIndex(item=>item.uid===uid);if(index<0){toast("That card is no longer in the G deck.");return;}const instance=player.gDeck.splice(index,1)[0];player.gZone.push({...instance,faceUp:false});addLog(`${player.name} revealed ${cardMap.get(instance.cardId)?.name||"a G card"} and placed it face down in the G zone.`);
+    } else if (action.startsWith("gzone-flip-up:")) {
+      const uid=action.slice("gzone-flip-up:".length),instance=player.gZone?.find(item=>item.uid===uid);if(!instance){toast("That card is no longer in the G zone.");return;}if(instance.faceUp){toast("That G-zone card is already face up.");return;}instance.faceUp=true;addLog(`${player.name} turned a G-zone card face up.`);
     } else if (action === "gdeck-to-g") {
       const unit = player.gDeck?.pop(); if (!unit) { toast("Your G deck is empty."); return; }
       player.gZone.push({ ...unit, faceUp: true }); addLog(`${player.name} placed a G-deck card face up in the G zone.`);
@@ -1606,9 +1608,7 @@
       if (playerZone === "vanguard") player.vanguard = null; else player.rear[field.index] = null;
       player.gZone.push({ ...field.instance, faceUp: true }); match.selected = null; addLog(`${player.name} moved a field unit face up to the G zone.`);
     } else if (action === "flip-g-unit") {
-      if ((player.gDeck || []).some((item) => item.faceUp)) { const item = player.gDeck.find((card) => card.faceUp); item.faceUp = false; addLog(`${player.name} turned a face-up G-deck card face down.`); return; }
-      if (!player.gZone?.length) { toast("Your G zone is empty."); return; }
-      player.gDeck.push(player.gZone.shift()); addLog(`${player.name} turned a G-zone card face down and returned it to the G deck.`);
+      const item=(player.gZone||[]).find(card=>card.faceUp);if(!item){toast("There are no face-up cards in your G zone.");return;}item.faceUp=false;addLog(`${player.name} turned a G-zone card face down.`);
     } else if (action === "g-guard" || action.startsWith("g-guard:")) {
       if (!match.pendingAttack||match.pendingAttack.defenderSide!=="human"||match.pendingAttack.defenderDone) { toast("Use G-Guard while you are defending an attack."); return; }
       if (action === "g-guard") { openGGuardCostDialog(); return; }
@@ -1986,6 +1986,7 @@
     if (online.role === "watcher") { toast("Spectators can watch but cannot change the match."); return; }
     if (online.role === "guest") {
       if (!online.connection?.open) { toast("You are disconnected from the match."); return; }
+      if (action === "guard") { const instance=selectedHandCard(); if(instance&&Number(cardMap.get(instance.cardId)?.shield||0)===0){humanGuard();return;} }
       online.connection.send({ type: "action", action, selected: match?.selected || null }); return;
     }
     ({ draw: drawForHuman, ride: rideHuman, call: callHuman, attack: resolveHumanAttack, guard: humanGuard, noGuard, finishAttack: confirmAttackFinished, endTurn, advance: advancePhase }[action] || (() => {}))();
@@ -2087,9 +2088,9 @@
     const healNotice=$("#g-guard-selected-heal");healNotice.classList.toggle("hidden",!isGuard);if(isGuard)healNotice.textContent="Selected Heal trigger: "+(cardMap.get(selectedHeal.cardId)?.name||"Heal trigger")+" (discarded when you choose a G-Guardian).";
     $("#gdeck-card-list").innerHTML = cards.length ? cards.map((item) => {
       const card = cardMap.get(item.cardId);
-      const flip=`<button class="button" type="button" data-gdeck-flip="${escapeHtml(item.uid)}">Flip face up into G zone</button>`;
+      const flip=`<button class="button" type="button" data-gdeck-flip="${escapeHtml(item.uid)}">Reveal, then place face down in G zone</button>`;
       const play=isGuard?'<button class="button button-primary" type="button" data-gdeck-action="g-guard:'+escapeHtml(item.uid)+':'+escapeHtml(selectedHeal.uid)+'">Guard with this G-Guardian</button>':'<button class="button button-primary" type="button" data-gdeck-action="stride:'+escapeHtml(item.uid)+'">Stride</button>';
-      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions"' + (isInspect ? '' : isGuard ? '' : ' hidden') + '>' + (isInspect ? (!item.faceUp ? flip.replace("Flip face up into G zone", "Reveal selected card into G zone") : "Already revealed") : play + (isGuard ? '' : flip + zoneMoveControls(item,"gdeck"))) + '</div></article>' : "";
+      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions"' + (isInspect ? '' : isGuard ? '' : ' hidden') + '>' + (isInspect ? (!item.faceUp ? flip : "Already revealed") : play + (isGuard ? '' : flip + zoneMoveControls(item,"gdeck"))) + '</div></article>' : "";
     }).join("") : '<p class="zone-empty-message">No ' + (isGuard ? "G Guardians" : "G Units") + ' are available in your G deck.</p>';
     $("#gdeck-dialog").dataset.kind = kind; $("#gdeck-dialog").dataset.gGuardHealUid = isGuard ? selectedHeal.uid : "";
     if (!$("#gdeck-dialog").open) $("#gdeck-dialog").showModal();
@@ -2201,7 +2202,8 @@
   $("#g-assist-content").addEventListener("click",(event)=>{const pick=event.target.closest("[data-gassist-choose]");if(pick){performManualAction("g-assist-pick:"+pick.dataset.gassistChoose);return;}const discard=event.target.closest("[data-gassist-discard]");if(discard)performManualAction("g-assist-discard:"+discard.dataset.gassistDiscard);});
   $("#g-assist-none").addEventListener("click",()=>performManualAction("g-assist-none"));
   $("#open-gdeck").addEventListener("click",()=>openGDeckDialog("inspect"));
-  $("#g-assist-finish").addEventListener("click",()=>performManualAction("g-assist-finish"));  $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const flip=e.target.closest("[data-gdeck-flip]");if(flip){performManualAction("gdeck-flip-up:"+flip.dataset.gdeckFlip);if(match)openGDeckDialog($("#gdeck-dialog").dataset.kind);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
+  $("#g-assist-finish").addEventListener("click",()=>performManualAction("g-assist-finish"));
+  $("#human-gzone").addEventListener("click",(e)=>{const flip=e.target.closest("[data-gzone-flip-up]");if(flip)performManualAction("gzone-flip-up:"+flip.dataset.gzoneFlipUp);else{const zoom=e.target.closest("[data-card-zoom]");if(zoom)showCardDetails(zoom.dataset.cardZoom);}});  $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const flip=e.target.closest("[data-gdeck-flip]");if(flip){performManualAction("gdeck-flip-up:"+flip.dataset.gdeckFlip);if(match)openGDeckDialog($("#gdeck-dialog").dataset.kind);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
   $("#g-guard-heal-list").addEventListener("click",(event)=>{const button=event.target.closest("[data-g-guard-heal]");if(!button)return;const uid=button.dataset.gGuardHeal;$("#g-guard-cost-dialog").close();openGDeckDialog("g-guard",uid);});
   $("#stride-cost-cards").addEventListener("click",(event)=>{const button=event.target.closest("[data-stride-cost]");if(button)performManualAction("stride-cost:"+button.dataset.strideCost);});
   $("#stride-cost-confirm").addEventListener("click",()=>performManualAction("stride-confirm"));
