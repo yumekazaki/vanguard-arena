@@ -1579,15 +1579,14 @@
         const uid = action.slice("stride:".length), stride = player.gDeck.find((item) => item.uid === uid), strideCard = cardMap.get(stride?.cardId);
         if (match.side !== "human" || match.phase !== 3 || match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human)) { toast("Stride is once per turn and requires both Vanguards at grade 3, or a grade 3 Vanguard at the start of your turn."); return; }
         if (!stride || stride.faceUp || !isStrideUnit(strideCard)) { toast("Choose a face-down G Unit with a Stride ability."); return; }
-        match.pendingStride = { ownerSide: "human", unitUid: uid, costUids: [], costValue: 0 }; renderStrideCostDialog(); return;
+        match.pendingStride = { ownerSide: "human", unitUid: uid, costUids: [], costValue: 0 }; if (!online.applyingRemote) renderStrideCostDialog(); return;
       }
       if (action.startsWith("stride-cost:")) {
         const state = match.pendingStride, uid = action.slice("stride-cost:".length); if (!state || state.ownerSide !== "human") return;
         const item = player.hand.find((card) => card.uid === uid); if (!item) return;
         const stride = player.gDeck.find((card) => card.uid === state.unitUid), strideCard = cardMap.get(stride?.cardId), ultimate = /Ultimate\s+Stride/i.test(String(strideCard?.text || ""));
         if (ultimate) state.costUids = state.costUids.includes(uid) ? [] : [uid];
-        else { const selected = new Set(state.costUids); selected.has(uid) ? selected.delete(uid) : selected.add(uid); state.costUids = [...selected]; }
-        renderStrideCostDialog(); return;
+        else { const selected = new Set(state.costUids); selected.has(uid) ? selected.delete(uid) : selected.add(uid); state.costUids = [...selected]; } if (!online.applyingRemote) renderStrideCostDialog(); return;
       }
       const state = match.pendingStride; if (!state || state.ownerSide !== "human") return;
       const strideIndex = player.gDeck.findIndex((item) => item.uid === state.unitUid), stride = strideIndex >= 0 ? player.gDeck[strideIndex] : null, strideCard = cardMap.get(stride?.cardId), payment = player.hand.filter((item) => state.costUids.includes(item.uid));
@@ -2104,6 +2103,13 @@
     if (online.role === "watcher") { toast("Spectators can watch but cannot change the match."); return; }
     if (action === "soul-blast") { openSoulDialog(true); return; }
     if (action === "stride") { openGDeckDialog(action); return; } if (action === "g-guard") { openGGuardCostDialog(); return; }
+    if (online.role === "guest" && (action.startsWith("stride:") || action.startsWith("stride-cost:") || action === "stride-confirm")) {
+      if (!online.connection?.open) { toast("You are disconnected from the match."); return; }
+      manualGameAction(action);
+      renderMatch();
+      online.connection.send({ type: "action", action: `manual:${action}`, selected: match?.selected || null });
+      return;
+    }
     if (action === "counter-blast" || action === "counter-charge" || action === "heal-damage") { openDamageDialog(action); return; }
     if (action === "g-assist" || action === "g-assist-none" || action === "g-assist-finish" || action.startsWith("g-assist-pick:") || action.startsWith("g-assist-discard:") || action.startsWith("superior-ride:") || action.startsWith("attack-choice:") || action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done" || action.startsWith("g-assist") ) { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.connection.send({type:"action",action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("superior-ride:")){["deck-view-dialog","soul-dialog","bind-dialog","drop-dialog","damage-dialog","reveal-dialog"].forEach(id=>{if($("#"+id).open)$("#"+id).close()});} if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
     if (action === "reveal-top-cards") { if (!match) { toast("Start a match first."); return; } $("#reveal-count-dialog").showModal(); return; }
