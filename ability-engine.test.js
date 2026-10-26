@@ -2,7 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const curatedDefinitions = require("./ability-definitions.js");
-const { createCardInstance, parseCardAbilities, createGameEvent, claimGameEvent, eventSubjectMatches, isManuallyActivatable, eventMatchesAbilityTrigger, canPayAbilityCosts, evaluateAbilityConditions, validateRemoteRequest, claimRemoteRequest, registerAbilityDefinitions, validateEffectProgram, resolveEffectProgram, EFFECT_HANDLERS } = require("./ability-engine.js");
+const { createCardInstance, canActivateManualAbility, abilityUsageKey, parseCardAbilities, createGameEvent, claimGameEvent, eventSubjectMatches, isManuallyActivatable, eventMatchesAbilityTrigger, canPayAbilityCosts, evaluateAbilityConditions, validateRemoteRequest, validateAbilityDecision, claimRemoteRequest, registerAbilityDefinitions, validateEffectProgram, resolveEffectProgram, EFFECT_HANDLERS } = require("./ability-engine.js");
 registerAbilityDefinitions(curatedDefinitions);
 test("creates distinct card copies with owner and initial controller identity", () => {
   const first = createCardInstance("card-1", "player-a", "copy-a");
@@ -19,6 +19,27 @@ test("player setup creates its identity before stamping deck instances", () => {
   assert.match(playerSetup, /const playerId\s*=\s*crypto\.randomUUID/);
   assert.match(playerSetup, /cardInstances\(deck, playerId\)/);
   assert.match(playerSetup, /return \{ playerId,/);
+});
+
+test("once-per-turn usage is scoped to exact card instance and ability", () => {
+  const firstCopy = abilityUsageKey(7, "player-a", "copy-a", "card:0");
+  const secondCopy = abilityUsageKey(7, "player-a", "copy-b", "card:0");
+  const secondAbility = abilityUsageKey(7, "player-a", "copy-a", "card:1");
+  assert.notEqual(firstCopy, secondCopy);
+  assert.notEqual(firstCopy, secondAbility);
+  assert.equal(firstCopy, abilityUsageKey(7, "player-a", "copy-a", "card:0"));
+});
+
+test("manual activation legality requires the controller, Main timing, legal zone, costs, conditions, and unused restriction", () => {
+  const ability = parseCardAbilities({ id: "manual-legal", text: "ACT (RC) 1/Turn: COST [CB1] Draw a card." })[0];
+  const context = { cardInstanceId: "copy-a", controllerPlayerId: "player-a", actorPlayerId: "player-a", turnPlayerId: "player-a", phase: "main", inPermittedZone: true, alreadyUsed: false, resources: { faceUpDamage: 1 } };
+  assert.deepEqual(canActivateManualAbility(ability, context), { ok: true });
+  assert.equal(canActivateManualAbility(ability, { ...context, actorPlayerId: "player-b" }).reason, "not-controller");
+  assert.equal(canActivateManualAbility(ability, { ...context, phase: "battle" }).reason, "wrong-timing-window");
+  assert.equal(canActivateManualAbility(ability, { ...context, inPermittedZone: false }).reason, "wrong-zone");
+  assert.equal(canActivateManualAbility(ability, { ...context, alreadyUsed: true }).reason, "usage-restriction");
+  assert.equal(canActivateManualAbility(ability, { ...context, resources: { faceUpDamage: 0 } }).reason, "unpayable-cost");
+  assert.equal(canActivateManualAbility(ability, { ...context, resolutionBlocked: true }).reason, "resolution-in-progress");
 });
 
 test("splits a card's printed AUTO, ACT, and CONT abilities independently", () => {
@@ -219,6 +240,17 @@ test("remote requests require a fresh ID and the current state version", () => {
   assert.deepEqual(validateRemoteRequest(state, request), { ok: false, reason: "duplicate-action" });
   assert.deepEqual(validateRemoteRequest(state, { actionId: "guest-action-2", expectedStateVersion: 3 }), { ok: false, reason: "stale-state-version", expected: 3, current: 4 });
   assert.equal(validateRemoteRequest(state, { expectedStateVersion: 4 }).reason, "missing-action-id");
+});
+
+test("ability decisions validate match, joining-player identity, and exact controlled source", () => {
+  const state = { matchId: "room-1", stateVersion: 3, processedActionIds: [] };
+  const pending = { side: "bot", instance: { uid: "joiner-card", controllerPlayerId: "joiner" }, ability: { id: "card:0" } };
+  const request = { matchId: "room-1", actorPlayerId: "joiner", actionId: "decision-1", expectedStateVersion: 3, selection: { instanceUid: "joiner-card", abilityId: "card:0" } };
+  assert.deepEqual(validateAbilityDecision(state, request, "joiner", pending), { ok: true });
+  assert.equal(validateAbilityDecision(state, { ...request, matchId: "other-room" }, "joiner", pending).reason, "wrong-match");
+  assert.equal(validateAbilityDecision(state, { ...request, actorPlayerId: "host" }, "joiner", pending).reason, "wrong-actor");
+  assert.equal(validateAbilityDecision(state, { ...request, selection: { ...request.selection, instanceUid: "host-card" } }, "joiner", pending).reason, "wrong-ability");
+  assert.equal(validateAbilityDecision(state, { ...request, actorPlayerId: "joiner" }, "joiner", { ...pending, instance: { ...pending.instance, controllerPlayerId: "host" } }).reason, "source-not-controlled");
 });
 
 test("binds a reviewed real Key Anchor, Dabid ability to its original text and typed power effect", () => {

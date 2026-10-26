@@ -172,7 +172,20 @@
       return {id:String(card.id||"")+":"+index,cardId:String(card.id||""),kind,raw,printedText,definition,effects:definition?.effects||null,gb:Number(raw.match(/(?:Generation\s*Break|GB)\s*[-( ]?\s*(\d+)/i)?.[1]||0),once:/\b1\s*\/\s*turn\b|\bonce per turn\b/i.test(raw),requiredLocation:parseAbilityLocation(raw),trigger,costs:costInfo.costs,conditions:conditionInfo.conditions,conditionStatus:hasUnparsedConditions?"needs-review":conditionInfo.conditions.length?"modeled":"no-explicit-condition-detected",choiceStatus:hasUnparsedChoices?"needs-review":"no-explicit-choice-detected",costStatus:hasUnparsedCosts?"needs-review":costInfo.status,implementationStatus:definition?"structured-effect-definition":kind==="AUTO"?(trigger.status==="needs-review"||hasUnparsedConditions||hasUnparsedCosts?"needs-review":"trigger-definition-pending-validation"):kind==="ACT"?"manual-definition-pending-validation":"continuous-definition-pending-validation"};
     });
   }
+  function abilityUsageKey(turnId, playerId, cardInstanceId, abilityId) { if (turnId == null || !playerId || !cardInstanceId || !abilityId) throw new TypeError("Ability usage records require turn, player, card, and ability identities."); return `${turnId}:${playerId}:${cardInstanceId}:${abilityId}`; }
   function isManuallyActivatable(ability) { return ability?.kind === "ACT"; }
+  function canActivateManualAbility(ability, context = {}) {
+    if (!isManuallyActivatable(ability)) return { ok: false, reason: "not-manual" };
+    if (!context.cardInstanceId || !context.controllerPlayerId || context.actorPlayerId !== context.controllerPlayerId) return { ok: false, reason: "not-controller" };
+    if (context.turnPlayerId !== context.actorPlayerId) return { ok: false, reason: "not-turn-player" };
+    if (context.resolutionBlocked) return { ok: false, reason: "resolution-in-progress" };
+    if (context.phase !== "main") return { ok: false, reason: "wrong-timing-window" };
+    if (context.inPermittedZone !== true) return { ok: false, reason: "wrong-zone" };
+    if (ability.once && context.alreadyUsed) return { ok: false, reason: "usage-restriction" };
+    if (!canPayAbilityCosts(ability, context.resources || {})) return { ok: false, reason: "unpayable-cost" };
+    if (context.conditions && !evaluateAbilityConditions(ability, context.conditions)) return { ok: false, reason: "condition-not-met" };
+    return { ok: true };
+  }
   function eventMatchesAbilityTrigger(ability,eventName,event,sourceUid,sourceZone,subjectZone) {
     const trigger=ability?.trigger;
     if(ability?.kind!=="AUTO"||trigger?.status!=="recognized-trigger"||trigger.eventType!==({ride:"card.ridden",place:"card.placed",attack:"unit.attacked",boost:"unit.boosted",hit:"attack.hit"})[eventName])return false;
@@ -242,6 +255,15 @@
     if (!Number.isInteger(expected) || expected !== current) return { ok: false, reason: "stale-state-version", expected, current };
     return { ok: true };
   }
+  function validateAbilityDecision(state, request, expectedPlayerId, pending) {
+    const replay = validateRemoteRequest(state, request);
+    if (!replay.ok) return replay;
+    if (!request.matchId || request.matchId !== state.matchId) return { ok: false, reason: "wrong-match" };
+    if (!expectedPlayerId || request.actorPlayerId !== expectedPlayerId) return { ok: false, reason: "wrong-actor" };
+    if (!pending || pending.instance?.uid !== request.selection?.instanceUid || pending.ability?.id !== request.selection?.abilityId) return { ok: false, reason: "wrong-ability" };
+    if (pending.instance?.controllerPlayerId !== expectedPlayerId) return { ok: false, reason: "source-not-controlled" };
+    return { ok: true };
+  }
   function claimRemoteRequest(state, actionId, limit = 512) {
     if (!state || !actionId || (state.processedActionIds || []).includes(actionId)) return false;
     const processed = state.processedActionIds ||= [];
@@ -260,5 +282,5 @@
     if (subject === "any") return true;
     return false;
   }
-  return Object.freeze({ createCardInstance, parseCardAbilities, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, canPayAbilityCosts, registerAbilityDefinitions, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, compileAutoTrigger, isManuallyActivatable, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, claimGameEvent, validateRemoteRequest, claimRemoteRequest, eventSubjectMatches });
+  return Object.freeze({ createCardInstance, parseCardAbilities, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, canPayAbilityCosts, registerAbilityDefinitions, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, compileAutoTrigger, isManuallyActivatable, canActivateManualAbility, abilityUsageKey, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, claimGameEvent, validateRemoteRequest, validateAbilityDecision, claimRemoteRequest, eventSubjectMatches });
 });
