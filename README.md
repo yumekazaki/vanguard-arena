@@ -24,3 +24,6 @@ A browser project with local practice and two-player online rooms. Without accou
 The card art came from the folders supplied by the user. Card names and available card details were read from the public Cardfight Area database repository. The repository is community-maintained, not an official Bushiroad API. See [`assets/cards/README.md`](assets/cards/README.md) for provenance, coverage, and local update instructions.
 
 Some source records have no grade or clan field, and some supplied images have no matching text record. Those are labeled as unknown or remain in the image gallery. New online rooms use Supabase Realtime broadcasts so they work in browsers without WebRTC support, including console browsers that block peer-to-peer connections. Existing rooms created by older builds still use PeerJS and require WebRTC. Match state is relayed live and is not stored in a match history. Turn controls and zones track manual actions but do not enforce every Premium rule or automate card-specific effects. This remains an early online prototype, not a complete or rules-accurate Premium simulator.
+
+
+See [ABILITY_ENGINE_STATUS.md](ABILITY_ENGINE_STATUS.md) for the current rules-engine scope, supported trigger shapes, test command, and remaining architecture work.
