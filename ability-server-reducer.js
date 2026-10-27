@@ -185,6 +185,14 @@
     const player=located&&state?.players?.[located.side],previous=String(event?.previousLocation||""),fromRear=/^(?:rear-|accel-|rear\d)/.test(previous);
     return isExactRcReturnToHandCostDrawAbility(ability)&&event?.type==="card.moved"&&Boolean(event.eventId)&&fromRear&&event.currentLocation==="hand"&&event.sourceCardInstanceId===source?.uid&&event.cardInstanceId===source?.uid&&event.subjectCardInstanceId===source?.uid&&event.subjectOwnerPlayerId===located?.ownerPlayerId&&event.sourceOwnerPlayerId===located?.ownerPlayerId&&event.subjectControllerPlayerId===actorPlayerId&&event.sourceControllerPlayerId===actorPlayerId&&located?.zone==="hand"&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&player.hand?.some(card=>card?.uid===source?.uid);
   }
+  function isExactRcPlacementSoulBlastCounterChargeAbility(ability){
+    const ids=new Set(["cfa-2920","cfa-3207","cfa-4636"]),definition=ability?.definition,printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim();
+    return ids.has(String(ability?.cardId||""))&&ability?.id===`${ability.cardId}:0`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&definition.source?.patternId==="auto-rc-placement-soul-blast-counter-charge-two-v1"&&printed==="AUTO: [Soul Blast 2] When this unit is placed on RC, you may pay the cost. If you do, Counter Charge 2."&&ability.trigger?.eventType==="card.placed"&&ability.trigger?.subject==="source"&&JSON.stringify(ability.trigger?.circles||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"soul-blast",count:2}])&&ability.canDecline===true&&definition.effects?.length===1&&definition.effects[0]?.op==="counter-charge"&&definition.effects[0]?.count===2;
+  }
+  function exactRcPlacementSoulBlastCounterChargeEventMatches(ability,source,located,event,actorPlayerId,state){
+    const player=located&&state?.players?.[located.side],isRear=value=>/^(?:rear-|accel-|rear\d)/.test(String(value||""));
+    return isExactRcPlacementSoulBlastCounterChargeAbility(ability)&&event?.type==="card.placed"&&Boolean(event.eventId)&&event.sourceCardInstanceId===source?.uid&&event.cardInstanceId===source?.uid&&event.subjectCardInstanceId===source?.uid&&isRear(event.currentLocation)&&isRear(event.circle)&&located?.zone==="rear-guard"&&located.circle===event.circle&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&player.rear?.some(card=>card?.uid===source?.uid)&&event.subjectOwnerPlayerId===located.ownerPlayerId&&event.subjectControllerPlayerId===actorPlayerId&&event.sourceControllerPlayerId===actorPlayerId;
+  }
   function isExactDiscardSelfOptionalSoulAbility(ability) {
     const ids = new Set(["cfa-10174", "cfa-6865", "cfa-8590"]);
     const cardId = String(ability?.cardId || ""), definition = ability?.definition;
@@ -1287,6 +1295,7 @@
     if (ability?.definition?.source?.patternId === "auto-rc-placement-soul-charge-one-v1" && !isExactRcPlacementSoulChargeOneAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-vanguard-or-rearguard-placement-optional-soul-charge-one-v1" && !isExactVanguardOrRearGuardOptionalSoulChargeAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-return-to-hand-counter-soul-blast-draw-v1" && !isExactRcReturnToHandCostDrawAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-rc-placement-soul-blast-counter-charge-two-v1" && !isExactRcPlacementSoulBlastCounterChargeAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-hand-discard-self-optional-to-soul-v1" && !isExactDiscardSelfOptionalSoulAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-vanguard-own-attack-soul-charge-power-battle-v1" && !isExactVanguardAttackSoulChargePowerAbility(ability)) return false;
     const isBoostedClosePattern = ability?.definition?.source?.patternId === "auto-boosted-battle-close-source-to-soul-power-v1";
@@ -1783,6 +1792,7 @@
             if (isExactRcPlacementSoulChargeOneAbility(ability) && !exactRcPlacementSoulChargeEventMatches(ability, located.instance, located, event, located.controllerPlayerId, state)) continue;
             if (isExactVanguardOrRearGuardOptionalSoulChargeAbility(ability) && !exactVanguardOrRearGuardOptionalSoulChargeEventMatches(ability, located.instance, located, event, located.controllerPlayerId, state)) continue;
             if (isExactRcReturnToHandCostDrawAbility(ability) && !exactRcReturnToHandCostDrawEventMatches(ability, located.instance, located, event, located.controllerPlayerId, state)) continue;
+            if (isExactRcPlacementSoulBlastCounterChargeAbility(ability) && !exactRcPlacementSoulBlastCounterChargeEventMatches(ability, located.instance, located, event, located.controllerPlayerId, state)) continue;
             if (isExactDiscardSelfOptionalSoulAbility(ability) && !exactDiscardSelfOptionalSoulEventMatches(ability, located.instance, located, event, located.controllerPlayerId, state)) continue;
             if (isExactVanguardAttackSoulChargePowerAbility(ability) && !exactVanguardAttackSoulChargePowerEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId)) continue;
             if (isAnyInterceptShieldAbility(ability) &&
@@ -3050,6 +3060,7 @@
     if (isExactRidePhaseDiscardCallAbility(ability) && !ridePhaseDiscardEventMatches(ability, located.instance, located, triggerEvent)) return reject("ride-phase-discard-context-invalid");
     if (isExactVanguardOrRearGuardOptionalSoulChargeAbility(ability) && !exactVanguardOrRearGuardOptionalSoulChargeEventMatches(ability, located.instance, located, triggerEvent, actorPlayerId, state)) return reject("placement-soul-charge-context-invalid");
     if (isExactRcReturnToHandCostDrawAbility(ability) && !exactRcReturnToHandCostDrawEventMatches(ability, located.instance, located, triggerEvent, actorPlayerId, state)) return reject("rc-return-to-hand-cost-draw-context-invalid");
+    if (isExactRcPlacementSoulBlastCounterChargeAbility(ability) && !exactRcPlacementSoulBlastCounterChargeEventMatches(ability, located.instance, located, triggerEvent, actorPlayerId, state)) return reject("rc-placement-soul-blast-counter-charge-context-invalid");
     if (isExactDiscardGradeCallAbility(ability)) {
       if (!discardGradeCallEventMatches(ability, located.instance, located, triggerEvent, actorPlayerId, state)) return reject("discarded-grade-call-context-invalid");
       const currentConditions=buildConditionContext(state,triggerEvent,located,engine);

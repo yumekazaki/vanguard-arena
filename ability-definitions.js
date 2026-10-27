@@ -65309,6 +65309,48 @@
       "source": {"dataset":"Cardfight Area snapshot","snapshotDate":"2025-05-09","patternId":"auto-rc-return-to-hand-counter-soul-blast-draw-v1","review":"Exact AUTO wording. This ability triggers only from the exact source instance moving from an RC to its controller's hand; the controller may pay Counter Blast 1 and Soul Blast 1 to draw one card. The ability resolves from hand, so it has no current-location requirement."},
       "effects": [{"op":"draw","count":1}]
     },
+    {
+      "id": "cfa-2920:0",
+      "cardId": "cfa-2920",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Soul Blast 2] When this unit is placed on RC, you may pay the cost. If you do, Counter Charge 2.",
+      "optional": true,
+      "requiredLocation": ["rear-guard"],
+      "trigger": {"status":"recognized-trigger","eventType":"card.placed","subject":"source","circles":["rear-guard"]},
+      "costs": [{"type":"soul-blast","count":2}],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {"dataset":"Cardfight Area snapshot","snapshotDate":"2025-05-09","patternId":"auto-rc-placement-soul-blast-counter-charge-two-v1","review":"Exact optional RC placement AUTO. The exact source Rear-Guard controller may pay Soul Blast 2; if paid, Counter Charge 2 flips up to two face-down cards in that controller's damage zone."},
+      "effects": [{"op":"counter-charge","count":2}]
+    },
+    {
+      "id": "cfa-3207:0",
+      "cardId": "cfa-3207",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Soul Blast 2] When this unit is placed on RC, you may pay the cost. If you do, Counter Charge 2.",
+      "optional": true,
+      "requiredLocation": ["rear-guard"],
+      "trigger": {"status":"recognized-trigger","eventType":"card.placed","subject":"source","circles":["rear-guard"]},
+      "costs": [{"type":"soul-blast","count":2}],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {"dataset":"Cardfight Area snapshot","snapshotDate":"2025-05-09","patternId":"auto-rc-placement-soul-blast-counter-charge-two-v1","review":"Exact optional RC placement AUTO. The exact source Rear-Guard controller may pay Soul Blast 2; if paid, Counter Charge 2 flips up to two face-down cards in that controller's damage zone."},
+      "effects": [{"op":"counter-charge","count":2}]
+    },
+    {
+      "id": "cfa-4636:0",
+      "cardId": "cfa-4636",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Soul Blast 2] When this unit is placed on RC, you may pay the cost. If you do, Counter Charge 2.",
+      "optional": true,
+      "requiredLocation": ["rear-guard"],
+      "trigger": {"status":"recognized-trigger","eventType":"card.placed","subject":"source","circles":["rear-guard"]},
+      "costs": [{"type":"soul-blast","count":2}],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {"dataset":"Cardfight Area snapshot","snapshotDate":"2025-05-09","patternId":"auto-rc-placement-soul-blast-counter-charge-two-v1","review":"Exact optional RC placement AUTO. The exact source Rear-Guard controller may pay Soul Blast 2; if paid, Counter Charge 2 flips up to two face-down cards in that controller's damage zone."},
+      "effects": [{"op":"counter-charge","count":2}]
+    },
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
