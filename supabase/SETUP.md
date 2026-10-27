@@ -1,50 +1,27 @@
-# Enable player accounts, profiles, and cloud decks
+# Supabase setup
 
-Vanguard Arena is a static GitHub Pages site, so it needs a separate service for accounts and shared deck storage. Supabase's free plan is enough for a small friend group, but it has quotas and can pause a project after a week of inactivity. The card images stay on GitHub Pages; deck names, card IDs/counts, account IDs, and profile names are stored in Supabase.
+Vanguard Arena uses Supabase for optional account/deck sync and for online room discovery and Realtime relay. The browser must contain only the project URL and publishable (or legacy anon) key. Never put a service-role key in the site.
 
-## 1. Create a Supabase project
+## Online rooms
 
-Create a free project in the [Supabase dashboard](https://supabase.com/dashboard). Keep its database password private; Vanguard Arena does not need it.
+1. Create a Supabase project and configure its URL and publishable key in the site's Supabase settings.
+2. In **Authentication → Sign In / Providers**, enable **Anonymous Sign-Ins**. The match relay creates a separate anonymous session for each player, even when they are not signed into a named account.
+3. Run [`match-rooms.sql`](match-rooms.sql) in the Supabase SQL Editor.
+4. Run [`match-auth-v1.sql`](match-auth-v1.sql) in the SQL Editor after the base migration.
+5. Create a new room and test joining it from a separate browser session. Rooms created before the authenticated-seat migration do not have the required host identity; close those rooms and create new ones.
 
-## 2. Create the player data tables
+The room directory exposes room code, room name, and host name, but not the password hash or connection secret. The password-gated resolve function returns the secret connection ID. The authenticated migration binds each player seat to an auth user and limits Realtime publishing to that seat's direction. Spectator messages remain on their separate public topic and must contain redacted snapshots.
 
-In the Supabase dashboard, open **SQL Editor**, create a query, paste all of [`player-decks.sql`](player-decks.sql), and run it. This creates a private deck table and a public player profile table. Players can only change their own profile and decks; usernames and bios can be read by site visitors. Do not disable Row Level Security.
+## Accounts and saved decks
 
-## 3. Add the public client settings
+The account dialog can use the same project URL and publishable key. Configure the project's email/password provider and deploy the account/deck tables and policies required by the account feature before enabling account sync. Account sign-in is optional for local decks and is separate from the anonymous identity used for each online match.
 
-Open the project's **Connect** dialog or **Project Settings → API Keys** and copy the project URL and the **publishable** key (the older `anon` public key also works). In `assets/cloud-config.js`, replace the two empty strings:
+## Authority limitation
 
-```js
-window.VANGUARD_CLOUD_CONFIG = {
-  url: "https://YOUR-PROJECT-REF.supabase.co",
-  publishableKey: "sb_publishable_..."
-};
-```
+The Realtime policies authenticate who may send on each room channel. They do not validate Vanguard actions or own canonical game state. At present, the host browser still validates and applies guest commands. A trusted server reducer, versioned server-owned state, private decision delivery, and server-side replay/concurrency protection are still required before online match actions can be considered authoritative.
 
-These browser values are public by design. Never use a `service_role`, secret, or database password in this file.
+`match-authority-v1.sql` contains the next private state/command database boundary, but it has no worker or website cutover yet. Do not apply it as a live-game fix: until a trusted reducer is deployed and both clients submit through it, matches still use the host browser as authority. See the repository's `MATCH_AUTHORITY_SETUP.md` for the staged design and remaining work.
 
-## 4. Allow the live site's email links
+`match-authority-v4.sql` adds the service-only card-definition catalog and transactional deck-to-state verification used by `functions/match-initialize`. The catalog returns only rows explicitly marked `redistribution_authorized`; the tracked Cardfight Area snapshot is marked for personal local use and is not an authorized source for a public server import. The initializer and v4 migration have local tests, but the migration has not been applied to PostgreSQL, no licensed catalog import is configured, and the endpoint is not deployed or connected to the clients.
 
-In **Authentication → URL Configuration**, set the Site URL to:
-
-```text
-https://yumekazaki.github.io/vanguard-arena/
-```
-
-Add this Redirect URL too:
-
-```text
-https://yumekazaki.github.io/vanguard-arena/**
-```
-
-Leave email confirmation enabled. Players create an account with their email and password, confirm through the email Supabase sends, and then sign in. The default email sender has a low rate limit, so configure your own SMTP sender if the group outgrows the trial email quota.
-
-## 5. Publish the configuration
-
-Save `assets/cloud-config.js`, commit the change, and push it to the existing `main` branch. After GitHub Pages finishes deploying, the **Account** button will support account creation, sign-in, password reset, player profiles, and per-account cloud deck sync. Signed-in players can save a unique username, display name, and short public bio. Existing browser-only decks stay local until **Import browser-saved decks** is pressed while signed in.
-
-Supabase Free currently includes 50,000 monthly active users, a 500 MB database, and 5 GB egress; free projects pause after one week of inactivity. Limits can change, so check [current pricing](https://supabase.com/pricing) before relying on it for a larger public community.
-
-## 6. Enable password-protected room discovery
-
-In the same Supabase SQL Editor, run [`match-rooms.sql`](match-rooms.sql). This creates the public room directory RPCs. Room passwords are stored only as salted hashes; the directory listing shows room names, host names, and short room codes. Players enter the password and choose Player or Spectator before the site returns the private PeerJS connection ID. Rooms expire from the listing after ten minutes without a host heartbeat and are removed when the host ends the match.
+`match-authority-v5.sql` adds authenticated seat-scoped state and action-result reads. It projects opponent private zones and pending ability/cost prompts away from each player. The local projection and SQL-contract tests pass, but the migration is not applied and neither client reads through these RPCs yet.

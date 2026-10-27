@@ -1,0 +1,67 @@
+{
+  "generatedAt": "2026-10-27T02:16:10.529Z",
+  "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
+  "catalogSource": "scripts/audit-ability-catalog.js (local catalog file or committed HEAD snapshot)",
+  "cards": {
+    "imported": 14022,
+    "parsed": 14022,
+    "withAbilities": 11841,
+    "withAtLeastOneCompiledAbility": 2887,
+    "withAllAbilityBlocksCompiledAndAuditValid": 1484,
+    "withUnsupportedAbilityBlocks": 10357,
+    "withUnmodeledRequirements": 10357,
+    "withExplicitPassingRegressionEvidence": 144,
+    "fullyVerified": 0
+  },
+  "abilities": {
+    "parsed": 17240,
+    "compiled": 3467,
+    "unsupportedOrUnreviewed": 13773,
+    "invalidCompiled": 0,
+    "patterns": 144,
+    "compiledPercent": 20.11
+  },
+  "verification": {
+    "manifest": "card-verification-manifest.json",
+    "manifestRecords": 146,
+    "passingTestCases": 318,
+    "latestFullSuite": {
+      "command": "node --test --test-reporter=spec",
+      "status": "passed",
+      "tests": 526,
+      "passed": 526,
+      "failed": 0,
+      "durationMilliseconds": 49782.78,
+      "runDate": "2026-10-26"
+    },
+    "fullyVerifiedRequiresAllPrintedAbilitiesAndRulesEvidence": true,
+    "note": "Aggregate parsing or a passing pattern test does not make a whole card fully verified. Only explicit manifest records count as regression evidence; zero fully verified cards is reported when no complete card-level evidence exists."
+  },
+  "workflow": {
+    "catalogLoadMilliseconds": 346.5,
+    "fullCatalogParseAndAuditMilliseconds": 4556.9,
+    "repeatedAuditsOfTheSameCatalogUseTheExistingDigestCache": true,
+    "parseCacheExperiment": "Rejected JSON-clone-per-call caching after three full catalog parse passes measured about 9.5 seconds uncached versus 12.1 seconds with cloning. Adopted immutable per-card snapshots with definition-revision invalidation: the same three passes measured about 9.5 seconds uncached versus 3.82 seconds cached; cache-hit passes were about 2.5 milliseconds each.",
+    "measuredBottlenecks": [
+      {
+        "area": "Repeated catalog parsing in regression tests",
+        "evidence": "84 parseCardAbilities references in the 95-test catalog suite; a full catalog parse is about 3.4-3.8 seconds.",
+        "optimization": "Immutable per-card parse snapshots, shared by audit and catalog regressions.",
+        "result": "Catalog test file 16.61 seconds on its first cached run and 13.04 seconds after audit/cache integration; the 494-test optimization milestone took 37.96 seconds versus 245.62 seconds before the cache."
+      },
+      {
+        "area": "Unbounded all-in-one verification feedback",
+        "evidence": "Full Node suite measured 245.62 seconds before the cache and 37.96 seconds after it.",
+        "optimization": "Run focused rule/worker checks per ability batch and reserve the full suite for milestones.",
+        "result": "Latest full suite: 526/526 passed in 49.78 seconds."
+      },
+      {
+        "area": "Manual card semantics and validation backlog",
+        "evidence": "13773 ability blocks remain unsupported or unreviewed; 10357 cards contain at least one such block. Repository history has no per-stage time logs to substantiate the reported 22 hours.",
+        "optimization": "Process exact recurring templates in reusable batches; preserve per-card evidence and leave ambiguous text unreviewed.",
+        "result": "Reusable Soul-count power and critical patterns plus signed continuous power adjustments cover the current verified examples; per-card evidence stays partial until the other printed abilities are implemented."
+      }
+    ]
+  },
+  "invalidCompiledDefinitions": []
+}
