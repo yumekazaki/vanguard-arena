@@ -10096,6 +10096,258 @@
           }
         }
       ]
+    },
+    {
+      "id": "cfa-169:1",
+      "cardId": "cfa-169",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a «Gold Paladin» other than a card named \"Scout of Darkness, Vortimer\" rides this unit, you may call this card to RC.",
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "riderClan": "Gold Paladin",
+        "excludedRiderName": "Scout of Darkness, Vortimer"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-unit-clan-optional-source-call-v1",
+        "review": "Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-274:1",
+      "cardId": "cfa-274",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a «Great Nature» other than a card named \"Bringer of Knowledge, Lox\" rides this unit, you may call this card to RC.",
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "riderClan": "Great Nature",
+        "excludedRiderName": "Bringer of Knowledge, Lox"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-unit-clan-optional-source-call-v1",
+        "review": "Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-561:1",
+      "cardId": "cfa-561",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a «Bermuda Triangle» other than a card named \"Mermaid Idol, Riviere\" rides this unit, you may call this card to RC.",
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "riderClan": "Bermuda Triangle",
+        "excludedRiderName": "Mermaid Idol, Riviere"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-unit-clan-optional-source-call-v1",
+        "review": "Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-743:1",
+      "cardId": "cfa-743",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a «Tachikaze» other than a card named \"Military Dragon, Raptor Sergeant\" rides this unit, you may call this card to RC.",
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "riderClan": "Tachikaze",
+        "excludedRiderName": "Military Dragon, Raptor Sergeant"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-unit-clan-optional-source-call-v1",
+        "review": "Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-901:1",
+      "cardId": "cfa-901",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a «Murakumo» other than a card named \"Stealth Dragon, Magatsu Breath\" rides this unit, you may call this card to RC.",
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "riderClan": "Murakumo",
+        "excludedRiderName": "Stealth Dragon, Magatsu Breath"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-unit-clan-optional-source-call-v1",
+        "review": "Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-948:1",
+      "cardId": "cfa-948",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a «Neo Nectar» other than a card named \"Arboros Dragon, Branch\" rides this unit, you may call this card to RC.",
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "riderClan": "Neo Nectar",
+        "excludedRiderName": "Arboros Dragon, Branch"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-unit-clan-optional-source-call-v1",
+        "review": "Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-974:1",
+      "cardId": "cfa-974",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a «Dimension Police» other than a card named \"Eye of Destruction, Zeal\" rides this unit, you may call this card to RC.",
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "riderClan": "Dimension Police",
+        "excludedRiderName": "Eye of Destruction, Zeal"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-unit-clan-optional-source-call-v1",
+        "review": "Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1148:1",
+      "cardId": "cfa-1148",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a «Genesis» other than a card named \"Bowstring of Heaven and Earth, Artemis\" rides this unit, you may call this card to RC.",
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "riderClan": "Genesis",
+        "excludedRiderName": "Bowstring of Heaven and Earth, Artemis"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-unit-clan-optional-source-call-v1",
+        "review": "Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1511:1",
+      "cardId": "cfa-1511",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a «Link Joker» other than a card named \"Gravity Ball Dragon\" rides this unit, you may call this card to RC.",
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "riderClan": "Link Joker",
+        "excludedRiderName": "Gravity Ball Dragon"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-unit-clan-optional-source-call-v1",
+        "review": "Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

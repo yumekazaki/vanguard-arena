@@ -1099,7 +1099,7 @@
       }));
       events.push(engine.createGameEvent(state, {
         type: "card.ridden", actingPlayerId: actorPlayerId, turnPlayerId: actorPlayerId,
-        sourceCardInstanceId: rider.uid, sourceOwnerPlayerId: rider.ownerPlayerId,
+        sourceCardInstanceId: rider.uid, sourceCardName: rider.cardName || rider.name || null, sourceOwnerPlayerId: rider.ownerPlayerId,
         sourceControllerPlayerId: rider.controllerPlayerId, sourceCardClan: rider.clan || null, sourceCardClans: rider.clans || [],
         cardInstanceId: rider.uid, subjectCardInstanceId: rider.uid,
         subjectOwnerPlayerId: rider.ownerPlayerId, subjectControllerPlayerId: rider.controllerPlayerId,

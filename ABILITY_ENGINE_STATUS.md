@@ -40,9 +40,11 @@ The tracked card catalog contains 14,022 records from a community Cardfight Area
 
 ## Current coverage snapshot
 
-A current catalog audit found 17,240 AUTO/ACT/CONT ability blocks across 14,022 records: 11,581 AUTO, 2,249 ACT, and 3,410 CONT. The working engine compiles 3,500 blocks into structured definitions across 144 exact-pattern families; 13,740 blocks remain unsupported or unreviewed. This is 20.30% by exact text match, not full card-pool coverage. The audit reports zero invalid compiled definitions, but that check does not prove each definition works in every real game state. Compiled definitions still need representative resolution and multiplayer tests, and unknown or unreviewed definitions remain unavailable rather than guessed. The full Node suite passes 533/533 tests. Current counters are recorded in `catalog-progress.json` from the October 26, 2026 audit.
+A current catalog audit found 17,240 AUTO/ACT/CONT ability blocks across 14,022 records: 11,581 AUTO, 2,249 ACT, and 3,410 CONT. The working engine compiles 3,509 blocks into structured definitions across 145 exact-pattern families; 13,731 blocks remain unsupported or unreviewed. This is 20.35% by exact text match, not full card-pool coverage. The audit reports zero invalid compiled definitions, but that check does not prove each definition works in every real game state. Compiled definitions still need representative resolution and multiplayer tests, and unknown or unreviewed definitions remain unavailable rather than guessed. The full Node suite passes 537/537 tests. Current counters are recorded in `catalog-progress.json` from the October 26, 2026 audit.
 
 The engine covers exact subject matching for supported attack, boost, placement, ride, hit, draw, stood, and movement events. It includes reviewed effect examples for draw, selected deck position, power modifiers, opponent Rear-Guard retirement, stand, common costs, and a continuous Soul condition. Many card effects and movement actions remain unsupported or unaudited.
+
+The latest batch adds exact ride-event matching for nine cards whose optional Soul call is conditioned on a same-clan rider that is not one named card. The ride event now carries the rider name, the exclusion check fails closed without it, and worker regressions verify the joining player's prompt and resolution. The shared clan-rider handler covers 23 exact card abilities; this batch does not complete the cards' other printed abilities.
 
 ### Latest implementation increment (2026-10-26)
 

@@ -4,12 +4,12 @@
   "latestFullSuite": {
     "command": "node --test --test-reporter=spec",
     "status": "passed",
-    "tests": 533,
-    "passed": 533,
+    "tests": 537,
+    "passed": 537,
     "failed": 0,
-    "durationMilliseconds": 54035.6622,
+    "durationMilliseconds": 55666.521,
     "runDate": "2026-10-26",
-    "validationInputDigest": "4c669d8a1f4de0d8090bda7a84281f68433605e457edbdba2588404c8c3c8e67"
+    "validationInputDigest": "e98cc9b23a01e582c0712a59dc4f8ab173d896c53c64f4e830c2281d7cb9b7ee"
   },
   "records": [
     {
@@ -2684,6 +2684,126 @@
       ],
       "fullyVerified": false,
       "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-169",
+      "abilityId": "cfa-169:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine real ride triggers preserve the named rider exclusion and exact source identity",
+        "ride trigger rejects the excluded card, wrong clan, missing name, and a different ridden instance",
+        "the joining player legal ride prompt and optional Soul call stay with that player",
+        "the named excluded rider does not offer the optional source call"
+      ],
+      "fullyVerified": false,
+      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+    },
+    {
+      "cardId": "cfa-274",
+      "abilityId": "cfa-274:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+      ],
+      "fullyVerified": false,
+      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+    },
+    {
+      "cardId": "cfa-561",
+      "abilityId": "cfa-561:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+      ],
+      "fullyVerified": false,
+      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+    },
+    {
+      "cardId": "cfa-743",
+      "abilityId": "cfa-743:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+      ],
+      "fullyVerified": false,
+      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+    },
+    {
+      "cardId": "cfa-901",
+      "abilityId": "cfa-901:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+      ],
+      "fullyVerified": false,
+      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+    },
+    {
+      "cardId": "cfa-948",
+      "abilityId": "cfa-948:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+      ],
+      "fullyVerified": false,
+      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+    },
+    {
+      "cardId": "cfa-974",
+      "abilityId": "cfa-974:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+      ],
+      "fullyVerified": false,
+      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+    },
+    {
+      "cardId": "cfa-1148",
+      "abilityId": "cfa-1148:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+      ],
+      "fullyVerified": false,
+      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+    },
+    {
+      "cardId": "cfa-1511",
+      "abilityId": "cfa-1511:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+      ],
+      "fullyVerified": false,
+      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
     }
   ]
 }

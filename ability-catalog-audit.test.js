@@ -848,20 +848,21 @@ test("six named-grade dual-circle CONT abilities keep RC power and GC shield in 
  assert.equal(matches.length,6);assert.deepEqual(report.invalidCompiled,[]);
 });
 
-test("optional clan-rider call AUTO matches the exact ridden source and rider clan across fourteen records",()=>{
+test("optional clan-rider call AUTO matches the ridden source, clan, and excluded name across twenty-three records",()=>{
  const cards=loadCatalog(),report=auditCatalog(cards),matches=[];
- assert.equal(report.patterns["auto-ridden-unit-clan-optional-source-call-v1"],14);
+ assert.equal(report.patterns["auto-ridden-unit-clan-optional-source-call-v1"],23);
  for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card)){
   if(ability.definition?.source?.patternId!=="auto-ridden-unit-clan-optional-source-call-v1")continue;
-  matches.push({card,ability});assert.deepEqual(ability.trigger,{status:"recognized-trigger",eventType:"card.ridden",subject:"ridden-unit",circles:[],riderClan:ability.trigger.riderClan},card.id);
+  matches.push({card,ability});assert.deepEqual(ability.trigger,{status:"recognized-trigger",eventType:"card.ridden",subject:"ridden-unit",circles:[],riderClan:ability.trigger.riderClan,...(ability.trigger.excludedRiderName?{excludedRiderName:ability.trigger.excludedRiderName}:{})},card.id);
   assert.equal(ability.canDecline,true,card.id);assert.equal(ability.choiceStatus,"modeled",card.id);
   assert.deepEqual(ability.definition.effects,[{op:"call-source-from-soul",target:"source",position:"stand"}],card.id);
-  const event=engine.createGameEvent({matchId:"rider-clan"},{type:"card.ridden",actingPlayerId:"p1",turnPlayerId:"p1",sourceCardInstanceId:"rider",sourceCardClan:ability.trigger.riderClan,subjectCardInstanceId:"rider",targetCardInstanceIds:["ridden-source"],targetPreviousLocation:"vanguard",targetLocation:"vanguard"});
+  const event=engine.createGameEvent({matchId:"rider-clan"},{type:"card.ridden",actingPlayerId:"p1",turnPlayerId:"p1",sourceCardInstanceId:"rider",sourceCardName:"Different " + ability.trigger.riderClan + " Rider",sourceCardClan:ability.trigger.riderClan,subjectCardInstanceId:"rider",targetCardInstanceIds:["ridden-source"],targetPreviousLocation:"vanguard",targetLocation:"vanguard"});
   assert.equal(engine.eventMatchesAbilityTrigger(ability,"ride",event,"ridden-source","vanguard","vanguard","p1"),true,card.id);
+  if(ability.trigger.excludedRiderName)assert.equal(engine.eventMatchesAbilityTrigger(ability,"ride",{...event,sourceCardName:ability.trigger.excludedRiderName},"ridden-source","vanguard","vanguard","p1"),false,card.id);
   assert.equal(engine.eventMatchesAbilityTrigger(ability,"ride",{...event,targetCardInstanceIds:["other-source"]},"ridden-source","vanguard","vanguard","p1"),false,card.id);
   assert.equal(engine.eventMatchesAbilityTrigger(ability,"ride",{...event,sourceCardClan:"Wrong Clan",sourceCardClans:[]},"ridden-source","vanguard","vanguard","p1"),false,card.id);
  }
- assert.equal(matches.length,14);assert.deepEqual(report.invalidCompiled,[]);
+ assert.equal(matches.length,23);assert.deepEqual(report.invalidCompiled,[]);
 });
 
 test("unsupported ability similarity queue groups for review without merging source text or ability types",()=>{

@@ -603,9 +603,11 @@
     return{id:abilityId,cardId,kind,printedText,optional:true,trigger:{eventType:"card.ridden",subject:"event-subject",circles:["vanguard"]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rode-upon-optional-source-call-v1",review:"Exact optional ride-trigger wording in seven catalog abilities. The exact prior Vanguard instance is called from Soul to an open Rear-Guard circle standing; no Forerunner same-clan condition is inferred."},effects:[{op:"call-source-from-soul",target:"source",position:"stand"}]};
   }  function compileRideClanCallSourceDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;
-    const match=normalizePrintedText(printedText).match(/^AUTO:\s*When another [<«]([^>»]+)[>»] rides this unit, you may call this card to RC\.$/i);
-    if(!match)return null;
-    return{id:abilityId,cardId,kind,printedText,optional:true,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"card.ridden",subject:"ridden-unit",riderClan:match[1]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-ridden-unit-clan-optional-source-call-v1",review:"Exact 14-card catalog family. Matches the ridden-upon source instance and the rider's printed clan separately; accepting calls this exact source from Soul to an open Rear-Guard circle standing."},effects:[{op:"call-source-from-soul",target:"source",position:"stand"}]};
+    const text=normalizePrintedText(printedText);
+    const match=text.match(/^(?:AUTO:\s*)?When another [<«]([^>»]+)[>»] rides this unit, you may call this card to RC\.$/i);
+    const excluding=text.match(/^(?:AUTO:\s*)?When a [<«]([^>»]+)[>»] other than a card named ["“]([^"”]+)["”] rides this unit, you may call this card to RC\.$/i);
+    if(!match&&!excluding)return null;
+    return{id:abilityId,cardId,kind,printedText,optional:true,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"card.ridden",subject:"ridden-unit",riderClan:(match||excluding)[1],...(excluding?{excludedRiderName:excluding[2]}:{})},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-ridden-unit-clan-optional-source-call-v1",review:excluding?"Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing.":"Exact 14-card catalog family. Matches the ridden-upon source instance and the rider's printed clan separately; accepting calls this exact source from Soul to an open Rear-Guard circle standing."},effects:[{op:"call-source-from-soul",target:"source",position:"stand"}]};
   }
   function compileResistKeywordDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT")return null;
@@ -1329,6 +1331,7 @@
     if(/^Harmony(?:\s*\(When (?:another of your units is placed on the same column as this unit, both units are in Harmony state until end of turn\.|your other unit is placed in the same column as this unit, both units become in harmony until end of turn\.?))?\)?\.?$/i.test(text))return result("card.placed","any");
     if(/\bwhen(?:ever)?\s+this unit becomes in harmony(?: state)?\b/i.test(text))return result("unit.became_harmony","source");
     const rideByClan=text.match(/^when another [<«]([^>»]+)[>»] rides this unit, you may call this card to RC\.$/i);if(rideByClan)return {...result("card.ridden","ridden-unit"),riderClan:rideByClan[1]};
+    const rideExceptNamed=text.match(/^when a [<«]([^>»]+)[>»] other than a card named ["“]([^"”]+)["”] rides this unit, you may call this card to RC\.$/i);if(rideExceptNamed)return {...result("card.ridden","ridden-unit"),riderClan:rideExceptNamed[1],excludedRiderName:rideExceptNamed[2]};
     if(/^forerunner\b/i.test(text))return result("card.ridden","event-subject");
     if(/\bwhen(?:ever)?\s+(?:an|the) attack hits?[^.]*\bthis unit boosted\b/i.test(text))return result("attack.hit","booster");
     if(/\bwhen(?:ever)?\s+its attack hits?\b/i.test(text))return result("attack.hit","source");
@@ -1791,6 +1794,7 @@
     if(trigger.revealedClan){const clans=[event?.checkedCardClan,...(event?.checkedCardClans||[])].filter(Boolean).map(value=>String(value).toLowerCase()),fallback=String(event?.checkedCardText||"").split(/\r?\n/)[0].split("/")[0].trim().toLowerCase();if(!clans.includes(String(trigger.revealedClan).toLowerCase())&&fallback!==String(trigger.revealedClan).toLowerCase())return false}
     if(trigger.boosterClan){const declared=[event?.boosterCardClan,...(event?.boosterCardClans||[])].filter(Boolean).map(value=>String(value).toLowerCase()),fallback=String(event?.boosterCardText||"").split(/\r?\n/)[0].split("/")[0].trim().toLowerCase();if(!declared.includes(String(trigger.boosterClan).toLowerCase())&&fallback!==String(trigger.boosterClan).toLowerCase())return false}
     if(trigger.riderClan){const clans=[event?.sourceCardClan,...(event?.sourceCardClans||[])].filter(Boolean).map(value=>String(value).trim().toLowerCase());if(!clans.includes(String(trigger.riderClan).trim().toLowerCase()))return false}
+    if(trigger.excludedRiderName){const normalizeName=value=>String(value||"").normalize("NFKD").toLocaleLowerCase().replace(/[^a-z0-9]/g,"");if(!event?.sourceCardName||normalizeName(event.sourceCardName)===normalizeName(trigger.excludedRiderName))return false}
     if(trigger.boosterRace){const declared=[event?.boosterCardRace,...(event?.boosterCardRaces||[])].filter(Boolean).map(value=>String(value).toLowerCase()),fallback=String(event?.boosterCardText||"").split(/\r?\n/)[0].split("/").slice(1).map(value=>value.trim().toLowerCase());if(!declared.includes(String(trigger.boosterRace).toLowerCase())&&!fallback.includes(String(trigger.boosterRace).toLowerCase()))return false}
     if(trigger.boosterCardNameContains&&!String(event?.boosterCardName||"").toLowerCase().includes(String(trigger.boosterCardNameContains).toLowerCase()))return false;
     if(trigger.boosterPowerAtLeast&&Number(event?.boosterPower??-1)<trigger.boosterPowerAtLeast)return false;
@@ -1861,6 +1865,7 @@
       actingPlayerId: String(input.actingPlayerId),
       turnPlayerId: String(input.turnPlayerId || ""),
       sourceCardInstanceId: input.sourceCardInstanceId || null,
+      sourceCardName: input.sourceCardName || null,
       sourceOwnerPlayerId: input.sourceOwnerPlayerId || null,
       sourceControllerPlayerId: input.sourceControllerPlayerId || null,
       sourceCardClan: input.sourceCardClan || null,
