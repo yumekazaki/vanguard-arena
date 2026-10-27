@@ -20,9 +20,12 @@
   function createCardInstance(cardId, ownerPlayerId, uid = null, state = {}) {
     if (cardId === undefined || cardId === null || !ownerPlayerId) throw new TypeError("Card instances require a definition ID and owner player ID.");
     if (!state || typeof state !== "object" || Array.isArray(state)) throw new TypeError("Card instance state must be an object.");
+    const instanceUid = uid || `${cardId}-${Math.random().toString(36).slice(2, 11)}`;
+    if (state.legionMateInstanceId !== undefined && (typeof state.legionMateInstanceId !== "string" || !state.legionMateInstanceId || state.legionMateInstanceId === instanceUid || state.legionMateInstanceId.length > 180)) throw new TypeError("Legion state requires a distinct, stable mate instance ID.");
     return {
-      uid: uid || `${cardId}-${Math.random().toString(36).slice(2, 11)}`,
+      uid: instanceUid,
       cardId, ownerPlayerId, controllerPlayerId: state.controllerPlayerId || ownerPlayerId,
+      ...(typeof state.legionMateInstanceId === "string" ? { legionMateInstanceId: state.legionMateInstanceId } : {}),
       ...(state.grade != null && Number.isInteger(Number(state.grade)) && Number(state.grade) >= 0 ? { grade: Number(state.grade) } : {}),
       ...(state.gDeckCard === true ? { gDeckCard: true } : {}),
       ...(state.gGuardian === true ? { gGuardian: true } : {}),
@@ -716,6 +719,12 @@
     const match=String(printedText||"").match(/^AUTO\s*\[RC\]:\s*When this unit boosts, this unit gets power \+(\d+) until end of turn\.$/i);
     if(!match)return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-own-boost-turn-power-v1",review:"Exact RC source-boost event and own-source turn power. Battle aggregation includes the exact booster when the boost trigger resolves."},effects:[{op:"modify-power",target:"source",amount:Number(match[1]),duration:"turn"}]};
+  }
+  function compileLegionVanguardBoostPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const match=normalizePrintedText(printedText).match(/^AUTO \[RC\]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power \+(\d+) until end of that battle\.$/i);
+    if(!match)return null;
+    return{id:abilityId,cardId,kind,printedText,conditions:[{type:"controller-vanguard-is-legion"}],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rc-boost-vanguard-legion-power-battle-v1",review:"Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."},effects:[{op:"modify-power-target",target:"boosted-unit",amount:Number(match[1]),duration:"battle",targetFilter:{controller:"source-controller",cardType:"unit",zone:"vanguard"}}]};
   }
   function compileAutoBoostedByQualifiedUnitPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;
@@ -1449,6 +1458,7 @@
     const generationBreak=remaining.match(/\bGeneration Break\s+(\d+)\s+\(((?:This ability is )?active if you have\s+(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+or more\s+(?:face up G units|G units face up)(?:\s+in total)?\s+(?:on your (?:V?C|V)\s+(?:and\/or|or)\s+G zone|in total on your V?C\s+or G zone))\)/i);
     if(generationBreak){const threshold=Number(generationBreak[1]),stated=printedNumberValue(generationBreak[3]);if(threshold===stated){conditions.push({type:"generation-break",count:threshold});remaining=remaining.replace(generationBreak[0]," ")}}
     const controllerVanguardGrade=remaining.match(/\bif your vanguard is grade (\d+) or less\b/i);if(controllerVanguardGrade){conditions.push({type:"controller-vanguard-grade-at-most",count:Number(controllerVanguardGrade[1])});remaining=remaining.replace(controllerVanguardGrade[0]," ")}
+    if(/\bif your vanguard is Legion\b/i.test(remaining)){conditions.push({type:"controller-vanguard-is-legion"});remaining=remaining.replace(/\bif your vanguard is Legion\b/i," ")}
     const exactControllerVanguard=remaining.match(/\bif your vanguard is ["“]([^"”]+)["”]/i);if(exactControllerVanguard){conditions.push({type:"controller-vanguard-name-contains",value:exactControllerVanguard[1],exact:true});remaining=remaining.replace(exactControllerVanguard[0]," ")}
     const opponentVanguardGrade=remaining.match(/\bif your opponent[’']s vanguard is grade (\d+) or greater\b/i);
     const attackTargetGrade=remaining.match(/\bwhen this unit attacks a grade (\d+) or greater unit\b/i);if(attackTargetGrade){conditions.push({type:"attack-target-grade-at-least",count:Number(attackTargetGrade[1])});remaining=remaining.replace(attackTargetGrade[0]," ")}
@@ -1519,6 +1529,7 @@
       if (condition.type === "source-is-hollowed" && context.sourceHollowed !== true) return false;
       if (condition.type === "source-is-in-harmony" && context.sourceInHarmony !== true) return false;
       if (condition.type === "controller-vanguard-is-blazing" && context.controllerVanguardIsBlazing !== true) return false;
+      if (condition.type === "controller-vanguard-is-legion" && context.controllerVanguardIsLegion !== true) return false;
       if (condition.type === "controller-has-empty-soul" && Number(context.controllerSoulCount ?? Infinity) !== 0) return false;
       if (condition.type === "opponent-has-no-rear-guards" && Number(context.opponentRearGuards || 0) !== 0) return false;
       if (condition.type === "controller-has-center-column-rear-guard" && context.controllerCenterColumnRearGuard !== true) return false;
@@ -1656,6 +1667,7 @@
     compileBoostedByPowerThresholdCriticalDefinition,
     compileBoostedLimitBreakClanCounterBlastPowerDefinition,
     compileBoostSelfPowerOnBoostDefinition,
+    compileLegionVanguardBoostPowerDefinition,
     compileGenerationBreakVanguardAttackPowerDefinition,
     compileGenerationBreakVanguardBoostPowerDefinition,
     compileNamedVanguardAttackPowerTemplateDefinition,

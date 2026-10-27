@@ -225,6 +225,10 @@ test("canonical state validation rejects version drift, duplicate instances, and
   const invalidGrade = claimedCommand();
   invalidGrade.state.players.bot.rear[1].grade = 1.5;
   assert.equal(Worker.validateCanonicalMatchState(invalidGrade.state, 2, Worker.seatMapping(invalidGrade)).reason, "invalid-card-grade");
+
+  const invalidLegionMate = claimedCommand();
+  invalidLegionMate.state.players.bot.rear[0].legionMateInstanceId = invalidLegionMate.state.players.bot.rear[0].uid;
+  assert.equal(Worker.validateCanonicalMatchState(invalidLegionMate.state, 2, Worker.seatMapping(invalidLegionMate)).reason, "invalid-legion-mate-instance");
 });
 
 test("worker rejects a malformed canonical state without passing it to the reducer", async () => {

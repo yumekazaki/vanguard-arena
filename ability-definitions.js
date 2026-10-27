@@ -10348,6 +10348,426 @@
           "position": "stand"
         }
       ]
+    },
+    {
+      "id": "cfa-1942:0",
+      "cardId": "cfa-1942",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2034:0",
+      "cardId": "cfa-2034",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2055:0",
+      "cardId": "cfa-2055",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2110:0",
+      "cardId": "cfa-2110",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2112:0",
+      "cardId": "cfa-2112",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2132:0",
+      "cardId": "cfa-2132",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2185:0",
+      "cardId": "cfa-2185",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2250:0",
+      "cardId": "cfa-2250",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2262:0",
+      "cardId": "cfa-2262",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2280:0",
+      "cardId": "cfa-2280",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2314:0",
+      "cardId": "cfa-2314",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2329:0",
+      "cardId": "cfa-2329",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2333:0",
+      "cardId": "cfa-2333",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2366:0",
+      "cardId": "cfa-2366",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a vanguard, if your vanguard is Legion, the boosted unit gets power +4000 until end of that battle.",
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-legion"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-boost-vanguard-legion-power-battle-v1",
+        "review": "Exact 14-record boost AUTO family. Requires this exact RC instance to be the booster, the actual boosted target to be the controller's Vanguard, and the live Vanguard instance to carry a Legion mate link; the power increase lasts only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 4000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

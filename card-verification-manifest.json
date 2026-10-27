@@ -4,12 +4,12 @@
   "latestFullSuite": {
     "command": "node --test --test-reporter=spec",
     "status": "passed",
-    "tests": 537,
-    "passed": 537,
+    "tests": 541,
+    "passed": 541,
     "failed": 0,
-    "durationMilliseconds": 55666.521,
-    "runDate": "2026-10-26",
-    "validationInputDigest": "e98cc9b23a01e582c0712a59dc4f8ab173d896c53c64f4e830c2281d7cb9b7ee"
+    "durationMilliseconds": 60895.191,
+    "runDate": "2026-10-27",
+    "validationInputDigest": "0a4b215e0ea770519701ef735383e08848bffa6a6bf3f0707f8d0deb6ba8684e"
   },
   "records": [
     {
@@ -2804,6 +2804,191 @@
       ],
       "fullyVerified": false,
       "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+    },
+    {
+      "cardId": "cfa-1942",
+      "abilityId": "cfa-1942:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements",
+        "boost trigger rejects another booster, non-Vanguard targets, and a Vanguard without a Legion mate",
+        "joining player receives the Legion boost prompt only when their Vanguard has a Legion mate link",
+        "trusted attack action carries the Vanguard target and lets the guest resolve their own trigger"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2034",
+      "abilityId": "cfa-2034:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2055",
+      "abilityId": "cfa-2055:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2110",
+      "abilityId": "cfa-2110:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2112",
+      "abilityId": "cfa-2112:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2132",
+      "abilityId": "cfa-2132:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2185",
+      "abilityId": "cfa-2185:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2250",
+      "abilityId": "cfa-2250:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2262",
+      "abilityId": "cfa-2262:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2280",
+      "abilityId": "cfa-2280:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2314",
+      "abilityId": "cfa-2314:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2329",
+      "abilityId": "cfa-2329:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2333",
+      "abilityId": "cfa-2333:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
+    },
+    {
+      "cardId": "cfa-2366",
+      "abilityId": "cfa-2366:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-legion-boost.test.js"
+      ],
+      "testCases": [
+        "14 real Legion-Vanguard boost abilities compile with exact source and Vanguard target requirements"
+      ],
+      "fullyVerified": false,
+      "remaining": "The authoritative Legion activation that sets legionMateInstanceId is not implemented by this batch; other printed abilities on this card are not assessed here."
     }
   ]
 }
