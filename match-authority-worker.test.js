@@ -111,6 +111,108 @@ test("authoritative attack calculation includes Great Daiyusha's live Limit Brea
   assert.equal(makeState(3,3).critical,1);
 });
 
+test("authoritative Legion attacks combine both card powers, rest both cards, and trigger only participating copies",()=>{
+  const leaderCardId="legion-attack-leader-auto-fixture",mateCardId="legion-attack-mate-auto-fixture";
+  Engine.registerAbilityDefinitions([
+    {id:`${leaderCardId}:0`,cardId:leaderCardId,kind:"AUTO",printedText:"AUTO [VC]: When this unit attacks, draw a card.",source:{dataset:"regression-fixture",review:"Legion leader is an exact participant in Vanguard attack"},effects:[{op:"draw",count:1}]},
+    {id:`${mateCardId}:0`,cardId:mateCardId,kind:"AUTO",printedText:"AUTO [VC]: When this unit attacks, draw a card.",source:{dataset:"regression-fixture",review:"Legion mate is an exact participant in Vanguard attack"},effects:[{op:"draw",count:1}]}
+  ]);
+  const mate={uid:"legion-mate-attacker",cardId:mateCardId,cardName:"Legion Mate",unitCard:true,grade:3,power:8000,critical:1,ownerPlayerId:"player-guest",controllerPlayerId:"player-guest",position:"stand"};
+  const leader={uid:"legion-leader-attacker",cardId:leaderCardId,cardName:"Legion Leader",unitCard:true,grade:3,power:11000,critical:1,ownerPlayerId:"player-guest",controllerPlayerId:"player-guest",position:"stand",legionMate:mate,legionMateInstanceId:mate.uid};
+  mate.legionLeaderInstanceId=leader.uid;
+  const unrelated={uid:"unrelated-mate-copy",cardId:mateCardId,cardName:"Legion Mate",unitCard:true,grade:3,power:8000,critical:1,ownerPlayerId:"player-guest",controllerPlayerId:"player-guest"};
+  const state={matchId:"legion-attack-room",stateVersion:0,processedActionIds:[],processedAbilityTriggers:[],turn:2,side:"bot",phase:5,firstTurnComplete:true,players:{
+    human:{playerId:"player-host",vanguard:{uid:"legion-opponent-vg",cardId:"enemy-vg",unitCard:true,power:10000,critical:1,ownerPlayerId:"player-host",controllerPlayerId:"player-host"},rear:[],guardCircle:[],orders:[],drop:[],hand:[],soul:[],bind:[],damage:[],deck:[]},
+    bot:{playerId:"player-guest",vanguard:leader,rear:[unrelated],guardCircle:[],orders:[],drop:[],hand:[],soul:[],bind:[],damage:[],deck:[]}
+  }};
+  const result=Reducer.applyGameAction(state,{actorAuthUid:"auth-guest",actionId:"legion-attack",expectedStateVersion:0,payload:{action:"attack",attackerCardInstanceId:leader.uid,targetCardInstanceId:"legion-opponent-vg"}},seats,Engine);
+  assert.equal(result.ok,true);
+  assert.equal(state.pendingAttack.power,19000);
+  assert.deepEqual(state.pendingAttack.attackingCardInstanceIds,[leader.uid,mate.uid]);
+  assert.equal(leader.rested,true);
+  assert.equal(mate.rested,true);
+  assert.equal(state.pendingAbility?.side,"bot");
+  assert.equal(state.pendingAbility?.triggerControllerPlayerId,"player-guest");
+  assert.deepEqual([state.pendingAbility?.instance.uid,...(state.pendingAbilities||[]).map(item=>item.instance.uid)],[leader.uid,mate.uid]);
+  const ownAttackAbility=Engine.parseCardAbilities({id:mateCardId,text:"AUTO [VC]: When this unit attacks, draw a card."})[0],attackEvent=result.events.find(event=>event.type==="unit.attacked");
+  assert.equal(Engine.eventMatchesAbilityTrigger(ownAttackAbility,"attack",attackEvent,unrelated.uid,"vanguard","vanguard","player-guest"),false);
+  assert.equal((state.pendingAbilities||[]).some(item=>item.instance.uid===unrelated.uid),false);
+});
+
+test("authoritative Legion attack prompts the joining player for the exact leader's reviewed bonus",()=>{
+  const cardId="cfa-1939",card=require("./scripts/audit-ability-catalog.js").loadCatalog().find(item=>item.id===cardId),compiled=Engine.parseCardAbilities(card).find(item=>item.definition?.source?.patternId==="auto-vc-own-attack-legion-power-battle-v1")?.definition;
+  assert.ok(compiled);Engine.registerAbilityDefinitions([compiled]);
+  const mate={uid:"real-legion-mate",cardId:"legion-mate-fixture",cardName:"Legion Mate",unitCard:true,grade:3,power:8000,critical:1,ownerPlayerId:"player-guest",controllerPlayerId:"player-guest",position:"stand"};
+  const leader={uid:"real-legion-leader",cardId,cardName:card.name,unitCard:true,grade:3,power:11000,critical:1,ownerPlayerId:"player-guest",controllerPlayerId:"player-guest",position:"stand",legionMate:mate,legionMateInstanceId:mate.uid};mate.legionLeaderInstanceId=leader.uid;
+  const state={matchId:"legion-own-attack-room",stateVersion:0,processedActionIds:[],processedAbilityTriggers:[],turn:3,side:"bot",phase:5,firstTurnComplete:true,players:{
+    human:{playerId:"player-host",vanguard:{uid:"legion-bonus-target",cardId:"opponent-vg",unitCard:true,power:10000,critical:1,ownerPlayerId:"player-host",controllerPlayerId:"player-host"},rear:[],guardCircle:[],orders:[],drop:[],hand:[],soul:[],bind:[],damage:[],deck:[]},
+    bot:{playerId:"player-guest",vanguard:leader,rear:[],guardCircle:[],orders:[],drop:[],hand:[],soul:[],bind:[],damage:[],deck:[]}
+  }};
+  const result=Reducer.applyGameAction(state,{actorAuthUid:"auth-guest",actionId:"legion-own-attack",expectedStateVersion:0,payload:{action:"attack",attackerCardInstanceId:leader.uid,targetCardInstanceId:"legion-bonus-target"}},seats,Engine);
+  assert.equal(result.ok,true);assert.equal(state.pendingAbility?.ability.id,compiled.id,JSON.stringify({events:result.events,pending:state.pendingAbility,pendingAbilities:state.pendingAbilities}));assert.equal(state.pendingAbility?.instance.uid,leader.uid);assert.equal(state.pendingAbility?.side,"bot");assert.equal(state.pendingAbility?.triggerControllerPlayerId,"player-guest");
+  const noMate={...leader,uid:"same-card-without-mate",legionMate:null,legionMateInstanceId:null};state.players.bot.vanguard=noMate;state.pendingAbility=null;state.pendingAbilities=[];state.processedAbilityTriggers=[];
+  const event=Engine.createGameEvent(state,{type:"unit.attacked",actingPlayerId:"player-guest",turnPlayerId:"player-guest",sourceCardInstanceId:noMate.uid,sourceControllerPlayerId:"player-guest",subjectCardInstanceId:noMate.uid,currentLocation:"vanguard",targetLocation:"vanguard",battleId:"battle-without-mate"});
+  assert.equal(Reducer.discoverAutoTriggers(state,[event],Engine).queued.length,0);
+});
+
+test("trusted Legion event queues the Rear-Guard AUTO for its joining-player controller",()=>{
+  const cardId="cfa-2396",card=require("./scripts/audit-ability-catalog.js").loadCatalog().find(item=>item.id===cardId),compiled=Engine.parseCardAbilities(card).find(item=>item.definition?.source?.patternId==="auto-rc-vanguard-legions-source-turn-power-v1")?.definition;
+  assert.ok(compiled);Engine.registerAbilityDefinitions([compiled]);
+  const leader={uid:"legioned-leader",cardId:"leader-fixture",ownerPlayerId:"player-guest",controllerPlayerId:"player-guest",legionMateInstanceId:"legioned-mate"};
+  const source={uid:"legion-rear-source",cardId,ownerPlayerId:"player-guest",controllerPlayerId:"player-guest"};
+  const state={matchId:"legion-event-room",turn:4,side:"bot",players:{human:{playerId:"player-host",vanguard:null,rear:[],guardCircle:[],orders:[],drop:[],hand:[],soul:[],bind:[],triggerZone:[]},bot:{playerId:"player-guest",vanguard:leader,rear:[source],guardCircle:[],orders:[],drop:[],hand:[],soul:[],bind:[],triggerZone:[]}}};
+  const event=Engine.createGameEvent(state,{type:"unit.legioned",actingPlayerId:"player-guest",turnPlayerId:"player-guest",sourceCardInstanceId:leader.uid,sourceControllerPlayerId:"player-guest",subjectCardInstanceId:leader.uid,subjectControllerPlayerId:"player-guest",currentLocation:"vanguard",legionMateInstanceId:"legioned-mate",timingWindow:"seek-mate-resolution"});
+  const result=Reducer.discoverAutoTriggers(state,[event],Engine);
+  assert.equal(result.queued.length,1);assert.equal(state.pendingAbility?.instance.uid,source.uid);assert.equal(state.pendingAbility?.side,"bot");assert.equal(state.pendingAbility?.triggerControllerPlayerId,"player-guest");
+});
+
+test("authoritative Rear-Guard attack prompts its joining-player controller only while the Vanguard is Legioned",()=>{
+  const cardId="cfa-2031",card=require("./scripts/audit-ability-catalog.js").loadCatalog().find(item=>item.id===cardId),compiled=Engine.parseCardAbilities(card).find(item=>item.definition?.source?.patternId==="auto-rc-own-attack-legion-power-battle-v1")?.definition;
+  assert.ok(compiled);Engine.registerAbilityDefinitions([compiled]);
+  const play=(legioned,actionId)=>{
+    const mate=legioned?{uid:`${actionId}-mate`,cardId:"mate-fixture",ownerPlayerId:"player-guest",controllerPlayerId:"player-guest",grade:3,power:9000,critical:1}:null;
+    const leader={uid:`${actionId}-leader`,cardId:"leader-fixture",ownerPlayerId:"player-guest",controllerPlayerId:"player-guest",grade:3,power:11000,critical:1,...(mate?{legionMate:mate,legionMateInstanceId:mate.uid}:{})};if(mate)mate.legionLeaderInstanceId=leader.uid;
+    const source={uid:`${actionId}-attacker`,cardId,cardName:card.name,unitCard:true,grade:2,power:8000,critical:1,ownerPlayerId:"player-guest",controllerPlayerId:"player-guest",position:"stand"};
+    const target={uid:`${actionId}-target`,cardId:"enemy-vg",unitCard:true,grade:3,power:10000,critical:1,ownerPlayerId:"player-host",controllerPlayerId:"player-host"};
+    const state={matchId:actionId,stateVersion:0,processedActionIds:[],processedAbilityTriggers:[],turn:3,side:"bot",phase:5,firstTurnComplete:true,players:{human:{playerId:"player-host",vanguard:target,rear:[],guardCircle:[],orders:[],drop:[],hand:[],soul:[],bind:[],damage:[],deck:[]},bot:{playerId:"player-guest",vanguard:leader,rear:[source],guardCircle:[],orders:[],drop:[],hand:[],soul:[],bind:[],damage:[],deck:[]}}};
+    const result=Reducer.applyGameAction(state,{actorAuthUid:"auth-guest",actionId,expectedStateVersion:0,payload:{action:"attack",attackerCardInstanceId:source.uid,targetCardInstanceId:target.uid}},seats,Engine);
+    assert.equal(result.ok,true);return{state,source};
+  };
+  const legal=play(true,"rear-legion-own-attack");assert.equal(legal.state.pendingAbility?.ability.id,compiled.id);assert.equal(legal.state.pendingAbility?.instance.uid,legal.source.uid);assert.equal(legal.state.pendingAbility?.side,"bot");assert.equal(legal.state.pendingAbility?.triggerControllerPlayerId,"player-guest");
+  const ineligible=play(false,"rear-without-legion");assert.equal(Boolean(ineligible.state.pendingAbility),false);assert.deepEqual(ineligible.state.pendingAbilities,[]);
+});
+
+test("authoritative boost power applies named Vanguard CONT only to the exact booster in that battle",()=>{
+  const boosterCardId="boosted-vanguard-cont-server-fixture";
+  Engine.registerAbilityDefinitions([{id:`${boosterCardId}:0`,cardId:boosterCardId,kind:"CONT",printedText:'CONT [RC]: During the battle this unit boosted, if you have a grade 3 or greater vanguard with "Welstra" in its card name, this unit gets power +5000.',requiredLocation:["rear-guard"],source:{dataset:"regression-fixture",review:"exact booster identity and named-grade Vanguard condition"},effects:[{op:"continuous-power",target:"source",amount:5000,duration:"continuous",condition:{op:"all",conditions:[{op:"source-boosted-this-battle"},{op:"controller-vanguard-grade-at-least",grade:3},{op:"controller-vanguard-card-name-contains",name:"Welstra"}]}}]}]);
+  const declare=useBooster=>{
+    const attacker={uid:"boost-cont-vg",cardId:"boost-cont-vg",cardName:"Welstra Vanguard",unitCard:true,grade:3,power:11000,critical:1,ownerPlayerId:"player-host",controllerPlayerId:"player-host"};
+    const booster={uid:"boost-cont-source",cardId:boosterCardId,cardName:"Booster",unitCard:true,grade:1,power:7000,critical:1,boostAbility:true,ownerPlayerId:"player-host",controllerPlayerId:"player-host"};
+    const target={uid:"boost-cont-target",cardId:"enemy-vg",unitCard:true,power:10000,critical:1,ownerPlayerId:"player-guest",controllerPlayerId:"player-guest"};
+    const state={matchId:`boost-cont-${useBooster}`,stateVersion:0,processedActionIds:[],processedAbilityTriggers:[],turn:2,side:"human",phase:5,firstTurnComplete:true,players:{human:{playerId:"player-host",vanguard:attacker,rear:[null,null,null,booster,null],guardCircle:[],orders:[],drop:[],hand:[],soul:[],bind:[],damage:[],deck:[]},bot:{playerId:"player-guest",vanguard:target,rear:[],guardCircle:[],orders:[],drop:[],hand:[],soul:[],bind:[],damage:[],deck:[]}}};
+    const result=Reducer.applyGameAction(state,{actorAuthUid:"auth-host",actionId:`boost-cont-attack-${useBooster}`,expectedStateVersion:0,payload:{action:"attack",attackerCardInstanceId:attacker.uid,targetCardInstanceId:target.uid,...(useBooster?{boosterCardInstanceId:booster.uid}:{})}},seats,Engine);
+    assert.equal(result.ok,true);return state.pendingAttack;
+  };
+  assert.equal(declare(true).boostPower,12000);
+  assert.equal(declare(false).boostPower,0);
+});
+
+test("authoritative turn transition stands the Legion mate and emits its own instance event",()=>{
+  const mate={uid:"next-turn-legion-mate",cardId:"legion-mate",ownerPlayerId:"player-guest",controllerPlayerId:"player-guest",rested:true,position:"rest"};
+  const leader={uid:"next-turn-legion-leader",cardId:"legion-leader",ownerPlayerId:"player-guest",controllerPlayerId:"player-guest",rested:true,position:"rest",legionMate:mate,legionMateInstanceId:mate.uid};
+  mate.legionLeaderInstanceId=leader.uid;
+  const state={matchId:"legion-stand-turn",eventSequence:0,turn:8,side:"human",phase:6,players:{
+    human:{playerId:"player-host",vanguard:{uid:"host-vg"},rear:[],soul:[],gZone:[]},
+    bot:{playerId:"player-guest",vanguard:leader,rear:[],soul:[],gZone:[]}
+  },pendingTurnEnd:{side:"human",playerId:"player-host",cleanupQueued:true}};
+  const events=Reducer.continueTurnEnd(state,Engine),mateStand=events.find(event=>event.type==="unit.stood"&&event.sourceCardInstanceId===mate.uid);
+  assert.equal(state.side,"bot");
+  assert.equal(mate.rested,false);
+  assert.ok(mateStand);
+  assert.equal(mateStand.sourceControllerPlayerId,"player-guest");
+  assert.equal(mateStand.currentLocation,"vanguard");
+});
+
 test("authoritative attacks apply Perfect Raizer's Soul threshold critical only when four matching cards are present",()=>{
   const declare=(count,otherRaizer=false)=>{
     const source={uid:"perfect-raizer-vg",cardId:"cfa-165",cardName:"Perfect Raizer",unitCard:true,grade:3,power:11000,critical:1,ownerPlayerId:"player-host",controllerPlayerId:"player-host"};

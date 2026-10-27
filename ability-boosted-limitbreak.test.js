@@ -8,6 +8,44 @@ const Reducer = require("./ability-server-reducer.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const PATTERN = "auto-rc-boosts-clan-limit-break-counter-blast-power-v1";
+const HIT_SOUL_PATTERN = "auto-boosted-limit-break-vanguard-hit-source-soul-draw-v1";
+
+test("all 14 clan variants of the boosted Limit Break Vanguard hit ability keep exact battle identity and optional Soul cost", () => {
+  const matches = [];
+  for (const card of loadCatalog()) for (const ability of Engine.parseCardAbilitiesCached(card)) {
+    if (ability.definition?.source?.patternId !== HIT_SOUL_PATTERN) continue;
+    matches.push({ card, ability });
+    assert.equal(ability.kind, "AUTO");
+    assert.deepEqual(ability.requiredLocation, ["rear-guard"]);
+    assert.equal(ability.trigger.status, "recognized-trigger");
+    assert.equal(ability.trigger.eventType, "attack.hit");
+    assert.equal(ability.trigger.subject, "booster");
+    assert.equal(ability.trigger.targetLocation, "vanguard");
+    assert.ok(ability.trigger.boostedUnitClan);
+    assert.equal(ability.trigger.boostedUnitLimitBreak, 4);
+    assert.deepEqual(ability.costs, [{ type: "source-to-soul", count: 1 }]);
+    assert.equal(ability.canDecline, true);
+    assert.deepEqual(ability.effects, [{ op: "draw", count: 1 }]);
+  }
+  assert.equal(matches.length, 14);
+  const { ability } = matches[0];
+  const event = Engine.createGameEvent({ matchId: "lb-boost-hit" }, {
+    type: "attack.hit", actingPlayerId: "player-a", turnPlayerId: "player-a", sourceCardInstanceId: "attacker",
+    subjectCardInstanceId: "defender", targetCardInstanceIds: ["defender"], targetLocation: "vanguard",
+    attackingUnitInstanceId: "attacker", boosterCardInstanceId: "booster", boostedCardInstanceId: "attacker",
+    boostedCardClan: ability.trigger.boostedUnitClan, boostedCardClans: [ability.trigger.boostedUnitClan],
+    boostedCardLimitBreaks: [4], battleId: "lb-boost-hit:battle"
+  });
+  const matchesEvent = candidate => Engine.eventMatchesAbilityTrigger(ability, "hit", candidate, "booster", "rear-left", "vanguard", "player-a");
+  assert.equal(matchesEvent(event), true);
+  assert.equal(matchesEvent({ ...event, boosterCardInstanceId: "other-booster" }), false);
+  assert.equal(matchesEvent({ ...event, boostedCardInstanceId: "other-attacker" }), false);
+  assert.equal(matchesEvent({ ...event, boostedCardClan: "Wrong Clan", boostedCardClans: ["Wrong Clan"] }), false);
+  assert.equal(matchesEvent({ ...event, boostedCardLimitBreaks: [] }), false);
+  assert.equal(matchesEvent({ ...event, targetLocation: "rear-guard" }), false);
+  assert.equal(matchesEvent({ ...event, attackingUnitInstanceId: "other-attacker" }), false);
+  assert.equal(matchesEvent({ ...event, battleId: null }), false);
+});
 
 test("all 15 clan-gated Limit Break boost AUTO abilities preserve the source, target, payment, and battle duration", () => {
   const matches = [];

@@ -622,6 +622,80 @@ test("trusted Stride rejects insufficient payment atomically, then strides for t
   assert.equal(placement.currentLocation, "vanguard");
 });
 
+test("reviewed face-up G-zone CONT grants free Stride independently to either player",()=>{
+  for (const side of ["human", "bot"]) {
+    const claim = claimedCommand(), state = claim.state;
+    const player = state.players[side], actor = player.playerId;
+    const other = state.players[side === "human" ? "bot" : "human"];
+    const heart = { uid: `free-heart-${side}`, cardId: "grade-three-vanguard", ownerPlayerId: actor, controllerPlayerId: actor, grade: 3, unitCard: true };
+    const stride = { uid: `free-stride-${side}`, cardId: "cfa-6662", ownerPlayerId: actor, controllerPlayerId: actor, grade: 4, type: "G Unit", faceUp: true };
+    player.vanguard = heart; player.gZone = [stride]; player.gDeck = []; player.hand = []; player.drop = [];
+    other.vanguard = { uid: `other-heart-${side}`, cardId: "other-heart", ownerPlayerId: other.playerId, controllerPlayerId: other.playerId, grade: 3, unitCard: true };
+    state.side = side; state.phase = 3; state.turn = 7; state.stridePerformed = false;
+    state.turnStartGrades = { human: 3, bot: 3 };
+    state.pendingAttack = null; state.pendingAbility = null; state.pendingAbilities = []; state.pendingTrigger = null;
+    const result = Reducer.applyGameAction(state, {
+      actorAuthUid: side === "human" ? "auth-host" : "auth-guest",
+      actionId: `free-stride-${side}`, expectedStateVersion: state.stateVersion,
+      payload: { type: "game-action", action: "stride", strideCardInstanceId: stride.uid, costCardInstanceIds: [] }
+    }, Worker.seatMapping(claim), Engine);
+    assert.equal(result.ok, true, JSON.stringify(result));
+    assert.equal(player.vanguard.uid, stride.uid);
+    assert.equal(player.drop.length, 0);
+    assert.equal(player.gZone.length, 0);
+    assert.equal(result.events.at(-1).previousLocation, "g-zone");
+    assert.equal(result.events.at(-1).sourceControllerPlayerId, actor);
+  }
+});
+
+test("a Stride-cost discard AUTO draws for the exact discarded card's controller", () => {
+  for (const side of ["human", "bot"]) {
+    const claim = claimedCommand(), state = claim.state;
+    const player = state.players[side], other = state.players[side === "human" ? "bot" : "human"], actor = player.playerId;
+    const heart = { uid: `discard-draw-heart-${side}`, cardId: "heart", ownerPlayerId: actor, controllerPlayerId: actor, grade: 3, unitCard: true };
+    const stride = { uid: `discard-draw-g-${side}`, cardId: "ordinary-g-unit", ownerPlayerId: actor, controllerPlayerId: actor, grade: 4, gDeckCard: true, faceUp: false };
+    const discarded = { uid: `discard-draw-source-${side}`, cardId: "cfa-11908", ownerPlayerId: actor, controllerPlayerId: actor, grade: 3, cardName: "Stride Draw" };
+    const top = { uid: `discard-draw-top-${side}`, cardId: "draw-card", ownerPlayerId: actor, controllerPlayerId: actor };
+    player.vanguard = heart; player.gDeck = [stride]; player.hand = [discarded]; player.deck = [top]; player.drop = [];
+    other.vanguard = { uid: `discard-draw-opponent-${side}`, cardId: "opponent", ownerPlayerId: other.playerId, controllerPlayerId: other.playerId, grade: 3, unitCard: true };
+    state.side = side; state.phase = 3; state.turn = 8; state.turnStartGrades = { human: 3, bot: 3 }; state.stridePerformed = false;
+    state.pendingAttack = null; state.pendingAbility = null; state.pendingAbilities = []; state.pendingTrigger = null;
+    const action = Reducer.applyGameAction(state, {
+      actorAuthUid: side === "human" ? "auth-host" : "auth-guest", actionId: `discard-draw-stride-${side}`, expectedStateVersion: state.stateVersion,
+      payload: { type: "game-action", action: "stride", strideCardInstanceId: stride.uid, costCardInstanceIds: [discarded.uid] }
+    }, Worker.seatMapping(claim), Engine);
+    assert.equal(action.ok, true, JSON.stringify(action));
+    assert.equal(state.pendingAbility?.instance?.uid, discarded.uid);
+    assert.equal(state.pendingAbility?.triggerControllerPlayerId, actor);
+    assert.equal(state.players.human.hand.includes(top), false); assert.equal(state.players.bot.hand.includes(top), false);
+    const decision = Reducer.applyAbilityDecision(state, {
+      actorAuthUid: side === "human" ? "auth-host" : "auth-guest", actionId: `resolve-discard-draw-${side}`, expectedStateVersion: state.stateVersion,
+      payload: { type: "ability-response", accept: true, selection: { instanceUid: discarded.uid, abilityId: "cfa-11908:1" } }
+    }, Worker.seatMapping(claim), Engine);
+    assert.equal(decision.ok, true, JSON.stringify(decision));
+    assert.ok(player.hand.some(card => card.uid === top.uid));
+    assert.equal(other.hand.some(card => card.uid === top.uid), false);
+  }
+});
+
+test("face-up G-zone cards without the reviewed CONT and free Stride costs are rejected atomically", () => {
+  for (const useAbility of [false, true]) {
+    const claim = claimedCommand(), state = claim.state, player = state.players.bot;
+    const heart = { uid: `locked-heart-${useAbility}`, cardId: "heart", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player", grade: 3, unitCard: true };
+    const stride = { uid: `locked-stride-${useAbility}`, cardId: useAbility ? "cfa-6662" : "unreviewed-g-unit", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player", grade: 4, faceUp: true };
+    player.vanguard = heart; player.gZone = [stride]; player.gDeck = []; player.hand = [];
+    state.players.human.vanguard = { uid: "opponent-grade-three", cardId: "opponent", ownerPlayerId: "host-player", controllerPlayerId: "host-player", grade: 3, unitCard: true };
+    state.side = "bot"; state.phase = 3; state.turnStartGrades = { bot: 3 }; state.pendingAttack = null; state.pendingAbility = null; state.pendingAbilities = []; state.pendingTrigger = null;
+    const result = Reducer.applyGameAction(state, {
+      actorAuthUid: "auth-guest", actionId: `reject-free-stride-${useAbility}`, expectedStateVersion: state.stateVersion,
+      payload: { type: "game-action", action: "stride", strideCardInstanceId: stride.uid, costCardInstanceIds: useAbility ? ["forged-cost"] : [] }
+    }, Worker.seatMapping(claim), Engine);
+    assert.equal(result.ok, false);
+    assert.equal(result.reason, useAbility ? "free-stride-does-not-accept-cost" : "face-up-g-zone-card-cannot-stride");
+    assert.equal(player.vanguard.uid, heart.uid); assert.equal(player.gZone[0].uid, stride.uid);
+  }
+});
+
 test("trusted Stride resolves a nonzero-index reviewed Hand grade modifier for the joining player",()=>{
   const claim=claimedCommand(),state=claim.state;
   const heart={uid:"stride-index-heart",cardId:"grade-three-vanguard",cardName:"Vanguard Name",ownerPlayerId:"guest-player",controllerPlayerId:"guest-player",type:"Unit",grade:3,unitCard:true,rested:true};
@@ -751,11 +825,101 @@ test("worker declares an exact boosted attack and queues the attacker's own AUTO
   assert.equal(next.players.bot.rear[2].rested, true);
   assert.equal(next.pendingAbility?.instance?.uid, attacker.uid);
   assert.equal(next.pendingAbility?.triggerControllerPlayerId, "guest-player");
-  assert.deepEqual(calls[1].args.p_result.events.map(event => event.type), ["attack.step-started", "unit.boosted", "unit.attacked", "attack.declared"]);
+  assert.deepEqual(calls[1].args.p_result.events.map(event => event.type), ["attack.step-started", "unit.boosted", "characteristic.changed", "unit.attacked", "attack.declared"]);
   assert.equal(calls[1].args.p_result.events[1].boosterCardInstanceId, booster.uid);
   assert.equal(calls[1].args.p_result.events[1].boostedCardInstanceId, attacker.uid);
-  assert.equal(calls[1].args.p_result.events[2].sourceCardInstanceId, attacker.uid);
-  assert.equal(calls[1].args.p_result.events[3].subjectCardInstanceId, defender.uid);
+  assert.equal(calls[1].args.p_result.events[3].sourceCardInstanceId, attacker.uid);
+  assert.equal(calls[1].args.p_result.events[4].subjectCardInstanceId, defender.uid);
+});
+
+test("the trusted server enforces an exact Vanguard cannot-be-boosted CONT for both seats", () => {
+  for (const side of ["human", "bot"]) {
+    const claim = claimedCommand();
+    const own = claim.state.players[side], opponent = claim.state.players[side === "human" ? "bot" : "human"];
+    const ownerId = own.playerId, authUid = side === "human" ? "auth-host" : "auth-guest";
+    const attacker = { uid: `no-boost-vanguard-${side}`, cardId: "cfa-38", ownerPlayerId: ownerId, controllerPlayerId: ownerId,
+      unitCard: true, power: 11000, critical: 1, drive: 3, rested: false, locked: false };
+    const booster = { uid: `no-boost-back-row-${side}`, cardId: "boost-card", ownerPlayerId: ownerId, controllerPlayerId: ownerId,
+      unitCard: true, power: 7000, boostAbility: true, rested: false, locked: false };
+    const defender = { uid: `no-boost-defender-${side}`, cardId: "defender-card", ownerPlayerId: opponent.playerId, controllerPlayerId: opponent.playerId,
+      unitCard: true, power: 13000, critical: 1, grade: 3, rested: false, locked: false };
+    own.vanguard = attacker; own.rear = Array(5).fill(null); own.rear[3] = booster;
+    opponent.vanguard = defender;
+    claim.state.side = side; claim.state.phase = 5; claim.state.turn = 2; claim.state.firstTurnComplete = true;
+    claim.state.pendingAttack = null; claim.state.pendingAbility = null; claim.state.pendingAbilities = [];
+    claim.actorAuthUid = authUid; claim.payload = { type: "game-action", action: "attack", attackerCardInstanceId: attacker.uid,
+      targetCardInstanceId: defender.uid, boosterCardInstanceId: booster.uid };
+    const before = JSON.stringify(claim.state);
+    const rejected = Reducer.applyGameAction(claim.state, { actorAuthUid: authUid, actionId: `illegal-boost-${side}`,
+      expectedStateVersion: claim.stateVersion ?? claim.state.stateVersion, payload: claim.payload }, Worker.seatMapping(claim), Engine);
+    assert.equal(rejected.ok, false);
+    assert.equal(rejected.reason, "unit-cannot-be-boosted");
+    assert.equal(JSON.stringify(claim.state), before, "an illegal boost must not rest units or open a battle");
+
+    const legal = Reducer.applyGameAction(claim.state, { actorAuthUid: authUid, actionId: `legal-no-boost-${side}`,
+      expectedStateVersion: claim.state.stateVersion, payload: { ...claim.payload, boosterCardInstanceId: null } }, Worker.seatMapping(claim), Engine);
+    assert.equal(legal.ok, true, legal.reason);
+    assert.equal(claim.state.pendingAttack.boostUid, null);
+    assert.equal(claim.state.pendingAttack.power, attacker.power);
+  }
+});
+
+test("the trusted server enforces the exact Rear-Guard cannot-be-boosted CONT for both seats", () => {
+  for (const side of ["human", "bot"]) {
+    const claim = claimedCommand();
+    const own = claim.state.players[side], opponent = claim.state.players[side === "human" ? "bot" : "human"];
+    const ownerId = own.playerId, authUid = side === "human" ? "auth-host" : "auth-guest";
+    const attacker = { uid: `no-boost-rear-${side}`, cardId: "cfa-7336", ownerPlayerId: ownerId, controllerPlayerId: ownerId,
+      unitCard: true, power: 10000, critical: 1, drive: 1, rested: false, locked: false };
+    const booster = { uid: `no-boost-rear-booster-${side}`, cardId: "boost-card", ownerPlayerId: ownerId, controllerPlayerId: ownerId,
+      unitCard: true, power: 7000, boostAbility: true, rested: false, locked: false };
+    const defender = { uid: `no-boost-rear-defender-${side}`, cardId: "defender-card", ownerPlayerId: opponent.playerId, controllerPlayerId: opponent.playerId,
+      unitCard: true, power: 13000, critical: 1, grade: 3, rested: false, locked: false };
+    own.vanguard = { uid: `rear-owner-vg-${side}`, cardId: "cfa-3", ownerPlayerId: ownerId, controllerPlayerId: ownerId, unitCard: true, grade: 3, power: 10000 };
+    own.rear = Array(5).fill(null); own.rear[0] = attacker; own.rear[2] = booster; opponent.vanguard = defender;
+    claim.state.side = side; claim.state.phase = 5; claim.state.turn = 2; claim.state.firstTurnComplete = true;
+    claim.state.pendingAttack = null; claim.state.pendingAbility = null; claim.state.pendingAbilities = [];
+    const payload = { type: "game-action", action: "attack", attackerCardInstanceId: attacker.uid,
+      targetCardInstanceId: defender.uid, boosterCardInstanceId: booster.uid };
+    const before = JSON.stringify(claim.state);
+    const rejected = Reducer.applyGameAction(claim.state, { actorAuthUid: authUid, actionId: `illegal-rc-boost-${side}`,
+      expectedStateVersion: claim.state.stateVersion, payload }, Worker.seatMapping(claim), Engine);
+    assert.equal(rejected.ok, false); assert.equal(rejected.reason, "unit-cannot-be-boosted"); assert.equal(JSON.stringify(claim.state), before);
+    const legal = Reducer.applyGameAction(claim.state, { actorAuthUid: authUid, actionId: `legal-rc-no-boost-${side}`,
+      expectedStateVersion: claim.state.stateVersion, payload: { ...payload, boosterCardInstanceId: null } }, Worker.seatMapping(claim), Engine);
+    assert.equal(legal.ok, true, legal.reason); assert.equal(claim.state.pendingAttack.boostUid, null);
+    assert.equal(claim.state.pendingAttack.power, attacker.power);
+  }
+});
+
+test("worker resolves the exact boosted-unit clan AUTO from trusted booster identity for the joining attacker", async () => {
+  const claim = claimedCommand();
+  const attacker = { ...claim.state.players.bot.rear[0], cardId: "cfa-77", cardName: "Starlight Violinist, Bubby",
+    type: "Normal Unit", grade: 3, unitCard: true, power: 10000, critical: 1, drive: 1, rested: false, locked: false,
+    ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
+  const booster = { uid: "megacolony-booster", cardId: "cfa-50", cardName: "Gloom Flyman", type: "Normal Unit", grade: 1,
+    clan: "Megacolony", clans: ["Megacolony"], race: "Insect", races: ["Insect"], unitCard: true, boostAbility: true,
+    power: 7000, critical: 1, drive: 1, ownerPlayerId: "guest-player", controllerPlayerId: "guest-player", rested: false, locked: false };
+  const defender = { uid: "boost-clan-defender", cardId: "defender-card", grade: 3, unitCard: true, power: 10000,
+    critical: 1, ownerPlayerId: "host-player", controllerPlayerId: "host-player" };
+  claim.state.side = "bot"; claim.state.phase = 5; claim.state.turn = 2;
+  claim.state.pendingAttack = null; claim.state.pendingAbility = null; claim.state.pendingAbilities = []; claim.state.pendingTrigger = null;
+  claim.state.players.bot.vanguard = attacker;
+  claim.state.players.bot.rear = [null, null, null, booster, null];
+  claim.state.players.human.vanguard = defender;
+  claim.payload = { type: "game-action", action: "attack", attackerCardInstanceId: attacker.uid,
+    targetCardInstanceId: defender.uid, boosterCardInstanceId: booster.uid };
+  const { calls, rpc } = rpcFor(claim);
+  const result = await Worker.processRoomAction("0123456789ABCDEF", { rpc, engine: Engine, reducer: Reducer });
+  assert.equal(result.accepted, true);
+  const committed = calls[1].args.p_next_state;
+  assert.equal(committed.pendingAbility?.side, "bot");
+  assert.equal(committed.pendingAbility?.instance?.uid, attacker.uid);
+  assert.equal(committed.pendingAbility?.ability?.id, "cfa-77:1");
+  const boostEvent = calls[1].args.p_result.events.find(event => event.type === "unit.boosted");
+  assert.equal(boostEvent.boosterCardInstanceId, booster.uid);
+  assert.equal(boostEvent.boostedCardInstanceId, attacker.uid);
+  assert.equal(boostEvent.boosterCardClan, "Megacolony");
 });
 
 test("trusted battle power applies Cycloned CONT only to an abilityless unit on its controller's turn", () => {
@@ -1167,6 +1331,106 @@ test("trusted battle resolution rechecks power, resolves damage triggers before 
   assert.equal(claim.state.pendingAttack, null);
 });
 
+test("charged battle participant moving to deck emits movement, not a false retirement event", () => {
+  const claim = claimedCommand(), state = claim.state;
+  state.side = "bot"; state.phase = 5; state.turn = 2;
+  state.pendingAbility = null; state.pendingAbilities = []; state.pendingTrigger = null;
+  const charged = { uid: "charged-vanguard", cardId: "charge-unit", unitCard: true, power: 13000, critical: 1, charging: true, chargingExpiry: "guest-player", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
+  const defender = { uid: "charge-defender", cardId: "host-vanguard", unitCard: true, power: 10000, ownerPlayerId: "host-player", controllerPlayerId: "host-player" };
+  state.players.bot.vanguard = charged;
+  state.players.human.vanguard = defender;
+  state.pendingAttack = {
+    battleId: "charge-close-event", attackerSide: "bot", attackerPlayerId: "guest-player", attackerUid: charged.uid,
+    attackerZone: "vanguard", defenderSide: "human", targetUid: defender.uid, targetZone: "vanguard",
+    power: 13000, targetPower: 10000, critical: 1, guardCards: [], defenderDone: true,
+    driveChecksComplete: true, driveCountChosen: true, damageChecksStarted: true, damageChecksRemaining: 0
+  };
+  const result = Reducer.applyGameAction(state, {
+    actorAuthUid: "auth-guest", actionId: "charge-close-action", expectedStateVersion: state.stateVersion,
+    payload: { type: "game-action", action: "resolveBattle" }
+  }, Worker.seatMapping(claim), Engine);
+  assert.equal(result.ok, true, result.reason);
+  const movement = result.events.find(event => event.cardInstanceId === charged.uid);
+  assert.equal(movement?.type, "card.moved");
+  assert.equal(movement?.previousLocation, "vanguard");
+  assert.equal(movement?.currentLocation, "deck");
+  assert.equal(result.events.some(event => event.type === "card.retired" && event.cardInstanceId === charged.uid), false);
+  assert.equal(state.players.bot.deck.at(-1).uid, charged.uid);
+  assert.equal(state.pendingAttack, null);
+});
+
+test("joining player's booster gets its exact optional Limit Break hit prompt and pays its Soul cost itself", () => {
+  const claim = claimedCommand(), state = claim.state;
+  state.side = "bot"; state.phase = 5; state.turn = 2;
+  state.pendingAttack = null; state.pendingAbility = null; state.pendingAbilities = []; state.pendingTrigger = null;
+  const attacker = { uid: "guest-lb-attacker", cardId: "lb-gold-unit", cardName: "Limit Break Gold Unit", grade: 3, clan: "Gold Paladin", clans: ["Gold Paladin"], hasLimitBreak4: true, unitCard: true, power: 16000, critical: 1, rested: false, ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
+  const booster = { uid: "guest-lb-booster", cardId: "cfa-1131", cardName: "Knight of Early Morning, Rukie", grade: 1, unitCard: true, boostAbility: true, power: 7000, rested: false, ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
+  const defender = { uid: "host-lb-defender", cardId: "host-vanguard", grade: 3, unitCard: true, power: 10000, ownerPlayerId: "host-player", controllerPlayerId: "host-player" };
+  state.players.bot.vanguard = null;
+  state.players.bot.rear = [attacker, null, booster, null, null];
+  state.players.bot.deck.push({ uid: "guest-draw", cardId: "plain", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" });
+  state.players.human.vanguard = defender;
+  const apply = (authUid, actionId, payload) => Reducer.applyGameAction(state, {
+    actorAuthUid: authUid, actionId, expectedStateVersion: state.stateVersion,
+    payload: { type: "game-action", ...payload }
+  }, Worker.seatMapping(claim), Engine);
+  const attack = apply("auth-guest", "lb-boost-attack", { action: "attack", attackerCardInstanceId: attacker.uid, targetCardInstanceId: defender.uid, boosterCardInstanceId: booster.uid });
+  assert.equal(attack.ok, true, attack.reason);
+  const noGuard = apply("auth-host", "lb-boost-no-guard", { action: "noGuard" });
+  assert.equal(noGuard.ok, true, noGuard.reason);
+  const hit = apply("auth-guest", "lb-boost-resolve-hit", { action: "resolveBattle" });
+  assert.equal(hit.ok, true, hit.reason);
+  const hitEvent = hit.events.find(event => event.type === "attack.hit");
+  assert.equal(hitEvent.attackingUnitInstanceId, attacker.uid);
+  assert.equal(hitEvent.boosterCardInstanceId, booster.uid);
+  assert.equal(hitEvent.boostedCardInstanceId, attacker.uid);
+  assert.deepEqual(hitEvent.boostedCardClans, ["Gold Paladin"]);
+  assert.deepEqual(hitEvent.boostedCardLimitBreaks, [4]);
+  assert.equal(state.pendingAbility?.instance?.uid, booster.uid);
+  assert.equal(state.pendingAbility?.triggerControllerPlayerId, "guest-player");
+  const resolved = Reducer.applyAbilityDecision(state, {
+    actorAuthUid: "auth-guest", actionId: "guest-pays-lb-booster-cost", expectedStateVersion: state.stateVersion,
+    payload: { type: "ability-response", accept: true, selection: { instanceUid: booster.uid, abilityId: "cfa-1131:1" } }
+  }, Worker.seatMapping(claim), Engine);
+  assert.equal(resolved.ok, true, resolved.reason);
+  assert.ok(state.players.bot.soul.some(card => card.uid === booster.uid));
+  assert.equal(state.players.bot.hand.at(-1).uid, "guest-draw");
+  assert.equal(state.players.human.hand.length, 0);
+});
+
+test("joining player's clan-matched booster privately returns to their own hand after the Vanguard hit", () => {
+  const claim = claimedCommand(), state = claim.state;
+  state.side = "bot"; state.phase = 5; state.turn = 2;
+  state.pendingAttack = null; state.pendingAbility = null; state.pendingAbilities = []; state.pendingTrigger = null;
+  const attacker = { uid: "guest-clan-attacker", cardId: "plain-attacker", clan: "Nova Grappler", clans: ["Nova Grappler"], grade: 2, unitCard: true, power: 16000, critical: 1, rested: false, ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
+  const booster = { uid: "guest-clan-booster", cardId: "cfa-121", cardName: "Nova Grappler Booster", grade: 1, unitCard: true, boostAbility: true, power: 7000, rested: false, ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
+  const defender = { uid: "host-clan-defender", cardId: "host-vanguard", grade: 3, unitCard: true, power: 10000, ownerPlayerId: "host-player", controllerPlayerId: "host-player" };
+  state.players.bot.vanguard = null;
+  state.players.bot.rear = [attacker, null, booster, null, null];
+  state.players.human.vanguard = defender;
+  const apply = (authUid, actionId, payload) => Reducer.applyGameAction(state, {
+    actorAuthUid: authUid, actionId, expectedStateVersion: state.stateVersion,
+    payload: { type: "game-action", ...payload }
+  }, Worker.seatMapping(claim), Engine);
+  const attack = apply("auth-guest", "clan-hit-attack", { action: "attack", attackerCardInstanceId: attacker.uid, targetCardInstanceId: defender.uid, boosterCardInstanceId: booster.uid });
+  assert.equal(attack.ok, true, attack.reason);
+  assert.equal(apply("auth-host", "clan-hit-no-guard", { action: "noGuard" }).ok, true);
+  const hit = apply("auth-guest", "clan-hit-resolve", { action: "resolveBattle" });
+  assert.equal(hit.ok, true, hit.reason);
+  assert.equal(hit.events.find(event => event.type === "attack.hit")?.boosterCardInstanceId, booster.uid);
+  assert.equal(state.pendingAbility?.instance?.uid, booster.uid);
+  assert.equal(state.pendingAbility?.triggerControllerPlayerId, "guest-player");
+  const definition = Engine.getReviewedAbilityDefinitionsForCard("cfa-121").find(item => item.source?.patternId === "auto-boosted-clan-vanguard-hit-return-source-hand-v1");
+  assert.ok(definition);
+  const resolved = Reducer.applyAbilityDecision(state, {
+    actorAuthUid: "auth-guest", actionId: "guest-returns-clan-booster", expectedStateVersion: state.stateVersion,
+    payload: { type: "ability-response", accept: true, selection: { instanceUid: booster.uid, abilityId: definition.id } }
+  }, Worker.seatMapping(claim), Engine);
+  assert.equal(resolved.ok, true, resolved.reason);
+  assert.ok(state.players.bot.hand.some(card => card.uid === booster.uid));
+  assert.equal(state.players.human.hand.length, 0);
+});
+
 test("damage-check Over Trigger removes itself, draws, grants 100 million power, then allows remaining damage", () => {
   const claim = claimedCommand();
   claim.state.side = "bot"; claim.state.phase = 5; claim.state.turn = 2;
@@ -1313,6 +1577,34 @@ test("normal ride rejects invalid timing, grade, unit type, card restrictions, a
     assert.equal(outcome.ok, false);
     assert.equal(JSON.stringify(claim.state), before);
   }
+});
+
+test("named-grade CONT ride restriction is enforced by the authoritative ride action", () => {
+  const setup = (vanguardGrade, vanguardName) => {
+    const claim = claimedCommand();
+    claim.state.side = "bot"; claim.state.phase = 2; claim.state.turn = 2;
+    claim.state.pendingAttack = null; claim.state.pendingAbility = null; claim.state.pendingAbilities = [];
+    claim.state.players.bot.vanguard = { uid: "uri-vanguard", cardId: "uri-vanguard", cardName: vanguardName, grade: vanguardGrade, ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
+    claim.state.players.bot.hand.push({ uid: "uri-rider", cardId: "cfa-10425", cardName: "Highway to Hell, Uriel", grade: 3, unitCard: true, ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" });
+    claim.payload = { type: "game-action", action: "ride", cardInstanceId: "uri-rider" };
+    return claim;
+  };
+  for (const [grade, name] of [[2, "Uriel Vanguard"], [3, "Different Vanguard"]]) {
+    const claim = setup(grade, name); const before = JSON.stringify(claim.state);
+    const outcome = Reducer.applyGameAction(claim.state, {
+      actorAuthUid: claim.actorAuthUid, actionId: claim.actionId,
+      expectedStateVersion: claim.expectedStateVersion, payload: claim.payload
+    }, Worker.seatMapping(claim), Engine);
+    assert.equal(outcome.ok, false);
+    assert.equal(outcome.reason, "ride-restriction");
+    assert.equal(JSON.stringify(claim.state), before);
+  }
+  const legal = setup(3, "Uriel Vanguard");
+  const outcome = Reducer.applyGameAction(legal.state, {
+    actorAuthUid: legal.actorAuthUid, actionId: legal.actionId,
+    expectedStateVersion: legal.expectedStateVersion, payload: legal.payload
+  }, Worker.seatMapping(legal), Engine);
+  assert.equal(outcome.ok, true);
 });
 
 test("normal draw rejects wrong player, wrong phase, repeat draw, and loses on an empty deck", () => {

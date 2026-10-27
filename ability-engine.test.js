@@ -18,6 +18,18 @@ test("Perfect Raizer continuous field restriction is per instance and only appli
  assert.equal(evaluateContinuousEffects([ability],{location:"vanguard",sourceInstanceId:"perfect-raizer-1",targetInstanceId:"perfect-raizer-1"}).power,0);
  assert.equal(evaluateContinuousEffects([ability],{location:"vanguard",controllerFieldCards:base.controllerFieldCards}).power,0);
 });
+test("boosted Vanguard-name CONT power applies only to its exact booster during that battle",()=>{
+ const text='CONT [RC]: During the battle this unit boosted, if you have a grade 3 or greater vanguard with "Welstra" in its card name, this unit gets power +5000.',ability=parseCardAbilities({id:"boosted-named-vanguard-cont",text})[0];
+ assert.equal(ability.kind,"CONT");assert.equal(ability.definition?.source?.patternId,"cont-rc-boosted-named-grade-vanguard-power-battle-v1");assert.deepEqual(ability.requiredLocation,["rear-guard"]);
+ const base={location:"rear-guard",sourceInstanceId:"booster-a",targetInstanceId:"booster-a",sourceWasBooster:true,controllerVanguardGrade:3,controllerVanguardCardNames:["Welstra"]};
+ assert.equal(evaluateContinuousEffects([ability],base).power,5000);
+ assert.equal(evaluateContinuousEffects([ability],{...base,sourceWasBooster:false}).power,0);
+ assert.equal(evaluateContinuousEffects([ability],{...base,controllerVanguardGrade:2}).power,0);
+ assert.equal(evaluateContinuousEffects([ability],{...base,controllerVanguardCardNames:["Rezael"]}).power,0);
+ assert.equal(evaluateContinuousEffects([ability],{...base,location:"vanguard"}).power,0);
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),matches=[];for(const card of loadCatalog())for(const item of parseCardAbilities(card))if(item.definition?.source?.patternId==="cont-rc-boosted-named-grade-vanguard-power-battle-v1")matches.push(item);assert.equal(matches.length,13);assert.ok(matches.every(item=>VanguardAbilityEngine.getReviewedAbilityDefinitionsForCard(item.cardId).some(definition=>definition.id===item.id)));
+ const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("boosterCardInstanceId:uid,boostedUnitInstanceId:setup.attackerUid"));assert.ok(app.includes("boosterCardInstanceId:booster.unit.uid,boostedUnitInstanceId:uid"));
+});
 test("immutable card-parse snapshots are reused and invalidated when reviewed definitions change",()=>{
  const card={id:"immutable-parse-cache-fixture",text:"AUTO [RC]: When this unit attacks, draw a card."};
  const first=VanguardAbilityEngine.parseCardAbilitiesCached(card);assert.equal(Object.isFrozen(first),true);assert.equal(Object.isFrozen(first[0]),true);assert.equal(VanguardAbilityEngine.parseCardAbilitiesCached(card),first);first[0].raw="changed";assert.notEqual(first[0].raw,"changed");
@@ -322,6 +334,26 @@ test("once-per-turn usage is scoped to exact card instance and ability", () => {
   assert.notEqual(firstCopy, secondCopy);
   assert.notEqual(firstCopy, secondAbility);
   assert.equal(firstCopy, abilityUsageKey(7, "player-a", "copy-a", "card:0"));
+});
+
+test("once-per-game restrictions persist across turns and reject reused ACT abilities", () => {
+  const text = "ACT [VC]: Once per game, draw a card.";
+  const parsed = parseCardAbilities({ id: "once-game", text })[0];
+  assert.deepEqual(parsed.usageRestriction, { type: "once-per-game", scope: "ability-instance", reset: "game" });
+  assert.equal(parsed.once, true);
+  const restriction = parsed.usageRestriction;
+  const firstTurnKey = abilityUsageKey(1, "player-a", "copy-a", "once-game:0", restriction);
+  assert.equal(firstTurnKey, abilityUsageKey(18, "player-a", "copy-a", "once-game:0", restriction));
+  assert.notEqual(firstTurnKey, abilityUsageKey(18, "player-a", "copy-b", "once-game:0", restriction));
+  assert.notEqual(firstTurnKey, abilityUsageKey(18, "player-a", "copy-a", "once-game:1", restriction));
+  const ability = { ...parsed, definition: { kind: "ACT", effects: [{ op: "draw", count: 1 }] }, costs: [], conditions: [] };
+  const legal = { cardInstanceId: "copy-a", controllerPlayerId: "player-a", actorPlayerId: "player-a", turnPlayerId: "player-a", phase: "main", inPermittedZone: true, alreadyUsed: false, resources: {} };
+  assert.deepEqual(canActivateManualAbility(ability, legal), { ok: true });
+  assert.equal(canActivateManualAbility(ability, { ...legal, alreadyUsed: true }).reason, "usage-restriction");
+  const source = { uid: "copy-a" }, player = { playerId: "player-a", vanguard: source, rear: [], hand: [], soul: [], damage: [], drop: [], usedAbilities: [] };
+  const paymentContext = { player, source, sourceZone: "vanguard", actorPlayerId: "player-a", turnId: 1 };
+  assert.equal(payAbilityCosts(ability, paymentContext, {}).ok, true);
+  assert.equal(payAbilityCosts(ability, { ...paymentContext, turnId: 18 }, {}).reason, "usage-restriction");
 });
 
 test("rejects stale cards, illegal call circles, and invalid ability targets before costs", () => {
@@ -824,6 +856,11 @@ test("Crest ride restriction compares the candidate against its controller's cur
   assert.match(app,/const rideContext=\{vanguardCard:cardMap\.get\(bot\.vanguard\?\.cardId\),crests:/);
 });
 
+test("named grade CONT ride restrictions compile and reject illegal source Vanguard grade or name",()=>{
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),ids=["cfa-10425","cfa-10825","cfa-10847","cfa-10860","cfa-10892","cfa-11016","cfa-11611","cfa-11679","cfa-11851"],catalog=loadCatalog();
+ for(const id of ids){const card=catalog.find(item=>item.id===id);assert.ok(card,id);const ability=parseCardAbilities(card).find(item=>item.definition?.source?.patternId==="cont-ride-from-grade-and-named-vanguard-v1");assert.ok(ability,id);assert.equal(ability.kind,"CONT",id);assert.deepEqual(ability.definition.effects,undefined,id);assert.equal(ability.definition.continuousRestrictions.length,1,id);const restriction=ability.definition.continuousRestrictions[0],legalVanguard={id:`${id}-vg`,name:`Grade ${restriction.grade} ${restriction.name} Vanguard`,grade:restriction.grade,text:""};assert.equal(canRideCard(card,{vanguardCard:legalVanguard}),true,id);assert.equal(canRideCard(card,{vanguardCard:{...legalVanguard,grade:restriction.grade-1}}),false,id);assert.equal(canRideCard(card,{vanguardCard:{...legalVanguard,name:"Different Vanguard"}}),false,id);assert.equal(canRideCard(card,{}),false,id);}
+});
+
 test("Restraint is a passive attack restriction only while this unit is on VC or RC",()=>{
   const card={id:"restraint-unit",text:"CONT [VC/RC]: Restraint (This unit cannot attack.)"},ability=parseCardAbilities(card)[0];
   assert.equal(ability.kind,"CONT");assert.equal(ability.definition?.source?.patternId,"cont-vc-rc-restraint-cannot-attack-v1");assert.deepEqual(ability.definition?.keywords,["restraint"]);assert.deepEqual(ability.requiredLocation,["vanguard","rear-guard"]);assert.equal(isManuallyActivatable(ability),false);
@@ -1224,7 +1261,7 @@ test("supports the real rode-upon draw AUTO only for the exact ridden starter an
   assert.deepEqual(ability.conditions, [{ type: "controller-went-second" }]);
   assert.equal(evaluateAbilityConditions(ability, { controllerWentSecond: true }), true);
   assert.equal(evaluateAbilityConditions(ability, { controllerWentSecond: false }), false);
-  const event = createGameEvent({ matchId: "ride-draw" }, { type: "card.ridden", actingPlayerId: "p1", sourceCardInstanceId: "rider", subjectCardInstanceId: "starter", previousLocation: "vanguard", currentLocation: "soul" });
+  const event = createGameEvent({ matchId: "ride-draw" }, { type: "card.ridden", actingPlayerId: "p1", sourceCardInstanceId: "rider", subjectCardInstanceId: "rider", targetCardInstanceIds: ["starter"], targetPreviousLocation: "vanguard", targetCurrentLocation: "soul", targetLocation: "vanguard", previousLocation: "hand", currentLocation: "vanguard" });
   assert.equal(eventMatchesAbilityTrigger(ability, "ride", event, "starter", "vanguard", "vanguard"), true);
   assert.equal(eventMatchesAbilityTrigger(ability, "ride", event, "another-starter", "vanguard", "vanguard"), false);
   assert.equal(eventMatchesAbilityTrigger(ability, "ride", event, "starter", "rear-left", "rear-left"), false);
@@ -1524,7 +1561,7 @@ test("movement triggers require the exact moved instance and verified source and
   assert.equal(eventMatchesAbilityTrigger(soulMove, "soulMove", { ...soulEvent, previousLocation: "hand" }, "soul-copy", "hand", "soul"), false);
 
 });test("real Blaster Dark retires only its chosen opposing Rear-Guard through the reviewed effect", () => {
-  const definition = curatedDefinitions.find(item => item.id === "cfa-20:0");
+  const definition = curatedDefinitions.find(item => item.id === "cfa-20:1");
   assert.ok(definition);
   assert.equal(definition.printedText, "AUTO: [Counter Blast 2] When this unit is placed on VC, you may pay the cost. If you do, choose one of your opponent’s rear-guards, and retire it.");
   const source = createCardInstance("cfa-20", "player-a", "blaster-dark");
@@ -1593,7 +1630,7 @@ test("retirement trigger subjects distinguish the retired source from another un
 });
 test("movement events dispatch against sources on both players’ fields using each source controller", () => {
   const app = fs.readFileSync("app.js", "utf8"), start = app.indexOf("function queueMovedCardAbility("), end = app.indexOf("function flushCollectedAbilityTriggers(", start), dispatcher = app.slice(start, end);
-  assert.match(dispatcher, /\["human","bot"\]\.flatMap\(fieldSide=>fieldUnits\(fieldSide\)/);
+  assert.match(dispatcher, /\["human","bot"\]\.flatMap\(fieldSide=>abilityFieldUnits\(fieldSide\)/);
   assert.match(dispatcher, /triggerControllerPlayerId:source\.instance\.controllerPlayerId/);
   assert.match(dispatcher, /abilityTriggerMatches\(ability,eventName,gameEvent,source\.instance\.uid,source\.zone,previousLocation,context\.triggerControllerPlayerId\)/);
   assert.match(dispatcher, /queueOneAbility\(triggerSide,source,ability,context\)/);
@@ -1614,7 +1651,7 @@ test("cross-player trigger scans keep you, any player, and your vanguard distinc
 });
 test("ordinary ability events scan both fields and route pending skills to each source controller", () => {
   const app = fs.readFileSync("app.js", "utf8"), start = app.indexOf("function queueAbilityPrompts("), end = app.indexOf("function queueMovedCardAbility(", start), dispatcher = app.slice(start, end);
-  assert.match(dispatcher, /\["human","bot"\]\.flatMap\(fieldSide=>fieldUnits\(fieldSide\)/);
+  assert.match(dispatcher, /\["human","bot"\]\.flatMap\(fieldSide=>abilityFieldUnits\(fieldSide\)/);
   assert.match(dispatcher, /triggerControllerPlayerId:source\.instance\.controllerPlayerId/);
   assert.match(dispatcher, /queueOneAbility\(sourceSide,source,ability,sourceContext\)/);
   assert.match(dispatcher, /sourceContext\.triggerControllerPlayerId\)/);
@@ -1951,6 +1988,31 @@ test("real AUTO placement Soul Blast draw is limited to its exact unit on RC and
   const result = resolveEffectProgram(ability.definition.effects, EFFECT_HANDLERS, { player });
   assert.equal(result.ok, true);
   assert.deepEqual(player.hand.map(card => card.uid), ["drawn"]);
+});
+
+test("clan-gated RC placement Soul Blast draw checks the source, circle, Vanguard clan, and optional cost",()=>{
+  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");
+  const records=["cfa-196","cfa-560","cfa-847","cfa-1607","cfa-1662","cfa-1820","cfa-1970"].map(id=>loadCatalog().find(card=>card.id===id));
+  assert.ok(records.every(Boolean));
+  for(const card of records){
+    const ability=parseCardAbilities(card)[0];
+    assert.equal(ability.definition?.source?.patternId,"auto-place-rc-soul-blast-clan-draw-v1",card.id);
+    assert.deepEqual(ability.costs,[{type:"soul-blast",count:2}],card.id);
+    assert.equal(ability.conditionStatus,"modeled",card.id);
+    assert.equal(ability.canDecline,true,card.id);
+    assert.deepEqual(ability.requiredLocation,[],card.id);
+    assert.equal(ability.trigger?.eventType,"card.placed",card.id);
+    const clan=ability.conditions.find(condition=>condition.type==="controller-vanguard-has-clan")?.value;
+    assert.ok(clan,card.id);
+    assert.equal(evaluateAbilityConditions(ability,{vanguardClan:clan}),true,card.id);
+    assert.equal(evaluateAbilityConditions(ability,{vanguardClan:"Different Clan"}),false,card.id);
+    const event=createGameEvent({matchId:`${card.id}-match`},{type:"card.placed",actingPlayerId:"p1",sourceCardInstanceId:"exact-source",subjectCardInstanceId:"exact-source",previousLocation:"hand",currentLocation:"rear-left",circle:"rear-left"});
+    assert.equal(eventMatchesAbilityTrigger(ability,"place",event,"exact-source","rear-left","rear-left","p1"),true,card.id);
+    assert.equal(eventMatchesAbilityTrigger(ability,"place",event,"other-copy","rear-left","rear-left","p1"),false,card.id);
+    assert.equal(eventMatchesAbilityTrigger(ability,"place",{...event,currentLocation:"vanguard",circle:"vanguard"},"exact-source","vanguard","vanguard","p1"),false,card.id);
+    assert.equal(canPayAbilityCosts(ability,{soulCount:1}),false,card.id);
+    assert.equal(canPayAbilityCosts(ability,{soulCount:2}),true,card.id);
+  }
 });
 
 test("Vanguard hit AUTO events wait until all damage checks resolve and retain exact battle identity",()=>{
@@ -2531,8 +2593,8 @@ test("Lord continuous restriction only blocks its own attack when a friendly uni
 
 
 test("ride draw and Quick Shield AUTO matches only the exact card that was ridden",()=>{
-  const card={id:"cfa-5673",text:"AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand."};const ability=parseCardAbilities(card)[0];assert.equal(ability.definition?.source?.patternId,"auto-rode-upon-draw-quick-shield-v1");assert.equal(ability.trigger?.eventType,"card.ridden");assert.equal(ability.trigger?.subject,"event-subject");assert.deepEqual(ability.conditions,[]);
-  const event={type:"card.ridden",sourceCardInstanceId:"rider-1",subjectCardInstanceId:"ridden-1",previousLocation:"vanguard",currentLocation:"soul"};
+  const card={id:"cfa-5673",text:"AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand."};const ability=parseCardAbilities(card)[0];assert.equal(ability.definition?.source?.patternId,"auto-rode-upon-draw-quick-shield-v1");assert.equal(ability.trigger?.eventType,"card.ridden");assert.equal(ability.trigger?.subject,"event-target");assert.deepEqual(ability.conditions,[]);
+  const event={type:"card.ridden",sourceCardInstanceId:"rider-1",subjectCardInstanceId:"rider-1",targetCardInstanceIds:["ridden-1"],targetPreviousLocation:"vanguard",targetCurrentLocation:"soul"};
   assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,"ridden-1","vanguard","vanguard","player-a"),true);assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,"other-copy","vanguard","vanguard","player-a"),false);assert.equal(eventMatchesAbilityTrigger(ability,"place",{...event,type:"card.placed"},"ridden-1","vanguard","vanguard","player-a"),false);
 });
 
@@ -2730,9 +2792,25 @@ test("Pastel Deer critical AUTO checks the exact booster power threshold",()=>{
 test("top-five grade search AUTO validates hand placement, private choice, reveal, shuffle, and conditional discard",()=>{
  const card={id:"search-grade-three",name:"Search unit",text:"AUTO [VC/RC]: When placed from hand, look at five cards from the top of your deck, reveal up to one grade 3 from among them and put it into your hand, shuffle your deck, and if you put a card, discard a card from your hand."},ability=parseCardAbilities(card)[0];assert.equal(ability.definition?.source?.patternId,"auto-placement-top-five-grade-three-search-discard-v1");assert.deepEqual(ability.trigger,{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["vanguard","rear-guard"],sourceLocation:"hand"});assert.equal(ability.conditionStatus,"no-explicit-condition-detected");assert.equal(ability.costStatus,"no-cost");
  const event=createGameEvent({matchId:"search-placement"},{type:"card.placed",actingPlayerId:"p1",turnPlayerId:"p1",sourceCardInstanceId:"search-source",sourceControllerPlayerId:"p1",subjectCardInstanceId:"search-source",subjectControllerPlayerId:"p1",previousLocation:"hand",currentLocation:"rear-0"});assert.equal(eventMatchesAbilityTrigger(ability,"place",event,"search-source","rear-left","rear-left","p1"),true);assert.equal(eventMatchesAbilityTrigger(ability,"place",{...event,previousLocation:"deck"},"search-source","rear-left","rear-left","p1"),false);assert.equal(eventMatchesAbilityTrigger(ability,"place",event,"other-copy","rear-left","rear-left","p1"),false);
- const defs=new Map([["g3",{grade:3}],["g2",{grade:2}]]),original={uid:"old-hand",cardId:"g2"},chosen={uid:"search-g3",cardId:"g3"},rest=[{uid:"a",cardId:"g2"},{uid:"b",cardId:"g2"},{uid:"c",cardId:"g2"},{uid:"d",cardId:"g2"}],player={playerId:"p1",hand:[original],deck:[...rest,chosen],drop:[]},events=[];let shuffled=false;const context={player,side:"p1",effectUid:chosen.uid,effectDiscardUid:original.uid,cardDefinitionForInstance:item=>defs.get(item.cardId),shuffleDeck:deck=>{shuffled=true;deck.reverse()},emitEvent:e=>events.push(e)};assert.equal(validateEffectProgram(ability.effects,EFFECT_HANDLERS,context).ok,true);const result=resolveEffectProgram(ability.effects,EFFECT_HANDLERS,context);assert.equal(result.ok,true);assert.equal(shuffled,true);assert.equal(result.results[0].revealedCardId,"g3");assert.deepEqual(player.hand,[chosen]);assert.deepEqual(player.drop,[original]);assert.equal(player.deck.length,4);assert.deepEqual(events.map(e=>e.type),["card.discarded"]);
+ const defs=new Map([["g3",{grade:3}],["g2",{grade:2}]]),original={uid:"old-hand",cardId:"g2"},chosen={uid:"search-g3",cardId:"g3"},rest=[{uid:"a",cardId:"g2"},{uid:"b",cardId:"g2"},{uid:"c",cardId:"g2"},{uid:"d",cardId:"g2"}],player={playerId:"p1",hand:[original],deck:[...rest,chosen],drop:[]},events=[];let shuffled=false;const context={player,side:"p1",effectUid:chosen.uid,effectDiscardUid:original.uid,cardDefinitionForInstance:item=>defs.get(item.cardId),shuffleDeck:deck=>{shuffled=true;deck.reverse()},emitEvent:e=>events.push(e)};assert.equal(validateEffectProgram(ability.effects,EFFECT_HANDLERS,context).ok,true);const result=resolveEffectProgram(ability.effects,EFFECT_HANDLERS,context);assert.equal(result.ok,true);assert.equal(shuffled,true);assert.equal(result.results[0].revealedCardId,"g3");assert.deepEqual(player.hand,[chosen]);assert.deepEqual(player.drop,[original]);assert.equal(player.deck.length,4);assert.deepEqual(events.map(e=>e.type),["card.revealed","card.discarded"]);assert.equal(events[0].revealedCardId,"g3");
  const noPick={player:{playerId:"p1",hand:[original],deck:[...rest,chosen],drop:[]},effectUid:null,effectDiscardUid:null,cardDefinitionForInstance:item=>defs.get(item.cardId),shuffleDeck:deck=>deck.reverse()};assert.equal(resolveEffectProgram(ability.effects,EFFECT_HANDLERS,noPick).ok,true);assert.deepEqual(noPick.player.hand,[original]);assert.deepEqual(noPick.player.drop,[]);assert.equal(noPick.player.deck.length,5);
  const invalid={player:{playerId:"p1",hand:[original],deck:[...rest,chosen],drop:[]},effectUid:chosen.uid,effectDiscardUid:null,cardDefinitionForInstance:item=>defs.get(item.cardId),shuffleDeck:deck=>deck.reverse()};assert.equal(validateEffectProgram(ability.effects,EFFECT_HANDLERS,invalid).ok,false);assert.equal(invalid.player.hand.length,1);assert.equal(invalid.player.deck.length,5);
+});
+
+test("named Grade 3 search emits the revealed card identity before its later discard",()=>{
+ const text='AUTO: When this unit is placed on RC from hand, COST [reveal a grade 3 card from hand], search your deck for up to one grade 3 card with "Chronojet" in its card name, reveal it and put it into your hand, shuffle your deck, choose a card from your hand, and discard it.';
+ const ability=parseCardAbilities({id:"cfa-2471",text})[0];
+ assert.equal(ability.definition?.source?.patternId,"auto-rc-from-hand-reveal-grade-three-search-name-discard-v1");
+ const cost={uid:"cost-grade-three",cardId:"cost-g3"},discard={uid:"discard-card",cardId:"ordinary"},chosen={uid:"chronojet-card",cardId:"chronojet-g3"};
+ const player={playerId:"p1",hand:[cost,discard],deck:[chosen],drop:[]},events=[];
+ const context={player,side:"p1",effectUid:chosen.uid,effectDiscardUid:discard.uid,cardDefinitionForInstance:card=>({"cost-g3":{grade:3},"chronojet-g3":{id:"chronojet-g3",name:"Chronojet Dragon",grade:3}}[card.cardId]||{}),shuffleDeck:deck=>deck.reverse(),emitEvent:event=>events.push(createGameEvent({matchId:"named-search"},{...event,actingPlayerId:"p1",turnPlayerId:"p1"}))};
+ const result=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,context);
+ assert.equal(result.ok,true);
+ assert.equal(events[0].type,"card.revealed");
+ assert.equal(events[0].revealedCardId,"chronojet-g3");
+ assert.equal(events[0].revealedCardName,"Chronojet Dragon");
+ assert.equal(events[0].revealedCardGrade,3);
+ assert.equal(events[1].type,"card.discarded");
 });
 
 test("from-hand placement events never infer a hand source for other placement actions",()=>{const app=fs.readFileSync("app.js","utf8"),start=app.indexOf("function queueAbilityPrompts("),queue=app.slice(start,app.indexOf("function queueMovedCardAbility(",start));assert.ok(!queue.includes("eventName==="+"place"+"?"+"hand"));assert.match(app,/callUnitToRear\(p,"human",instance,empty,\{source:"hand"\}\)/);assert.ok(app.includes('sourceZone:field?.zone||source,source,zone:"vanguard"'))});
@@ -2799,7 +2877,7 @@ test("attack-battle CONT power applies only to its exact RC source attacking a V
  const ability=parseCardAbilities({id:"attacks-vanguard-cont",text:"CONT [RC]: During the battle it attacked a vanguard, this unit gets power +3000."})[0];
  assert.equal(ability.definition?.source?.patternId,"cont-rc-attacks-vanguard-battle-power-v1");assert.deepEqual(ability.requiredLocation,["rear-guard"]);assert.equal(isManuallyActivatable(ability),false);
  assert.deepEqual(evaluateContinuousEffects([ability],{location:"rear-guard",attackingVanguard:false}),{power:0,critical:0,drive:0});assert.deepEqual(evaluateContinuousEffects([ability],{location:"rear-guard",attackingVanguard:true}),{power:3000,critical:0,drive:0});assert.deepEqual(evaluateContinuousEffects([ability],{location:"vanguard",attackingVanguard:true}),{power:0,critical:0,drive:0});
- const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("attackerPower(attacker,{targetZone:zone})"));assert.ok(app.includes("attackTargetZone:attackContext.targetZone"));
+ const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("attackerPower(attacker,{targetZone:zone,boosterCardInstanceId:setup.boostUid||null"));assert.ok(app.includes("attackTargetZone:attackContext.targetZone"));
 });
 
 test("CONT power grade gates use the correct controller and opponent Vanguard",()=>{
@@ -2826,9 +2904,9 @@ test("GC call-top ability requires its exact source placed from hand and the Gua
 test("call-top-to-guardian effect moves only available top cards, rests them, adds shield, and emits placement events",()=>{
   const player={playerId:"p1",deck:[{uid:"bottom",shield:5000},{uid:"top",shield:10000}],guardCircle:[]};
   const attack={defenderSide:"p1",guardCards:[],targetPower:12000};const match={players:{p1:player},pendingAttack:attack};const events=[];
-  const result=resolveEffectProgram([{op:"call-top-to-guardian",target:"controller",count:5,destination:"guardian",position:"rest"}],EFFECT_HANDLERS,{player,side:"p1",match,shieldValueForInstance:card=>card.shield,emitEvent:event=>events.push(event)});
+  const result=resolveEffectProgram([{op:"call-top-to-guardian",target:"controller",count:5,destination:"guardian",position:"rest"}],EFFECT_HANDLERS,{player,side:"p1",match,cardDefinitionForInstance:card=>({type:"Unit",shield:card.shield}),shieldValueForInstance:card=>card.shield,emitEvent:event=>events.push(event)});
   assert.equal(result.ok,true);assert.equal(result.results[0],2);assert.deepEqual(player.deck,[]);assert.deepEqual(player.guardCircle.map(card=>card.uid),["top","bottom"]);assert.ok(player.guardCircle.every(card=>card.rested&&card.position==="rest"&&card.zone==="guardian"&&card.faceUp));assert.deepEqual(attack.guardCards.map(card=>card.uid),["top","bottom"]);assert.equal(attack.targetPower,27000);assert.deepEqual(events.map(event=>[event.cardInstanceId,event.previousLocation,event.currentLocation]),[["top","deck","guardian"],["bottom","deck","guardian"]]);
-  const wrongDefender=resolveEffectProgram([{op:"call-top-to-guardian",target:"controller",count:5,destination:"guardian",position:"rest"}],EFFECT_HANDLERS,{player,side:"p1",match:{players:{p1:player},pendingAttack:{defenderSide:"p2",guardCards:[],targetPower:0}},shieldValueForInstance:()=>0});assert.equal(wrongDefender.ok,false);
+  const wrongDefender=resolveEffectProgram([{op:"call-top-to-guardian",target:"controller",count:5,destination:"guardian",position:"rest"}],EFFECT_HANDLERS,{player,side:"p1",match:{players:{p1:player},pendingAttack:{defenderSide:"p2",guardCards:[],targetPower:0}},cardDefinitionForInstance:()=>({type:"Unit",shield:0}),shieldValueForInstance:()=>0});assert.equal(wrongDefender.ok,false);
 });
 test("Ride Phase discard trigger is tied to the exact discarded hand instance and Ride Phase",()=>{
   const ability=parseCardAbilities({id:"ride-bottom-draw",text:"AUTO: When this card is discarded from hand during your ride phase, COST [Soul Blast 1 & put this card on the bottom of deck], and draw a card."})[0];
@@ -2902,7 +2980,7 @@ test("Ride Phase Hand AUTO pays by discarding its exact source before optional t
  const ability=parseCardAbilities({id:"ride-hand-resolution",text:"AUTO [Hand]: At the beginning of your ride phase, if your vanguard is grade 1 or less, COST [discard this card], look at the top five cards of your deck, choose up to one grade 2 or less card from among them, reveal it and put it into your hand, and shuffle your deck."})[0],source={uid:"source",cardId:"ride-hand-resolution"},eligible={uid:"grade-2",cardId:"g2"},illegal={uid:"grade-3",cardId:"g3"},deck=[{uid:"bottom",cardId:"g1"},illegal,eligible],player={playerId:"p1",deck,hand:[source],damage:[],soul:[],drop:[],rear:[]},definitions={"g1":{grade:1},"g2":{grade:2},"g3":{grade:3}},events=[];
  const context={player,source,side:"human",sourceZone:"hand",turnId:1,actorPlayerId:"p1",effectUid:eligible.uid,cardDefinitionForInstance:card=>definitions[card.cardId],shuffleDeck:cards=>cards.reverse(),emitEvent:event=>events.push(event)};
  const result=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,context,draft=>payAbilityCosts(ability,{...draft,turnId:1,actorPlayerId:"p1",side:"human",sourceZone:"hand"},{}).ok);
- assert.equal(result.ok,true);assert.deepEqual(player.hand.map(card=>card.uid),[eligible.uid]);assert.deepEqual(player.drop.map(card=>card.uid),[source.uid]);assert.deepEqual(player.deck.map(card=>card.uid),[illegal.uid,"bottom"]);assert.deepEqual(events.map(event=>[event.type,event.cardInstanceId,event.previousLocation,event.currentLocation]),[["card.discarded",source.uid,"hand","drop"]]);
+ assert.equal(result.ok,true);assert.deepEqual(player.hand.map(card=>card.uid),[eligible.uid]);assert.deepEqual(player.drop.map(card=>card.uid),[source.uid]);assert.deepEqual(player.deck.map(card=>card.uid),[illegal.uid,"bottom"]);assert.deepEqual(events.map(event=>[event.type,event.cardInstanceId,event.previousLocation,event.currentLocation]),[["card.discarded",source.uid,"hand","drop"],["card.revealed",eligible.uid,"deck","hand"]]);
  const noPick={playerId:"p1",deck:[{uid:"top",cardId:"g2"}],hand:[{uid:"source-2",cardId:"ride-hand-resolution"}],damage:[],soul:[],drop:[],rear:[]};const noPickResult=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{player:noPick,source:noPick.hand[0],side:"human",sourceZone:"hand",effectUid:null,cardDefinitionForInstance:card=>definitions[card.cardId],shuffleDeck:cards=>cards,turnId:2,actorPlayerId:"p1"},draft=>payAbilityCosts(ability,{...draft,turnId:2,actorPlayerId:"p1",side:"human",sourceZone:"hand"},{}).ok);assert.equal(noPickResult.ok,true);assert.equal(noPick.hand.length,0);assert.equal(noPick.drop[0].uid,"source-2");assert.equal(noPick.deck[0].uid,"top");
  const illegalPick=validateEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{...context,effectUid:illegal.uid});assert.equal(illegalPick.ok,false);
 });
@@ -2964,7 +3042,7 @@ test("Counter-Blast ACT wording During this turn uses the same exact source-powe
 
 test("source-to-Soul ACT with that unit wording pays its source and buffs only a legal friendly target",()=>{
   const ability=parseCardAbilities({id:"act-soul-buff-wording",text:"ACT [RC]: [Put this unit into your soul] Choose one of your units, and that unit gets power +3000 until end of turn."})[0];
-  assert.equal(ability.definition?.source?.patternId,"act-source-to-soul-choose-friendly-power-turn-v1");assert.equal(ability.choiceStatus,"no-explicit-choice-detected");assert.deepEqual(ability.costs,[{type:"source-to-soul",count:1}]);
+  assert.equal(ability.definition?.source?.patternId,"act-source-to-soul-choose-friendly-power-turn-v1");assert.equal(ability.choiceStatus,"modeled");assert.deepEqual(ability.costs,[{type:"source-to-soul",count:1}]);
   const source={uid:"source-copy",controllerPlayerId:"p1"},target={uid:"target-copy",controllerPlayerId:"p1",turnPowerBoost:0},player={playerId:"p1",vanguard:null,damage:[],soul:[],hand:[],drop:[],rear:[source,target]};
   const payment=payAbilityCosts(ability,{player,source,side:"human",sourceZone:"rear-left"});assert.equal(payment.ok,true);assert.equal(player.rear[0],null);assert.deepEqual(player.soul,[source]);
   const context={source,sourceInPlay:false,side:"human",player,match:{},target,targetInPlay:true,sourceControllerPlayerId:"p1",targetControllerPlayerId:"p1",targetCard:{type:"Normal Unit"},targetZone:"rear-right"};
@@ -3088,7 +3166,7 @@ test("Dauntless Dominate Dragon locks only its exact normal drive-check card and
   const result=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,context,draft=>payAbilityCosts(ability,{...draft,turnId:4,actorPlayerId:"p1",side:"human",sourceZone:"vanguard"},{cb:[cb.uid],sb:[],discard:[],reveal:[]}).ok);
   assert.equal(result.ok,true);assert.equal(player.hand.length,0);assert.equal(player.rear[0].uid,checked.uid);assert.equal(player.rear[0].locked,true);assert.equal(player.rear[1],null);assert.deepEqual(player.drop,[displaced]);
   assert.equal(cb.faceDown,true);assert.equal(attack.power,23000);assert.equal(attack.driveChecksRemaining,2);assert.equal(attack.maxDriveChecks,2);
-  assert.deepEqual(events.map(event=>[event.type,event.cardInstanceId]),[["card.retired",displaced.uid],["card.placed",checked.uid]]);
+  assert.deepEqual(events.map(event=>[event.type,event.cardInstanceId]),[["card.retired",displaced.uid],["card.placed",checked.uid],["characteristic.changed",source.uid]]);
   const cb2={uid:"cb-2",faceDown:false},noSpacePlayer={...player,rear:Array.from({length:5},(_,index)=>({uid:`lock-${index}`,locked:true})),hand:[{...checked}],damage:[cb2]},noSpaceAttack={attackerUid:source.uid,attackerZone:"vanguard",driveChecksRemaining:1,maxDriveChecks:1,power:13000};
   const noSpace=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{...context,player:noSpacePlayer,checkedCard:noSpacePlayer.hand[0],checkedCardInstanceId:noSpacePlayer.hand[0].uid,callZone:null,match:{pendingAttack:noSpaceAttack}},draft=>payAbilityCosts(ability,{...draft,turnId:4,actorPlayerId:"p1",side:"human",sourceZone:"vanguard"},{cb:[cb2.uid],sb:[],discard:[],reveal:[]}).ok);
   assert.equal(noSpace.ok,true);assert.equal(noSpace.results[0],0);assert.equal(noSpaceAttack.power,13000);assert.equal(noSpaceAttack.driveChecksRemaining,1);
@@ -3098,7 +3176,7 @@ test("Dauntless Dominate Dragon locks only its exact normal drive-check card and
 
 test("the site cache-busts every changed engine script bundle",()=>{
   const html=fs.readFileSync("index.html","utf8");
-  assert.match(html,/ability-engine\.js\?v=20261026-gc-implicit-source-1/);assert.match(html,/app\.js\?v=20261026-opening-mulligan-1/);assert.match(html,/ability-definitions\.js\?v=20261026-hollow-1/);
+  assert.match(html,/ability-engine\.js\?v=20261027-success-1/);assert.match(html,/app\.js\?v=20261026-opening-mulligan-1/);assert.match(html,/ability-definitions\.js\?v=20261027-success-1/);
 });
 
 test("ride-phase discard AUTO calls only its exact source from Drop to a legal rested circle",()=>{
@@ -3131,7 +3209,7 @@ test("filtered top-five search validates keyword targets and resolves the exact 
  const source={uid:"source-instance",cardId:sourceCard.id},target={uid:"dark-target-instance",cardId:targetDefinition.id},wrong={uid:"wrong-target-instance",cardId:wrongDefinition.id},bottom={uid:"bottom-instance",cardId:wrongDefinition.id},player={playerId:"p1",hand:[],deck:[bottom,target,wrong]},definitions=new Map([[sourceCard.id,sourceCard],[target.cardId,targetDefinition],[wrong.cardId,wrongDefinition]]),events=[],context={source,player,side:"human",effectUid:target.uid,cardDefinitionForInstance:card=>definitions.get(card.cardId),shuffleDeck:deck=>deck.reverse(),emitEvent:event=>events.push(event)};
  assert.equal(matchesTargetFilter(ability.definition.effects[0].filter,{targetCard:targetDefinition}),true);assert.equal(matchesTargetFilter(ability.definition.effects[0].filter,{targetCard:wrongDefinition}),false);
  const illegal=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{...context,effectUid:wrong.uid});assert.equal(illegal.ok,false);assert.deepEqual(player.deck.map(card=>card.uid),[bottom.uid,target.uid,wrong.uid]);assert.deepEqual(player.hand,[]);
- const paid=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,context);assert.equal(paid.ok,true);assert.deepEqual(paid.results,[{revealedCardId:target.cardId,revealedCardUid:target.uid,lookedCount:3}]);assert.deepEqual(player.hand,[target]);assert.deepEqual(player.deck.map(card=>card.uid),[wrong.uid,bottom.uid]);assert.deepEqual(events,[{type:"card.revealed",cardInstanceId:target.uid,controllerSide:"human",reason:"search"}]);
+ const paid=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,context);assert.equal(paid.ok,true);assert.deepEqual(paid.results,[{revealedCardId:target.cardId,revealedCardUid:target.uid,lookedCount:3}]);assert.deepEqual(player.hand,[target]);assert.deepEqual(player.deck.map(card=>card.uid),[wrong.uid,bottom.uid]);assert.deepEqual(events,[{type:"card.revealed",cardInstanceId:target.uid,controllerSide:"human",previousLocation:"deck",currentLocation:"hand",reason:"search",revealedCardId:"darkness-target",revealedCardName:"Darkness Unit",revealedCardGrade:null}]);
  const optionalPlayer={playerId:"p1",hand:[],deck:[bottom,target,wrong]},optional=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{...context,player:optionalPlayer,effectUid:null});assert.equal(optional.ok,true);assert.deepEqual(optionalPlayer.hand,[]);assert.deepEqual(optionalPlayer.deck.map(card=>card.uid),[wrong.uid,target.uid,bottom.uid]);
  const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("filteredSearch=x.ability.definition"));assert.ok(app.includes("search-top-up-to-one-filtered-to-hand"));
 });
@@ -3231,7 +3309,7 @@ test("Afterimage responds only to an opponent-owned bind-to-hand move and may re
 
 test("catalog Afterimage variants are supported as optional AUTO abilities with a modeled six-card condition",()=>{
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),matches=[];for(const card of loadCatalog())for(const ability of parseCardAbilities(card))if(ability.raw.startsWith("[RC]: Afterimage"))matches.push(ability);assert.equal(matches.length,14);assert.ok(matches.every(ability=>ability.definition?.source?.patternId==="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"&&ability.trigger?.eventType==="card.moved"&&ability.trigger?.sourceLocation==="bind"&&ability.trigger?.destinationLocation==="hand"&&ability.trigger?.movedCardOwnerRelation==="opponent"&&ability.canDecline&&ability.conditionStatus==="modeled"));
- const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes('["human","bot"].flatMap(fieldSide=>fieldUnits(fieldSide)'));
+ const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes('["human","bot"].flatMap(fieldSide=>abilityFieldUnits(fieldSide)'));
 });
 
 test("Charge triggers only when its exact Rear-Guard is effect-placed and returns to deck after a participating battle",()=>{
@@ -3248,7 +3326,7 @@ test("catalog Charge AUTO definitions include keyword-only records and remain ef
 });
 
 test("Forerunner is an optional exact-source same-clan ride AUTO that calls from Soul standing",()=>{
- const ability=parseCardAbilities({id:"forerunner-test",text:"AUTO: Forerunner."})[0];assert.equal(ability.definition?.source?.patternId,"auto-forerunner-same-clan-ride-call-source-v1");assert.equal(ability.trigger?.eventType,"card.ridden");assert.equal(ability.trigger?.subject,"event-subject");assert.equal(ability.canDecline,true);assert.deepEqual(ability.definition.effects,[{op:"call-source-from-soul",target:"source",position:"stand"}]);
+ const ability=parseCardAbilities({id:"forerunner-test",text:"AUTO: Forerunner."})[0];assert.equal(ability.definition?.source?.patternId,"auto-forerunner-same-clan-ride-call-source-v1");assert.equal(ability.trigger?.eventType,"card.ridden");assert.equal(ability.trigger?.subject,"ridden-unit");assert.equal(ability.canDecline,true);assert.deepEqual(ability.definition.effects,[{op:"call-source-from-soul",target:"source",position:"stand"}]);
  const source={uid:"starter-copy",cardId:"forerunner-test"},player={playerId:"p1",soul:[source],rear:[null,null,null,null,null],accelZones:0},events=[];const apply=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{player,source,side:"human",callZone:"rear-left",cardDefinitionForInstance:()=>({type:"Normal Unit"}),emitEvent:event=>events.push(event)});assert.equal(apply.ok,true);assert.equal(player.soul.length,0);assert.equal(player.rear[0].uid,"starter-copy");assert.equal(player.rear[0].rested,false);assert.equal(events[0].previousLocation,"soul");
  const occupiedSource={uid:"occupied-starter"},occupiedPlayer={soul:[occupiedSource],rear:[{uid:"occupant"},null,null,null,null]};assert.equal(resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{player:occupiedPlayer,source:occupiedSource,side:"human",callZone:"rear-left",cardDefinitionForInstance:()=>({type:"Normal Unit"})}).ok,false);assert.equal(occupiedPlayer.soul[0].uid,"occupied-starter");
  const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("auto-forerunner-same-clan-ride-call-source-v1"));assert.ok(app.includes("Choose an open Rear-Guard circle"));
@@ -3265,6 +3343,12 @@ test("Harmony associations require same controller and column, persist across mo
  const program=[{op:"associate-harmony-units",target:"source-and-event-subject",duration:"turn"}],placed=match.players.human.rear[2],events=[],sourceUnit=match.players.human.rear[0],effectContext={match,source:sourceUnit,sourceInPlay:true,eventSubjectUid:placed.uid,harmonySameColumnAtTrigger:true,harmonyTurnKey:turnKey,side:"human",emitEvent:event=>events.push(event)};assert.equal(resolveEffectProgram(program,EFFECT_HANDLERS,{...effectContext,harmonySameColumnAtTrigger:false}).ok,false);match.players.human.rear[0]=null;match.players.human.rear[1]=sourceUnit;assert.equal(resolveEffectProgram(program,EFFECT_HANDLERS,effectContext).ok,true,"the association still resolves after the source moves columns");assert.equal(isCardInHarmony(match,placed.uid,turnKey),true);assert.deepEqual(events.map(event=>event.cardInstanceId).sort(),["back","front"]);
  const becomes=parseCardAbilities({id:"harmony-becomes",text:"AUTO [RC]: When this unit becomes in Harmony state, draw a card."})[0],becameEvent=createGameEvent({matchId:"harmony-trigger"},{type:"unit.became_harmony",actingPlayerId:"p1",sourceCardInstanceId:"front",subjectCardInstanceId:"front",sourceControllerPlayerId:"p1",subjectControllerPlayerId:"p1",currentLocation:"rear-left"});assert.equal(becomes.trigger.eventType,"unit.became_harmony");assert.equal(eventMatchesAbilityTrigger(becomes,"harmony",becameEvent,"front","rear-left","rear-left","p1"),true);assert.equal(eventMatchesAbilityTrigger(becomes,"harmony",becameEvent,"other-copy","rear-left","rear-left","p1"),false);
  const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("auto-harmony-same-column-association-v1"));assert.ok(app.includes("sourceController!==placedController||rearColumn(source.zone)!==rearColumn(placed.zone)"));assert.ok(app.includes("removeHarmonyAssociationsForInstance(match,instance.uid)"));const turnEnd=app.slice(app.indexOf("function completeTurnTransition("),app.indexOf("function endTurn(",app.indexOf("function completeTurnTransition(")));assert.ok(turnEnd.indexOf("retireHollowedUnitsAtTurnEnd")<turnEnd.indexOf("expireHarmonyAssociations"));
+});
+test("checking Harmony eligibility is read-only when an activation is rejected",()=>{
+ const state={turn:1,side:"human",players:{human:{playerId:"p1",vanguard:null,rear:[]},bot:{playerId:"p2",vanguard:null,rear:[]}}};
+ const before=JSON.stringify(state);
+ assert.equal(isCardInHarmony(state,"missing-source","1:human"),false);
+ assert.equal(JSON.stringify(state),before,"a rejected legality check must not mutate canonical state");
 });
 test("Revelation keywords compile to exact circle triggers and ordered optional Soul/rest effects",()=>{
   const {loadCatalog}=require("./scripts/audit-ability-catalog");
@@ -3327,4 +3411,68 @@ test("AUTO ability readiness requires reviewed trigger, conditions, costs, choic
  assert.deepEqual(autoAbilityReadiness(valid),{ok:true});
  for(const [field,value,reason] of [["trigger",{status:"needs-review"},"unrecognized-trigger"],["conditionStatus","needs-review","unmodeled-condition"],["costStatus","needs-review","unmodeled-cost"],["choiceStatus","needs-review","unmodeled-choice"],["definition",{kind:"AUTO",effects:[]},"unsupported-effect"]])assert.equal(autoAbilityReadiness({...valid,[field]:value}).reason,reason,field);
  assert.equal(autoAbilityReadiness({...valid,kind:"ACT"}).reason,"not-automatic");
+});
+
+test("Legion Vanguard own-attack AUTO requires this exact Vanguard instance to have a Legion mate",()=>{
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),ids=["cfa-1939","cfa-2028","cfa-2115","cfa-2118","cfa-2128","cfa-2135","cfa-2191","cfa-2205","cfa-2215","cfa-2255","cfa-2308"],records=ids.map(id=>loadCatalog().find(card=>card.id===id));
+ assert.ok(records.every(Boolean));
+ for(const card of records){
+  const ability=parseCardAbilities(card).find(item=>item.definition?.source?.patternId==="auto-vc-own-attack-legion-power-battle-v1");
+  assert.equal(ability.definition?.source?.patternId,"auto-vc-own-attack-legion-power-battle-v1",card.id);
+  assert.deepEqual(ability.requiredLocation,["vanguard"],card.id);
+  assert.deepEqual(ability.conditions,[{type:"source-is-legion"}],card.id);
+  assert.equal(ability.conditionStatus,"modeled",card.id);
+  assert.equal(ability.trigger.eventType,"unit.attacked",card.id);
+  assert.equal(evaluateAbilityConditions(ability,{sourceInLegion:true}),true,card.id);
+  assert.equal(evaluateAbilityConditions(ability,{sourceInLegion:false}),false,card.id);
+  const event=createGameEvent({matchId:`${card.id}-legion-attack`},{type:"unit.attacked",actingPlayerId:"p1",sourceCardInstanceId:"legion-vanguard",subjectCardInstanceId:"legion-vanguard",targetLocation:"vanguard",currentLocation:"vanguard",battleId:"battle-1"});
+  assert.equal(eventMatchesAbilityTrigger(ability,"attack",event,"legion-vanguard","vanguard","vanguard","p1"),true,card.id);
+  assert.equal(eventMatchesAbilityTrigger(ability,"attack",event,"other-vanguard-copy","vanguard","vanguard","p1"),false,card.id);
+  assert.equal(eventMatchesAbilityTrigger(ability,"attack",{...event,targetLocation:"rear-guard"},"legion-vanguard","vanguard","vanguard","p1"),false,card.id);
+ }
+});
+
+test("Rear-Guard Legion power AUTO matches the exact Legion event and expires at turn end",()=>{
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),ids=["cfa-2123","cfa-2131","cfa-2145","cfa-2147","cfa-2318","cfa-2348","cfa-2360","cfa-2396","cfa-2424","cfa-2434","cfa-11697"],catalog=loadCatalog(),matches=[];
+ for(const id of ids){const card=catalog.find(item=>item.id===id);assert.ok(card,id);const ability=parseCardAbilities(card).find(item=>item.definition?.source?.patternId==="auto-rc-vanguard-legions-source-turn-power-v1");assert.ok(ability,id);matches.push(ability);}
+ assert.equal(matches.length,11);assert.ok(matches.every(ability=>ability.trigger.eventType==="unit.legioned"&&ability.trigger.subject==="vanguard"&&ability.requiredLocation.includes("rear-guard")));
+ const ability=matches[0],event=createGameEvent({matchId:"rear-legion"},{type:"unit.legioned",actingPlayerId:"p1",turnPlayerId:"p1",sourceCardInstanceId:"leader",subjectCardInstanceId:"leader",subjectControllerPlayerId:"p1",currentLocation:"vanguard",legionMateInstanceId:"mate",timingWindow:"seek-mate-resolution"});
+ assert.equal(eventMatchesAbilityTrigger(ability,"legion",event,"rear-source","rear-left","vanguard","p1"),true);
+ assert.equal(eventMatchesAbilityTrigger(ability,"legion",event,"rear-source","vanguard","vanguard","p1"),false);
+ assert.equal(eventMatchesAbilityTrigger(ability,"legion",{...event,subjectControllerPlayerId:"p2"},"rear-source","rear-left","vanguard","p1"),false);
+ const source={uid:"rear-source",controllerPlayerId:"p1",turnPowerBoost:0},player={playerId:"p1",rear:[source],vanguard:{uid:"leader"}},result=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{source,sourceInPlay:true,sourceZone:"rear-left",sourceControllerPlayerId:"p1",player,side:"p1",turnId:7});
+ assert.equal(result.ok,true);assert.equal(source.turnPowerBoost,5000);expireTurnModifiers({players:{p1:player},turn:7,side:"p1"},"p1");assert.equal(source.turnPowerBoost,0);
+});
+
+test("Rear-Guard own-attack Legion AUTO requires its exact attack and a Legioned controller Vanguard",()=>{
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),ids=["cfa-2031","cfa-2045","cfa-2116","cfa-2120","cfa-2127","cfa-2133","cfa-2248","cfa-2258","cfa-2312","cfa-2363"],catalog=loadCatalog();
+ for(const id of ids){
+  const card=catalog.find(item=>item.id===id);assert.ok(card,id);
+  const ability=parseCardAbilities(card).find(item=>item.definition?.source?.patternId==="auto-rc-own-attack-legion-power-battle-v1");assert.ok(ability,id);
+  assert.deepEqual(ability.requiredLocation,["rear-guard"],id);assert.deepEqual(ability.conditions,[{type:"controller-vanguard-is-legion"}],id);assert.equal(ability.conditionStatus,"modeled",id);assert.equal(ability.trigger.eventType,"unit.attacked",id);assert.equal(ability.trigger.subject,"source",id);
+  assert.equal(evaluateAbilityConditions(ability,{controllerVanguardIsLegion:true}),true,id);assert.equal(evaluateAbilityConditions(ability,{controllerVanguardIsLegion:false}),false,id);
+  const event=createGameEvent({matchId:`${id}-legion-attack`},{type:"unit.attacked",actingPlayerId:"p1",turnPlayerId:"p1",sourceCardInstanceId:"attacker",subjectCardInstanceId:"attacker",sourceControllerPlayerId:"p1",currentLocation:"rear-left",targetLocation:"vanguard",battleId:"battle-1"});
+  assert.equal(eventMatchesAbilityTrigger(ability,"attack",event,"attacker","rear-left","vanguard","p1"),true,id);assert.equal(eventMatchesAbilityTrigger(ability,"attack",event,"other-copy","rear-left","vanguard","p1"),false,id);assert.equal(eventMatchesAbilityTrigger(ability,"attack",event,"attacker","vanguard","vanguard","p1"),false,id);
+ }
+});
+
+test("G-zone CONT prevents ability-originated face-up changes but permits a player's free Stride rule",()=>{
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),catalog=loadCatalog();
+ const records=catalog.filter(card=>/This card cannot be turned face up by abilities\. If this card is face up, you can Stride without paying the Stride cost\./i.test(card.text));
+ assert.equal(records.length,6);
+ for(const card of records){
+  const ability=parseCardAbilities(card)[0];assert.equal(ability.kind,"CONT");assert.deepEqual(ability.requiredLocation,["g-zone"]);assert.equal(ability.definition?.source?.patternId,"cont-gzone-unflip-free-stride-v1");assert.equal(ability.costStatus,"no-cost");assert.equal(isManuallyActivatable(ability),false);
+  const lock=evaluateContinuousRestrictions([ability],{location:"g-zone",action:"turn-face-up-by-ability"});assert.equal(lock.legal,false,card.id);assert.equal(lock.restrictions[0].reason,"g-zone-card-cannot-be-turned-face-up-by-ability",card.id);
+  assert.equal(evaluateContinuousRestrictions([ability],{location:"g-zone",action:"turn-face-up-manually"}).legal,true,card.id);
+  assert.equal(evaluateContinuousRestrictions([ability],{location:"rear-guard",action:"turn-face-up-by-ability"}).legal,true,card.id);
+ }
+});
+
+test("Stride/Ride Deck cost draw AUTO matches only its own card and one of the printed discard reasons",()=>{
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),catalog=loadCatalog(),ids=["cfa-11908","cfa-11974","cfa-12012","cfa-12034","cfa-12064","cfa-12121"];
+ const event=(reason,source="discarded-source",actor="p1")=>createGameEvent({matchId:`discard-reason-${reason}-${source}-${actor}`},{type:"card.discarded",actingPlayerId:actor,turnPlayerId:actor,sourceCardInstanceId:source,sourceControllerPlayerId:"p1",subjectCardInstanceId:source,subjectControllerPlayerId:"p1",previousLocation:"hand",currentLocation:"drop",discardReason:reason});
+ for(const id of ids){const card=catalog.find(item=>item.id===id);assert.ok(card,id);const ability=parseCardAbilities(card).find(item=>item.definition?.source?.patternId==="auto-ride-deck-or-stride-cost-discard-draw-v1");assert.ok(ability,id);assert.equal(ability.id.endsWith(":1"),true,id);assert.equal(ability.conditionStatus,"no-explicit-condition-detected",id);assert.equal(ability.costStatus,"no-cost",id);assert.deepEqual(ability.conditions,[],id);
+  for(const reason of ["ride-deck-grade-three-cost","stride-cost"])assert.equal(eventMatchesAbilityTrigger(ability,"discard",event(reason),"discarded-source","hand","drop","p1"),true,`${id}:${reason}`);
+  assert.equal(eventMatchesAbilityTrigger(ability,"discard",event("ordinary-cost"),"discarded-source","hand","drop","p1"),false,id);assert.equal(eventMatchesAbilityTrigger(ability,"discard",event("stride-cost","different-copy"),"discarded-source","hand","drop","p1"),false,id);assert.equal(eventMatchesAbilityTrigger(ability,"discard",event("stride-cost","discarded-source","p2"),"discarded-source","hand","drop","p1"),false,id);
+ }
 });

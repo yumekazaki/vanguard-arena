@@ -19,7 +19,9 @@
     for (const [side, player] of playerEntries) {
       for (const zone of CARD_ZONES) if (!Array.isArray(player[zone])) return { ok: false, reason: "missing-card-zone", side, zone };
       if (player.triggerZone !== undefined && !Array.isArray(player.triggerZone)) return { ok: false, reason: "invalid-card-zone", side, zone: "triggerZone" };
-      const instances = [player.vanguard, ...CARD_ZONES.flatMap(zone => player[zone]), ...(player.triggerZone || [])];
+      const instances = [player.vanguard, player.vanguard?.legionMate, ...CARD_ZONES.flatMap(zone => player[zone]), ...(player.triggerZone || [])];
+      if (player.vanguard?.legionMateInstanceId !== undefined && player.vanguard.legionMateInstanceId !== player.vanguard?.legionMate?.uid) return { ok: false, reason: "legion-mate-link-mismatch", uid: player.vanguard.uid };
+      if (player.vanguard?.legionMate && player.vanguard.legionMate.legionLeaderInstanceId !== player.vanguard.uid) return { ok: false, reason: "legion-leader-link-mismatch", uid: player.vanguard.legionMate.uid };
       for (const instance of instances) {
         if (instance == null) continue;
         if (typeof instance !== "object" || Array.isArray(instance) || typeof instance.uid !== "string" || !instance.uid || instance.uid.length > 180 || (typeof instance.cardId !== "string" && typeof instance.cardId !== "number") || String(instance.cardId).length === 0) return { ok: false, reason: "invalid-card-instance", side };

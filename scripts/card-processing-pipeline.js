@@ -38,11 +38,13 @@ function validateShard(result, shard, expectedCards) {
 }
 
 async function run() {
-  const workersRequested = Number(option("--workers", "2"));
+  const workersOption = option("--workers", "auto");
+  const workersRequested = workersOption === "auto" ? "auto" : Number(workersOption);
+  const workerTarget = workersOption === "auto" ? (os.availableParallelism?.() || os.cpus().length) : workersRequested;
   const batchSize = Number(option("--batch-size", "250"));
   const runId = option("--run-id", `catalog-${new Date().toISOString().replace(/[:.]/g, "-")}`);
   if (!/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,79}$/.test(runId)) throw new Error("Invalid run ID.");
-  const maxWorkers = Math.max(1, Math.min(8, os.availableParallelism?.() || os.cpus().length, Number.isInteger(workersRequested) ? workersRequested : 2));
+  const maxWorkers = Math.max(1, Math.min(8, os.availableParallelism?.() || os.cpus().length, Number.isInteger(workerTarget) ? workerTarget : 2));
   if (!Number.isInteger(batchSize) || batchSize < 25 || batchSize > 2000) throw new Error("Batch size must be from 25 to 2000 cards.");
   const catalog = loadCatalog(root);
   const manifest = JSON.parse(fs.readFileSync(path.join(root, "card-verification-manifest.json"), "utf8"));
@@ -116,7 +118,10 @@ async function run() {
   }
   progress.status = "complete";
   progress.completedAt = new Date().toISOString();
-  progress.metrics = { ...aggregate, validationEvidenceFresh, workersRequested, workersUsed: maxWorkers, batchSize, elapsedMilliseconds: Number((performance.now() - started).toFixed(1)), parsedCardsPerMinute: Number((aggregate.parsed * 60000 / (performance.now() - started)).toFixed(1)), verifiedCardsPerMinute: Number((aggregate.fullyVerifiedCards * 60000 / (performance.now() - started)).toFixed(1)), stagedShards: shards.length };
+  const elapsedMilliseconds = Number((performance.now() - started).toFixed(1));
+  // Staging only parses and classifies existing evidence. It does not verify cards.
+  // Keep pre-existing fully verified cards separate from newly verified throughput.
+  progress.metrics = { ...aggregate, existingFullyVerifiedCards: aggregate.fullyVerifiedCards, newlyVerifiedCards: 0, validationEvidenceFresh, workersRequested, workersUsed: maxWorkers, batchSize, elapsedMilliseconds, parsedCardsPerMinute: Number((aggregate.parsed * 60000 / elapsedMilliseconds).toFixed(1)), verifiedCardsPerMinute: 0, stagedShards: shards.length };
   atomicJson(manifestFile, progress);
   process.stdout.write(JSON.stringify({ runId, stageDirectory: path.relative(root, directory), metrics: progress.metrics, resumedShards: shards.length - pending.length }, null, 2) + "\n");
 }

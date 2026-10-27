@@ -12,16 +12,45 @@
   function isGDeckCard(card) { return G_DECK_PATTERN.test(`${card?.type || ""} ${card?.name || ""}`); }
   function isUnitCard(card) { return UNIT_PATTERN.test(String(card?.type || "")); }
   function nameKey(card, id) { return String(card?.name || id).normalize("NFKD").toLowerCase().replace(/[^a-z0-9]/g, ""); }
+  function cardIdentity(card) {
+    const header = String(card?.text || "").split(/\r?\n/, 1)[0].split("/").map(value => value.trim()).filter(Boolean);
+    const clan = typeof card?.clan === "string" ? card.clan : Array.isArray(card?.clans) && card.clans.length ? card.clans[0] : header.length > 1 ? header[0] : null;
+    const clans = Array.isArray(card?.clans) ? [...card.clans] : clan ? [clan] : [];
+    const explicitRaces = Array.isArray(card?.races) ? [...card.races] : typeof card?.race === "string" ? [card.race] : [];
+    const races = explicitRaces.length ? explicitRaces : header.length > 1 ? header.slice(1) : [];
+    return { clan, clans, race: explicitRaces[0] || races[0] || null, races };
+  }
+
+  function deckCopyLimitForCard(card, deck, cardById, engine) {
+    const targetKey = nameKey(card, card?.id), definitions = [card];
+    for (const [id, count] of Object.entries(deck?.cards || {})) if (Number(count) > 0) {
+      const definition = cardById?.(id);
+      if (definition) definitions.push(definition);
+    }
+    const limits = [];
+    for (const definition of definitions) for (const ability of engine?.parseCardAbilities?.(definition) || []) {
+      for (const restriction of ability.definition?.continuousRestrictions || []) {
+        if (restriction.type === "named-deck-copy-limit" && nameKey({ name: restriction.cardName }, restriction.cardName) === targetKey) limits.push(Number(restriction.maximum));
+      }
+    }
+    return limits.length ? Math.min(...limits) : 4;
+  }
 
   function validateDecklist(deck, cardById, engine) {
     if (!deck || typeof deck !== "object" || Array.isArray(deck) || !deck.cards || typeof deck.cards !== "object" || Array.isArray(deck.cards)) return { ok: false, reason: "invalid-deck" };
-    const mainNames = new Map(), gNames = new Map();
+    const mainNames = new Map(), gNames = new Map(), namedDeckLimits = new Map();
     let mainCount = 0, gCount = 0, triggers = 0, heals = 0, overs = 0, sentinels = 0, regalis = 0;
     for (const [cardId, rawCount] of Object.entries(deck.cards)) {
       if (!Number.isInteger(rawCount) || rawCount < 0 || rawCount > 4) return { ok: false, reason: "invalid-card-count", cardId };
       if (rawCount === 0) continue;
       const card = cardById(cardId);
       if (!card || String(card.id) !== cardId) return { ok: false, reason: "unknown-card", cardId };
+      for (const ability of engine?.parseCardAbilities?.(card) || []) for (const restriction of ability.definition?.continuousRestrictions || []) {
+        if (restriction.type !== "named-deck-copy-limit") continue;
+        const key = nameKey({ name: restriction.cardName }, restriction.cardName), prior = namedDeckLimits.get(key);
+        if (prior && prior.maximum !== restriction.maximum) return { ok: false, reason: "conflicting-named-deck-copy-limits", cardName: restriction.cardName };
+        namedDeckLimits.set(key, { cardName: restriction.cardName, maximum: restriction.maximum });
+      }
       const isG = isGDeckCard(card), names = isG ? gNames : mainNames, key = nameKey(card, cardId);
       names.set(key, (names.get(key) || 0) + rawCount);
       if (isG) gCount += rawCount;
@@ -36,7 +65,12 @@
     if (gCount > 16) return { ok: false, reason: "g-deck-exceeds-16", actual: gCount };
     if (triggers !== 16) return { ok: false, reason: "main-deck-must-have-16-triggers", actual: triggers };
     if (heals > 4 || overs > 1 || sentinels > 4 || regalis > 1) return { ok: false, reason: "deck-restriction-exceeded", heals, overs, sentinels, regalis };
-    if ([...mainNames.values(), ...gNames.values()].some(count => count > 4)) return { ok: false, reason: "same-name-limit-exceeded" };
+    for (const [key, count] of [...mainNames, ...gNames]) {
+      const exception = namedDeckLimits.get(key), limit = exception?.maximum ?? 4;
+      if (count > limit) return exception
+        ? { ok: false, reason: "named-deck-copy-limit-exceeded", cardName: exception.cardName, maximum: limit, actual: count }
+        : { ok: false, reason: "same-name-limit-exceeded" };
+    }
     const starter = typeof deck.starterCardId === "string" ? cardById(deck.starterCardId) : null;
     if (!starter || !(Number(starter.grade) === 0 && isUnitCard(starter) && Number(deck.cards[starter.id]) > 0 && !isGDeckCard(starter))) return { ok: false, reason: "invalid-starter" };
     return { ok: true, mainCount, gCount, starterCardId: starter.id };
@@ -64,6 +98,7 @@
     for (const [cardId, count] of Object.entries(deck.cards)) {
       const definition = cardById(cardId), grade = Number(definition?.grade);
       const parsedAbilities = engine.parseCardAbilities?.(definition) || [];
+      const identity = cardIdentity(definition);
       const printedDrive = /Triple Drive/i.test(String(definition?.text || "")) ? 3 : /Twin Drive/i.test(String(definition?.text || "")) ? 2 : 1;
       const instanceState = {
         ...(Number.isInteger(grade) && grade >= 0 ? { grade } : {}),
@@ -72,12 +107,12 @@
         ...(typeof definition?.type === "string" ? { type: definition.type } : {}),
         hasAbilities: parsedAbilities.length > 0,
         hasLimitBreak4: /\bLimit Break 4\s*\(This ability is active if you have (?:four|4) or more damage\)/i.test(String(definition?.text || "")),
-        ...(typeof definition?.clan === "string" ? { clan: definition.clan } : {}),
-        ...(Array.isArray(definition?.clans) ? { clans: [...definition.clans] } : {}),
+        ...(identity.clan ? { clan: identity.clan } : {}),
+        ...(identity.clans.length ? { clans: identity.clans } : {}),
         ...(typeof definition?.nation === "string" ? { nation: definition.nation } : {}),
         ...(Array.isArray(definition?.nations) ? { nations: [...definition.nations] } : {}),
-        ...(typeof definition?.race === "string" ? { race: definition.race } : {}),
-        ...(Array.isArray(definition?.races) ? { races: [...definition.races] } : {}),
+        ...(identity.race ? { race: identity.race } : {}),
+        ...(identity.races.length ? { races: identity.races } : {}),
         critical: Number.isFinite(Number(definition?.critical)) && Number(definition.critical) > 0 ? Number(definition.critical) : 1,
         drive: printedDrive,
         ...(isGDeckCard(definition) ? { gDeckCard: true } : {}),
@@ -87,7 +122,7 @@
         ...(typeof definition?.trigger === "string" ? { triggerType: definition.trigger.toLowerCase() } : {}),
         ...(definition?.triggerPower != null && Number.isFinite(Number(definition.triggerPower)) ? { triggerPower: Number(definition.triggerPower) } : {}),
         ...(isUnitCard(definition) ? { unitCard: true } : {}),
-        ...(engine.hasAbilityKeyword(definition, "boost") ? { boostAbility: true } : {}),
+        ...(isUnitCard(definition) && (grade === 1 || engine.hasAbilityKeyword(definition, "boost")) ? { boostAbility: true } : {}),
         ...(engine.hasAbilityKeyword(definition, "sentinel") ? { sentinel: true } : {}),
         ...(/attack(?:s|ing)? from (?:the )?back row|back row[^.\n]*can attack/i.test(String(definition?.text || "")) ? { canAttackBackRow: true } : {}),
         ...(engine.hasAbilityKeyword(definition, "cannot-be-ridden") ? { cannotBeRidden: true } : {}),
@@ -142,5 +177,5 @@
     };
   }
 
-  return Object.freeze({ isGDeckCard, isUnitCard, validateDecklist, shuffleInPlace, secureRandomFloat, createInitialMatchState });
+  return Object.freeze({ isGDeckCard, isUnitCard, validateDecklist, deckCopyLimitForCard, shuffleInPlace, secureRandomFloat, createInitialMatchState });
 });

@@ -1,4 +1,5 @@
 import "../../../ability-engine.js";
+import "../../../card-ability-keywords.js";
 import "../../../ability-definitions.js";
 import "../../../ability-server-reducer.js";
 import "./worker-core.js";

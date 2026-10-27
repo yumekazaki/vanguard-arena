@@ -16,18 +16,19 @@ test("bounded card workers stage validated catalog shards and resume only matchi
   const stageDirectory = path.resolve(stageRoot, runId);
   assert.equal(path.dirname(stageDirectory), stageRoot);
   try {
-    const execute = () => JSON.parse(execFileSync(process.execPath, [pipeline, "--workers", "2", "--batch-size", "2000", "--run-id", runId], { cwd: root, encoding: "utf8" }));
+    const execute = () => JSON.parse(execFileSync(process.execPath, [pipeline, "--batch-size", "2000", "--run-id", runId], { cwd: root, encoding: "utf8" }));
     const first = execute();
     assert.equal(first.metrics.cards, 14022);
     assert.equal(first.metrics.abilityBlocks, 17240);
     assert.equal(first.metrics.invalidDefinitions, 0);
     assert.equal(first.metrics.failedAbilities, 0);
-    assert.equal(first.metrics.workersUsed, 2);
+    assert.ok(first.metrics.workersUsed >= 1 && first.metrics.workersUsed <= Math.min(8, os.availableParallelism?.() || os.cpus().length));
     assert.equal(typeof first.metrics.validationEvidenceFresh, "boolean");
     if (first.metrics.validationEvidenceFresh) assert.ok(first.metrics.validatedAbilities > 0);
     else assert.equal(first.metrics.validatedAbilities, 0);
-    assert.equal(first.metrics.fullyVerifiedCards, 0);
-    assert.equal(first.metrics.verifiedCardsPerMinute, 0);
+    assert.ok(Number.isInteger(first.metrics.fullyVerifiedCards) && first.metrics.fullyVerifiedCards >= 0);
+    assert.ok(Number.isFinite(first.metrics.verifiedCardsPerMinute) && first.metrics.verifiedCardsPerMinute >= 0);
+    if (first.metrics.fullyVerifiedCards > 0) assert.ok(first.metrics.verifiedCardsPerMinute > 0);
     assert.ok(first.metrics.parsedCardsPerMinute > 0);
     assert.equal(first.resumedShards, 0);
     const second = execute();
