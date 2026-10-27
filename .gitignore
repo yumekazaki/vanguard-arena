@@ -2,3 +2,4 @@ inspect-catalog.js
 parse_check.js
 parse_check.py
 scan-props.js
+.card-pipeline/

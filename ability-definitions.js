@@ -7624,6 +7624,1494 @@
           "count": 1
         }
       ]
+    },
+    {
+      "id": "cfa-5289:0",
+      "cardId": "cfa-5289",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded from hand for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5293:0",
+      "cardId": "cfa-5293",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5299:0",
+      "cardId": "cfa-5299",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded from hand for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5303:0",
+      "cardId": "cfa-5303",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded from hand for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5306:0",
+      "cardId": "cfa-5306",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded from hand for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5307:0",
+      "cardId": "cfa-5307",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded from hand for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5310:0",
+      "cardId": "cfa-5310",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded from hand for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5344:0",
+      "cardId": "cfa-5344",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded from hand for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5350:0",
+      "cardId": "cfa-5350",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded from hand for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5352:0",
+      "cardId": "cfa-5352",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded from hand for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5449:0",
+      "cardId": "cfa-5449",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5463:0",
+      "cardId": "cfa-5463",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5476:0",
+      "cardId": "cfa-5476",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5556:0",
+      "cardId": "cfa-5556",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5573:0",
+      "cardId": "cfa-5573",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5589:0",
+      "cardId": "cfa-5589",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5594:0",
+      "cardId": "cfa-5594",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5609:0",
+      "cardId": "cfa-5609",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5613:0",
+      "cardId": "cfa-5613",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5640:0",
+      "cardId": "cfa-5640",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up] When this card is discarded for the cost of calling a G guardian, you may pay the cost. If you do, Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5785:0",
+      "cardId": "cfa-5785",
+      "kind": "AUTO",
+      "printedText": "AUTO: When discarded for the cost of calling a G guardian, COST [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up], Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5786:0",
+      "cardId": "cfa-5786",
+      "kind": "AUTO",
+      "printedText": "AUTO: When discarded for the cost of calling a G guardian, COST [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up], Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5787:0",
+      "cardId": "cfa-5787",
+      "kind": "AUTO",
+      "printedText": "AUTO: When discarded for the cost of calling a G guardian, COST [Bind this card face up & Choose another card with \"Heal\" from your drop zone, and bind it face up], Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5789:0",
+      "cardId": "cfa-5789",
+      "kind": "AUTO",
+      "printedText": "AUTO: When discarded for the cost of calling a G guardian, COST [Bind this card face up & Choose another \"Heal\" trigger from your drop zone, and bind it face up], Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11019:0",
+      "cardId": "cfa-11019",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11151:0",
+      "cardId": "cfa-11151",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11152:0",
+      "cardId": "cfa-11152",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11153:0",
+      "cardId": "cfa-11153",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11154:0",
+      "cardId": "cfa-11154",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11155:0",
+      "cardId": "cfa-11155",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11156:0",
+      "cardId": "cfa-11156",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11157:0",
+      "cardId": "cfa-11157",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11158:0",
+      "cardId": "cfa-11158",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11159:0",
+      "cardId": "cfa-11159",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11160:0",
+      "cardId": "cfa-11160",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11161:0",
+      "cardId": "cfa-11161",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11162:0",
+      "cardId": "cfa-11162",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11163:0",
+      "cardId": "cfa-11163",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11164:0",
+      "cardId": "cfa-11164",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11165:0",
+      "cardId": "cfa-11165",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11166:0",
+      "cardId": "cfa-11166",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11167:0",
+      "cardId": "cfa-11167",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11168:0",
+      "cardId": "cfa-11168",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11169:0",
+      "cardId": "cfa-11169",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11170:0",
+      "cardId": "cfa-11170",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11171:0",
+      "cardId": "cfa-11171",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11172:0",
+      "cardId": "cfa-11172",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11173:0",
+      "cardId": "cfa-11173",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded for the cost of calling a G guardian, COST [bind this card & bind another heal trigger from drop], and Counter Charge 1 or Soul Charge 1.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-g-guardian-discard-bind-heal-charge-choice-v1",
+        "review": "Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."
+      },
+      "costs": [
+        {
+          "type": "source-bind",
+          "count": 1
+        },
+        {
+          "type": "bind-heal-from-drop",
+          "count": 1,
+          "filter": {
+            "trigger": "Heal"
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "g-guardian-discard-charge-choice",
+          "target": "controller"
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

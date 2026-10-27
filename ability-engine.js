@@ -1123,8 +1123,8 @@
   }
   function compileGGuardianDiscardChargeChoiceDefinition(cardId,abilityId,kind,printedText){
     const text=normalizePrintedText(printedText);
-    if(kind!=="AUTO"||!/^AUTO\s*:/i.test(text)||!/\bwhen (?:this card )?(?:is )?discarded for the cost of calling a G guardian\b/i.test(text)||!/\bCounter Charge 1 or Soul Charge 1\.$/i.test(text)||!/\bbind this card\b/i.test(text)||!/\banother[\s\S]{0,80}heal[\s\S]{0,55}drop/i.test(text))return null;
-    return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-g-guardian-discard-bind-heal-charge-choice-v1",review:"Exact 39-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."},costs:[{type:"source-bind",count:1},{type:"bind-heal-from-drop",count:1,filter:{trigger:"Heal"}}],effects:[{op:"g-guardian-discard-charge-choice",target:"controller"}]};
+    if(kind!=="AUTO"||!/^AUTO\s*:/i.test(text)||!/\bwhen (?:this card )?(?:is )?discarded(?: from hand)? for the cost of calling a G guardian\b/i.test(text)||!/\bCounter Charge 1 or Soul Charge 1\.$/i.test(text)||!/\bbind this card\b/i.test(text)||!/\banother[\s\S]{0,80}heal[\s\S]{0,55}drop/i.test(text))return null;
+    return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-g-guardian-discard-bind-heal-charge-choice-v1",review:"Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."},costs:[{type:"source-bind",count:1},{type:"bind-heal-from-drop",count:1,filter:{trigger:"Heal"}}],effects:[{op:"g-guardian-discard-charge-choice",target:"controller"}]};
   }
   function compileVanguardTopFiveKeywordSearchDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;const text=normalizePrintedText(printedText).replace(/\s*\(SHIFT \+ left click to count up attacks\.\)\s*\(SHIFT \+ right click to count down attacks\.\)\s*\(Middle click or hover and press SPACE to set number of attacks\.\)/i,"");
@@ -1287,7 +1287,7 @@
   function compileAutoTrigger(raw) {
     const text=String(raw||"").replace(/^(?:\([^)]*\)|\[[^\]]*\])\s*:?\s*/,"").replace(/^(?:\[[^\]]+\]\s*)+/,"");
     const result=(eventType,subject,circles=[])=>({status:"recognized-trigger",eventType,subject,circles});
-    if(/^when (?:this card )?(?:is )?discarded for the cost of calling a G guardian\b/i.test(text))return {...result("card.discarded","source"),sourceLocation:"hand",destinationLocation:"drop",discardReason:"g-guardian-cost"};
+    if(/^when (?:this card )?(?:is )?discarded(?: from hand)? for the cost of calling a G guardian\b/i.test(text))return {...result("card.discarded","source"),sourceLocation:"hand",destinationLocation:"drop",discardReason:"g-guardian-cost"};
     if(/^Blaze\.?$/i.test(text))return{...result("attack.step-started","controller"),turnRelation:"controller"};const blaze=text.match(/^Blaze \(At the beginning of (?:your (?:first|each)|each of your) attack, if the number of rear-guards you have is greater than your opponent[’']s, your vanguard becomes blazing until end of turn\.\)$/i);if(blaze)return{...result("attack.step-started","controller"),turnRelation:"controller",...(/beginning of your first attack/i.test(text)?{firstAttackOnly:true}:{})};
     if(/^Engorge\.?$/i.test(text)||/^Engorge \(When this unit attacks, you may retire one or more of your other rear-guards\. If you do, it is engorged until end of turn\.\)$/i.test(text))return result("unit.attacked","source");
     if(/^when(?:ever)? this unit becomes engorged\b/i.test(text))return result("unit.became_engorged","source");
@@ -1351,7 +1351,7 @@
       const from = text.match(/\bfrom\s+(?:(?:your|the|a|an) )?(hand|soul|deck|damage zone|bind zone|drop zone|guardian circle|GC|rear-guard circle|RC|vanguard circle|VC)\b/i)?.[1];
       const sourceLocation = from ? (/rear-guard circle|\bRC\b/i.test(from) ? "rear-guard" : /vanguard circle|\bVC\b/i.test(from) ? "vanguard" : /guardian circle|\bGC\b/i.test(from) ? "guardian" : from.toLowerCase().replace(/ zone$/, "")) : null;
       const phrase=String(movementMatch[1]||"this unit").toLowerCase(),subject=phrase==="this unit"||phrase==="this card"?"source":"any";
-      const discardReason=text.toLowerCase().includes("discarded for the cost of calling a g guardian")?"g-guardian-cost":null;
+      const discardReason=/discarded(?: from hand)? for the cost of calling a g guardian/i.test(text)?"g-guardian-cost":null;
       if(discardReason)return { ...result(eventType, subject), destinationLocation, sourceLocation, excludeSourceAsSubject:/^another /.test(phrase), requiredPhase:/during your ride phase/i.test(text)?"ride":null, discardReason };
       return { ...result(eventType, subject), destinationLocation, sourceLocation, excludeSourceAsSubject:/^another /.test(phrase), requiredPhase:/\bduring your ride phase\b/i.test(text)?"ride":null };
     }
