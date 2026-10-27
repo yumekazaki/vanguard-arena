@@ -9112,6 +9112,990 @@
           "target": "controller"
         }
       ]
+    },
+    {
+      "id": "cfa-10781:0",
+      "cardId": "cfa-10781",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Chronojet\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Chronojet"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11103:0",
+      "cardId": "cfa-11103",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Susanoo\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Susanoo"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11105:0",
+      "cardId": "cfa-11105",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Gavrail\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Gavrail"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11107:0",
+      "cardId": "cfa-11107",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Claret Sword Dragon\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Claret Sword Dragon"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11109:0",
+      "cardId": "cfa-11109",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Gurguit\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Gurguit"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11111:0",
+      "cardId": "cfa-11111",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Fenrir\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Fenrir"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11113:0",
+      "cardId": "cfa-11113",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Dragonic Blademaster\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Dragonic Blademaster"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11115:0",
+      "cardId": "cfa-11115",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Shiranui\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Shiranui"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11117:0",
+      "cardId": "cfa-11117",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Gaia\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Gaia"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11119:0",
+      "cardId": "cfa-11119",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Yasuie\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Yasuie"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11121:0",
+      "cardId": "cfa-11121",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Vanquisher\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Vanquisher"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11123:0",
+      "cardId": "cfa-11123",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Victor\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Victor"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11125:0",
+      "cardId": "cfa-11125",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Gallop\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Gallop"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11127:0",
+      "cardId": "cfa-11127",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Messiah\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Messiah"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11129:0",
+      "cardId": "cfa-11129",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Rising\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Rising"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11131:0",
+      "cardId": "cfa-11131",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Scharhrot\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Scharhrot"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11133:0",
+      "cardId": "cfa-11133",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Harri\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Harri"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11135:0",
+      "cardId": "cfa-11135",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Nightrose\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Nightrose"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11137:0",
+      "cardId": "cfa-11137",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Lauris\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Lauris"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11139:0",
+      "cardId": "cfa-11139",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Thavas\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Thavas"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11141:0",
+      "cardId": "cfa-11141",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Darkface\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Darkface"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11143:0",
+      "cardId": "cfa-11143",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Bigbelly\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Bigbelly"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11145:0",
+      "cardId": "cfa-11145",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Ranunculus\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Ranunculus"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11147:0",
+      "cardId": "cfa-11147",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your grade 3 or greater vanguard with \"Altmile\" in its card name attacks, COST [put this unit into soul], draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Altmile"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-grade-named-vanguard-attack-sacrifice-draw-power-v1",
+        "review": "Exact 24-record family. The controller's exact Vanguard attack is the trigger; the live Vanguard must meet the printed minimum grade and name substring. The source RC pays its optional Soul cost before drawing and selecting a friendly Vanguard for battle-only power."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

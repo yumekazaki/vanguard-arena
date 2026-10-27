@@ -4,11 +4,12 @@
   "latestFullSuite": {
     "command": "node --test --test-reporter=spec",
     "status": "passed",
-    "tests": 530,
-    "passed": 530,
+    "tests": 533,
+    "passed": 533,
     "failed": 0,
-    "durationMilliseconds": 50098.2511,
-    "runDate": "2026-10-26"
+    "durationMilliseconds": 54035.6622,
+    "runDate": "2026-10-26",
+    "validationInputDigest": "4c669d8a1f4de0d8090bda7a84281f68433605e457edbdba2588404c8c3c8e67"
   },
   "records": [
     {
@@ -2320,6 +2321,366 @@
         "the exact from-hand G-Guardian Heal wording joins the existing validated 48-card handler",
         "from-hand wording still requires the exact source instance and G-Guardian discard cause",
         "the expanded compiler remains limited to the reviewed 48 exact abilities"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-10781",
+      "abilityId": "cfa-10781:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11103",
+      "abilityId": "cfa-11103:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11105",
+      "abilityId": "cfa-11105:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11107",
+      "abilityId": "cfa-11107:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11109",
+      "abilityId": "cfa-11109:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11111",
+      "abilityId": "cfa-11111:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11113",
+      "abilityId": "cfa-11113:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11115",
+      "abilityId": "cfa-11115:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11117",
+      "abilityId": "cfa-11117:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11119",
+      "abilityId": "cfa-11119:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11121",
+      "abilityId": "cfa-11121:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11123",
+      "abilityId": "cfa-11123:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11125",
+      "abilityId": "cfa-11125:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11127",
+      "abilityId": "cfa-11127:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11129",
+      "abilityId": "cfa-11129:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11131",
+      "abilityId": "cfa-11131:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11133",
+      "abilityId": "cfa-11133:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11135",
+      "abilityId": "cfa-11135:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11137",
+      "abilityId": "cfa-11137:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11139",
+      "abilityId": "cfa-11139:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11141",
+      "abilityId": "cfa-11141:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11143",
+      "abilityId": "cfa-11143:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11145",
+      "abilityId": "cfa-11145:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-11147",
+      "abilityId": "cfa-11147:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-grade-named-vanguard-attack.test.js"
+      ],
+      "testCases": [
+        "all 24 grade-and-name Vanguard attack texts compile with optional Soul cost and ordered effects",
+        "the trusted trigger queues only for its controller's exact qualifying Vanguard attack",
+        "the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power"
       ],
       "fullyVerified": false,
       "remaining": "Other printed abilities on this card have not all been implemented and validated."

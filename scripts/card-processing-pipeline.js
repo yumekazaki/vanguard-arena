@@ -51,16 +51,16 @@ async function run() {
   const validationInputDigest = sourceValidationDigest(root);
   const fullSuite = manifest.latestFullSuite || {};
   const validationEvidenceFresh = fullSuite.status === "passed" && fullSuite.passed === fullSuite.tests && fullSuite.validationInputDigest === validationInputDigest;
-  const engineDigest = sha(["ability-engine.js", "ability-definitions.js", "scripts/card-pipeline-worker.js"].map(file => fs.readFileSync(path.join(root, file))).join("\0"));
+  const engineDigest = sha(["ability-engine.js", "ability-definitions.js", "scripts/card-pipeline-worker.js", "scripts/card-processing-pipeline.js"].map(file => fs.readFileSync(path.join(root, file))).join("\0"));
   const directory = path.join(stageRoot, runId);
   fs.mkdirSync(directory, { recursive: true });
   const manifestFile = path.join(directory, "manifest.json");
   let progress = null;
   if (fs.existsSync(manifestFile)) {
     progress = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
-    if (progress.catalogDigest !== catalogDigest || progress.evidenceDigest !== evidenceDigest || progress.engineDigest !== engineDigest || progress.batchSize !== batchSize) throw new Error("Resume refused: catalog, evidence, engine, or batch size changed. Use a new --run-id.");
+    if (progress.catalogDigest !== catalogDigest || progress.evidenceDigest !== evidenceDigest || progress.engineDigest !== engineDigest || progress.validationInputDigest !== validationInputDigest || progress.batchSize !== batchSize) throw new Error("Resume refused: catalog, evidence, tested source, engine, or batch size changed. Use a new --run-id.");
   } else {
-    progress = { schemaVersion: 1, runId, catalogDigest, evidenceDigest, engineDigest, batchSize, totalCards: catalog.length, createdAt: new Date().toISOString(), completedShards: {}, status: "running" };
+    progress = { schemaVersion: 1, runId, catalogDigest, evidenceDigest, engineDigest, validationInputDigest, batchSize, totalCards: catalog.length, createdAt: new Date().toISOString(), completedShards: {}, status: "running" };
   }
   const evidence = validationEvidenceFresh ? manifest.records.filter(record => record.status === "tests-passing" || record.status === "fully-verified").map(record => ({ abilityId: record.abilityId, status: record.status, fullyVerified: record.fullyVerified, testFiles: record.testFiles })) : [];
   const shards = [];
