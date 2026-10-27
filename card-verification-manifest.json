@@ -4,10 +4,10 @@
   "latestFullSuite": {
     "command": "node --test --test-reporter=spec",
     "status": "passed",
-    "tests": 526,
-    "passed": 526,
+    "tests": 530,
+    "passed": 530,
     "failed": 0,
-    "durationMilliseconds": 49782.78,
+    "durationMilliseconds": 50098.2511,
     "runDate": "2026-10-26"
   },
   "records": [
@@ -2179,6 +2179,150 @@
       ],
       "fullyVerified": false,
       "remaining": "Other printed abilities on this card are not yet implemented and validated."
+    },
+    {
+      "cardId": "cfa-5289",
+      "abilityId": "cfa-5289:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-g-guardian-hand-wording.test.js",
+        "ability-catalog-audit.test.js"
+      ],
+      "testCases": [
+        "the exact from-hand G-Guardian Heal wording joins the existing validated 48-card handler",
+        "from-hand wording still requires the exact source instance and G-Guardian discard cause",
+        "the expanded compiler remains limited to the reviewed 48 exact abilities"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-5299",
+      "abilityId": "cfa-5299:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-g-guardian-hand-wording.test.js",
+        "ability-catalog-audit.test.js"
+      ],
+      "testCases": [
+        "the exact from-hand G-Guardian Heal wording joins the existing validated 48-card handler",
+        "from-hand wording still requires the exact source instance and G-Guardian discard cause",
+        "the expanded compiler remains limited to the reviewed 48 exact abilities"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-5303",
+      "abilityId": "cfa-5303:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-g-guardian-hand-wording.test.js",
+        "ability-catalog-audit.test.js"
+      ],
+      "testCases": [
+        "the exact from-hand G-Guardian Heal wording joins the existing validated 48-card handler",
+        "from-hand wording still requires the exact source instance and G-Guardian discard cause",
+        "the expanded compiler remains limited to the reviewed 48 exact abilities"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-5306",
+      "abilityId": "cfa-5306:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-g-guardian-hand-wording.test.js",
+        "ability-catalog-audit.test.js"
+      ],
+      "testCases": [
+        "the exact from-hand G-Guardian Heal wording joins the existing validated 48-card handler",
+        "from-hand wording still requires the exact source instance and G-Guardian discard cause",
+        "the expanded compiler remains limited to the reviewed 48 exact abilities"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-5307",
+      "abilityId": "cfa-5307:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-g-guardian-hand-wording.test.js",
+        "ability-catalog-audit.test.js"
+      ],
+      "testCases": [
+        "the exact from-hand G-Guardian Heal wording joins the existing validated 48-card handler",
+        "from-hand wording still requires the exact source instance and G-Guardian discard cause",
+        "the expanded compiler remains limited to the reviewed 48 exact abilities"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-5310",
+      "abilityId": "cfa-5310:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-g-guardian-hand-wording.test.js",
+        "ability-catalog-audit.test.js"
+      ],
+      "testCases": [
+        "the exact from-hand G-Guardian Heal wording joins the existing validated 48-card handler",
+        "from-hand wording still requires the exact source instance and G-Guardian discard cause",
+        "the expanded compiler remains limited to the reviewed 48 exact abilities"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-5344",
+      "abilityId": "cfa-5344:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-g-guardian-hand-wording.test.js",
+        "ability-catalog-audit.test.js"
+      ],
+      "testCases": [
+        "the exact from-hand G-Guardian Heal wording joins the existing validated 48-card handler",
+        "from-hand wording still requires the exact source instance and G-Guardian discard cause",
+        "the expanded compiler remains limited to the reviewed 48 exact abilities"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-5350",
+      "abilityId": "cfa-5350:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-g-guardian-hand-wording.test.js",
+        "ability-catalog-audit.test.js"
+      ],
+      "testCases": [
+        "the exact from-hand G-Guardian Heal wording joins the existing validated 48-card handler",
+        "from-hand wording still requires the exact source instance and G-Guardian discard cause",
+        "the expanded compiler remains limited to the reviewed 48 exact abilities"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
+    },
+    {
+      "cardId": "cfa-5352",
+      "abilityId": "cfa-5352:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-g-guardian-hand-wording.test.js",
+        "ability-catalog-audit.test.js"
+      ],
+      "testCases": [
+        "the exact from-hand G-Guardian Heal wording joins the existing validated 48-card handler",
+        "from-hand wording still requires the exact source instance and G-Guardian discard cause",
+        "the expanded compiler remains limited to the reviewed 48 exact abilities"
+      ],
+      "fullyVerified": false,
+      "remaining": "Other printed abilities on this card have not all been implemented and validated."
     }
   ]
 }
