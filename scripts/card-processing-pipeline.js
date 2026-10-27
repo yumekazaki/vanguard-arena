@@ -18,6 +18,21 @@ function atomicJson(file, data) {
   fs.renameSync(temporary, file);
 }
 function sha(value) { return createHash("sha256").update(value).digest("hex"); }
+function sourceValidationDigest(directory) {
+  const files = [];
+  const walk = current => {
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      if (entry.isDirectory() && [".git", ".card-pipeline", "node_modules"].includes(entry.name)) continue;
+      const file = path.join(current, entry.name);
+      if (entry.isDirectory()) walk(file);
+      else if (/\.(?:js|cjs|mjs|ts|html|sql)$/i.test(entry.name)) files.push(file);
+    }
+  };
+  walk(directory);
+  const hash = createHash("sha256");
+  for (const file of files.sort()) hash.update(path.relative(directory, file)).update("\0").update(fs.readFileSync(file)).update("\0");
+  return hash.digest("hex");
+}
 function validateShard(result, shard, expectedCards) {
   return result?.ok === true && result.shardId === shard.id && result.recordCount === result.counters?.abilityBlocks && result.cardIds?.length === expectedCards && new Set(result.cardIds).size === expectedCards;
 }
@@ -33,6 +48,9 @@ async function run() {
   const manifest = JSON.parse(fs.readFileSync(path.join(root, "card-verification-manifest.json"), "utf8"));
   const catalogDigest = sha(JSON.stringify(catalog));
   const evidenceDigest = sha(JSON.stringify(manifest.records));
+  const validationInputDigest = sourceValidationDigest(root);
+  const fullSuite = manifest.latestFullSuite || {};
+  const validationEvidenceFresh = fullSuite.status === "passed" && fullSuite.passed === fullSuite.tests && fullSuite.validationInputDigest === validationInputDigest;
   const engineDigest = sha(["ability-engine.js", "ability-definitions.js", "scripts/card-pipeline-worker.js"].map(file => fs.readFileSync(path.join(root, file))).join("\0"));
   const directory = path.join(stageRoot, runId);
   fs.mkdirSync(directory, { recursive: true });
@@ -44,7 +62,7 @@ async function run() {
   } else {
     progress = { schemaVersion: 1, runId, catalogDigest, evidenceDigest, engineDigest, batchSize, totalCards: catalog.length, createdAt: new Date().toISOString(), completedShards: {}, status: "running" };
   }
-  const evidence = manifest.records.filter(record => record.status === "tests-passing" || record.status === "fully-verified").map(record => ({ abilityId: record.abilityId, status: record.status, fullyVerified: record.fullyVerified, testFiles: record.testFiles }));
+  const evidence = validationEvidenceFresh ? manifest.records.filter(record => record.status === "tests-passing" || record.status === "fully-verified").map(record => ({ abilityId: record.abilityId, status: record.status, fullyVerified: record.fullyVerified, testFiles: record.testFiles })) : [];
   const shards = [];
   for (let start = 0, index = 0; start < catalog.length; start += batchSize, index++) shards.push({ id: `shard-${String(index).padStart(5, "0")}`, cards: catalog.slice(start, start + batchSize) });
   const pending = [];
@@ -98,7 +116,7 @@ async function run() {
   }
   progress.status = "complete";
   progress.completedAt = new Date().toISOString();
-  progress.metrics = { ...aggregate, workersRequested, workersUsed: maxWorkers, batchSize, elapsedMilliseconds: Number((performance.now() - started).toFixed(1)), parsedCardsPerMinute: Number((aggregate.parsed * 60000 / (performance.now() - started)).toFixed(1)), verifiedCardsPerMinute: Number((aggregate.fullyVerifiedCards * 60000 / (performance.now() - started)).toFixed(1)), stagedShards: shards.length };
+  progress.metrics = { ...aggregate, validationEvidenceFresh, workersRequested, workersUsed: maxWorkers, batchSize, elapsedMilliseconds: Number((performance.now() - started).toFixed(1)), parsedCardsPerMinute: Number((aggregate.parsed * 60000 / (performance.now() - started)).toFixed(1)), verifiedCardsPerMinute: Number((aggregate.fullyVerifiedCards * 60000 / (performance.now() - started)).toFixed(1)), stagedShards: shards.length };
   atomicJson(manifestFile, progress);
   process.stdout.write(JSON.stringify({ runId, stageDirectory: path.relative(root, directory), metrics: progress.metrics, resumedShards: shards.length - pending.length }, null, 2) + "\n");
 }
