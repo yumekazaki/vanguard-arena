@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Card Pipeline Optimization
 
 ## Checkpoint
@@ -57,5 +56,3 @@ Two independent read-only pattern audits were run in parallel with implementatio
 `scripts/card-processing-pipeline.js` assigns deterministic catalog shards to a bounded `worker_threads` pool. Workers use the existing parser and reviewed definitions, write isolated shard files under ignored `.card-pipeline/staging/<run-id>/`, and never edit shared engine or card-definition files. The parent checks shard/card identities, ability counts, and output hashes, then atomically updates the run manifest. Resume is refused if the catalog, evidence manifest, engine/definitions, or batch size changed; a valid shard left by an interrupted run is recovered after identity and hash checks. Maximum workers are capped at eight and batch sizes at 2,000.
 
 On this machine (8 logical CPUs, 15.9 GiB RAM, 2.9 GiB free when measured), fresh 14,022-card runs with batch size 1,000 took 5.11 s at one worker, 3.55 s at two, 2.80 s at four, and 2.63 s at eight in the latest measured run. Eight workers processed about 319,600 parsed catalog records per minute; this measures parsing and audit only, **not** verified-card throughput. The pool stops at eight because that is the available logical CPU count; this short benchmark did not establish a better setting above eight. The staged audit reports 1,517 cards with all abilities structurally implemented, 179 evidence-backed ability blocks, zero fully verified cards, zero invalid definitions, and 10,324 cards still awaiting review. The current full suite is recorded separately, and 179 ability blocks have passing regression evidence.
-=======
->>>>>>> 814e86112918b4b8a026d461f1cdbbce73c4f944

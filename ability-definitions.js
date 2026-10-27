@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 (function registerCuratedAbilityBatch(root) {
   const definitions =   [
     {
@@ -10102,5 +10101,3 @@
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
 })(typeof globalThis === "undefined" ? this : globalThis);
-=======
->>>>>>> 814e86112918b4b8a026d461f1cdbbce73c4f944

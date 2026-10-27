@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Ability Engine Implementation Status
 
 ## Existing architecture
@@ -426,5 +425,3 @@ Follow-up batch (2026-10-26): generalized the named-Vanguard CONT family to cove
 - An exact wording expansion supports nine additional Heal trigger abilities whose G-Guardian discard text says “discarded from hand.” It preserves the exact source instance, hand origin, G-Guardian cost cause, bind costs, and owner choice between Counter Charge 1 and Soul Charge 1. Regressions check all nine records plus wrong-instance, wrong-discard-reason, and wrong-origin rejection.
 
 - An exact 24-card AUTO family now supports grade-and-name Vanguard attack triggers with the source Rear-Guard as the optional Soul cost, followed by a draw and selected friendly Vanguard battle power. The trigger is bound to the controller's actual Vanguard attack; live grade/name checks, cost decline, joining-player resolution order, and exact target filtering have regression coverage.
-=======
->>>>>>> 814e86112918b4b8a026d461f1cdbbce73c4f944

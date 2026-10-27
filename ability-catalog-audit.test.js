@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use strict";
 const test = require("node:test");
 const assert = require("node:assert/strict");
@@ -882,5 +881,3 @@ test("unsupported ability similarity queue groups for review without merging sou
  assert.equal(act.occurrenceCount,1);
  assert.match(queue.disclaimer,/review candidates only/i);
 });
-=======
->>>>>>> 814e86112918b4b8a026d461f1cdbbce73c4f944
