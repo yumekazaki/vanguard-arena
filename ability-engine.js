@@ -2990,9 +2990,10 @@
       }
       return{ok:true};
     }
-    if(/^manual:[A-Za-z0-9:_-]{1,180}$/.test(request.action)&&remoteManualActions.has(request.action.slice(7).split(":")[0])){
+    if(/^manual:[A-Za-z0-9:_ -]{1,180}$/.test(request.action)&&remoteManualActions.has(request.action.slice(7).split(":")[0])){
       const [command,...args]=request.action.slice(7).split(":"),actorSide=Object.keys(state.players||{}).find(side=>state.players[side]?.playerId===request.actorPlayerId),actor=state.players?.[actorSide];
       if(!actorSide)return{ok:false,reason:"actor-not-in-match"};
+      if(command==="gift-force"){const[type,zone]=args,zones=["vanguard","rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:Number(actor.accelZones)||0},(_,i)=>`accel-${i+1}`)];if(!["Force I","Force II"].includes(type)||!zones.includes(zone))return{ok:false,reason:"invalid-force-marker-placement"};}
       if(command==="trigger-pick"){
         const pending=state.pendingTrigger,uid=args[0];
         if(!pending||pending.side!==actorSide||typeof uid!=="string")return{ok:false,reason:"no-owned-trigger-choice"};

@@ -1582,7 +1582,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }
   function canStrideForSide(side, turnStartGrade = -1) {
     const ownGrade = Number(cardMap.get(match?.players?.[side]?.vanguard?.cardId)?.grade ?? -1), opponentGrade = Number(cardMap.get(match?.players?.[flipSide(side)]?.vanguard?.cardId)?.grade ?? -1);
-    return (ownGrade >= 3 && opponentGrade >= 3) || Number(turnStartGrade) >= 3;
+    return ownGrade >= 3 && (opponentGrade >= 3 || Number(turnStartGrade) >= 3);
   }
   function isStrideUnit(card) { return /G Unit/i.test(String(card?.type || "")) && !isGGuardian(card) && /\bStride\b/i.test(String(card?.text || "")); }
   function strideGrade(instance,isPayingStrideCost=false) { const card=cardMap.get(instance?.cardId),text=String(card?.text||""); const payingForStride=/(?:pay(?:ing)?[^.\n]*stride|stride[^.\n]*(?:pay|cost))/i.test(text); const countsAsGradeThree=/(?:grade\s*(?:is\s*)?(?:regarded|treated|considered)\s*(?:as\s*)?3|(?:regarded|treated|considered)\s+as\s+grade\s*3|counts?\s+as\s+grade\s*3|grade\s*3\s+(?:for|when paying)[^.\n]*stride)/i.test(text); if(payingForStride&&countsAsGradeThree)return 3;const modifier=window.VanguardAbilityEngine.evaluateStrideCostGrade(cardAbilities(card),{location:"hand",isPayingStrideCost});return (modifier.treatedAsGradeThree?3:gradeOf(card))+modifier.grade; }
@@ -1995,7 +1995,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       if (action === "stride") { if (match.side !== "human" || match.phase !== 3) { toast("Stride during your Stride step."); return; } openGDeckDialog("stride"); return; }
       if (action.startsWith("stride:")) {
         const uid = action.slice("stride:".length), stride = player.gDeck.find((item) => item.uid === uid), strideCard = cardMap.get(stride?.cardId);
-        if (match.side !== "human" || match.phase !== 3 || match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human)) { toast("Stride is once per turn and requires both Vanguards at grade 3, or a grade 3 Vanguard at the start of your turn."); return; }
+        if (match.side !== "human" || match.phase !== 3 || match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human)) { toast("Stride is once per turn. Your Vanguard must be grade 3 or greater, and either your opponent's Vanguard is grade 3 or greater or yours was grade 3 at the start of your turn."); return; }
         if (!stride || stride.faceUp || !isStrideUnit(strideCard)) { toast("Choose a face-down G Unit with a Stride ability."); return; }
         match.pendingStride = { ownerSide: "human", unitUid: uid, costUids: [], costValue: 0 }; if (!online.applyingRemote) renderStrideCostDialog(); return;
       }
@@ -2540,7 +2540,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }
   function openGDeckDialog(kind, healUid = "") {
     if (!match) { toast("Start a match first."); return; }
-    if (kind === "stride" && (match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human))) { toast("Stride is once per turn. You need both Vanguards at grade 3, or you must have started this turn with a grade 3 Vanguard."); return; }
+    if (kind === "stride" && (match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human))) { toast("Stride is once per turn. Your Vanguard must be grade 3 or greater, and either your opponent's Vanguard is grade 3 or greater or yours was grade 3 at the start of your turn."); return; }
     const isGuard = kind === "g-guard", isInspect = kind === "inspect";
     const player=match.players.human,healCards=player.hand.filter(item=>triggerKind(item)==="heal"),vanguardGrade=Number(cardMap.get(player.vanguard?.cardId)?.grade||0),attackerGrade=Number(cardMap.get(match.players[match.pendingAttack?.attackerSide]?.vanguard?.cardId)?.grade||0),selectedHeal=healCards.find(item=>item.uid===healUid);
     if(isGuard&&(!match.pendingAttack||match.pendingAttack.defenderSide!=="human"||match.pendingAttack.defenderDone||(vanguardGrade<3||attackerGrade<3))){toast("G-Guard needs an active defense with both Vanguards at grade 3 or greater.");return;}

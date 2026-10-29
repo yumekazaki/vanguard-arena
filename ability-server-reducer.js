@@ -4763,7 +4763,7 @@
       const opposing = Object.values(state.players || {}).find(candidate => candidate && candidate !== player);
       const ownGrade = Number(player.vanguard.grade), opposingGrade = Number(opposing?.vanguard?.grade);
       const turnStartGrade = Number(state.turnStartGrades?.[side]);
-      if (!((ownGrade >= 3 && opposingGrade >= 3) || turnStartGrade >= 3)) return reject("stride-grade-requirement-not-met");
+      if (!(ownGrade >= 3 && (opposingGrade >= 3 || turnStartGrade >= 3))) return reject("stride-grade-requirement-not-met");
       const strideUid = command.payload?.strideCardInstanceId, submittedCosts = command.payload?.costCardInstanceIds;
       if (typeof strideUid !== "string" || !Array.isArray(submittedCosts) || submittedCosts.some(uid => typeof uid !== "string") || new Set(submittedCosts).size !== submittedCosts.length) return reject("invalid-stride-payment");
       const deckStrideIndex = player.gDeck.findIndex(card => card?.uid === strideUid);
