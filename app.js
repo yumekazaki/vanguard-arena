@@ -66,7 +66,7 @@
   let activeCheckRevealId = null;
   let checkRevealTimer = null;
   const shownCheckRevealIds = new Set();
-  let online = { role: null, peer: null, connection: null, watchConnection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, joinRetry: null, remoteRequestTimer: null, remoteRequestPending: null, relayStateReceived: false, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false, abilityResponsePending: null, lastSentStateSignature: null };
+  let online = { role: null, peer: null, connection: null, watchConnection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, joinRetry: null, remoteRequestTimer: null, remoteRequestPending: null, relayStateReceived: false, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false, abilityResponsePending: null, lastSentStateSignature: null, turnOrderAnnouncementPending: false, turnOrderAnnouncementMatchId: null, turnOrderAnnouncementTimer: null };
   const localDeckStorageKey = "vanguardArenaDecks";
   const account = { client: null, matchClient: null, user: null, syncing: false, recovery: false, profile: null };
 
@@ -581,6 +581,7 @@
     for (let i = 0; i < returned.length; i++) { const card = player.deck.pop(); if (card) player.hand.push(card); }
     if (returned.length) shuffle(player.deck);
     setup.mulliganDone[side] = true;
+    if (side === "human" && online.role) online.turnOrderAnnouncementPending = true;
     addLog(`${player.name} ${returned.length ? `returned ${returned.length} card${returned.length === 1 ? "" : "s"} and drew ${returned.length} replacement${returned.length === 1 ? "" : "s"}` : "kept their opening hand"} and confirmed the mulligan.`);
     finishOnlineMulligan(); renderMatch();
   }
@@ -664,7 +665,7 @@
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog(); renderGAssistDialog(); renderRemotePaymentPrompt();
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
-    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderBattleActionPrompt(); renderAttackArrow(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal();
+    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderBattleActionPrompt(); renderAttackArrow(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal(); renderOnlineTurnOrderAnnouncement();
     if(!online.applyingRemote)showNextAbilityPrompt();
     if (!online.applyingRemote && match.pendingAttack?.awaitingDrive) setTimeout(resolvePracticeAttackAfterDrives, 0);
     if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
@@ -1295,6 +1296,26 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     match.checkReveals ||= [];
     match.checkReveals.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, side, cardId: instance.cardId, checkName });
     if (match.checkReveals.length > 40) match.checkReveals.splice(0, match.checkReveals.length - 40);
+  }
+  function renderOnlineTurnOrderAnnouncement() {
+    if (!online.turnOrderAnnouncementPending || !online.role || online.role === "watcher" || !match || match.preMatch) return;
+    const matchId = String(match.matchId || online.roomId || "online-match");
+    if (online.turnOrderAnnouncementMatchId === matchId) { online.turnOrderAnnouncementPending = false; return; }
+    const flash = $("#turn-order-flash"), label = $("#turn-order-flash-label");
+    if (!flash || !label) return;
+    online.turnOrderAnnouncementPending = false;
+    online.turnOrderAnnouncementMatchId = matchId;
+    label.textContent = match.firstSide === "human" ? "You are going first" : "You are going second";
+    flash.hidden = false;
+    flash.classList.remove("flash");
+    void flash.offsetWidth;
+    flash.classList.add("flash");
+    if (online.turnOrderAnnouncementTimer) clearTimeout(online.turnOrderAnnouncementTimer);
+    online.turnOrderAnnouncementTimer = setTimeout(() => {
+      flash.hidden = true;
+      flash.classList.remove("flash");
+      online.turnOrderAnnouncementTimer = null;
+    }, 1150);
   }
   function renderCheckReveal() {
     const panel = $("#check-reveal-flash");
@@ -2596,7 +2617,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#practice-mulligan-confirm").addEventListener("click", () => finishPracticeOpeningChoice(true));
   $("#practice-mulligan-keep").addEventListener("click", () => finishPracticeOpeningChoice(false));
   $("#practice-mulligan-dialog").addEventListener("cancel", (event) => event.preventDefault());
-  $("#online-mulligan-confirm").addEventListener("click", () => { if (!match?.preMatch || match.preMatch.stage !== "mulligan") return; if (online.role === "guest") { if (!online.connection?.open) { toast("You are disconnected from the match."); return; } online.mulliganSubmitted = true; sendGuestRequest("setup-mulligan",{handUids:online.mulliganSelection||[]}); renderOnlineSetup(); } else if (online.role === "host") completeOnlineMulligan("human", online.mulliganSelection || []); });
+  $("#online-mulligan-confirm").addEventListener("click", () => { if (!match?.preMatch || match.preMatch.stage !== "mulligan") return; if (online.role === "guest") { if (!online.connection?.open) { toast("You are disconnected from the match."); return; } online.mulliganSubmitted = true; online.turnOrderAnnouncementPending = true; sendGuestRequest("setup-mulligan",{handUids:online.mulliganSelection||[]}); renderOnlineSetup(); } else if (online.role === "host") completeOnlineMulligan("human", online.mulliganSelection || []); });
   $("#refresh-rooms").addEventListener("click", () => void loadOpenRooms()); $("#room-list").addEventListener("change", () => { if ($("#room-list").value) $("#join-code").value = $("#room-list").value; });
   $("#online-cancel").addEventListener("click", () => $("#online-dialog").close()); $("#close-online-dialog").addEventListener("click", () => $("#online-dialog").close());
   $("#copy-invite").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#invite-link").value); toast("Invite link copied."); } catch { $("#invite-link").select(); document.execCommand("copy"); toast("Invite link copied."); } });
