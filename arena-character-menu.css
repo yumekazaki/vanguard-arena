@@ -70,3 +70,14 @@ body { background:linear-gradient(130deg,#06143c99,#15072fb0 70%,#390c229e),url(
 @media(max-width:700px) { .fighter-menu { gap:16px; grid-template-columns:1fr; }.fighter-scene { height:210px; }.fighter-menu-heading { align-items:flex-start; margin-bottom:22px; }.fighter-menu-heading h1 { font-size:40px; }.q4-badge { display:none; }.fighter-reveal,.theme-royal .fighter-reveal,.theme-oracle .fighter-reveal,.theme-nova .fighter-reveal,.theme-kagero .fighter-reveal { height:235px; right:8%; }.fighter-option-copy { padding:17px 20px; }.clan-label { position:absolute; bottom:19px; right:20px; margin:0; }.fighter-description { padding-right:120px; font-size:10px; }.fighter-title-row strong { font-size:29px; }.brand .brand-vanguard { font-size:25px; }.brand .brand-wordmark>b { font-size:23px; }.brand .brand-wordmark small { font-size:6px; }.brand .brand-mark { height:41px; width:34px; font-size:31px; } }
 @media(max-width:380px) { .fighter-description { padding-right:100px; }.clan-label { font-size:8px; padding:4px 6px; }.brand-wordmark { column-gap:4px; }.brand .brand-vanguard { font-size:23px; }.brand .brand-wordmark>b { font-size:21px; }.brand .brand-wordmark small { letter-spacing:.1em; }.fighter-menu-heading h1 { font-size:37px; } }
 @media(prefers-reduced-motion:reduce) { .fighter-option,.fighter-cards,.fighter-reveal,.scene-shine,.menu-card { transition:none!important; }.fighter-option:hover .fighter-cards,.fighter-option:focus-visible .fighter-cards { transform:scale(1.08); } }
+
+
+/* Touch screens have no hover state: keep each menu character visible beside its cards. */
+@media (hover:none), (pointer:coarse) {
+  .fighter-option .fighter-reveal { opacity:1; visibility:visible; transform:translateX(0) scale(1); }
+  .fighter-option .fighter-cards { left:31%; top:53%; transform:scale(1.08); }
+  .fighter-option .menu-card { filter:brightness(1.07); }
+  .fighter-option .scene-shine { opacity:0; }
+}
+.mobile-mode .fighter-option .fighter-reveal { opacity:1; visibility:visible; transform:translateX(0) scale(1); }
+.mobile-mode .fighter-option .fighter-cards { left:31%; top:53%; transform:scale(1.08); }
