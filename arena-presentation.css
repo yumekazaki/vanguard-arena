@@ -1,0 +1,89 @@
+/* Independent presentation layer. Board positions and game-control visibility stay owned by styles.css. */
+:root { --bg:#0c121c; --panel:#141e2c; --panel2:#1a2738; --line:#304158; --muted:#a7b6c9; --text:#edf3fc; --pink:#77d6d2; --lav:#a3bafa; --font:Inter,"Segoe UI",sans-serif; --display:Inter,"Segoe UI",sans-serif; }
+body { background:radial-gradient(ellipse at 20% 0,#192b40 0,transparent 48%),var(--bg); }
+.app-shell { max-width:1920px; padding:0 24px; }
+.topbar { height:72px; gap:20px; }
+.brand-mark { background:#173e48; border:1px solid #4e969f; color:#a9f1e9; box-shadow:none; }
+.brand small { color:#9aadc1; font-size:9px; letter-spacing:.13em; }
+.nav-button { font-size:13px; }
+.view { padding-top:22px; }
+.page-heading { margin-bottom:20px; gap:18px; }
+.page-heading h1 { font-size:30px; letter-spacing:-.04em; }
+.page-heading h1 em { color:#8ee2d9; }
+.eyebrow { font-size:10px; letter-spacing:.12em; color:#b0c2d8; }
+.subheading { font-size:13px; color:#a7b6c9; }
+.button { min-height:36px; border-radius:7px; font-size:12px; border-color:#3b4b61; background:#1b2a3d; }
+.button:hover:not(:disabled) { border-color:#82c7d5; background:#253b52; }
+.button-primary { background:#83ded4; color:#08282e; border-color:#83ded4; font-weight:700; box-shadow:none; }
+.button-primary:hover:not(:disabled) { background:#a3eee6; }
+button:focus-visible, [tabindex]:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid #9ae9e0; outline-offset:3px; }
+.button:disabled { opacity:.45; }
+.match-layout { grid-template-columns:210px minmax(0,1fr) 292px; gap:16px; }
+.match-rail { grid-column:1; grid-row:1; }
+.table-column { grid-column:2; grid-row:1; min-width:0; }
+.card-inspector { grid-column:3; grid-row:1; position:sticky; top:16px; border:1px solid #35475e; border-radius:12px; background:#141f2e; overflow:hidden; }
+.inspector-heading { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:16px; border-bottom:1px solid #304158; }
+.inspector-heading .eyebrow { margin:0 0 6px; color:#95e3db; }
+#inspector-status { font-size:12px; color:#a7b6c9; }
+.inspector-heading .button { font-size:11px; min-height:32px; padding:6px 10px; }
+.inspector-content { max-height:calc(100dvh - 112px); overflow:auto; overscroll-behavior:contain; padding:16px; scrollbar-width:thin; scrollbar-color:#526e88 #141f2e; }
+.inspector-art { display:block; width:100%; height:auto; max-height:370px; object-fit:contain; border-radius:6px; background:#0a111b; }
+.inspector-content h2 { font-size:19px; line-height:1.35; margin:18px 0 8px; overflow-wrap:anywhere; }
+.inspector-meta { font-size:12px; line-height:1.6; color:#afc3d9; }
+.inspector-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; padding:12px 0; margin:14px 0; border-block:1px solid #304158; }
+.inspector-stats dt { font-size:10px; text-transform:uppercase; color:#a9bbcf; margin-bottom:6px; }
+.inspector-stats dd { margin:0; font-size:14px; font-weight:650; }
+.inspector-content h3 { font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:#98dfd8; }
+.inspector-rules { white-space:pre-wrap; font-size:14px; line-height:1.75; overflow-wrap:anywhere; }
+.inspector-source { border-top:1px solid #304158; padding-top:14px; font-size:11px; line-height:1.6; color:#95a9bf; }
+.inspector-empty { min-height:500px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:#b3c2d4; }
+.inspector-empty>span { font-size:64px; color:#76b7c0; }
+.inspector-empty h2 { font-size:20px; color:#edf3fc; }
+.inspector-empty p { font-size:14px; line-height:1.7; }
+.inspector-empty small { font-size:12px; line-height:1.7; color:#8fa6bf; }
+.inspector-image-fallback { padding:35px 12px; text-align:center; color:#9eb7d0; background:#0c1522; border-radius:8px; }
+.rail-card { background:#141e2c; border-color:#304158; border-radius:10px; padding:14px; }
+.rail-heading { font-size:10px; color:#bfccdc; }
+.status-top { font-size:9px; }
+.status-names b { font-size:13px; }
+.status-names small, .turn-banner small { font-size:9px; }
+.phase-list button { font-size:12px; min-height:34px; }
+.match-log { max-height:220px; font-size:12px; line-height:1.65; }
+.prototype-note p { color:#9fb0c4; font-size:11px; line-height:1.6; }
+.game-table { border-color:#38536a; background:radial-gradient(ellipse,#1d3b4b,#102332 75%); border-radius:12px; box-shadow:0 16px 36px #0003; height:660px; min-height:660px; }
+.game-table .mat-half { background:none!important; opacity:.035; }
+.game-table .mat-half img { filter:grayscale(1); }
+.field-zone { border:1px dashed #7ba6b16b; border-radius:50%; background:#0b1b2940; }
+.vanguard-zone { border:1px solid #83ded4aa; background:#29535e40; }
+.field-zone>span { color:#bdd0dc; font-size:9px; letter-spacing:.1em; }
+.game-table .player-line .avatar { left:16%; top:2%; }
+.game-table .player-title { left:calc(16% + 32px); top:2%; width:58%; }
+.game-table .player-title b { font-size:11px; }
+.game-table .player-title small { font-size:8px; line-height:1.4; }
+.game-table .zone-strip { left:16%; width:68%; height:14%; gap:4px; align-content:center; transform:none; }
+.game-table .opponent-side .zone-strip { top:80%; bottom:auto; }
+.game-table .human-side .zone-strip { top:auto; bottom:0; }
+.game-table .zone-label,.game-table .zone-empty { font-size:8px; }
+.game-table .field-row,.game-table .rear-row { gap:8px; }
+.game-table .human-line .avatar,.game-table .human-line .player-title { top:5%; }
+.center-divider { background:#0c1928e6; border-block:1px solid #507087; color:#d0e0ed; font-size:10px; }
+.hand-panel,.action-bar,.quick-control-row,.manual-actions { background:#141e2c; border-color:#304158; border-radius:10px; }
+.hand-panel { min-height:200px; }
+.hand-heading .eyebrow { color:#9ee6df; }
+.hand-heading b { font-size:13px; }
+.selection-hint,.selected-summary small { font-size:11px; color:#a9bad0; }
+.selected-summary b { font-size:12px; }
+.action-bar { flex-wrap:wrap; }
+.action-buttons .button,.quick-control-row .button { font-size:11px; min-height:34px; }
+.quick-control-row { padding:10px; margin-top:10px; gap:8px; }
+.muted-text { font-size:11px; color:#a9bad0; }
+.game-card .card-name { font-size:11px; }
+.game-card .card-subline { font-size:9px; }
+.game-card.selected { border-color:#83ded4; box-shadow:0 0 0 2px #83ded440; }
+.text-input { font-size:13px; }
+.dialog-card-info p { font-size:14px; line-height:1.75; white-space:pre-wrap; }
+@media(min-width:1600px) { .match-layout { grid-template-columns:230px minmax(0,1fr) 330px; gap:20px; } .game-table { height:720px; min-height:720px; } .inspector-art { max-height:420px; } }
+@media(max-width:1199px) { .app-shell { padding:0 16px; } .match-layout { grid-template-columns:minmax(0,1fr) 280px; } .table-column { grid-column:1; } .card-inspector { grid-column:2; } .match-rail { grid-column:1/-1; grid-row:2; display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; } .prototype-note { grid-column:1/-1; } .game-table { height:660px; min-height:660px; } }
+@media(max-width:760px) { .topbar { height:auto; } .page-heading h1 { font-size:26px; } .match-layout { display:flex; flex-direction:column; } .table-column { order:1; width:100%; } .card-inspector { order:2; position:static; width:100%; } .match-rail { order:3; display:grid; grid-template-columns:1fr 1fr; width:100%; } .match-log-card,.prototype-note { grid-column:1/-1; } .inspector-content { max-height:480px; } .inspector-empty { min-height:160px; } .inspector-empty>span { display:none; } .inspector-art { float:left; width:38%; max-height:280px; margin:0 16px 12px 0; } .inspector-content:after { content:""; display:block; clear:both; } .inspector-content h2 { margin-top:0; } .game-table { height:610px; min-height:610px; } .heading-actions { flex-wrap:wrap; } .heading-actions .button { flex:1 1 40%; } .button { min-height:42px; } }
+@media(prefers-reduced-motion:reduce) { *, *:before, *:after { scroll-behavior:auto!important; transition:none!important; animation:none!important; } }
+@media(max-width:760px) { .game-table .zone-strip { height:16%; } .game-table .opponent-side .zone-strip { top:78%; } .game-table .zone-label { letter-spacing:0; } .game-table .player-title small { font-size:7px; } }

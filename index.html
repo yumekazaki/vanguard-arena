@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#101118" />
     <title>Vanguard Arena — Card Game Sandbox</title>
     <link rel="stylesheet" href="./styles.css?v=20261024-premium-rules-9" />
+    <link rel="stylesheet" href="./arena-presentation.css" />
   </head>
   <body>
     <div class="app-shell">
@@ -34,6 +35,10 @@
           </div>
 
           <div id="match-layout" class="match-layout">
+            <aside class="card-inspector" aria-label="Card inspector">
+              <div class="inspector-heading"><div><p class="eyebrow">CARD INSPECTOR</p><span id="inspector-status" role="status">Live preview</span></div><button id="inspector-unpin" class="button" type="button" hidden>Unpin</button></div>
+              <div id="inspector-content" class="inspector-content" tabindex="0" aria-label="Card image and information"><div class="inspector-empty"><span>◇</span><h2>Know your next move</h2><p>Hover or focus a card to read it here. Click or tap to pin its details.</p><small>You can move here to scroll. The preview stays visible.</small></div></div>
+            </aside>
             <aside class="match-rail">
           <div class="rail-card status-card"><div class="status-top"><span class="live-dot"></span><span id="match-status">PRACTICE MATCH</span><button id="reconnect-match" class="button button-quiet reconnect-button" type="button" hidden>Reconnect</button><button id="match-menu" class="dots-button" aria-label="Match options">•••</button></div><div class="status-names"><div><small>YOU</small><b id="human-name">Player</b></div><span class="versus">VS</span><div class="opponent-name"><small>OPPONENT</small><b id="opponent-name">Practice Bot</b></div></div><div id="online-invite" class="online-invite hidden"><small>Player invite link</small><input id="invite-link" readonly /><button class="button button-quiet" id="copy-invite">Copy</button><small>Spectator link</small><input id="spectate-link" readonly /><button class="button button-quiet" id="copy-spectate">Copy</button><small id="spectator-count">0 spectators</small></div><div class="rail-divider"></div><div class="turn-banner"><span class="turn-symbol">↻</span><div><small id="turn-label">YOUR TURN</small><b id="phase-label">Stand phase</b></div><span class="turn-number" id="turn-number">01</span></div></div>
               <div class="rail-card turn-controls"><div class="rail-heading"><span>TURN CONTROLS</span><span class="phase-count" id="phase-count">1 / 6</span></div><div class="phase-track"><div class="phase-segment current"></div><div class="phase-segment"></div><div class="phase-segment"></div><div class="phase-segment"></div><div class="phase-segment"></div><div class="phase-segment"></div></div><div class="phase-list" id="phase-list"></div><button id="advance-phase" class="button button-primary wide">Continue to Draw <span>→</span></button></div>
@@ -126,6 +131,7 @@
     <script src="match-state-projection.js?v=20261026-private-zones-1" defer></script>
     <script src="match-relay.js?v=20261026-dual-channel-1" defer></script>
     <script src="practice-bot.js?v=20261027-turn-progression-1" defer></script>
-    <script src="app.js?v=20261027-practice-bot-phase-1" defer></script>
+    <script src="arena-inspector.js" defer></script>
+    <script src="app.js?v=20261028-arena-inspector-1" defer></script>
   </body>
 </html>
