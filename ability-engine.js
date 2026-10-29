@@ -89,7 +89,7 @@
   function createHarmonyAssociation(state,firstUid,secondUid,turnKey,allowMovedSinceTrigger=false){if(!state||!firstUid||!secondUid||firstUid===secondUid||!turnKey)return false;const first=locateCardInstance(state,firstUid),second=locateCardInstance(state,secondUid);if(!first||!second||first.ambiguous||second.ambiguous||!["vanguard","rear-guard"].includes(first.zone)||!["vanguard","rear-guard"].includes(second.zone)||first.side!==second.side||first.controllerPlayerId!==second.controllerPlayerId||!allowMovedSinceTrigger&&(!harmonyColumn(first.circle||first.zone)||harmonyColumn(first.circle||first.zone)!==harmonyColumn(second.circle||second.zone)))return false;const active=(state.harmonyAssociations||[]).filter(pair=>pair?.turnKey===turnKey&&harmonyFieldPair(state,pair));state.harmonyAssociations=active;if(active.some(pair=>pair.firstUid===firstUid&&pair.secondUid===secondUid||pair.firstUid===secondUid&&pair.secondUid===firstUid))return true;state.harmonyAssociations.push({firstUid,secondUid,controllerPlayerId:first.controllerPlayerId,turnKey});return true}
   function isCardInHarmony(state,uid,turnKey){if(!state||!uid||!turnKey)return false;let found=false;for(const pair of state.harmonyAssociations||[]){if(pair?.turnKey!==turnKey||!harmonyFieldPair(state,pair))continue;if(pair.firstUid===uid||pair.secondUid===uid)found=true}return found}
   function expireHarmonyAssociations(state,endingTurnKey){if(!Array.isArray(state?.harmonyAssociations))return 0;const before=state.harmonyAssociations.length;state.harmonyAssociations=state.harmonyAssociations.filter(pair=>pair?.turnKey!==endingTurnKey&&harmonyFieldPair(state,pair));return before-state.harmonyAssociations.length}
-  const effectOperations = new Set(["draw", "modify-power", "modify-power-target", "modify-critical", "grant-temporary-boost", "continuous-power", "continuous-power-adjustment", "continuous-power-per-soul-card", "continuous-power-per-clan-rearguard", "continuous-critical", "continuous-shield", "continuous-grade", "modify-drive", "modify-drive-target", "counter-charge", "conditional-counter-charge", "soul-charge", "revelation-choice", "rest-target", "engorge", "g-guardian-discard-charge-choice", "g-guardian-grade-three-replacement-choice", "set-blazing", "set-hollowed", "set-charging", "set-successful", "deck-to-damage", "schedule-damage-return-at-turn-end", "return-chosen-damage-to-deck", "reorder-deck-card", "retire-target", "stand-target", "unlock-target", "protect-target", "protect-attacked-source", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "modify-defending-source-power", "rest-source", "stand-source", "create-token", "discard-from-hand", "draw-then-discard", "search-top-grade-three-to-hand-then-discard", "search-top-up-to-one-grade-to-hand", "search-top-up-to-one-filtered-to-hand", "search-deck-named-grade-three-then-discard", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "call-checked-card-locked", "call-source-from-drop-rested", "call-source-from-soul", "associate-harmony-units", "modify-shield-source", "seek-mate"]);
+  const effectOperations = new Set(["draw", "modify-power", "modify-power-target", "modify-critical", "grant-temporary-boost", "continuous-power", "continuous-power-adjustment", "continuous-power-per-soul-card", "continuous-power-per-clan-rearguard", "continuous-critical", "continuous-shield", "continuous-grade", "modify-drive", "modify-drive-target", "counter-charge", "conditional-counter-charge", "soul-charge", "revelation-choice", "rest-target", "engorge", "g-guardian-discard-charge-choice", "g-guardian-grade-three-replacement-choice", "set-blazing", "set-hollowed", "set-charging", "set-successful", "deck-to-damage", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "reorder-deck-card", "retire-target", "stand-target", "unlock-target", "protect-target", "protect-attacked-source", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "modify-defending-source-power", "rest-source", "stand-source", "create-token", "discard-from-hand", "draw-then-discard", "search-top-grade-three-to-hand-then-discard", "search-top-up-to-one-grade-to-hand", "search-top-up-to-one-filtered-to-hand", "search-deck-named-grade-three-then-discard", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "call-checked-card-locked", "call-source-from-drop-rested", "call-source-from-soul", "associate-harmony-units", "modify-shield-source", "seek-mate", "place-circle-marker"]);
   const positiveInteger = value => Number.isInteger(Number(value)) && Number(value) > 0;
   function validTopSearchFilter(filter) {
     if (!filter || typeof filter !== "object" || Array.isArray(filter)) return false;
@@ -122,6 +122,10 @@
     }
   });
   const EFFECT_HANDLERS = Object.freeze({
+    "place-circle-marker": Object.freeze({
+      validate(step, context) { const zone = String(context.circleZone || ""), rearIndex = ({ "rear-left": 0, "rear-right": 1, "rear-back-left": 2, "rear-back-center": 3, "rear-back-right": 4 })[zone], accel = zone.match(/^accel-(\d+)$/), validConfiguration = step.markerType === "Treasures" && JSON.stringify(step.circleTypes) === JSON.stringify(["vanguard","rear-guard"]) || step.markerType === "Dragontree" && JSON.stringify(step.circleTypes) === JSON.stringify(["rear-guard"]), circleType = zone === "vanguard" ? "vanguard" : rearIndex != null || accel ? "rear-guard" : null, zoneExists = zone === "vanguard" ? Boolean(context.player?.vanguard) : rearIndex != null ? rearIndex < (context.player?.rear || []).length : Boolean(accel && Number(accel[1]) <= Number(context.player?.accelZones || 0)); return step.target === "chosen-controller-circle" && validConfiguration && step.circleTypes.includes(circleType) && zoneExists && context.player?.playerId === context.actorPlayerId && !(context.player.giftZones || []).some(marker => marker?.zone === zone && marker?.type === step.markerType); },
+      apply(step, context) { context.player.giftZones ||= []; context.player.giftZones.push({ type: step.markerType, zone: context.circleZone }); context.emitEvent?.({ type: "circle.marker_placed", controllerSide: context.side, controllerPlayerId: context.actorPlayerId, targetLocation: context.circleZone, markerType: step.markerType }); return true; }
+    }),
     "set-successful": Object.freeze({
       validate(step) { return step.target === "source" && positiveInteger(step.threshold); },
       apply(step, context) { context.source.successfulTurnKey = `${context.match.turn}:${context.match.side}`; context.emitEvent?.({ type: "unit.became_successful", cardInstanceId: context.source.uid, targetLocation: context.sourceCircle || context.sourceZone }); return true; }
@@ -192,9 +196,50 @@
       validate(step, context) { return step.target === "controller" && step.due === "end-phase-start" && Boolean(context.match) && typeof context.eventId === "string" && Boolean(context.eventId) && typeof context.sourceAbilityId === "string" && Boolean(context.source?.uid) && Boolean(context.player?.playerId); },
       apply(_step, context) { context.match.scheduledEffects ||= []; const id = `${context.eventId}:${context.source.uid}:${context.sourceAbilityId}`; if (context.match.scheduledEffects.some(item => item?.id === id)) return false; context.match.scheduledEffects.push({ id, kind: "return-chosen-damage-to-deck", sourceCardInstanceId: context.source.uid, sourceCardId: String(context.source.cardId), sourceOwnerPlayerId: context.source.ownerPlayerId || context.player.playerId, sourceAbilityId: context.sourceAbilityId, controllerPlayerId: context.player.playerId, turn: Number(context.turnId), status: "scheduled" }); return id; }
     }),
+    "schedule-source-return-to-deck-at-turn-end": Object.freeze({
+      validate(step, context) {
+        const attack = context.match?.pendingAttack, source = context.source;
+        return step.target === "source" && step.due === "end-phase-start" && step.shuffle === true && context.sourceInPlay === true &&
+          /^(?:rear-(?:left|right|back-left|back-center|back-right)|accel-\d+)$/.test(String(context.sourceCircle || "")) &&
+          Boolean(context.match) && typeof context.eventId === "string" && Boolean(context.eventId) && typeof context.sourceAbilityId === "string" &&
+          Boolean(source?.uid && source.cardId && source.controllerPlayerId === context.actorPlayerId && context.player?.playerId === context.actorPlayerId) &&
+          Boolean(attack?.battleId && attack.battleId === context.battleId && attack.boostUid === source.uid && attack.attackerSide === context.side);
+      },
+      apply(_step, context) {
+        context.match.scheduledEffects ||= [];
+        const id = `${context.eventId}:${context.source.uid}:${context.sourceAbilityId}`;
+        const prior = context.match.scheduledEffects.find(item => item?.id === id);
+        if (prior) return prior.kind === "return-boosting-source-to-deck" ? id : false;
+        context.match.scheduledEffects.push({
+          id, kind: "return-boosting-source-to-deck", sourceCardInstanceId: context.source.uid,
+          sourceCardId: String(context.source.cardId), sourceOwnerPlayerId: context.source.ownerPlayerId || context.player.playerId,
+          controllerPlayerId: context.player.playerId, sourceCircle: context.sourceCircle, sourceAbilityId: context.sourceAbilityId,
+          battleId: context.battleId, turn: Number(context.turnId), status: "scheduled"
+        });
+        return id;
+      }
+    }),
     "return-chosen-damage-to-deck": Object.freeze({
       validate(step, context) { return step.target === "controller" && step.shuffle === true && typeof context.effectUid === "string" && Boolean(context.match?.players?.[context.side]?.damage?.some(card => card?.uid === context.effectUid)) && Array.isArray(context.player?.damage) && Array.isArray(context.player?.deck) && typeof context.shuffleDeck === "function"; },
       apply(_step, context) { const index = context.player.damage.findIndex(card => card?.uid === context.effectUid); if (index < 0) return false; const [card] = context.player.damage.splice(index, 1); context.player.deck.push(card); context.shuffleDeck(context.player.deck); context.emitEvent?.({ type: "card.moved", cardInstanceId: card.uid, controllerSide: context.side, previousLocation: "damage", currentLocation: "deck", reason: "delayed-damage-return" }); return card.uid; }
+    }),
+    "return-trigger-discard-to-hand": Object.freeze({
+      validate(step,context) {
+        const event=context.triggerEvent,source=context.source,player=context.player,uid=event?.subjectCardInstanceId||event?.cardInstanceId;
+        const sourceInLegalZone=Boolean(source?.uid&&(player?.rear||[]).some(card=>card?.uid===source.uid)||(player?.drop||[]).some(card=>card?.uid===source?.uid));
+        const sourceBound=Boolean(context.sourceBindCostPaid===true&&(player?.bind||[]).some(card=>card?.uid===source?.uid));
+        return step.target==="event-discarded-card"&&Boolean(context.eventId)&&event?.eventId===context.eventId&&event?.type==="card.discarded"&&
+          event.previousLocation==="hand"&&event.currentLocation==="drop"&&event.actingPlayerId===context.actorPlayerId&&event.turnPlayerId===context.actorPlayerId&&
+          event.sourceControllerPlayerId===context.actorPlayerId&&event.subjectControllerPlayerId===context.actorPlayerId&&event.sourceOwnerPlayerId===context.actorPlayerId&&event.subjectOwnerPlayerId===context.actorPlayerId&&
+          typeof uid==="string"&&uid!==source?.uid&&context.effectUid===uid&&Array.isArray(player?.drop)&&player.drop.some(card=>card?.uid===uid&&card?.ownerPlayerId===context.actorPlayerId&&card?.controllerPlayerId===context.actorPlayerId)&&
+          Boolean(sourceBound||(!context.sourceBindCostPaid&&sourceInLegalZone&&context.source?.controllerPlayerId===context.actorPlayerId&&context.source?.ownerPlayerId===context.actorPlayerId));
+      },
+      apply(_step,context) {
+        if(context.sourceBindCostPaid!==true)return false;
+        const uid=context.triggerEvent?.subjectCardInstanceId||context.triggerEvent?.cardInstanceId,index=context.player.drop.findIndex(card=>card?.uid===uid);
+        if(index<0)return false;const [card]=context.player.drop.splice(index,1);context.player.hand.push(card);
+        context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"hand",reason:"discard-trigger-return"});return card.uid;
+      }
     }),
     "modify-shield-source": Object.freeze({
       validate(step,context) { const attack=context.match?.pendingAttack;return step.target==="source"&&step.duration==="battle"&&positiveInteger(step.amount)&&context.player?.guardCircle?.some(card=>card?.uid===context.source?.uid)&&attack?.defenderSide===context.side&&attack?.battleId===context.battleId&&Array.isArray(attack.guardCards)&&attack.guardCards.some(card=>card?.uid===context.source.uid); },
@@ -254,6 +299,31 @@
     "call-source-from-soul": Object.freeze({
       validate(step,context){const player=context.player,zones=["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:player?.accelZones||0},(_,i)=>`accel-${i+1}`)],source=context.source,definition=source&&context.cardDefinitionForInstance?.(source),index=zones.indexOf(context.callZone);return step.target==="source"&&step.position==="stand"&&Boolean(source?.uid)&&Array.isArray(player?.soul)&&Array.isArray(player?.rear)&&player.soul.some(card=>card?.uid===source.uid)&&Boolean(definition)&&/\b(?:unit|trigger)\b/i.test(String(definition.type||""))&&index>=0&&index<player.rear.length&&player.rear[index]?.locked!==true&&!player.rear[index]},
       apply(_step,context){const player=context.player,source=context.source,zones=["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:player.accelZones||0},(_,i)=>`accel-${i+1}`)],index=zones.indexOf(context.callZone),soulIndex=player.soul.findIndex(card=>card?.uid===source.uid);if(index<0||index>=player.rear.length||player.rear[index]?.locked===true||player.rear[index]||soulIndex<0)return false;player.soul.splice(soulIndex,1);player.rear[index]={...source,rested:false,locked:false,zone:"rear-guard",circle:context.callZone};context.emitEvent?.({type:"card.placed",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:"soul",currentLocation:context.callZone,position:"stand"});return true}
+    }),
+    "ride-revoldress-source-from-soul-rested": Object.freeze({
+      validate(step, context) {
+        const player=context.player, source=context.source, uid=context.effectUid;
+        const target=(player?.soul||[]).find(card=>card?.uid===uid);
+        const definition=target&&context.cardDefinitionForInstance?.(target);
+        return step.target==="controller"&&step.rested===true&&Boolean(target&&source?.uid)&&
+          player?.vanguard?.uid===source.uid&&Array.isArray(player.soul)&&Array.isArray(player.deck)&&
+          typeof context.cardDefinitionForInstance==="function"&&definition?.hasRevolDress===true&&
+          /\bunit\b/i.test(String(definition?.type||""))&&target.cannotBeRidden!==true&&
+          (typeof context.canRideCard!=="function"||context.canRideCard(target,player.vanguard));
+      },
+      apply(_step,context) {
+        const player=context.player, source=context.source, index=player.soul.findIndex(card=>card?.uid===context.effectUid);
+        if(index<0||player.vanguard?.uid!==source.uid)return false;
+        const rider=player.soul.splice(index,1)[0], previous=player.vanguard, riderDefinition=context.cardDefinitionForInstance?.(rider)||{};
+        previous.zone="soul";previous.circle=null;delete previous.position;
+        player.soul.push(previous);
+        player.vanguard={...rider,controllerPlayerId:player.playerId||context.actorPlayerId,rested:true,zone:"vanguard",circle:"vanguard"};
+        if(Number(rider.grade)>=3)context.recordFightRide?.(player,{grade:Number(rider.grade)});
+        context.emitEvent?.({type:"card.moved",cardInstanceId:previous.uid,previousLocation:"vanguard",currentLocation:"soul",reason:"revoldress-ride"});
+        context.emitEvent?.({type:"card.ridden",cardInstanceId:rider.uid,subjectCardInstanceId:rider.uid,sourceCardName:riderDefinition.name||rider.cardName||null,sourceCardGrade:Number(riderDefinition.grade??rider.grade??-1),sourceCardClan:riderDefinition.clan||null,sourceCardClans:riderDefinition.clans||[],sourceCardText:riderDefinition.text||"",targetCardInstanceIds:[previous.uid],previousLocation:"soul",currentLocation:"vanguard",targetPreviousLocation:"vanguard",targetCurrentLocation:"soul",targetLocation:"vanguard",reason:"revoldress-ride"});
+        context.emitEvent?.({type:"card.placed",cardInstanceId:rider.uid,subjectCardInstanceId:rider.uid,previousLocation:"soul",currentLocation:"vanguard",circle:"vanguard",position:"rest",reason:"revoldress-ride"});
+        return true;
+      }
     }),
     "call-checked-card-locked": Object.freeze({
       validate(step, context) {
@@ -503,7 +573,11 @@
         if (effect.op === "continuous-power-per-clan-rearguard") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition) || typeof effect.clan !== "string" || !effect.clan.trim();
         if (effect.op === "continuous-critical") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition);
         if (effect.op === "continuous-shield") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition);
-        if (effect.op === "continuous-grade") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "stride-payment" || effect.condition?.op !== "paying-stride-cost" || ![undefined,"add","treat-as-grade-three"].includes(effect.mode) || (effect.mode === "treat-as-grade-three" && Number(effect.amount) !== 3);
+        if (effect.op === "continuous-grade") {
+          const strideCost = effect.duration === "stride-payment" && effect.condition?.op === "paying-stride-cost" && !effect.location && [undefined,"add","treat-as-grade-three"].includes(effect.mode) && (effect.mode !== "treat-as-grade-three" || Number(effect.amount) === 3);
+          const triggerZoneGrade = effect.duration === "continuous" && effect.location === "trigger" && effect.condition?.op === "generation-break" && positiveInteger(effect.condition.count) && effect.mode == null;
+          return effect.target !== "source" || !positiveInteger(effect.amount) || !(strideCost || triggerZoneGrade);
+        }
         if (effect.op === "modify-shield-source") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "battle";
         if (effect.op === "conditional-counter-charge") return effect.target !== "controller" || !positiveInteger(effect.count) || effect.condition?.type !== "controller-drop-has-card-name" || typeof effect.condition.cardName !== "string" || !effect.condition.cardName.trim();
         if (effect.op === "modify-drive-target") return effect.target !== "attacking-vanguard" || !positiveInteger(effect.amount) || effect.duration !== "battle";
@@ -512,6 +586,7 @@
         if (effect.op === "call-filtered-top-to-guardian-drop") return effect.target !== "controller" || effect.count !== 5 || effect.destination !== "guardian" || effect.position !== "rest" || effect.remainder !== "drop" || typeof effect.filter?.clan !== "string" || !effect.filter.clan.trim();
         if (effect.op === "call-checked-card-locked") return effect.target !== "checked-card" || effect.position !== "locked";
         if (effect.op === "call-source-from-drop-rested") return effect.target !== "source" || effect.position !== "rest" || effect.cannotAttackTurnKeyWhenBattlePhase !== undefined && effect.cannotAttackTurnKeyWhenBattlePhase !== true;
+        if (effect.op === "ride-revoldress-source-from-soul-rested") return effect.target !== "controller" || effect.rested !== true;
         if (effect.op === "search-top-up-to-one-filtered-to-hand") return effect.target !== "controller" || !positiveInteger(effect.lookCount) || effect.maximum !== 1 || !validTopSearchFilter(effect.filter);
         if (effect.op === "move-filtered-hand-card-to-soul") return effect.target !== "controller" || effect.maximum !== 1 || !effect.filter || Object.keys(effect.filter).length !== 1 || typeof effect.filter.clan !== "string" || !effect.filter.clan.trim();
         if (effect.op === "search-top-up-to-one-grade-to-hand") return effect.target !== "controller" || !positiveInteger(effect.lookCount) || !Number.isInteger(Number(effect.maximumGrade)) || Number(effect.maximumGrade) < 0;
@@ -519,6 +594,7 @@
         if (effect.op === "search-deck-or-drop-named-to-hand") return effect.target !== "controller" || effect.maximum !== 1 || typeof effect.cardName !== "string" || !effect.cardName.trim() || effect.reveal !== true || effect.shuffleIfDeckSearched !== true;
         if (effect.op === "ride-top-five-named-card") return effect.target !== "controller" || effect.lookCount !== 5 || typeof effect.cardName !== "string" || !effect.cardName.trim() || effect.bottomOrder !== "chosen-rest";
         if (effect.op === "schedule-damage-return-at-turn-end") return effect.target !== "controller" || effect.due !== "end-phase-start";
+        if (effect.op === "schedule-source-return-to-deck-at-turn-end") return effect.target !== "source" || effect.due !== "end-phase-start" || effect.shuffle !== true;
         if (effect.op === "return-chosen-damage-to-deck") return effect.target !== "controller" || effect.shuffle !== true;
         if (effect.op === "reorder-deck-card") return effect.target !== "chosen" || effect.destination !== "player-choice";
         if (effect.op === "seek-mate") return effect.target !== "controller" || !positiveInteger(effect.power) || Number(effect.dropCount) !== 4 || typeof effect.mateName !== "string" || !effect.mateName.trim();
@@ -530,6 +606,7 @@
         if (effect.op === "unlock-target") return effect.target !== "chosen" || effect.targetFilter?.controller !== "source-controller" || effect.targetFilter?.locked !== true;
         if (effect.op === "protect-target") return effect.target !== "chosen" || effect.duration !== "battle" || !effect.targetFilter || effect.targetFilter.controller !== "source-controller" || effect.targetFilter.cardType !== "unit";
         if (effect.op === "g-guardian-grade-three-replacement-choice") return effect.target !== "controller" || !Array.isArray(effect.choices) || effect.choices.length !== 2 || JSON.stringify(effect.choices.map(choice=>choice.id))!==JSON.stringify(["vanguard-power","opponent-critical"]) || effect.choices[0].amount!==10000 || JSON.stringify(effect.choices[0].targetFilter)!==JSON.stringify({controller:"source-controller",cardType:"unit",zone:"vanguard"}) || effect.choices[1].amount!==-2 || JSON.stringify(effect.choices[1].targetFilter)!==JSON.stringify({controller:"opponent",cardType:"unit"});
+        if (effect.op === "place-circle-marker") return effect.target !== "chosen-controller-circle" || !(effect.markerType === "Treasures" && JSON.stringify(effect.circleTypes) === JSON.stringify(["vanguard","rear-guard"]) || effect.markerType === "Dragontree" && JSON.stringify(effect.circleTypes) === JSON.stringify(["rear-guard"]));
         if (effect.op === "protect-attacked-source") return effect.target !== "source" || effect.duration !== "battle";
         if (effect.op === "move-source-to-soul") return effect.target !== "source" || effect.from !== "drop";
         if (effect.op === "modify-defending-source-power") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "battle";
@@ -645,6 +722,14 @@
       requiredLocation: ["rear-guard"],choicesReviewed: true,
       source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "act-source-to-soul-optional-up-to-one-friendly-power-v1", review: "Exact ACT family: pay by moving this Rear-Guard into Soul, then optionally choose zero or one legal friendly field unit matching the printed clan filter and give it the printed turn power." },
       effects: [{ op: "modify-power-target", target: "chosen", amount: Number(match[2]), duration: "turn", optionalTarget: true, targetFilter: { controller: "source-controller", cardType: "unit", excludeSource: true, ...(clan ? { clan } : {}) } }] };
+  }
+  function compileRevoldressEndTurnRideDefinition(cardId,abilityId,kind,printedText) {
+    const exact="AUTO [VC]: At the end of your turn, choose a card with the RevolDress ability from your soul, and ride it as rest.";
+    if(kind!=="AUTO"||normalizePrintedText(printedText)!==exact)return null;
+    return {id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard"],choicesReviewed:true,
+      trigger:{status:"recognized-trigger",eventType:"turn.ended",subject:"controller",turnRelation:"controller"},
+      source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/cardlist/?cardno=D-BT07%2F011EN",patternId:"auto-vc-end-turn-revoldress-ride-from-soul-rest-v1",review:"Exact AUTO [VC] end-of-controller-turn text. The controller chooses a card in their Soul whose printed card text grants RevolDress, rides that exact instance to VC rested, and emits normal card.moved/card.ridden/card.placed events so ride-trigger processing continues."},
+      effects:[{op:"ride-revoldress-source-from-soul-rested",target:"controller",rested:true}]};
   }
   function compileOwnAttackHitCounterBlastDrawWithClanDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
@@ -763,7 +848,12 @@
     if(kind!=="CONT")return null;const text=normalizePrintedText(printedText);if(!/^CONT\s*\[VC\/RC\]:\s*Lord(?:\s*\(If you have a unit without a same clan as this unit, this unit cannot attack\))?\.?$/i.test(text))return null;return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-lord-attack-restriction-v1",review:"Exact Lord keyword variants on VC/RC compile as a continuous attack restriction; no activation prompt is created."},keywords:["lord"],continuousRestrictions:[{type:"lord"}]};
   }  function compileAllClansNationsDefinition(cardId,abilityId,kind,printedText){if(kind!=="CONT"||!/^CONT:\s*This card is from all clans and nations\.$/i.test(normalizePrintedText(printedText)))return null;return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-all-clans-and-nations-v1",review:"Exact CONT identity wording. This is a continuous clan/nation identity property, not a manually activated skill."},keywords:["all-clans-and-nations"]};
   }  function compileMissedAttackHitEffectsDefinition(cardId,abilityId,kind,printedText){if(kind!=="CONT"||!/^CONT\s*\[VC\]:\s*This unit\u2019s "when attack hits" effects activate even if the attack did not hit\.$/i.test(normalizePrintedText(printedText)))return null;return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-vanguard-missed-attack-hit-effects-v1",review:"Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard\x27s own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."},keywords:["missed-attack-hit-effects"]};
-  }  function compilePlacementGradeThreeSearchDefinition(cardId,abilityId,kind,printedText){
+  }  function compileMissedAttackVanguardRetireDefinition(cardId,abilityId,kind,printedText){
+    const text=normalizePrintedText(printedText).replace(/\s*\(SHIFT \+ left click to create (?:Force|Accel|Protect) gifts\.\)$/i,"");
+    if(kind!=="AUTO"||!/^AUTO\s*\[VC\]:\s*When this unit(?:'|’|’)s attack hits a vanguard, choose one of your opponent(?:'|’|’)s rear-guards, and retire it\.$/i.test(text))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard"],trigger:{status:"recognized-trigger",eventType:"attack.hit",subject:"source",targetLocation:"vanguard",circles:[]},conditions:[],conditionsReviewed:true,costs:[],costsReviewed:true,choicesReviewed:true,optional:false,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"auto-vanguard-own-attack-hit-opponent-rear-retire-v1",review:"Exact Vanguard AUTO wording. The exact Vanguard must attack and hit the opposing Vanguard; its controller chooses one opposing Rear-Guard to retire. When paired with the exact missed-attack CONT on that same Vanguard, the AUTO may resolve only for that source's missed Vanguard attack."},effects:[{op:"retire-target",target:"chosen",targetFilter:{controller:"opponent",zone:"rear-guard"}}]};
+  }
+  function compilePlacementGradeThreeSearchDefinition(cardId,abilityId,kind,printedText){
     const text=normalizePrintedText(printedText),prefix=text.match(/^AUTO \[VC\/RC\]: When placed from hand, look at five cards from the top of your deck, reveal up to one grade (3)(?: or greater)?(?: card)? from among them\b/i);
     if(kind!=="AUTO"||!prefix)return null;const rest=text.slice(prefix[0].length);if(!/\bput it into your hand\b/i.test(rest)||!/\bshuffle your deck\b/i.test(rest)||!/\bif you put a card(?: into your hand)?, discard a card(?: from your hand)?\.$/i.test(rest)&&!/\bif you put a card into your hand, discard a card(?: from your hand)?\.$/i.test(rest))return null;
     if(rest.search(/\bput it into your hand\b/i)>rest.search(/\bshuffle your deck\b/i)||rest.search(/\bshuffle your deck\b/i)>rest.search(/\bif you put a card/i))return null;
@@ -810,6 +900,7 @@
       source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-rc-drive-check-trigger-unit-power-turn-v1", review: "Exact trigger-unit drive-check AUTO. It matches the controller's actual drive-check event only when the checked card has a trigger type, then grants this exact source Rear-Guard the printed turn power." },
       effects: [{ op: "modify-power", target: "source", amount: Number(match[1]), duration: "turn" }] };
   }
+  function compileBoostSetOrderCounterChargeDefinition(cardId,abilityId,kind,printedText){if(kind!=="AUTO")return null;const ids={"cfa-11833":1,"cfa-12552":1,"cfa-13453":1,"cfa-8353":0};if(ids[cardId]!==Number(String(abilityId).split(":").at(-1)))return null;const text=normalizePrintedText(printedText);if(text!=="AUTO [RC]: At the end of the battle this unit boosted, if your Order Zone has a Set Order, COST [put this unit into your soul], and Counter Charge 1.")return null;return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],conditions:[{type:"controller-has-set-order"}],conditionsReviewed:true,costs:[{type:"source-to-soul",count:1}],costsReviewed:true,choicesReviewed:true,optional:true,trigger:{status:"recognized-trigger",eventType:"battle.close-step",subject:"booster",circles:[]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"auto-boosted-close-set-order-counter-charge-v1",review:"Exact four-record AUTO [RC] family. At the end of the battle this exact Rear-Guard boosted, and only if its controller's Order Zone contains a Set Order, its controller may decline the [COST]; paying moves that exact booster into Soul before Counter Charge 1. This uses the rules permission to decline paying an AUTO ability's [COST]."},effects:[{op:"counter-charge",count:1}]};}
   function compileBoostedBattleEndSourceToSoulPowerDefinition(cardId,abilityId,kind,printedText){if(kind!=="AUTO")return null;const match=normalizePrintedText(printedText).match(/^AUTO \[RC\]: At the end of the batt?le this unit boosted, COST \[put this unit into (?:your )?soul\], choose one of your units, and it gets power \+(\d+) until end of turn\.$/i);if(!match)return null;return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],choicesReviewed:true,costs:[{type:"source-to-soul",count:1}],trigger:{status:"recognized-trigger",eventType:"battle.close-step",subject:"booster",circles:[]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-boosted-battle-close-source-to-soul-power-v1",review:"Exact RC AUTO wording, including the five source records' printed 'batle' typo. A close-step event must name this exact booster; its Soul cost is paid before choosing a friendly unit for the printed turn modifier."},effects:[{op:"modify-power-target",target:"chosen",amount:Number(match[1]),duration:"turn",targetFilter:{controller:"source-controller",cardType:"unit"}}]};
   }  function compileRidePhaseHandSearchDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;const text=normalizePrintedText(printedText);if(!/^AUTO \[Hand\]: At the beginning of your ride phase, if your vanguard is grade 1 or less, COST \[discard this card\], look at the top five cards of your deck, choose up to one grade 2 or less card from among them, reveal it and put it into (?:your )?hand, and shuffle (?:(?:your|the) )?deck\.(?:\s*\(SHIFT[^\n]*\))*$/i.test(text))return null;
@@ -1044,6 +1135,14 @@
     const match=String(printedText||"").match(/^AUTO\s*\[RC\]:\s*When this unit boosts, this unit gets power \+(\d+) until end of turn\.$/i);
     if(!match)return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-own-boost-turn-power-v1",review:"Exact RC source-boost event and own-source turn power. Battle aggregation includes the exact booster when the boost trigger resolves."},effects:[{op:"modify-power",target:"source",amount:Number(match[1]),duration:"turn"}]};
+  }
+  function compileBoostThenDeckReturnDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText),match=text.match(/^AUTO \[RC\]: When this unit boosts, the boosted unit gets power \+(\d+) until end of that battle, and at the beginning of the end phase of that turn, return this unit to your deck, and shuffle your deck\.$/i);
+    if(!match)return null;
+    const amount=Number(match[1]);
+    if(!positiveInteger(amount))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],trigger:{status:"recognized-trigger",eventType:"unit.boosted",subject:"source",circles:[]},conditions:[],costs:[],conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,optional:false,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-boost-power-battle-then-return-self-end-phase-v1",review:"Exact AUTO [RC] source-boost wording. The exact booster grants the attack target +the printed power until battle end, then schedules this same instance to return to its owner's deck at the beginning of this turn's End Phase and shuffle."},effects:[{op:"modify-power-target",target:"boosted-unit",amount,duration:"battle",targetFilter:{controller:"source-controller",cardType:"unit"}},{op:"schedule-source-return-to-deck-at-turn-end",target:"source",due:"end-phase-start",shuffle:true}]};
   }
   function compileLegionVanguardBoostPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;
@@ -1448,6 +1547,13 @@
     if(!match)return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-rc-own-turn-power-v1",review:"Exact RC continuous text; the source contributes power only while its controller turn is active and the instance remains on RC."},effects:[{op:"continuous-power",target:"source",amount:Number(match[1]),duration:"continuous",condition:{op:"controller-turn"}}]};
   }
+  function compileTriggerZoneGenerationBreakGradeDefinition(cardId,abilityId,kind,printedText){
+    const eligibleIds=new Set(["cfa-11592","cfa-11593","cfa-11594","cfa-5501","cfa-5513","cfa-5567"]);
+    if(kind!=="CONT"||!eligibleIds.has(String(cardId))||abilityId!==`${cardId}:0`)return null;
+    const text=normalizePrintedText(printedText).replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/\s+/g," ").trim();
+    if(text!=="CONT [Trigger Zone] Generation Break 1: This card gets grade +1.")return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["trigger"],conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-trigger-zone-generation-break-grade-plus-one-v1",review:"Exact text and six-record family match the local catalog snapshot only; official English card text was not independently located because these Mask Collection cards are Thai-exclusive. This is a passive continuous +1 grade modifier for this exact card instance only while it is in the Trigger Zone and its controller has Generation Break 1."},effects:[{op:"continuous-grade",target:"source",amount:1,duration:"continuous",location:"trigger",condition:{op:"generation-break",count:1}}]};
+  }
   function compileContinuousVanguardOwnTurnRearGuardClanCountPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT")return null;
     const match=normalizePrintedText(printedText).match(/^CONT \[VC\]: During your turn, if the number of [«<]([^»>]+)[»>] rear-guards you have is (one|two|three|four|five|six|seven|eight|nine|ten|\d+) or more, this unit gets power \+(\d+)\.$/i);
@@ -1830,6 +1936,18 @@
     for(const ability of abilities||[]){if(ability?.kind!=="CONT"||!ability.definition||!ability.requiredLocation?.includes("hand"))continue;for(const effect of ability.definition.effects||[])if(effect.op==="continuous-grade"&&effect.target==="source"&&effect.duration==="stride-payment"&&effect.condition?.op==="paying-stride-cost"&&positiveInteger(effect.amount)){if(effect.mode==="treat-as-grade-three")treatedAsGradeThree=true;else grade+=Number(effect.amount)}}
     return treatedAsGradeThree?{grade,treatedAsGradeThree}: {grade};
   }
+  function evaluateContinuousGrade(abilities,context={}){
+    let grade=0;const location=context.sourceLocation||context.location;
+    if(location!=="trigger"||!context.sourceInstanceId||!context.targetInstanceId||context.sourceInstanceId!==context.targetInstanceId)return grade;
+    for(const ability of abilities||[]){
+      if(ability?.kind!=="CONT"||!ability.definition||!ability.requiredLocation?.includes(location))continue;
+      for(const effect of ability.definition.effects||[]){
+        if(effect.op!=="continuous-grade"||effect.target!=="source"||effect.duration!=="continuous"||effect.location!==location||!positiveInteger(effect.amount))continue;
+        if(continuousConditionMatches(effect.condition,context))grade+=Number(effect.amount);
+      }
+    }
+    return grade;
+  }
   function evaluateContinuousRestrictions(abilities,context={}){
     const restrictions=[];for(const ability of abilities||[]){if(ability?.kind!=="CONT"||!ability.definition)continue;if(ability.requiredLocation?.length&&(!context.location||!ability.requiredLocation.includes(context.location)))continue;for(const restriction of ability.definition.continuousRestrictions||[]){if(restriction.type==="restraint"){restrictions.push({type:"restraint",abilityId:ability.id,legal:false,reason:"unit-with-restraint-cannot-attack"});continue}if(restriction.type==="cannot-be-boosted"){if(context.action==="boost")restrictions.push({type:restriction.type,abilityId:ability.id,legal:false,reason:"unit-cannot-be-boosted"});continue}if(restriction.type==="g-zone-cannot-turn-face-up-by-abilities"){if(context.action==="turn-face-up-by-ability"&&context.location==="g-zone")restrictions.push({type:restriction.type,abilityId:ability.id,legal:false,reason:"g-zone-card-cannot-be-turned-face-up-by-ability"});continue}if(restriction.type!=="lord")continue;const sourceHasAllClans=hasAbilityKeyword(context.sourceCard,"all-clans-and-nations"),clans=Array.isArray(context.sourceCard?.clans)?context.sourceCard.clans:context.sourceCard?.clan?[context.sourceCard.clan]:[];if(!sourceHasAllClans&&!clans.length)continue;const foreign=(context.controlledUnits||[]).filter(unit=>unit?.uid!==context.sourceInstanceId&&unit?.card).some(unit=>{if(sourceHasAllClans||hasAbilityKeyword(unit.card,"all-clans-and-nations"))return false;const other=Array.isArray(unit.card.clans)?unit.card.clans:unit.card.clan?[unit.card.clan]:[];return !other.length||!other.some(clan=>clans.includes(clan))});if(foreign)restrictions.push({type:"lord",abilityId:ability.id,legal:false,reason:"lord-requires-all-other-units-to-share-a-clan"});}}return{legal:restrictions.length===0,restrictions};
   }
@@ -2019,9 +2137,28 @@
     const mentionsCost = /\bCOST\b|\b(?:CB|SB|E\s*BLAST|Counter[- ]Blast|Soul[- ]Blast|Energy[- ]Blast|discard|retire this unit|rest this unit|put this unit into your soul)\b/i.test(costText);
     if (!explicit.length) return { status: mentionsCost ? "needs-review" : "no-cost", costs: [] };
     const clause = explicit.map(match => match[1] || match[2]).join(" & ");
-    // Cost alternatives are not conjunctive. Until the ability schema represents
-    // selectable cost branches, fail closed instead of charging every branch.
-    if (/\b(?:or|either)\b/i.test(clause)) return { status: "needs-review", costs: [] };
+    // Preserve explicit alternative cost branches. Only split top-level `or`
+    // clauses here; each branch must independently parse as a complete cost.
+    if (/\b(?:or|either)\b/i.test(clause)) {
+      const branches = clause.split(/\s+or\s+/i).map(value => value.trim());
+      if (branches.length < 2 || branches.some(value => /\beither\b/i.test(value))) return { status: "needs-review", costs: [] };
+      const costAlternatives = branches.map(branch => {
+        const parsed = [];
+        let rest = branch;
+        for (const [type, pattern] of [
+          ["counter-blast", /(?:CB|Counter[- ]Blast)\s*\(?\s*(\d+)/gi],
+          ["energy-blast", /(?:E\s*Blast|Energy[- ]Blast)\s*\(?\s*(\d+)/gi],
+          ["soul-blast", /(?:SB|Soul[- ]Blast)\s*\(?\s*(\d+)/gi]
+        ]) {
+          for (const match of branch.matchAll(pattern)) parsed.push({ type, count: Number(match[1]) });
+          rest = rest.replace(pattern, " ");
+        }
+        const residue = rest.replace(/[\s&+(),.;:[\]0-9-]/g, "").toLowerCase();
+        return residue || !parsed.length ? null : parsed;
+      });
+      if (costAlternatives.some(branch => !branch)) return { status: "needs-review", costs: [] };
+      return { status: "supported-cost-alternatives", costs: [], costAlternatives };
+    }
     const costs = [];
     const patterns = [
       ["counter-blast", /(?:CB|Counter[- ]Blast)\s*\(?\s*(\d+)/gi],
@@ -2054,6 +2191,7 @@
   }
   function canPayAbilityCosts(ability, resources = {}) {
     if (!ability || ability.costStatus === "needs-review") return false;
+    if (Array.isArray(ability.costAlternatives)) return ability.costAlternatives.some(costs => canPayAbilityCosts({ ...ability, costs, costAlternatives: undefined }, resources));
     const costs = ability.costs || [];
     for (const cost of costs) {
       if (cost.type === "counter-blast" && Number(resources.faceUpDamage || 0) < cost.count) return false;
@@ -2081,6 +2219,7 @@
       if (cost.type === "source-to-bottom-deck" && resources.sourceCanMoveToBottomDeck !== true) return false;
       if (cost.type === "source-retire" && resources.sourceCanRetire !== true) return false;
       if (cost.type === "source-bind" && resources.sourceCanBind !== true) return false;
+      if (cost.type === "source-bind-from-field-or-drop" && resources.sourceCanBindFromFieldOrDrop !== true) return false;
       if (cost.type === "bind-heal-from-drop" && Number(resources.bindableHealInDrop || 0) < cost.count) return false;
     }
     return true;
@@ -2088,6 +2227,12 @@
   function evaluateAutoCostPayment(ability,resources={},decision=null){
     if(!ability||ability.kind!=="AUTO")return{ok:false,reason:"not-auto-ability"};
     if(!Array.isArray(ability.costs))return{ok:false,reason:"invalid-cost-definition"};
+    if(Array.isArray(ability.costAlternatives)){
+      if(decision!==null&&typeof decision!=="boolean")return{ok:false,reason:"invalid-cost-decision"};
+      if(decision===false)return{ok:true,payCost:false,applyEffects:false,reason:"cost-not-paid"};
+      if(!canPayAbilityCosts(ability,resources))return{ok:true,payCost:false,applyEffects:false,reason:"unpayable-cost"};
+      return{ok:true,payCost:true,applyEffects:true};
+    }
     if(!ability.costs.length)return{ok:true,payCost:true,applyEffects:true};
     if(decision!==null&&typeof decision!=="boolean")return{ok:false,reason:"invalid-cost-decision"};
     if(decision===false)return{ok:true,payCost:false,applyEffects:false,reason:"cost-not-paid"};
@@ -2207,6 +2352,7 @@
       if (condition.type === "controller-face-up-damage-at-most" && Number(context.controllerFaceUpDamageCount ?? Infinity) > condition.count) return false;
       if (condition.type === "controller-damage-count-more-than-opponent" && Number(context.controllerDamageCount ?? -1) <= Number(context.opponentDamageCount ?? Infinity)) return false;
       if (condition.type === "all-order-zones-count-at-least" && Number(context.allOrderZonesCount ?? -1) < condition.count) return false;
+      if (condition.type === "controller-has-set-order" && context.controllerHasSetOrder !== true) return false;
       if (condition.type === "any-field-card-is-locked" && context.anyFieldCardIsLocked !== true) return false;
       if (condition.type === "controller-has-more-rear-guards-than-opponent" && Number(context.controllerRearGuards || 0) <= Number(context.opponentRearGuards || 0)) return false;
       if (condition.type === "controller-has-more-cards-in-hand-than-opponent" && Number(context.controllerHandCount || 0) <= Number(context.opponentHandCount || 0)) return false;
@@ -2278,6 +2424,7 @@
     compileContinuousNormalOrderPowerDefinition,
     compileContinuousExactVanguardNamePowerDefinition,
     compileContinuousOwnTurnRearGuardPowerDefinition,
+    compileTriggerZoneGenerationBreakGradeDefinition,
     compileContinuousVanguardOwnTurnRearGuardClanCountPowerDefinition,
     compileContinuousVanguardOwnTurnPowerPerClanRearGuardDefinition,
     compileContinuousRearGuardNamedUnitPowerDefinition,
@@ -2320,6 +2467,7 @@
     compileVanguardBoostSoulBlastDrawDiscardDefinition,
     compileVanguardBoostDrawDiscardDefinition,
     compileBoostedBattleEndSourceToSoulPowerDefinition,
+    compileBoostSetOrderCounterChargeDefinition,
     compileDriveTriggerUnitPowerDefinition,
     compileRidePhaseHandSearchDefinition,
     compilePlacedCounterBlastTwoRetireLowGradeDefinition,
@@ -2332,6 +2480,7 @@
     compileRidePhaseTopFiveNamedRideDefinition,
     compileVanguardPlacementDrawDiscardDefinition,
     compileMissedAttackHitEffectsDefinition,
+    compileMissedAttackVanguardRetireDefinition,
     compileRodeUponDrawQuickShieldDefinition,
     compileMainPhaseSoulChargePowerDefinition,
     compileMainPhaseSourceSoulNamedCallDefinition,
@@ -2354,6 +2503,7 @@
     compileActSoulCostBuffDefinition,
     compileActSourceToSoulDiscardDrawClanDefinition,
     compileActSourceToSoulOptionalFriendlyPowerDefinition,
+    compileRevoldressEndTurnRideDefinition,
     compileOwnAttackHitCounterBlastDrawWithClanDefinition,
     compileAutoLegionOwnAttackHitDrawDefinition,
     compileAutoOwnAttackHitClanPowerDefinition,
@@ -2387,6 +2537,7 @@
     compileBoostedClanVanguardHitReturnHandDefinition,
     compileAttackHitClanVanguardCounterChargeDefinition,
     compileBoostSelfPowerOnBoostDefinition,
+    compileBoostThenDeckReturnDefinition,
     compileLegionVanguardBoostPowerDefinition,
     compileLegionOwnVanguardAttackPowerDefinition,
     compileRearGuardOnLegionTurnPowerDefinition,
@@ -2454,6 +2605,16 @@
     return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard","rear-guard"],trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["vanguard","rear-guard"]},conditions:[{type:"controller-vanguard-has-clan",value:clan}],costs:[{type:"counter-blast",count:1}],optional:true,conditionsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-vc-rc-clan-placement-delayed-damage-return-v1",review:"Exact clan-gated VC/RC source-placement template. The exact source instance must be placed on VC or RC while its controller has a Vanguard of the printed clan. It offers Counter Blast 1; after payment it puts the deck top into Damage (without a damage check), then at that turn's End Phase start the controller chooses any Damage card, returns it to Deck, and shuffles. The delayed schedule is created only if the AUTO cost is accepted."},effects:[{op:"deck-to-damage",target:"controller",count:1},{op:"schedule-damage-return-at-turn-end",target:"controller",due:"end-phase-start"}]};
   }
   function compileAbilityDefinition(cardId, abilityId, kind, printedText, cardContext) {
+    const treasureHitIds = new Set(["cfa-7622", "cfa-7623", "cfa-7624", "cfa-7625", "cfa-7626", "cfa-7627"]);
+    const treasureHitText = "AUTO [VC/RC]: When its attack hits, choose one of your VC or RC without any Treasures markers, and put a Treasures marker.";
+    const normalizedTreasureText = normalizePrintedText(printedText).replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, " ").trim();
+    if (treasureHitIds.has(String(cardId)) && kind === "AUTO" && normalizedTreasureText === treasureHitText && abilityId === `${cardId}:0`) {
+      return { id: abilityId, cardId, kind, printedText, requiredLocation: ["vanguard", "rear-guard"],
+        trigger: { status: "recognized-trigger", eventType: "attack.hit", subject: "source", circles: [] },
+        conditionsReviewed: true, costsReviewed: true, choicesReviewed: true,
+        source: { dataset: "Bushiroad official card list", patternId: "auto-own-attack-hit-place-treasures-marker-v1", review: "Exact six-card AUTO family. Requires this exact source's attack to hit; the controller privately chooses one of their VC/RC circles without a Treasures marker." },
+        effects: [{ op: "place-circle-marker", target: "chosen-controller-circle", markerType: "Treasures", circleTypes: ["vanguard", "rear-guard"] }] };
+    }
     for (const compiler of abilityDefinitionCompilers) {
       const definition = compiler(cardId, abilityId, kind, printedText, cardContext);
       if (definition) return definition;
@@ -2473,9 +2634,11 @@
     const parsed = starts.map((item,index)=>{
       const end=starts[index+1]?.index??text.length,raw=text.slice(item.rawStart,end).trim(),printedText=text.slice(item.printedStart,end).trim(),kind=item.kind,abilityId=String(card.id||"")+":"+index;
       const trigger=kind==="AUTO"?compileAutoTrigger(raw):null,costInfo=parseAbilityCosts(raw),conditionInfo=parseAbilityConditions(raw),definition=getAbilityDefinition(String(card.id||"")+":"+index,printedText)||compileAbilityDefinition(String(card.id||""),abilityId,kind,printedText,card),usageRestriction=parseAbilityUsageRestriction(raw)||definition?.usageRestriction||null,hasUnparsedConditions=conditionInfo.status==="needs-review"&&!definition?.conditionsReviewed&&!definition?.conditions?.length&&! ["cont-rc-normal-order-power-v1","cont-rc-order-played-power-v1","cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","cont-rc-own-turn-named-grade-vanguard-power-v1","cont-named-soul-card-power-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1","cont-rc-vanguard-grade-or-damage-power-shield-v1","cont-great-daiyusha-limit-break-critical-v1","cont-vanguard-soul-name-threshold-critical-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId),hasUnparsedChoices=definition?.choicesReviewed!==true&&(/\b(?:choose|select|target)\b/i.test(raw)||(/\bmay\b/i.test(raw)&&!/\bmay pay the cost\b/i.test(raw))||Boolean(definition?.effects?.some(step=>step.op==="draw-then-discard"||step.op==="discard-from-hand"))||definition?.source?.patternId==="auto-placement-top-five-grade-three-search-discard-v1")&&definition?.source?.patternId!=="act-source-to-soul-choose-friendly-power-turn-v1"&&definition?.source?.patternId!=="auto-rc-placement-choose-friendly-clan-power-turn-v1"&&definition?.source?.patternId!=="auto-hollow-placement-retire-turn-end-v1"&&definition?.source?.patternId!=="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"&&definition?.source?.patternId!=="auto-charge-effect-placement-bottom-deck-after-battle-v1"&&definition?.source?.patternId!=="auto-gc-retire-optional-source-to-soul-v1"&&definition?.source?.patternId!=="auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1"&&![ "auto-forerunner-same-clan-ride-call-source-v1","auto-gc-discard-protect-attacked-unit-v1","auto-gc-protect-then-conditional-discard-v1","auto-gc-sentinel-protect-friendly-unit-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-boosted-battle-close-source-to-soul-power-v1","auto-hand-ride-phase-discard-self-search-top-five-grade-two-v1","auto-boosting-unit-attack-hit-discard-draw-v1","auto-rode-upon-optional-source-call-v1","auto-drive-check-front-trigger-critical-turn-v1","auto-revelation-keyword-v1","auto-ride-phase-discard-source-call-rested-v1","auto-rc-vanguard-boost-soul-blast-draw-discard-v1","auto-rc-vanguard-boost-draw-discard-v1","act-rest-discard-draw-v1","act-vanguard-counter-blast-unlock-friendly-locked-v1","act-rest-source-front-row-ally-power-v1" ].includes(definition?.source?.patternId),hasUnparsedCosts=costInfo.status==="needs-review"&&!definition?.keywords?.includes("g-guardian-heal-cost-substitute")&&definition?.source?.patternId!=="auto-rc-vanguard-boost-draw-discard-v1"&&definition?.source?.patternId!=="auto-placement-top-five-grade-three-search-discard-v1"&&definition?.source?.patternId!=="auto-g-guardian-discard-bind-heal-charge-choice-v1"&&definition?.source?.patternId!=="auto-g-guardian-named-call-discard-grade-one-draw-v1";
-      return {id:abilityId,cardId:String(card.id||""),kind,raw,printedText,definition,effects:definition?.effects||null,gb:Number(raw.match(/(?:Generation\s*Break|GB)\s*[-( ]?\s*(\d+)/i)?.[1]||0),once:Boolean(usageRestriction||definition?.once),usageRestriction,requiredLocation:definition?.requiredLocation||parseAbilityLocation(raw),requiredCircle:definition?.requiredCircle||[],trigger:definition?.trigger?{...trigger,...definition.trigger,circles:definition.trigger.circles||trigger?.circles||[]}:definition?.source?.patternId==="auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1"?{...trigger,turnRelation:"controller"}:trigger,costs:["auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-g-guardian-named-call-discard-grade-one-draw-v1"].includes(definition?.source?.patternId)?definition.costs:["auto-gc-protect-then-conditional-discard-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1"].includes(definition?.source?.patternId)?[]:costInfo.costs,conditions:["cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","auto-rode-upon-draw-quick-shield-v1","auto-gc-protect-then-conditional-discard-v1","cont-vanguard-missed-attack-hit-effects-v1","cont-vanguard-limit-break-4-active-at-three-or-less-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-hollow-placement-retire-turn-end-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1"].includes(definition?.source?.patternId)?[]:definition?.source?.patternId==="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"?(definition.conditions||[]):(definition?.conditions||conditionInfo.conditions),conditionStatus:definition?.conditions?.length?"modeled":["cont-rc-order-played-power-v1","cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","cont-no-other-field-card-name-power-v1","cont-rc-controlled-rearguard-named-unit-power-v1","cont-gc-named-grade-vanguard-shield-v1","cont-vc-rc-non-clan-field-power-penalty-v1","cont-rc-gc-named-grade-vanguard-power-shield-v1"].includes(definition?.source?.patternId)?"modeled":["auto-rode-upon-draw-quick-shield-v1","auto-gc-protect-then-conditional-discard-v1","cont-vanguard-missed-attack-hit-effects-v1","cont-vanguard-limit-break-4-active-at-three-or-less-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-hollow-placement-retire-turn-end-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1","cont-rc-gc-vanguard-grade-or-damage-power-shield-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId)?"no-explicit-condition-detected":definition?.source?.patternId==="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"?"modeled":hasUnparsedConditions?(definition?.continuousRestrictions?.length?"modeled":"needs-review"):conditionInfo.conditions.length?"modeled":"no-explicit-condition-detected",choiceStatus:definition?.choicesReviewed===true||["auto-engorge-retire-other-rearguards-v1","auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-hollow-placement-retire-turn-end-v1","auto-rc-from-hand-reveal-grade-three-search-name-discard-v1","auto-placed-vc-rc-counter-blast-two-retire-opponent-grade-two-v1","act-counter-blast-same-name-search-power-v1","auto-rc-placement-choose-friendly-clan-power-turn-v1","auto-vanguard-placement-counter-soul-named-search-v1","auto-rc-drive-check-normal-unit-source-soul-draw-v1","auto-rc-drive-check-normal-unit-source-soul-rearguard-power-v1","auto-vanguard-placement-top-five-filtered-search-hand-v1","auto-gc-no-grade-three-ride-choice-v1","act-rc-counter-blast-source-to-soul-top-five-grade-three-search-v1","auto-afterimage-opponent-bound-card-to-hand-return-source-v1","auto-charge-effect-placement-bottom-deck-after-battle-v1","auto-gc-retire-optional-source-to-soul-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","auto-forerunner-same-clan-ride-call-source-v1","auto-gc-discard-protect-attacked-unit-v1","auto-gc-protect-then-conditional-discard-v1","auto-gc-sentinel-protect-friendly-unit-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-boosted-battle-close-source-to-soul-power-v1","auto-hand-ride-phase-discard-self-search-top-five-grade-two-v1","auto-boosting-unit-attack-hit-discard-draw-v1","auto-rode-upon-optional-source-call-v1","auto-drive-check-front-trigger-critical-turn-v1","auto-revelation-keyword-v1","auto-ride-phase-discard-source-call-rested-v1","auto-rc-vanguard-boost-soul-blast-draw-discard-v1","auto-rc-vanguard-boost-draw-discard-v1","act-rest-discard-draw-v1","act-vanguard-counter-blast-unlock-friendly-locked-v1","act-rest-source-front-row-ally-power-v1"].includes(definition?.source?.patternId)?"modeled":hasUnparsedChoices?"needs-review":"no-explicit-choice-detected",costStatus:["auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-g-guardian-named-call-discard-grade-one-draw-v1"].includes(definition?.source?.patternId)?"supported-cost":["auto-gc-protect-then-conditional-discard-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","cont-hand-g-guardian-heal-cost-substitute-v1","auto-rc-vanguard-boost-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","cont-gzone-unflip-free-stride-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId)?"no-cost":hasUnparsedCosts?"needs-review":costInfo.status,canDecline:kind!=="AUTO"||definition?.optional===true||definition?.keywords?.includes("afterimage")||definition?.source?.patternId!=="auto-revelation-keyword-v1"&&/\bmay\b|\boptional\b/i.test(raw.replace(/\bmay only be used\b/gi,"")),implementationStatus:definition?"structured-effect-definition":kind==="AUTO"?(trigger.status==="needs-review"||hasUnparsedConditions||hasUnparsedCosts?"needs-review":"trigger-definition-pending-validation"):kind==="ACT"?"manual-definition-pending-validation":"continuous-definition-pending-validation"};
+      return {id:abilityId,cardId:String(card.id||""),kind,raw,printedText,definition,effects:definition?.effects||null,gb:Number(raw.match(/(?:Generation\s*Break|GB)\s*[-( ]?\s*(\d+)/i)?.[1]||0),once:Boolean(usageRestriction||definition?.once),usageRestriction,requiredLocation:definition?.requiredLocation||parseAbilityLocation(raw),requiredCircle:definition?.requiredCircle||[],costAlternatives:definition?.costAlternatives||costInfo.costAlternatives,trigger:definition?.trigger?{...trigger,...definition.trigger,circles:definition.trigger.circles||trigger?.circles||[]}:definition?.source?.patternId==="auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1"?{...trigger,turnRelation:"controller"}:trigger,costs:["auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-g-guardian-named-call-discard-grade-one-draw-v1"].includes(definition?.source?.patternId)?definition.costs:["auto-gc-protect-then-conditional-discard-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1"].includes(definition?.source?.patternId)?[]:costInfo.costs,conditions:["cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","auto-rode-upon-draw-quick-shield-v1","auto-gc-protect-then-conditional-discard-v1","cont-vanguard-missed-attack-hit-effects-v1","cont-vanguard-limit-break-4-active-at-three-or-less-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-hollow-placement-retire-turn-end-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1"].includes(definition?.source?.patternId)?[]:definition?.source?.patternId==="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"?(definition.conditions||[]):(definition?.conditions||conditionInfo.conditions),conditionStatus:definition?.conditions?.length?"modeled":["cont-rc-order-played-power-v1","cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","cont-no-other-field-card-name-power-v1","cont-rc-controlled-rearguard-named-unit-power-v1","cont-gc-named-grade-vanguard-shield-v1","cont-vc-rc-non-clan-field-power-penalty-v1","cont-rc-gc-named-grade-vanguard-power-shield-v1"].includes(definition?.source?.patternId)?"modeled":["auto-rode-upon-draw-quick-shield-v1","auto-gc-protect-then-conditional-discard-v1","cont-vanguard-missed-attack-hit-effects-v1","cont-vanguard-limit-break-4-active-at-three-or-less-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-hollow-placement-retire-turn-end-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1","cont-rc-gc-vanguard-grade-or-damage-power-shield-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId)?"no-explicit-condition-detected":definition?.source?.patternId==="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"?"modeled":hasUnparsedConditions?(definition?.continuousRestrictions?.length?"modeled":"needs-review"):conditionInfo.conditions.length?"modeled":"no-explicit-condition-detected",choiceStatus:definition?.choicesReviewed===true||["auto-engorge-retire-other-rearguards-v1","auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-hollow-placement-retire-turn-end-v1","auto-rc-from-hand-reveal-grade-three-search-name-discard-v1","auto-placed-vc-rc-counter-blast-two-retire-opponent-grade-two-v1","act-counter-blast-same-name-search-power-v1","auto-rc-placement-choose-friendly-clan-power-turn-v1","auto-vanguard-placement-counter-soul-named-search-v1","auto-rc-drive-check-normal-unit-source-soul-draw-v1","auto-rc-drive-check-normal-unit-source-soul-rearguard-power-v1","auto-vanguard-placement-top-five-filtered-search-hand-v1","auto-gc-no-grade-three-ride-choice-v1","act-rc-counter-blast-source-to-soul-top-five-grade-three-search-v1","auto-afterimage-opponent-bound-card-to-hand-return-source-v1","auto-charge-effect-placement-bottom-deck-after-battle-v1","auto-gc-retire-optional-source-to-soul-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","auto-forerunner-same-clan-ride-call-source-v1","auto-gc-discard-protect-attacked-unit-v1","auto-gc-protect-then-conditional-discard-v1","auto-gc-sentinel-protect-friendly-unit-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-boosted-battle-close-source-to-soul-power-v1","auto-hand-ride-phase-discard-self-search-top-five-grade-two-v1","auto-boosting-unit-attack-hit-discard-draw-v1","auto-rode-upon-optional-source-call-v1","auto-drive-check-front-trigger-critical-turn-v1","auto-revelation-keyword-v1","auto-ride-phase-discard-source-call-rested-v1","auto-rc-vanguard-boost-soul-blast-draw-discard-v1","auto-rc-vanguard-boost-draw-discard-v1","act-rest-discard-draw-v1","act-vanguard-counter-blast-unlock-friendly-locked-v1","act-rest-source-front-row-ally-power-v1"].includes(definition?.source?.patternId)?"modeled":hasUnparsedChoices?"needs-review":"no-explicit-choice-detected",costStatus:["auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-g-guardian-named-call-discard-grade-one-draw-v1"].includes(definition?.source?.patternId)?"supported-cost":["auto-gc-protect-then-conditional-discard-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","cont-hand-g-guardian-heal-cost-substitute-v1","auto-rc-vanguard-boost-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","cont-gzone-unflip-free-stride-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId)?"no-cost":hasUnparsedCosts?"needs-review":costInfo.status,canDecline:kind!=="AUTO"||definition?.optional===true||definition?.keywords?.includes("afterimage")||definition?.source?.patternId!=="auto-revelation-keyword-v1"&&/\bmay\b|\boptional\b/i.test(raw.replace(/\bmay only be used\b/gi,"")),implementationStatus:definition?"structured-effect-definition":kind==="AUTO"?(trigger.status==="needs-review"||hasUnparsedConditions||hasUnparsedCosts?"needs-review":"trigger-definition-pending-validation"):kind==="ACT"?"manual-definition-pending-validation":"continuous-definition-pending-validation"};
     });
-    return parsed.map(ability => ability.definition?.costsReviewed === true && Array.isArray(ability.definition.costs) && ability.definition.costs.length > 0
+    return parsed.map(ability => Array.isArray(ability.definition?.costAlternatives) && ability.definition.costAlternatives.length > 1
+      ? { ...ability, costs: [], costAlternatives: ability.definition.costAlternatives, costStatus: "supported-cost", implementationStatus: "structured-effect-definition" }
+      : ability.definition?.costsReviewed === true && Array.isArray(ability.definition.costs) && ability.definition.costs.length > 0
       ? { ...ability, costs: ability.definition.costs || [], costStatus: "supported-cost", implementationStatus: "structured-effect-definition" }
       : ability);
   }  function countGenerationBreakUnits(player, isGUnit = () => false) { return (player?.gZone || []).filter(card => card?.faceUp === true && isGUnit(card)).length + (player?.vanguard && isGUnit(player.vanguard) ? 1 : 0); }
@@ -2539,6 +2702,7 @@
   }
   function eventMatchesAbilityTrigger(ability,eventName,event,sourceUid,sourceZone,subjectZone,sourceControllerPlayerId=null) {
     const trigger=ability?.trigger;
+    if (Array.isArray(trigger?.anyOf)) return trigger.anyOf.some(branch => eventMatchesAbilityTrigger({ ...ability, trigger: { ...trigger, ...branch, anyOf: undefined } }, eventName, event, sourceUid, sourceZone, subjectZone, sourceControllerPlayerId));
     const expectedEventType=({ride:"card.ridden",place:"card.placed",attack:"unit.attacked",attackStep:"attack.step-started",attacked:"attack.declared",draw:"card.drawn",boost:"unit.boosted",hit:"attack.hit",drop:"card.moved",retire:"card.retired",rest:"unit.rested",stand:"unit.stood",bind:"card.bound",discard:"card.discarded",move:"card.moved",soulMove:"card.moved",damagePlace:"card.damage_moved",damageLeave:"card.moved",battleEnd:"battle.close-step",driveCheck:"drive.checked",damageCheck:"damage.checked",triggerCheck:"trigger.checked",characteristic:"characteristic.changed",success:"unit.became_successful",harmony:"unit.became_harmony",engorge:"unit.became_engorged",legion:"unit.legioned",phase:"phase.changed",start:"turn.started",end:"turn.ended"})[eventName];
     if(ability?.kind!=="AUTO"||trigger?.status!=="recognized-trigger"||trigger.eventType!==expectedEventType||event?.type!==expectedEventType)return false;
     if(["drive.checked","damage.checked","trigger.checked"].includes(expectedEventType)&&(!event.checkedCardInstanceId||event.subjectCardInstanceId!==event.checkedCardInstanceId))return false;
@@ -2701,6 +2865,7 @@
       phase: input.phase ?? null,
       timingWindow: input.timingWindow || null,
       attackHitOverride: input.attackHitOverride === true,
+      didNotHit: input.didNotHit === true,
       checkKind: input.checkKind || null,
       checkSourceLocation: input.checkSourceLocation || null,
       checkIndex: Number.isInteger(input.checkIndex) ? input.checkIndex : null,
@@ -2831,7 +2996,12 @@
     return{ok:false,reason:"unsupported-action"};
   }
   function payAbilityCosts(ability,context={},selection={}) {
-    const player=context.player,source=context.source,costs={"counter-blast":0,"soul-blast":0,"energy-blast":0,discard:0,"reveal-grade-from-hand":0,"source-discard":0,"source-retire":0,"source-to-soul":0,"source-to-bottom-deck":0,"rest-source":0,"source-bind":0,"bind-heal-from-drop":0};
+    if (Array.isArray(ability?.costAlternatives)) {
+      const index = selection.costAlternativeIndex;
+      if (!Number.isInteger(index) || index < 0 || index >= ability.costAlternatives.length) return { ok: false, reason: "invalid-cost-alternative" };
+      return payAbilityCosts({ ...ability, costs: ability.costAlternatives[index], costAlternatives: undefined }, context, selection);
+    }
+    const player=context.player,source=context.source,costs={"counter-blast":0,"soul-blast":0,"energy-blast":0,discard:0,"reveal-grade-from-hand":0,"source-discard":0,"source-retire":0,"source-to-soul":0,"source-to-bottom-deck":0,"rest-source":0,"source-bind":0,"source-bind-from-field-or-drop":0,"bind-heal-from-drop":0};
     if(!ability||!player||!source||ability.costStatus==="needs-review"||!Array.isArray(player.damage)||!Array.isArray(player.soul)||!Array.isArray(player.hand)||!Array.isArray(player.drop)||!Array.isArray(player.rear))return{ok:false,reason:"invalid-cost-context"};
     for(const cost of ability.costs||[]){if(!Object.hasOwn(costs,cost.type))return{ok:false,reason:"unsupported-cost"};if(!Number.isInteger(Number(cost.count))||Number(cost.count)<1)return{ok:false,reason:"invalid-cost-definition"};costs[cost.type]+=Number(cost.count)}
     if(costs["energy-blast"]&&(context.hasEnergyGenerator!==true||!Number.isInteger(Number(player.energy))||Number(player.energy)<costs["energy-blast"]))return{ok:false,reason:"insufficient-energy"};
@@ -2853,6 +3023,8 @@
     if(costs["source-retire"]&&(costs["source-retire"]!==1||!sourceInPlay||sourceZone==="vanguard"))return{ok:false,reason:"source-not-retirable"};
     if(costs["source-to-bottom-deck"]&&(!player.drop.some(card=>card?.uid===source.uid)||costs["source-to-soul"]||costs["rest-source"]))return{ok:false,reason:"source-not-in-drop"};
     if(costs["source-bind"]&&(costs["source-bind"]!==1||!player.drop.some(card=>card?.uid===source.uid)))return{ok:false,reason:"source-not-in-drop"};
+    const bindAnyZoneCount=costs["source-bind-from-field-or-drop"],sourceOnRear=rearCircle&&sourceIndex>=0,sourceInDrop=player.drop.some(card=>card?.uid===source.uid);
+    if(bindAnyZoneCount&&(bindAnyZoneCount!==1||!(sourceOnRear||sourceZone==="drop"&&sourceInDrop)||source.ownerPlayerId!==player.playerId&&source.ownerPlayerId!==context.actorPlayerId||source.controllerPlayerId!==player.playerId&&source.controllerPlayerId!==context.actorPlayerId))return{ok:false,reason:"source-not-in-field-or-drop"};
     const bindHealCosts=(ability.costs||[]).filter(cost=>cost.type==="bind-heal-from-drop"),bindHealUid=selection.effectUid,bindHeal=player.drop.find(card=>card?.uid===bindHealUid&&card.uid!==source.uid);
     if(costs["bind-heal-from-drop"]&&(costs["bind-heal-from-drop"]!==1||!bindHeal||bindHealCosts.some(cost=>String(context.cardDefinitionForInstance?.(bindHeal)?.trigger||"").toLowerCase()!==String(cost.filter?.trigger||"heal").toLowerCase())))return{ok:false,reason:"invalid-bind-heal-target"};
     if(costs["rest-source"]&&source.rested)return{ok:false,reason:"source-already-rested"};
@@ -2869,6 +3041,7 @@
     if(costs["source-retire"]){player.rear[sourceIndex]=null;player.drop.push(source);context.emitEvent?.({type:"card.retired",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:sourceZone,currentLocation:"drop"})}
     if(costs["source-to-bottom-deck"]){const index=player.drop.findIndex(card=>card?.uid===source.uid);if(index<0)return{ok:false,reason:"source-not-in-drop"};player.drop.splice(index,1);player.deck.unshift(source);context.emitEvent?.({type:"card.moved",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"deck"})}
     if(costs["source-bind"]){const index=player.drop.findIndex(card=>card?.uid===source.uid);if(index<0)return{ok:false,reason:"source-not-in-drop"};player.drop.splice(index,1);source.faceUp=true;player.bind||=[];player.bind.push(source);context.emitEvent?.({type:"card.bound",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"bind"})}
+    if(bindAnyZoneCount){const oldLocation=sourceZone;let removed=false;if(sourceOnRear){player.rear[sourceIndex]=null;removed=true}else if(sourceZone==="drop"){const index=player.drop.findIndex(card=>card?.uid===source.uid);if(index>=0){player.drop.splice(index,1);removed=true}}if(!removed)return{ok:false,reason:"source-not-in-field-or-drop"};source.faceUp=true;player.bind||=[];player.bind.push(source);context.sourceBindCostPaid=true;context.emitEvent?.({type:"card.bound",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:oldLocation,currentLocation:"bind"})}
     if(costs["bind-heal-from-drop"]){const index=player.drop.findIndex(card=>card?.uid===bindHealUid);if(index<0)return{ok:false,reason:"invalid-bind-heal-target"};const [card]=player.drop.splice(index,1);card.faceUp=true;player.bind||=[];player.bind.push(card);context.emitEvent?.({type:"card.bound",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"bind"})}
     if(costs["rest-source"])source.rested=true;
     return{ok:true,usageKey,paid:{counterBlast:chosen["counter-blast"].length,soulBlast:chosen["soul-blast"].length,discard:chosen.discard.length,sourceToSoul:costs["source-to-soul"],sourceToBottomDeck:costs["source-to-bottom-deck"],restSource:costs["rest-source"],sourceBind:costs["source-bind"],bindHealFromDrop:costs["bind-heal-from-drop"]}};
@@ -2879,7 +3052,7 @@
     if (sourceIsInPlay) return true;
     return ability.kind === "AUTO" && Boolean(pending.eventContext?.eventId);
   }
-  function validateAbilityDecision(state, request, expectedPlayerId, pending) {
+  function validateAbilityDecision(state, request, expectedPlayerId, pending, resourceContext = {}) {
     const replay = validateRemoteRequest(state, request, expectedPlayerId);
     if (!replay.ok) return replay;
     if (!request.matchId || request.matchId !== state.matchId) return { ok: false, reason: "wrong-match" };
@@ -2890,16 +3063,22 @@
     if (typeof request.accept !== "boolean") return { ok: false, reason: "invalid-decision" };
     if (!request.accept) return canDeclineAbility(pending.ability) ? { ok: true } : { ok: false, reason: "mandatory-ability" };
     if(selection.payCost!==undefined&&typeof selection.payCost!=="boolean")return{ok:false,reason:"invalid-cost-decision"};
-    if(selection.payCost===false){const selectedCosts=selection.costSelections??{};if(pending.ability.kind!=="AUTO"||!(pending.ability.costs||[]).length||!selectedCosts||typeof selectedCosts!=="object"||Array.isArray(selectedCosts)||Object.keys(selectedCosts).some(key=>!(["cb","sb","discard","reveal"].includes(key)))||Object.values(selectedCosts).some(ids=>!Array.isArray(ids)||ids.length))return{ok:false,reason:"cost-not-skipped"};return{ok:true}}
+    if(selection.payCost===false){const selectedCosts=selection.costSelections??{};if(pending.ability.kind!=="AUTO"||pending.ability.costStatus==="needs-review"||!((Array.isArray(pending.ability.costs)&&pending.ability.costs.length)||(Array.isArray(pending.ability.costAlternatives)&&pending.ability.costAlternatives.length))||selection.costAlternativeIndex!==undefined||!selectedCosts||typeof selectedCosts!=="object"||Array.isArray(selectedCosts)||Object.keys(selectedCosts).some(key=>!(["cb","sb","discard","reveal"].includes(key)))||Object.values(selectedCosts).some(ids=>!Array.isArray(ids)||ids.length))return{ok:false,reason:"cost-not-skipped"};return{ok:true}}
     const costs=selection.costSelections ?? {};
+    const alternatives=pending.ability.costAlternatives;
+    if(alternatives!==undefined&&!Array.isArray(alternatives))return{ok:false,reason:"invalid-cost-definition"};
+    if(Array.isArray(alternatives)&&(!Number.isInteger(selection.costAlternativeIndex)||selection.costAlternativeIndex<0||selection.costAlternativeIndex>=alternatives.length))return{ok:false,reason:"invalid-cost-alternative"};
+    if(!Array.isArray(alternatives)&&selection.costAlternativeIndex!==undefined)return{ok:false,reason:"unexpected-cost-alternative"};
+    const selectedAbilityCosts=Array.isArray(alternatives)?alternatives[selection.costAlternativeIndex]:pending.ability.costs||[];
     if (!costs || typeof costs !== "object" || Array.isArray(costs) || Object.keys(costs).some(key=>!(["cb","sb","discard","reveal"].includes(key)))) return { ok: false, reason: "invalid-cost-selection" };
-    const expected={cb:0,sb:0,discard:0,reveal:0},automaticCosts=new Set(["source-discard","source-retire","source-to-soul","source-to-bottom-deck","rest-source","source-bind","bind-heal-from-drop"]);
-    for(const cost of pending.ability.costs||[]){if(!Number.isInteger(Number(cost.count))||Number(cost.count)<1)return{ok:false,reason:"invalid-cost-definition"};const key=cost.type==="counter-blast"?"cb":cost.type==="soul-blast"?"sb":cost.type==="discard"?"discard":cost.type==="reveal-grade-from-hand"?"reveal":null;if(key)expected[key]+=Number(cost.count);else if(!automaticCosts.has(cost.type))return{ok:false,reason:"unsupported-cost"};else if(Number(cost.count)!==1)return{ok:false,reason:"invalid-cost-definition"}}
+    const expected={cb:0,sb:0,discard:0,reveal:0},automaticCosts=new Set(["source-discard","source-retire","source-to-soul","source-to-bottom-deck","rest-source","source-bind","source-bind-from-field-or-drop","bind-heal-from-drop"]);
+    for(const cost of selectedAbilityCosts){if(!Number.isInteger(Number(cost.count))||Number(cost.count)<1)return{ok:false,reason:"invalid-cost-definition"};const key=cost.type==="counter-blast"?"cb":cost.type==="soul-blast"?"sb":cost.type==="discard"?"discard":cost.type==="reveal-grade-from-hand"?"reveal":null;if(key)expected[key]+=Number(cost.count);else if(cost.type==="energy-blast")continue;else if(!automaticCosts.has(cost.type))return{ok:false,reason:"unsupported-cost"};else if(Number(cost.count)!==1)return{ok:false,reason:"invalid-cost-definition"}}
     const revealSelections=costs.reveal??[];if(!Array.isArray(revealSelections)||revealSelections.some(uid=>typeof uid!=="string"||!uid||uid.length>180)||new Set(revealSelections).size!==revealSelections.length||revealSelections.length!==expected.reveal)return{ok:false,reason:"invalid-cost-selection"};
     for(const key of Object.keys(expected)){
       const ids=costs[key]??[];
       if(!Array.isArray(ids)||ids.some(uid=>typeof uid!=="string"||!uid||uid.length>180)||new Set(ids).size!==ids.length||ids.length!==expected[key])return{ok:false,reason:"invalid-cost-selection"};
     }
+    if(Array.isArray(alternatives)){const optionActor=Object.values(state.players||{}).find(player=>player?.playerId===expectedPlayerId);if(!optionActor)return{ok:false,reason:"actor-not-in-match"};if(!canPayAbilityCosts({...pending.ability,costs:selectedAbilityCosts,costAlternatives:undefined},{faceUpDamage:(optionActor.damage||[]).filter(card=>!card.faceDown).length,energy:optionActor.energy,hasEnergyGenerator:resourceContext.hasEnergyGenerator===true||(optionActor.crests||[]).some(card=>/energy generator/i.test(String(card?.cardName||card?.crestName||card?.name||"")))}))return{ok:false,reason:"unpayable-cost"};}
     if(Object.values(expected).some(count=>count>0)){
       const actor=Object.values(state.players||{}).find(player=>player?.playerId===expectedPlayerId);
       if(!actor)return{ok:false,reason:"actor-not-in-match"};
@@ -2910,9 +3089,13 @@
       if((costs.discard||[]).some(uid=>!inZone("hand",uid)))return{ok:false,reason:"cost-card-unavailable"};
       if((costs.discard||[]).includes(pending.instance?.uid))return{ok:false,reason:"cannot-discard-source"};
       if((costs.reveal||[]).some(uid=>!inZone("hand",uid)))return{ok:false,reason:"cost-card-unavailable"};
-      if((pending.ability.costs||[]).some(cost=>cost.type==="source-retire")&&(!Array.isArray(actor.rear)||!actor.rear.some(card=>card?.uid===pending.instance?.uid)))return{ok:false,reason:"source-not-retirable"};
+      if(selectedAbilityCosts.some(cost=>cost.type==="source-retire")&&(!Array.isArray(actor.rear)||!actor.rear.some(card=>card?.uid===pending.instance?.uid)))return{ok:false,reason:"source-not-retirable"};
+      if(selectedAbilityCosts.some(cost=>cost.type==="source-bind-from-field-or-drop")&&!([...((actor.rear)||[]).filter(Boolean),...(actor.drop||[])].some(card=>card?.uid===pending.instance?.uid)))return{ok:false,reason:"source-not-in-field-or-drop"};
     }
-    for(const key of ["effectUid","targetUid","effectDiscardUid","callZone","deckDestination","effectChoice","revelationTopUid"]){const value=selection[key];if(value!=null&&(typeof value!=="string"||value.length>180))return{ok:false,reason:"invalid-ability-selection"}}
+    for(const key of ["effectUid","targetUid","effectDiscardUid","callZone","circleZone","deckDestination","effectChoice","revelationTopUid"]){const value=selection[key];if(value!=null&&(typeof value!=="string"||value.length>180))return{ok:false,reason:"invalid-ability-selection"}}
+    const circleMarkerStep=pending.ability.definition?.effects?.find(step=>step.op==="place-circle-marker");
+    if(circleMarkerStep){const actor=Object.values(state.players||{}).find(player=>player?.playerId===expectedPlayerId),zone=selection.circleZone,rearIndex=({"rear-left":0,"rear-right":1,"rear-back-left":2,"rear-back-center":3,"rear-back-right":4})[zone],accel=typeof zone==="string"?zone.match(/^accel-(\d+)$/):null,zoneType=zone==="vanguard"?"vanguard":rearIndex!=null||accel?"rear-guard":null,configuration=circleMarkerStep.markerType==="Treasures"&&JSON.stringify(circleMarkerStep.circleTypes)===JSON.stringify(["vanguard","rear-guard"])||circleMarkerStep.markerType==="Dragontree"&&JSON.stringify(circleMarkerStep.circleTypes)===JSON.stringify(["rear-guard"]),zoneExists=zone==="vanguard"?Boolean(actor?.vanguard):rearIndex!=null?rearIndex<(actor?.rear||[]).length:Boolean(accel&&Number(accel[1])<=Number(actor?.accelZones||0));if(selection.targetUid!==undefined||selection.effectChoice!==undefined||!actor||!configuration||!circleMarkerStep.circleTypes.includes(zoneType)||!zoneExists)return{ok:false,reason:"invalid-marker-circle"};if((actor.giftZones||[]).some(marker=>marker?.zone===zone&&marker?.type===circleMarkerStep.markerType))return{ok:false,reason:"marker-already-present"}}
+    else if(selection.circleZone!==undefined)return{ok:false,reason:"invalid-ability-selection"};
     const revelationStep=pending.ability.definition?.effects?.find(step=>step.op==="revelation-choice");
     if(revelationStep){if(!["soul","keep-top"].includes(selection.effectChoice))return{ok:false,reason:"invalid-ability-choice"};const actor=Object.values(state.players||{}).find(player=>player?.playerId===expectedPlayerId),target=selection.targetUid?locateCardInstance(state,selection.targetUid):null,standing=(actor?.rear||[]).filter(card=>card&&card.rested!==true);if(!Object.hasOwn(selection,"revelationTopUid")||(actor?.deck?.at(-1)?.uid??null)!==(selection.revelationTopUid??null))return{ok:false,reason:"stale-revelation-top-card"};if(selection.effectChoice==="keep-top"&&selection.targetUid)return{ok:false,reason:"unexpected-ability-target"};if(selection.effectChoice==="soul"&&!selection.targetUid&&standing.length)return{ok:false,reason:"missing-ability-target"};if(selection.effectChoice==="soul"&&selection.targetUid){const card=target?.instance,controller=target?.controllerPlayerId;if(!actor||!target||target.ambiguous||controller!==expectedPlayerId||target.zone!=="rear-guard"||card?.rested===true||!standing.some(unit=>unit.uid===card?.uid))return{ok:false,reason:"invalid-ability-target"}}}
     const engorgeStep=pending.ability.definition?.effects?.find(step=>step.op==="engorge");
@@ -3033,5 +3216,5 @@
     if (subject === "any") return true;
     return false;
   }
-  return Object.freeze({ createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, countGenerationBreakUnits, parseCardAbilities, parseCardAbilitiesCached, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, canPayAbilityCosts, evaluateAutoCostPayment, registerAbilityDefinitions, getReviewedAbilityDefinitionsForCard, registerCardAbilityKeywordIndex, getCardAbilityKeywords, compileVanguardTopFiveKeywordSearchDefinition, compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition, compileActRcSoulBlastThreeDrawDefinition, compileAutoRcPlacementChooseFriendlyPowerDefinition, compileRearGuardVanguardAttackSacrificeDrawPowerDefinition, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, expireTurnModifiers, compileAutoTrigger, isManuallyActivatable, autoAbilityReadiness, canActivateManualAbility, abilityUsageKey, validateAbilityChoices, canDeclineAbility, matchesTargetFilter, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, claimGameEvent, claimAbilityTrigger, validateRemoteRequest, validateRemoteActionRequest, canResolveAbilitySource, payAbilityCosts, validateAbilityDecision, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, claimRemoteRequest, eventSubjectMatches, recordAttackCount, getAttackCount, getPlayerAttackCount, retireHollowedUnitsAtTurnEnd, retireChargingUnitsAtBattleEnd, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance, prunePendingAbilitiesWithConsumedUsage });
+  return Object.freeze({ createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, countGenerationBreakUnits, parseCardAbilities, parseCardAbilitiesCached, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, canPayAbilityCosts, evaluateAutoCostPayment, registerAbilityDefinitions, getReviewedAbilityDefinitionsForCard, registerCardAbilityKeywordIndex, getCardAbilityKeywords, compileVanguardTopFiveKeywordSearchDefinition, compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition, compileActRcSoulBlastThreeDrawDefinition, compileAutoRcPlacementChooseFriendlyPowerDefinition, compileRearGuardVanguardAttackSacrificeDrawPowerDefinition, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, evaluateContinuousGrade, expireTurnModifiers, compileAutoTrigger, isManuallyActivatable, autoAbilityReadiness, canActivateManualAbility, abilityUsageKey, validateAbilityChoices, canDeclineAbility, matchesTargetFilter, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, claimGameEvent, claimAbilityTrigger, validateRemoteRequest, validateRemoteActionRequest, canResolveAbilitySource, payAbilityCosts, validateAbilityDecision, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, claimRemoteRequest, eventSubjectMatches, recordAttackCount, getAttackCount, getPlayerAttackCount, retireHollowedUnitsAtTurnEnd, retireChargingUnitsAtBattleEnd, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance, prunePendingAbilitiesWithConsumedUsage });
 });

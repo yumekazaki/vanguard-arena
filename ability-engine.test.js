@@ -561,9 +561,12 @@ test("turn-end AUTO timing distinguishes the controller turn from the opponent t
 });
 test("turn-end events hold the transition until private skill decisions resolve", () => {
   const app = fs.readFileSync("app.js", "utf8");
-  assert.match(app, /function queueTurnEndEvent\(side\)[\s\S]{0,240}queueAbilityPrompts\("end",side,null/);
-  assert.match(app, /function beginTurnEnd\(side\)[\s\S]{0,320}pendingTurnEnd=\{playerId:player\.playerId,side,turn:match\.turn\};queueTurnEndEvent\(side\);resumeAbilityQueue\(\)/);
-  assert.match(app, /function resumeAbilityQueue\(\)[\s\S]{0,700}if\(match\.pendingTurnEnd\)[\s\S]{0,180}completeTurnTransition\(playerId\)/);
+  assert.match(app, /function queueTurnEndEvent\(side,endPhaseRescan=false\)[\s\S]{0,300}pending\.endPhaseRescanInProgress=true/);
+  assert.match(app, /queueAbilityPrompts\("end",side,null,\{eventId:pending\?\.turnEndEventId/);
+  assert.match(app, /function beginTurnEnd\(side\)[\s\S]{0,420}pendingTurnEnd=\{playerId:player\.playerId,side,turn:match\.turn,turnEndEventId:/);
+  assert.match(app, /function resumeAbilityQueue\(\)[\s\S]{0,400}endPhaseRescanPending[\s\S]{0,260}queueTurnEndEvent\(pending\.side,true\)/);
+  assert.match(app, /endPhaseRescanInProgress===true/);
+  assert.match(app, /if\(match\.pendingTurnEnd\)[\s\S]{0,180}completeTurnTransition\(playerId\)/);
   assert.match(app, /message\.type === "ability-response"[\s\S]{0,4000}resumeAbilityQueue\(\);renderMatch\(\)/);
   assert.match(app, /if\(match\?\.pendingTurnEnd\)\{toast\("Resolve the pending end-of-turn abilities first\."\)/);
 });
@@ -970,8 +973,8 @@ test("application routes AUTO eligibility through the exact-instance engine matc
   const declarations = [...source.matchAll(/function abilityTriggerMatches\(/g)];
   assert.equal(declarations.length, 1);
   assert.match(declarations[0][0] + source.slice(declarations[0].index, declarations[0].index + 240), /eventMatchesAbilityTrigger/);
-  assert.ok(source.includes('sourceToSoul:abilityCostCount(ability,"source-to-soul")'));
-  assert.ok(source.includes('costs={cb:abilityCostCount(ability,"counter-blast")'));
+  assert.ok(source.includes('sourceToSoul:abilityCostCount(ability,"source-to-soul",ability.costAlternatives?.[x.costAlternativeIndex])'));
+  assert.ok(source.includes('costs={cb:abilityCostCount(ability,"counter-blast",ability.costAlternatives?.[x.costAlternativeIndex])'));
   assert.match(source, /resolveEffectProgram\(definition\.effects,handlers,context,draft=>/);
   assert.ok(source.includes("function abilityUsed(side,instanceUid,abilityOrId)"));
   assert.ok(source.includes("abilityUsageKey(match.turn,player.playerId||side,instanceUid,id,ability?.usageRestriction,name,ability?.printedText||ability?.raw)"));
@@ -993,7 +996,7 @@ test("application routes AUTO eligibility through the exact-instance engine matc
   assert.match(source, /resolveReviewedAbility\(x,x\.ability\.definition\)/);
   assert.match(source, /resolveEffectProgram\(definition\.effects/);
   assert.ok(source.includes("canDeclineAbility(pending.ability)"));
-  assert.ok(source.includes("sourceToSoul:abilityCostCount(ability,\"source-to-soul\")"));
+  assert.ok(source.includes("sourceToSoul:abilityCostCount(ability,\"source-to-soul\",ability.costAlternatives?.[x.costAlternativeIndex])"));
   assert.ok(source.includes("met an AUTO trigger, but its effect is not reviewed and supported yet"));
   assert.ok(source.includes("!a.definition?.effects"));
   assert.ok(source.includes("This ability effect is not reviewed and supported yet; no cost was paid."));
@@ -1087,7 +1090,7 @@ test("remote ability decisions validate explicit choices and exact unique paymen
 });
 
 test("AUTO cost decisions may skip the entire post-cost effect without paying partial costs",()=>{
- const state={matchId:"auto-cost-room",stateVersion:4,processedActionIds:[]},pending={instance:{uid:"auto-card",controllerPlayerId:"guest"},ability:{id:"auto-card:0",kind:"AUTO",costs:[{type:"counter-blast",count:1},{type:"soul-blast",count:1}]}};
+ const state={matchId:"auto-cost-room",stateVersion:4,processedActionIds:[]},pending={instance:{uid:"auto-card",controllerPlayerId:"guest"},ability:{id:"auto-card:0",kind:"AUTO",canDecline:true,costs:[{type:"counter-blast",count:1},{type:"soul-blast",count:1}]}};
  const request={matchId:"auto-cost-room",actorPlayerId:"guest",actionId:"skip-cost",expectedStateVersion:4,accept:true,selection:{instanceUid:"auto-card",abilityId:"auto-card:0",payCost:false,costSelections:{cb:[],sb:[],discard:[],reveal:[]}}};
  assert.deepEqual(validateAbilityDecision(state,request,"guest",pending),{ok:true});
  assert.equal(validateAbilityDecision(state,{...request,actionId:"partial-cost",selection:{...request.selection,costSelections:{cb:["damage-a"],sb:[],discard:[],reveal:[]}}},"guest",pending).reason,"cost-not-skipped");
@@ -1108,7 +1111,7 @@ test("the app queues eligible AUTO abilities independently from cost payment and
  const app=fs.readFileSync("app.js","utf8"),requirements=app.slice(app.indexOf("function abilityRequirementsMet("),app.indexOf("function abilityTriggerMatches("));
  assert.match(requirements,/a\.kind!=="AUTO"&&!window\.VanguardAbilityEngine\.canPayAbilityCosts/);
  assert.match(app,/abilityCostPaymentAvailable\(ability,side,source\)\){const unpaid={side,field:source\.zone,instance:source\.instance,ability,eventContext,[\s\S]{0,250}skipCostPayment:true/);
- assert.match(app,/if\(x\.skipCostPayment&&ability\.kind==="AUTO"&&\(ability\.costs\|\|\[\]\)\.length\)/);
+ assert.match(app,/if\(x\.skipCostPayment&&ability\.kind==="AUTO"&&\(\(ability\.costs\|\|\[\]\)\.length\|\|\(ability\.costAlternatives\|\|\[\]\)\.length\)\)/);
  assert.match(app,/#ability-skip-cost/);
  assert.match(app,/pending\.skipCostPayment=selection\.payCost===false/);
 });
@@ -1403,7 +1406,12 @@ test("named-unit boost template requires the exact boosted card and only modifie
   assert.equal(resolveEffectProgram(ability.effects, EFFECT_HANDLERS, { ...context, targetCard: { type: "Unit", name: "Chain-attack Sutherland SP" } }).ok, false);
 
   const extraEffect = parseCardAbilities({ id: "cfa-104", text: "AUTO [RC]: When this unit boosts, the boosted unit gets power +3000 until end of that battle, and at the beginning of the end phase of that turn, return this unit to your deck, and shuffle your deck." })[0];
-  assert.equal(extraEffect.definition, null);
+  assert.equal(extraEffect.implementationStatus, "structured-effect-definition");
+  assert.equal(extraEffect.definition.source.patternId, "auto-boost-power-battle-then-return-self-end-phase-v1");
+  assert.deepEqual(extraEffect.effects, [
+    { op: "modify-power-target", target: "boosted-unit", amount: 3000, duration: "battle", targetFilter: { controller: "source-controller", cardType: "unit" } },
+    { op: "schedule-source-return-to-deck-at-turn-end", target: "source", due: "end-phase-start", shuffle: true }
+  ]);
 });
 
 test("real Doranbau and Gururubau abilities bind boost and attack effects to the current battle", () => {

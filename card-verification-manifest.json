@@ -2,17 +2,17 @@
   "schemaVersion": 1,
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "latestFullSuite": {
-    "command": "node --test --test-reporter=tap",
-    "testCommand": "node --test --test-reporter=tap",
+    "command": "node --test",
+    "testCommand": "node --test",
     "status": "passed",
-    "tests": 1304,
-    "testCount": 1304,
-    "passed": 1304,
+    "tests": 1342,
+    "testCount": 1342,
+    "passed": 1342,
     "failed": 0,
-    "durationMilliseconds": 317294.8983,
-    "completedAt": "2026-10-29T02:17:03.343Z",
+    "durationMilliseconds": 285842,
+    "completedAt": "2026-10-29T05:23:02.969Z",
     "runDate": "2026-10-29",
-    "validationInputDigest": "36c443f448f0c9d4d84a0e225503c6dd33d1765fd497454448a039d0fa442b06"
+    "validationInputDigest": "f44c5f5e7741bdbb80a5c4c9f70ebe97ccc29d76c43e2b7a7c041b42287675fc"
   },
   "records": [
     {
@@ -68170,8 +68170,644 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11112",
+      "abilityId": "cfa-11112:2",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-missed-vanguard-hit-server.test.js"
+      ],
+      "testCases": [
+        "a missed Vanguard attack uses the same Vanguard's exact CONT and resolves its attack-hit AUTO for either player",
+        "the same AUTO does not trigger from a different Vanguard without the CONT"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-104",
+      "abilityId": "cfa-104:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boost-power-battle-return-deck-server.test.js"
+      ],
+      "testCases": [
+        "five exact catalog records use the reviewed boost and scheduled source-return definition",
+        "both host and joining player get their own exact booster prompt and only that battle gains power",
+        "different booster, different battle, and a source no longer on its rear-guard circle do not trigger",
+        "the scheduled return resolves at this turn's end-phase start, returns owner card, and duplicate action cannot repeat it",
+        "source that leaves play before end phase is not returned from its new zone",
+        "source that leaves its original circle before end phase is treated as a different card"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-387",
+      "abilityId": "cfa-387:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boost-power-battle-return-deck-server.test.js"
+      ],
+      "testCases": [
+        "five exact catalog records use the reviewed boost and scheduled source-return definition",
+        "both host and joining player get their own exact booster prompt and only that battle gains power",
+        "different booster, different battle, and a source no longer on its rear-guard circle do not trigger",
+        "the scheduled return resolves at this turn's end-phase start, returns owner card, and duplicate action cannot repeat it",
+        "source that leaves play before end phase is not returned from its new zone",
+        "source that leaves its original circle before end phase is treated as a different card"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-391",
+      "abilityId": "cfa-391:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boost-power-battle-return-deck-server.test.js"
+      ],
+      "testCases": [
+        "five exact catalog records use the reviewed boost and scheduled source-return definition",
+        "both host and joining player get their own exact booster prompt and only that battle gains power",
+        "different booster, different battle, and a source no longer on its rear-guard circle do not trigger",
+        "the scheduled return resolves at this turn's end-phase start, returns owner card, and duplicate action cannot repeat it",
+        "source that leaves play before end phase is not returned from its new zone",
+        "source that leaves its original circle before end phase is treated as a different card"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-5533",
+      "abilityId": "cfa-5533:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boost-power-battle-return-deck-server.test.js"
+      ],
+      "testCases": [
+        "five exact catalog records use the reviewed boost and scheduled source-return definition",
+        "both host and joining player get their own exact booster prompt and only that battle gains power",
+        "different booster, different battle, and a source no longer on its rear-guard circle do not trigger",
+        "the scheduled return resolves at this turn's end-phase start, returns owner card, and duplicate action cannot repeat it",
+        "source that leaves play before end phase is not returned from its new zone",
+        "source that leaves its original circle before end phase is treated as a different card"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-706",
+      "abilityId": "cfa-706:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boost-power-battle-return-deck-server.test.js"
+      ],
+      "testCases": [
+        "five exact catalog records use the reviewed boost and scheduled source-return definition",
+        "both host and joining player get their own exact booster prompt and only that battle gains power",
+        "different booster, different battle, and a source no longer on its rear-guard circle do not trigger",
+        "the scheduled return resolves at this turn's end-phase start, returns owner card, and duplicate action cannot repeat it",
+        "source that leaves play before end phase is not returned from its new zone",
+        "source that leaves its original circle before end phase is treated as a different card"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11833",
+      "abilityId": "cfa-11833:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boost-set-order-counter-charge-server.test.js"
+      ],
+      "testCases": [
+        "four catalog abilities compile to one exact Set Order-gated battle-close definition",
+        "host and joining player's exact boosted unit receive independent prompts and pay source-to-Soul before Counter Charge",
+        "no controller-owned Set Order, or only an opponent Set Order, means no prompt",
+        "another unit's boost, a different battle, or a booster that left RC cannot trigger this source",
+        "controller may decline the AUTO cost without moving the booster or Counter Charging",
+        "Set Order condition is rechecked before paying the cost"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12552",
+      "abilityId": "cfa-12552:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boost-set-order-counter-charge-server.test.js"
+      ],
+      "testCases": [
+        "four catalog abilities compile to one exact Set Order-gated battle-close definition",
+        "host and joining player's exact boosted unit receive independent prompts and pay source-to-Soul before Counter Charge",
+        "no controller-owned Set Order, or only an opponent Set Order, means no prompt",
+        "another unit's boost, a different battle, or a booster that left RC cannot trigger this source",
+        "controller may decline the AUTO cost without moving the booster or Counter Charging",
+        "Set Order condition is rechecked before paying the cost"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13453",
+      "abilityId": "cfa-13453:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boost-set-order-counter-charge-server.test.js"
+      ],
+      "testCases": [
+        "four catalog abilities compile to one exact Set Order-gated battle-close definition",
+        "host and joining player's exact boosted unit receive independent prompts and pay source-to-Soul before Counter Charge",
+        "no controller-owned Set Order, or only an opponent Set Order, means no prompt",
+        "another unit's boost, a different battle, or a booster that left RC cannot trigger this source",
+        "controller may decline the AUTO cost without moving the booster or Counter Charging",
+        "Set Order condition is rechecked before paying the cost"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-8353",
+      "abilityId": "cfa-8353:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boost-set-order-counter-charge-server.test.js"
+      ],
+      "testCases": [
+        "four catalog abilities compile to one exact Set Order-gated battle-close definition",
+        "host and joining player's exact boosted unit receive independent prompts and pay source-to-Soul before Counter Charge",
+        "no controller-owned Set Order, or only an opponent Set Order, means no prompt",
+        "another unit's boost, a different battle, or a booster that left RC cannot trigger this source",
+        "controller may decline the AUTO cost without moving the booster or Counter Charging",
+        "Set Order condition is rechecked before paying the cost"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10051",
+      "abilityId": "cfa-10051:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-vc-end-turn-revoldress-ride-server.test.js"
+      ],
+      "testCases": [
+        "five exact records compile to one trusted end-turn RevolDress ride family",
+        "host and joining player resolve their own end-turn choice, ride the selected instance rested, and retain standard ride events",
+        "end-turn ability rejects wrong turn, wrong phase, opponent action, and source moved from VC",
+        "no eligible RevolDress unit prevents an empty-choice prompt",
+        "same end-turn event is rechecked after a ride for a new Vanguard ability, once per source and only for the host or joining player",
+        "selection must be a rideable RevolDress unit in this controller's Soul and the source must remain Vanguard"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires the card’s other printed AUTO abilities and relevant rules interactions."
+    },
+    {
+      "cardId": "cfa-10140",
+      "abilityId": "cfa-10140:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-vc-end-turn-revoldress-ride-server.test.js"
+      ],
+      "testCases": [
+        "five exact records compile to one trusted end-turn RevolDress ride family",
+        "host and joining player resolve their own end-turn choice, ride the selected instance rested, and retain standard ride events",
+        "end-turn ability rejects wrong turn, wrong phase, opponent action, and source moved from VC",
+        "selection must be a real RevolDress unit in this controller's Soul and the source must remain Vanguard",
+        "no eligible RevolDress unit prevents an empty-choice prompt"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10361",
+      "abilityId": "cfa-10361:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-vc-end-turn-revoldress-ride-server.test.js"
+      ],
+      "testCases": [
+        "five exact records compile to one trusted end-turn RevolDress ride family",
+        "host and joining player resolve their own end-turn choice, ride the selected instance rested, and retain standard ride events",
+        "end-turn ability rejects wrong turn, wrong phase, opponent action, and source moved from VC",
+        "selection must be a real RevolDress unit in this controller's Soul and the source must remain Vanguard",
+        "no eligible RevolDress unit prevents an empty-choice prompt"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12069",
+      "abilityId": "cfa-12069:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-vc-end-turn-revoldress-ride-server.test.js"
+      ],
+      "testCases": [
+        "five exact records compile to one trusted end-turn RevolDress ride family",
+        "host and joining player resolve their own end-turn choice, ride the selected instance rested, and retain standard ride events",
+        "end-turn ability rejects wrong turn, wrong phase, opponent action, and source moved from VC",
+        "selection must be a real RevolDress unit in this controller's Soul and the source must remain Vanguard",
+        "no eligible RevolDress unit prevents an empty-choice prompt"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13900",
+      "abilityId": "cfa-13900:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-vc-end-turn-revoldress-ride-server.test.js"
+      ],
+      "testCases": [
+        "five exact records compile to one trusted end-turn RevolDress ride family",
+        "host and joining player resolve their own end-turn choice, ride the selected instance rested, and retain standard ride events",
+        "end-turn ability rejects wrong turn, wrong phase, opponent action, and source moved from VC",
+        "selection must be a real RevolDress unit in this controller's Soul and the source must remain Vanguard",
+        "no eligible RevolDress unit prevents an empty-choice prompt"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7622",
+      "abilityId": "cfa-7622:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-treasures-marker-hit-server.test.js"
+      ],
+      "testCases": [
+        "the six supported AUTO definitions are exact, VC/RC-only, and leave other printed abilities unsupported",
+        "host and joining player each get their own private choice and place the marker on their own selected circle",
+        "an unrelated attacker, a miss, a blocked attack, and a forged hit target cannot trigger",
+        "marked circles are excluded and target selection is revalidated before resolution",
+        "duplicate hit events do not queue the ability twice and no legal circles means no prompt"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7623",
+      "abilityId": "cfa-7623:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-treasures-marker-hit-server.test.js"
+      ],
+      "testCases": [
+        "the six supported AUTO definitions are exact, VC/RC-only, and leave other printed abilities unsupported",
+        "host and joining player each get their own private choice and place the marker on their own selected circle",
+        "an unrelated attacker, a miss, a blocked attack, and a forged hit target cannot trigger",
+        "marked circles are excluded and target selection is revalidated before resolution",
+        "duplicate hit events do not queue the ability twice and no legal circles means no prompt"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7624",
+      "abilityId": "cfa-7624:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-treasures-marker-hit-server.test.js"
+      ],
+      "testCases": [
+        "the six supported AUTO definitions are exact, VC/RC-only, and leave other printed abilities unsupported",
+        "host and joining player each get their own private choice and place the marker on their own selected circle",
+        "an unrelated attacker, a miss, a blocked attack, and a forged hit target cannot trigger",
+        "marked circles are excluded and target selection is revalidated before resolution",
+        "duplicate hit events do not queue the ability twice and no legal circles means no prompt"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7625",
+      "abilityId": "cfa-7625:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-treasures-marker-hit-server.test.js"
+      ],
+      "testCases": [
+        "the six supported AUTO definitions are exact, VC/RC-only, and leave other printed abilities unsupported",
+        "host and joining player each get their own private choice and place the marker on their own selected circle",
+        "an unrelated attacker, a miss, a blocked attack, and a forged hit target cannot trigger",
+        "marked circles are excluded and target selection is revalidated before resolution",
+        "duplicate hit events do not queue the ability twice and no legal circles means no prompt"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7626",
+      "abilityId": "cfa-7626:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-treasures-marker-hit-server.test.js"
+      ],
+      "testCases": [
+        "the six supported AUTO definitions are exact, VC/RC-only, and leave other printed abilities unsupported",
+        "host and joining player each get their own private choice and place the marker on their own selected circle",
+        "an unrelated attacker, a miss, a blocked attack, and a forged hit target cannot trigger",
+        "marked circles are excluded and target selection is revalidated before resolution",
+        "duplicate hit events do not queue the ability twice and no legal circles means no prompt"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7627",
+      "abilityId": "cfa-7627:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-treasures-marker-hit-server.test.js"
+      ],
+      "testCases": [
+        "the six supported AUTO definitions are exact, VC/RC-only, and leave other printed abilities unsupported",
+        "host and joining player each get their own private choice and place the marker on their own selected circle",
+        "an unrelated attacker, a miss, a blocked attack, and a forged hit target cannot trigger",
+        "marked circles are excluded and target selection is revalidated before resolution",
+        "duplicate hit events do not queue the ability twice and no legal circles means no prompt"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12773",
+      "abilityId": "cfa-12773:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-other-hand-discard-return-server.test.js"
+      ],
+      "testCases": [
+        "six exact :1 abilities use the reviewed RC/Drop event-discard return definition only",
+        "host and joining player independently receive private prompts and pay/resolve their own ability",
+        "rejects wrong seat, wrong event identity, source-as-subject, illegal location, and unpayable cost without partial effects",
+        "revalidates the exact discarded card and suppresses duplicate events and decisions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12774",
+      "abilityId": "cfa-12774:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-other-hand-discard-return-server.test.js"
+      ],
+      "testCases": [
+        "six exact :1 abilities use the reviewed RC/Drop event-discard return definition only",
+        "host and joining player independently receive private prompts and pay/resolve their own ability",
+        "rejects wrong seat, wrong event identity, source-as-subject, illegal location, and unpayable cost without partial effects",
+        "revalidates the exact discarded card and suppresses duplicate events and decisions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12782",
+      "abilityId": "cfa-12782:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-other-hand-discard-return-server.test.js"
+      ],
+      "testCases": [
+        "six exact :1 abilities use the reviewed RC/Drop event-discard return definition only",
+        "host and joining player independently receive private prompts and pay/resolve their own ability",
+        "rejects wrong seat, wrong event identity, source-as-subject, illegal location, and unpayable cost without partial effects",
+        "revalidates the exact discarded card and suppresses duplicate events and decisions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12783",
+      "abilityId": "cfa-12783:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-other-hand-discard-return-server.test.js"
+      ],
+      "testCases": [
+        "six exact :1 abilities use the reviewed RC/Drop event-discard return definition only",
+        "host and joining player independently receive private prompts and pay/resolve their own ability",
+        "rejects wrong seat, wrong event identity, source-as-subject, illegal location, and unpayable cost without partial effects",
+        "revalidates the exact discarded card and suppresses duplicate events and decisions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12791",
+      "abilityId": "cfa-12791:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-other-hand-discard-return-server.test.js"
+      ],
+      "testCases": [
+        "six exact :1 abilities use the reviewed RC/Drop event-discard return definition only",
+        "host and joining player independently receive private prompts and pay/resolve their own ability",
+        "rejects wrong seat, wrong event identity, source-as-subject, illegal location, and unpayable cost without partial effects",
+        "revalidates the exact discarded card and suppresses duplicate events and decisions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12792",
+      "abilityId": "cfa-12792:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-other-hand-discard-return-server.test.js"
+      ],
+      "testCases": [
+        "six exact :1 abilities use the reviewed RC/Drop event-discard return definition only",
+        "host and joining player independently receive private prompts and pay/resolve their own ability",
+        "rejects wrong seat, wrong event identity, source-as-subject, illegal location, and unpayable cost without partial effects",
+        "revalidates the exact discarded card and suppresses duplicate events and decisions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11592",
+      "abilityId": "cfa-11592:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-trigger-zone-generation-break-grade-server.test.js"
+      ],
+      "testCases": [
+        "the six exact abilities compile as passive Trigger Zone CONT and no other card ID inherits them",
+        "Generation Break 1 grade is derived only for the exact source instance in Trigger Zone",
+        "authoritative drive checks apply the GB boundary for both host and joining player",
+        "grade reverts immediately when the exact revealed card leaves Trigger Zone"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11593",
+      "abilityId": "cfa-11593:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-trigger-zone-generation-break-grade-server.test.js"
+      ],
+      "testCases": [
+        "the six exact abilities compile as passive Trigger Zone CONT and no other card ID inherits them",
+        "Generation Break 1 grade is derived only for the exact source instance in Trigger Zone",
+        "authoritative drive checks apply the GB boundary for both host and joining player",
+        "grade reverts immediately when the exact revealed card leaves Trigger Zone"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11594",
+      "abilityId": "cfa-11594:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-trigger-zone-generation-break-grade-server.test.js"
+      ],
+      "testCases": [
+        "the six exact abilities compile as passive Trigger Zone CONT and no other card ID inherits them",
+        "Generation Break 1 grade is derived only for the exact source instance in Trigger Zone",
+        "authoritative drive checks apply the GB boundary for both host and joining player",
+        "grade reverts immediately when the exact revealed card leaves Trigger Zone"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-5501",
+      "abilityId": "cfa-5501:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-trigger-zone-generation-break-grade-server.test.js"
+      ],
+      "testCases": [
+        "the six exact abilities compile as passive Trigger Zone CONT and no other card ID inherits them",
+        "Generation Break 1 grade is derived only for the exact source instance in Trigger Zone",
+        "authoritative drive checks apply the GB boundary for both host and joining player",
+        "grade reverts immediately when the exact revealed card leaves Trigger Zone"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-5513",
+      "abilityId": "cfa-5513:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-trigger-zone-generation-break-grade-server.test.js"
+      ],
+      "testCases": [
+        "the six exact abilities compile as passive Trigger Zone CONT and no other card ID inherits them",
+        "Generation Break 1 grade is derived only for the exact source instance in Trigger Zone",
+        "authoritative drive checks apply the GB boundary for both host and joining player",
+        "grade reverts immediately when the exact revealed card leaves Trigger Zone"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-5567",
+      "abilityId": "cfa-5567:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-trigger-zone-generation-break-grade-server.test.js"
+      ],
+      "testCases": [
+        "the six exact abilities compile as passive Trigger Zone CONT and no other card ID inherits them",
+        "Generation Break 1 grade is derived only for the exact source instance in Trigger Zone",
+        "authoritative drive checks apply the GB boundary for both host and joining player",
+        "grade reverts immediately when the exact revealed card leaves Trigger Zone"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10622",
+      "abilityId": "cfa-10622:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-dragontree-marker-server.test.js"
+      ],
+      "testCases": [
+        "five reviewed D-BT09 Dragontree abilities match exact card text and share only the supported marker effect",
+        "host and joining player privately resolve their own marker choice and Counter Blast",
+        "rejects other-card, VC, wrong-player, unpayable, no-circle, duplicate, and stale choices",
+        "empty Rear-Guard Circles and modeled Accel Circles are legal targets; an existing Dragontree marker blocks only its own circle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10639",
+      "abilityId": "cfa-10639:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-dragontree-marker-server.test.js"
+      ],
+      "testCases": [
+        "five reviewed D-BT09 Dragontree abilities match exact card text and share only the supported marker effect",
+        "host and joining player privately resolve their own marker choice and Counter Blast",
+        "rejects other-card, VC, wrong-player, unpayable, no-circle, duplicate, and stale choices",
+        "empty Rear-Guard Circles and modeled Accel Circles are legal targets; an existing Dragontree marker blocks only its own circle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10662",
+      "abilityId": "cfa-10662:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-dragontree-marker-server.test.js"
+      ],
+      "testCases": [
+        "five reviewed D-BT09 Dragontree abilities match exact card text and share only the supported marker effect",
+        "host and joining player privately resolve their own marker choice and Counter Blast",
+        "rejects other-card, VC, wrong-player, unpayable, no-circle, duplicate, and stale choices",
+        "empty Rear-Guard Circles and modeled Accel Circles are legal targets; an existing Dragontree marker blocks only its own circle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10717",
+      "abilityId": "cfa-10717:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-dragontree-marker-server.test.js"
+      ],
+      "testCases": [
+        "five reviewed D-BT09 Dragontree abilities match exact card text and share only the supported marker effect",
+        "host and joining player privately resolve their own marker choice and Counter Blast",
+        "rejects other-card, VC, wrong-player, unpayable, no-circle, duplicate, and stale choices",
+        "empty Rear-Guard Circles and modeled Accel Circles are legal targets; an existing Dragontree marker blocks only its own circle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10730",
+      "abilityId": "cfa-10730:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-dragontree-marker-server.test.js"
+      ],
+      "testCases": [
+        "five reviewed D-BT09 Dragontree abilities match exact card text and share only the supported marker effect",
+        "host and joining player privately resolve their own marker choice and Counter Blast",
+        "rejects other-card, VC, wrong-player, unpayable, no-circle, duplicate, and stale choices",
+        "empty Rear-Guard Circles and modeled Accel Circles are legal targets; an existing Dragontree marker blocks only its own circle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
-  "generatedAt": "2026-10-29T00:07:14.556Z",
-  "evidenceUpdatedAt": "2026-10-29T02:04:48.008Z"
+  "generatedAt": "2026-10-29T04:38:36.057Z",
+  "evidenceUpdatedAt": "2026-10-29T05:35:11.874Z"
 }

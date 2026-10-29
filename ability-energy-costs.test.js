@@ -15,10 +15,14 @@ test("Energy Blast costs parse their exact amount and fail closed without Energy
   }
 });
 
-test("alternative resource costs are not misread as costs that must all be paid", () => {
+test("alternative resource costs remain supported as exclusive payment branches", () => {
   const parsed = Engine.parseAbilityCosts("ACT: COST [Counter-Blast 1 or Energy-Blast 3], draw a card.");
-  assert.equal(parsed.status, "needs-review");
+  assert.equal(parsed.status, "supported-cost-alternatives");
   assert.deepEqual(parsed.costs, []);
+  assert.deepEqual(parsed.costAlternatives, [
+    [{ type: "counter-blast", count: 1 }],
+    [{ type: "energy-blast", count: 3 }]
+  ]);
 });
 
 test("Energy Blast payment is atomic, consumes the right amount, and tracks this-turn spending", () => {

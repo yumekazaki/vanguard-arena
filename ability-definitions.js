@@ -107499,7 +107499,1735 @@
           "duration": "battle"
         }
       ]
-    }
+    },
+    {
+      "id": "cfa-10780:1",
+      "cardId": "cfa-10780",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11102:1",
+      "cardId": "cfa-11102",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11104:1",
+      "cardId": "cfa-11104",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11106:1",
+      "cardId": "cfa-11106",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11108:1",
+      "cardId": "cfa-11108",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11110:1",
+      "cardId": "cfa-11110",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11112:1",
+      "cardId": "cfa-11112",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11114:1",
+      "cardId": "cfa-11114",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11116:1",
+      "cardId": "cfa-11116",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11118:1",
+      "cardId": "cfa-11118",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11120:1",
+      "cardId": "cfa-11120",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11122:1",
+      "cardId": "cfa-11122",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11124:1",
+      "cardId": "cfa-11124",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11126:1",
+      "cardId": "cfa-11126",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11128:1",
+      "cardId": "cfa-11128",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11130:1",
+      "cardId": "cfa-11130",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11132:1",
+      "cardId": "cfa-11132",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11134:1",
+      "cardId": "cfa-11134",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11136:1",
+      "cardId": "cfa-11136",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11138:1",
+      "cardId": "cfa-11138",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11140:1",
+      "cardId": "cfa-11140",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11142:1",
+      "cardId": "cfa-11142",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11144:1",
+      "cardId": "cfa-11144",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-11146:1",
+      "cardId": "cfa-11146",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: This unit’s \"when attack hits\" effects activate even if the attack did not hit.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vanguard-missed-attack-hit-effects-v1",
+        "review": "Exact VC CONT template. On a missed attack by this exact Vanguard, only that Vanguard's own AUTO effects with hit triggers are considered; no damage, hit-to-retire, or opponent hit effects are synthesized."
+      },
+      "keywords": [
+        "missed-attack-hit-effects"
+      ]
+    },
+    {
+      "id": "cfa-2497:0",
+      "cardId": "cfa-2497",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When this unit’s attack hits a vanguard, choose one of your opponent’s rear-guards, and retire it.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-own-attack-hit-opponent-rear-retire-v1",
+        "review": "Exact Vanguard AUTO wording. The exact Vanguard must attack and hit the opposing Vanguard; its controller chooses one opposing Rear-Guard to retire. When paired with the exact missed-attack CONT on that same Vanguard, the AUTO may resolve only for that source's missed Vanguard attack."
+      },
+      "effects": [
+        {
+          "op": "retire-target",
+          "target": "chosen",
+          "targetFilter": {
+            "controller": "opponent",
+            "zone": "rear-guard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11706:0",
+      "cardId": "cfa-11706",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When this unit’s attack hits a vanguard, choose one of your opponent’s rear-guards, and retire it.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-own-attack-hit-opponent-rear-retire-v1",
+        "review": "Exact Vanguard AUTO wording. The exact Vanguard must attack and hit the opposing Vanguard; its controller chooses one opposing Rear-Guard to retire. When paired with the exact missed-attack CONT on that same Vanguard, the AUTO may resolve only for that source's missed Vanguard attack."
+      },
+      "effects": [
+        {
+          "op": "retire-target",
+          "target": "chosen",
+          "targetFilter": {
+            "controller": "opponent",
+            "zone": "rear-guard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11112:2",
+      "cardId": "cfa-11112",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When this unit’s attack hits a vanguard, choose one of your opponent’s rear-guards, and retire it.\n\n(SHIFT + left click to create Force gifts.)",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-own-attack-hit-opponent-rear-retire-v1",
+        "review": "Exact Vanguard AUTO wording. The exact Vanguard must attack and hit the opposing Vanguard; its controller chooses one opposing Rear-Guard to retire. When paired with the exact missed-attack CONT on that same Vanguard, the AUTO may resolve only for that source's missed Vanguard attack."
+      },
+      "effects": [
+        {
+          "op": "retire-target",
+          "target": "chosen",
+          "targetFilter": {
+            "controller": "opponent",
+            "zone": "rear-guard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-104:1",
+      "cardId": "cfa-104",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts, the boosted unit gets power +3000 until end of that battle, and at the beginning of the end phase of that turn, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-boost-power-battle-then-return-self-end-phase-v1",
+        "review": "Exact AUTO [RC] source-boost wording. Cardfight!! Vanguard official Q&A 708 (Flame Seed Salamander) rules that if this unit leaves its circle, it is treated as a different card and the delayed return does not apply. While it remains on that circle, the exact booster grants the attack target +3000 until battle end, then returns this instance to its owner’s deck at this turn’s End Phase start and shuffles."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 3000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          }
+        },
+        {
+          "op": "schedule-source-return-to-deck-at-turn-end",
+          "target": "source",
+          "due": "end-phase-start",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-387:1",
+      "cardId": "cfa-387",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts, the boosted unit gets power +3000 until end of that battle, and at the beginning of the end phase of that turn, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-boost-power-battle-then-return-self-end-phase-v1",
+        "review": "Exact AUTO [RC] source-boost wording. Cardfight!! Vanguard official Q&A 708 (Flame Seed Salamander) rules that if this unit leaves its circle, it is treated as a different card and the delayed return does not apply. While it remains on that circle, the exact booster grants the attack target +3000 until battle end, then returns this instance to its owner’s deck at this turn’s End Phase start and shuffles."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 3000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          }
+        },
+        {
+          "op": "schedule-source-return-to-deck-at-turn-end",
+          "target": "source",
+          "due": "end-phase-start",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-391:1",
+      "cardId": "cfa-391",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts, the boosted unit gets power +3000 until end of that battle, and at the beginning of the end phase of that turn, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-boost-power-battle-then-return-self-end-phase-v1",
+        "review": "Exact AUTO [RC] source-boost wording. Cardfight!! Vanguard official Q&A 708 (Flame Seed Salamander) rules that if this unit leaves its circle, it is treated as a different card and the delayed return does not apply. While it remains on that circle, the exact booster grants the attack target +3000 until battle end, then returns this instance to its owner’s deck at this turn’s End Phase start and shuffles."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 3000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          }
+        },
+        {
+          "op": "schedule-source-return-to-deck-at-turn-end",
+          "target": "source",
+          "due": "end-phase-start",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-5533:1",
+      "cardId": "cfa-5533",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts, the boosted unit gets power +3000 until end of that battle, and at the beginning of the end phase of that turn, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-boost-power-battle-then-return-self-end-phase-v1",
+        "review": "Exact AUTO [RC] source-boost wording. Cardfight!! Vanguard official Q&A 708 (Flame Seed Salamander) rules that if this unit leaves its circle, it is treated as a different card and the delayed return does not apply. While it remains on that circle, the exact booster grants the attack target +3000 until battle end, then returns this instance to its owner’s deck at this turn’s End Phase start and shuffles."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 3000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          }
+        },
+        {
+          "op": "schedule-source-return-to-deck-at-turn-end",
+          "target": "source",
+          "due": "end-phase-start",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-706:1",
+      "cardId": "cfa-706",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts, the boosted unit gets power +3000 until end of that battle, and at the beginning of the end phase of that turn, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-boost-power-battle-then-return-self-end-phase-v1",
+        "review": "Exact AUTO [RC] source-boost wording. Cardfight!! Vanguard official Q&A 708 (Flame Seed Salamander) rules that if this unit leaves its circle, it is treated as a different card and the delayed return does not apply. While it remains on that circle, the exact booster grants the attack target +3000 until battle end, then returns this instance to its owner’s deck at this turn’s End Phase start and shuffles."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "boosted-unit",
+          "amount": 3000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          }
+        },
+        {
+          "op": "schedule-source-return-to-deck-at-turn-end",
+          "target": "source",
+          "due": "end-phase-start",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11833:1",
+      "cardId": "cfa-11833",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: At the end of the battle this unit boosted, if your Order Zone has a Set Order, COST [put this unit into your soul], and Counter Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "battle.close-step",
+        "subject": "booster",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "controller-has-set-order"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-boosted-close-set-order-counter-charge-v1",
+        "review": "Exact four-record AUTO [RC] family. At the end of the battle this exact Rear-Guard boosted, and only if its controller’s Order Zone contains a Set Order, its controller may decline the [COST]; paying moves that exact booster into Soul before Counter Charge 1. This uses the rules permission to decline paying an AUTO ability’s [COST]."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-12552:1",
+      "cardId": "cfa-12552",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: At the end of the battle this unit boosted, if your Order Zone has a Set Order, COST [put this unit into your soul], and Counter Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "battle.close-step",
+        "subject": "booster",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "controller-has-set-order"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-boosted-close-set-order-counter-charge-v1",
+        "review": "Exact four-record AUTO [RC] family. At the end of the battle this exact Rear-Guard boosted, and only if its controller’s Order Zone contains a Set Order, its controller may decline the [COST]; paying moves that exact booster into Soul before Counter Charge 1. This uses the rules permission to decline paying an AUTO ability’s [COST]."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-13453:1",
+      "cardId": "cfa-13453",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: At the end of the battle this unit boosted, if your Order Zone has a Set Order, COST [put this unit into your soul], and Counter Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "battle.close-step",
+        "subject": "booster",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "controller-has-set-order"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-boosted-close-set-order-counter-charge-v1",
+        "review": "Exact four-record AUTO [RC] family. At the end of the battle this exact Rear-Guard boosted, and only if its controller’s Order Zone contains a Set Order, its controller may decline the [COST]; paying moves that exact booster into Soul before Counter Charge 1. This uses the rules permission to decline paying an AUTO ability’s [COST]."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-8353:0",
+      "cardId": "cfa-8353",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: At the end of the battle this unit boosted, if your Order Zone has a Set Order, COST [put this unit into your soul], and Counter Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "battle.close-step",
+        "subject": "booster",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "controller-has-set-order"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-boosted-close-set-order-counter-charge-v1",
+        "review": "Exact four-record AUTO [RC] family. At the end of the battle this exact Rear-Guard boosted, and only if its controller’s Order Zone contains a Set Order, its controller may decline the [COST]; paying moves that exact booster into Soul before Counter Charge 1. This uses the rules permission to decline paying an AUTO ability’s [COST]."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-10051:1",
+      "cardId": "cfa-10051",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: At the end of your turn, choose a card with the RevolDress ability from your soul, and ride it as rest.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "turn.ended",
+        "subject": "controller",
+        "turnRelation": "controller"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT07%2F011EN",
+        "patternId": "auto-vc-end-turn-revoldress-ride-from-soul-rest-v1",
+        "review": "Exact AUTO [VC] end-of-controller-turn text. The controller chooses a card in their Soul whose printed card text grants RevolDress, rides that exact instance to VC rested, and emits normal card.moved/card.ridden/card.placed events so ride-trigger processing continues."
+      },
+      "effects": [
+        {
+          "op": "ride-revoldress-source-from-soul-rested",
+          "target": "controller",
+          "rested": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-10140:1",
+      "cardId": "cfa-10140",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: At the end of your turn, choose a card with the RevolDress ability from your soul, and ride it as rest.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "turn.ended",
+        "subject": "controller",
+        "turnRelation": "controller"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT07%2F011EN",
+        "patternId": "auto-vc-end-turn-revoldress-ride-from-soul-rest-v1",
+        "review": "Exact AUTO [VC] end-of-controller-turn text. The controller chooses a card in their Soul whose printed card text grants RevolDress, rides that exact instance to VC rested, and emits normal card.moved/card.ridden/card.placed events so ride-trigger processing continues."
+      },
+      "effects": [
+        {
+          "op": "ride-revoldress-source-from-soul-rested",
+          "target": "controller",
+          "rested": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-10361:1",
+      "cardId": "cfa-10361",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: At the end of your turn, choose a card with the RevolDress ability from your soul, and ride it as rest.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "turn.ended",
+        "subject": "controller",
+        "turnRelation": "controller"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT07%2F011EN",
+        "patternId": "auto-vc-end-turn-revoldress-ride-from-soul-rest-v1",
+        "review": "Exact AUTO [VC] end-of-controller-turn text. The controller chooses a card in their Soul whose printed card text grants RevolDress, rides that exact instance to VC rested, and emits normal card.moved/card.ridden/card.placed events so ride-trigger processing continues."
+      },
+      "effects": [
+        {
+          "op": "ride-revoldress-source-from-soul-rested",
+          "target": "controller",
+          "rested": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-12069:1",
+      "cardId": "cfa-12069",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: At the end of your turn, choose a card with the RevolDress ability from your soul, and ride it as rest.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "turn.ended",
+        "subject": "controller",
+        "turnRelation": "controller"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT07%2F011EN",
+        "patternId": "auto-vc-end-turn-revoldress-ride-from-soul-rest-v1",
+        "review": "Exact AUTO [VC] end-of-controller-turn text. The controller chooses a card in their Soul whose printed card text grants RevolDress, rides that exact instance to VC rested, and emits normal card.moved/card.ridden/card.placed events so ride-trigger processing continues."
+      },
+      "effects": [
+        {
+          "op": "ride-revoldress-source-from-soul-rested",
+          "target": "controller",
+          "rested": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-13900:1",
+      "cardId": "cfa-13900",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: At the end of your turn, choose a card with the RevolDress ability from your soul, and ride it as rest.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "turn.ended",
+        "subject": "controller",
+        "turnRelation": "controller"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT07%2F011EN",
+        "patternId": "auto-vc-end-turn-revoldress-ride-from-soul-rest-v1",
+        "review": "Exact AUTO [VC] end-of-controller-turn text. The controller chooses a card in their Soul whose printed card text grants RevolDress, rides that exact instance to VC rested, and emits normal card.moved/card.ridden/card.placed events so ride-trigger processing continues."
+      },
+      "effects": [
+        {
+          "op": "ride-revoldress-source-from-soul-rested",
+          "target": "controller",
+          "rested": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-7622:0",
+      "cardId": "cfa-7622",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When its attack hits, choose one of your VC or RC without any Treasures markers, and put a Treasures marker.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS06%2F066EN",
+        "patternId": "auto-own-attack-hit-place-treasures-marker-v1",
+        "review": "Exact [VC/RC] hit AUTO. The exact attacking source must hit; its controller privately chooses one of their own VC/RC circles without a Treasures marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Treasures",
+          "circleTypes": [
+            "vanguard",
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-7623:0",
+      "cardId": "cfa-7623",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When its attack hits, choose one of your VC or RC without any Treasures markers, and put a Treasures marker.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS06%2F066EN",
+        "patternId": "auto-own-attack-hit-place-treasures-marker-v1",
+        "review": "Exact [VC/RC] hit AUTO. The exact attacking source must hit; its controller privately chooses one of their own VC/RC circles without a Treasures marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Treasures",
+          "circleTypes": [
+            "vanguard",
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-7624:0",
+      "cardId": "cfa-7624",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When its attack hits, choose one of your VC or RC without any Treasures markers, and put a Treasures marker.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS06%2F066EN",
+        "patternId": "auto-own-attack-hit-place-treasures-marker-v1",
+        "review": "Exact [VC/RC] hit AUTO. The exact attacking source must hit; its controller privately chooses one of their own VC/RC circles without a Treasures marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Treasures",
+          "circleTypes": [
+            "vanguard",
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-7625:0",
+      "cardId": "cfa-7625",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When its attack hits, choose one of your VC or RC without any Treasures markers, and put a Treasures marker.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS06%2F066EN",
+        "patternId": "auto-own-attack-hit-place-treasures-marker-v1",
+        "review": "Exact [VC/RC] hit AUTO. The exact attacking source must hit; its controller privately chooses one of their own VC/RC circles without a Treasures marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Treasures",
+          "circleTypes": [
+            "vanguard",
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-7626:0",
+      "cardId": "cfa-7626",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When its attack hits, choose one of your VC or RC without any Treasures markers, and put a Treasures marker.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS06%2F066EN",
+        "patternId": "auto-own-attack-hit-place-treasures-marker-v1",
+        "review": "Exact [VC/RC] hit AUTO. The exact attacking source must hit; its controller privately chooses one of their own VC/RC circles without a Treasures marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Treasures",
+          "circleTypes": [
+            "vanguard",
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-7627:0",
+      "cardId": "cfa-7627",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When its attack hits, choose one of your VC or RC without any Treasures markers, and put a Treasures marker.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS06%2F066EN",
+        "patternId": "auto-own-attack-hit-place-treasures-marker-v1",
+        "review": "Exact [VC/RC] hit AUTO. The exact attacking source must hit; its controller privately chooses one of their own VC/RC circles without a Treasures marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Treasures",
+          "circleTypes": [
+            "vanguard",
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-12773:1",
+      "cardId": "cfa-12773",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC/Drop]: When your other card is discarded from hand during your turn, COST [Energy Blast 3 & remove this card], choose one of the discarded cards, and put it into hand.",
+      "requiredLocation": [
+        "rear-guard",
+        "drop"
+      ],
+      "costs": [
+        {
+          "type": "energy-blast",
+          "count": 3
+        },
+        {
+          "type": "source-bind-from-field-or-drop",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "any",
+        "turnRelation": "controller",
+        "actingPlayerRelation": "source-controller",
+        "subjectControllerRelation": "source-controller",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "excludeSourceAsSubject": true
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS01%2F006EN",
+        "patternId": "auto-other-hand-discard-energy-blast-remove-source-return-discard-v1",
+        "review": "Exact AUTO [RC/Drop] family: during this source controller's turn, another card they control is discarded from hand to Drop; they may pay Energy Blast 3 and remove this source, then return that exact triggering discarded instance from Drop to hand."
+      },
+      "effects": [
+        {
+          "op": "return-trigger-discard-to-hand",
+          "target": "event-discarded-card"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12774:1",
+      "cardId": "cfa-12774",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC/Drop]: When your other card is discarded from hand during your turn, COST [Energy Blast 3 & remove this card], choose one of the discarded cards, and put it into hand.",
+      "requiredLocation": [
+        "rear-guard",
+        "drop"
+      ],
+      "costs": [
+        {
+          "type": "energy-blast",
+          "count": 3
+        },
+        {
+          "type": "source-bind-from-field-or-drop",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "any",
+        "turnRelation": "controller",
+        "actingPlayerRelation": "source-controller",
+        "subjectControllerRelation": "source-controller",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "excludeSourceAsSubject": true
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS01%2F006EN",
+        "patternId": "auto-other-hand-discard-energy-blast-remove-source-return-discard-v1",
+        "review": "Exact AUTO [RC/Drop] family: during this source controller's turn, another card they control is discarded from hand to Drop; they may pay Energy Blast 3 and remove this source, then return that exact triggering discarded instance from Drop to hand."
+      },
+      "effects": [
+        {
+          "op": "return-trigger-discard-to-hand",
+          "target": "event-discarded-card"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12782:1",
+      "cardId": "cfa-12782",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC/Drop]: When your other card is discarded from hand during your turn, COST [Energy Blast 3 & remove this card], choose one of the discarded cards, and put it into hand.",
+      "requiredLocation": [
+        "rear-guard",
+        "drop"
+      ],
+      "costs": [
+        {
+          "type": "energy-blast",
+          "count": 3
+        },
+        {
+          "type": "source-bind-from-field-or-drop",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "any",
+        "turnRelation": "controller",
+        "actingPlayerRelation": "source-controller",
+        "subjectControllerRelation": "source-controller",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "excludeSourceAsSubject": true
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS01%2F006EN",
+        "patternId": "auto-other-hand-discard-energy-blast-remove-source-return-discard-v1",
+        "review": "Exact AUTO [RC/Drop] family: during this source controller's turn, another card they control is discarded from hand to Drop; they may pay Energy Blast 3 and remove this source, then return that exact triggering discarded instance from Drop to hand."
+      },
+      "effects": [
+        {
+          "op": "return-trigger-discard-to-hand",
+          "target": "event-discarded-card"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12783:1",
+      "cardId": "cfa-12783",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC/Drop]: When your other card is discarded from hand during your turn, COST [Energy Blast 3 & remove this card], choose one of the discarded cards, and put it into hand.",
+      "requiredLocation": [
+        "rear-guard",
+        "drop"
+      ],
+      "costs": [
+        {
+          "type": "energy-blast",
+          "count": 3
+        },
+        {
+          "type": "source-bind-from-field-or-drop",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "any",
+        "turnRelation": "controller",
+        "actingPlayerRelation": "source-controller",
+        "subjectControllerRelation": "source-controller",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "excludeSourceAsSubject": true
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS01%2F006EN",
+        "patternId": "auto-other-hand-discard-energy-blast-remove-source-return-discard-v1",
+        "review": "Exact AUTO [RC/Drop] family: during this source controller's turn, another card they control is discarded from hand to Drop; they may pay Energy Blast 3 and remove this source, then return that exact triggering discarded instance from Drop to hand."
+      },
+      "effects": [
+        {
+          "op": "return-trigger-discard-to-hand",
+          "target": "event-discarded-card"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12791:1",
+      "cardId": "cfa-12791",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC/Drop]: When your other card is discarded from hand during your turn, COST [Energy Blast 3 & remove this card], choose one of the discarded cards, and put it into hand.",
+      "requiredLocation": [
+        "rear-guard",
+        "drop"
+      ],
+      "costs": [
+        {
+          "type": "energy-blast",
+          "count": 3
+        },
+        {
+          "type": "source-bind-from-field-or-drop",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "any",
+        "turnRelation": "controller",
+        "actingPlayerRelation": "source-controller",
+        "subjectControllerRelation": "source-controller",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "excludeSourceAsSubject": true
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS01%2F006EN",
+        "patternId": "auto-other-hand-discard-energy-blast-remove-source-return-discard-v1",
+        "review": "Exact AUTO [RC/Drop] family: during this source controller's turn, another card they control is discarded from hand to Drop; they may pay Energy Blast 3 and remove this source, then return that exact triggering discarded instance from Drop to hand."
+      },
+      "effects": [
+        {
+          "op": "return-trigger-discard-to-hand",
+          "target": "event-discarded-card"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12792:1",
+      "cardId": "cfa-12792",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC/Drop]: When your other card is discarded from hand during your turn, COST [Energy Blast 3 & remove this card], choose one of the discarded cards, and put it into hand.",
+      "requiredLocation": [
+        "rear-guard",
+        "drop"
+      ],
+      "costs": [
+        {
+          "type": "energy-blast",
+          "count": 3
+        },
+        {
+          "type": "source-bind-from-field-or-drop",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "any",
+        "turnRelation": "controller",
+        "actingPlayerRelation": "source-controller",
+        "subjectControllerRelation": "source-controller",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "excludeSourceAsSubject": true
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS01%2F006EN",
+        "patternId": "auto-other-hand-discard-energy-blast-remove-source-return-discard-v1",
+        "review": "Exact AUTO [RC/Drop] family: during this source controller's turn, another card they control is discarded from hand to Drop; they may pay Energy Blast 3 and remove this source, then return that exact triggering discarded instance from Drop to hand."
+      },
+      "effects": [
+        {
+          "op": "return-trigger-discard-to-hand",
+          "target": "event-discarded-card"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5501:0",
+      "cardId": "cfa-5501",
+      "kind": "CONT",
+      "printedText": "CONT [Trigger Zone] Generation Break 1: This card gets grade +1.",
+      "requiredLocation": [
+        "trigger"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-trigger-zone-generation-break-grade-plus-one-v1",
+        "review": "Exact text and six-record family match the local catalog snapshot only; official English card text was not independently located because these Mask Collection cards are Thai-exclusive. This is a passive continuous +1 grade modifier for this exact card instance only while it is in the Trigger Zone and its controller has Generation Break 1."
+      },
+      "effects": [
+        {
+          "op": "continuous-grade",
+          "target": "source",
+          "amount": 1,
+          "duration": "continuous",
+          "location": "trigger",
+          "condition": {
+            "op": "generation-break",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-5513:0",
+      "cardId": "cfa-5513",
+      "kind": "CONT",
+      "printedText": "CONT [Trigger Zone] Generation Break 1: This card gets grade +1.",
+      "requiredLocation": [
+        "trigger"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-trigger-zone-generation-break-grade-plus-one-v1",
+        "review": "Exact text and six-record family match the local catalog snapshot only; official English card text was not independently located because these Mask Collection cards are Thai-exclusive. This is a passive continuous +1 grade modifier for this exact card instance only while it is in the Trigger Zone and its controller has Generation Break 1."
+      },
+      "effects": [
+        {
+          "op": "continuous-grade",
+          "target": "source",
+          "amount": 1,
+          "duration": "continuous",
+          "location": "trigger",
+          "condition": {
+            "op": "generation-break",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-5567:0",
+      "cardId": "cfa-5567",
+      "kind": "CONT",
+      "printedText": "CONT [Trigger Zone] Generation Break 1: This card gets grade +1.",
+      "requiredLocation": [
+        "trigger"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-trigger-zone-generation-break-grade-plus-one-v1",
+        "review": "Exact text and six-record family match the local catalog snapshot only; official English card text was not independently located because these Mask Collection cards are Thai-exclusive. This is a passive continuous +1 grade modifier for this exact card instance only while it is in the Trigger Zone and its controller has Generation Break 1."
+      },
+      "effects": [
+        {
+          "op": "continuous-grade",
+          "target": "source",
+          "amount": 1,
+          "duration": "continuous",
+          "location": "trigger",
+          "condition": {
+            "op": "generation-break",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11592:0",
+      "cardId": "cfa-11592",
+      "kind": "CONT",
+      "printedText": "CONT [Trigger Zone] Generation Break 1: This card gets grade +1.",
+      "requiredLocation": [
+        "trigger"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-trigger-zone-generation-break-grade-plus-one-v1",
+        "review": "Exact text and six-record family match the local catalog snapshot only; official English card text was not independently located because these Mask Collection cards are Thai-exclusive. This is a passive continuous +1 grade modifier for this exact card instance only while it is in the Trigger Zone and its controller has Generation Break 1."
+      },
+      "effects": [
+        {
+          "op": "continuous-grade",
+          "target": "source",
+          "amount": 1,
+          "duration": "continuous",
+          "location": "trigger",
+          "condition": {
+            "op": "generation-break",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11593:0",
+      "cardId": "cfa-11593",
+      "kind": "CONT",
+      "printedText": "CONT [Trigger Zone] Generation Break 1: This card gets grade +1.",
+      "requiredLocation": [
+        "trigger"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-trigger-zone-generation-break-grade-plus-one-v1",
+        "review": "Exact text and six-record family match the local catalog snapshot only; official English card text was not independently located because these Mask Collection cards are Thai-exclusive. This is a passive continuous +1 grade modifier for this exact card instance only while it is in the Trigger Zone and its controller has Generation Break 1."
+      },
+      "effects": [
+        {
+          "op": "continuous-grade",
+          "target": "source",
+          "amount": 1,
+          "duration": "continuous",
+          "location": "trigger",
+          "condition": {
+            "op": "generation-break",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11594:0",
+      "cardId": "cfa-11594",
+      "kind": "CONT",
+      "printedText": "CONT [Trigger Zone] Generation Break 1: This card gets grade +1.",
+      "requiredLocation": [
+        "trigger"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-trigger-zone-generation-break-grade-plus-one-v1",
+        "review": "Exact text and six-record family match the local catalog snapshot only; official English card text was not independently located because these Mask Collection cards are Thai-exclusive. This is a passive continuous +1 grade modifier for this exact card instance only while it is in the Trigger Zone and its controller has Generation Break 1."
+      },
+      "effects": [
+        {
+          "op": "continuous-grade",
+          "target": "source",
+          "amount": 1,
+          "duration": "continuous",
+          "location": "trigger",
+          "condition": {
+            "op": "generation-break",
+            "count": 1
+          }
+        }
+      ]
+    }, ...Object.entries({
+      "cfa-10622":"https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2F003EN",
+      "cfa-10639":"https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2F012EN",
+      "cfa-10662":"https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2FFFR15EN",
+      "cfa-10717":"https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2FFFR09EN",
+      "cfa-10730":"https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=201&s_param=d-Dark+States&sort=no&view=image&view=text"
+    }).map(([cardId,officialReference])=>({
+      "id": `${cardId}:0`, "cardId": cardId, "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Counter Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker.",
+      "requiredLocation": ["rear-guard"], "optional": false,
+      "trigger": {"status":"recognized-trigger","eventType":"card.placed","subject":"source","circles":["rear-guard"]},
+      "conditionsReviewed": true, "costs": [{"type":"counter-blast","count":1}], "costsReviewed": true, "choicesReviewed": true,
+      "source": {"dataset":"Bushiroad official card list","officialReference":officialReference,"patternId":"auto-rc-placement-counter-blast-place-dragontree-marker-v1","review":"Exact five-card D-BT09 family confirmed against official Bushiroad card listings. This exact source must be placed on RC; its controller may pay Counter Blast 1 and choose an unmarked Rear-Guard Circle for the Dragontree marker."},
+      "effects": [{"op":"place-circle-marker","target":"chosen-controller-circle","markerType":"Dragontree","circleTypes":["rear-guard"]}]
+    }))
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
