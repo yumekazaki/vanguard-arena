@@ -1203,16 +1203,23 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function renderAttackArrow() {
     const layer = $("#attack-arrow-layer"), table = $(".game-table"), attack = match?.pendingAttack;
     if (!layer || !table || !attack?.targetUid) { if (layer) { layer.hidden = true; layer.dataset.attackId = ""; } return; }
-    const sourceZone = Array.from(table.querySelectorAll(".field-zone")).find(zone => zone.dataset.side === attack.attackerSide && zone.dataset.zone === attack.attackerZone);
-    const targetZone = Array.from(table.querySelectorAll(".field-zone")).find(zone => zone.dataset.side === attack.defenderSide && zone.dataset.zone === attack.targetZone);
-    const source = sourceZone?.querySelector(".field-card") || sourceZone, target = targetZone?.querySelector(".field-card") || targetZone;
+    if (layer.parentElement !== document.body) document.body.appendChild(layer);
+    const zones = Array.from(table.querySelectorAll(".field-zone"));
+    const sourceZone = zones.find(zone => zone.dataset.side === attack.attackerSide && zone.dataset.zone === attack.attackerZone);
+    const targetZone = zones.find(zone => zone.dataset.side === attack.defenderSide && zone.dataset.zone === attack.targetZone);
+    const cards = Array.from(table.querySelectorAll(".field-card"));
+    const source = cards.find(card => card.dataset.fieldUid === String(attack.attackerUid)) || sourceZone?.querySelector(".field-card") || sourceZone;
+    const target = cards.find(card => card.dataset.fieldUid === String(attack.targetUid)) || targetZone?.querySelector(".field-card") || targetZone;
     if (!source || !target) { layer.hidden = true; return; }
-    const bounds = table.getBoundingClientRect(), from = source.getBoundingClientRect(), to = target.getBoundingClientRect();
-    const x1 = from.left + from.width / 2 - bounds.left, y1 = from.top + from.height / 2 - bounds.top;
-    const x2 = to.left + to.width / 2 - bounds.left, y2 = to.top + to.height / 2 - bounds.top;
+    const from = source.getBoundingClientRect(), to = target.getBoundingClientRect();
+    if (!from.width || !from.height || !to.width || !to.height) { layer.hidden = true; return; }
+    const x1 = from.left + from.width / 2, y1 = from.top + from.height / 2;
+    const x2 = to.left + to.width / 2, y2 = to.top + to.height / 2;
+    const width = Math.max(1, window.innerWidth), height = Math.max(1, window.innerHeight);
     const id = String(attack.battleId || (attack.attackerUid + ":" + attack.targetUid));
-
-    layer.setAttribute("viewBox", "0 0 " + Math.max(1, table.clientWidth) + " " + Math.max(1, table.clientHeight));
+    layer.setAttribute("viewBox", "0 0 " + width + " " + height);
+    layer.setAttribute("preserveAspectRatio", "none");
+    Object.assign(layer.style, { position: "fixed", inset: "0", width: "100vw", height: "100vh", zIndex: "500", pointerEvents: "none" });
     const path = layer.querySelector(".attack-arrow-path");
     if (layer.dataset.attackId !== id || !path) {
       layer.innerHTML = '<defs><marker id="attack-arrow-head" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" class="attack-arrow-head"></path></marker></defs><path class="attack-arrow-path" marker-end="url(#attack-arrow-head)"></path><circle class="attack-arrow-origin" r="7"></circle>';
