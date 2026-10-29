@@ -1235,6 +1235,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       layer.querySelectorAll(".attack-arrow-path").forEach(path => path.setAttribute("d", d));
       layer.querySelector(".attack-arrow-origin").setAttribute("cx", x1);
       layer.querySelector(".attack-arrow-origin").setAttribute("cy", y1);
+      layer.removeAttribute("hidden");
       layer.hidden = false;
     };
     layer.dataset.attackId = attackId;
