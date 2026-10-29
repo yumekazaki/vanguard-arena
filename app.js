@@ -88,7 +88,7 @@
     $("#account-reset").classList.toggle("hidden", account.recovery);
     $("#account-update-password").classList.toggle("hidden", !account.recovery);
     if (account.user) $("#account-email-label").textContent = account.user.email || "Signed-in player";
-    $("#account-button").textContent = account.user ? `Account · ${(account.user.email || "Player").split("@")[0]}` : "Account";
+    $("#account-button").textContent = account.user ? `Account · ${(account.user.email || "Player").split("@")[0]}` : "Sign in";
     $("#account-import-local").classList.toggle("hidden", !account.user || !localDecksToImport().length);
     $("#profile-username").value = account.profile?.username || "";
     $("#profile-display-name").value = account.profile?.display_name || "";
