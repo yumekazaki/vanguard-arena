@@ -1179,7 +1179,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       const canGGuard = ownGrade >= 3 && attackerGrade >= 3 && player.hand.some(item => triggerKind(item) === "heal") && (player.gDeck || []).some(item => !item.faceUp && isGGuardian(cardMap.get(item.cardId)));
       if (canGGuard) actions.push({ id: "g-guard", label: "G-Guard" });
       if (eligibleInterceptors().length) actions.push({ id: "intercept", label: "Intercept" });
-    } else if (attack.attackerSide === "human" && attack.defenderDone && !attack.awaitingDrive && !attack.driveCountPrompt && Number(attack.driveChecksRemaining || 0) <= 0) {
+    } else if ((attack.attackerSide === "human" || !online.role) && attack.defenderDone && !attack.awaitingDrive && !attack.driveCountPrompt && Number(attack.driveChecksRemaining || 0) <= 0) {
       title = "Attack resolution complete";
       help = "Drive checks and attack effects are resolved. End the attack to continue.";
       actions.push({ id: "finishAttack", label: "End this attack" });
@@ -1250,8 +1250,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (!attack?.awaitingDrive || !attack.defenderDone || !["human", "bot"].includes(driveSide) || match.pendingTrigger || match.pendingDamageQueue?.length) return;
     if (Number(attack.driveChecksRemaining || 0) <= 0) {
       attack.awaitingDrive = false; attack.blocked = Boolean(attack.perfectGuard || !attackHits(attack));
-      if (!online.role) finishAttack(Boolean(attack.perfectGuard || !attackHits(attack)));
-      else renderMatch();
+      setMessage(`${match.players[attack.attackerSide].name} can finish the attack.`);
+      renderMatch();
       return;
     }
     if (attack.driveSequenceStarted) return;
@@ -1414,7 +1414,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       const count = Math.max(0, Math.min(Number(pendingAttack.maxDriveChecks) || 0, Number(choice.slice("drive-count:".length)) || 0));
       pendingAttack.driveChecksRemaining = count; pendingAttack.driveCountPrompt = false; pendingAttack.driveCountChosen = true;
       pendingAttack.awaitingDrive = count > 0;
-      if (!count && !online.role) finishAttack(Boolean(pendingAttack.perfectGuard || !attackHits(pendingAttack)));
+
       renderMatch(); return;
     }
     const setup=match?.pendingAttackSetup;if(!setup)return;
@@ -1532,13 +1532,12 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       setMessage(`${match.players[attack.attackerSide].name} must complete ${attack.driveChecksRemaining} Vanguard drive check${attack.driveChecksRemaining === 1 ? "" : "s"}.`);
       renderMatch(); return;
     }
-    if (!online.role) { finishAttack(attack.blocked); return; }
     setMessage(`${match.players[attack.attackerSide].name} can finish the attack.`);
     renderMatch();
   }
   function confirmAttackFinished() {
     const attack = match?.pendingAttack;
-    if (!attack || attack.attackerSide !== "human" || !attack.defenderDone || attack.driveCountPrompt || Number(attack.driveChecksRemaining || 0) > 0) {
+    if (!attack || (online.role && attack.attackerSide !== "human") || !attack.defenderDone || attack.driveCountPrompt || Number(attack.driveChecksRemaining || 0) > 0) {
       toast("Wait until the defender is done guarding before finishing this attack."); return;
     }
     finishAttack(Boolean(attack.perfectGuard || !attackHits(attack)));
