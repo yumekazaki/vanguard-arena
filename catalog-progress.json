@@ -1,49 +1,49 @@
 {
-  "generatedAt": "2026-10-29T01:38:03.589Z",
+  "generatedAt": "2026-10-29T02:17:18.733Z",
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "catalogSource": "scripts/audit-ability-catalog.js (local catalog file or committed HEAD snapshot)",
   "cards": {
     "imported": 14022,
     "parsed": 14022,
     "withAbilities": 11841,
-    "withAtLeastOneCompiledAbility": 3419,
-    "withAllAbilityBlocksCompiledAndAuditValid": 1872,
-    "withUnsupportedAbilityBlocks": 9969,
-    "withUnmodeledRequirements": 9969,
-    "withExplicitPassingRegressionEvidence": 3364,
+    "withAtLeastOneCompiledAbility": 3422,
+    "withAllAbilityBlocksCompiledAndAuditValid": 1875,
+    "withUnsupportedAbilityBlocks": 9966,
+    "withUnmodeledRequirements": 9966,
+    "withExplicitPassingRegressionEvidence": 3367,
     "fullyVerified": 1
   },
   "abilities": {
     "parsed": 17240,
-    "compiled": 4174,
-    "unsupportedOrUnreviewed": 13066,
+    "compiled": 4177,
+    "unsupportedOrUnreviewed": 13063,
     "invalidCompiled": 0,
-    "patterns": 227,
-    "compiledPercent": 24.21
+    "patterns": 230,
+    "compiledPercent": 24.23
   },
   "verification": {
     "manifest": "card-verification-manifest.json",
-    "manifestRecords": 4112,
-    "passingTestCases": 15904,
+    "manifestRecords": 4115,
+    "passingTestCases": 15916,
     "latestFullSuite": {
-      "command": "node --test",
-      "testCommand": "node --test",
+      "command": "node --test --test-reporter=tap",
+      "testCommand": "node --test --test-reporter=tap",
       "status": "passed",
-      "tests": 1295,
-      "testCount": 1295,
-      "passed": 1295,
+      "tests": 1304,
+      "testCount": 1304,
+      "passed": 1304,
       "failed": 0,
-      "durationMilliseconds": 310394.4857,
-      "completedAt": "2026-10-29T01:36:03.729Z",
+      "durationMilliseconds": 317294.8983,
+      "completedAt": "2026-10-29T02:17:03.343Z",
       "runDate": "2026-10-29",
-      "validationInputDigest": "d553b730017b37501f030fbfe60e06a05e3476eaec370ed736407f87cbf0d730"
+      "validationInputDigest": "36c443f448f0c9d4d84a0e225503c6dd33d1765fd497454448a039d0fa442b06"
     },
     "fullyVerifiedRequiresAllPrintedAbilitiesAndRulesEvidence": true,
     "note": "Aggregate parsing or a passing pattern test does not make a whole card fully verified. Only explicit manifest records count as regression evidence; zero fully verified cards is reported when no complete card-level evidence exists."
   },
   "workflow": {
-    "catalogLoadMilliseconds": 242.7,
-    "fullCatalogParseAndAuditMilliseconds": 4991.4,
+    "catalogLoadMilliseconds": 191.8,
+    "fullCatalogParseAndAuditMilliseconds": 5450.9,
     "repeatedAuditsOfTheSameCatalogUseTheExistingDigestCache": true,
     "parseCacheExperiment": "Rejected JSON-clone-per-call caching after three full catalog parse passes measured about 9.5 seconds uncached versus 12.1 seconds with cloning. Adopted immutable per-card snapshots with definition-revision invalidation: the same three passes measured about 9.5 seconds uncached versus 3.82 seconds cached; cache-hit passes were about 2.5 milliseconds each.",
     "measuredBottlenecks": [
@@ -57,56 +57,15 @@
         "area": "Unbounded all-in-one verification feedback",
         "evidence": "Full Node suite measured 245.62 seconds before the cache and 37.96 seconds after it.",
         "optimization": "Run focused rule/worker checks per ability batch and reserve the full suite for milestones.",
-        "result": "Latest full suite: 1294/1294 passed in 305.74 seconds."
+        "result": "Latest full suite: 1304/1304 passed in 317.29 seconds."
       },
       {
         "area": "Manual card semantics and validation backlog",
-        "evidence": "13066 ability blocks remain unsupported or unreviewed; 9969 cards contain at least one such block. Repository history has no per-stage time logs to substantiate the reported 22 hours.",
+        "evidence": "13063 ability blocks remain unsupported or unreviewed; 9966 cards contain at least one such block. Repository history has no per-stage time logs to substantiate the reported 22 hours.",
         "optimization": "Process exact recurring templates in reusable batches; preserve per-card evidence and leave ambiguous text unreviewed.",
         "result": "Reusable Soul-count power and critical patterns plus signed continuous power adjustments cover the current verified examples; per-card evidence stays partial until the other printed abilities are implemented."
       }
-    ],
-    "parallelBenchmark": {
-      "measuredAt": "2026-10-28",
-      "catalogCards": 14022,
-      "abilityBlocks": 17240,
-      "batchSize": 250,
-      "results": [
-        {
-          "workers": 1,
-          "elapsedMilliseconds": 6832.1,
-          "parsedCardsPerMinute": 123142.2,
-          "verifiedAbilitiesPerMinute": 0
-        },
-        {
-          "workers": 2,
-          "elapsedMilliseconds": 3956.7,
-          "parsedCardsPerMinute": 212631.7,
-          "verifiedAbilitiesPerMinute": 0
-        },
-        {
-          "workers": 4,
-          "elapsedMilliseconds": 3625.5,
-          "parsedCardsPerMinute": 232056.3,
-          "verifiedAbilitiesPerMinute": 0
-        },
-        {
-          "workers": 8,
-          "elapsedMilliseconds": 3004.9,
-          "parsedCardsPerMinute": 279982.7,
-          "verifiedAbilitiesPerMinute": 0
-        }
-      ],
-      "speedup": 2.274,
-      "interpretation": "Measured 1/2/4/8 workers on the same 14,022-card/17,240-ability snapshot at batch size 250. Eight workers were fastest (3.00 s versus 6.83 s at one worker, 2.27x); identical counters in all runs. Parsing/classification verified zero abilities, so parsing is not the backlog bottleneck.",
-      "latestRegressionSuite": {
-        "tests": 1295,
-        "passed": 1295,
-        "failed": 0,
-        "durationMilliseconds": 310394.4857,
-        "validationInputDigest": "d553b730017b37501f030fbfe60e06a05e3476eaec370ed736407f87cbf0d730"
-      }
-    }
+    ]
   },
   "invalidCompiledDefinitions": []
 }

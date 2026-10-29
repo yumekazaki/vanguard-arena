@@ -3274,6 +3274,45 @@
     };
   }
 
+  function mandatoryAutoAbilityCostIsPayable(state, ability, located, controller, engine) {
+    if (ability?.canDecline === true || !Array.isArray(ability?.costs) || ability.costs.length === 0) return true;
+    if (!controller || typeof engine?.canPayAbilityCosts !== "function") return false;
+    const supportedCostTypes = new Set(["counter-blast", "soul-blast", "energy-blast", "discard", "reveal-grade-from-hand", "source-discard", "rest-source", "source-to-soul", "source-to-bottom-deck", "source-retire", "source-bind", "bind-heal-from-drop"]);
+    if (ability.costs.some(cost => !supportedCostTypes.has(cost?.type))) return false;
+    const faceUpDamageCards = (controller.damage || []).filter(card => !card?.faceDown);
+    const hand = controller.hand || [];
+    const sourceInHand = located.zone === "hand";
+    const discardableHandCards = hand.filter(card => card?.uid !== (sourceInHand ? located.instance.uid : null));
+    const revealableHandByGrade = {};
+    for (const card of hand) {
+      const grade = Number(serverCardDefinition(card)?.grade);
+      if (Number.isInteger(grade) && grade >= 0) revealableHandByGrade[grade] = Number(revealableHandByGrade[grade] || 0) + 1;
+    }
+    const bindableHealInDrop = (controller.drop || []).filter(card => {
+      const definition = serverCardDefinition(card);
+      return card?.uid !== located.instance?.uid && engine.matchesTargetFilter?.({ trigger: "Heal" }, { targetCard: definition }) === true;
+    }).length;
+    const sourceOnField = ["vanguard", "rear-guard", "guardian"].includes(located.zone);
+    return engine.canPayAbilityCosts(ability, {
+      faceUpDamage: faceUpDamageCards.length,
+      faceUpDamageCards,
+      soulCount: (controller.soul || []).length,
+      energy: Number(controller.energy) || 0,
+      hasEnergyGenerator: (controller.crests || []).some(card => /energy generator/i.test(String(serverCardDefinition(card)?.name || card?.crestName || card?.cardName || ""))),
+      discardableHand: discardableHandCards.length,
+      discardableHandCards,
+      cardDefinitionForInstance: serverCardDefinition,
+      revealableHandByGrade,
+      sourceCanDiscard: sourceInHand,
+      sourceRested: Boolean(located.instance?.rested),
+      sourceCanMoveToSoul: sourceOnField || ["hand", "drop", "soul"].includes(located.zone),
+      sourceCanMoveToBottomDeck: ["vanguard", "rear-guard", "guardian", "hand", "drop", "soul"].includes(located.zone),
+      sourceCanRetire: sourceOnField,
+      sourceCanBind: ["vanguard", "rear-guard", "hand", "drop", "soul", "damage", "trigger-zone"].includes(located.zone),
+      bindableHealInDrop
+    });
+  }
+
   function discoverAutoTriggers(state, events, engine) {
     if (!state || !Array.isArray(events) || !engine?.getReviewedAbilityDefinitionsForCard) return { queued: [], skipped: [] };
     const queued = [], skipped = [], queue = state.pendingAbilities ||= [];
@@ -3608,6 +3647,14 @@
                 !engine.canPayAbilityCosts(ability, {
                   revealableGradeThreeHand: (controller.hand || []).filter(card => Number(serverCardDefinition(card)?.grade) === 3).length
                 })) {
+              const unavailableKey = `${side}:${instance.uid}:${ability.id}:${event.eventId}`;
+              if (!pendingKeys.has(unavailableKey) && engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) {
+                pendingKeys.add(unavailableKey);
+                skipped.push({ eventId: event.eventId, cardInstanceId: instance.uid, abilityId: ability.id, reason: "unpayable-cost" });
+              }
+              continue;
+            }
+            if (!mandatoryAutoAbilityCostIsPayable(state, ability, located, controller, engine)) {
               const unavailableKey = `${side}:${instance.uid}:${ability.id}:${event.eventId}`;
               if (!pendingKeys.has(unavailableKey) && engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) {
                 pendingKeys.add(unavailableKey);

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "baselineCommit": "272b4f405ee96af64a30abec3b49f286479e7549",
-  "generatedAt": "2026-10-29T00:55:28.999Z",
+  "generatedAt": "2026-10-29T02:17:19.386Z",
   "sourceQueue": "current catalog + trusted ability definitions + verification manifest",
   "concurrencyProtocol": "GitHub atomic branch creation at refs/heads/claims/<batchId>; the first successful non-forced create owns the batch.",
   "counts": {
@@ -737,8 +737,6 @@
         "cfa-1007:0"
       ],
       "dependencies": [
-        "candidate-review:candidate:ACT\u0000[rc] n/turn: if you have a vanguard with \"<card-name>\" in its card name, cost [counter blast n], and this unit gets power + n until end of turn.",
-        "candidate-review:candidate:ACT\u0000[rc] n/turn: if your vanguard is grade n or greater, cost [counter blast n], and draw a card.",
         "candidate-review:candidate:ACT\u0000[rc]: [counter blast n & choose two of your <clan> rear-guards, and retire them] search your deck for up to one card named \"<card-name>\", reveal it to your opponent, and add it to your hand.",
         "candidate-review:candidate:ACT\u0000[rc]: if you have a grade n or greater vanguard with \"<card-name>\" in its card name, cost [retire this unit], choose a critical trigger or front trigger from your drop, and put it into your hand.",
         "candidate-review:candidate:AUTO\u0000[rc]: at the end of the battle that this unit attacked a vanguard, if you have four or more units, cost [soul blast n & retire this unit], look at the top three cards of your deck, choose up to one grade n or greater unit card from among them, reveal it and put it into your hand, and shuffle your deck. if you did not reveal a card, draw a card.",
@@ -770,7 +768,6 @@
         "regression-evidence:cfa-10051:0",
         "regression-evidence:cfa-10051:1",
         "regression-evidence:cfa-10054:0",
-        "regression-evidence:cfa-10055:0",
         "regression-evidence:cfa-10056:0",
         "regression-evidence:cfa-10058:0",
         "regression-evidence:cfa-10059:0",
@@ -784,7 +781,6 @@
         "regression-evidence:cfa-10070:1",
         "regression-evidence:cfa-10070:2",
         "regression-evidence:cfa-10071:0",
-        "regression-evidence:cfa-10072:0",
         "regression-evidence:cfa-10075:0",
         "regression-evidence:cfa-10077:0",
         "regression-evidence:cfa-10078:0",
@@ -894,7 +890,6 @@
         "candidate-review:candidate:AUTO\u0000[rc]: when this unit attacks a vanguard, if you have three or more back row rear-guards, cost [counter blast n], and this unit gets power + n until end of that battle.",
         "candidate-review:candidate:AUTO\u0000[rc]: when this unit attacks while not boosted, if your vanguard is \"<card-name>\", choose up to four normal units with \"<card-name>\" in their card names from your drop, and if you chose one or more cards, return them to your deck and shuffle it. if you returned four cards, this unit gets power + n until end of that battle.",
         "candidate-review:candidate:AUTO\u0000[rc]: when this unit attacks, if you have a vanguard with \"<card-name>\" in its card name, cost [counter blast n], and this unit gets power + n until end of that battle. at the end of that battle, put this unit into your soul.",
-        "candidate-review:candidate:AUTO\u0000[rc]: when this unit attacks, if you have a vanguard with \"<card-name>\" in its card name, cost [soul blast n], and this units gets power + n until end of that battle.",
         "candidate-review:candidate:AUTO\u0000[rc]: when this unit boosts a grade n or greater unit, you may soul charge n.",
         "candidate-review:candidate:AUTO\u0000[rc]: when this unit boosts, if you have no other rear-guards, cost [counter blast n], choose one \"<card-name>\" on your vc, and it gets critical + n until end of that battle.",
         "candidate-review:candidate:AUTO\u0000[vc/rc]: [soul blast n & choose a card from your hand, and discard it] when this unit attacks a vanguard, you may pay the cost. if you do, choose one of your other <clan>, it gets power + n until end of turn.",
@@ -926,7 +921,6 @@
         "regression-evidence:cfa-10091:2",
         "regression-evidence:cfa-10092:0",
         "regression-evidence:cfa-10093:0",
-        "regression-evidence:cfa-10097:0",
         "regression-evidence:cfa-10098:0",
         "regression-evidence:cfa-10100:0",
         "regression-evidence:cfa-10102:0",

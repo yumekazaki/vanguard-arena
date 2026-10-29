@@ -63,3 +63,12 @@ The primary session reviews each PR, checks for IDs outside the claimed batch, v
 ## Current limitations
 
 The full catalog is not complete: 13,066 abilities remain unsupported or unreviewed. The live room UI still uses the host relay; the canonical Supabase worker exists but is not wired into live match initialization/action synchronization. Worker contributions are reviewed modules until the primary session integrates them into the runtime. This handoff does not imply publication or deployment.
+
+## Latest local checkpoint (2026-10-29)
+
+- Active working branch: `work/primary-engine-vanguard-20261028-resume`, based on local commit `182a558b2170107b3849072406e48d75a3302d39`.
+- The local checkout now includes the two exact ACT definitions from batch `ABILITY-0003`, the exact own-attack AUTO `cfa-10097:0` from batch `ABILITY-0004`, and a shared reducer gate that prevents mandatory AUTO abilities from entering the prompt queue when their structured costs cannot be paid. Ability-level evidence is recorded for these three IDs and the `cfa-10047:0` ride trigger; none of these records marks a whole card fully verified.
+- Latest full suite: 1,304/1,304 passed after the mandatory-AUTO-cost reducer change; the source validation digest is in `card-verification-manifest.json` and `catalog-progress.json`.
+- The local catalog currently reports 4,177/17,240 abilities compiled (24.23%) and 13,063 unsupported or unreviewed; one card is fully verified. See `catalog-progress.json` for the digest and current suite evidence.
+- The current GitHub checkout has no Git credentials available to the atomic claim script. Claims for batches 0002 and 0003 therefore were not created remotely. Do not treat local batch assignments as cross-session reservations until the GitHub claim refs exist. At the last read, only `claims/ABILITY-0001` and `claims/ABILITY-0040` existed remotely.
+- These local changes are uncommitted and unpublished. Continue only in the named resume worktree; do not assume they are present on GitHub or the live site.

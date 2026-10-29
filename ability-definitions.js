@@ -107369,6 +107369,136 @@
           "remainder": "drop"
         }
       ]
+    },
+    {
+      "id": "cfa-10055:0",
+      "cardId": "cfa-10055",
+      "kind": "ACT",
+      "printedText": "ACT [RC] 1/Turn: If you have a vanguard with \"Youthberk\" in its card name, COST [Counter Blast 2], and this unit gets power +10000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Youthberk"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 2
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "once": true,
+      "usageRestriction": {
+        "type": "once-per-turn",
+        "scope": "ability-instance",
+        "reset": "turn"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "act-rc-youthberk-counter-blast-power-turn-v1",
+        "review": "Exact ACT on Internalize Mage. It is available only from its controller's RC during the main activation window, only while that controller has a Vanguard with Youthberk in its name, costs Counter Blast 2, and gives this exact source +10000 until end of turn once per turn."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 10000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-10072:0",
+      "cardId": "cfa-10072",
+      "kind": "ACT",
+      "printedText": "ACT [RC] 1/Turn: If your vanguard is grade 3 or greater, COST [Counter Blast 2], and draw a card.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 2
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "once": true,
+      "usageRestriction": {
+        "type": "once-per-turn",
+        "scope": "ability-instance",
+        "reset": "turn"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "act-rc-grade-three-counter-blast-draw-v1",
+        "review": "Exact ACT on Direful Doll, Kjerstin. It is available only from its controller's RC during the main activation window, only with a grade 3 or greater Vanguard, costs Counter Blast 2, draws one card, and is once per turn for this ability instance."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-10097:0",
+      "cardId": "cfa-10097",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, if you have a vanguard with \"Youth\" in its card name, COST [Soul Blast 1], and this units gets power +5000 until end of that battle.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "targetLocation": "vanguard"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Youth"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-youth-soul-blast-power-battle-v1",
+        "review": "Exact AUTO on cfa-10097. Only this Rear-Guard's own attack against a Vanguard with a controller Vanguard containing Youth can trigger it. Soul Blast 1 is mandatory; this source gains 5000 only for that battle. Eligibility requires the controller to have the cost before the prompt is created."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

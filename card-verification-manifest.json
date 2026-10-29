@@ -2,17 +2,17 @@
   "schemaVersion": 1,
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "latestFullSuite": {
-    "command": "node --test",
-    "testCommand": "node --test",
+    "command": "node --test --test-reporter=tap",
+    "testCommand": "node --test --test-reporter=tap",
     "status": "passed",
-    "tests": 1295,
-    "testCount": 1295,
-    "passed": 1295,
+    "tests": 1304,
+    "testCount": 1304,
+    "passed": 1304,
     "failed": 0,
-    "durationMilliseconds": 310394.4857,
-    "completedAt": "2026-10-29T01:36:03.729Z",
+    "durationMilliseconds": 317294.8983,
+    "completedAt": "2026-10-29T02:17:03.343Z",
     "runDate": "2026-10-29",
-    "validationInputDigest": "d553b730017b37501f030fbfe60e06a05e3476eaec370ed736407f87cbf0d730"
+    "validationInputDigest": "36c443f448f0c9d4d84a0e225503c6dd33d1765fd497454448a039d0fa442b06"
   },
   "records": [
     {
@@ -129,17 +129,19 @@
       "abilityId": "cfa-10047:0",
       "status": "tests-passing",
       "testFiles": [
+        "ability-batch-0002-exact-registration.test.js",
         "ability-rode-upon-second-draw-authority.test.js"
       ],
       "testCases": [
-        "all 153 exact ride-draw abilities bind to the ridden Vanguard; both seats resolve only after an actual ride when that controller went second",
+        "ABILITY-0002 exact cfa-10047 ride ability is trusted and resolves for its controller only",
+        "ABILITY-0002 exact cfa-10047 ride ability rejects wrong events, wrong ridden instance, first-player rides, and opponent resolution",
         "all 153 catalog ride-draw abilities bind to the ridden Vanguard and exact second-player condition",
         "both host and joining player draw only from their exact prior Vanguard after riding when they went second",
         "going first, a call, the wrong ridden instance, and a non-Ride timing event do not prompt",
         "the condition is rechecked at resolution and the host cannot resolve the joining player's draw"
       ],
       "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-1006",
@@ -68121,7 +68123,55 @@
       ],
       "fullyVerified": false,
       "remaining": "This ability has focused server regression coverage. Other printed abilities on the card, whole-card verification, official card-text/rules audit, and live browser multiplayer verification remain incomplete."
+    },
+    {
+      "cardId": "cfa-10055",
+      "abilityId": "cfa-10055:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-batch-ability-0003.test.js"
+      ],
+      "testCases": [
+        "batch contribution exactly matches the two catalog ACTs and trusted reducer operations",
+        "host and joining player independently activate the legal ability and receive its effect",
+        "activation rejects wrong Vanguard conditions and unavailable costs without partial effects",
+        "once-per-turn, field, phase, and controller restrictions are enforced by the reducer"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10072",
+      "abilityId": "cfa-10072:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-batch-ability-0003.test.js"
+      ],
+      "testCases": [
+        "batch contribution exactly matches the two catalog ACTs and trusted reducer operations",
+        "host and joining player independently activate the legal ability and receive its effect",
+        "activation rejects wrong Vanguard conditions and unavailable costs without partial effects",
+        "once-per-turn, field, phase, and controller restrictions are enforced by the reducer"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10097",
+      "abilityId": "cfa-10097:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-mandatory-cost-eligibility.test.js"
+      ],
+      "testCases": [
+        "mandatory AUTO Soul Blast abilities do not queue without enough Soul for either seat",
+        "legal cost queues to and resolves for the ability controller on either seat",
+        "the trigger identity and Vanguard condition remain strict"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
-  "generatedAt": "2026-10-29T00:07:14.556Z"
+  "generatedAt": "2026-10-29T00:07:14.556Z",
+  "evidenceUpdatedAt": "2026-10-29T02:04:48.008Z"
 }
