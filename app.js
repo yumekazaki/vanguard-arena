@@ -2619,6 +2619,15 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $$('[data-goto]').forEach((b) => b.addEventListener("click", () => showView(b.dataset.goto)));
   $("#host-online").addEventListener("click", () => openOnlineDialog("host")); $("#host-online-empty").addEventListener("click", () => openOnlineDialog("host"));
   $("#join-online").addEventListener("click", () => openOnlineDialog("join")); $("#join-online-empty").addEventListener("click", () => openOnlineDialog("join"));
+  function setMobileMode(enabled) {
+    const button = $("#mobile-mode-button");
+    document.body.classList.toggle("mobile-mode", enabled);
+    try { localStorage.setItem("vanguardArenaMobileMode", enabled ? "on" : "off"); } catch {}
+    button?.setAttribute("aria-pressed", String(enabled));
+    if (button) button.textContent = enabled ? "Mobile mode: On" : "Mobile mode";
+  }
+  setMobileMode(localStorage.getItem("vanguardArenaMobileMode") === "on");
+  $("#mobile-mode-button").addEventListener("click", () => setMobileMode(!document.body.classList.contains("mobile-mode")));
   $("#account-button").addEventListener("click", openAccountDialog); $("#close-account-dialog").addEventListener("click", () => $("#account-dialog").close());
   $("#account-signup").addEventListener("click", accountSignUp); $("#account-signin").addEventListener("click", accountSignIn); $("#account-signout").addEventListener("click", accountSignOut); $("#account-reset").addEventListener("click", resetAccountPassword); $("#account-update-password").addEventListener("click", updateAccountPassword); $("#account-import-local").addEventListener("click", importLocalDecks);
   $("#profile-save").addEventListener("click", savePlayerProfile);
