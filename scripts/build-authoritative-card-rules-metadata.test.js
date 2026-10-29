@@ -22,7 +22,7 @@ test("generated metadata is deterministic and matches representative local catal
   const destination = path.join(root, "card-authoritative-rules-metadata.js");
   const artifact = require(destination);
   assert.deepEqual(Object.keys(generated).sort(), Object.keys(artifact.byId).sort());
-  assert.equal(renderArtifact(generated), fs.readFileSync(destination, "utf8"));
+  assert.equal(renderArtifact(generated), fs.readFileSync(destination, "utf8").replace(/\r\n?/g, "\n"));
   assert.equal(Object.keys(generated).length, cards.length);
   assert.deepEqual(artifact.get("cfa-664"), {
     grade: 2,

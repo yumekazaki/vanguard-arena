@@ -7,6 +7,7 @@ const { Worker } = require("node:worker_threads");
 const { createHash } = require("node:crypto");
 const { performance } = require("node:perf_hooks");
 const { loadCatalog } = require("./audit-ability-catalog.js");
+const { sourceValidationDigest } = require("./source-validation-digest.js");
 
 const root = path.resolve(__dirname, "..");
 const stageRoot = path.join(root, ".card-pipeline", "staging");
@@ -18,21 +19,6 @@ function atomicJson(file, data) {
   fs.renameSync(temporary, file);
 }
 function sha(value) { return createHash("sha256").update(value).digest("hex"); }
-function sourceValidationDigest(directory) {
-  const files = [];
-  const walk = current => {
-    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
-      if (entry.isDirectory() && [".git", ".card-pipeline", "node_modules"].includes(entry.name)) continue;
-      const file = path.join(current, entry.name);
-      if (entry.isDirectory()) walk(file);
-      else if (/\.(?:js|cjs|mjs|ts|html|sql)$/i.test(entry.name)) files.push(file);
-    }
-  };
-  walk(directory);
-  const hash = createHash("sha256");
-  for (const file of files.sort()) hash.update(path.relative(directory, file)).update("\0").update(fs.readFileSync(file)).update("\0");
-  return hash.digest("hex");
-}
 function validateShard(result, shard, expectedCards) {
   return result?.ok === true && result.shardId === shard.id && result.recordCount === result.counters?.abilityBlocks && result.cardIds?.length === expectedCards && new Set(result.cardIds).size === expectedCards;
 }

@@ -2,32 +2,16 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
-const { createHash } = require("node:crypto");
 const engine = require("../ability-engine.js");
 engine.registerAbilityDefinitions(require("../ability-definitions.js"));
 const serverReducer = require("../ability-server-reducer.js");
 const { loadCatalog, auditCatalog } = require("./audit-ability-catalog.js");
 const { candidatePatternKey } = require("./unsupported-ability-patterns.js");
+const { sourceValidationDigest } = require("./source-validation-digest.js");
 const CONTINUOUS_EFFECT_OPS = new Set([
   "continuous-power", "continuous-critical", "continuous-shield", "continuous-grade",
   "continuous-power-per-soul-card", "continuous-power-adjustment", "continuous-power-per-clan-rearguard"
 ]);
-
-function validationSourceDigest(root) {
-  const files = [];
-  const walk = directory => {
-    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
-      if (entry.isDirectory() && [".git", ".card-pipeline", "node_modules"].includes(entry.name)) continue;
-      const file = path.join(directory, entry.name);
-      if (entry.isDirectory()) walk(file);
-      else if (/\.(?:js|cjs|mjs|ts|html|sql)$/i.test(entry.name)) files.push(file);
-    }
-  };
-  walk(root);
-  const hash = createHash("sha256");
-  for (const file of files.sort()) hash.update(path.relative(root, file)).update("\0").update(fs.readFileSync(file)).update("\0");
-  return hash.digest("hex");
-}
 
 function dependenciesForAbility({ ability, definition, missingRequirements, missingHandlers, missingServerHandlers, missingTrustedDefinition, hasTests, suiteFresh, mechanicGroup }) {
   const dependencies = [];
@@ -49,7 +33,7 @@ function buildAbilityWorkQueue(cards, manifest, root = path.resolve(__dirname, "
   const invalid = new Map(audit.invalidCompiled.map(item => [item.abilityId, item.reasons]));
   const evidence = new Map(manifest.records.map(record => [record.abilityId, record]));
   const suite = manifest.latestFullSuite || null;
-  const suiteFresh = Boolean(suite?.status === "passed" && suite.passed === suite.tests && suite.validationInputDigest === validationSourceDigest(root));
+  const suiteFresh = Boolean(suite?.status === "passed" && suite.passed === suite.tests && suite.validationInputDigest === sourceValidationDigest(root));
   const parsedByCard = new Map(cards.map(card => [String(card.id || ""), engine.parseCardAbilitiesCached(card)]));
   const trustedByCard = new Map(cards.map(card => [String(card.id || ""), new Set((engine.getReviewedAbilityDefinitionsForCard?.(String(card.id || "")) || []).map(entry => entry.id))]));
   const fullyVerifiedCards = new Set();
@@ -226,4 +210,4 @@ function main(argv = process.argv.slice(2)) {
 }
 
 if (require.main === module) main();
-module.exports = { buildAbilityWorkQueue, validationSourceDigest, dependenciesForAbility };
+module.exports = { buildAbilityWorkQueue, validationSourceDigest: sourceValidationDigest, dependenciesForAbility };

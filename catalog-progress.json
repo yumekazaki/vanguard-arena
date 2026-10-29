@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T00:55:01.511Z",
+  "generatedAt": "2026-10-29T01:38:03.589Z",
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "catalogSource": "scripts/audit-ability-catalog.js (local catalog file or committed HEAD snapshot)",
   "cards": {
@@ -29,14 +29,14 @@
       "command": "node --test",
       "testCommand": "node --test",
       "status": "passed",
-      "tests": 1294,
-      "testCount": 1294,
-      "passed": 1294,
+      "tests": 1295,
+      "testCount": 1295,
+      "passed": 1295,
       "failed": 0,
-      "durationMilliseconds": 305744.9759,
-      "completedAt": "2026-10-29T00:54:55.951Z",
+      "durationMilliseconds": 310394.4857,
+      "completedAt": "2026-10-29T01:36:03.729Z",
       "runDate": "2026-10-29",
-      "validationInputDigest": "7090b3a098a352a344f39145db4df88dbd810787a9b28ade4ff2eab52d24f6d6"
+      "validationInputDigest": "d553b730017b37501f030fbfe60e06a05e3476eaec370ed736407f87cbf0d730"
     },
     "fullyVerifiedRequiresAllPrintedAbilitiesAndRulesEvidence": true,
     "note": "Aggregate parsing or a passing pattern test does not make a whole card fully verified. Only explicit manifest records count as regression evidence; zero fully verified cards is reported when no complete card-level evidence exists."
@@ -65,7 +65,48 @@
         "optimization": "Process exact recurring templates in reusable batches; preserve per-card evidence and leave ambiguous text unreviewed.",
         "result": "Reusable Soul-count power and critical patterns plus signed continuous power adjustments cover the current verified examples; per-card evidence stays partial until the other printed abilities are implemented."
       }
-    ]
+    ],
+    "parallelBenchmark": {
+      "measuredAt": "2026-10-28",
+      "catalogCards": 14022,
+      "abilityBlocks": 17240,
+      "batchSize": 250,
+      "results": [
+        {
+          "workers": 1,
+          "elapsedMilliseconds": 6832.1,
+          "parsedCardsPerMinute": 123142.2,
+          "verifiedAbilitiesPerMinute": 0
+        },
+        {
+          "workers": 2,
+          "elapsedMilliseconds": 3956.7,
+          "parsedCardsPerMinute": 212631.7,
+          "verifiedAbilitiesPerMinute": 0
+        },
+        {
+          "workers": 4,
+          "elapsedMilliseconds": 3625.5,
+          "parsedCardsPerMinute": 232056.3,
+          "verifiedAbilitiesPerMinute": 0
+        },
+        {
+          "workers": 8,
+          "elapsedMilliseconds": 3004.9,
+          "parsedCardsPerMinute": 279982.7,
+          "verifiedAbilitiesPerMinute": 0
+        }
+      ],
+      "speedup": 2.274,
+      "interpretation": "Measured 1/2/4/8 workers on the same 14,022-card/17,240-ability snapshot at batch size 250. Eight workers were fastest (3.00 s versus 6.83 s at one worker, 2.27x); identical counters in all runs. Parsing/classification verified zero abilities, so parsing is not the backlog bottleneck.",
+      "latestRegressionSuite": {
+        "tests": 1295,
+        "passed": 1295,
+        "failed": 0,
+        "durationMilliseconds": 310394.4857,
+        "validationInputDigest": "d553b730017b37501f030fbfe60e06a05e3476eaec370ed736407f87cbf0d730"
+      }
+    }
   },
   "invalidCompiledDefinitions": []
 }
