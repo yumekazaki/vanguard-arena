@@ -2960,9 +2960,9 @@
   function playerContainsInstance(player,uid){if(!player||typeof uid!=="string")return false;const seen=new WeakSet(),stack=[player];while(stack.length){const value=stack.pop();if(!value||typeof value!=="object"||seen.has(value))continue;seen.add(value);if(value.uid===uid)return true;for(const child of Object.values(value))if(child&&typeof child==="object")stack.push(child)}return false}
   function stateContainsInstance(state,uid){const located=locateCardInstance(state,uid);return Boolean(located&&!located.ambiguous)}
   const remoteGameActions = new Set(["draw","ride","call","attack","guard","noGuard","finishAttack","endTurn","advance"]);
-  const remoteManualActions = new Set("ability activate-skill add-critical add-damage alter-power attack-choice bind crest-add crest-place crest-skip counter-blast counter-charge damage-action damage-check deck-action deck-view draw-card drop-action drive-check field-to-g flip-g-unit g-assist g-assist-discard g-assist-finish g-assist-none g-assist-pick g-guard gdeck-flip-up gdeck-to-g gzone-flip-up gift-accel gift-force guard-perfect guardian-shield hand-to-bottom hand-to-damage hand-to-order hand-to-top heal-damage intercept lock mill minus move-rear-to move-select open-skills order-to-bottom order-to-drop order-to-hand order-to-top place play-order protect-to-hand public-reveal public-reveal-close quick-shield rest-selected reveal-action reveal-done reveal-top reveal-top-cards selected-to-bottom selected-to-drop selected-to-hand selected-to-soul selected-to-top set-power shuffle soul-blast soul-charge stand-selected stride stride-confirm stride-cost stride-cancel superior-ride top-to-drop trigger-check trigger-pick trigger-skip view-gdeck view-selected-soul zone-move".split(" "));
+  const remoteManualActions = new Set("ability activate-skill add-critical add-damage alter-power attack-choice bind crest-add crest-place crest-skip counter-blast counter-charge damage-action damage-check deck-action deck-view draw-card drop-action drive-check field-to-g flip-g-unit g-assist g-assist-discard g-assist-finish g-assist-none g-assist-pick g-guard gdeck-flip-up gdeck-reveal gdeck-to-g gzone-flip-up gift-accel gift-force guard-perfect guardian-shield hand-to-bottom hand-to-damage hand-to-order hand-to-top heal-damage intercept lock mill minus move-rear-to move-select open-skills order-to-bottom order-to-drop order-to-hand order-to-top place play-order protect-to-hand public-reveal public-reveal-close quick-shield rest-selected reveal-action reveal-done reveal-top reveal-top-cards selected-to-bottom selected-to-drop selected-to-hand selected-to-soul selected-to-top set-power shuffle soul-blast soul-charge stand-selected stride stride-confirm stride-cost stride-cancel superior-ride top-to-drop trigger-check trigger-pick trigger-skip view-gdeck view-selected-soul zone-move".split(" "));
   function validateRemoteActionRequest(state, request, expectedActorPlayerId = null) {
-    const replay=validateRemoteRequest(state,request,expectedActorPlayerId);if(!replay.ok)return replay;if(state.pendingTurnEnd||state.pendingAbility||(state.pendingAbilities||[]).length||state.pendingTrigger||state.pendingHitResolution||state.pendingBattleEnd||(state.pendingDamageQueue||[]).length)return{ok:false,reason:"resolution-in-progress"};
+    const replay=validateRemoteRequest(state,request,expectedActorPlayerId);if(!replay.ok)return replay;const requestActorSide=Object.keys(state.players||{}).find(side=>state.players[side]?.playerId===request.actorPlayerId),triggerDecision=state.pendingTrigger?.side===requestActorSide&&/^manual:trigger-(?:pick|skip)(?::|$)/.test(request.action||"");if(state.pendingTurnEnd||state.pendingAbility||(state.pendingAbilities||[]).length||state.pendingTrigger&&!triggerDecision||state.pendingHitResolution||state.pendingBattleEnd||(state.pendingDamageQueue||[]).length)return{ok:false,reason:"resolution-in-progress"};
     if(request.type==="setup-roll")return state.preMatch?.stage==="roll"&&state.preMatch.rolls?.bot===null?{ok:true}:{ok:false,reason:"setup-window-closed"};
     if(request.type==="setup-choice")return state.preMatch?.stage==="roll"&&state.preMatch.winner==="bot"&&["human","bot"].includes(request.firstSide)?{ok:true}:{ok:false,reason:"invalid-first-player-choice"};
     if(request.type==="setup-mulligan"){const hand=state.players?.bot?.hand||[],uids=request.handUids;if(state.preMatch?.stage!=="mulligan"||state.preMatch.mulliganDone?.bot||!Array.isArray(uids)||new Set(uids).size!==uids.length||uids.some(uid=>typeof uid!=="string"||!hand.some(card=>card?.uid===uid)))return{ok:false,reason:"invalid-mulligan-selection"};return{ok:true}}
@@ -2993,6 +2993,23 @@
     if(/^manual:[A-Za-z0-9:_-]{1,180}$/.test(request.action)&&remoteManualActions.has(request.action.slice(7).split(":")[0])){
       const [command,...args]=request.action.slice(7).split(":"),actorSide=Object.keys(state.players||{}).find(side=>state.players[side]?.playerId===request.actorPlayerId),actor=state.players?.[actorSide];
       if(!actorSide)return{ok:false,reason:"actor-not-in-match"};
+      if(command==="trigger-pick"){
+        const pending=state.pendingTrigger,uid=args[0];
+        if(!pending||pending.side!==actorSide||typeof uid!=="string")return{ok:false,reason:"no-owned-trigger-choice"};
+        if(pending.stage==="heal-target"){
+          if(!(actor.damage||[]).some(card=>card?.uid===uid))return{ok:false,reason:"invalid-heal-target"};
+        }else{
+          const target=locateCardInstance(state,uid);
+          if(!target||target.ambiguous||target.side!==actorSide||!["vanguard","rear-guard"].includes(target.zone))return{ok:false,reason:"invalid-trigger-unit-target"};
+          if(pending.stage==="stand-target"&&(target.zone==="vanguard"||!target.instance.rested))return{ok:false,reason:"invalid-stand-target"};
+        }
+      }
+      if(command==="trigger-skip"&&(state.pendingTrigger?.side!==actorSide||state.pendingTrigger?.stage!=="heal-target"))return{ok:false,reason:"no-skippable-heal-choice"};
+      if(command==="gdeck-reveal"||command==="gdeck-flip-up"){
+        const item=(actor.gDeck||[]).find(card=>card?.uid===args[0]);
+        if(!item)return{ok:false,reason:"gdeck-card-not-owned"};
+        if(command==="gdeck-flip-up"&&item.faceUp)return{ok:false,reason:"gdeck-card-already-face-up"};
+      }
       if(["stride","stride-cost","stride-confirm","stride-cancel"].includes(command)){
         if(state.side!==actorSide)return{ok:false,reason:"not-actor-turn"};
         if(command==="stride"&&(Number(state.phase)!==3||state.stridePerformed||state.pendingStride||typeof args[0]!=="string"||!(actor.gDeck||[]).some(card=>card?.uid===args[0]&&!card.faceUp)))return{ok:false,reason:"invalid-stride-selection"};

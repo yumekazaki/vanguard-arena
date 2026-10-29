@@ -624,14 +624,14 @@
         }
         const zoneElement = $(`.field-zone[data-side="${side}"][data-zone="${zone}"]`); const accelRow = $(`#${side}-accel-row`); if (zone.startsWith("accel-") && zoneElement && accelRow && zoneElement.parentElement !== accelRow) accelRow.appendChild(zoneElement); renderZone(side, zone, player.rear[index]);
       });
-      const accelRow = $(`#${side}-accel-row`); if (accelRow) { accelRow.style.display = player.accelZones ? "grid" : "none"; accelRow.style.gridTemplateColumns = `repeat(${3 + player.accelZones}, minmax(0, 1fr))`; accelRow.style.width = `calc(68% * ${(3 + player.accelZones) / 3})`; accelRow.style.left = `calc(50% - (68% * ${(3 + player.accelZones) / 3}) / 2)`; const leftAccelCount = Math.ceil(player.accelZones / 2); for (let i = 1; i <= player.accelZones; i++) { const column = i % 2 ? leftAccelCount - Math.floor((i - 1) / 2) : leftAccelCount + 4 + Math.floor((i - 1) / 2); const circle = $(`.field-zone[data-side="${side}"][data-zone="accel-${i}"]`); if (circle) { circle.style.gridColumn = String(column); circle.style.transform = i % 2 ? "translateX(-50%)" : "translateX(50%)"; } } }
+      const accelRow = $(`#${side}-accel-row`); if (accelRow) { accelRow.style.display = player.accelZones ? "grid" : "none"; accelRow.style.gridTemplateColumns = `repeat(${3 + player.accelZones}, minmax(0, 1fr))`; accelRow.style.width = "96%"; accelRow.style.left = "2%"; const leftAccelCount = Math.ceil(player.accelZones / 2); for (let i = 1; i <= player.accelZones; i++) { const column = i % 2 ? leftAccelCount - Math.floor((i - 1) / 2) : leftAccelCount + 4 + Math.floor((i - 1) / 2); const circle = $(`.field-zone[data-side="${side}"][data-zone="accel-${i}"]`); if (circle) { circle.style.gridColumn = String(column); circle.style.transform = "none"; } } }
     });
             $("#soul-pips").innerHTML = you.soul.slice(0, 7).map(() => `<span class="soul-pip"></span>`).join("");
     $("#hand-count").textContent = `${you.hand.length} card${you.hand.length === 1 ? "" : "s"}`;
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog(); renderGAssistDialog(); renderRemotePaymentPrompt();
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
-    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal();
+    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderBattleActionPrompt(); renderAttackArrow(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal();
     if(!online.applyingRemote)showNextAbilityPrompt();
     if (!online.applyingRemote && match.pendingAttack?.awaitingDrive) setTimeout(resolvePracticeAttackAfterDrives, 0);
     if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
@@ -658,9 +658,9 @@
     const guardPower = match.pendingAttack?.targetUid === instance.uid ? Math.max(0, Number(match.pendingAttack.targetPower || 0) - calculatedPower) : 0;
     const effectivePower = calculatedPower + guardPower;
     const effectivePowerLabel = c.power === null || c.power === undefined ? "Unknown" : effectivePower.toLocaleString();
-    const printedCritical = Math.max(1, Number(c.critical || 1)); const forceCrit = markers.some((gift) => /^Force II$/i.test(gift.type || ""));
-    const effectiveCrit = Math.max(1, printedCritical + turnCrit + (forceCrit ? Math.max(0, 2 - printedCritical) : 0));
-    if (forceCrit) effectLabels.push("ORIGINAL CRITICAL 2 · FORCE II");
+    const printedCritical = Math.max(1, Number(c.critical || 1)); const forceCrit = markers.filter((gift) => /^Force II$/i.test(gift.type || "")).length;
+    const effectiveCrit = Math.max(1, printedCritical + turnCrit + forceCrit);
+    if (forceCrit) effectLabels.push(`+${forceCrit} CRITICAL · FORCE II`);
     const effectTag = effectLabels.length ? `<span class="turn-effect-badge">${escapeHtml(effectLabels.join(" · "))}</span>` : "";
     const shieldLabel = c.shield === null || c.shield === undefined ? "Unknown" : Number(c.shield) > 0 ? Number(c.shield).toLocaleString() : "—";
     const field = document.createElement("div"); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; const powerBreakdown = [`base ${Number(c.power || 0).toLocaleString()}`, heartPower ? `+${heartPower.toLocaleString()} heart` : "", Number(instance.powerBoost || 0) ? `+${Number(instance.powerBoost).toLocaleString()} manual` : "", turnPower ? `+${turnPower.toLocaleString()} temporary until end of turn` : "", continuousPower ? `+${continuousPower.toLocaleString()} continuous ability` : "", forcePower ? `+${forcePower.toLocaleString()} Force I for this turn` : "", guardPower ? `+${guardPower.toLocaleString()} guard shield for this attack` : ""].filter(Boolean).join(" · "); field.title = `${c.name}${heartPower ? ` · Heart: ${cardMap.get(instance.strideHeart.cardId)?.name || "Grade 3"}` : ""}\nPower: ${effectivePowerLabel}${effectiveCrit > 1 ? ` · ${effectiveCrit} critical` : ""} · Printed ${c.power === null || c.power === undefined ? "unknown" : Number(c.power).toLocaleString()} power · ${c.trigger || "No trigger"}\nShield: ${shieldLabel}\n${powerBreakdown}`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade === null || c.grade === undefined ? "?" : c.grade}`}</span>${effectTag}${guardPower ? `<span class="turn-effect-badge">+${guardPower.toLocaleString()} GUARD</span>` : ""}<span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${effectivePowerLabel}</b><span>${effectiveCrit} CRIT</span><small>SHIELD ${shieldLabel}</small></span>`;
@@ -1124,11 +1124,66 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       defender.rear.forEach((unit, index) => {
         if (!unit) return;
         const zone = index === 0 ? "rear-left" : index === 1 ? "rear-right" : index >= 5 ? `accel-${index - 4}` : "";
-        if (zone) choices.push({ value: `target:${zone}:${unit.uid}`, label: `Front Rear-Guard · ${cardMap.get(unit.cardId)?.name || "Unit"}` });
+        if (zone) { const circleLabel = zone.startsWith("accel-") ? `Accel Circle ${zone.slice(6)}` : "Front Rear-Guard"; choices.push({ value: `target:${zone}:${unit.uid}`, label: `${circleLabel} · ${cardMap.get(unit.cardId)?.name || "Unit"}` }); }
       });
     }
     $("#attack-choice-buttons").innerHTML = choices.map((choice) => `<button class="button button-primary" type="button" data-attack-choice="${escapeHtml(choice.value)}">${escapeHtml(choice.label)}</button>`).join("");
     panel.hidden = false;
+  }
+  function renderBattleActionPrompt() {
+    const panel = $("#battle-action-panel"), attack = match?.pendingAttack, choicePanel = $("#attack-choice-panel");
+    if (!panel) return;
+    if (!attack || !choicePanel?.hidden || match.pendingAbility || match.pendingTrigger || (match.pendingDamageQueue || []).length) { panel.hidden = true; return; }
+    const buttons = $("#battle-action-buttons");
+    let title = "", help = "", actions = [];
+    if (attack.defenderSide === "human" && !attack.defenderDone && !attack.driveCountPrompt) {
+      const player = match.players.human;
+      const attackerGrade = Number(cardMap.get(match.players[attack.attackerSide]?.vanguard?.cardId)?.grade ?? -1);
+      const ownGrade = Number(cardMap.get(player.vanguard?.cardId)?.grade ?? -1);
+      title = "Defend this attack";
+      help = "Choose how to defend. Your guard and G-Guard decisions stay on your screen.";
+      actions.push({ id: "guard", label: "Guard" }, { id: "noGuard", label: "No guard" });
+      const canGGuard = ownGrade >= 3 && attackerGrade >= 3 && player.hand.some(item => triggerKind(item) === "heal") && (player.gDeck || []).some(item => !item.faceUp && isGGuardian(cardMap.get(item.cardId)));
+      if (canGGuard) actions.push({ id: "g-guard", label: "G-Guard" });
+      if (eligibleInterceptors().length) actions.push({ id: "intercept", label: "Intercept" });
+    } else if (attack.attackerSide === "human" && attack.defenderDone && !attack.awaitingDrive && !attack.driveCountPrompt) {
+      title = "Attack resolution complete";
+      help = "Drive checks and attack effects are resolved. End the attack to continue.";
+      actions.push({ id: "finishAttack", label: "End this attack" });
+    } else if (attack.attackerSide === "human" && !attack.defenderDone) {
+      title = "Waiting for defense";
+      help = "The defending player is choosing whether and how to guard.";
+    } else {
+      panel.hidden = true;
+      return;
+    }
+    $("#battle-action-title").textContent = title;
+    $("#battle-action-help").textContent = help;
+    buttons.innerHTML = actions.map(item => '<button class="button button-primary" type="button" data-battle-action="' + item.id + '">' + item.label + '</button>').join("");
+    panel.hidden = false;
+  }
+  function renderAttackArrow() {
+    const layer = $("#attack-arrow-layer"), table = $(".game-table"), attack = match?.pendingAttack;
+    if (!layer || !table || !attack?.targetUid) { if (layer) { layer.hidden = true; layer.dataset.attackId = ""; } return; }
+    const sourceZone = Array.from(table.querySelectorAll(".field-zone")).find(zone => zone.dataset.side === attack.attackerSide && zone.dataset.zone === attack.attackerZone);
+    const targetZone = Array.from(table.querySelectorAll(".field-zone")).find(zone => zone.dataset.side === attack.defenderSide && zone.dataset.zone === attack.targetZone);
+    const source = sourceZone?.querySelector(".field-card") || sourceZone, target = targetZone?.querySelector(".field-card") || targetZone;
+    if (!source || !target) { layer.hidden = true; return; }
+    const bounds = table.getBoundingClientRect(), from = source.getBoundingClientRect(), to = target.getBoundingClientRect();
+    const x1 = from.left + from.width / 2 - bounds.left, y1 = from.top + from.height / 2 - bounds.top;
+    const x2 = to.left + to.width / 2 - bounds.left, y2 = to.top + to.height / 2 - bounds.top;
+    const id = String(attack.battleId || (attack.attackerUid + ":" + attack.targetUid));
+    layer.setAttribute("viewBox", "0 0 " + Math.max(1, table.clientWidth) + " " + Math.max(1, table.clientHeight));
+    const path = layer.querySelector(".attack-arrow-path");
+    if (layer.dataset.attackId !== id || !path) {
+      layer.innerHTML = '<defs><marker id="attack-arrow-head" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" class="attack-arrow-head"></path></marker></defs><path class="attack-arrow-path" marker-end="url(#attack-arrow-head)"></path><circle class="attack-arrow-origin" r="7"></circle>';
+      layer.dataset.attackId = id;
+    }
+    const dx = x2 - x1, dy = y2 - y1;
+    layer.querySelector(".attack-arrow-path").setAttribute("d", "M " + x1 + " " + y1 + " C " + (x1 + dx * .28) + " " + (y1 + dy * .08) + ", " + (x2 - dx * .28) + " " + (y2 - dy * .08) + ", " + x2 + " " + y2);
+    layer.querySelector(".attack-arrow-origin").setAttribute("cx", x1);
+    layer.querySelector(".attack-arrow-origin").setAttribute("cy", y1);
+    layer.hidden = false;
   }
   function finishTriggerResolution() {
     const pending = match?.pendingTrigger;
@@ -1196,7 +1251,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     $("#check-reveal-label").textContent = `${match.players[reveal.side]?.name || "A player"} · ${({ damage: "Damage check", trigger: "Trigger check", drive: "Drive check" })[reveal.checkName] || "Card revealed"}`;
     $("#check-reveal-card").innerHTML = card ? `${cardImage(card, "check-reveal-art")}<b>${escapeHtml(card.name)}</b>` : "Card revealed";
     panel.hidden = false; panel.classList.remove("flash"); void panel.offsetWidth; panel.classList.add("flash");
-    checkRevealTimer = setTimeout(() => { panel.hidden = true; panel.classList.remove("flash"); activeCheckRevealId = null; checkRevealTimer = null; renderCheckReveal(); }, 650);
+    checkRevealTimer = setTimeout(() => { panel.hidden = true; panel.classList.remove("flash"); activeCheckRevealId = null; checkRevealTimer = null; renderCheckReveal(); }, 1150);
   }  function beginTriggerResolution(side, instance, checkName) {
     queueCheckReveal(side, instance, checkName);
     const kind = triggerKind(instance); if (!kind) return false;
@@ -1289,7 +1344,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     const forcePower = field && match.side === field.side ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force I$/i.test(gift.type || "")).length * 10000 : 0;
     const accelIndex = field?.zone.startsWith("accel-") ? Number(field.zone.slice(6)) - 1 : -1; const accelType = accelIndex >= 0 ? (match.players[field.side].accelTypes?.[accelIndex] || "Accel I") : ""; const accelPower = field && accelType && match.side === field.side ? (/II/i.test(accelType) ? 5000 : 10000) : 0; return Number(card?.power || 0) + (mlbSoul&&field.zone==="vanguard"?5000:0) + Number(cardMap.get(entry.instance.strideHeart?.cardId)?.power || 0) + Number(entry.instance.strideHeart?.powerBoost || 0) + Number(entry.instance.strideHeart?.turnPowerBoost || 0) + Number(entry.instance.powerBoost || 0) + Number(entry.instance.turnPowerBoost || 0) + continuousPowerBonus(entry.instance,field.side,field.zone,{...attackContext,attackTargetZone:attackContext.targetZone}) + forcePower + accelPower;
   }
-  function attackerCritical(entry) { const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid); const card = cardMap.get(entry.instance.cardId), printedCritical = Math.max(1, Number(card?.critical || 1)),fieldSide=field?.side||findFieldCard(entry.instance.uid)?.side,mlbSoul=card?.name==="Majesty Lord Blaster"&&fieldSide&&(()=>{const names=(match.players[fieldSide].soul||[]).map(x=>cardMap.get(x.cardId)?.name);return names.includes("Blaster Blade")&&names.includes("Blaster Dark")})(); const forceCrit = field && (match.players[field.side].giftZones || []).some((gift) => gift.zone === field.zone && /^Force II$/i.test(gift.type || "")); return Math.max(1, printedCritical + (mlbSoul?1:0) + Number(entry.instance.turnCriticalBoost || 0) + (forceCrit ? Math.max(0, 2 - printedCritical) : 0)); }
+  function attackerCritical(entry) { const field = entry.side && entry.zone ? entry : findFieldCard(entry.instance.uid); const card = cardMap.get(entry.instance.cardId), printedCritical = Math.max(1, Number(card?.critical || 1)),fieldSide=field?.side||findFieldCard(entry.instance.uid)?.side,mlbSoul=card?.name==="Majesty Lord Blaster"&&fieldSide&&(()=>{const names=(match.players[fieldSide].soul||[]).map(x=>cardMap.get(x.cardId)?.name);return names.includes("Blaster Blade")&&names.includes("Blaster Dark")})(); const forceCrit = field ? (match.players[field.side].giftZones || []).filter((gift) => gift.zone === field.zone && /^Force II$/i.test(gift.type || "")).length : 0; return Math.max(1, printedCritical + (mlbSoul?1:0) + Number(entry.instance.turnCriticalBoost || 0) + forceCrit); }
   function getDriveValue(card,instance=null) { const text=String(card?.text||"");let value=/Triple Drive/i.test(text)?3:/Twin Drive/i.test(text)?2:1;const unit=instance?.instance||instance;value+=Number(unit?.turnDriveBoost||0);const field=instance?.side?instance:instance?.uid?findFieldCard(instance.uid):null;if(card?.name==="Majesty Lord Blaster"&&field?.zone==="vanguard"){const p=match.players[field.side],soulNames=(p.soul||[]).map(x=>cardMap.get(x.cardId)?.name);if(soulNames.includes("Blaster Blade")&&soulNames.includes("Blaster Dark"))value+=1}return value; }
   function continuousAttackRestriction(field){const player=match?.players?.[field?.side];if(!player||!field?.instance)return{legal:true,restrictions:[]};const controlledUnits=[player.vanguard,...(player.rear||[])].filter(Boolean).map(instance=>({uid:instance.uid,card:cardMap.get(instance.cardId)}));const location=field.zone==="vanguard"?"vanguard":field.zone==="guardian"?"guardian":field.zone?.startsWith("rear-")||field.zone?.startsWith("accel-")?"rear-guard":null;return window.VanguardAbilityEngine.evaluateContinuousRestrictions(cardAbilities(cardMap.get(field.instance.cardId)),{sourceInstanceId:field.instance.uid,sourceCard:cardMap.get(field.instance.cardId),location,controlledUnits})}
   function continuousBoostRestriction(field){if(!field?.instance)return{legal:true,restrictions:[]};const source=cardMap.get(field.instance.cardId),location=field.zone==="vanguard"?"vanguard":"rear-guard";return window.VanguardAbilityEngine.evaluateContinuousRestrictions(cardAbilities(source),{sourceInstanceId:field.instance.uid,sourceCard:source,location,action:"boost"})}
@@ -2420,7 +2475,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       const flip=`<button class="button" type="button" data-gdeck-flip="${escapeHtml(item.uid)}">Flip face up</button>`;
       const play=isGuard?'<button class="button button-primary" type="button" data-gdeck-action="g-guard:'+escapeHtml(item.uid)+':'+escapeHtml(selectedHeal.uid)+'">Guard with this G-Guardian</button>':'<button class="button button-primary" type="button" data-gdeck-action="stride:'+escapeHtml(item.uid)+'">Stride</button>';
       const skills=!isGuard&&!isInspect&&match.side==="human"&&Number(match.phase)===3?eligibleActivatedAbilities({side:"human",zone:"g-deck",instance:item}).map(ability=>`<button class="button" type="button" data-gdeck-activate="${escapeHtml(item.uid)}" data-ability-id="${escapeHtml(encodeURIComponent(ability.id))}">Activate skill · ${escapeHtml(ability.printedText||ability.raw)}</button>`).join(""):"";
-      return card ? '<article class="zone-view-card" data-card-id="' + escapeHtml(card.id) + '"><button class="zone-card-face" type="button" data-gdeck-reveal="' + escapeHtml(item.uid) + '">' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b><small>' + (item.faceUp ? 'Face up' : 'Face down') + '</small></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions"' + (isInspect || isGuard || skills ? '' : ' hidden') + '>' + (isInspect ? reveal + (!item.faceUp ? flip : "Face up") + inspectStride : play + skills + reveal + (isGuard ? '' : flip + zoneMoveControls(item,"gdeck"))) + '</div></article>' : "";
+      return card ? '<article class="zone-view-card" data-card-id="' + escapeHtml(card.id) + '"><button class="zone-card-face" type="button" data-gdeck-reveal="' + escapeHtml(item.uid) + '">' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b><small>' + (item.faceUp ? 'Face up' : 'Face down') + '</small></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions"' + (isInspect || isGuard || kind === "stride" || skills ? '' : ' hidden') + '>' + (isInspect ? reveal + (!item.faceUp ? flip : "Face up") + inspectStride : play + skills + reveal + (isGuard ? '' : flip + zoneMoveControls(item,"gdeck"))) + '</div></article>' : "";
     }).join("") : '<p class="zone-empty-message">No ' + (isGuard ? "G Guardians" : "G Units") + ' are available in your G deck.</p>';
     $("#gdeck-dialog").dataset.kind = kind; $("#gdeck-dialog").dataset.gGuardHealUid = isGuard ? selectedHeal.uid : "";
     if (!$("#gdeck-dialog").open) $("#gdeck-dialog").showModal();
@@ -2442,7 +2497,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       return;
     }
     if (action === "counter-blast" || action === "counter-charge" || action === "heal-damage") { openDamageDialog(action); return; }
-    if (action === "g-assist" || action === "g-assist-none" || action === "g-assist-finish" || action.startsWith("g-assist-pick:") || action.startsWith("g-assist-discard:") || action.startsWith("superior-ride:") || action.startsWith("attack-choice:") || action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done" || action.startsWith("g-assist") ) { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}sendGuestRequest("action",{action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("superior-ride:")){["deck-view-dialog","soul-dialog","bind-dialog","drop-dialog","damage-dialog","reveal-dialog"].forEach(id=>{if($("#"+id).open)$("#"+id).close()});} if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
+    if (action === "g-assist" || action === "g-assist-none" || action === "g-assist-finish" || action.startsWith("g-assist-pick:") || action.startsWith("g-assist-discard:") || action.startsWith("g-guard:") || action.startsWith("intercept:") || action.startsWith("superior-ride:") || action.startsWith("attack-choice:") || action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("gift-force:") || action.startsWith("gift-accel:") || action.startsWith("gdeck-reveal:") || action.startsWith("gdeck-flip-up:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done" || action.startsWith("g-assist") ) { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}sendGuestRequest("action",{action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("superior-ride:")){["deck-view-dialog","soul-dialog","bind-dialog","drop-dialog","damage-dialog","reveal-dialog"].forEach(id=>{if($("#"+id).open)$("#"+id).close()});} if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
     if (action === "reveal-top-cards") { if (!match) { toast("Start a match first."); return; } $("#reveal-count-dialog").showModal(); return; }
     if (action === "gift-force" || action === "gift-accel") { openGiftDialog(action === "gift-force" ? "force" : "accel"); return; }
     if (online.role === "guest") {
@@ -2549,6 +2604,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#stride-cost-confirm").addEventListener("click",()=>performManualAction("stride-confirm"));
   ["#stride-cost-cancel","#stride-cost-cancel-button"].forEach((selector)=>$(selector).addEventListener("click",()=>performManualAction("stride-cancel")));
   $("#attack-choice-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
+  $("#battle-action-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-battle-action]");if(!button)return;const action=button.dataset.battleAction;if(action==="g-guard"||action==="intercept")performManualAction(action);else performOnlineAction(action);});
+  window.addEventListener("resize",renderAttackArrow);
   $("#protect-discard-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-protect-cost]");if(!button)return;const marker=$("#protect-discard-dialog").dataset.markerUid;$("#protect-discard-dialog").close();performManualAction(`guard-perfect:${marker}:${button.dataset.protectCost}`);});
   $("#intercept-card-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-intercept-uid]");if(!button)return;$("#intercept-dialog").close();performManualAction(`intercept:${button.dataset.interceptUid}`);});
   $("#bind-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
