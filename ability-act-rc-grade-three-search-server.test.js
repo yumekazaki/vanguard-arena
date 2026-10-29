@@ -99,7 +99,7 @@ test("clan/unit filters and top-five boundary are enforced, while generic wordin
 
   for (const ownerSide of ["human", "bot"]) {
     const ownerId = ownerSide === "human" ? "host" : "guest";
-    const wrongClan = setup({ ownerSide, sourceCardId: "cfa-83", target: instance(card("cfa-98"), `${ownerSide}-wrong-clan`, ownerId, { clan: "Kagero", clans: ["Kagero"] }) });
+    const wrongClan = setup({ ownerSide, sourceCardId: "cfa-83", target: instance(card("cfa-31"), `${ownerSide}-wrong-clan`, ownerId) });
     const beforeWrongClan = JSON.stringify(wrongClan.state);
     assert.equal(activate(wrongClan, { effectUid: wrongClan.matched.uid, actionId: `reject-wrong-clan-${ownerSide}` }).ok, false);
     assert.equal(JSON.stringify(wrongClan.state), beforeWrongClan);

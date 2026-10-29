@@ -6,6 +6,8 @@ const Engine = require("./ability-engine.js");
 require("./ability-definitions.js");
 const Reducer = require("./ability-server-reducer.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
+const cardRules = require("./card-authoritative-rules-metadata.js").byId;
+const normalizeTrait = value => String(value || "").trim().toLocaleLowerCase().replace(/^the\s+/, "");
 
 const catalog = loadCatalog();
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
@@ -26,25 +28,43 @@ function cardInstance(definition, uid, playerId, overrides = {}) {
   };
 }
 
-function setup(cardId, { defenderTargetZone = "rear", attackTargetUid = "guest-rear", ownerSide = "bot" } = {}) {
+function setup(cardId, { defenderTargetZone = "rear", attackTargetUid = "guest-rear", ownerSide = "bot", abilityId = null } = {}) {
   const definition = cardDefinition(cardId);
-  const ability = Engine.parseCardAbilitiesCached(definition).find(item => item.kind === "AUTO" && item.definition?.effects?.some(step => step.op === "protect-target"));
+  const ability = Engine.parseCardAbilitiesCached(definition).find(item => item.kind === "AUTO" && item.definition?.effects?.some(step => step.op === "protect-target") && (!abilityId || item.id === abilityId));
   assert.ok(ability, `card ${cardId} has a reviewed protect AUTO`);
   assert.equal(ability.definition.effects.some(step => ["discard-from-hand", "conditional-counter-charge"].includes(step.op)), false,
     "this test covers only definitions whose full effect program is server-supported");
-  // Reducer discovery intentionally reads only the trusted ability registry.
-  // Register this exact catalog-derived fixture definition for this isolated test.
-  Engine.registerAbilityDefinitions([ability.definition]);
+  // Reducer discovery must work from the production registry without test-only registration.
+  if (ability.definition.source?.patternId === "auto-gc-discard-protect-attacked-unit-v1") {
+    assert.ok(Engine.getReviewedAbilityDefinitionsForCard(definition.id).some(item => item.id === ability.id), `${ability.id} is trusted in production`);
+  } else {
+    Engine.registerAbilityDefinitions([ability.definition]);
+  }
   const ownerId = ownerSide === "human" ? "host" : "guest", attackerSide = ownerSide === "human" ? "bot" : "human";
   const attackerId = attackerSide === "human" ? "host" : "guest";
   const source = cardInstance(definition, `${ownerSide}-guard`, ownerId, { zone: "guardian", circle: "guardian" });
-  const discard = cardInstance(cardDefinition("cfa-2"), `${ownerSide}-discard`, ownerId);
-  const target = defenderTargetZone === "vanguard"
-    ? cardInstance(cardDefinition("cfa-3"), attackTargetUid, ownerId)
-    : cardInstance(cardDefinition("cfa-3"), attackTargetUid, ownerId, { circle: "rear-left" });
+  const discardCost = ability.costs?.find(cost => cost.type === "discard");
+  const discardTrait = discardCost?.filter?.clan || discardCost?.filter?.race;
+  const discardDefinition = discardTrait
+    ? catalog.find(item => (item.type || "Unit") === "Unit" && ([item.clan, ...(item.clans || [])].some(trait => normalizeTrait(trait) === normalizeTrait(discardTrait)) || (cardRules[String(item.id)]?.races || []).includes(discardTrait)))
+    : cardDefinition("cfa-2");
+  assert.ok(discardDefinition, `${ability.id} has a catalog card for its filtered discard cost`);
+  const discard = cardInstance(discardDefinition, `${ownerSide}-discard`, ownerId);
+  const protect = ability.definition.effects.find(step => step.op === "protect-target");
+  const filter = protect.targetFilter || {};
+  const requiredTargetZone = filter.zone === "vanguard" ? "vanguard" : defenderTargetZone;
+  const targetDefinition = filter.clan || filter.race
+    ? catalog.find(item => (item.type || "Unit") === "Unit" && (filter.clan
+      ? [item.clan, ...(item.clans || [])].some(trait => normalizeTrait(trait) === normalizeTrait(filter.clan))
+      : (cardRules[String(item.id)]?.races || []).includes(filter.race)))
+    : cardDefinition("cfa-3");
+  assert.ok(targetDefinition, `${ability.id} has a catalog card for its target filter`);
+  const target = requiredTargetZone === "vanguard"
+    ? cardInstance(targetDefinition, attackTargetUid, ownerId)
+    : cardInstance(targetDefinition, attackTargetUid, ownerId, { circle: "rear-left" });
   const owner = {
-    playerId: ownerId, vanguard: defenderTargetZone === "vanguard" ? target : cardInstance(cardDefinition("cfa-3"), `${ownerSide}-vg`, ownerId),
-    rear: defenderTargetZone === "rear" ? [target] : [], hand: [discard], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [],
+    playerId: ownerId, vanguard: requiredTargetZone === "vanguard" ? target : cardInstance(cardDefinition("cfa-3"), `${ownerSide}-vg`, ownerId),
+    rear: requiredTargetZone === "rear" ? [target] : [], hand: [discard], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [],
     guardCircle: [source], gDeck: [], gZone: [], triggerZone: []
   };
   const attacker = {
@@ -58,7 +78,7 @@ function setup(cardId, { defenderTargetZone = "rear", attackTargetUid = "guest-r
     players,
     pendingAttack: {
       battleId: "battle-protect-1", attackerSide, attackerUid: `${attackerSide}-vg`, attackerZone: "vanguard",
-      defenderSide: ownerSide, targetUid: attackTargetUid, targetZone: defenderTargetZone === "vanguard" ? "vanguard" : "rear-left",
+      defenderSide: ownerSide, targetUid: attackTargetUid, targetZone: requiredTargetZone === "vanguard" ? "vanguard" : "rear-left",
       guardCards: [], power: 18000, targetPower: 10000, critical: 1
     }
   };
@@ -123,6 +143,47 @@ test("all 92 exact generic Guardian discard-and-protect abilities are registered
   }
 });
 
+test("all 73 exact filtered Guardian protect abilities resolve for their owning host and joining player", () => {
+  const family = [];
+  for (const definition of catalog) for (const ability of Engine.parseCardAbilitiesCached(definition)) {
+    if (ability.definition?.source?.patternId === "auto-gc-discard-protect-attacked-unit-v1") family.push(ability);
+  }
+  assert.equal(family.length, 73);
+  for (const ability of family) for (const ownerSide of ["human", "bot"]) {
+    const defenderTargetZone = ability.definition.effects[0]?.targetFilter?.zone === "vanguard" ? "vanguard" : "rear";
+    const fixture = setup(ability.cardId, { abilityId: ability.id, ownerSide, defenderTargetZone, attackTargetUid: `${ownerSide}-target` });
+    const actorAuthUid = ownerSide === "human" ? "auth-host" : "auth-guest";
+    const result = decide(fixture, actorAuthUid, { targetUid: fixture.target.uid }, `resolve-${ability.id}-${ownerSide}`);
+    assert.equal(result.ok, true, JSON.stringify({ abilityId: ability.id, ownerSide, result, discard: fixture.discard, costs: fixture.ability.costs }, null, 2));
+    assert.equal(fixture.state.pendingAttack.perfectGuard, true, ability.id);
+    assert.deepEqual(fixture.state.players[ownerSide].drop.map(card => card.uid), [fixture.discard.uid], ability.id);
+    assert.deepEqual(fixture.state.players[ownerSide === "human" ? "bot" : "human"].drop, [], ability.id);
+  }
+});
+
+test("filtered clan and race Guardian costs and targets reject mismatches without partial payment", () => {
+  const raceCost = setup("cfa-4187", { ownerSide: "bot" });
+  assert.deepEqual(raceCost.ability.costs[0].filter, { race: "Zodiac Time Beast" });
+  raceCost.state.players.bot.hand[0].cardId = "cfa-2";
+  const wrongRaceBefore = JSON.stringify(raceCost.state);
+  const wrongRace = decide(raceCost, "auth-guest", { targetUid: raceCost.target.uid }, "wrong-race-cost");
+  assert.equal(wrongRace.ok, false);
+  assert.equal(JSON.stringify(raceCost.state), wrongRaceBefore);
+
+  const clanTarget = setup("cfa-189", { ownerSide: "bot" });
+  clanTarget.state.players.bot.rear[0].cardId = "cfa-3";
+  const wrongClanBefore = JSON.stringify(clanTarget.state);
+  const wrongClan = decide(clanTarget, "auth-guest", { targetUid: clanTarget.target.uid }, "wrong-clan-target");
+  assert.equal(wrongClan.ok, false);
+  assert.equal(JSON.stringify(clanTarget.state), wrongClanBefore);
+
+  const hostProxyBefore = JSON.stringify(raceCost.state);
+  const hostProxy = decide(raceCost, "auth-host", { targetUid: raceCost.target.uid }, "host-cannot-proxy-race-protect");
+  assert.equal(hostProxy.ok, false);
+  assert.equal(hostProxy.reason, "source-not-controlled");
+  assert.equal(JSON.stringify(raceCost.state), hostProxyBefore);
+});
+
 test("attacked-target variant binds to the current attack target and needs no client-supplied target", () => {
   const fixture = setup("cfa-2069");
   const result = decide(fixture, "auth-guest", {});
@@ -184,6 +245,7 @@ test("protection rejects missing, unrelated, stale, and illegal targets without 
   assert.equal(JSON.stringify(stale.state), staleBefore);
 
   const illegal = setup("cfa-5678");
+  illegal.state.players.bot.rear[0].cardId = "test-order-target";
   illegal.state.players.bot.rear[0].type = "Order";
   const illegalBefore = JSON.stringify(illegal.state);
   const illegalType = decide(illegal, "auth-guest", { targetUid: illegal.target.uid }, "illegal-unit-type");

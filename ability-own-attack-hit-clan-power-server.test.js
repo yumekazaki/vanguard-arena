@@ -57,7 +57,7 @@ test("both seats receive and resolve only their own exact Rear-Guard hit prompt 
       payload: { type: "ability-response", accept: true, selection: { instanceUid: source.uid, abilityId: `${source.cardId}:0`, targetUid: ally.uid, costSelections: { cb: [], sb: [], discard: [], reveal: [] } } } }, seats, Engine);
     assert.equal(result.ok, true, result.reason);
     assert.equal(ally.turnPowerBoost, 3000);
-    assert.equal(ally.turnPowerExpiry, side);
+    assert.equal(ally.turnPowerExpiry, ally.controllerPlayerId);
     assert.equal(wrongClan.turnPowerBoost, 0);
     assert.equal(state.players[side === "bot" ? "human" : "bot"].vanguard.turnPowerBoost || 0, 0);
   }

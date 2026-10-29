@@ -29,13 +29,34 @@ test("all ten same-name search abilities are restricted to their exact reviewed 
   }
   for (const [id, targetName] of Object.entries(AUTO_TARGETS)) {
     const ability = Engine.parseCardAbilities(cardDef(id))[0];
-    Engine.registerAbilityDefinitions([ability.definition]);
+    const reviewed = Engine.getReviewedAbilityDefinitionsForCard(id);
+    assert.ok(reviewed.some(definition => definition.id === ability.id), `${id} production trusted registry`);
     assert.equal(ability.definition.effects[0].cardName, targetName);
     assert.equal(Reducer.supportsServerAbilityEffects(ability), true, id);
     const tampered = structuredClone(ability);
     tampered.definition.effects[0].cardName = "Different Card Name";
     assert.equal(Reducer.supportsServerAbilityEffects(tampered), false, `${id} tampered named target`);
   }
+});
+
+test("named VC searches reject wrong source, wrong circle, and unpayable costs before creating prompts", () => {
+  const sourceDefinition = cardDef("cfa-2025"), ability = Engine.parseCardAbilities(sourceDefinition)[0];
+  const playerId = "host-player", source = instance(sourceDefinition, "strict-vc-source", playerId, { zone: "vanguard", circle: "vanguard" });
+  const own = player(playerId), opponent = player("guest-player");
+  own.vanguard = source;
+  own.deck = [instance(namedCardDef(AUTO_TARGETS["cfa-2025"]), "strict-target", playerId, { zone: "deck" })];
+  opponent.vanguard = instance(cardDef("cfa-3"), "strict-opponent-vg", opponent.playerId, { zone: "vanguard", circle: "vanguard" });
+  const state = { matchId: "same-name-auto-strict", stateVersion: 1, side: "human", phase: 2, turn: 1, eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], processedActionIds: [], pendingAbilities: [], players: { human: own, bot: opponent } };
+  const makeEvent = (overrides = {}) => Engine.createGameEvent(state, { type: "card.placed", actingPlayerId: playerId, turnPlayerId: playerId, sourceCardInstanceId: source.uid, sourceOwnerPlayerId: playerId, sourceControllerPlayerId: playerId, cardInstanceId: source.uid, subjectCardInstanceId: source.uid, subjectOwnerPlayerId: playerId, subjectControllerPlayerId: playerId, previousLocation: "hand", currentLocation: "vanguard", circle: "vanguard", phase: "call", timingWindow: "call", ...overrides });
+  assert.equal(Reducer.discoverAutoTriggers(state, [makeEvent({ cardInstanceId: "different-copy", subjectCardInstanceId: "different-copy" })], Engine).queued.length, 0);
+  assert.equal(Reducer.discoverAutoTriggers(state, [makeEvent({ eventId: "wrong-circle", currentLocation: "rear-guard", circle: "rear-guard" })], Engine).queued.length, 0);
+  own.damage = [];
+  own.soul = [];
+  assert.equal(Reducer.discoverAutoTriggers(state, [makeEvent({ eventId: "unpayable" })], Engine).queued.length, 0);
+  assert.equal(state.pendingAbility, undefined);
+  assert.equal(own.hand.length, 0);
+  assert.equal(own.deck.length, 1);
+  assert.equal(ability.trigger.circles[0], "vanguard");
 });
 
 test("host and joining player can each resolve the once-per-turn ACT using their own resources and same-name target", () => {

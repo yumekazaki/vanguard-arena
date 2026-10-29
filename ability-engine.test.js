@@ -537,7 +537,12 @@ test("turn-start events dispatch at local, online, and practice turn transitions
   assert.match(app, /function queueTurnStartEvent\(side\)[\s\S]{0,240}queueAbilityPrompts\("start",side,null/);
   assert.match(app, /!onlineSetup&&firstSide==="human"[\s\S]{0,160}queueTurnStartEvent\("human"\)/);
   assert.match(app, /match\.turnStartGrades\[firstSide\][\s\S]{0,120}queueTurnStartEvent\(firstSide\)/);
-  assert.match(app, /function botTurn\(\)[\s\S]{0,340}queueTurnStartEvent\("bot"\)/);
+  const botTurnStart = app.indexOf("function botTurn()");
+  const botTurnEnd = app.indexOf("function nextBotAttack", botTurnStart);
+  const botTurn = app.slice(botTurnStart, botTurnEnd);
+  assert.ok(botTurnStart >= 0 && botTurnEnd > botTurnStart);
+  assert.ok(botTurn.indexOf("botTimer = setTimeout(") < botTurn.indexOf('queueTurnStartEvent("bot")'));
+  assert.ok(botTurn.indexOf('queueTurnStartEvent("bot")') < botTurn.indexOf('advanceBotPhase("Draw")'));
   assert.match(app, /function completeTurnTransition\(endingPlayerId\)[\s\S]{0,2200}queueTurnStartEvent\("human"\)/);
   assert.ok(app.includes("match.turnStartGrades[nextSide]=Number(cardMap.get(match.players[nextSide].vanguard?.cardId)?.grade??-1);match.drewThisTurn=false;queueTurnStartEvent(nextSide)"));
 });
@@ -556,9 +561,12 @@ test("turn-end AUTO timing distinguishes the controller turn from the opponent t
 });
 test("turn-end events hold the transition until private skill decisions resolve", () => {
   const app = fs.readFileSync("app.js", "utf8");
-  assert.match(app, /function queueTurnEndEvent\(side\)[\s\S]{0,240}queueAbilityPrompts\("end",side,null/);
-  assert.match(app, /function beginTurnEnd\(side\)[\s\S]{0,320}pendingTurnEnd=\{playerId:player\.playerId,side,turn:match\.turn\};queueTurnEndEvent\(side\);resumeAbilityQueue\(\)/);
-  assert.match(app, /function resumeAbilityQueue\(\)[\s\S]{0,700}if\(match\.pendingTurnEnd\)[\s\S]{0,180}completeTurnTransition\(playerId\)/);
+  assert.match(app, /function queueTurnEndEvent\(side,endPhaseRescan=false\)[\s\S]{0,300}pending\.endPhaseRescanInProgress=true/);
+  assert.match(app, /queueAbilityPrompts\("end",side,null,\{eventId:pending\?\.turnEndEventId/);
+  assert.match(app, /function beginTurnEnd\(side\)[\s\S]{0,420}pendingTurnEnd=\{playerId:player\.playerId,side,turn:match\.turn,turnEndEventId:/);
+  assert.match(app, /function resumeAbilityQueue\(\)[\s\S]{0,400}endPhaseRescanPending[\s\S]{0,260}queueTurnEndEvent\(pending\.side,true\)/);
+  assert.match(app, /endPhaseRescanInProgress===true/);
+  assert.match(app, /if\(match\.pendingTurnEnd\)[\s\S]{0,180}completeTurnTransition\(playerId\)/);
   assert.match(app, /message\.type === "ability-response"[\s\S]{0,4000}resumeAbilityQueue\(\);renderMatch\(\)/);
   assert.match(app, /if\(match\?\.pendingTurnEnd\)\{toast\("Resolve the pending end-of-turn abilities first\."\)/);
 });
@@ -724,7 +732,7 @@ test("real Weather Girl, Saft enforces draw timing, RC, Soul Blast, and once-per
   assert.deepEqual(ability.conditions, [{ type: "controller-turn" }]);
   assert.equal(evaluateAbilityConditions(ability, { isControllerTurn: true }), true);
   assert.equal(evaluateAbilityConditions(ability, { isControllerTurn: false }), false);
-  const draw = createGameEvent({ matchId: "saft-draw" }, { type: "card.drawn", actingPlayerId: "p1", sourceCardInstanceId: "drawn-card", subjectCardInstanceId: "drawn-card", previousLocation: "deck", currentLocation: "hand" });
+  const draw = createGameEvent({ matchId: "saft-draw" }, { type: "card.drawn", actingPlayerId: "p1", sourceCardInstanceId: "drawn-card", subjectCardInstanceId: "drawn-card", subjectOwnerPlayerId: "p1", subjectControllerPlayerId: "p1", previousLocation: "deck", currentLocation: "hand" });
   assert.equal(eventMatchesAbilityTrigger(ability, "draw", draw, "saft-copy", "rear-left", "rear-left", "p1"), true);
   assert.equal(eventMatchesAbilityTrigger(ability, "draw", draw, "saft-copy", "vanguard", "rear-left"), false);
   assert.deepEqual(ability.effects, [{ op: "modify-power", target: "source", amount: 6000, duration: "turn" }]);
@@ -737,7 +745,7 @@ test("real Sword Dancer Angel resolves its exact draw-trigger power effect", () 
   const ability = parseCardAbilities({ id: "cfa-425", text: "Oracle Think Tank/Angel\n\nAUTO [VC/RC]: When you draw a card, this unit gets power +1000 until end of turn." })[0];
   assert.equal(ability.definition.source.patternId, "auto-when-you-draw-power-turn-v1");
   assert.deepEqual(ability.effects, [{ op: "modify-power", target: "source", amount: 1000, duration: "turn" }]);
-  const event = createGameEvent({ matchId: "sword-dancer-draw" }, { type: "card.drawn", actingPlayerId: "p1", sourceCardInstanceId: "drawn-copy", subjectCardInstanceId: "drawn-copy", previousLocation: "deck", currentLocation: "hand" });
+  const event = createGameEvent({ matchId: "sword-dancer-draw" }, { type: "card.drawn", actingPlayerId: "p1", sourceCardInstanceId: "drawn-copy", subjectCardInstanceId: "drawn-copy", subjectOwnerPlayerId: "p1", subjectControllerPlayerId: "p1", previousLocation: "deck", currentLocation: "hand" });
   assert.equal(eventMatchesAbilityTrigger(ability, "draw", event, "sword-dancer-copy", "rear-left", "rear-left", "p1"), true);
   assert.equal(eventMatchesAbilityTrigger(ability, "attack", event, "sword-dancer-copy", "rear-left", "rear-left"), false);
   assert.equal(eventMatchesAbilityTrigger(ability, "draw", event, "sword-dancer-copy", "guardian", "rear-left"), false);
@@ -751,7 +759,7 @@ test("draw AUTO triggers use the drawn card event and preserve exact drawn-card 
   const youDraw = parseCardAbilities({ id: "draw-observer", text: "AUTO [RC]: When you draw a card, this unit gets power +1000 until end of turn." })[0];
   assert.equal(youDraw.trigger.eventType, "card.drawn");
   assert.equal(youDraw.trigger.subject, "controller");
-  const event = createGameEvent({ matchId: "draw-event" }, { type: "card.drawn", actingPlayerId: "p1", sourceCardInstanceId: "drawn-copy", subjectCardInstanceId: "drawn-copy", previousLocation: "deck", currentLocation: "hand" });
+  const event = createGameEvent({ matchId: "draw-event" }, { type: "card.drawn", actingPlayerId: "p1", sourceCardInstanceId: "drawn-copy", subjectCardInstanceId: "drawn-copy", subjectOwnerPlayerId: "p1", subjectControllerPlayerId: "p1", previousLocation: "deck", currentLocation: "hand" });
   assert.equal(eventMatchesAbilityTrigger(youDraw, "draw", event, "draw-observer-copy", "rear-left", "rear-left", "p1"), true);
   assert.equal(eventMatchesAbilityTrigger(youDraw, "attack", event, "draw-observer-copy", "rear-left", "rear-left", "p1"), false);
   const thisDrawn = parseCardAbilities({ id: "self-drawn", text: "AUTO: When this card is drawn, draw a card." })[0];
@@ -965,8 +973,8 @@ test("application routes AUTO eligibility through the exact-instance engine matc
   const declarations = [...source.matchAll(/function abilityTriggerMatches\(/g)];
   assert.equal(declarations.length, 1);
   assert.match(declarations[0][0] + source.slice(declarations[0].index, declarations[0].index + 240), /eventMatchesAbilityTrigger/);
-  assert.ok(source.includes('sourceToSoul:abilityCostCount(ability,"source-to-soul")'));
-  assert.ok(source.includes('costs={cb:abilityCostCount(ability,"counter-blast")'));
+  assert.ok(source.includes('sourceToSoul:abilityCostCount(ability,"source-to-soul",ability.costAlternatives?.[x.costAlternativeIndex])'));
+  assert.ok(source.includes('costs={cb:abilityCostCount(ability,"counter-blast",ability.costAlternatives?.[x.costAlternativeIndex])'));
   assert.match(source, /resolveEffectProgram\(definition\.effects,handlers,context,draft=>/);
   assert.ok(source.includes("function abilityUsed(side,instanceUid,abilityOrId)"));
   assert.ok(source.includes("abilityUsageKey(match.turn,player.playerId||side,instanceUid,id,ability?.usageRestriction,name,ability?.printedText||ability?.raw)"));
@@ -974,10 +982,10 @@ test("application routes AUTO eligibility through the exact-instance engine matc
   assert.match(movementQueue, /card\.retired/);
   assert.match(movementQueue, /previousLocation,currentLocation/);
   assert.match(fs.readFileSync("ability-engine.js", "utf8"), /type:"card\.discarded"/);
-  assert.match(source, /queueMovedCardAbility\(cost,"human","discard","hand",\{discardReason:"g-guardian-cost"\}\)/);
-  assert.match(source, /payment\.forEach\(cost=>queueMovedCardAbility\(cost,"human","discard","hand"\)\)/);
+  assert.match(source, /queueMovedCardAbility\(cost,"human","discard","hand",\{discardReason:"g-guardian-cost",calledGUnitCardId:instance\.cardId,calledGUnitInstanceId:instance\.uid,calledGUnitCardName:guardian\.name\|\|null,calledGUnitPreviousLocation:"g-deck"\}\)/);
+  assert.match(source, /payment\.forEach\(cost=>queueMovedCardAbility\(cost,"human","discard","hand",\{discardReason:"stride-cost",timingWindow:"stride-cost"\}\)\)/);
   assert.match(source, /queueMovedCardAbility\(discardCost,"bot","discard","hand"\)/);
-  assert.match(source, /queueMovedCardAbility\(heal,"bot","discard","hand",\{discardReason:"g-guardian-cost"\}\)/);
+  assert.match(source, /queueMovedCardAbility\(heal,"bot","discard","hand",\{discardReason:"g-guardian-cost",calledGUnitCardId:gGuardian\.cardId,calledGUnitInstanceId:gGuardian\.uid,calledGUnitCardName:cardMap\.get\(gGuardian\.cardId\)\?\.name\|\|null,calledGUnitPreviousLocation:"g-deck"\}\)/);
   assert.doesNotMatch(source, /queueAbilityPrompts\("damageLeave",x.side,card.uid/);
   assert.match(source, /targetZone:zone,boostUid:setup\.boostUid/);
   assert.match(source, /evaluateAbilityConditions\(a,/);
@@ -988,7 +996,7 @@ test("application routes AUTO eligibility through the exact-instance engine matc
   assert.match(source, /resolveReviewedAbility\(x,x\.ability\.definition\)/);
   assert.match(source, /resolveEffectProgram\(definition\.effects/);
   assert.ok(source.includes("canDeclineAbility(pending.ability)"));
-  assert.ok(source.includes("sourceToSoul:abilityCostCount(ability,\"source-to-soul\")"));
+  assert.ok(source.includes("sourceToSoul:abilityCostCount(ability,\"source-to-soul\",ability.costAlternatives?.[x.costAlternativeIndex])"));
   assert.ok(source.includes("met an AUTO trigger, but its effect is not reviewed and supported yet"));
   assert.ok(source.includes("!a.definition?.effects"));
   assert.ok(source.includes("This ability effect is not reviewed and supported yet; no cost was paid."));
@@ -1082,7 +1090,7 @@ test("remote ability decisions validate explicit choices and exact unique paymen
 });
 
 test("AUTO cost decisions may skip the entire post-cost effect without paying partial costs",()=>{
- const state={matchId:"auto-cost-room",stateVersion:4,processedActionIds:[]},pending={instance:{uid:"auto-card",controllerPlayerId:"guest"},ability:{id:"auto-card:0",kind:"AUTO",costs:[{type:"counter-blast",count:1},{type:"soul-blast",count:1}]}};
+ const state={matchId:"auto-cost-room",stateVersion:4,processedActionIds:[]},pending={instance:{uid:"auto-card",controllerPlayerId:"guest"},ability:{id:"auto-card:0",kind:"AUTO",canDecline:true,costs:[{type:"counter-blast",count:1},{type:"soul-blast",count:1}]}};
  const request={matchId:"auto-cost-room",actorPlayerId:"guest",actionId:"skip-cost",expectedStateVersion:4,accept:true,selection:{instanceUid:"auto-card",abilityId:"auto-card:0",payCost:false,costSelections:{cb:[],sb:[],discard:[],reveal:[]}}};
  assert.deepEqual(validateAbilityDecision(state,request,"guest",pending),{ok:true});
  assert.equal(validateAbilityDecision(state,{...request,actionId:"partial-cost",selection:{...request.selection,costSelections:{cb:["damage-a"],sb:[],discard:[],reveal:[]}}},"guest",pending).reason,"cost-not-skipped");
@@ -1103,7 +1111,7 @@ test("the app queues eligible AUTO abilities independently from cost payment and
  const app=fs.readFileSync("app.js","utf8"),requirements=app.slice(app.indexOf("function abilityRequirementsMet("),app.indexOf("function abilityTriggerMatches("));
  assert.match(requirements,/a\.kind!=="AUTO"&&!window\.VanguardAbilityEngine\.canPayAbilityCosts/);
  assert.match(app,/abilityCostPaymentAvailable\(ability,side,source\)\){const unpaid={side,field:source\.zone,instance:source\.instance,ability,eventContext,[\s\S]{0,250}skipCostPayment:true/);
- assert.match(app,/if\(x\.skipCostPayment&&ability\.kind==="AUTO"&&\(ability\.costs\|\|\[\]\)\.length\)/);
+ assert.match(app,/if\(x\.skipCostPayment&&ability\.kind==="AUTO"&&\(\(ability\.costs\|\|\[\]\)\.length\|\|\(ability\.costAlternatives\|\|\[\]\)\.length\)\)/);
  assert.match(app,/#ability-skip-cost/);
  assert.match(app,/pending\.skipCostPayment=selection\.payCost===false/);
 });
@@ -1398,7 +1406,12 @@ test("named-unit boost template requires the exact boosted card and only modifie
   assert.equal(resolveEffectProgram(ability.effects, EFFECT_HANDLERS, { ...context, targetCard: { type: "Unit", name: "Chain-attack Sutherland SP" } }).ok, false);
 
   const extraEffect = parseCardAbilities({ id: "cfa-104", text: "AUTO [RC]: When this unit boosts, the boosted unit gets power +3000 until end of that battle, and at the beginning of the end phase of that turn, return this unit to your deck, and shuffle your deck." })[0];
-  assert.equal(extraEffect.definition, null);
+  assert.equal(extraEffect.implementationStatus, "structured-effect-definition");
+  assert.equal(extraEffect.definition.source.patternId, "auto-boost-power-battle-then-return-self-end-phase-v1");
+  assert.deepEqual(extraEffect.effects, [
+    { op: "modify-power-target", target: "boosted-unit", amount: 3000, duration: "battle", targetFilter: { controller: "source-controller", cardType: "unit" } },
+    { op: "schedule-source-return-to-deck-at-turn-end", target: "source", due: "end-phase-start", shuffle: true }
+  ]);
 });
 
 test("real Doranbau and Gururubau abilities bind boost and attack effects to the current battle", () => {
@@ -1760,7 +1773,12 @@ test("ordinary stand phases and manual stand choices dispatch exact-instance sta
   const app = fs.readFileSync("app.js", "utf8");
   assert.match(app, /function standUnitAndQueue\(side, field\)[\s\S]{0,420}field\.instance\.rested=false[\s\S]{0,220}queueAbilityPrompts\("stand",side,field\.instance\.uid/);
   assert.match(app, /function standAllUnits\(side\)[\s\S]{0,1000}fields\.forEach\(field=>field\.instance\.rested=false\)/);
-  assert.match(app, /match\.side = "bot"; match\.phase = 0;[^\n]*queueTurnStartEvent\("bot"\);standAllUnits\("bot"\)/);
+  const botTurnStart = app.indexOf("function botTurn()");
+  const botTurnEnd = app.indexOf("function nextBotAttack", botTurnStart);
+  const botTurn = app.slice(botTurnStart, botTurnEnd);
+  assert.match(botTurn, /match\.side = "bot"; match\.phase = 0;/);
+  assert.ok(botTurn.indexOf("botTimer = setTimeout(") < botTurn.indexOf('queueTurnStartEvent("bot")'));
+  assert.ok(botTurn.indexOf('queueTurnStartEvent("bot")') < botTurn.indexOf('standAllUnits("bot")'));
   assert.match(app, /function completeTurnTransition\(endingPlayerId\)[\s\S]{0,2200}queueTurnStartEvent\("human"\);standAllUnits\("human"\)/);
   assert.match(app, /else if \(pending\.stage === "stand-target"\) \{ standUnitAndQueue\("human",unit\)/);
   assert.match(app, /if \(pending\.stage === "stand-target"\)[\s\S]{0,220}standUnitAndQueue\(side,target\)/);
@@ -1975,7 +1993,7 @@ test("real AUTO placement Soul Blast draw is limited to its exact unit on RC and
   const ability = parseCardAbilities({ id: "cfa-2406", text: "Royal Paladin/Human\n\nAUTO: [Soul Blast 2] When this unit is placed on RC, you may pay the cost. If you do, draw a card." })[0];
   assert.equal(ability.definition.source.patternId, "auto-place-rc-soul-blast-draw-v1");
   assert.deepEqual(ability.costs, [{ type: "soul-blast", count: 2 }]);
-  assert.deepEqual(ability.requiredLocation, [], "the Soul Blast cost bracket is not a Soul Circle restriction");
+  assert.deepEqual(ability.requiredLocation, ["rear-guard"], "the ability is restricted to its printed Rear-Guard Circle");
   assert.equal(ability.trigger.eventType, "card.placed");
   const event = createGameEvent({ matchId: "ladinas" }, { type: "card.placed", actingPlayerId: "p1", sourceCardInstanceId: "ladinas-copy", subjectCardInstanceId: "ladinas-copy", previousLocation: "hand", currentLocation: "rear-left", circle: "rear-left" });
   assert.equal(eventMatchesAbilityTrigger(ability, "place", event, "ladinas-copy", "rear-left", "rear-left"), true);
@@ -2141,7 +2159,7 @@ test("real Metalborg Drion center-column AUTO checks the exact Vanguard attack a
   assert.deepEqual(ability.conditions,[{type:"controller-has-center-column-rear-guard"}]);
   assert.equal(evaluateAbilityConditions(ability,{controllerCenterColumnRearGuard:true}),true);
   assert.equal(evaluateAbilityConditions(ability,{controllerCenterColumnRearGuard:false}),false);
-  const event=createGameEvent({matchId:"center-column"},{type:"unit.attacked",actingPlayerId:"p1",sourceCardInstanceId:"drion-copy",subjectCardInstanceId:"drion-copy",targetLocation:"vanguard"});
+  const event=createGameEvent({matchId:"center-column"},{type:"unit.attacked",actingPlayerId:"p1",sourceCardInstanceId:"drion-copy",subjectCardInstanceId:"drion-copy",targetLocation:"vanguard",phase:"battle"});
   assert.equal(eventMatchesAbilityTrigger(ability,"attack",event,"drion-copy","vanguard","vanguard","p1"),true);
   assert.equal(eventMatchesAbilityTrigger(ability,"attack",event,"other-copy","vanguard","vanguard","p1"),false);
   assert.equal(eventMatchesAbilityTrigger(ability,"attack",{...event,targetLocation:"rear-guard"},"drion-copy","vanguard","vanguard","p1"),false);
@@ -2550,7 +2568,7 @@ test("Main-phase Soul Charge AUTO matches only the controller entering Main and 
   assert.equal(resolved.ok, true);
   assert.deepEqual(player.soul.map(card => card.uid), ["soul-charge-top"]);
   assert.equal(source.turnPowerBoost, 2000);
-  assert.equal(source.turnPowerExpiry, "human");
+  assert.equal(source.turnPowerExpiry, "p1");
   assert.equal(isManuallyActivatable(ability), false);
   const app = fs.readFileSync("app.js", "utf8");
   assert.ok(app.includes('phase:"phase.changed"'));
@@ -2865,7 +2883,7 @@ test("Normal Order CONT power tracks the controller's order counter and only app
  const ability=parseCardAbilities({id:"normal-order-cont",text:"CONT [RC]: If you played a normal order this turn, this unit gets power +5000."})[0];
  assert.equal(ability.kind,"CONT");assert.equal(ability.definition?.source?.patternId,"cont-rc-normal-order-power-v1");assert.deepEqual(ability.definition.effects,[{op:"continuous-power",target:"source",amount:5000,duration:"continuous",condition:{op:"normal-order-played-this-turn"}}]);assert.equal(ability.conditionStatus,"no-explicit-condition-detected");assert.equal(isManuallyActivatable(ability),false);
  assert.deepEqual(evaluateContinuousEffects([ability],{location:"rear-guard",normalOrderPlayedThisTurn:false}),{power:0,critical:0,drive:0});assert.deepEqual(evaluateContinuousEffects([ability],{location:"rear-guard",normalOrderPlayedThisTurn:true}),{power:5000,critical:0,drive:0});assert.deepEqual(evaluateContinuousEffects([ability],{location:"vanguard",normalOrderPlayedThisTurn:true}),{power:0,critical:0,drive:0});
- const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("normalOrderPlayedThisTurn:match.side===side&&Number(match.ordersPlayedThisTurn||0)>0"));
+ const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("normalOrderPlayedThisTurn:match.side===side&&orderCount>0"));assert.ok(app.includes("orderPlayedThisTurn:match.side===side&&orderCount>0"));
 });
 
 test("discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride",()=>{
@@ -2911,7 +2929,7 @@ test("call-top-to-guardian effect moves only available top cards, rests them, ad
 test("Ride Phase discard trigger is tied to the exact discarded hand instance and Ride Phase",()=>{
   const ability=parseCardAbilities({id:"ride-bottom-draw",text:"AUTO: When this card is discarded from hand during your ride phase, COST [Soul Blast 1 & put this card on the bottom of deck], and draw a card."})[0];
   assert.equal(ability.definition.source.patternId,"auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1");assert.deepEqual(ability.costs,[{type:"soul-blast",count:1},{type:"source-to-bottom-deck",count:1}]);assert.equal(ability.costStatus,"supported-cost");assert.equal(ability.trigger.requiredPhase,"ride");assert.equal(ability.trigger.sourceLocation,"hand");
-  const event=createGameEvent({matchId:"ride-bottom-draw",eventSequence:1},{type:"card.discarded",actingPlayerId:"p1",sourceCardInstanceId:"source",subjectCardInstanceId:"source",previousLocation:"hand",currentLocation:"drop",phase:"ride"});
+  const event=createGameEvent({matchId:"ride-bottom-draw",eventSequence:1},{type:"card.discarded",actingPlayerId:"p1",turnPlayerId:"p1",sourceCardInstanceId:"source",sourceOwnerPlayerId:"p1",sourceControllerPlayerId:"p1",cardInstanceId:"source",subjectCardInstanceId:"source",subjectOwnerPlayerId:"p1",subjectControllerPlayerId:"p1",previousLocation:"hand",currentLocation:"drop",phase:"ride"});
   assert.equal(eventMatchesAbilityTrigger(ability,"discard",event,"source","drop","hand","p1"),true);assert.equal(eventMatchesAbilityTrigger(ability,"discard",event,"other","drop","hand","p1"),false);assert.equal(eventMatchesAbilityTrigger(ability,"discard",{...event,previousLocation:"rear-left"},"source","drop","hand","p1"),false);assert.equal(eventMatchesAbilityTrigger(ability,"discard",{...event,phase:"main"},"source","drop","hand","p1"),false);
 });
 
@@ -3028,6 +3046,36 @@ test("ACT Rest source front-row power targets only a different friendly front-ro
   assert.equal(matchesTargetFilter(ability.effects[0].targetFilter,{...invalid,targetCard:{type:"Normal Unit"}}),false);assert.equal(validateEffectProgram(ability.effects,EFFECT_HANDLERS,invalid).ok,false);assert.equal(invalid.target.turnPowerBoost,0);
   assert.equal(matchesTargetFilter(ability.effects[0].targetFilter,{...context,target:source,targetZone:"rear-left"}),false);
   assert.equal(matchesTargetFilter(ability.effects[0].targetFilter,{...context,targetControllerPlayerId:"p2",targetZone:"rear-right"}),false);
+});
+
+test("ACT Rest source clan-unit power compiles the four real clan variants and enforces the chosen unit's clan",()=>{
+  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");
+  const ids=new Set(["cfa-133:0","cfa-1535:0","cfa-1654:0","cfa-1748:0"]),abilities=[];
+  for(const card of loadCatalog())for(const ability of parseCardAbilities(card))if(ids.has(ability.id))abilities.push(ability);
+  assert.equal(abilities.length,4);
+  const clans=new Map([["cfa-133:0","Nova Grappler"],["cfa-1535:0","Gold Paladin"],["cfa-1654:0","Aqua Force"],["cfa-1748:0","Narukami"]]);
+  for(const ability of abilities){
+    const clan=clans.get(ability.id);
+    assert.equal(ability.definition?.source?.patternId,"act-rest-source-other-clan-unit-power-v1");
+    assert.equal(ability.definition.effects[0].amount,2000);
+    assert.deepEqual(ability.definition.effects[0].targetFilter,{controller:"source-controller",cardType:"unit",excludeSource:true,clan});
+    assert.deepEqual(ability.costs,[{type:"rest-source",count:1}]);
+    const source={uid:`source-${clan}`,rested:false,controllerPlayerId:"p1"};
+    const sameClan={uid:`ally-${clan}`,controllerPlayerId:"p1",turnPowerBoost:0};
+    const player={playerId:"p1",vanguard:sameClan,rear:[source],damage:[],soul:[],hand:[],drop:[]};
+    const paid=payAbilityCosts(ability,{player,source,side:"human",sourceZone:"rear-left"});
+    assert.equal(paid.ok,true,ability.id);
+    const context={source,sourceInPlay:true,side:"human",player,match:{},target:sameClan,targetInPlay:true,sourceControllerPlayerId:"p1",targetControllerPlayerId:"p1",targetCard:{type:"Normal Unit",clan},targetZone:"vanguard"};
+    assert.equal(validateEffectProgram(ability.effects,EFFECT_HANDLERS,context).ok,true,ability.id);
+    assert.equal(resolveEffectProgram(ability.effects,EFFECT_HANDLERS,context).ok,true,ability.id);
+    assert.equal(sameClan.turnPowerBoost,2000,ability.id);
+    const wrongClan={...context,target:{uid:`wrong-${clan}`,controllerPlayerId:"p1",turnPowerBoost:0},targetCard:{type:"Normal Unit",clan:"Other Clan"}};
+    assert.equal(matchesTargetFilter(ability.effects[0].targetFilter,wrongClan),false,ability.id);
+    assert.equal(validateEffectProgram(ability.effects,EFFECT_HANDLERS,wrongClan).ok,false,ability.id);
+    assert.equal(wrongClan.target.turnPowerBoost,0,ability.id);
+    assert.equal(matchesTargetFilter(ability.effects[0].targetFilter,{...context,target:source}),false,ability.id);
+    assert.equal(matchesTargetFilter(ability.effects[0].targetFilter,{...context,targetControllerPlayerId:"p2"}),false,ability.id);
+  }
 });
 
 test("Counter-Blast ACT wording During this turn uses the same exact source-power effect",()=>{
@@ -3176,7 +3224,7 @@ test("Dauntless Dominate Dragon locks only its exact normal drive-check card and
 
 test("the site cache-busts every changed engine script bundle",()=>{
   const html=fs.readFileSync("index.html","utf8");
-  assert.match(html,/ability-engine\.js\?v=20261027-success-1/);assert.match(html,/app\.js\?v=20261026-opening-mulligan-1/);assert.match(html,/ability-definitions\.js\?v=20261027-success-1/);
+  assert.match(html,/ability-engine\.js\?v=20261028-gc-race-protect-1/);assert.match(html,/app\.js\?v=20261028-bot-prompt-recovery-1/);assert.match(html,/ability-definitions\.js\?v=20261028-clan-hand-soul-1/);assert.match(html,/practice-bot\.js\?v=20261028-ability-batch-v1/);
 });
 
 test("ride-phase discard AUTO calls only its exact source from Drop to a legal rested circle",()=>{
@@ -3237,8 +3285,8 @@ test("G-Guardian discard AUTO requires the exact recorded G-Guardian payment rea
  assert.equal(matches(eventFor("stride-cost")),false);
  assert.equal(matches(eventFor("g-guardian-cost")),true);
  const app=fs.readFileSync("app.js","utf8");
- assert.match(app,/queueMovedCardAbility\(heal,"bot","discard","hand",\{discardReason:"g-guardian-cost"\}\)/);
- assert.match(app,/queueMovedCardAbility\(cost,"human","discard","hand",\{discardReason:"g-guardian-cost"\}\)/);
+ assert.match(app,/queueMovedCardAbility\(heal,"bot","discard","hand",\{discardReason:"g-guardian-cost",calledGUnitCardId:gGuardian\.cardId,calledGUnitInstanceId:gGuardian\.uid,calledGUnitCardName:cardMap\.get\(gGuardian\.cardId\)\?\.name\|\|null,calledGUnitPreviousLocation:"g-deck"\}\)/);
+ assert.match(app,/queueMovedCardAbility\(cost,"human","discard","hand",\{discardReason:"g-guardian-cost",calledGUnitCardId:instance\.cardId,calledGUnitInstanceId:instance\.uid,calledGUnitCardName:guardian\.name\|\|null,calledGUnitPreviousLocation:"g-deck"\}\)/);
  assert.match(app,/discardReason:eventContext\.discardReason\|\|eventContext\.reason\|\|null/);
 });
 
@@ -3352,12 +3400,15 @@ test("checking Harmony eligibility is read-only when an activation is rejected",
 });
 test("Revelation keywords compile to exact circle triggers and ordered optional Soul/rest effects",()=>{
   const {loadCatalog}=require("./scripts/audit-ability-catalog");
+  const trustedReducer=require("./ability-server-reducer.js");
   const catalog=loadCatalog();
   const records=[];
   for(const card of catalog)for(const ability of parseCardAbilities(card))if(ability.definition?.source?.patternId==="auto-revelation-keyword-v1")records.push({card,ability});
   assert.equal(records.length,23);
   for(const {card,ability} of records){
     assert.equal(ability.kind,"AUTO");assert.equal(ability.trigger.eventType,"card.placed");assert.equal(ability.trigger.subject,"source");
+    assert.ok(VanguardAbilityEngine.getReviewedAbilityDefinitionsForCard(card.id).some(item=>item.id===ability.id),"the exact Revelation ability is in the production registry");
+    assert.equal(trustedReducer.supportsServerAbilityEffects(ability),true,"the authoritative reducer supports the exact Revelation ability");
     assert.equal(ability.trigger.circles.includes("rear-guard"),/Revelation - RC|VC\/RC/i.test(ability.raw));
     assert.equal(ability.trigger.circles.includes("vanguard"),/Revelation - VC|VC\/RC/i.test(ability.raw));
     assert.equal(ability.definition.effects[0].op,"revelation-choice");assert.equal(ability.definition.effects[1].op,"rest-target");
@@ -3399,7 +3450,7 @@ test("Engorge refuses another unit's attack, a source target, and stale/duplicat
  const source={uid:"source"},ally={uid:"ally"},player={playerId:"p1",rear:[source,ally],drop:[]},base={source,player,side:"human",sourceInPlay:true,match:{pendingAttack:{attackerUid:"other",attackerSide:"human"}},engorgeTargetUids:[ally.uid]};assert.equal(resolveEffectProgram([{op:"engorge",target:"source"}],EFFECT_HANDLERS,base).ok,false);assert.deepEqual(player.rear,[source,ally]);assert.equal(player.drop.length,0);const attack={attackerUid:source.uid,attackerSide:"human"};for(const ids of [[source.uid],[ally.uid,ally.uid]])assert.equal(resolveEffectProgram([{op:"engorge",target:"source"}],EFFECT_HANDLERS,{...base,match:{pendingAttack:attack},engorgeTargetUids:ids}).ok,false);assert.deepEqual(player.rear,[source,ally]);
 });
 test("all real Engorge keyword records compile with exact attack trigger and effect",()=>{
- const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),rows=[];for(const card of loadCatalog())for(const ability of parseCardAbilities(card))if(ability.kind==="AUTO"&&ability.raw.startsWith("[VC")&&ability.raw.includes("Engorge"))rows.push(ability);assert.equal(rows.length,23);assert.ok(rows.every(ability=>ability.definition?.source?.patternId==="auto-engorge-retire-other-rearguards-v1"&&ability.trigger?.eventType==="unit.attacked"&&ability.trigger.subject==="source"&&ability.canDecline&&ability.choiceStatus==="modeled"));
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),reducer=require("./ability-server-reducer.js"),rows=[];for(const card of loadCatalog())for(const ability of parseCardAbilities(card))if(ability.kind==="AUTO"&&ability.raw.startsWith("[VC")&&ability.raw.includes("Engorge"))rows.push({card,ability});assert.equal(rows.length,23);assert.ok(rows.every(({card,ability})=>ability.definition?.source?.patternId==="auto-engorge-retire-other-rearguards-v1"&&ability.trigger?.eventType==="unit.attacked"&&ability.trigger.subject==="source"&&ability.canDecline&&ability.choiceStatus==="modeled"&&VanguardAbilityEngine.getReviewedAbilityDefinitionsForCard(card.id).some(item=>item.id===ability.id)&&reducer.supportsServerAbilityEffects(ability)));
 });
 test("joining player Engorge choices require current attack source and exact own Rear-Guard targets",()=>{
  const ability=parseCardAbilities({id:"remote-engorge",text:"AUTO [VC]: Engorge."})[0],source={uid:"attacker",controllerPlayerId:"p-guest"},ally={uid:"ally"},opponent={uid:"opponent-ally"},player={playerId:"p-guest",vanguard:source,rear:[source,ally],drop:[]},other={playerId:"p-host",rear:[opponent],drop:[]},state={matchId:"engorge-room",stateVersion:3,players:{bot:player,human:other},pendingAttack:{attackerUid:source.uid,attackerSide:"bot"}},pending={side:"bot",instance:source,triggerControllerPlayerId:"p-guest",ability},base={matchId:"engorge-room",actorPlayerId:"p-guest",actionId:"engorge-choice",expectedStateVersion:3,accept:true,selection:{instanceUid:source.uid,abilityId:ability.id,costSelections:{},engorgeTargetUids:[ally.uid]}};

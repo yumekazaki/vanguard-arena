@@ -39,7 +39,8 @@ function setup({ namedDrop = true, hostHasName = false, damage = true } = {}) {
   assert.ok(ability);
   assert.match(ability.printedText, /^AUTO: When this unit is placed on GC from hand, COST \[discard a card from hand\], choose one of your vanguards being attacked, and it cannot be hit until end of that battle\. If your drop has a ".+", Counter Charge 1\.$/);
   assert.deepEqual(ability.definition.effects.map(step => step.op), ["protect-target", "conditional-counter-charge"]);
-  Engine.registerAbilityDefinitions([ability.definition]);
+  assert.ok(Engine.getReviewedAbilityDefinitionsForCard(sourceDefinition.id).some(item => item.id === ability.id),
+    "the production registry, not a test-only registration, must trust this exact ability");
 
   const discard = makeInstance(definition("cfa-2"), "guest-cost", "guest");
   const source = makeInstance(sourceDefinition, "guest-guardian", "guest", { zone: "guardian", circle: "guardian" });

@@ -9,6 +9,9 @@ const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const catalog = loadCatalog();
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
+const BATCH = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
+  .filter(ability => ability.definition?.source?.patternId === "auto-gc-protect-then-conditional-discard-v1")
+  .map(ability => ({ cardId: String(card.id), abilityId: ability.id })));
 
 function definition(cardId) {
   const card = catalog.find(item => String(item.id) === String(cardId));
@@ -31,7 +34,6 @@ function setup(cardId, ownerSide = "bot", handCount = 2) {
   const card = definition(cardId);
   const ability = Engine.parseCardAbilitiesCached(card).find(item => item.definition?.source?.patternId === "auto-gc-protect-then-conditional-discard-v1");
   assert.ok(ability, `${cardId} has the audited conditional-discard family`);
-  Engine.registerAbilityDefinitions([ability.definition]);
 
   const source = instance(card, `${ownerSide}-guard-source`, ownerPlayerId, { zone: "guardian", circle: "guardian" });
   const ownHand = Array.from({ length: handCount }, (_, index) => instance(definition("cfa-2"), `${ownerSide}-hand-${index}`, ownerPlayerId));
@@ -61,6 +63,31 @@ function setup(cardId, ownerSide = "bot", handCount = 2) {
   assert.equal(discovered.queued.length, 1, `${ability.id} queues from this source's GC placement`);
   return { state, source, ability, ownHand, target, ownerSide, ownerPlayerId };
 }
+
+test("all 63 exact conditional Guardian Circle definitions are trusted in production", () => {
+  assert.equal(BATCH.length, 63);
+  for (const { cardId, abilityId } of BATCH) {
+    const ability = Engine.parseCardAbilitiesCached(definition(cardId)).find(item => item.id === abilityId);
+    assert.ok(Engine.getReviewedAbilityDefinitionsForCard(cardId).some(item => item.id === abilityId), abilityId);
+    assert.equal(Reducer.supportsServerAbilityEffects(ability), true, abilityId);
+    assert.equal(ability.trigger?.eventType, "card.placed", abilityId);
+    assert.deepEqual(ability.trigger?.circles, ["guardian"], abilityId);
+    assert.equal(ability.effects?.[0]?.op, "protect-target", abilityId);
+    assert.equal(ability.effects?.[1]?.op, "discard-from-hand", abilityId);
+  }
+});
+
+test("all 63 conditional Guardian Circle abilities independently resolve for both online players", () => {
+  for (const { cardId } of BATCH) for (const ownerSide of ["human", "bot"]) {
+    const fixture = setup(cardId, ownerSide), selectedUid = fixture.ownHand[0].uid;
+    const result = resolve(fixture, { effectDiscardUid: selectedUid }, `conditional-guardian-${cardId}-${ownerSide}`);
+    assert.equal(result.ok, true, `${cardId}:${ownerSide}: ${result.reason}`);
+    const own = fixture.state.players[ownerSide];
+    assert.equal(fixture.state.pendingAttack.perfectGuard, true, `${cardId}:${ownerSide}`);
+    assert.equal(own.drop.some(card => card.uid === selectedUid), true, `${cardId}:${ownerSide}`);
+    assert.equal(own.hand.length, 1, `${cardId}:${ownerSide}`);
+  }
+});
 
 function resolve(fixture, selection, actionId = "resolve-conditional-discard") {
   const actorAuthUid = fixture.ownerSide === "human" ? "auth-host" : "auth-guest";

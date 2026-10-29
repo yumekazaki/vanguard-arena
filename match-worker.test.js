@@ -5,6 +5,8 @@ const Engine = require("./ability-engine.js");
 require("./ability-definitions.js");
 const Reducer = require("./ability-server-reducer.js");
 const Worker = require("./supabase/functions/match-worker/worker-core.js");
+const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
+const abilityCatalog = loadCatalog();
 
 const MANUAL_CARD_ID = "cfa-19";
 const MANUAL_ABILITY_ID = `${MANUAL_CARD_ID}:0`;
@@ -226,6 +228,10 @@ test("canonical state validation rejects version drift, duplicate instances, and
   invalidGrade.state.players.bot.rear[1].grade = 1.5;
   assert.equal(Worker.validateCanonicalMatchState(invalidGrade.state, 2, Worker.seatMapping(invalidGrade)).reason, "invalid-card-grade");
 
+  const invalidClan = claimedCommand();
+  invalidClan.state.players.bot.rear[1].clans = ["Gold Paladin", 7];
+  assert.equal(Worker.validateCanonicalMatchState(invalidClan.state, 2, Worker.seatMapping(invalidClan)).reason, "invalid-card-clan-metadata");
+
   const invalidLegionMate = claimedCommand();
   invalidLegionMate.state.players.bot.rear[0].legionMateInstanceId = invalidLegionMate.state.players.bot.rear[0].uid;
   assert.equal(Worker.validateCanonicalMatchState(invalidLegionMate.state, 2, Worker.seatMapping(invalidLegionMate)).reason, "invalid-legion-mate-instance");
@@ -353,7 +359,7 @@ test("reviewed booster AUTO buffs only its exact boosted Blaster Dark and reject
   const booster = state.players.bot.rear[0], attacker = state.players.bot.rear[1];
   booster.cardId = "cfa-16"; booster.type = "Unit"; booster.cardName = "Knight of Elegant Skills, Gareth";
   booster.boostAbility = true; booster.power = 7000; booster.rested = false;
-  attacker.cardName = "Blaster Dark"; attacker.type = "Unit"; attacker.unitCard = true;
+  attacker.cardId = "cfa-20"; attacker.cardName = "Blaster Dark"; attacker.type = "Unit"; attacker.unitCard = true;
   attacker.power = 10000; attacker.critical = 1; attacker.rested = false;
   state.players.bot.rear = [attacker, null, booster];
   state.players.human.vanguard = { uid: "host-vanguard", cardId: "host-vg", ownerPlayerId: "host-player", controllerPlayerId: "host-player", type: "Unit", power: 13000, critical: 1, grade: 3, unitCard: true };
@@ -368,7 +374,7 @@ test("reviewed booster AUTO buffs only its exact boosted Blaster Dark and reject
   const boosterAbility = Engine.parseCardAbilities({ id: booster.cardId, text: Engine.getReviewedAbilityDefinitionsForCard(booster.cardId)[0]?.printedText })[0];
   assert.equal(Engine.eventMatchesAbilityTrigger(boosterAbility, "boost", boostEvent, booster.uid, "rear-back-left", "rear-back-left", "guest-player"), true);
   assert.equal(state.pendingAbility?.instance.uid, booster.uid);
-  assert.equal(state.pendingAbility?.eventContext.gameEvent.boostedCardInstanceId, attacker.uid, JSON.stringify(state.pendingAbility?.eventContext.gameEvent));
+  assert.equal(state.pendingAbility?.eventContext.gameEvent.boostedCardInstanceId, attacker.uid);
   const pending = state.pendingAbility, version = state.stateVersion;
   const wrong = Reducer.applyAbilityDecision(state, {
     actorAuthUid: "auth-guest", actionId: "wrong-target", expectedStateVersion: version,
@@ -486,7 +492,10 @@ test("reviewed Revelation resolves its private Soul choice and rests only the jo
   const { loadCatalog } = require("./scripts/audit-ability-catalog");
   const catalogCard = loadCatalog().find(card => card.id === "cfa-4033");
   assert.ok(catalogCard);
-  Engine.registerAbilityDefinitions(Engine.parseCardAbilities(catalogCard).map(ability => ability.definition).filter(Boolean));
+  const revelationAbility = Engine.parseCardAbilities(catalogCard).find(ability => ability.definition?.source?.patternId === "auto-revelation-keyword-v1");
+  assert.ok(revelationAbility);
+  assert.ok(Engine.getReviewedAbilityDefinitionsForCard(catalogCard.id).some(item => item.id === revelationAbility.id),
+    "the production registry must trust Revelation without test-only registration");
   const source = { uid: "revelation-source", cardId: "cfa-4033", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player", cardName: "Revelation Unit", type: "Unit", grade: 2, unitCard: true };
   const rear = { uid: "guest-rear", cardId: "rear-unit", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player", type: "Unit", grade: 1, rested: false };
   const opponentRear = { uid: "host-rear", cardId: "opponent-rear", ownerPlayerId: "host-player", controllerPlayerId: "host-player", type: "Unit", grade: 1, rested: false };
@@ -707,6 +716,71 @@ test("trusted Stride resolves a nonzero-index reviewed Hand grade modifier for t
   state.players.human.vanguard={uid:"index-host-vg",cardId:"host-vg",ownerPlayerId:"host-player",controllerPlayerId:"host-player",grade:2,type:"Unit",unitCard:true};
   const result=Reducer.applyGameAction(state,{actorAuthUid:"auth-guest",actionId:"stride-nonzero-index-modifier",expectedStateVersion:state.stateVersion,payload:{type:"game-action",action:"stride",strideCardInstanceId:stride.uid,costCardInstanceIds:[steamBreath.uid]}},Worker.seatMapping(claim),Engine);
   assert.equal(result.ok,true,JSON.stringify(result));assert.equal(state.players.bot.vanguard.uid,stride.uid);assert.equal(state.players.bot.drop[0].uid,steamBreath.uid);
+});
+
+test("all 34 exact Hand CONT grade-three Stride replacements preserve their catalog text and legal window",()=>{
+  const matches=[];
+  for(const card of abilityCatalog)for(const ability of Engine.parseCardAbilitiesCached(card)){
+    if(ability.definition?.source?.patternId!=="cont-hand-stride-cost-treated-grade-three-v1")continue;
+    matches.push({card,ability});
+    assert.equal(ability.kind,"CONT",card.id);
+    assert.deepEqual(ability.requiredLocation,["hand"],card.id);
+    assert.equal(Engine.isManuallyActivatable(ability),false,card.id);
+    assert.deepEqual(ability.definition.effects,[{op:"continuous-grade",target:"source",amount:3,duration:"stride-payment",condition:{op:"paying-stride-cost"},mode:"treat-as-grade-three"}],card.id);
+    assert.deepEqual(Engine.evaluateStrideCostGrade([ability],{location:"hand",isPayingStrideCost:true}),{grade:0,treatedAsGradeThree:true},card.id);
+    assert.deepEqual(Engine.evaluateStrideCostGrade([ability],{location:"hand",isPayingStrideCost:false}),{grade:0},card.id);
+    assert.deepEqual(Engine.evaluateStrideCostGrade([ability],{location:"rear-guard",isPayingStrideCost:true}),{grade:0},card.id);
+  }
+  assert.equal(matches.length,34);
+});
+
+test("all 30 exact Hand CONT grade bonuses authorize Stride for both seats",()=>{
+  const matches=[];
+  for(const card of abilityCatalog)for(const ability of Engine.parseCardAbilitiesCached(card)){
+    if(ability.definition?.source?.patternId!=="cont-hand-stride-cost-grade-boost-v1")continue;
+    matches.push({card,ability});
+    assert.equal(ability.kind,"CONT",card.id);
+    assert.deepEqual(ability.requiredLocation,["hand"],card.id);
+    assert.equal(Engine.isManuallyActivatable(ability),false,card.id);
+    assert.deepEqual(ability.definition.effects,[{op:"continuous-grade",target:"source",amount:2,duration:"stride-payment",condition:{op:"paying-stride-cost"}}],card.id);
+    assert.deepEqual(Engine.evaluateStrideCostGrade([ability],{location:"hand",isPayingStrideCost:true}),{grade:2},card.id);
+    assert.deepEqual(Engine.evaluateStrideCostGrade([ability],{location:"hand",isPayingStrideCost:false}),{grade:0},card.id);
+    assert.deepEqual(Engine.evaluateStrideCostGrade([ability],{location:"rear-guard",isPayingStrideCost:true}),{grade:0},card.id);
+  }
+  assert.equal(matches.length,30);
+  for(const {card} of matches)for(const side of ["human","bot"]){
+    const claim=claimedCommand(),state=claim.state,player=state.players[side],other=state.players[side==="human"?"bot":"human"],actor=player.playerId;
+    const heart={uid:`stride-grade-heart-${card.id}-${side}`,cardId:"stride-test-heart",ownerPlayerId:actor,controllerPlayerId:actor,grade:3,unitCard:true,rested:true};
+    const stride={uid:`stride-grade-g-${card.id}-${side}`,cardId:"stride-test-g-unit",ownerPlayerId:actor,controllerPlayerId:actor,grade:4,gDeckCard:true,faceUp:false};
+    const cost={uid:`stride-grade-cost-${card.id}-${side}`,cardId:card.id,cardName:card.name,ownerPlayerId:actor,controllerPlayerId:actor,grade:card.grade};
+    player.vanguard=heart;player.gDeck=[stride];player.hand=[cost];player.drop=[];
+    other.vanguard={uid:`stride-grade-other-${card.id}-${side}`,cardId:"other-vanguard",ownerPlayerId:other.playerId,controllerPlayerId:other.playerId,grade:3,unitCard:true};
+    state.side=side;state.phase=3;state.turn=13;state.stridePerformed=false;state.turnStartGrades={human:3,bot:3};
+    state.pendingAttack=null;state.pendingAbility=null;state.pendingAbilities=[];state.pendingTrigger=null;
+    const result=Reducer.applyGameAction(state,{actorAuthUid:side==="human"?"auth-host":"auth-guest",actionId:`stride-grade-${card.id}-${side}`,expectedStateVersion:state.stateVersion,payload:{type:"game-action",action:"stride",strideCardInstanceId:stride.uid,costCardInstanceIds:[cost.uid]}},Worker.seatMapping(claim),Engine);
+    assert.equal(result.ok,true,`${card.id} (${side}): ${JSON.stringify(result)}`);
+    assert.equal(player.vanguard.uid,stride.uid,card.id);
+    assert.deepEqual(player.drop.map(item=>item.uid),[cost.uid],card.id);
+    assert.equal(other.drop.length,0,card.id);
+  }
+});
+
+test("the exact catalog Hand grade-three replacement pays for Stride for either seat",()=>{
+  for(const side of ["human","bot"]){
+    const claim=claimedCommand(),state=claim.state,player=state.players[side],other=state.players[side==="human"?"bot":"human"],actor=player.playerId;
+    const heart={uid:`grade-three-heart-${side}`,cardId:"stride-test-heart",cardName:"Stride Test Vanguard",ownerPlayerId:actor,controllerPlayerId:actor,grade:3,unitCard:true,rested:true};
+    const stride={uid:`grade-three-g-unit-${side}`,cardId:"stride-test-g-unit",cardName:"Stride Test G Unit",ownerPlayerId:actor,controllerPlayerId:actor,grade:4,gDeckCard:true,faceUp:false};
+    const cost={uid:`wedgemove-cost-${side}`,cardId:"cfa-6210",cardName:"Wedgemove Dragon",ownerPlayerId:actor,controllerPlayerId:actor,grade:1};
+    player.vanguard=heart;player.gDeck=[stride];player.hand=[cost];player.drop=[];
+    other.vanguard={uid:`other-heart-${side}`,cardId:"other-vanguard",ownerPlayerId:other.playerId,controllerPlayerId:other.playerId,grade:3,unitCard:true};
+    state.side=side;state.phase=3;state.turn=12;state.stridePerformed=false;state.turnStartGrades={human:3,bot:3};
+    state.pendingAttack=null;state.pendingAbility=null;state.pendingAbilities=[];state.pendingTrigger=null;
+    const result=Reducer.applyGameAction(state,{actorAuthUid:side==="human"?"auth-host":"auth-guest",actionId:`exact-grade-three-cost-${side}`,expectedStateVersion:state.stateVersion,payload:{type:"game-action",action:"stride",strideCardInstanceId:stride.uid,costCardInstanceIds:[cost.uid]}},Worker.seatMapping(claim),Engine);
+    assert.equal(result.ok,true,JSON.stringify(result));
+    assert.equal(player.vanguard.uid,stride.uid);
+    assert.deepEqual(player.drop.map(card=>card.uid),[cost.uid]);
+    assert.equal(other.drop.length,0);
+  }
 });
 
 test("trusted Ultimate Stride requires one exact card sharing a name with the Vanguard or its heart", () => {
@@ -1221,9 +1295,11 @@ test("drive checks reveal the exact card, then only its player resolves the trig
 });
 
 test("the Front Trigger effect resolves before its matching AUTO and the checked card remains in the trigger zone", () => {
-  const cardId = "drive-critical-auto-source";
-  const printedText = "AUTO [VC/RC] 1/Turn: When your drive check reveals a front trigger, you may have this unit get critical +1 until end of turn.";
-  Engine.registerAbilityDefinitions([{ id: `${cardId}:0`, cardId, kind: "AUTO", printedText, source: { patternId: "auto-drive-check-front-trigger-critical-turn-v1", review: "drive-check trigger-order regression" }, effects: [{ op: "modify-critical", target: "source", amount: 1, duration: "turn" }] }]);
+  const cardId = "cfa-7110";
+  const catalogCard = abilityCatalog.find(card => card.id === cardId);
+  assert.ok(catalogCard, "the real Front-trigger AUTO source is in the catalog");
+  const ability = Engine.parseCardAbilitiesCached(catalogCard).find(item => item.id === `${cardId}:0`);
+  assert.ok(ability, "the exact catalog ability is compiled and trusted");
   const claim = claimedCommand();
   claim.state.side = "bot"; claim.state.phase = 5; claim.state.turn = 2;
   claim.state.pendingAbility = null; claim.state.pendingAbilities = []; claim.state.pendingTrigger = null;
@@ -1251,7 +1327,7 @@ test("the Front Trigger effect resolves before its matching AUTO and the checked
   assert.equal(claim.state.players.bot.hand.some(card => card.uid === reveal.uid), false);
   const auto = Reducer.applyAbilityDecision(claim.state, {
     actorAuthUid: "auth-guest", actionId: "resolve-drive-auto", expectedStateVersion: claim.state.stateVersion,
-    payload: { accept: false, selection: { instanceUid: source.uid, abilityId: `${cardId}:0` } }
+    payload: { accept: false, selection: { instanceUid: source.uid, abilityId: ability.id } }
   }, Worker.seatMapping(claim), Engine);
   assert.equal(auto.ok, true, auto.reason);
   assert.equal(claim.state.players.bot.triggerZone.length, 0);

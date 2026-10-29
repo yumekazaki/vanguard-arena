@@ -65,7 +65,7 @@ test("a real trigger drive check resolves the source ability for its controller 
     }, seats, Engine);
     assert.equal(result.ok, true, result.reason);
     assert.equal(f.source.turnPowerBoost, 5000);
-    assert.equal(f.source.turnPowerExpiry, side);
+    assert.equal(f.source.turnPowerExpiry, f.playerId);
   }
 });
 

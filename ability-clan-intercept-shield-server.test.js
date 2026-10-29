@@ -17,12 +17,13 @@ const instance = (definition, uid, playerId, extra = {}) => ({ uid, cardId: Stri
 function setup({ cardId = CARD_IDS[0], side = "bot", clanOverride, eventOverride = {} } = {}) {
   const sourceDef = card(cardId), ability = Engine.parseCardAbilitiesCached(sourceDef).find(item => item.definition?.source?.patternId === PATTERN);
   assert.ok(ability, `${cardId} compiles to ${PATTERN}`);
-  Engine.registerAbilityDefinitions([ability.definition]);
   const clan = ability.conditions[0].value, ownerId = side === "human" ? "host" : "guest", ownerAuth = side === "human" ? seats.hostAuthUid : seats.guestAuthUid;
   const attackerSide = side === "human" ? "bot" : "human", attackerId = attackerSide === "human" ? "host" : "guest";
   const source = instance(sourceDef, `${side}-interceptor`, ownerId, { zone: "guardian", circle: "guardian" });
-  const ownerVanguard = instance(card("cfa-3"), `${side}-vg`, ownerId, { clan: ["opponent", "owner-missing"].includes(clanOverride) ? "Different Clan" : clan, clans: [["opponent", "owner-missing"].includes(clanOverride) ? "Different Clan" : clan] });
-  const attackerVanguard = instance(card("cfa-3"), `${attackerSide}-vg`, attackerId, { clan: clanOverride === "owner-missing" ? clan : "Different Clan", clans: [clanOverride === "owner-missing" ? clan : "Different Clan"] });
+  const ownerClan = ["opponent", "owner-missing"].includes(clanOverride) ? "Different Clan" : clan;
+  const attackerClan = clanOverride === "owner-missing" ? clan : "Different Clan";
+  const ownerVanguard = instance({ ...card("cfa-3"), id: `test-owner-vanguard-${side}`, clan: ownerClan, clans: [ownerClan] }, `${side}-vg`, ownerId);
+  const attackerVanguard = instance({ ...card("cfa-3"), id: `test-attacker-vanguard-${side}`, clan: attackerClan, clans: [attackerClan] }, `${attackerSide}-vg`, attackerId);
   const owner = { playerId: ownerId, vanguard: ownerVanguard, rear: [], hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [source], gDeck: [], gZone: [], triggerZone: [] };
   const attacker = { playerId: attackerId, vanguard: attackerVanguard, rear: [], hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] };
   const players = side === "human" ? { human: owner, bot: attacker } : { human: attacker, bot: owner };
@@ -44,6 +45,7 @@ test("all 18 clan-qualified Intercept definitions are exact and server-gated", (
   for (const definition of catalog) for (const ability of Engine.parseCardAbilitiesCached(definition)) if (ability.definition?.source?.patternId === PATTERN) family.push(ability);
   assert.equal(family.length, 18);
   assert.deepEqual(family.map(ability => ability.cardId).sort(), CARD_IDS.slice().sort());
+  assert.ok(family.every(ability => Engine.getReviewedAbilityDefinitionsForCard(ability.cardId).some(entry => entry.id === ability.id)), "every family ability is trusted in the production registry");
   assert.ok(family.every(ability => Reducer.supportsServerAbilityEffects(ability)));
   for (const ability of family) {
     assert.equal(ability.kind, "AUTO");
