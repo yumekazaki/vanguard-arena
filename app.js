@@ -631,7 +631,7 @@
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog(); renderGAssistDialog(); renderRemotePaymentPrompt();
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
-    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal();
+    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderBattleActionPrompt(); renderAttackArrow(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal();
     if(!online.applyingRemote)showNextAbilityPrompt();
     if (!online.applyingRemote && match.pendingAttack?.awaitingDrive) setTimeout(resolvePracticeAttackAfterDrives, 0);
     if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
@@ -1130,6 +1130,61 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     $("#attack-choice-buttons").innerHTML = choices.map((choice) => `<button class="button button-primary" type="button" data-attack-choice="${escapeHtml(choice.value)}">${escapeHtml(choice.label)}</button>`).join("");
     panel.hidden = false;
   }
+  function renderBattleActionPrompt() {
+    const panel = $("#battle-action-panel"), attack = match?.pendingAttack, choicePanel = $("#attack-choice-panel");
+    if (!panel) return;
+    if (!attack || !choicePanel?.hidden || match.pendingAbility || match.pendingTrigger || (match.pendingDamageQueue || []).length) { panel.hidden = true; return; }
+    const buttons = $("#battle-action-buttons");
+    let title = "", help = "", actions = [];
+    if (attack.defenderSide === "human" && !attack.defenderDone && !attack.driveCountPrompt) {
+      const player = match.players.human;
+      const attackerGrade = Number(cardMap.get(match.players[attack.attackerSide]?.vanguard?.cardId)?.grade ?? -1);
+      const ownGrade = Number(cardMap.get(player.vanguard?.cardId)?.grade ?? -1);
+      title = "Defend this attack";
+      help = "Choose how to defend. Your guard and G-Guard decisions stay on your screen.";
+      actions.push({ id: "guard", label: "Guard" }, { id: "noGuard", label: "No guard" });
+      const canGGuard = ownGrade >= 3 && attackerGrade >= 3 && player.hand.some(item => triggerKind(item) === "heal") && (player.gDeck || []).some(item => !item.faceUp && isGGuardian(cardMap.get(item.cardId)));
+      if (canGGuard) actions.push({ id: "g-guard", label: "G-Guard" });
+      if (eligibleInterceptors().length) actions.push({ id: "intercept", label: "Intercept" });
+    } else if (attack.attackerSide === "human" && attack.defenderDone && !attack.awaitingDrive && !attack.driveCountPrompt) {
+      title = "Attack resolution complete";
+      help = "Drive checks and attack effects are resolved. End the attack to continue.";
+      actions.push({ id: "finishAttack", label: "End this attack" });
+    } else if (attack.attackerSide === "human" && !attack.defenderDone) {
+      title = "Waiting for defense";
+      help = "The defending player is choosing whether and how to guard.";
+    } else {
+      panel.hidden = true;
+      return;
+    }
+    $("#battle-action-title").textContent = title;
+    $("#battle-action-help").textContent = help;
+    buttons.innerHTML = actions.map(item => '<button class="button button-primary" type="button" data-battle-action="' + item.id + '">' + item.label + '</button>').join("");
+    panel.hidden = false;
+  }
+  function renderAttackArrow() {
+    const layer = $("#attack-arrow-layer"), table = $(".game-table"), attack = match?.pendingAttack;
+    if (!layer || !table || !attack?.targetUid) { if (layer) { layer.hidden = true; layer.dataset.attackId = ""; } return; }
+    const sourceZone = Array.from(table.querySelectorAll(".field-zone")).find(zone => zone.dataset.side === attack.attackerSide && zone.dataset.zone === attack.attackerZone);
+    const targetZone = Array.from(table.querySelectorAll(".field-zone")).find(zone => zone.dataset.side === attack.defenderSide && zone.dataset.zone === attack.targetZone);
+    const source = sourceZone?.querySelector(".field-card") || sourceZone, target = targetZone?.querySelector(".field-card") || targetZone;
+    if (!source || !target) { layer.hidden = true; return; }
+    const bounds = table.getBoundingClientRect(), from = source.getBoundingClientRect(), to = target.getBoundingClientRect();
+    const x1 = from.left + from.width / 2 - bounds.left, y1 = from.top + from.height / 2 - bounds.top;
+    const x2 = to.left + to.width / 2 - bounds.left, y2 = to.top + to.height / 2 - bounds.top;
+    const id = String(attack.battleId || (attack.attackerUid + ":" + attack.targetUid));
+    layer.setAttribute("viewBox", "0 0 " + Math.max(1, table.clientWidth) + " " + Math.max(1, table.clientHeight));
+    const path = layer.querySelector(".attack-arrow-path");
+    if (layer.dataset.attackId !== id || !path) {
+      layer.innerHTML = '<defs><marker id="attack-arrow-head" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" class="attack-arrow-head"></path></marker></defs><path class="attack-arrow-path" marker-end="url(#attack-arrow-head)"></path><circle class="attack-arrow-origin" r="7"></circle>';
+      layer.dataset.attackId = id;
+    }
+    const dx = x2 - x1, dy = y2 - y1;
+    layer.querySelector(".attack-arrow-path").setAttribute("d", "M " + x1 + " " + y1 + " C " + (x1 + dx * .28) + " " + (y1 + dy * .08) + ", " + (x2 - dx * .28) + " " + (y2 - dy * .08) + ", " + x2 + " " + y2);
+    layer.querySelector(".attack-arrow-origin").setAttribute("cx", x1);
+    layer.querySelector(".attack-arrow-origin").setAttribute("cy", y1);
+    layer.hidden = false;
+  }
   function finishTriggerResolution() {
     const pending = match?.pendingTrigger;
     if (!pending) return;
@@ -1196,7 +1251,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     $("#check-reveal-label").textContent = `${match.players[reveal.side]?.name || "A player"} · ${({ damage: "Damage check", trigger: "Trigger check", drive: "Drive check" })[reveal.checkName] || "Card revealed"}`;
     $("#check-reveal-card").innerHTML = card ? `${cardImage(card, "check-reveal-art")}<b>${escapeHtml(card.name)}</b>` : "Card revealed";
     panel.hidden = false; panel.classList.remove("flash"); void panel.offsetWidth; panel.classList.add("flash");
-    checkRevealTimer = setTimeout(() => { panel.hidden = true; panel.classList.remove("flash"); activeCheckRevealId = null; checkRevealTimer = null; renderCheckReveal(); }, 650);
+    checkRevealTimer = setTimeout(() => { panel.hidden = true; panel.classList.remove("flash"); activeCheckRevealId = null; checkRevealTimer = null; renderCheckReveal(); }, 1150);
   }  function beginTriggerResolution(side, instance, checkName) {
     queueCheckReveal(side, instance, checkName);
     const kind = triggerKind(instance); if (!kind) return false;
@@ -2549,6 +2604,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#stride-cost-confirm").addEventListener("click",()=>performManualAction("stride-confirm"));
   ["#stride-cost-cancel","#stride-cost-cancel-button"].forEach((selector)=>$(selector).addEventListener("click",()=>performManualAction("stride-cancel")));
   $("#attack-choice-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
+  $("#battle-action-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-battle-action]");if(!button)return;const action=button.dataset.battleAction;if(action==="g-guard"||action==="intercept")performManualAction(action);else performOnlineAction(action);});
+  window.addEventListener("resize",renderAttackArrow);
   $("#protect-discard-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-protect-cost]");if(!button)return;const marker=$("#protect-discard-dialog").dataset.markerUid;$("#protect-discard-dialog").close();performManualAction(`guard-perfect:${marker}:${button.dataset.protectCost}`);});
   $("#intercept-card-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-intercept-uid]");if(!button)return;$("#intercept-dialog").close();performManualAction(`intercept:${button.dataset.interceptUid}`);});
   $("#bind-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=e.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove);});
