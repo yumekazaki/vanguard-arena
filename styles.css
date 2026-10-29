@@ -171,3 +171,39 @@
 #attack-arrow-layer.attack-arrow-layer{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;z-index:9500!important;overflow:visible;pointer-events:none}.attack-arrow-glow{stroke:#ffbf35!important;stroke-width:13!important;stroke-dasharray:none!important;opacity:.48;filter:drop-shadow(0 0 9px #ffb52b)}.attack-arrow-layer .attack-arrow-path:not(.attack-arrow-glow){stroke:#fff1a8!important;stroke-width:6!important;stroke-dasharray:14 8!important;filter:drop-shadow(0 0 8px #ffb52b);animation:attack-arrow-flow .55s linear infinite}.attack-arrow-layer .attack-arrow-head{fill:#fff1a8!important;stroke:#ff9e36;stroke-width:1.5}.attack-arrow-layer .attack-arrow-origin{fill:#fff2ad;stroke:#ff9e36;stroke-width:3;filter:drop-shadow(0 0 8px #ffac3b);animation:attack-arrow-pulse .7s ease-in-out infinite alternate}
 
 .turn-order-flash strong{font:700 clamp(26px,7vw,48px)/1.15 var(--display);letter-spacing:-.03em;color:#fff;text-shadow:0 3px 18px #cf8cf4aa;text-align:center}
+
+
+/* Player-controlled phone-first layout. The existing responsive layout remains active by default. */
+.mobile-mode{font-size:16px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.mobile-mode .app-shell{max-width:none;padding:0 12px}
+.mobile-mode .topbar{position:sticky;top:0;z-index:1000;height:auto;min-height:0;padding:8px 0 0;gap:7px;flex-wrap:wrap;background:#101117f5;backdrop-filter:blur(14px)}
+.mobile-mode .brand{gap:8px;font-size:12px}.mobile-mode .brand-mark{width:32px;height:32px}
+.mobile-mode .brand small{font-size:8px}
+.mobile-mode .topbar-right{margin-left:auto;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.mobile-mode .mobile-mode-button,.mobile-mode .account-button{min-height:42px;padding:0 11px}
+.mobile-mode .main-nav{order:3;width:100%;height:48px;justify-content:flex-start;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
+.mobile-mode .main-nav::-webkit-scrollbar{display:none}
+.mobile-mode .nav-button{min-height:44px;padding:0 14px;white-space:nowrap}
+.mobile-mode .nav-button.active:after{bottom:0}
+.mobile-mode .view{padding:14px 0 28px}
+.mobile-mode .page-heading{gap:10px}
+.mobile-mode .match-layout{grid-template-columns:minmax(0,1fr);gap:12px}
+.mobile-mode .match-rail{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.mobile-mode .match-log-card,.mobile-mode .prototype-note{grid-column:1/-1}
+.mobile-mode .game-table{height:min(145vw,76dvh);min-height:460px;margin-bottom:12px}
+.mobile-mode .field-row,.mobile-mode .rear-row{width:76%;left:12%}
+.mobile-mode .field-zone{min-height:74px}
+.mobile-mode .hand-panel{position:sticky;bottom:0;z-index:30;padding:10px;background:#171920f5;backdrop-filter:blur(12px);border:1px solid #ffffff20;box-shadow:0 -8px 28px #0008}
+.mobile-mode .hand-cards{min-height:138px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity}
+.mobile-mode .game-card-wrap{scroll-snap-align:center;flex-basis:96px;width:96px;height:137px}
+.mobile-mode .attack-choice-panel,.mobile-mode .battle-action-panel{position:fixed;z-index:12000;left:50%;top:auto;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(680px,calc(100vw - 20px));max-height:min(58dvh,520px);padding:14px;overflow:auto;overscroll-behavior:contain}
+.mobile-mode dialog{max-width:calc(100vw - 20px);max-height:calc(100dvh - 24px);overflow:auto}
+.mobile-mode .button,.mobile-mode button{min-height:42px;touch-action:manipulation}
+.mobile-mode .field-card,.mobile-mode .field-zone,.mobile-mode .zone-card{touch-action:manipulation}
+.mobile-mode input,.mobile-mode select{min-height:42px;font-size:16px}
+.mobile-mode .library-grid,.mobile-mode .builder-card-grid{grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:9px}
+.mobile-mode .card-search-row{position:sticky;top:102px;z-index:20;padding:8px 0;background:#0e0f14ed}
+.mobile-mode .app-footer{padding-bottom:max(18px,env(safe-area-inset-bottom))}
+@media(max-width:560px){.mobile-mode .local-pill{display:none}.mobile-mode .match-rail .status-card,.mobile-mode .match-rail .turn-controls{min-height:0}.mobile-mode .game-table{min-height:430px}.mobile-mode .battle-action-panel,.mobile-mode .attack-choice-panel{bottom:max(8px,env(safe-area-inset-bottom));max-height:62dvh}}
+.mobile-mode-button{border:1px solid #a39bff66;border-radius:9px;background:#a39bff13;color:#dedaff;padding:0 12px;font:600 11px var(--mono);letter-spacing:.02em;white-space:nowrap}
+.mobile-mode-button:hover,.mobile-mode-button[aria-pressed="true"]{background:#a39bff2b;border-color:#b7afff;color:#fff}
