@@ -66,7 +66,7 @@ The full catalog is not complete: 13,066 abilities remain unsupported or unrevie
 
 ## Latest local checkpoint (2026-10-29)
 
-- Active working branch: `work/primary-engine-vanguard-20261028-resume`, based on local commit `182a558b2170107b3849072406e48d75a3302d39`.
+- Active working branch: `work/primary-engine-vanguard-20261028-resume`, with local checkpoints `b7d73d86cf2e52b8638f76c86fdb1ccaf3175dbf` (engine, tests, manifests) and `797498019614d8d404a019057a33914568930d42` (contribution sources), based on `182a558b2170107b3849072406e48d75a3302d39`.
 - The local checkout now includes the two exact ACT definitions from batch `ABILITY-0003`, the exact own-attack AUTO `cfa-10097:0` from batch `ABILITY-0004`, and a shared reducer gate that prevents mandatory AUTO abilities from entering the prompt queue when their structured costs cannot be paid. Ability-level evidence is recorded for these three IDs and the `cfa-10047:0` ride trigger; none of these records marks a whole card fully verified.
 - Latest full suite: 1,304/1,304 passed after the mandatory-AUTO-cost reducer change; the source validation digest is in `card-verification-manifest.json` and `catalog-progress.json`.
 - The local catalog currently reports 4,177/17,240 abilities compiled (24.23%) and 13,063 unsupported or unreviewed; one card is fully verified. See `catalog-progress.json` for the digest and current suite evidence.
