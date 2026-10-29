@@ -75,3 +75,18 @@ test("fresh face-down G Units can enter the existing Stride cost flow and face-u
   c.manualGameAction("stride:"+uid);
   assert.equal(c.match.pendingStride,null);
 });
+test("Stride payment uses numeric grades and preserves engine grade modifiers", () => {
+  const c=harness();
+  c.gradeOf=card=>Number(card?.grade ?? -1);
+  c.cardAbilities=()=>[];
+  vm.runInContext(section("strideGrade(", "botStridePriority("),c);
+  c.cardMap.set("g1",{id:"g1",grade:1,text:""});
+  c.cardMap.set("g2",{id:"g2",grade:2,text:""});
+  assert.equal(c.strideGrade({cardId:"g1"},true),1);
+  assert.equal(c.strideGrade({cardId:"g2"},true),2);
+  assert.equal(c.strideGrade({cardId:"g1"},true)+c.strideGrade({cardId:"g2"},true),3);
+  c.window.VanguardAbilityEngine={evaluateStrideCostGrade:()=>({grade:2})};
+  assert.equal(c.strideGrade({cardId:"g1"},true),3);
+  c.window.VanguardAbilityEngine={evaluateStrideCostGrade:()=>({grade:0,treatedAsGradeThree:true})};
+  assert.equal(c.strideGrade({cardId:"g1"},true),3);
+});
