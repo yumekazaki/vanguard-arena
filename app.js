@@ -484,15 +484,48 @@
     return { playerId, name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rodeGradeThreePlusThisFight: false, opponentTriggerRevealedThisTurn:false, rear: [null, null, null, null, null], accelZones: 0, accelTypes: [], giftZones: [], orders: [], crests: [], energy: 0, energySpentThisTurn: 0, guardCircle: [], extra: [], gDeck: shuffle(gDeck), gZone: [], removed: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
   }
   function openPracticeSetup() { $("#practice-setup-dialog").showModal(); }
+  function openPracticeMulligan() {
+    if (!match || online.role || !match.practiceOpeningChoicePending) return;
+    match.practiceMulliganSelection = [];
+    renderPracticeMulligan();
+    $("#practice-mulligan-dialog").showModal();
+  }
+  function renderPracticeMulligan() {
+    if (!match) return;
+    const selected = new Set(match.practiceMulliganSelection || []), hand = match.players.human.hand || [];
+    $("#practice-mulligan-cards").innerHTML = hand.map(item => { const card = cardMap.get(item.cardId); return card ? `<button class="zone-view-card mulligan-card${selected.has(item.uid) ? " selected" : ""}" type="button" data-practice-mulligan-uid="${escapeHtml(item.uid)}" aria-pressed="${selected.has(item.uid)}">${cardImage(card)}<b>${escapeHtml(card.name)}</b><small>${selected.has(item.uid) ? "Will return to deck" : "Keep in hand"}</small></button>` : ""; }).join("");
+    $("#practice-mulligan-count").textContent = `${selected.size} card${selected.size === 1 ? "" : "s"} selected`;
+    $("#practice-mulligan-confirm").disabled = selected.size === 0;
+  }
+  function finishPracticeOpeningChoice(mulligan) {
+    if (!match || online.role || !match.practiceOpeningChoicePending) return;
+    const player = match.players.human, selected = new Set(match.practiceMulliganSelection || []);
+    if (mulligan) {
+      const returned = player.hand.filter(item => selected.has(item.uid));
+      if (!returned.length || returned.length !== selected.size) { toast("Choose at least one card from your opening hand."); return; }
+      player.hand = player.hand.filter(item => !selected.has(item.uid));
+      player.deck.unshift(...returned);
+      for (let i = 0; i < returned.length; i++) { const card = player.deck.pop(); if (card) player.hand.push(card); }
+      shuffle(player.deck);
+      addLog(`${player.name} mulliganed ${returned.length} card${returned.length === 1 ? "" : "s"}.`);
+    } else addLog(`${player.name} kept their opening hand.`);
+    match.practiceOpeningChoicePending = false;
+    $("#practice-mulligan-dialog").close();
+    if (match.firstSide === "human") { match.turnStartGrades.human = Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade ?? -1); queueTurnStartEvent("human"); setMessage("Your turn — advance through Stand and Draw."); }
+    else { setMessage("Practice Bot goes first."); setTimeout(botTurn, 350); }
+    renderMatch();
+  }
   function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
-    match = { matchId: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`, stateVersion: 0, processedActionIds: [], eventSequence: 0, processedEventIds: [], players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, phase: 0, drewThisTurn: false, ridePerformed: false, stridePerformed: false, turnStartGrades: { human: 0, bot: 0 }, pendingStride: null, pendingProtectGuard: null, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingBattleEnd: null, pendingTrigger: null, pendingAbility: null, pendingAbilities: [], attacksByUnitTurn: Object.create(null), pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
+    match = { matchId: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`, stateVersion: 0, processedActionIds: [], eventSequence: 0, processedEventIds: [], players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, practiceOpeningChoicePending: !onlineSetup && !online.role, practiceMulliganSelection: [], phase: 0, drewThisTurn: false, ridePerformed: false, stridePerformed: false, turnStartGrades: { human: 0, bot: 0 }, pendingStride: null, pendingProtectGuard: null, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingBattleEnd: null, pendingTrigger: null, pendingAbility: null, pendingAbilities: [], attacksByUnitTurn: Object.create(null), pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
     if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
-    else { addLog(`${online.role ? "Online match" : "Practice match"} started with ${readyDeck.name}. ${firstSide === "human" ? "You chose to go first." : "You chose to go second."}`); setMessage(firstSide === "human" ? "Your turn — advance through Stand and Draw." : "Practice Bot goes first."); }
-    renderMatch(); showView("play"); if(!onlineSetup&&firstSide==="human"){match.turnStartGrades.human=Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade??-1);queueTurnStartEvent("human")}
+    else { addLog(`${online.role ? "Online match" : "Practice match"} started with ${readyDeck.name}. ${firstSide === "human" ? "You chose to go first." : "You chose to go second."}`); setMessage(!onlineSetup && !online.role ? "Choose a mulligan or keep your opening hand." : firstSide === "human" ? "Your turn — advance through Stand and Draw." : "Practice Bot goes first."); }
+    renderMatch(); showView("play");
+    if (!onlineSetup && !online.role) { openPracticeMulligan(); return; }
+    if(!onlineSetup&&firstSide==="human"){match.turnStartGrades.human=Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade??-1);queueTurnStartEvent("human")}
     if (!onlineSetup && firstSide === "bot") setTimeout(botTurn, 350);
   }
   function rollOnlineDieFor(side) {
@@ -755,7 +788,7 @@
   }
   function updateActionAvailability() {
     if (!match) return;
-    const canAct = !match.ended && online.role !== "watcher";
+    const canAct = !match.ended && online.role !== "watcher" && !match.practiceOpeningChoicePending;
     const handCard = match.players.human.hand.find((x) => x.uid === match.selected);
     const fieldCard = findFieldCard(match.selected);
     const pending = Boolean(match.pendingAttack);
@@ -1162,6 +1195,12 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     buttons.innerHTML = actions.map(item => '<button class="button button-primary" type="button" data-battle-action="' + item.id + '">' + item.label + '</button>').join("");
     panel.hidden = false;
   }
+  function dismissAttackArrow(attack = match?.pendingAttack) {
+    const layer = $("#attack-arrow-layer");
+    if (!layer || !attack?.targetUid) return;
+    layer.dataset.dismissedAttackId = String(attack.battleId || (attack.attackerUid + ":" + attack.targetUid));
+    layer.hidden = true;
+  }
   function renderAttackArrow() {
     const layer = $("#attack-arrow-layer"), table = $(".game-table"), attack = match?.pendingAttack;
     if (!layer || !table || !attack?.targetUid) { if (layer) { layer.hidden = true; layer.dataset.attackId = ""; } return; }
@@ -1173,6 +1212,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     const x1 = from.left + from.width / 2 - bounds.left, y1 = from.top + from.height / 2 - bounds.top;
     const x2 = to.left + to.width / 2 - bounds.left, y2 = to.top + to.height / 2 - bounds.top;
     const id = String(attack.battleId || (attack.attackerUid + ":" + attack.targetUid));
+    if (layer.dataset.dismissedAttackId === id) { layer.hidden = true; return; }
     layer.setAttribute("viewBox", "0 0 " + Math.max(1, table.clientWidth) + " " + Math.max(1, table.clientHeight));
     const path = layer.querySelector(".attack-arrow-path");
     if (layer.dataset.attackId !== id || !path) {
@@ -1410,7 +1450,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     completeAttackDefense(false);
   }  function resolvePendingBattleEnd(){const pending=match?.pendingBattleEnd;if(!pending||match.pendingAbility||match.pendingAbilities?.length||match.pendingTrigger||match.pendingDamageQueue?.length||match.pendingHitResolution)return false;match.pendingBattleEnd=null;const participantInstanceIds=[pending.attackerUid,pending.boostUid,pending.targetUid].filter(uid=>findMatchInstance(uid)?.charging===true);if(participantInstanceIds.length)match.pendingChargeCleanup={battleId:pending.battleId,participantInstanceIds};queueAbilityPrompts("battleEnd",pending.attackerSide,pending.attackerUid,{...pending,sourceCardInstanceId:pending.attackerUid,boostedUid:pending.attackerUid,turnPlayerId:match.players[pending.attackerSide]?.playerId,timingWindow:"close-step"});return true}
   function finishAttack(blocked) {
-    const attack=match?.pendingAttack;if(!attack)return;const defender=match.players[attack.defenderSide];match.pendingBattleEnd={attackerSide:attack.attackerSide,attackerUid:attack.attackerUid,targetZone:attack.targetZone,targetUid:attack.targetUid,boostUid:attack.boostUid,battleId:attack.battleId};
+    const attack=match?.pendingAttack;if(!attack)return;dismissAttackArrow(attack);const defender=match.players[attack.defenderSide];match.pendingBattleEnd={attackerSide:attack.attackerSide,attackerUid:attack.attackerUid,targetZone:attack.targetZone,targetUid:attack.targetUid,boostUid:attack.boostUid,battleId:attack.battleId};
     for(const guard of attack.guardCards||[]){if(guard.battleShieldExpiryBattleId===attack.battleId){guard.battleShieldBoost=0;delete guard.battleShieldExpiryBattleId}const card=cardMap.get(guard.cardId);if(isGGuardian(card)){(defender.gDeck ||= []).push({...guard,faceUp:true,guarding:false});queueMovedCardAbility(guard,attack.defenderSide,"move","guardian",{currentLocation:"g-deck",battleId:attack.battleId});}else{defender.drop.push(guard);queueMovedCardAbility(guard,attack.defenderSide,"move","guardian",{currentLocation:"drop",battleId:attack.battleId});queueMovedCardAbility(guard,attack.defenderSide,"retire","guardian",{currentLocation:"drop",battleId:attack.battleId});}}
     defender.guardCircle=[];
     if(blocked)addLog(`${attack.attacker} was stopped by ${defender.name}'s guard.`);
@@ -2374,6 +2414,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (online.role === "watcher") { toast("Spectators can watch but cannot change the match."); return; }
     if (online.role === "guest") {
       if (!online.connection?.open) { toast("You are disconnected from the match."); return; }
+      if (action === "finishAttack") { dismissAttackArrow(); $("#battle-action-panel").hidden = true; }
       if (action === "guard") { const instance=selectedHandCard(); if(instance&&Number(cardMap.get(instance.cardId)?.shield||0)===0){humanGuard();return;} }
       sendGuestRequest("action", { action, selected: match?.selected || null }); return;
     }
@@ -2535,6 +2576,10 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#online-confirm").addEventListener("click", () => online.dialogMode === "host" ? beginHosting() : beginJoining());
   $("#online-join-role").addEventListener("change", renderOnlineDeckChoices);
   $("#online-mulligan-cards").addEventListener("click", (event) => { const card = event.target.closest("[data-mulligan-uid]"); if (!card || online.mulliganSubmitted || match?.preMatch?.mulliganDone?.human) return; const selected = new Set(online.mulliganSelection || []); selected.has(card.dataset.mulliganUid) ? selected.delete(card.dataset.mulliganUid) : selected.add(card.dataset.mulliganUid); online.mulliganSelection = [...selected]; renderOnlineSetup(); });
+  $("#practice-mulligan-cards").addEventListener("click", (event) => { const card = event.target.closest("[data-practice-mulligan-uid]"); if (!card || !match?.practiceOpeningChoicePending) return; const selected = new Set(match.practiceMulliganSelection || []); selected.has(card.dataset.practiceMulliganUid) ? selected.delete(card.dataset.practiceMulliganUid) : selected.add(card.dataset.practiceMulliganUid); match.practiceMulliganSelection = [...selected]; renderPracticeMulligan(); });
+  $("#practice-mulligan-confirm").addEventListener("click", () => finishPracticeOpeningChoice(true));
+  $("#practice-mulligan-keep").addEventListener("click", () => finishPracticeOpeningChoice(false));
+  $("#practice-mulligan-dialog").addEventListener("cancel", (event) => event.preventDefault());
   $("#online-mulligan-confirm").addEventListener("click", () => { if (!match?.preMatch || match.preMatch.stage !== "mulligan") return; if (online.role === "guest") { if (!online.connection?.open) { toast("You are disconnected from the match."); return; } online.mulliganSubmitted = true; sendGuestRequest("setup-mulligan",{handUids:online.mulliganSelection||[]}); renderOnlineSetup(); } else if (online.role === "host") completeOnlineMulligan("human", online.mulliganSelection || []); });
   $("#refresh-rooms").addEventListener("click", () => void loadOpenRooms()); $("#room-list").addEventListener("change", () => { if ($("#room-list").value) $("#join-code").value = $("#room-list").value; });
   $("#online-cancel").addEventListener("click", () => $("#online-dialog").close()); $("#close-online-dialog").addEventListener("click", () => $("#online-dialog").close());
