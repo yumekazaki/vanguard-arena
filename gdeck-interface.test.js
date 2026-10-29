@@ -90,3 +90,21 @@ test("Stride payment uses numeric grades and preserves engine grade modifiers", 
   c.window.VanguardAbilityEngine={evaluateStrideCostGrade:()=>({grade:0,treatedAsGradeThree:true})};
   assert.equal(c.strideGrade({cardId:"g1"},true),3);
 });
+test("paying Stride updates Vanguard, costs and G deck, then refreshes the table", () => {
+  const c=harness(),p=c.match.players.human,uid=p.gDeck[0].uid;
+  c.cardMap.set("g1",{id:"g1",grade:1,type:"Unit",text:""});
+  c.cardMap.set("g2",{id:"g2",grade:2,type:"Unit",text:""});
+  p.hand=[{uid:"cost1",cardId:"g1"},{uid:"cost2",cardId:"g2"}];
+  c.gradeOf=card=>Number(card?.grade ?? -1); c.cardAbilities=()=>[];
+  c.isGGuardian=()=>false; c.isStrideUnit=card=>card?.type==="G Unit"; c.canStrideForSide=()=>true;
+  c.queueMovedCardAbility=()=>{};
+  let refreshed=0; c.renderMatch=()=>{refreshed++};
+  vm.runInContext(section("strideGrade(", "botStridePriority(")+section("performStrideForPlayer(", "advanceBotPhase("),c);
+  c.match.phase=3;
+  c.match.pendingStride={ownerSide:"human",unitUid:uid,costUids:["cost1","cost2"]};
+  c.manualGameAction("stride-confirm");
+  assert.equal(p.vanguard.uid,uid); assert.equal(p.vanguard.strideHeart.cardId,"starter");
+  assert.equal(p.gDeck.length,3); assert.equal(p.hand.length,0); assert.equal(p.drop.length,2);
+  assert.equal(c.match.pendingStride,null); assert.equal(c.match.stridePerformed,true);
+  assert.equal(refreshed,1);
+});
