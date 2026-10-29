@@ -2203,6 +2203,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       if(match.pendingAbility?.side)match.pendingAbility.side=flipSide(match.pendingAbility.side);(match.pendingAbilities||[]).forEach(item=>{if(item.side)item.side=flipSide(item.side)});
       if(match.pendingAttack){match.pendingAttack.attackerSide=flipSide(match.pendingAttack.attackerSide);match.pendingAttack.defenderSide=flipSide(match.pendingAttack.defenderSide);}if(match.pendingGAssist?.ownerSide)match.pendingGAssist.ownerSide=flipSide(match.pendingGAssist.ownerSide);
     if(match.pendingStride?.ownerSide)match.pendingStride.ownerSide=flipSide(match.pendingStride.ownerSide);
+      if(match.pendingProtectGuard?.ownerSide)match.pendingProtectGuard.ownerSide=flipSide(match.pendingProtectGuard.ownerSide);
       if(match.pendingAttackSetup){match.pendingAttackSetup.attackerSide=flipSide(match.pendingAttackSetup.attackerSide);match.pendingAttackSetup.defenderSide=flipSide(match.pendingAttackSetup.defenderSide);}
       online.applyingRemote = false;
     }
