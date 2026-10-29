@@ -4,7 +4,7 @@
     panel, content: panel.querySelector('.inspector-content'),
     status: panel.querySelector('[data-inspector-status], #inspector-status'),
     unpin: panel.querySelector('[data-inspector-unpin], #inspector-unpin'),
-    currentId: null, pinned: false
+    currentId: null
   }));
   if (!panels.length) return;
   let catalog = new Map();
@@ -16,13 +16,12 @@
   };
   const number = value => value == null ? 'Unknown' : Number(value).toLocaleString();
   function updateStatus(state) {
-    state.status.textContent = state.pinned ? 'Pinned card' : 'Live preview';
-    state.unpin.hidden = !state.pinned;
+    state.status.textContent = 'Live preview';
+    state.unpin.hidden = true;
   }
-  function show(state, id, pin) {
+  function show(state, id) {
     const card = catalog.get(id);
-    if (!card || !state.panel.closest('.active-view') || (state.pinned && !pin)) return;
-    if (pin) state.pinned = true;
+    if (!card || !state.panel.closest('.active-view')) return;
     state.panel.classList.add('has-card');
     updateStatus(state);
     if (state.currentId === id) return;
@@ -60,18 +59,17 @@
     if (direct) return direct.dataset.cardId || direct.dataset.cardZoom || direct.dataset.cardDetail;
     return target.closest('.game-card-wrap, .zone-card-wrap, .zone-view-card')?.querySelector('[data-card-zoom]')?.dataset.cardZoom;
   }
-  function inspect(event, pin = false) {
+  function inspect(event) {
     const id = cardId(event.target);
-    if (id) panels.forEach(state => show(state, id, pin));
+    if (id) panels.forEach(state => show(state, id));
   }
   document.addEventListener('pointerover', event => { if (event.pointerType !== 'touch') inspect(event); });
   document.addEventListener('focusin', event => inspect(event));
   // Keep identity before existing handlers re-render; do not prevent or stop their events.
-  document.addEventListener('click', event => inspect(event, true), true);
+  document.addEventListener('click', event => inspect(event), true);
   panels.forEach(state => {
-    state.unpin.addEventListener('click', () => { state.pinned = false; updateStatus(state); });
+    state.unpin.addEventListener('click', () => { updateStatus(state); });
     state.panel.querySelector('[data-inspector-close]')?.addEventListener('click', () => {
-      state.pinned = false;
       updateStatus(state);
       state.panel.classList.remove('has-card');
     });

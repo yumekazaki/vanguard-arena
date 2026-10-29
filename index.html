@@ -58,7 +58,7 @@
           <div id="match-layout" class="match-layout">
             <aside class="card-inspector" aria-label="Card inspector">
               <div class="inspector-heading"><div><p class="eyebrow">CARD INSPECTOR</p><span id="inspector-status" role="status">Live preview</span></div><button id="inspector-unpin" class="button" type="button" hidden>Unpin</button></div>
-              <div id="inspector-content" class="inspector-content" tabindex="0" aria-label="Card image and information"><div class="inspector-empty"><span>◇</span><h2>Know your next move</h2><p>Hover or focus a card to read it here. Click or tap to pin its details.</p><small>You can move here to scroll. The preview stays visible.</small></div></div>
+              <div id="inspector-content" class="inspector-content" tabindex="0" aria-label="Card image and information"><div class="inspector-empty"><span>◇</span><h2>Know your next move</h2><p>Hover or focus a card to read it here. Hover another card to change the preview. Tap a card to inspect on touch screens.</p><small>You can move here to scroll. The preview stays visible.</small></div></div>
             </aside>
             <aside class="match-rail">
           <div class="rail-card status-card"><div class="status-top"><span class="live-dot"></span><span id="match-status">PRACTICE MATCH</span><button id="reconnect-match" class="button button-quiet reconnect-button" type="button" hidden>Reconnect</button><button id="match-menu" class="dots-button" aria-label="Match options">•••</button></div><div class="status-names"><div><small>YOU</small><b id="human-name">Player</b></div><span class="versus">VS</span><div class="opponent-name"><small>OPPONENT</small><b id="opponent-name">Practice Bot</b></div></div><div id="online-invite" class="online-invite hidden"><small>Player invite link</small><input id="invite-link" readonly /><button class="button button-quiet" id="copy-invite">Copy</button><small>Spectator link</small><input id="spectate-link" readonly /><button class="button button-quiet" id="copy-spectate">Copy</button><small id="spectator-count">0 spectators</small></div><div class="rail-divider"></div><div class="turn-banner"><span class="turn-symbol">↻</span><div><small id="turn-label">YOUR TURN</small><b id="phase-label">Stand phase</b></div><span class="turn-number" id="turn-number">01</span></div></div>
@@ -105,7 +105,7 @@
           <div class="deck-workshop-grid visual-workshop">
             <aside class="card-inspector workshop-inspector" aria-label="Workshop card inspector">
               <div class="inspector-heading"><div><p class="eyebrow">CARD INSPECTOR</p><span data-inspector-status role="status">Hover a card to inspect</span></div><button data-inspector-unpin class="button" type="button" hidden>Unpin</button><button data-inspector-close class="icon-button" type="button" aria-label="Close card preview">×</button></div>
-              <div id="workshop-inspector-content" class="inspector-content" tabindex="0" aria-label="Workshop card image and information"><div class="inspector-empty"><span>◇</span><h2>See every detail.</h2><p>Hover a card in your deck or the search results to inspect it here.</p><small>Click to pin a card. Move here to scroll through its text.</small></div></div>
+              <div id="workshop-inspector-content" class="inspector-content" tabindex="0" aria-label="Workshop card image and information"><div class="inspector-empty"><span>◇</span><h2>See every detail.</h2><p>Hover a card in your deck or the search results to inspect it here.</p><small>Move here to scroll through its text. Hover another card to change the preview.</small></div></div>
             </aside>
             <section class="deck-builder-panel panel" aria-label="Visual deck editor">
               <h2 id="builder-title" class="workshop-accessible-title">Untitled deck</h2>
@@ -170,7 +170,7 @@
     <script src="match-state-projection.js?v=20261026-private-zones-1" defer></script>
     <script src="match-relay.js?v=20261026-dual-channel-1" defer></script>
     <script src="practice-bot.js?v=20261027-turn-progression-1" defer></script>
-    <script src="arena-inspector.js?v=visual-workshop-1" defer></script>
-    <script src="app.js?v=20261029-default-deck-1" defer></script>
+    <script src="arena-inspector.js?v=hover-gdeck-1" defer></script>
+    <script src="app.js?v=20261029-hover-gdeck-1" defer></script>
   </body>
 </html>
