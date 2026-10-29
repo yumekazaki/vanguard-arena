@@ -26,6 +26,7 @@
   }
   const userCards = Array.isArray(window.USER_CARDS) ? window.USER_CARDS.map((card, i) => ({ ...card, color: card.color || colors[i % colors.length], glyph: glyphs[i % glyphs.length], type: card.type || "Unit", trigger: card.trigger || "" })) : [];
   const importedCatalog = Array.isArray(window.CARD_CATALOG) ? window.CARD_CATALOG : [];
+  const importedCardIds = new Set(importedCatalog.map(card => card.id));
   const cardList = importedCatalog.length ? [...importedCatalog, ...userCards] : [...sampleCards, ...userCards];
   const cardMap = new Map(cardList.map((c) => [c.id, c]));
   window.ArenaInspector?.setCatalog(cardList);
@@ -327,12 +328,20 @@
     $("#starter-vanguard").value = builder.starterCardId || "";
     $("#starter-vanguard-help").textContent = builder.starterCardId ? `${cardMap.get(builder.starterCardId)?.name || "Selected unit"} will begin on your Vanguard circle.` : "Choose a Grade 0 unit from your deck. It starts on your Vanguard circle.";
     const rows = Object.entries(builder.cards || {}).filter(([, qty]) => qty > 0).map(([id, qty]) => ({ card: cardMap.get(id), qty })).filter((x) => x.card).sort((a, b) => a.card.grade - b.card.grade || a.card.name.localeCompare(b.card.name));
-    $("#deck-list").innerHTML = rows.length ? rows.map(({ card, qty }) => `<div class="deck-row"><button class="deck-row-image" type="button" data-card-zoom="${escapeHtml(card.id)}" aria-label="Zoom ${escapeHtml(card.name)}" title="Zoom card">${cardImage(card)}</button><span class="row-grade">${card.grade === null || card.grade === undefined ? "G?" : `G${escapeHtml(card.grade)}`}</span><span class="row-title">${escapeHtml(card.name)}<small>${escapeHtml(card.clan || card.nation || "Clan not listed")} · ${escapeHtml(card.type)}${card.trigger ? ` · ${escapeHtml(card.trigger)}` : ""}</small></span><span class="qty-controls"><button data-qty="-1" data-id="${escapeHtml(card.id)}">−</button>${qty}<button data-qty="1" data-id="${escapeHtml(card.id)}">+</button><button class="remove-row" data-remove="${escapeHtml(card.id)}" title="Remove">×</button></span></div>`).join("") : `<div class="empty-saved">Your deck is empty. Choose cards from the library.</div>`;
+    // Presentation only: every copy is visible; existing quantity and zoom handlers are reused.
+    const visualCard = (card, qty, copy) => `<article class="deck-grid-card" data-card-id="${escapeHtml(card.id)}"><button class="deck-grid-image" type="button" aria-label="Inspect ${escapeHtml(card.name)}, copy ${copy + 1} of ${qty}">${cardImage(card)}</button><button class="deck-grid-zoom" type="button" data-card-zoom="${escapeHtml(card.id)}" aria-label="Zoom ${escapeHtml(card.name)}">⤢</button><span class="deck-copy-number">${copy + 1}/${qty}</span><div class="deck-copy-controls"><button type="button" data-qty="-1" data-id="${escapeHtml(card.id)}" aria-label="Remove one ${escapeHtml(card.name)}">−</button><button type="button" data-qty="1" data-id="${escapeHtml(card.id)}" aria-label="Add one ${escapeHtml(card.name)}">+</button><button type="button" data-remove="${escapeHtml(card.id)}" aria-label="Remove all ${escapeHtml(card.name)}" title="Remove all copies">×</button></div></article>`;
+    const visualSection = (items, title, count, limit, extra = false) => {
+      const cards = items.flatMap(({card, qty}) => Array.from({length:qty}, (_,copy) => visualCard(card,qty,copy))).join("");
+      const slots = Array.from({length:Math.max(0,limit-count)}, () => '<span class="deck-empty-slot" aria-hidden="true"></span>').join("");
+      return `<section class="workshop-deck-section${extra ? " workshop-gdeck" : ""}" aria-label="${title}"><header><h3>${title}</h3><span>${count} / ${limit}</span></header><div class="deck-grid-stage"><div class="deck-card-grid">${cards}${slots}</div>${!count ? `<div class="deck-empty-prompt"><b>${extra ? "Your G deck" : "Your next deck starts here"}</b><span>${extra ? "G Units and G Guardians appear here." : "Search on the right, then click a card to add it."}</span></div>` : ""}</div></section>`;
+    };
+    $("#deck-list").innerHTML = visualSection(rows.filter(({card}) => !isGDeckCard(card)), "Main deck", total, 50) + visualSection(rows.filter(({card}) => isGDeckCard(card)), "G deck", gTotal, 16, true);
     renderBuilderCards();
   }
   function renderBuilderCards() {
     const term = $("#card-search").value.trim().toLowerCase(); const grade = $("#grade-filter").value; const clan = $("#builder-clan-filter").value; const nation = $("#builder-nation-filter").value;
-    const filtered = cardList.filter((c) => gradeMatches(c, grade) && clanMatches(c, clan) && nationMatches(c, nation) && (!term || `${c.name} ${c.id} ${c.dbId || ""} ${c.clan || ""} ${c.nation || ""} ${c.type} ${c.trigger || ""}`.toLowerCase().includes(term)));
+    const abilityTerm = $("#card-text-search").value.trim().toLowerCase();
+    const filtered = cardList.filter((c) => (!abilityTerm || String(c.text || "").toLowerCase().includes(abilityTerm)) && gradeMatches(c, grade) && clanMatches(c, clan) && nationMatches(c, nation) && (!term || `${c.name} ${c.id} ${c.dbId || ""} ${c.clan || ""} ${c.nation || ""} ${c.type} ${c.trigger || ""}`.toLowerCase().includes(term)));
     const pages = Math.max(1, Math.ceil(filtered.length / cardPageSize)); builderPage = Math.min(builderPage, pages - 1);
     const visible = filtered.slice(builderPage * cardPageSize, (builderPage + 1) * cardPageSize);
     $("#builder-results-count").textContent = `${filtered.length.toLocaleString()} cards`;
@@ -350,14 +359,14 @@
   }
   function clanMatches(card, selected) {
     if (selected === "all") return true;
-    const allClans=window.VanguardAbilityEngine?.hasAbilityKeyword(card,"all-clans-and-nations")===true;
+    const allClans=window.VanguardAbilityEngine?.hasAbilityKeyword(importedCardIds.has(card.id) ? card.id : card,"all-clans-and-nations")===true;
     if (selected === "unknown") return !(card.clans || (card.clan ? [card.clan] : [])).length&&!allClans;
     return allClans||(card.clans || []).includes(selected) || card.clan === selected;
   }
   function nationMatches(card, selected) {
     const nations = card.nations?.length ? card.nations : (card.nation ? [card.nation] : []);
     if (selected === "all") return true;
-    const allClansAndNations=window.VanguardAbilityEngine?.hasAbilityKeyword(card,"all-clans-and-nations")===true;
+    const allClansAndNations=window.VanguardAbilityEngine?.hasAbilityKeyword(importedCardIds.has(card.id) ? card.id : card,"all-clans-and-nations")===true;
     if (selected === "unknown") return nations.length === 0&&!allClansAndNations;
     return allClansAndNations||nations.includes(selected);
   }
@@ -2455,6 +2464,7 @@ html+=renderGuardianReplacementChoice(x);box.innerHTML=html;if(namedCallStep&&x.
   $("#clear-log").addEventListener("click", () => { if (match) { match.log = []; renderLog(); } });
   $("#create-deck").addEventListener("click", () => { emptyDeck(); showView("decks"); $("#deck-name").focus(); });
   $("#save-deck").addEventListener("click", saveDeck); $("#load-deck-editor").addEventListener("click", openLoadDeckDialog); $("#load-deck-confirm").addEventListener("click", () => { const deck = readSavedDecks().find((item) => item.id === $("#load-deck-choice").value); if (!deck) { toast("Choose a saved deck first."); return; } $("#load-deck-dialog").close(); loadDeck(deck); }); $("#starter-vanguard").addEventListener("change", () => { builder.starterCardId = $("#starter-vanguard").value; renderBuilder(); }); $("#deck-name").addEventListener("input", () => { builder.name = $("#deck-name").value; $("#builder-title").textContent = builder.name || "Untitled deck"; });
+  $("#card-text-search").addEventListener("input", () => { builderPage = 0; renderBuilderCards(); });
   $("#card-search").addEventListener("input", () => { builderPage = 0; renderBuilderCards(); }); $("#grade-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-clan-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-nation-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); });
   $("#builder-prev").addEventListener("click", () => { builderPage = Math.max(0, builderPage - 1); renderBuilderCards(); }); $("#builder-next").addEventListener("click", () => { builderPage += 1; renderBuilderCards(); });
   $("#builder-card-grid").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const node = e.target.closest("[data-card-id]"); if (!node) return; const id=node.dataset.cardId,card=cardMap.get(id);if(!card)return;const key=deckNameKey(card,id),sameNameCount=Object.entries(builder.cards||{}).reduce((sum,[otherId,qty])=>{const other=cardMap.get(otherId);return other&&isGDeckCard(other)===isGDeckCard(card)&&deckNameKey(other,otherId)===key?sum+Number(qty||0):sum},0);if(sameNameCount>=deckCopyLimitForCard(card,builder))return;builder.cards[id]=(builder.cards[id]||0)+1;renderBuilder(); });
