@@ -19,7 +19,8 @@ The other 22 assigned abilities are deferred below. In particular, cfa-11091:0 i
 - Authoritative guard tests cover all 10 cards from both authenticated seats at opponent grades 2, 3 and 4 (60 successful transitions). Each chooses the exact instance and checks untouched duplicate/opponent copies, request replay, and attempting to reuse the moved source.
 - Invalid action cases cover wrong/unseated player, stale state version, unavailable UID, wrong zone, wrong owner/controller, closed defense and absent attack, asserting complete state equality on rejection. Caller-supplied shield/amount fields cannot increase the modifier.
 - Standalone catalog audit is run; counts remain 17,240 blocks, 4,174 compiled, 13,066 unsupported and zero invalid compiled definitions.
-- Full-suite result will be recorded in the PR. Per-card full verification and live online publication are not claimed. The primary worker must integrate accepted evidence and refresh official manifests serially.
+- node --test --test-concurrency=4: 1,341 passing, zero failures, skipped tests or TODOs. The initial run had 1,340 passes and one metadata determinism failure caused solely by checkout CRLF conversion. The committed LF bytes were restored locally without any Git content change, the metadata test passed 3/3, and the complete suite then passed 1,341/1,341. Tested source commit: fe03471; the subsequent documentation commit records these results only.
+- Per-card full verification and live online publication are not claimed. The primary worker must integrate accepted evidence and refresh official manifests serially.
 
 These passive abilities have no costs, active target selection, usage limit, AUTO event timing or duration timer; those activation-only checks are inapplicable. Authoritative guard action permissions, source identity, timing and deduplication are tested where the shield modifier is used.
 
