@@ -1146,7 +1146,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       const canGGuard = ownGrade >= 3 && attackerGrade >= 3 && player.hand.some(item => triggerKind(item) === "heal") && (player.gDeck || []).some(item => !item.faceUp && isGGuardian(cardMap.get(item.cardId)));
       if (canGGuard) actions.push({ id: "g-guard", label: "G-Guard" });
       if (eligibleInterceptors().length) actions.push({ id: "intercept", label: "Intercept" });
-    } else if (attack.attackerSide === "human" && attack.defenderDone && !attack.awaitingDrive && !attack.driveCountPrompt) {
+    } else if (attack.attackerSide === "human" && attack.defenderDone && !attack.awaitingDrive && !attack.driveCountPrompt && Number(attack.driveChecksRemaining || 0) <= 0) {
       title = "Attack resolution complete";
       help = "Drive checks and attack effects are resolved. End the attack to continue.";
       actions.push({ id: "finishAttack", label: "End this attack" });
@@ -2175,6 +2175,12 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }
   function updateGuestState(snapshot) {
     if (!snapshot) return;
+    // Relay/state messages can arrive out of order. Never roll a guest back to an
+    // earlier battle snapshot after End Attack has already cleared pendingAttack.
+    const incomingVersion = Number(snapshot.stateVersion || 0);
+    const currentVersion = Number(match?.stateVersion || 0);
+    if (snapshot.matchId && match?.matchId && snapshot.matchId !== match.matchId) return;
+    if (incomingVersion < currentVersion) return;
     if(online.remoteRequestTimer){clearTimeout(online.remoteRequestTimer);online.remoteRequestTimer=null;}online.remoteRequestPending=null;
     match = snapshot;
     match.log = (match.log || []).map((entry) => ({ ...entry, time: new Date(entry.time) }));
