@@ -1414,7 +1414,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       const count = Math.max(0, Math.min(Number(pendingAttack.maxDriveChecks) || 0, Number(choice.slice("drive-count:".length)) || 0));
       pendingAttack.driveChecksRemaining = count; pendingAttack.driveCountPrompt = false; pendingAttack.driveCountChosen = true;
       pendingAttack.awaitingDrive = count > 0;
-      if (!count && !online.role) finishAttack(Boolean(pendingAttack.perfectGuard || !attackHits(pendingAttack)));
+
       renderMatch(); return;
     }
     const setup=match?.pendingAttackSetup;if(!setup)return;
