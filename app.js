@@ -1201,35 +1201,44 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     layer.hidden = true;
   }
   function renderAttackArrow() {
-    const layer = $("#attack-arrow-layer"), table = $(".game-table"), attack = match?.pendingAttack;
-    if (!layer || !table || !attack?.targetUid) { if (layer) { layer.hidden = true; layer.dataset.attackId = ""; } return; }
-    if (layer.parentElement !== document.body) document.body.appendChild(layer);
-    const zones = Array.from(table.querySelectorAll(".field-zone"));
-    const sourceZone = zones.find(zone => zone.dataset.side === attack.attackerSide && zone.dataset.zone === attack.attackerZone);
-    const targetZone = zones.find(zone => zone.dataset.side === attack.defenderSide && zone.dataset.zone === attack.targetZone);
-    const cards = Array.from(table.querySelectorAll(".field-card"));
-    const source = cards.find(card => card.dataset.fieldUid === String(attack.attackerUid)) || sourceZone?.querySelector(".field-card") || sourceZone;
-    const target = cards.find(card => card.dataset.fieldUid === String(attack.targetUid)) || targetZone?.querySelector(".field-card") || targetZone;
-    if (!source || !target) { layer.hidden = true; return; }
-    const from = source.getBoundingClientRect(), to = target.getBoundingClientRect();
-    if (!from.width || !from.height || !to.width || !to.height) { layer.hidden = true; return; }
-    const x1 = from.left + from.width / 2, y1 = from.top + from.height / 2;
-    const x2 = to.left + to.width / 2, y2 = to.top + to.height / 2;
-    const width = Math.max(1, window.innerWidth), height = Math.max(1, window.innerHeight);
-    const id = String(attack.battleId || (attack.attackerUid + ":" + attack.targetUid));
-    layer.setAttribute("viewBox", "0 0 " + width + " " + height);
-    layer.setAttribute("preserveAspectRatio", "none");
-    Object.assign(layer.style, { position: "fixed", inset: "0", width: "100vw", height: "100vh", zIndex: "500", pointerEvents: "none" });
-    const path = layer.querySelector(".attack-arrow-path");
-    if (layer.dataset.attackId !== id || !path) {
-      layer.innerHTML = '<defs><marker id="attack-arrow-head" markerWidth="12" markerHeight="12" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" class="attack-arrow-head"></path></marker></defs><path class="attack-arrow-path" marker-end="url(#attack-arrow-head)"></path><circle class="attack-arrow-origin" r="7"></circle>';
-      layer.dataset.attackId = id;
-    }
-    const dx = x2 - x1, dy = y2 - y1;
-    layer.querySelector(".attack-arrow-path").setAttribute("d", "M " + x1 + " " + y1 + " C " + (x1 + dx * .28) + " " + (y1 + dy * .08) + ", " + (x2 - dx * .28) + " " + (y2 - dy * .08) + ", " + x2 + " " + y2);
-    layer.querySelector(".attack-arrow-origin").setAttribute("cx", x1);
-    layer.querySelector(".attack-arrow-origin").setAttribute("cy", y1);
-    layer.hidden = false;
+    const attack = match?.pendingAttack;
+    let layer = document.getElementById("attack-arrow-layer");
+    if (!attack?.targetUid) { if (layer) { layer.hidden = true; layer.dataset.attackId = ""; } return; }
+    if (!layer) {
+      layer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      layer.id = "attack-arrow-layer";
+      layer.classList.add("attack-arrow-layer");
+      layer.setAttribute("aria-hidden", "true");
+      document.body.appendChild(layer);
+    } else if (layer.parentElement !== document.body) document.body.appendChild(layer);
+    const attackId = String(attack.battleId || (attack.attackerUid + ":" + attack.targetUid));
+    const draw = () => {
+      if (match?.pendingAttack !== attack || !attack.targetUid) { layer.hidden = true; return; }
+      const cards = Array.from(document.querySelectorAll(".field-card[data-field-uid]"));
+      const source = cards.find(card => card.dataset.fieldUid === String(attack.attackerUid));
+      const target = cards.find(card => card.dataset.fieldUid === String(attack.targetUid));
+      if (!source || !target) { layer.hidden = true; return; }
+      const from = source.getBoundingClientRect(), to = target.getBoundingClientRect();
+      if (!from.width || !from.height || !to.width || !to.height) { layer.hidden = true; return; }
+      const width = Math.max(1, window.innerWidth), height = Math.max(1, window.innerHeight);
+      layer.setAttribute("viewBox", "0 0 " + width + " " + height);
+      layer.setAttribute("preserveAspectRatio", "none");
+      Object.assign(layer.style, { position: "fixed", inset: "0", width: "100vw", height: "100vh", zIndex: "9500", display: "block", visibility: "visible", pointerEvents: "none", overflow: "visible" });
+      if (layer.dataset.attackId !== attackId || !layer.querySelector(".attack-arrow-path")) {
+        layer.innerHTML = '<defs><marker id="attack-arrow-head-live" markerWidth="14" markerHeight="14" refX="11" refY="7" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1 L12 7 L1 13 Z" class="attack-arrow-head"></path></marker></defs><path class="attack-arrow-path attack-arrow-glow"></path><path class="attack-arrow-path" marker-end="url(#attack-arrow-head-live)"></path><circle class="attack-arrow-origin" r="8"></circle>';
+        layer.dataset.attackId = attackId;
+      }
+      const x1 = from.left + from.width / 2, y1 = from.top + from.height / 2;
+      const x2 = to.left + to.width / 2, y2 = to.top + to.height / 2;
+      const dx = x2 - x1, dy = y2 - y1, curve = Math.min(60, Math.max(20, Math.hypot(dx, dy) * .1));
+      const d = "M " + x1 + " " + y1 + " C " + (x1 + dx * .3 + curve) + " " + (y1 + dy * .1) + ", " + (x2 - dx * .3 + curve) + " " + (y2 - dy * .1) + ", " + x2 + " " + y2;
+      layer.querySelectorAll(".attack-arrow-path").forEach(path => path.setAttribute("d", d));
+      layer.querySelector(".attack-arrow-origin").setAttribute("cx", x1);
+      layer.querySelector(".attack-arrow-origin").setAttribute("cy", y1);
+      layer.hidden = false;
+    };
+    layer.dataset.attackId = attackId;
+    requestAnimationFrame(draw);
   }
   function finishTriggerResolution() {
     const pending = match?.pendingTrigger;
