@@ -6,14 +6,15 @@
     <meta name="theme-color" content="#101924" />
     <title>Vanguard Arena — Card Game Sandbox</title>
     <link rel="stylesheet" href="./styles.css?v=20261024-premium-rules-9" />
-    <link rel="stylesheet" href="./arena-presentation.css?v=site-polish-2" />
+    <link rel="stylesheet" href="./arena-presentation.css?v=character-menu-1" />
+    <link rel="stylesheet" href="./arena-character-menu.css?v=character-menu-1" />
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar">
         <a class="brand" href="#play" aria-label="Vanguard Arena home">
           <span class="brand-mark">V</span>
-          <span>VANGUARD <b>ARENA</b><small>YOUR TABLE. YOUR NEXT CHAPTER.</small></span>
+          <span class="brand-wordmark"><span class="brand-vanguard">VANGUARD</span><b>ARENA</b><small>STAND UP. FIGHT YOUR STORY.</small></span>
         </a>
         <nav class="main-nav" aria-label="Main navigation">
           <button class="nav-button active" data-view="play"><span class="nav-icon" aria-hidden="true">◇</span> Play</button>
@@ -31,17 +32,26 @@
           </div>
 
           <div id="match-empty" class="empty-match hidden">
-            <div class="lobby-hero">
-              <div class="lobby-copy"><span class="lobby-tag"><i></i> WELCOME TO VANGUARD ARENA</span><h1>Every great fight<br>starts with <em>your deck.</em></h1><p>Find your cards. Build your strategy. Take your place at the table.</p><button class="button button-primary lobby-build" data-goto="decks">Open deck workshop <span aria-hidden="true">↗</span></button><span class="lobby-footnote">No account needed to start practicing.</span></div>
-              <div class="lobby-art" aria-hidden="true"><div class="lobby-orbit"></div><span class="art-caption">STAND UP, VANGUARD.</span><img class="lobby-card card-left" src="assets/cards/full/n169.jpg" alt=""><img class="lobby-card card-right" src="assets/cards/full/n4.jpg" alt=""><img class="lobby-card card-center" src="assets/cards/full/n36.jpg" alt=""><span class="art-spark spark-one">✦</span><span class="art-spark spark-two">✧</span></div>
+            <div class="fighter-menu-heading"><div><p class="eyebrow">YOUR CARDS. YOUR STORY.</p><h1>Stand up, <em>Vanguard.</em></h1><p>Choose your next chapter. Hover a deck to meet its fighter.</p></div><span class="q4-badge">FOUR CLANS <i>✦</i> ONE ARENA</span></div>
+            <div class="fighter-menu">
+              <button class="fighter-option theme-royal" data-goto="decks" type="button" aria-label="Deck workshop — Royal Paladin">
+                <span class="fighter-scene" aria-hidden="true"><span class="clan-sigil"></span><span class="fighter-cards"><img class="menu-card menu-card-0" src="assets/cards/full/n694.jpg" alt=""><img class="menu-card menu-card-1" src="assets/cards/full/n686.jpg" alt=""><img class="menu-card menu-card-2" src="assets/cards/full/n664.jpg" alt=""></span><span class="fighter-reveal"><img class="fighter-portrait" src="assets/ui/aichi-sendou.png" alt=""><span class="fighter-name">Aichi Sendou</span></span><span class="scene-shine"></span></span>
+                <span class="fighter-option-copy"><span class="fighter-kicker">BUILD YOUR STRATEGY</span><span class="fighter-title-row"><strong>Deck workshop</strong><span class="fighter-arrow" aria-hidden="true">↗</span></span><span class="fighter-description">Find your ace. Build your next winning deck.</span><span class="clan-label">Royal Paladin</span></span>
+              </button>
+              <button class="fighter-option theme-oracle" id="empty-start" type="button" aria-label="Practice a cardfight — Oracle Think Tank">
+                <span class="fighter-scene" aria-hidden="true"><span class="clan-sigil"></span><span class="fighter-cards"><img class="menu-card menu-card-0" src="assets/cards/full/n401.jpg" alt=""><img class="menu-card menu-card-1" src="assets/cards/full/n416.jpg" alt=""><img class="menu-card menu-card-2" src="assets/cards/full/n430.jpg" alt=""></span><span class="fighter-reveal"><svg class="fighter-portrait" viewBox="660 166 360 734" aria-hidden="true"><defs><clipPath id="cut-oracle"><polygon points="660,166 1020,166 1020,900 684,900 714,510 650,450"/></clipPath></defs><image href="assets/ui/misaki-tokura.png" width="1020" height="900" clip-path="url(#cut-oracle)"/></svg><span class="fighter-name">Misaki Tokura</span></span><span class="scene-shine"></span></span>
+                <span class="fighter-option-copy"><span class="fighter-kicker">SHARPEN YOUR INSTINCTS</span><span class="fighter-title-row"><strong>Practice a cardfight</strong><span class="fighter-arrow" aria-hidden="true">↗</span></span><span class="fighter-description">Read the next move. Take on the practice bot.</span><span class="clan-label">Oracle Think Tank</span></span>
+              </button>
+              <button class="fighter-option theme-nova" id="host-online-empty" type="button" aria-label="Host a table — Nova Grappler">
+                <span class="fighter-scene" aria-hidden="true"><span class="clan-sigil"></span><span class="fighter-cards"><img class="menu-card menu-card-0" src="assets/cards/full/n141.jpg" alt=""><img class="menu-card menu-card-1" src="assets/cards/full/n165.jpg" alt=""><img class="menu-card menu-card-2" src="assets/cards/full/n155.jpg" alt=""></span><span class="fighter-reveal"><svg class="fighter-portrait" viewBox="652 148 368 752" aria-hidden="true"><defs><clipPath id="cut-nova"><polygon points="652,148 1020,148 1020,900 708,900 735,615 680,500 670,410"/></clipPath></defs><image href="assets/ui/kamui-katsuragi.png" width="1020" height="900" clip-path="url(#cut-nova)"/></svg><span class="fighter-name">Kamui Katsuragi</span></span><span class="scene-shine"></span></span>
+                <span class="fighter-option-copy"><span class="fighter-kicker">BRING THE CHALLENGE</span><span class="fighter-title-row"><strong>Host a table</strong><span class="fighter-arrow" aria-hidden="true">↗</span></span><span class="fighter-description">Set the stage. Invite a friend to your table.</span><span class="clan-label">Nova Grappler</span></span>
+              </button>
+              <button class="fighter-option theme-kagero" id="join-online-empty" type="button" aria-label="Join a cardfight — Kagero">
+                <span class="fighter-scene" aria-hidden="true"><span class="clan-sigil"></span><span class="fighter-cards"><img class="menu-card menu-card-0" src="assets/cards/full/n1879.jpg" alt=""><img class="menu-card menu-card-1" src="assets/cards/full/n548.jpg" alt=""><img class="menu-card menu-card-2" src="assets/cards/full/n547.jpg" alt=""></span><span class="fighter-reveal"><svg class="fighter-portrait" viewBox="674 117 346 783" aria-hidden="true"><defs><clipPath id="cut-kagero"><polygon points="674,117 1020,117 1020,900 716,900 720,550 670,450"/></clipPath></defs><image href="assets/ui/toshiki-kai.png" width="1020" height="900" clip-path="url(#cut-kagero)"/></svg><span class="fighter-name">Toshiki Kai</span></span><span class="scene-shine"></span></span>
+                <span class="fighter-option-copy"><span class="fighter-kicker">ANSWER THE CALL</span><span class="fighter-title-row"><strong>Join a cardfight</strong><span class="fighter-arrow" aria-hidden="true">↗</span></span><span class="fighter-description">Enter a room. Let your fighting spirit ignite.</span><span class="clan-label">Kagero</span></span>
+              </button>
             </div>
-            <div class="lobby-section-heading"><div><p class="eyebrow">CHOOSE YOUR TABLE</p><h3>How would you like to play?</h3></div><span>Pick a mode to get started</span></div>
-            <div class="lobby-modes">
-              <button class="mode-card practice-mode" id="empty-start"><span class="mode-icon" aria-hidden="true">◇</span><span class="mode-copy"><span class="mode-kicker">SOLO PLAY</span><strong>Practice a cardfight</strong><span>Try your deck against the practice bot.</span></span><span class="mode-arrow" aria-hidden="true">↗</span></button>
-              <button class="mode-card" id="host-online-empty"><span class="mode-icon" aria-hidden="true">＋</span><span class="mode-copy"><span class="mode-kicker">PLAY WITH FRIENDS</span><strong>Host a table</strong><span>Create a room and share your invite.</span></span><span class="mode-arrow" aria-hidden="true">↗</span></button>
-              <button class="mode-card" id="join-online-empty"><span class="mode-icon" aria-hidden="true">↗</span><span class="mode-copy"><span class="mode-kicker">HAVE AN INVITE?</span><strong>Join a cardfight</strong><span>Find a room or enter an invite code.</span></span><span class="mode-arrow" aria-hidden="true">↗</span></button>
-            </div>
-            <div class="lobby-library"><span class="library-symbol" aria-hidden="true">▤</span><div><strong>A new strategy is one card away.</strong><p>Explore the card library and find the pieces for your next deck.</p></div><button class="button button-quiet" data-goto="cards">Explore cards <span aria-hidden="true">→</span></button></div>
+            <div class="lobby-library"><span class="library-symbol" aria-hidden="true">▤</span><div><strong>Discover your next ace.</strong><p>Explore the card library and find the pieces for your next deck.</p></div><button class="button button-quiet" data-goto="cards">Explore cards <span aria-hidden="true">→</span></button></div>
           </div>
 
           <div id="match-layout" class="match-layout">
