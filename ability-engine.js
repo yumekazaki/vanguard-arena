@@ -3242,6 +3242,7 @@
     if (!event || !abilitySourceInstanceId) return false;
     if (subject === "source") return event.sourceCardInstanceId === abilitySourceInstanceId || (event.type === "unit.attacked" && (event.attackingCardInstanceIds || []).includes(abilitySourceInstanceId));
     if (subject === "event-subject") return event.subjectCardInstanceId === abilitySourceInstanceId;
+    if (subject === "event-target") return (event.targetCardInstanceIds || []).includes(abilitySourceInstanceId);
     if (subject === "ridden-unit") return event.subjectCardInstanceId === abilitySourceInstanceId || (event.targetCardInstanceIds || []).includes(abilitySourceInstanceId);
     if (subject === "booster") return event.boosterCardInstanceId === abilitySourceInstanceId;
     if (subject === "boosted-unit") return event.boostedCardInstanceId === abilitySourceInstanceId;
