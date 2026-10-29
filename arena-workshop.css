@@ -1,0 +1,103 @@
+/* Visual deck construction: inspect | full deck | search. */
+#view-decks { max-width:1920px; }
+body:has(#view-decks.active-view) .topbar { height:70px; }
+#view-decks { padding-top:18px; }
+#view-decks>.page-heading .eyebrow { display:none; }
+#view-decks>.page-heading h1 { margin:0; }
+.workshop-accessible-title { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+#view-decks>.page-heading { margin-bottom:20px; align-items:center; }
+#view-decks>.page-heading h1 { font:900 italic 35px/1 ArenaDisplay,Impact,sans-serif; letter-spacing:.02em; }
+#view-decks>.page-heading .subheading { font-size:12px; margin-bottom:0; }
+#view-decks .visual-workshop { display:grid; grid-template-columns:235px minmax(0,1fr) 275px; gap:16px; align-items:start; }
+.visual-workshop .workshop-inspector { grid-column:1; grid-row:1; position:sticky; top:16px; width:100%; min-width:0; background:linear-gradient(145deg,#182b50f5,#191d3af5); border-color:#99b9e85c; max-height:calc(100dvh - 32px); }
+.workshop-inspector .inspector-heading { padding:14px; gap:7px; min-height:63px; }
+.workshop-inspector [data-inspector-status] { font-size:11px; color:#b3c8e0; }
+.workshop-inspector [data-inspector-close] { display:none; }
+.workshop-inspector .inspector-heading .button { padding:6px 9px; min-height:30px; font-size:10px; }
+.workshop-inspector .inspector-content { padding:12px; height:calc(100dvh - 290px); min-height:470px; max-height:calc(100dvh - 100px); display:flex; flex-direction:column; gap:12px; overflow:hidden; }
+.workshop-inspector .inspector-art { width:100%; height:auto; max-height:min(34dvh,340px); object-fit:contain; flex:none; float:none; margin:0; border:1px solid #abc8e42b; }
+.workshop-inspector .inspector-copy { flex:1; min-height:0; overflow:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#6987b5 #18213b; padding:0 5px 8px 0; }
+.workshop-inspector .inspector-copy h2 { font-size:17px; margin:0 0 8px; line-height:1.4; }
+.workshop-inspector .inspector-meta { font-size:11px; margin:0; }
+.workshop-inspector .inspector-stats { margin:12px 0; padding:10px 0; }
+.workshop-inspector .inspector-rules { font-size:13px; line-height:1.75; }
+.workshop-inspector .inspector-source { font-size:10px; }
+.workshop-inspector .inspector-empty { min-height:0; flex:1; }
+.workshop-inspector .inspector-empty>span { font-size:48px; color:#97bced; }
+.workshop-inspector .inspector-empty h2 { font-size:20px; }
+.workshop-inspector .inspector-empty p { font-size:12px; }
+.workshop-inspector .inspector-empty small { font-size:11px; }
+.visual-workshop .deck-builder-panel { grid-column:2; grid-row:1; min-width:0; position:static; padding:20px; background:linear-gradient(135deg,#152747f5,#1a1e39f5); border-color:#a5b5e34f; }
+.visual-workshop .panel-heading { margin-bottom:14px; }
+.visual-workshop .panel-heading h2 { font-size:20px; }
+.visual-workshop .panel-heading .eyebrow { font-size:8px; margin-bottom:6px; }
+.workshop-toolbar { display:flex; align-items:end; gap:12px; }
+.workshop-name { flex:1; min-width:110px; }.workshop-name .input-label { margin:0 0 6px; font-size:10px; }
+.workshop-toolbar .text-input { min-height:37px; height:37px; font-size:12px; }
+.visual-workshop .deck-save-row { display:flex; flex-wrap:nowrap; flex:none; gap:6px; margin:0; padding:0; border:0; }
+.visual-workshop .deck-save-row .button,.visual-workshop .deck-save-row .button:first-child { flex:none; padding:8px 10px; min-height:37px; font-size:11px; white-space:nowrap; }
+.visual-workshop .builder-stats { grid-template-columns:1fr 1.5fr .8fr; margin:14px 0; border-color:#9dbfe333; }
+.visual-workshop .builder-stats div { padding:10px 12px; }
+.visual-workshop .builder-stats b { font-size:15px; }
+.visual-workshop .builder-stats small { margin-top:5px; font-size:8px; }
+.workshop-grid-help { display:flex; justify-content:space-between; gap:12px; margin:15px 0 12px; font-size:10px; color:#acbed7; }
+.workshop-grid-help>span:first-child { color:#d2dff5; }
+.visual-workshop .visual-deck-list { display:block; max-height:none; overflow:visible; margin:0; }
+.workshop-deck-section { margin:0 0 16px; border:1px solid #9cb8ed38; border-radius:10px; background:#0c173080; overflow:hidden; }
+.workshop-deck-section>header { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:1px solid #98b6e52b; background:linear-gradient(100deg,#28477477,#3e285077); }
+.workshop-deck-section h3 { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; margin:0; color:#d2e4ff; }
+.workshop-deck-section>header>span { font-size:11px; color:#b9d1f1; font-variant-numeric:tabular-nums; }
+.deck-grid-stage { position:relative; padding:10px; }
+.deck-card-grid { --deck-height:clamp(300px,calc(100dvh - 520px),620px); display:grid; grid-template-columns:repeat(10,minmax(0,1fr)); grid-auto-rows:minmax(0,1fr); gap:5px; height:var(--deck-height); align-content:start; }
+.deck-grid-card,.deck-empty-slot { display:block; position:relative; min-width:0; aspect-ratio:2/3; border-radius:4px; }
+.deck-card-grid>.deck-grid-card,.deck-card-grid>.deck-empty-slot { height:100%; width:auto; max-width:100%; min-height:0; justify-self:center; }
+.deck-grid-card { border:1px solid #bbcae64d; background:#111d32; box-shadow:0 2px 6px #0006; transition:border-color .15s,box-shadow .15s; }
+.deck-grid-card:hover,.deck-grid-card:focus-within { border-color:#cfddff; box-shadow:0 0 0 2px #a3c4ff45; z-index:2; }
+.deck-grid-image { display:block; width:100%; height:100%; padding:0; border:0; background:transparent; border-radius:3px; overflow:hidden; cursor:zoom-in; }
+.deck-grid-image img { display:block; width:100%; height:100%; object-fit:contain; }
+.deck-empty-slot { border:1px solid #afc4ef14; background:linear-gradient(145deg,#4b689d0a,#333e720b); }
+.deck-empty-slot:before { content:"◇"; position:absolute; inset:0; display:grid; place-items:center; color:#9fb9e815; font-size:21px; }
+.deck-empty-prompt { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:9px; pointer-events:none; text-align:center; padding:14px; }
+.deck-empty-prompt b { padding:9px 15px 0; font:900 italic 24px ArenaDisplay,Impact,sans-serif; color:#c9dbfb; text-shadow:0 2px 9px #081028; }
+.deck-empty-prompt span { padding:0 12px 10px; font-size:11px; color:#9fb6d9; text-shadow:0 1px 6px #081028; }
+.deck-copy-number { position:absolute; top:3px; left:3px; padding:2px 4px; border-radius:3px; color:#fff; background:#071128d9; border:1px solid #c6d3f35c; font-size:8px; font-variant-numeric:tabular-nums; pointer-events:none; }
+.deck-grid-zoom { position:absolute; top:3px; right:3px; padding:0; width:19px; height:19px; border:1px solid #d1dcf275; border-radius:4px; background:#0a1431db; color:#fff; font-size:12px; opacity:0; }
+.deck-copy-controls { display:flex; position:absolute; left:2px; right:2px; bottom:2px; justify-content:space-between; gap:2px; padding:2px; background:#071128e6; border-radius:4px; opacity:0; }
+.deck-copy-controls button { min-width:0; width:33.333%; height:22px; padding:0; border:1px solid #aec9ee3d; border-radius:3px; background:#263c60; font-size:15px; color:#f2f5ff; }
+.deck-copy-controls button:hover { background:#48679a; }
+.deck-grid-card:hover .deck-copy-controls,.deck-grid-card:focus-within .deck-copy-controls,.deck-grid-card:hover .deck-grid-zoom,.deck-grid-card:focus-within .deck-grid-zoom { opacity:1; }
+.workshop-gdeck { border-color:#c5a5f13e; background:#281a3c55; margin-bottom:0; }
+.workshop-gdeck>header { background:#673c8c30; }
+.workshop-gdeck h3,.workshop-gdeck>header>span { color:#dac4f5; }
+.workshop-gdeck .deck-card-grid { grid-template-columns:repeat(16,minmax(0,1fr)); grid-auto-rows:auto; height:auto; gap:4px; }
+.workshop-gdeck .deck-card-grid>.deck-grid-card,.workshop-gdeck .deck-card-grid>.deck-empty-slot { height:clamp(48px,8dvh,86px); }
+.workshop-gdeck .deck-copy-number { font-size:7px; padding:1px 2px; top:1px; left:1px; }
+.workshop-gdeck .deck-copy-controls { left:0; right:0; bottom:0; gap:1px; padding:1px; }.workshop-gdeck .deck-copy-controls button { height:19px; font-size:12px; }
+.workshop-gdeck .deck-grid-zoom { width:16px; height:16px; font-size:11px; top:1px; right:1px; }
+.workshop-gdeck .deck-empty-prompt { gap:3px; }.workshop-gdeck .deck-empty-prompt b { font-size:18px; padding-top:0; }.workshop-gdeck .deck-empty-prompt span { font-size:10px; padding-bottom:0; }
+.workshop-starter { display:grid; grid-template-columns:minmax(140px,1fr) 1.2fr; align-items:center; gap:14px; margin:17px 0; }
+.workshop-starter .input-label { font-size:10px; margin:0 0 6px; }.workshop-starter select { min-height:37px; height:37px; font-size:11px; }.workshop-starter .muted-text { font-size:10px; line-height:1.6; margin:13px 0 0; }
+.visual-workshop .deck-validation { font-size:10px; padding:10px 12px; line-height:1.7; }
+.visual-workshop .workshop-search { grid-column:3; grid-row:1; position:sticky; top:16px; min-width:0; padding:16px; max-height:calc(100dvh - 32px); display:flex; flex-direction:column; background:linear-gradient(145deg,#1c2d52f5,#201d3ff5); border-color:#b4a6e252; }
+.workshop-search .panel-heading h2 { font-size:18px; }.workshop-search .panel-heading { margin-bottom:15px; }
+.workshop-search-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 8px; }
+.workshop-filter { display:block; min-width:0; }.workshop-filter>span { display:block; font-size:10px; color:#bbcbe5; margin-bottom:5px; }.wide-filter { grid-column:1/-1; }
+.workshop-search .text-input { width:100%; height:35px; min-height:35px; padding:7px 9px; font-size:11px; }
+.workshop-search .catalog-pager { display:flex; flex-direction:column; align-items:stretch; gap:8px; padding:11px 0 8px; margin-top:13px; }
+.workshop-search .catalog-pager>div { display:flex; width:100%; justify-content:space-between; gap:8px; }
+.workshop-search .catalog-pager .button { min-height:28px; padding:4px 10px; }.workshop-search .catalog-pager .muted-text { font-size:10px; }
+.search-add-hint { margin:8px 0 0; font-size:10px; color:#a6bcd6; line-height:1.5; }
+.workshop-search .builder-card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding:12px 2px 3px; margin:0; overflow:auto; min-height:150px; max-height:calc(100dvh - 400px); scrollbar-width:thin; scrollbar-color:#7185b6 #192141; }
+.workshop-search .game-card-wrap,.workshop-search .game-card-wrap>.game-card { width:100%; height:175px; }
+.workshop-search .game-card .card-art { height:133px; background:#101a30; }.workshop-search .game-card .card-art img { object-fit:contain; }
+.workshop-search .game-card .card-copy { padding:7px 6px; }.workshop-search .game-card .card-name { font-size:10px; }.workshop-search .game-card .card-subline { font-size:8px; margin-top:3px; }.workshop-search .trigger-chip { display:none; }.workshop-search .grade-chip { width:16px; height:16px; top:4px; left:4px; font-size:8px; }.workshop-search .card-zoom { width:23px; height:23px; top:23px; right:4px; font-size:14px; }
+@media(min-width:1700px) { #view-decks .visual-workshop { grid-template-columns:265px minmax(0,1fr) 300px; gap:20px; }.workshop-search .builder-card-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }.workshop-search .game-card-wrap,.workshop-search .game-card-wrap>.game-card { height:153px; }.workshop-search .game-card .card-art { height:112px; } }
+@media(max-width:1199px) and (min-width:1001px) { #view-decks .visual-workshop { grid-template-columns:205px minmax(0,1fr) 230px; gap:12px; }.visual-workshop .deck-builder-panel { padding:15px; }.workshop-toolbar { flex-wrap:wrap; }.workshop-name { flex-basis:100%; }.visual-workshop .deck-save-row { width:100%; }.visual-workshop .deck-save-row .button { flex:1!important; }.workshop-search { padding:13px!important; }.workshop-inspector .inspector-content { padding:10px; } }
+@media(max-width:1000px) and (min-width:761px) { #view-decks .visual-workshop { grid-template-columns:minmax(0,1fr) 245px; }.visual-workshop .deck-builder-panel { grid-column:1; grid-row:1/3; }.visual-workshop .workshop-search { grid-column:2; grid-row:1; position:static; max-height:700px; }.visual-workshop .workshop-inspector { grid-column:2; grid-row:2; position:sticky; top:16px; }.workshop-search .builder-card-grid { max-height:230px; }.workshop-inspector .inspector-content { height:510px; min-height:0; }.deck-card-grid { grid-template-columns:repeat(8,minmax(0,1fr)); }.workshop-gdeck .deck-card-grid { grid-template-columns:repeat(8,minmax(0,1fr)); }.workshop-toolbar { flex-wrap:wrap; }.workshop-name { flex-basis:100%; }.workshop-starter { grid-template-columns:1fr; gap:0; }.workshop-starter .muted-text { margin-top:8px; } }
+@media(max-width:760px) { #view-decks .visual-workshop { display:flex; flex-direction:column; gap:18px; }.visual-workshop .deck-builder-panel { order:1; width:100%; padding:15px; }.visual-workshop .workshop-search { order:2; width:100%; position:static; max-height:none; }.visual-workshop .workshop-inspector { display:none; }.visual-workshop .workshop-inspector.has-card { display:block; position:fixed; top:auto; bottom:10px; left:10px; right:10px; width:auto; z-index:50; max-height:43dvh; box-shadow:0 -12px 60px #0008; border-color:#b1cfff; }.workshop-inspector [data-inspector-close] { display:grid; width:29px; height:29px; min-height:29px; flex:none; }.workshop-inspector .inspector-heading { min-height:48px; padding:9px 12px; }.workshop-inspector .inspector-heading .eyebrow { font-size:8px; margin-bottom:4px; }.workshop-inspector .inspector-content { height:calc(43dvh - 50px); min-height:0; max-height:none; display:block; padding:10px; }.workshop-inspector .inspector-art { width:30%; height:auto; max-height:calc(43dvh - 75px); float:left; margin:0 12px 8px 0; }.workshop-inspector .inspector-copy { height:100%; max-height:none; overflow:auto; }.workshop-inspector .inspector-copy h2 { font-size:15px; }.workshop-inspector .inspector-meta { font-size:10px; }.workshop-inspector .inspector-rules { font-size:12px; }.workshop-inspector .inspector-stats { gap:4px; margin:8px 0; padding:8px 0; }.workshop-inspector .inspector-stats dt { font-size:8px; }.workshop-inspector .inspector-stats dd { font-size:11px; }#view-decks:has(.workshop-inspector.has-card) { padding-bottom:45dvh; }.workshop-toolbar { flex-wrap:wrap; gap:10px; }.workshop-name { flex-basis:100%; }.visual-workshop .deck-save-row { width:100%; }.visual-workshop .deck-save-row .button,.visual-workshop .deck-save-row .button:first-child { flex:1; min-height:40px; font-size:10px; padding:8px; }.workshop-toolbar .text-input,.workshop-search .text-input { min-height:42px; height:42px; font-size:16px; }.workshop-grid-help { flex-direction:column; gap:5px; font-size:9px; }.deck-card-grid { grid-template-columns:repeat(5,minmax(0,1fr)); gap:5px; }.workshop-gdeck .deck-card-grid { grid-template-columns:repeat(8,minmax(0,1fr)); }.deck-grid-stage { padding:7px; }.deck-copy-number { top:1px; left:1px; font-size:7px; padding:1px 2px; }.deck-empty-prompt b { font-size:21px; }.deck-empty-prompt span { max-width:220px; line-height:1.7; }.workshop-gdeck .deck-empty-prompt b { font-size:16px; }.workshop-gdeck .deck-empty-prompt span { font-size:8px; }.workshop-starter { grid-template-columns:1fr; gap:0; }.workshop-starter select { font-size:16px; min-height:42px; }.workshop-starter .muted-text { margin-top:8px; }.workshop-search .builder-card-grid { grid-template-columns:repeat(3,minmax(0,1fr)); max-height:500px; }.workshop-search .game-card-wrap,.workshop-search .game-card-wrap>.game-card { height:165px; }.workshop-search .game-card .card-art { height:122px; }.workshop-search .panel-heading h2 { font-size:21px; }.workshop-search-fields { gap:12px; }.workshop-filter>span { font-size:11px; } }
+@media(pointer:coarse) { .deck-grid-zoom { opacity:1; }.deck-copy-controls { opacity:1; }.deck-copy-controls button { min-height:22px; } }
+@media(max-width:760px) { body:has(#view-decks.active-view) .topbar { height:auto; }.deck-card-grid { height:auto; grid-auto-rows:auto; }.deck-card-grid>.deck-grid-card,.deck-card-grid>.deck-empty-slot { height:auto; width:100%; }.workshop-gdeck .deck-card-grid>.deck-grid-card,.workshop-gdeck .deck-card-grid>.deck-empty-slot { height:auto; width:100%; } }
+
+.saved-deck-default { width:100%; margin-top:14px; min-height:39px; border-color:#a9c5ff55; color:#d5e6ff; background:#34457555; }
+.saved-deck-default[aria-pressed="true"] { color:#c5f5e5; border-color:#8fd4b68c; background:#397b652d; }
+.saved-deck-card.is-default-deck { border-color:#8fd4b68c; box-shadow:0 0 0 1px #8fd4b61f; }

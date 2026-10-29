@@ -26,8 +26,10 @@
   }
   const userCards = Array.isArray(window.USER_CARDS) ? window.USER_CARDS.map((card, i) => ({ ...card, color: card.color || colors[i % colors.length], glyph: glyphs[i % glyphs.length], type: card.type || "Unit", trigger: card.trigger || "" })) : [];
   const importedCatalog = Array.isArray(window.CARD_CATALOG) ? window.CARD_CATALOG : [];
+  const importedCardIds = new Set(importedCatalog.map(card => card.id));
   const cardList = importedCatalog.length ? [...importedCatalog, ...userCards] : [...sampleCards, ...userCards];
   const cardMap = new Map(cardList.map((c) => [c.id, c]));
+  window.ArenaInspector?.setCatalog(cardList);
   const cardArtByDatabaseId = new Map(cardList.filter((c) => Number.isFinite(Number(c.dbId))).map((c) => [Number(c.dbId), c.image]));
   const upstreamCardArtBase = "https://raw.githubusercontent.com/justkidding047356/cardfight-area/c2a5aad1f1e348500f1942a890c7e39a95953719";
   function artThumbnailUrl(id) {
@@ -73,6 +75,32 @@
     try { return JSON.parse(localStorage.getItem(deckStorageKey()) || "[]"); } catch { return []; }
   }
   function writeSavedDecks(decks) { localStorage.setItem(deckStorageKey(), JSON.stringify(decks)); updateDeckCount(); if (account.user && !account.syncing) void persistCloudDecks(decks); }
+  // A browser preference, scoped to the current deck folder; saved deck data stays unchanged.
+  const restoredDefaultDeckScopes = new Set();
+  let defaultDeckStartupSnapshot = JSON.stringify(builder);
+  function defaultDeckStorageKey() { return `${deckStorageKey()}:defaultDeckId`; }
+  function savedDefaultDeck() {
+    const id = localStorage.getItem(defaultDeckStorageKey());
+    return id ? readSavedDecks().find(deck => String(deck.id) === id) || null : null;
+  }
+  function restoreDefaultDeck() {
+    const scope = defaultDeckStorageKey(), deck = savedDefaultDeck();
+    // Account decks may arrive later. Never replace work started while they were loading.
+    if (!deck || restoredDefaultDeckScopes.has(scope) || match || JSON.stringify(builder) !== defaultDeckStartupSnapshot) return;
+    builder = { id: deck.id, name: deck.name, cards: { ...deck.cards }, starterCardId: deck.starterCardId || "" };
+    restoredDefaultDeckScopes.add(scope);
+    defaultDeckStartupSnapshot = JSON.stringify(builder);
+    renderBuilder();
+  }
+  function makeDefaultDeck(id) {
+    const deck = readSavedDecks().find(item => String(item.id) === String(id));
+    if (!deck) return;
+    localStorage.setItem(defaultDeckStorageKey(), String(deck.id));
+    restoredDefaultDeckScopes.add(defaultDeckStorageKey());
+    builder = { id: deck.id, name: deck.name, cards: { ...deck.cards }, starterCardId: deck.starterCardId || "" };
+    renderBuilder(); renderSavedDecks();
+    toast(`“${deck.name}” is your default deck for the workshop and practice`);
+  }
   function updateDeckCount() { $("#deck-count").textContent = readSavedDecks().length; }
   function escapeHtml(value) { return String(value ?? "").replace(/[&<>\"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
   function accountMessage(message, isError = false) { const el = $("#account-message"); if (!el) return; el.textContent = message; el.classList.toggle("error", isError); }
@@ -87,7 +115,7 @@
     $("#account-reset").classList.toggle("hidden", account.recovery);
     $("#account-update-password").classList.toggle("hidden", !account.recovery);
     if (account.user) $("#account-email-label").textContent = account.user.email || "Signed-in player";
-    $("#account-button").textContent = account.user ? `Account · ${(account.user.email || "Player").split("@")[0]}` : "Account";
+    $("#account-button").textContent = account.user ? `Account · ${(account.user.email || "Player").split("@")[0]}` : "Sign in";
     $("#account-import-local").classList.toggle("hidden", !account.user || !localDecksToImport().length);
     $("#profile-username").value = account.profile?.username || "";
     $("#profile-display-name").value = account.profile?.display_name || "";
@@ -126,7 +154,7 @@
         if (!current || Date.parse(deck.updatedAt || 0) > Date.parse(current.updatedAt || 0)) decks.set(String(deck.id), deck);
       });
       const merged = [...decks.values()].sort((a, b) => Date.parse(b.updatedAt || 0) - Date.parse(a.updatedAt || 0));
-      localStorage.setItem(deckStorageKey(), JSON.stringify(merged)); updateDeckCount(); renderSavedDecks();
+      localStorage.setItem(deckStorageKey(), JSON.stringify(merged)); updateDeckCount(); restoreDefaultDeck(); renderSavedDecks();
       if (merged.length) {
         const result = await account.client.from("player_decks").upsert(cloudDeckRows(merged, userId), { onConflict: "user_id,deck_id" });
         if (result.error) throw result.error;
@@ -175,14 +203,14 @@
       account.client.auth.onAuthStateChange((event, session) => {
         const previousUserId = account.user?.id;
         account.user = session?.user || null; if (previousUserId !== account.user?.id) account.profile = null; account.recovery = event === "PASSWORD_RECOVERY";
-        refreshAccountUI(); updateDeckCount(); renderSavedDecks();
+        refreshAccountUI(); updateDeckCount(); restoreDefaultDeck(); renderSavedDecks();
         if (account.user && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) setTimeout(() => { void syncCloudDecks(); void loadPlayerProfile(); }, 0);
         if (account.recovery) { accountMessage("Enter a new password, then choose Save new password."); setTimeout(openAccountDialog, 0); }
         if (!account.user) $("#account-sync-status").textContent = "Your account is signed out. Local decks remain in this browser.";
       });
       account.client.auth.getSession().then(({ data, error }) => {
         if (error) throw error;
-        account.user = data.session?.user || null; refreshAccountUI(); updateDeckCount(); renderSavedDecks();
+        account.user = data.session?.user || null; refreshAccountUI(); updateDeckCount(); restoreDefaultDeck(); renderSavedDecks();
         if (account.user) { void syncCloudDecks(); void loadPlayerProfile(); }
       }).catch((error) => accountMessage(`Couldn't restore your account session: ${error.message}`, true));
     } catch (error) { accountMessage(`Account setup error: ${error.message}`, true); }
@@ -326,12 +354,20 @@
     $("#starter-vanguard").value = builder.starterCardId || "";
     $("#starter-vanguard-help").textContent = builder.starterCardId ? `${cardMap.get(builder.starterCardId)?.name || "Selected unit"} will begin on your Vanguard circle.` : "Choose a Grade 0 unit from your deck. It starts on your Vanguard circle.";
     const rows = Object.entries(builder.cards || {}).filter(([, qty]) => qty > 0).map(([id, qty]) => ({ card: cardMap.get(id), qty })).filter((x) => x.card).sort((a, b) => a.card.grade - b.card.grade || a.card.name.localeCompare(b.card.name));
-    $("#deck-list").innerHTML = rows.length ? rows.map(({ card, qty }) => `<div class="deck-row"><button class="deck-row-image" type="button" data-card-zoom="${escapeHtml(card.id)}" aria-label="Zoom ${escapeHtml(card.name)}" title="Zoom card">${cardImage(card)}</button><span class="row-grade">${card.grade === null || card.grade === undefined ? "G?" : `G${escapeHtml(card.grade)}`}</span><span class="row-title">${escapeHtml(card.name)}<small>${escapeHtml(card.clan || card.nation || "Clan not listed")} · ${escapeHtml(card.type)}${card.trigger ? ` · ${escapeHtml(card.trigger)}` : ""}</small></span><span class="qty-controls"><button data-qty="-1" data-id="${escapeHtml(card.id)}">−</button>${qty}<button data-qty="1" data-id="${escapeHtml(card.id)}">+</button><button class="remove-row" data-remove="${escapeHtml(card.id)}" title="Remove">×</button></span></div>`).join("") : `<div class="empty-saved">Your deck is empty. Choose cards from the library.</div>`;
+    // Presentation only: every copy is visible; existing quantity and zoom handlers are reused.
+    const visualCard = (card, qty, copy) => `<article class="deck-grid-card" data-card-id="${escapeHtml(card.id)}"><button class="deck-grid-image" type="button" aria-label="Inspect ${escapeHtml(card.name)}, copy ${copy + 1} of ${qty}">${cardImage(card)}</button><button class="deck-grid-zoom" type="button" data-card-zoom="${escapeHtml(card.id)}" aria-label="Zoom ${escapeHtml(card.name)}">⤢</button><span class="deck-copy-number">${copy + 1}/${qty}</span><div class="deck-copy-controls"><button type="button" data-qty="-1" data-id="${escapeHtml(card.id)}" aria-label="Remove one ${escapeHtml(card.name)}">−</button><button type="button" data-qty="1" data-id="${escapeHtml(card.id)}" aria-label="Add one ${escapeHtml(card.name)}">+</button><button type="button" data-remove="${escapeHtml(card.id)}" aria-label="Remove all ${escapeHtml(card.name)}" title="Remove all copies">×</button></div></article>`;
+    const visualSection = (items, title, count, limit, extra = false) => {
+      const cards = items.flatMap(({card, qty}) => Array.from({length:qty}, (_,copy) => visualCard(card,qty,copy))).join("");
+      const slots = Array.from({length:Math.max(0,limit-count)}, () => '<span class="deck-empty-slot" aria-hidden="true"></span>').join("");
+      return `<section class="workshop-deck-section${extra ? " workshop-gdeck" : ""}" aria-label="${title}"><header><h3>${title}</h3><span>${count} / ${limit}</span></header><div class="deck-grid-stage"><div class="deck-card-grid">${cards}${slots}</div>${!count ? `<div class="deck-empty-prompt"><b>${extra ? "Your G deck" : "Your next deck starts here"}</b><span>${extra ? "G Units and G Guardians appear here." : "Search on the right, then click a card to add it."}</span></div>` : ""}</div></section>`;
+    };
+    $("#deck-list").innerHTML = visualSection(rows.filter(({card}) => !isGDeckCard(card)), "Main deck", total, 50) + visualSection(rows.filter(({card}) => isGDeckCard(card)), "G deck", gTotal, 16, true);
     renderBuilderCards();
   }
   function renderBuilderCards() {
     const term = $("#card-search").value.trim().toLowerCase(); const grade = $("#grade-filter").value; const clan = $("#builder-clan-filter").value; const nation = $("#builder-nation-filter").value;
-    const filtered = cardList.filter((c) => gradeMatches(c, grade) && clanMatches(c, clan) && nationMatches(c, nation) && (!term || `${c.name} ${c.id} ${c.dbId || ""} ${c.clan || ""} ${c.nation || ""} ${c.type} ${c.trigger || ""}`.toLowerCase().includes(term)));
+    const abilityTerm = $("#card-text-search").value.trim().toLowerCase();
+    const filtered = cardList.filter((c) => (!abilityTerm || String(c.text || "").toLowerCase().includes(abilityTerm)) && gradeMatches(c, grade) && clanMatches(c, clan) && nationMatches(c, nation) && (!term || `${c.name} ${c.id} ${c.dbId || ""} ${c.clan || ""} ${c.nation || ""} ${c.type} ${c.trigger || ""}`.toLowerCase().includes(term)));
     const pages = Math.max(1, Math.ceil(filtered.length / cardPageSize)); builderPage = Math.min(builderPage, pages - 1);
     const visible = filtered.slice(builderPage * cardPageSize, (builderPage + 1) * cardPageSize);
     $("#builder-results-count").textContent = `${filtered.length.toLocaleString()} cards`;
@@ -349,14 +385,14 @@
   }
   function clanMatches(card, selected) {
     if (selected === "all") return true;
-    const allClans=window.VanguardAbilityEngine?.hasAbilityKeyword(card,"all-clans-and-nations")===true;
+    const allClans=window.VanguardAbilityEngine?.hasAbilityKeyword(importedCardIds.has(card.id) ? card.id : card,"all-clans-and-nations")===true;
     if (selected === "unknown") return !(card.clans || (card.clan ? [card.clan] : [])).length&&!allClans;
     return allClans||(card.clans || []).includes(selected) || card.clan === selected;
   }
   function nationMatches(card, selected) {
     const nations = card.nations?.length ? card.nations : (card.nation ? [card.nation] : []);
     if (selected === "all") return true;
-    const allClansAndNations=window.VanguardAbilityEngine?.hasAbilityKeyword(card,"all-clans-and-nations")===true;
+    const allClansAndNations=window.VanguardAbilityEngine?.hasAbilityKeyword(importedCardIds.has(card.id) ? card.id : card,"all-clans-and-nations")===true;
     if (selected === "unknown") return nations.length === 0&&!allClansAndNations;
     return allClansAndNations||nations.includes(selected);
   }
@@ -389,10 +425,10 @@
     $("#load-deck-dialog").showModal();
   }
   function renderSavedDecks() {
-    const decks = readSavedDecks(); $("#saved-deck-subtitle").textContent = decks.length ? `${decks.length} deck${decks.length === 1 ? "" : "s"}` : "No decks yet";
+    const decks = readSavedDecks(), defaultId = savedDefaultDeck()?.id; $("#saved-deck-subtitle").textContent = decks.length ? `${decks.length} deck${decks.length === 1 ? "" : "s"}` : "No decks yet";
     $("#saved-deck-eyebrow").textContent = account.user ? "ONLINE ACCOUNT DECK FOLDER" : "DECK FOLDER · THIS BROWSER";
     $("#deck-folder-help").textContent = account.user ? "This folder syncs to your account. Your saved decks load here whenever you sign in." : "Sign in to sync this folder across devices. Save decks here, then they load whenever you sign in.";
-    $("#saved-decks").innerHTML = decks.length ? decks.map((d) => { const s = deckSummary(d); const preview = Object.keys(d.cards || {}).slice(0, 5).map((id) => cardMap.get(id)).filter(Boolean); return `<article class="saved-deck-card"><h3>${escapeHtml(d.name)}</h3><div class="saved-deck-meta">${deckCount(d)} cards · G${s.counts.join(" / ")} · ${escapeHtml(new Date(d.updatedAt || Date.now()).toLocaleDateString())}</div><div class="saved-deck-preview">${preview.map((c) => `<button class="saved-deck-preview-card" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom ${escapeHtml(c.name)}">${c.image ? `<img src="${escapeHtml(c.image)}" alt="" onerror="this.remove()"/>` : escapeHtml(c.glyph)}</button>`).join("")}</div><div class="saved-deck-actions"><button class="button button-primary" data-load-deck="${escapeHtml(d.id)}">Open</button><button class="button" data-duplicate-deck="${escapeHtml(d.id)}">Duplicate</button><button class="button" data-export-saved="${escapeHtml(d.id)}">Export</button><button class="button" data-delete-deck="${escapeHtml(d.id)}" title="Delete">×</button></div></article>`; }).join("") : `<div class="empty-saved">Saved decks appear here. Build a deck and choose Save deck.</div>`;
+    $("#saved-decks").innerHTML = decks.length ? decks.map((d) => { const s = deckSummary(d); const preview = Object.keys(d.cards || {}).slice(0, 5).map((id) => cardMap.get(id)).filter(Boolean); return `<article class="saved-deck-card${d.id === defaultId ? " is-default-deck" : ""}"><h3>${escapeHtml(d.name)}</h3><div class="saved-deck-meta">${deckCount(d)} cards · G${s.counts.join(" / ")} · ${escapeHtml(new Date(d.updatedAt || Date.now()).toLocaleDateString())}</div><div class="saved-deck-preview">${preview.map((c) => `<button class="saved-deck-preview-card" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom ${escapeHtml(c.name)}">${c.image ? `<img src="${escapeHtml(c.image)}" alt="" onerror="this.remove()"/>` : escapeHtml(c.glyph)}</button>`).join("")}</div><div class="saved-deck-actions"><button class="button button-primary" data-load-deck="${escapeHtml(d.id)}">Open</button><button class="button" data-duplicate-deck="${escapeHtml(d.id)}">Duplicate</button><button class="button" data-export-saved="${escapeHtml(d.id)}">Export</button><button class="button" data-delete-deck="${escapeHtml(d.id)}" title="Delete">×</button></div><button class="button saved-deck-default" type="button" data-default-deck="${escapeHtml(d.id)}" aria-pressed="${d.id === defaultId}">${d.id === defaultId ? "✓ Default deck" : "Make default deck"}</button></article>`; }).join("") : `<div class="empty-saved">Saved decks appear here. Build a deck and choose Save deck.</div>`;
     updateDeckCount();
   }
   function renderLibrary() {
@@ -439,6 +475,7 @@
     const playerId = crypto.randomUUID?.() || 'player-' + Date.now() + '-' + Math.random().toString(36).slice(2);
     const allCards = cardInstances(deck, playerId);
     const gDeck = allCards.filter((instance) => isGDeckCard(cardMap.get(instance.cardId)));
+    gDeck.forEach(instance => { instance.faceUp = false; });
     const pile = allCards.filter((instance) => !gDeck.includes(instance));
     const starterId = deck.starterCardId || pile.find((instance) => Number(cardMap.get(instance.cardId)?.grade) === 0 && isUnitCard(cardMap.get(instance.cardId)))?.cardId;
     const starterIndex = pile.findIndex((instance) => instance.cardId === starterId);
@@ -1052,6 +1089,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     const card = cardMap.get(reveal.instance.cardId);
     if (!card) return;
     $("#public-reveal-title").textContent = `${reveal.owner === "human" ? match.players.human.name : match.players.bot.name} revealed a card`;
+    $("#public-reveal-card").dataset.cardId = card.id;
     $("#public-reveal-card").innerHTML = `<button class="zone-card-zoom" type="button" data-card-zoom="${escapeHtml(card.id)}" aria-label="Zoom ${escapeHtml(card.name)}">⤢</button>${cardImage(card)}<b>${escapeHtml(card.name)}</b>`;
     $("#public-reveal-close").classList.toggle("hidden", reveal.owner !== "human");
     if (!dialog.open) dialog.showModal();
@@ -1415,7 +1453,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     return (ownGrade >= 3 && opponentGrade >= 3) || Number(turnStartGrade) >= 3;
   }
   function isStrideUnit(card) { return /G Unit/i.test(String(card?.type || "")) && !isGGuardian(card) && /\bStride\b/i.test(String(card?.text || "")); }
-  function strideGrade(instance,isPayingStrideCost=false) { const card=cardMap.get(instance?.cardId),text=String(card?.text||""); const payingForStride=/(?:pay(?:ing)?[^.\n]*stride|stride[^.\n]*(?:pay|cost))/i.test(text); const countsAsGradeThree=/(?:grade\s*(?:is\s*)?(?:regarded|treated|considered)\s*(?:as\s*)?3|(?:regarded|treated|considered)\s+as\s+grade\s*3|counts?\s+as\s+grade\s*3|grade\s*3\s+(?:for|when paying)[^.\n]*stride)/i.test(text); if(payingForStride&&countsAsGradeThree)return 3;const modifier=window.VanguardAbilityEngine.evaluateStrideCostGrade(cardAbilities(card),{location:"hand",isPayingStrideCost}).grade;return (modifier.treatedAsGradeThree?3:gradeOf(card))+modifier.grade; }
+  function strideGrade(instance,isPayingStrideCost=false) { const card=cardMap.get(instance?.cardId),text=String(card?.text||""); const payingForStride=/(?:pay(?:ing)?[^.\n]*stride|stride[^.\n]*(?:pay|cost))/i.test(text); const countsAsGradeThree=/(?:grade\s*(?:is\s*)?(?:regarded|treated|considered)\s*(?:as\s*)?3|(?:regarded|treated|considered)\s+as\s+grade\s*3|counts?\s+as\s+grade\s*3|grade\s*3\s+(?:for|when paying)[^.\n]*stride)/i.test(text); if(payingForStride&&countsAsGradeThree)return 3;const modifier=window.VanguardAbilityEngine.evaluateStrideCostGrade(cardAbilities(card),{location:"hand",isPayingStrideCost});return (modifier.treatedAsGradeThree?3:gradeOf(card))+modifier.grade; }
   function botStridePriority(card,player){const name=String(card?.name||""),vg=String(cardMap.get(player.vanguard?.cardId)?.name||""),faceUp=(player.gZone||[]).some(x=>x.faceUp),cb=(player.damage||[]).some(x=>!x.faceDown);if(/Saint of Twin Sword/i.test(name)&&cb&&/Blaster|Alfred/i.test(vg))return 120;if(/Gancelot Peace Saver/i.test(name)&&/Blaster|Alfred/i.test(vg))return 110;if(/Crystaluster/i.test(name)&&faceUp&&(player.rear||[]).filter(Boolean).length>=3)return 90;return Number(card?.power||0)/1000+(String(card?.text||"").match(/AUTO|ACT/g)||[]).length*2}
   function botCallPriority(card,player){const name=String(card?.name||"");if(name==="Blaster Blade"&&!(player.soul||[]).some(x=>cardMap.get(x.cardId)?.name===name))return 120;if(name==="Blaster Dark"&&!(player.soul||[]).some(x=>cardMap.get(x.cardId)?.name===name))return 115;if(/Blaster-friend, Barcgal|Wingal Brave/i.test(name))return 105;if(/Blaster Blade/i.test(name))return 100;if(/Llew/i.test(name))return 90;if(Number(card?.grade)>=2)return 50;if(/Flogal/i.test(name))return 45;return 30+(String(card?.text||"").match(/AUTO|ACT/g)||[]).length*5}
   function botUseBlasterOrder(player){if((player.ordersPlayedThisTurn||0)>=1)return false;const orderIndex=player.hand.findIndex(x=>cardMap.get(x.cardId)?.name==="When Light and Darkness Intersects");if(orderIndex<0)return false;const fieldNames=[player.vanguard,...(player.rear||[])].filter(Boolean).map(x=>cardMap.get(x.cardId)?.name||"");let wanted="";if(fieldNames.includes("Blaster Blade")&&!fieldNames.includes("Blaster Dark"))wanted="Blaster Dark";else if(fieldNames.includes("Blaster Dark")&&!fieldNames.includes("Blaster Blade"))wanted="Blaster Blade";else if(fieldNames.includes("Blaster Blade")&&fieldNames.includes("Blaster Dark"))wanted="Majesty Lord Blaster";if(!wanted)return false;const targetIndex=player.deck.findIndex(x=>cardMap.get(x.cardId)?.name===wanted);if(targetIndex<0)return false;const order=player.hand.splice(orderIndex,1)[0],found=player.deck.splice(targetIndex,1)[0];player.hand.push(found);player.drop.push(order);queueMovedCardAbility(order,"bot","move","hand",{currentLocation:"drop"});player.ordersPlayedThisTurn=(player.ordersPlayedThisTurn||0)+1;shuffle(player.deck);addLog(`Practice Bot played When Light and Darkness Intersects and added ${wanted} to its hand.`);return true}  function botStrideCost(strideCard, player) {
@@ -1690,6 +1728,12 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       player.hand = player.hand.filter((item) => item.uid !== instance.uid); player.orders ||= []; player.orders.push(instance); match.selected = null;
       queueAbilityPrompts("place","human",instance.uid,{sourceZone:"hand",zone:"order",currentLocation:"order",subjectInstance:instance,timingWindow:"order-zone-placement"});
       addLog(`${player.name} moved ${cardMap.get(instance.cardId)?.name || "a card"} from hand to the Order zone.`);
+    } else if (action.startsWith("gdeck-reveal:")) {
+      const instance = player.gDeck?.find(item => item.uid === action.slice("gdeck-reveal:".length));
+      if (!instance) { toast("That card is no longer in the G deck."); return; }
+      // Reveal a copy so closing the existing shared reveal cannot move or flip the original.
+      match.publicReveal = { owner: "human", instance: { ...instance } };
+      addLog(`${player.name} revealed ${cardMap.get(instance.cardId)?.name || "a G card"} from the G deck. Its face-down state is unchanged.`);
     } else if (action === "public-reveal") {
       const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; }
       match.publicReveal = { owner: "human", instance: { ...instance } };
@@ -1835,9 +1879,9 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       const ultimate = /Ultimate\s+Stride/i.test(String(strideCard?.text || "")), names = [cardMap.get(player.vanguard?.cardId)?.name, cardMap.get(player.vanguard?.strideHeart?.cardId)?.name];
       const validCost = ultimate ? payment.length === 1 && names.includes(cardMap.get(payment[0]?.cardId)?.name) : payment.length > 0 && payment.reduce((sum, item) => sum + strideGrade(item,true), 0) >= 3;
       if (!stride || stride.faceUp || !isStrideUnit(strideCard) || !validCost || match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human)) { toast("Choose a legal Stride cost and eligible face-down G Unit."); return; }
-      player.gDeck.splice(strideIndex, 1); performStrideForPlayer(player, stride, payment); match.stridePerformed = true; match.pendingStride = null; $("#stride-cost-dialog").close(); addLog(`${player.name} strode ${strideCard.name} over ${cardMap.get(player.vanguard.strideHeart?.cardId)?.name || "their Vanguard"}.`); payment.forEach(cost=>queueMovedCardAbility(cost,"human","discard","hand",{discardReason:"stride-cost",timingWindow:"stride-cost"})); return;
+      player.gDeck.splice(strideIndex, 1); performStrideForPlayer(player, stride, payment); match.stridePerformed = true; match.pendingStride = null; $("#stride-cost-dialog").close(); addLog(`${player.name} strode ${strideCard.name} over ${cardMap.get(player.vanguard.strideHeart?.cardId)?.name || "their Vanguard"}.`); payment.forEach(cost=>queueMovedCardAbility(cost,"human","discard","hand",{discardReason:"stride-cost",timingWindow:"stride-cost"})); renderMatch(); return;
     } else if (action.startsWith("gdeck-flip-up:")) {
-      const uid=action.slice("gdeck-flip-up:".length),index=player.gDeck.findIndex(item=>item.uid===uid);if(index<0){toast("That card is no longer in the G deck.");return;}const instance=player.gDeck.splice(index,1)[0];player.gZone.push({...instance,faceUp:false});addLog(`${player.name} revealed ${cardMap.get(instance.cardId)?.name||"a G card"} and placed it face down in the G zone.`);
+      const uid=action.slice("gdeck-flip-up:".length),index=player.gDeck.findIndex(item=>item.uid===uid);if(index<0){toast("That card is no longer in the G deck.");return;}const instance=player.gDeck.splice(index,1)[0];player.gZone.push({...instance,faceUp:true});addLog(`${player.name} turned ${cardMap.get(instance.cardId)?.name||"a G card"} face up in the G zone.`);
     } else if (action.startsWith("gzone-flip-up:")) {
       const uid=action.slice("gzone-flip-up:".length),instance=player.gZone?.find(item=>item.uid===uid);if(!instance){toast("That card is no longer in the G zone.");return;}if(instance.faceUp){toast("That G-zone card is already face up.");return;}instance.faceUp=true;addLog(`${player.name} turned a G-zone card face up.`);
     } else if (action === "gdeck-to-g") {
@@ -2366,14 +2410,16 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       return !item.faceUp && (isGuard ? isGGuardian(card) : isStrideUnit(card));
     });
     $("#gdeck-dialog-title").textContent = isInspect ? "Your G-deck" : isGuard ? "Choose a G-Guard" : "Choose a G Unit to stride";
-    $("#gdeck-dialog-help").textContent = isInspect ? "Select a face-down card and reveal it into your G zone, or zoom in to inspect it." : isGuard ? "Choose a face-down G-Guardian. It adds its shield for this defense and returns face up to your G deck when the attack ends." : "Stride during your Stride step. Pay the ability cost, place the G Unit on your Vanguard, then return it face up to the G zone at end of turn.";
+    $("#gdeck-dialog-help").textContent = isInspect ? "Click a card or Reveal to show it temporarily; closing the reveal leaves it face down in the G deck. Flip face up places it face up in the G zone." : isGuard ? "Choose a face-down G-Guardian. It adds its shield for this defense and returns face up to your G deck when the attack ends." : "Stride during your Stride step. Pay the ability cost, place the G Unit on your Vanguard, then return it face up to the G zone at end of turn.";
     const healNotice=$("#g-guard-selected-heal");healNotice.classList.toggle("hidden",!isGuard);if(isGuard)healNotice.textContent="Selected Heal trigger: "+(cardMap.get(selectedHeal.cardId)?.name||"Heal trigger")+" (discarded when you choose a G-Guardian).";
     $("#gdeck-card-list").innerHTML = cards.length ? cards.map((item) => {
       const card = cardMap.get(item.cardId);
-      const flip=`<button class="button" type="button" data-gdeck-flip="${escapeHtml(item.uid)}">Reveal, then place face down in G zone</button>`;
+      const reveal = '<button class="button" type="button" data-gdeck-reveal="' + escapeHtml(item.uid) + '">Reveal</button>';
+      const inspectStride = !item.faceUp && isStrideUnit(card) ? '<button class="button button-primary" type="button" data-gdeck-action="stride:' + escapeHtml(item.uid) + '"' + (match.side === "human" && match.phase === 3 && !match.stridePerformed && canStrideForSide("human", match.turnStartGrades?.human) ? '' : ' disabled title="Available during your Stride step when eligible"') + '>Stride</button>' : '';
+      const flip=`<button class="button" type="button" data-gdeck-flip="${escapeHtml(item.uid)}">Flip face up</button>`;
       const play=isGuard?'<button class="button button-primary" type="button" data-gdeck-action="g-guard:'+escapeHtml(item.uid)+':'+escapeHtml(selectedHeal.uid)+'">Guard with this G-Guardian</button>':'<button class="button button-primary" type="button" data-gdeck-action="stride:'+escapeHtml(item.uid)+'">Stride</button>';
       const skills=!isGuard&&!isInspect&&match.side==="human"&&Number(match.phase)===3?eligibleActivatedAbilities({side:"human",zone:"g-deck",instance:item}).map(ability=>`<button class="button" type="button" data-gdeck-activate="${escapeHtml(item.uid)}" data-ability-id="${escapeHtml(encodeURIComponent(ability.id))}">Activate skill · ${escapeHtml(ability.printedText||ability.raw)}</button>`).join(""):"";
-      return card ? '<article class="zone-view-card"><button class="zone-card-face" type="button" data-zone-select>' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions"' + (isInspect || isGuard || skills ? '' : ' hidden') + '>' + (isInspect ? (!item.faceUp ? flip : "Already revealed") : play + skills + (isGuard ? '' : flip + zoneMoveControls(item,"gdeck"))) + '</div></article>' : "";
+      return card ? '<article class="zone-view-card" data-card-id="' + escapeHtml(card.id) + '"><button class="zone-card-face" type="button" data-gdeck-reveal="' + escapeHtml(item.uid) + '">' + cardImage(card) + '<b>' + escapeHtml(card.name) + '</b><small>' + (item.faceUp ? 'Face up' : 'Face down') + '</small></button><button class="zone-card-zoom" type="button" data-card-zoom="' + escapeHtml(card.id) + '" aria-label="Zoom ' + escapeHtml(card.name) + '">⤢</button><div class="peek-actions"' + (isInspect || isGuard || skills ? '' : ' hidden') + '>' + (isInspect ? reveal + (!item.faceUp ? flip : "Face up") + inspectStride : play + skills + reveal + (isGuard ? '' : flip + zoneMoveControls(item,"gdeck"))) + '</div></article>' : "";
     }).join("") : '<p class="zone-empty-message">No ' + (isGuard ? "G Guardians" : "G Units") + ' are available in your G deck.</p>';
     $("#gdeck-dialog").dataset.kind = kind; $("#gdeck-dialog").dataset.gGuardHealUid = isGuard ? selectedHeal.uid : "";
     if (!$("#gdeck-dialog").open) $("#gdeck-dialog").showModal();
@@ -2438,6 +2484,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#power-change-apply").addEventListener("click", () => { const value = Number($("#power-change-value").value); if (!Number.isFinite(value)) { toast("Enter a valid power amount."); return; } $("#power-input-dialog").close(); performManualAction(`set-power:${value}`); });
   $("#public-reveal-close").addEventListener("click", () => performManualAction("public-reveal-close"));
+  $("#public-reveal-dialog").addEventListener("cancel", event => { event.preventDefault(); if (match?.publicReveal?.owner === "human") performManualAction("public-reveal-close"); });
   document.addEventListener("click", (event) => { const zoom = event.target.closest?.("[data-card-zoom]"); if (!zoom) return; event.preventDefault(); event.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); }, true);
   document.addEventListener("click",event=>{const button=event.target.closest?.("[data-superior-ride]");if(!button)return;event.preventDefault();event.stopPropagation();performManualAction("superior-ride:"+button.dataset.superiorRide);},true);
   $("#ability-dialog").addEventListener("cancel", event => { event.preventDefault(); });
@@ -2495,7 +2542,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#g-assist-none").addEventListener("click",()=>performManualAction("g-assist-none"));
   $("#open-gdeck").addEventListener("click",()=>openGDeckDialog("inspect"));
   $("#g-assist-finish").addEventListener("click",()=>performManualAction("g-assist-finish"));
-  $("#human-gzone").addEventListener("click",(e)=>{const flip=e.target.closest("[data-gzone-flip-up]");if(flip)performManualAction("gzone-flip-up:"+flip.dataset.gzoneFlipUp);else{const zoom=e.target.closest("[data-card-zoom]");if(zoom)showCardDetails(zoom.dataset.cardZoom);}});  $("#gdeck-card-list").addEventListener("click",(e)=>{const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const activate=e.target.closest("[data-gdeck-activate]");if(activate){let abilityId;try{abilityId=decodeURIComponent(activate.dataset.abilityId)}catch{return;}$("#gdeck-dialog").close();performManualAction("activate-skill:"+activate.dataset.gdeckActivate+":"+abilityId);return;}const flip=e.target.closest("[data-gdeck-flip]");if(flip){performManualAction("gdeck-flip-up:"+flip.dataset.gdeckFlip);if(match)openGDeckDialog($("#gdeck-dialog").dataset.kind);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
+  $("#human-gzone").addEventListener("click",(e)=>{const flip=e.target.closest("[data-gzone-flip-up]");if(flip)performManualAction("gzone-flip-up:"+flip.dataset.gzoneFlipUp);else{const zoom=e.target.closest("[data-card-zoom]");if(zoom)showCardDetails(zoom.dataset.cardZoom);}});  $("#gdeck-card-list").addEventListener("click",(e)=>{const reveal=e.target.closest("[data-gdeck-reveal]");if(reveal){performManualAction("gdeck-reveal:"+reveal.dataset.gdeckReveal);return;}const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const activate=e.target.closest("[data-gdeck-activate]");if(activate){let abilityId;try{abilityId=decodeURIComponent(activate.dataset.abilityId)}catch{return;}$("#gdeck-dialog").close();performManualAction("activate-skill:"+activate.dataset.gdeckActivate+":"+abilityId);return;}const flip=e.target.closest("[data-gdeck-flip]");if(flip){performManualAction("gdeck-flip-up:"+flip.dataset.gdeckFlip);if(match)openGDeckDialog($("#gdeck-dialog").dataset.kind);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
   $("#g-guard-heal-list").addEventListener("click",(event)=>{const button=event.target.closest("[data-g-guard-heal]");if(!button)return;const uid=button.dataset.gGuardHeal;$("#g-guard-cost-dialog").close();openGDeckDialog("g-guard",uid);});
   $("#stride-cost-cards").addEventListener("click",(event)=>{const button=event.target.closest("[data-stride-cost]");if(button)performManualAction("stride-cost:"+button.dataset.strideCost);});
   $("#stride-cost-confirm").addEventListener("click",()=>performManualAction("stride-confirm"));
@@ -2522,11 +2569,12 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#clear-log").addEventListener("click", () => { if (match) { match.log = []; renderLog(); } });
   $("#create-deck").addEventListener("click", () => { emptyDeck(); showView("decks"); $("#deck-name").focus(); });
   $("#save-deck").addEventListener("click", saveDeck); $("#load-deck-editor").addEventListener("click", openLoadDeckDialog); $("#load-deck-confirm").addEventListener("click", () => { const deck = readSavedDecks().find((item) => item.id === $("#load-deck-choice").value); if (!deck) { toast("Choose a saved deck first."); return; } $("#load-deck-dialog").close(); loadDeck(deck); }); $("#starter-vanguard").addEventListener("change", () => { builder.starterCardId = $("#starter-vanguard").value; renderBuilder(); }); $("#deck-name").addEventListener("input", () => { builder.name = $("#deck-name").value; $("#builder-title").textContent = builder.name || "Untitled deck"; });
+  $("#card-text-search").addEventListener("input", () => { builderPage = 0; renderBuilderCards(); });
   $("#card-search").addEventListener("input", () => { builderPage = 0; renderBuilderCards(); }); $("#grade-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-clan-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-nation-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); });
   $("#builder-prev").addEventListener("click", () => { builderPage = Math.max(0, builderPage - 1); renderBuilderCards(); }); $("#builder-next").addEventListener("click", () => { builderPage += 1; renderBuilderCards(); });
   $("#builder-card-grid").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const node = e.target.closest("[data-card-id]"); if (!node) return; const id=node.dataset.cardId,card=cardMap.get(id);if(!card)return;const key=deckNameKey(card,id),sameNameCount=Object.entries(builder.cards||{}).reduce((sum,[otherId,qty])=>{const other=cardMap.get(otherId);return other&&isGDeckCard(other)===isGDeckCard(card)&&deckNameKey(other,otherId)===key?sum+Number(qty||0):sum},0);if(sameNameCount>=deckCopyLimitForCard(card,builder))return;builder.cards[id]=(builder.cards[id]||0)+1;renderBuilder(); });
   $("#deck-list").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const q = e.target.closest("[data-qty]"); const r = e.target.closest("[data-remove]"); if (q) { const id=q.dataset.id,card=cardMap.get(id);if(!card)return;const next=Math.max(0,(builder.cards[id]||0)+Number(q.dataset.qty));if(Number(q.dataset.qty)>0){const key=deckNameKey(card,id),sameNameCount=Object.entries(builder.cards||{}).reduce((sum,[otherId,qty])=>{const other=cardMap.get(otherId);return other&&isGDeckCard(other)===isGDeckCard(card)&&deckNameKey(other,otherId)===key?sum+Number(qty||0):sum},0);if(sameNameCount>=deckCopyLimitForCard(card,builder))return;}builder.cards[id]=next;if(!builder.cards[id])delete builder.cards[id];renderBuilder(); } if (r) { delete builder.cards[r.dataset.remove]; renderBuilder(); } });
-  $("#saved-decks").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const load = e.target.closest("[data-load-deck]"); const duplicate = e.target.closest("[data-duplicate-deck]"); const remove = e.target.closest("[data-delete-deck]"); const exp = e.target.closest("[data-export-saved]"); const decks = readSavedDecks(); if (load) { const d = decks.find((x) => x.id === load.dataset.loadDeck); if (d) loadDeck(d); } if (duplicate) { const d = decks.find((x) => x.id === duplicate.dataset.duplicateDeck); if (d) { const copy = { ...d, id: crypto.randomUUID?.() || String(Date.now()), name: `${d.name} Copy`, updatedAt: new Date().toISOString() }; decks.unshift(copy); writeSavedDecks(decks); renderSavedDecks(); toast("Deck duplicated"); } } if (remove) { const d = decks.find((x) => x.id === remove.dataset.deleteDeck); if (d && confirm(`Delete “${d.name}” from this browser?`)) { writeSavedDecks(decks.filter((x) => x.id !== d.id)); void deleteCloudDeck(d.id); renderSavedDecks(); } } if (exp) { const d = decks.find((x) => x.id === exp.dataset.exportSaved); if (d) exportDeck(d, `${d.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`); } });
+  $("#saved-decks").addEventListener("click", (e) => { const preferred = e.target.closest("[data-default-deck]"); if (preferred) { makeDefaultDeck(preferred.dataset.defaultDeck); return; } const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const load = e.target.closest("[data-load-deck]"); const duplicate = e.target.closest("[data-duplicate-deck]"); const remove = e.target.closest("[data-delete-deck]"); const exp = e.target.closest("[data-export-saved]"); const decks = readSavedDecks(); if (load) { const d = decks.find((x) => x.id === load.dataset.loadDeck); if (d) loadDeck(d); } if (duplicate) { const d = decks.find((x) => x.id === duplicate.dataset.duplicateDeck); if (d) { const copy = { ...d, id: crypto.randomUUID?.() || String(Date.now()), name: `${d.name} Copy`, updatedAt: new Date().toISOString() }; decks.unshift(copy); writeSavedDecks(decks); renderSavedDecks(); toast("Deck duplicated"); } } if (remove) { const d = decks.find((x) => x.id === remove.dataset.deleteDeck); if (d && confirm(`Delete “${d.name}” from this browser?`)) { if (String(savedDefaultDeck()?.id) === String(d.id)) localStorage.removeItem(defaultDeckStorageKey()); writeSavedDecks(decks.filter((x) => x.id !== d.id)); void deleteCloudDeck(d.id); renderSavedDecks(); } } if (exp) { const d = decks.find((x) => x.id === exp.dataset.exportSaved); if (d) exportDeck(d, `${d.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`); } });
   $("#export-deck").addEventListener("click", () => exportDeck(builder, `${builder.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`));
   $("#import-deck").addEventListener("click", () => $("#deck-file").click()); $("#deck-file").addEventListener("change", (e) => { if (e.target.files[0]) importDeckFile(e.target.files[0]); e.target.value = ""; });
   $("#library-search").addEventListener("input", () => { libraryPage = 0; renderLibrary(); }); $("#library-grade").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-clan").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-nation").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-prev").addEventListener("click", () => { libraryPage = Math.max(0, libraryPage - 1); renderLibrary(); }); $("#library-next").addEventListener("click", () => { libraryPage += 1; renderLibrary(); }); $("#library-grid").addEventListener("click", (e) => { const node = e.target.closest("[data-card-detail]"); if (node) showCardDetails(node.dataset.cardDetail); });
@@ -2541,7 +2589,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $$("[data-first-choice]").forEach((button) => button.addEventListener("click", () => chooseOnlineFirstPlayer(button.dataset.firstChoice)));
   $("#online-start-dialog").addEventListener("cancel", (event) => event.preventDefault());
   $("#card-dialog").addEventListener("click", (e) => { if (e.target === $("#card-dialog")) $("#card-dialog").close(); });
-  populateClanFilters(); updateDeckCount(); renderBuilder(); renderLibrary(); renderArtGallery(); renderSavedDecks();
+  populateClanFilters(); updateDeckCount(); restoreDefaultDeck(); renderBuilder(); renderLibrary(); renderArtGallery(); renderSavedDecks();
   initializeAccounts();
   const initial = ["play", "decks", "cards"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "play"; showView(initial);
   if (!readSavedDecks().length) { $("#match-layout").classList.add("hidden"); $("#match-empty").classList.remove("hidden"); }
