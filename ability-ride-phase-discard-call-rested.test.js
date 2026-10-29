@@ -10,7 +10,7 @@ const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: 
 const catalog = loadCatalog();
 function fixture(id, side = "bot") {
   const definition = catalog.find(card => card.id === id), parsed = Engine.parseCardAbilities(definition)[0];
-  Engine.registerAbilityDefinitions([parsed.definition]);
+  assert.ok(Engine.getReviewedAbilityDefinitionsForCard(id).some(item => item.id === `${id}:0`), `${id}:0 is registered in production`);
   const playerId = side === "human" ? "player-host" : "player-guest", otherSide = side === "human" ? "bot" : "human";
   const source = { uid: `source-${id}-${side}`, cardId: id, cardName: definition.name, type: definition.type || "Unit", ownerPlayerId: playerId, controllerPlayerId: playerId };
   const player = { playerId, vanguard: null, rear: Array(5).fill(null), hand: [], drop: [source], soul: [], damage: [], deck: [], bind: [], guardCircle: [], orders: [], gDeck: [], gZone: [], triggerZone: [] };
@@ -26,6 +26,8 @@ function decide(f, accept, actionId) {
 test("six real ride-phase discard AUTO definitions pass exact authoritative gates", () => {
   for (const id of IDS) {
     const f = fixture(id);
+    assert.ok(Engine.getReviewedAbilityDefinitionsForCard(id).some(item => item.id === f.parsed.id), `${id}:0 production definition`);
+    assert.equal(f.parsed.definition.source.patternId, "auto-ride-phase-discard-source-call-rested-v1", id);
     assert.equal(Reducer.supportsServerAbilityEffects(f.parsed), true, id);
     const forged = structuredClone(f.parsed); forged.definition.effects[0].position = "stand";
     assert.equal(Reducer.supportsServerAbilityEffects(forged), false, `${id} forged effect`);

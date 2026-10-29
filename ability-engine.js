@@ -89,7 +89,7 @@
   function createHarmonyAssociation(state,firstUid,secondUid,turnKey,allowMovedSinceTrigger=false){if(!state||!firstUid||!secondUid||firstUid===secondUid||!turnKey)return false;const first=locateCardInstance(state,firstUid),second=locateCardInstance(state,secondUid);if(!first||!second||first.ambiguous||second.ambiguous||!["vanguard","rear-guard"].includes(first.zone)||!["vanguard","rear-guard"].includes(second.zone)||first.side!==second.side||first.controllerPlayerId!==second.controllerPlayerId||!allowMovedSinceTrigger&&(!harmonyColumn(first.circle||first.zone)||harmonyColumn(first.circle||first.zone)!==harmonyColumn(second.circle||second.zone)))return false;const active=(state.harmonyAssociations||[]).filter(pair=>pair?.turnKey===turnKey&&harmonyFieldPair(state,pair));state.harmonyAssociations=active;if(active.some(pair=>pair.firstUid===firstUid&&pair.secondUid===secondUid||pair.firstUid===secondUid&&pair.secondUid===firstUid))return true;state.harmonyAssociations.push({firstUid,secondUid,controllerPlayerId:first.controllerPlayerId,turnKey});return true}
   function isCardInHarmony(state,uid,turnKey){if(!state||!uid||!turnKey)return false;let found=false;for(const pair of state.harmonyAssociations||[]){if(pair?.turnKey!==turnKey||!harmonyFieldPair(state,pair))continue;if(pair.firstUid===uid||pair.secondUid===uid)found=true}return found}
   function expireHarmonyAssociations(state,endingTurnKey){if(!Array.isArray(state?.harmonyAssociations))return 0;const before=state.harmonyAssociations.length;state.harmonyAssociations=state.harmonyAssociations.filter(pair=>pair?.turnKey!==endingTurnKey&&harmonyFieldPair(state,pair));return before-state.harmonyAssociations.length}
-  const effectOperations = new Set(["draw", "modify-power", "modify-power-target", "modify-critical", "continuous-power", "continuous-power-adjustment", "continuous-power-per-soul-card", "continuous-critical", "continuous-shield", "continuous-grade", "modify-drive", "modify-drive-target", "counter-charge", "conditional-counter-charge", "soul-charge", "revelation-choice", "rest-target", "engorge", "g-guardian-discard-charge-choice", "g-guardian-grade-three-replacement-choice", "set-blazing", "set-hollowed", "set-charging", "set-successful", "deck-to-damage", "reorder-deck-card", "retire-target", "stand-target", "unlock-target", "protect-target", "protect-attacked-source", "move-source-to-soul", "move-source-to-hand", "modify-defending-source-power", "rest-source", "stand-source", "create-token", "discard-from-hand", "draw-then-discard", "search-top-grade-three-to-hand-then-discard", "search-top-up-to-one-grade-to-hand", "search-top-up-to-one-filtered-to-hand", "search-deck-named-grade-three-then-discard", "search-deck-same-name-to-hand", "search-deck-named-call-to-rearguard", "call-top-to-guardian", "call-checked-card-locked", "call-source-from-drop-rested", "call-source-from-soul", "associate-harmony-units", "modify-shield-source", "seek-mate"]);
+  const effectOperations = new Set(["draw", "modify-power", "modify-power-target", "modify-critical", "grant-temporary-boost", "continuous-power", "continuous-power-adjustment", "continuous-power-per-soul-card", "continuous-power-per-clan-rearguard", "continuous-critical", "continuous-shield", "continuous-grade", "modify-drive", "modify-drive-target", "counter-charge", "conditional-counter-charge", "soul-charge", "revelation-choice", "rest-target", "engorge", "g-guardian-discard-charge-choice", "g-guardian-grade-three-replacement-choice", "set-blazing", "set-hollowed", "set-charging", "set-successful", "deck-to-damage", "schedule-damage-return-at-turn-end", "return-chosen-damage-to-deck", "reorder-deck-card", "retire-target", "stand-target", "unlock-target", "protect-target", "protect-attacked-source", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "modify-defending-source-power", "rest-source", "stand-source", "create-token", "discard-from-hand", "draw-then-discard", "search-top-grade-three-to-hand-then-discard", "search-top-up-to-one-grade-to-hand", "search-top-up-to-one-filtered-to-hand", "search-deck-named-grade-three-then-discard", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "call-checked-card-locked", "call-source-from-drop-rested", "call-source-from-soul", "associate-harmony-units", "modify-shield-source", "seek-mate"]);
   const positiveInteger = value => Number.isInteger(Number(value)) && Number(value) > 0;
   function validTopSearchFilter(filter) {
     if (!filter || typeof filter !== "object" || Array.isArray(filter)) return false;
@@ -98,11 +98,12 @@
     if (keys === "cardType,clan,minGrade") return Number.isInteger(Number(filter.minGrade)) && Number(filter.minGrade) >= 0 && filter.cardType === "unit" && typeof filter.clan === "string" && Boolean(filter.clan.trim());
     if (keys === "abilityKeyword") return typeof filter.abilityKeyword === "string" && Boolean(filter.abilityKeyword.trim());
     if (keys === "abilityKeywordsAny") return Array.isArray(filter.abilityKeywordsAny) && filter.abilityKeywordsAny.length > 0 && filter.abilityKeywordsAny.length <= 8 && filter.abilityKeywordsAny.every(keyword => typeof keyword === "string" && Boolean(keyword.trim()));
+    if (keys === "cardNamesAny") return Array.isArray(filter.cardNamesAny) && filter.cardNamesAny.length >= 2 && filter.cardNamesAny.length <= 8 && filter.cardNamesAny.every(name => typeof name === "string" && Boolean(name.trim()));
     if (keys === "race") return typeof filter.race === "string" && Boolean(filter.race.trim());
     return false;
   }
-  function continuousConditionSupported(condition,depth=0){if(!condition||typeof condition!=="object"||Array.isArray(condition)||depth>4)return false;if(["any","all"].includes(condition.op))return Array.isArray(condition.conditions)&&condition.conditions.length>=1&&condition.conditions.length<=8&&condition.conditions.every(child=>continuousConditionSupported(child,depth+1));if(condition.op==="always"||condition.op==="source-boosted-this-battle")return true;if(condition.op==="controller-vanguard-card-name-contains"||condition.op==="controller-field-lacks-other-card-name"||condition.op==="controller-rearguard-has-card-name"||condition.op==="controller-rearguard-card-name-contains")return typeof condition.name==="string"&&condition.name.trim().length>0;if(condition.op==="controller-field-has-non-clan")return typeof condition.clan==="string"&&condition.clan.trim().length>0;if(condition.op==="soul-has-card-name")return typeof condition.name==="string"&&condition.name.trim().length>0;if(condition.op==="soul-card-name-contains-count-at-least")return typeof condition.name==="string"&&condition.name.trim().length>0&&positiveInteger(condition.count);if(["controller-turn","normal-order-played-this-turn","attacking-vanguard","opponent-trigger-revealed-this-turn"].includes(condition.op))return true;if(["opponent-vanguard-grade-at-least","controller-vanguard-grade-at-least","controller-vanguard-grade-less-than-opponent"].includes(condition.op))return condition.op==="controller-vanguard-grade-less-than-opponent"||Number.isInteger(Number(condition.grade))&&Number(condition.grade)>=0;if(condition.op==="generation-break"||condition.op==="controller-damage-at-least")return positiveInteger(condition.count);return false}
-  function continuousConditionMatches(condition,context={}){if(!continuousConditionSupported(condition))return false;if(condition.op==="always")return true;if(condition.op==="any")return condition.conditions.some(child=>continuousConditionMatches(child,context));if(condition.op==="all")return condition.conditions.every(child=>continuousConditionMatches(child,context));if(condition.op==="controller-vanguard-card-name-contains")return(context.controllerVanguardCardNames||[]).some(name=>String(name).toLocaleLowerCase().includes(String(condition.name).toLocaleLowerCase()));if(condition.op==="controller-rearguard-has-card-name"||condition.op==="controller-rearguard-card-name-contains"){if(!Array.isArray(context.controllerFieldCards))return false;const phrase=String(condition.name).toLocaleLowerCase();return context.controllerFieldCards.some(card=>card?.zone==="rear-guard"&&(card?.names||[]).some(name=>condition.op==="controller-rearguard-has-card-name"?String(name).toLocaleLowerCase()===phrase:String(name).toLocaleLowerCase().includes(phrase)))}if(condition.op==="controller-field-lacks-other-card-name"){if(!context.sourceInstanceId||!Array.isArray(context.controllerFieldCards))return false;const phrase=String(condition.name).toLocaleLowerCase();return context.controllerFieldCards.every(card=>card?.uid===context.sourceInstanceId||!(card?.names||[]).some(name=>String(name).toLocaleLowerCase().includes(phrase)))}if(condition.op==="controller-field-has-non-clan"){const expected=String(condition.clan).trim().toLowerCase();if(!Array.isArray(context.controllerFieldCards))return false;return context.controllerFieldCards.some(card=>{const values=Array.isArray(card?.clans)?card.clans:card?.clan?[card.clan]:[],clans=[...new Set(values.map(value=>String(value||"").trim().toLowerCase()).filter(Boolean))];return clans.length===1&&clans[0]!==expected})}if(condition.op==="soul-has-card-name")return(condition.controllerTurn!==true||context.isControllerTurn===true)&&(context.soulCardNames||[]).some(name=>String(name).toLowerCase()===String(condition.name).toLowerCase());if(condition.op==="soul-card-name-contains-count-at-least")return(context.soulCardNames||[]).filter(name=>String(name).toLowerCase().includes(String(condition.name).toLowerCase())).length>=Number(condition.count);if(condition.op==="controller-turn")return context.isControllerTurn===true;if(condition.op==="normal-order-played-this-turn")return context.normalOrderPlayedThisTurn===true;if(condition.op==="attacking-vanguard")return context.attackingVanguard===true;if(condition.op==="source-boosted-this-battle")return context.sourceWasBooster===true;if(condition.op==="opponent-trigger-revealed-this-turn")return context.opponentTriggerRevealedThisTurn===true;if(condition.op==="opponent-vanguard-grade-at-least")return Number(context.opponentVanguardGrade??-1)>=Number(condition.grade)&&(condition.controllerTurn!==true||context.isControllerTurn===true);if(condition.op==="controller-vanguard-grade-at-least")return Number(context.controllerVanguardGrade??-1)>=Number(condition.grade);if(condition.op==="controller-vanguard-grade-less-than-opponent")return Number.isFinite(Number(context.controllerVanguardGrade))&&Number.isFinite(Number(context.opponentVanguardGrade))&&Number(context.controllerVanguardGrade)<Number(context.opponentVanguardGrade);if(condition.op==="generation-break")return Number(context.generationBreakCount||0)>=Number(condition.count);if(condition.op==="controller-damage-at-least")return Number(context.controllerDamageCount||context.damageCount||0)>=Number(condition.count);return false}
+  function continuousConditionSupported(condition,depth=0){if(!condition||typeof condition!=="object"||Array.isArray(condition)||depth>4)return false;if(["any","all"].includes(condition.op))return Array.isArray(condition.conditions)&&condition.conditions.length>=1&&condition.conditions.length<=8&&condition.conditions.every(child=>continuousConditionSupported(child,depth+1));if(condition.op==="always"||condition.op==="source-boosted-this-battle"||condition.op==="opponent-g-zone-has-card-and-no-face-up-card"||condition.op==="opponent-g-zone-has-card"||condition.op==="opponent-g-zone-has-face-up-card")return true;if(condition.op==="controller-vanguard-card-name-equals"||condition.op==="controller-vanguard-card-name-contains"||condition.op==="controller-field-lacks-other-card-name"||condition.op==="controller-rearguard-has-card-name"||condition.op==="controller-rearguard-card-name-contains")return typeof condition.name==="string"&&condition.name.trim().length>0;if(condition.op==="controller-field-has-non-clan")return typeof condition.clan==="string"&&condition.clan.trim().length>0;if(condition.op==="controller-rearguard-clan-count-at-least")return typeof condition.clan==="string"&&condition.clan.trim().length>0&&positiveInteger(condition.count);if(condition.op==="soul-has-card-name")return typeof condition.name==="string"&&condition.name.trim().length>0;if(condition.op==="soul-card-name-contains-count-at-least")return typeof condition.name==="string"&&condition.name.trim().length>0&&positiveInteger(condition.count);if(["controller-turn","normal-order-played-this-turn","order-played-this-turn","attacking-vanguard","opponent-trigger-revealed-this-turn"].includes(condition.op))return true;if(["opponent-vanguard-grade-at-least","controller-vanguard-grade-at-least","controller-vanguard-grade-less-than-opponent"].includes(condition.op))return condition.op==="controller-vanguard-grade-less-than-opponent"||Number.isInteger(Number(condition.grade))&&Number(condition.grade)>=0;if(condition.op==="generation-break"||condition.op==="controller-damage-at-least")return positiveInteger(condition.count);return false}
+  function continuousConditionMatches(condition,context={}){if(!continuousConditionSupported(condition))return false;if(condition.op==="always")return true;if(condition.op==="any")return condition.conditions.some(child=>continuousConditionMatches(child,context));if(condition.op==="all")return condition.conditions.every(child=>continuousConditionMatches(child,context));if(condition.op==="controller-vanguard-card-name-equals")return(context.controllerVanguardCardNames||[]).some(name=>String(name).toLocaleLowerCase()===String(condition.name).toLocaleLowerCase());if(condition.op==="controller-vanguard-card-name-contains")return(context.controllerVanguardCardNames||[]).some(name=>String(name).toLocaleLowerCase().includes(String(condition.name).toLocaleLowerCase()));if(condition.op==="controller-rearguard-has-card-name"||condition.op==="controller-rearguard-card-name-contains"){if(!Array.isArray(context.controllerFieldCards))return false;const phrase=String(condition.name).toLocaleLowerCase();return context.controllerFieldCards.some(card=>card?.zone==="rear-guard"&&(card?.names||[]).some(name=>condition.op==="controller-rearguard-has-card-name"?String(name).toLocaleLowerCase()===phrase:String(name).toLocaleLowerCase().includes(phrase)))}if(condition.op==="controller-rearguard-clan-count-at-least"){if(!Array.isArray(context.controllerFieldCards))return false;const expected=String(condition.clan).trim().toLocaleLowerCase(),matchingIds=new Set();for(const card of context.controllerFieldCards){if(card?.zone!=="rear-guard"||typeof card.uid!=="string")continue;const values=Array.isArray(card.clans)?card.clans:card.clan?[card.clan]:[];if(card.allClansAndNations===true||values.some(value=>String(value||"").trim().toLocaleLowerCase()===expected))matchingIds.add(card.uid)}return matchingIds.size>=Number(condition.count)}if(condition.op==="controller-field-lacks-other-card-name"){if(!context.sourceInstanceId||!Array.isArray(context.controllerFieldCards))return false;const phrase=String(condition.name).toLocaleLowerCase();return context.controllerFieldCards.every(card=>card?.uid===context.sourceInstanceId||!(card?.names||[]).some(name=>String(name).toLocaleLowerCase().includes(phrase)))}if(condition.op==="controller-field-has-non-clan"){const expected=String(condition.clan).trim().toLowerCase();if(!Array.isArray(context.controllerFieldCards))return false;return context.controllerFieldCards.some(card=>{const values=Array.isArray(card?.clans)?card.clans:card?.clan?[card.clan]:[],clans=[...new Set(values.map(value=>String(value||"").trim().toLowerCase()).filter(Boolean))];return clans.length===1&&clans[0]!==expected})}if(condition.op==="soul-has-card-name")return(condition.controllerTurn!==true||context.isControllerTurn===true)&&(context.soulCardNames||[]).some(name=>String(name).toLowerCase()===String(condition.name).toLowerCase());if(condition.op==="soul-card-name-contains-count-at-least")return(context.soulCardNames||[]).filter(name=>String(name).toLowerCase().includes(String(condition.name).toLowerCase())).length>=Number(condition.count);if(condition.op==="controller-turn")return context.isControllerTurn===true;if(condition.op==="normal-order-played-this-turn")return context.normalOrderPlayedThisTurn===true;if(condition.op==="order-played-this-turn")return context.isControllerTurn===true&&context.orderPlayedThisTurn===true;if(condition.op==="attacking-vanguard")return context.attackingVanguard===true;if(condition.op==="source-boosted-this-battle")return context.sourceWasBooster===true;if(condition.op==="opponent-g-zone-has-card-and-no-face-up-card")return Number(context.opponentGZoneCardCount||0)>0&&Number(context.opponentFaceUpGZoneCardCount||0)===0;if(condition.op==="opponent-g-zone-has-card")return Number(context.opponentGZoneCardCount||0)>0;if(condition.op==="opponent-g-zone-has-face-up-card")return Number(context.opponentFaceUpGZoneCardCount||0)>0;if(condition.op==="opponent-trigger-revealed-this-turn")return context.opponentTriggerRevealedThisTurn===true;if(condition.op==="opponent-vanguard-grade-at-least")return Number(context.opponentVanguardGrade??-1)>=Number(condition.grade)&&(condition.controllerTurn!==true||context.isControllerTurn===true);if(condition.op==="controller-vanguard-grade-at-least")return Number(context.controllerVanguardGrade??-1)>=Number(condition.grade);if(condition.op==="controller-vanguard-grade-less-than-opponent")return Number.isFinite(Number(context.controllerVanguardGrade))&&Number.isFinite(Number(context.opponentVanguardGrade))&&Number(context.controllerVanguardGrade)<Number(context.opponentVanguardGrade);if(condition.op==="generation-break")return Number(context.generationBreakCount||0)>=Number(condition.count);if(condition.op==="controller-damage-at-least")return Number(context.controllerDamageCount||context.damageCount||0)>=Number(condition.count);return false}
   const sourceModifierHandler = (property, expiryProperty, attackProperty = null) => Object.freeze({
     validate(step, context) { const attack=context?.match?.pendingAttack,source=context?.source;return step.target === "source" && positiveInteger(step.amount) && ["turn", "battle"].includes(step.duration) && context?.sourceInPlay === true && Boolean(source) && (step.duration !== "battle" || attack?.attackerUid === source.uid || (property === "turnPowerBoost" && attack?.boostUid === source.uid)); },
     apply(step, context) {
@@ -110,10 +111,10 @@
       const beforePower=property==="turnPowerBoost"?Number(context.source.power||0)+Number(context.source.powerBoost||0)+Number(context.source.turnPowerBoost||0):null;
       if(step.duration === "battle") { if(attackProperty&&attack?.attackerUid===context.source.uid){attack[attackProperty]=Number(attack[attackProperty]||0)+amount;if(attackProperty==="critical")attack.abilityCriticalBoost=Number(attack.abilityCriticalBoost||0)+amount;if(attackProperty==="driveChecksRemaining"){attack.maxDriveChecks=Number(attack.maxDriveChecks||0)+amount;attack.awaitingDrive=true;attack.driveChecksComplete=false;}}else if(attackProperty==="power"&&attack?.boostUid===context.source.uid){attack.boostPower=Number(attack.boostPower||0)+amount;attack.power=Number(attack.power||0)+amount;}if(property==="turnPowerBoost")context.emitEvent?.({type:"characteristic.changed",cardInstanceId:context.source.uid,targetLocation:context.sourceCircle||context.sourceZone,reason:"power-modified",before:{power:beforePower},after:{power:beforePower+amount},battleId:attack?.battleId||null});return true; }
       context.source[property] = Number(context.source[property] || 0) + amount;
-      context.source[expiryProperty] = context.side;
+      context.source[expiryProperty] = context.actorPlayerId || context.player?.playerId || context.side;
       if (property === "turnCriticalBoost") {
         context.source.turnCriticalAbilityBoost = Number(context.source.turnCriticalAbilityBoost || 0) + amount;
-        context.source.turnCriticalAbilityExpiry = context.side;
+        context.source.turnCriticalAbilityExpiry = context.actorPlayerId || context.player?.playerId || context.side;
       }
       if (attackProperty && attack?.attackerUid === context.source.uid) { attack[attackProperty] += amount; if(attackProperty==="critical")attack.abilityCriticalBoost=Number(attack.abilityCriticalBoost||0)+amount; if (attackProperty === "driveChecksRemaining") { attack.maxDriveChecks = Number(attack.maxDriveChecks || 0) + amount; attack.awaitingDrive = true; attack.driveChecksComplete = false; } } else if(attackProperty==="power"&&attack?.boostUid===context.source.uid){attack.boostPower=Number(attack.boostPower||0)+amount;attack.power=Number(attack.power||0)+amount;}
       if(property==="turnPowerBoost")context.emitEvent?.({type:"characteristic.changed",cardInstanceId:context.source.uid,targetLocation:context.sourceCircle||context.sourceZone,reason:"power-modified",before:{power:beforePower},after:{power:Number(context.source.power||0)+Number(context.source.powerBoost||0)+Number(context.source.turnPowerBoost||0)},battleId:attack?.battleId||null});
@@ -130,14 +131,18 @@
       apply(step,context){const sourceWasInHarmony=isCardInHarmony(context.match,context.source.uid,context.harmonyTurnKey),otherWasInHarmony=isCardInHarmony(context.match,context.eventSubjectUid,context.harmonyTurnKey);if(!createHarmonyAssociation(context.match,context.source.uid,context.eventSubjectUid,context.harmonyTurnKey,true))return false;if(!sourceWasInHarmony)context.emitEvent?.({type:"unit.became_harmony",cardInstanceId:context.source.uid,controllerSide:context.side});if(!otherWasInHarmony)context.emitEvent?.({type:"unit.became_harmony",cardInstanceId:context.eventSubjectUid,controllerSide:context.side});return true}
     }),
     "modify-power": sourceModifierHandler("turnPowerBoost", "turnPowerExpiry", "power"),
+    "grant-temporary-boost": Object.freeze({
+      validate(step,context){const circle=String(context.sourceCircle||context.sourceZone||"");return step.target==="source"&&step.duration==="turn"&&context.sourceInPlay===true&&(/^(?:rear-(?:left|right|back-left|back-center|back-right)|accel-\d+)$/i.test(circle))&&typeof context.actorPlayerId==="string"&&context.source?.controllerPlayerId===context.actorPlayerId;},
+      apply(_step,context){const source=context.source;source.temporaryBoostAbilityPrevious=source.boostAbility===true;source.boostAbility=true;source.temporaryBoostAbility=true;source.temporaryBoostAbilityExpiry=context.actorPlayerId;return true;}
+    }),
       "modify-power-target": Object.freeze({
       validate(step, context) { if(step.optionalTarget===true&&context?.optionalNoTarget===true)return step.target==="chosen"&&positiveInteger(step.amount)&&step.duration==="turn"&&!context.target;if(step.noOpIfNoLegalTargets&&context?.noLegalTarget===true)return ["chosen","boosted-unit"].includes(step.target)&&positiveInteger(step.amount)&&step.duration==="turn";return ["chosen","boosted-unit"].includes(step.target) && positiveInteger(step.amount) && ["turn","battle"].includes(step.duration) && Boolean(context?.target) && context.targetInPlay === true && matchesTargetFilter(step.targetFilter || {}, context) && (step.duration !== "battle" || context.match?.pendingAttack?.attackerUid === context.target.uid); },
-      apply(step, context) { if(step.optionalTarget===true&&context?.optionalNoTarget===true)return 0;if(step.noOpIfNoLegalTargets&&context?.noLegalTarget===true)return 0;const attack=context.match?.pendingAttack,battleTarget=attack?.attackerUid===context.target.uid,beforePower=step.duration==="battle"&&battleTarget?Number(attack.power||0):Number(context.target.power||0)+Number(context.target.powerBoost||0)+Number(context.target.turnPowerBoost||0);if(step.duration==="battle"){attack.power=Number(attack.power||0)+Number(step.amount);}else{context.target.turnPowerBoost=Number(context.target.turnPowerBoost||0)+Number(step.amount);context.target.turnPowerExpiry=context.side;if(battleTarget)attack.power=Number(attack.power||0)+Number(step.amount);}const afterPower=step.duration==="battle"||battleTarget?Number(attack?.power||beforePower):Number(context.target.power||0)+Number(context.target.powerBoost||0)+Number(context.target.turnPowerBoost||0);context.emitEvent?.({type:"characteristic.changed",cardInstanceId:context.target.uid,targetLocation:context.targetZone||context.target.circle||null,reason:"power-modified",before:{power:beforePower},after:{power:afterPower},battleId:attack?.battleId||null});return true; }
+      apply(step, context) { if(step.optionalTarget===true&&context?.optionalNoTarget===true)return 0;if(step.noOpIfNoLegalTargets&&context?.noLegalTarget===true)return 0;const attack=context.match?.pendingAttack,battleTarget=attack?.attackerUid===context.target.uid,beforePower=step.duration==="battle"&&battleTarget?Number(attack.power||0):Number(context.target.power||0)+Number(context.target.powerBoost||0)+Number(context.target.turnPowerBoost||0);if(step.duration==="battle"){attack.power=Number(attack.power||0)+Number(step.amount);}else{context.target.turnPowerBoost=Number(context.target.turnPowerBoost||0)+Number(step.amount);context.target.turnPowerExpiry=context.actorPlayerId||context.player?.playerId||context.side;if(battleTarget)attack.power=Number(attack.power||0)+Number(step.amount);}const afterPower=step.duration==="battle"||battleTarget?Number(attack?.power||beforePower):Number(context.target.power||0)+Number(context.target.powerBoost||0)+Number(context.target.turnPowerBoost||0);context.emitEvent?.({type:"characteristic.changed",cardInstanceId:context.target.uid,targetLocation:context.targetZone||context.target.circle||null,reason:"power-modified",before:{power:beforePower},after:{power:afterPower},battleId:attack?.battleId||null});return true; }
     }),
     "modify-critical": sourceModifierHandler("turnCriticalBoost", "turnCriticalExpiry", "critical"),
     "g-guardian-grade-three-replacement-choice": Object.freeze({
       validate(step,context){const choice=step.choices?.find(item=>item.id===context.effectChoice);return step.target==="controller"&&Array.isArray(step.choices)&&step.choices.length===2&&Boolean(choice)&&Boolean(context.match?.pendingAttack?.battleId)&&context.match.pendingAttack.defenderSide===context.side&&context.match.pendingAttack.battleId===context.battleId&&Boolean(context.target?.uid)&&context.targetInPlay===true&&matchesTargetFilter(choice.targetFilter||{},context)},
-      apply(step,context){const choice=step.choices.find(item=>item.id===context.effectChoice),target=context.target;if(!choice||!target)return false;if(choice.id==="vanguard-power"){target.turnPowerBoost=Number(target.turnPowerBoost||0)+Number(choice.amount);target.turnPowerExpiry=context.side;if(context.match.pendingAttack?.attackerUid===target.uid)context.match.pendingAttack.power=Number(context.match.pendingAttack.power||0)+Number(choice.amount);return true}if(choice.id==="opponent-critical"){target.battleCriticalBoost=Number(target.battleCriticalBoost||0)+Number(choice.amount);target.battleCriticalExpiryBattleId=context.battleId;if(context.match.pendingAttack?.attackerUid===target.uid)context.match.pendingAttack.critical=Math.max(1,Number(context.match.pendingAttack.critical||1)+Number(choice.amount));return true}return false}
+      apply(step,context){const choice=step.choices.find(item=>item.id===context.effectChoice),target=context.target;if(!choice||!target)return false;if(choice.id==="vanguard-power"){target.turnPowerBoost=Number(target.turnPowerBoost||0)+Number(choice.amount);target.turnPowerExpiry=context.actorPlayerId||context.player?.playerId||context.side;if(context.match.pendingAttack?.attackerUid===target.uid)context.match.pendingAttack.power=Number(context.match.pendingAttack.power||0)+Number(choice.amount);return true}if(choice.id==="opponent-critical"){target.battleCriticalBoost=Number(target.battleCriticalBoost||0)+Number(choice.amount);target.battleCriticalExpiryBattleId=context.battleId;if(context.match.pendingAttack?.attackerUid===target.uid)context.match.pendingAttack.critical=Math.max(1,Number(context.match.pendingAttack.critical||1)+Number(choice.amount));return true}return false}
     }),
     "modify-drive": sourceModifierHandler("turnDriveBoost", "turnDriveExpiry", "driveChecksRemaining"),
     "modify-drive-target": Object.freeze({
@@ -146,7 +151,7 @@
     }),
     draw: Object.freeze({
       validate(step, context) { return positiveInteger(step.count) && Array.isArray(context?.player?.deck) && Array.isArray(context?.player?.hand); },
-      apply(step, context) { const drawn=[];for(let i=0;i<Number(step.count)&&context.player.deck.length;i++)drawn.push(context.player.deck.pop());context.player.hand.push(...drawn);for(const card of drawn)context.emitEvent?.({type:"card.drawn",cardInstanceId:card.uid});return drawn.length; }
+      apply(step, context) { const drawn=[];for(let i=0;i<Number(step.count)&&context.player.deck.length;i++)drawn.push(context.player.deck.pop());context.player.hand.push(...drawn);for(const card of drawn)context.emitEvent?.({type:"card.drawn",cardInstanceId:card.uid});if(drawn.length<Number(step.count))context.effectDeckOut={side:context.side||null,playerId:context.player?.playerId||context.actorPlayerId||null,requested:Number(step.count),drawn:drawn.length};return drawn.length; }
     }),
     "counter-charge": Object.freeze({
       validate(step, context) { const ids=context.selectedDamageUids||[],damage=context.player?.damage||[],available=damage.filter(card=>card?.faceDown),expected=Math.min(Number(step.count),available.length);return positiveInteger(step.count)&&Array.isArray(ids)&&new Set(ids).size===ids.length&&ids.length===expected&&ids.every(uid=>available.some(card=>card.uid===uid)); },
@@ -183,6 +188,14 @@
       validate(step, context) { return step.target === "controller" && positiveInteger(step.count) && Array.isArray(context?.player?.deck) && Array.isArray(context?.player?.damage); },
       apply(step, context) { const cards=[];for(let i=0;i<Number(step.count)&&context.player.deck.length;i++){const card=context.player.deck.pop();card.faceDown=false;context.player.damage.push(card);cards.push(card);}for(const card of cards)context.emitEvent?.({type:"card.damage_moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"deck",currentLocation:"damage"});return cards.length; }
     }),
+    "schedule-damage-return-at-turn-end": Object.freeze({
+      validate(step, context) { return step.target === "controller" && step.due === "end-phase-start" && Boolean(context.match) && typeof context.eventId === "string" && Boolean(context.eventId) && typeof context.sourceAbilityId === "string" && Boolean(context.source?.uid) && Boolean(context.player?.playerId); },
+      apply(_step, context) { context.match.scheduledEffects ||= []; const id = `${context.eventId}:${context.source.uid}:${context.sourceAbilityId}`; if (context.match.scheduledEffects.some(item => item?.id === id)) return false; context.match.scheduledEffects.push({ id, kind: "return-chosen-damage-to-deck", sourceCardInstanceId: context.source.uid, sourceCardId: String(context.source.cardId), sourceOwnerPlayerId: context.source.ownerPlayerId || context.player.playerId, sourceAbilityId: context.sourceAbilityId, controllerPlayerId: context.player.playerId, turn: Number(context.turnId), status: "scheduled" }); return id; }
+    }),
+    "return-chosen-damage-to-deck": Object.freeze({
+      validate(step, context) { return step.target === "controller" && step.shuffle === true && typeof context.effectUid === "string" && Boolean(context.match?.players?.[context.side]?.damage?.some(card => card?.uid === context.effectUid)) && Array.isArray(context.player?.damage) && Array.isArray(context.player?.deck) && typeof context.shuffleDeck === "function"; },
+      apply(_step, context) { const index = context.player.damage.findIndex(card => card?.uid === context.effectUid); if (index < 0) return false; const [card] = context.player.damage.splice(index, 1); context.player.deck.push(card); context.shuffleDeck(context.player.deck); context.emitEvent?.({ type: "card.moved", cardInstanceId: card.uid, controllerSide: context.side, previousLocation: "damage", currentLocation: "deck", reason: "delayed-damage-return" }); return card.uid; }
+    }),
     "modify-shield-source": Object.freeze({
       validate(step,context) { const attack=context.match?.pendingAttack;return step.target==="source"&&step.duration==="battle"&&positiveInteger(step.amount)&&context.player?.guardCircle?.some(card=>card?.uid===context.source?.uid)&&attack?.defenderSide===context.side&&attack?.battleId===context.battleId&&Array.isArray(attack.guardCards)&&attack.guardCards.some(card=>card?.uid===context.source.uid); },
       apply(step,context) { const attack=context.match.pendingAttack;context.source.battleShieldBoost=Number(context.source.battleShieldBoost||0)+Number(step.amount);context.source.battleShieldExpiryBattleId=attack.battleId;attack.targetPower+=Number(step.amount);return true; }
@@ -190,6 +203,10 @@
     "call-top-to-guardian": Object.freeze({
       validate(step, context) { const attack=context.match?.pendingAttack;if(step.target!=="controller"||step.destination!=="guardian"||step.position!=="rest"||!Number.isInteger(Number(step.count))||Number(step.count)<1||Number(step.count)>10||!Array.isArray(context.player?.deck)||!Array.isArray(context.player?.guardCircle)||!Array.isArray(attack?.guardCards)||attack.defenderSide!==context.side||context.match?.players?.[context.side]!==context.player||typeof context.shieldValueForInstance!=="function"||typeof context.cardDefinitionForInstance!=="function")return false;const cards=context.player.deck.slice(-Math.min(Number(step.count),context.player.deck.length));return cards.every(card=>{const definition=context.cardDefinitionForInstance(card),shield=context.shieldValueForInstance(card);return Boolean(definition)&&/\bunit\b/i.test(String(definition.type||""))&&Number.isFinite(Number(definition.shield))&&Number.isFinite(Number(shield))}); },
       apply(step, context) { const attack=context.match.pendingAttack,cards=context.player.deck.splice(-Math.min(Number(step.count),context.player.deck.length)).reverse();for(const card of cards){card.zone="guardian";card.circle="guardian";card.position="rest";card.rested=true;card.faceUp=true;context.player.guardCircle.push(card);attack.guardCards.push(card);attack.targetPower+=Number(context.shieldValueForInstance(card)||0);context.emitEvent?.({type:"card.placed",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"deck",currentLocation:"guardian",position:"rest"});}return cards.length; }
+    }),
+    "call-filtered-top-to-guardian-drop": Object.freeze({
+      validate(step,context){const attack=context.match?.pendingAttack;if(step.target!=="controller"||step.count!==5||step.destination!=="guardian"||step.position!=="rest"||step.remainder!=="drop"||typeof step.filter?.clan!=="string"||!step.filter.clan.trim()||!Array.isArray(context.player?.deck)||!Array.isArray(context.player?.guardCircle)||!Array.isArray(context.player?.drop)||!Array.isArray(attack?.guardCards)||attack.defenderSide!==context.side||context.match?.players?.[context.side]!==context.player||typeof context.shieldValueForInstance!=="function"||typeof context.cardDefinitionForInstance!=="function")return false;const cards=context.player.deck.slice(-Math.min(5,context.player.deck.length));return cards.filter(card=>{const def=context.cardDefinitionForInstance(card),clans=[def?.clan,...(def?.clans||[])].filter(Boolean).map(value=>String(value).toLocaleLowerCase());return clans.includes(step.filter.clan.toLocaleLowerCase())}).every(card=>{const def=context.cardDefinitionForInstance(card),shield=context.shieldValueForInstance(card);return Boolean(def&&/\bunit\b/i.test(String(def.type||""))&&Number.isFinite(Number(def.shield))&&Number.isFinite(Number(shield)))});},
+      apply(step,context){const attack=context.match.pendingAttack,cards=context.player.deck.splice(-Math.min(5,context.player.deck.length)).reverse();for(const card of cards){const def=context.cardDefinitionForInstance(card),clans=[def?.clan,...(def?.clans||[])].filter(Boolean).map(value=>String(value).toLocaleLowerCase()),matches=clans.includes(step.filter.clan.toLocaleLowerCase());if(matches){card.zone="guardian";card.circle="guardian";card.position="rest";card.rested=true;card.faceUp=true;context.player.guardCircle.push(card);attack.guardCards.push(card);attack.targetPower+=Number(context.shieldValueForInstance(card)||0);context.emitEvent?.({type:"card.placed",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"deck",currentLocation:"guardian",position:"rest"})}else{context.player.drop.push(card);context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"deck",currentLocation:"drop",reason:"guardian-clan-reveal"})}}return cards.length}
     }),
     "reorder-deck-card": Object.freeze({
       validate(step, context) { return step.target === "chosen" && step.destination === "player-choice" && Boolean(context.selectedCard) && context.player?.deck?.some(card => card.uid === context.selectedCard.uid) && ["top", "bottom"].includes(context.deckDestination); },
@@ -292,7 +309,10 @@
     }),    "protect-attacked-source": Object.freeze({
       validate(step, context) { const attack=context?.match?.pendingAttack;return step.target === "source" && step.duration === "battle" && Boolean(context.source?.uid && attack && attack.targetUid === context.source.uid && !attack.boostUid); },
       apply(_step, context) { context.match.pendingAttack.perfectGuard=true;context.match.pendingAttack.blocked=true;return true; }
-    }),    "move-source-to-soul": Object.freeze({
+    }),    "move-filtered-hand-card-to-soul": Object.freeze({
+      validate(step,context){const player=context.player,filter=step.filter;if(step.target!=="controller"||step.maximum!==1||!filter||Object.keys(filter).length!==1||typeof filter.clan!=="string"||!filter.clan.trim()||!Array.isArray(player?.hand)||!Array.isArray(player?.soul)||typeof context.cardDefinitionForInstance!=="function")return false;if(!context.effectUid)return true;const card=player.hand.find(item=>item?.uid===context.effectUid);return Boolean(card&&matchesTargetFilter(filter,{targetCard:context.cardDefinitionForInstance(card)}));},
+      apply(_step,context){if(!context.effectUid)return true;const index=context.player.hand.findIndex(card=>card?.uid===context.effectUid);if(index<0)return false;const [card]=context.player.hand.splice(index,1);context.player.soul.push(card);context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"hand",currentLocation:"soul",reason:"ability"});return true;}
+    }), "move-source-to-soul": Object.freeze({
       validate(step, context) { return step.target === "source" && step.from === "drop" && Boolean(context?.source?.uid && context.player?.drop?.some(card=>card?.uid===context.source.uid) && Array.isArray(context.player.soul)); },
       apply(_step, context) { const index=context.player.drop.findIndex(card=>card?.uid===context.source.uid);if(index<0)return false;const [card]=context.player.drop.splice(index,1);context.player.soul.push(card);context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"soul"});return true; }
     }), "move-source-to-hand": Object.freeze({
@@ -328,6 +348,14 @@
     "search-deck-same-name-to-hand": Object.freeze({
       validate(step,context){const player=context.player,source=context.source,deck=player?.deck;if(step.target!=="controller"||step.maximum!==1||(!source&&!step.cardName)||!Array.isArray(deck)||!Array.isArray(player.hand)||typeof context.cardDefinitionForInstance!=="function"||typeof context.shuffleDeck!=="function")return false;const selected=deck.find(card=>card?.uid===context.effectUid);if(!context.effectUid)return true;if(!selected)return false;const selectedCard=context.cardDefinitionForInstance(selected);return Boolean(step.cardName?cardHasName(selectedCard,step.cardName):cardsShareName(context.cardDefinitionForInstance(source),selectedCard));},
       apply(_step,context){const deck=context.player.deck;let chosen=null;if(context.effectUid){const index=deck.findIndex(card=>card?.uid===context.effectUid);if(index<0)return false;[chosen]=deck.splice(index,1);context.player.hand.push(chosen);context.emitEvent?.({type:"card.revealed",cardInstanceId:chosen.uid,controllerSide:context.side,reason:"search"});}context.shuffleDeck(deck);return{revealedCardId:chosen?.cardId||null,revealedCardUid:chosen?.uid||null};}
+    }),
+    "search-deck-or-drop-named-to-hand": Object.freeze({
+      validate(step,context){const p=context.player,zone=context.effectSourceZone,list=zone==="deck"?p?.deck:zone==="drop"?p?.drop:null;if(step.target!=="controller"||step.maximum!==1||typeof step.cardName!=="string"||!step.cardName.trim()||step.reveal!==true||step.shuffleIfDeckSearched!==true||!Array.isArray(list)||!Array.isArray(p?.hand)||typeof context.cardDefinitionForInstance!=="function"||zone==="deck"&&typeof context.shuffleDeck!=="function")return false;if(!context.effectUid)return true;const selected=list.find(card=>card?.uid===context.effectUid);return Boolean(selected&&cardHasName(context.cardDefinitionForInstance(selected),step.cardName));},
+      apply(step,context){const p=context.player,zone=context.effectSourceZone,list=zone==="deck"?p.deck:p.drop;let chosen=null;if(context.effectUid){const index=list.findIndex(card=>card?.uid===context.effectUid);if(index<0)return false;[chosen]=list.splice(index,1);p.hand.push(chosen);const definition=context.cardDefinitionForInstance?.(chosen)||{};context.emitEvent?.({type:"card.revealed",cardInstanceId:chosen.uid,controllerSide:context.side,previousLocation:zone,currentLocation:"hand",reason:"search",revealedCardId:String(chosen.cardId||""),revealedCardName:definition.name||null});context.emitEvent?.({type:"card.moved",cardInstanceId:chosen.uid,controllerSide:context.side,previousLocation:zone,currentLocation:"hand",reason:"search"});}if(zone==="deck")context.shuffleDeck(p.deck);return{searchedZone:zone,revealedCardId:chosen?.cardId||null,revealedCardUid:chosen?.uid||null};}
+    }),
+    "ride-top-five-named-card": Object.freeze({
+      validate(step,context){const p=context.player,m=context.match,source=context.source,deck=p?.deck;if(step.target!=="controller"||step.lookCount!==5||typeof step.cardName!=="string"||!step.cardName.trim()||step.bottomOrder!=="chosen-rest"||!Array.isArray(deck)||!Array.isArray(p?.soul)||!source?.uid||p.vanguard?.uid!==source.uid||context.sourceZone!=="vanguard"||context.sourceInPlay!==true||m?.side!==context.side||Number(m.phase)!==2||!Array.isArray(context.deckBottomUids)||typeof context.cardDefinitionForInstance!=="function")return false;const looked=deck.slice(-Math.min(step.lookCount,deck.length)),selected=context.effectUid?looked.find(card=>card?.uid===context.effectUid):null;if(context.effectUid&&!selected)return false;if(selected){const definition=context.cardDefinitionForInstance(selected)||{},oldDefinition=context.cardDefinitionForInstance(source)||{},grade=Number(definition.grade),oldGrade=Number(oldDefinition.grade);if(!/unit/i.test(String(definition.type||""))||definition.gDeckCard===true||selected.gDeckCard===true||selected.cannotBeRidden===true||!Number.isInteger(grade)||!Number.isInteger(oldGrade)||grade<oldGrade||grade>oldGrade+1||!cardHasName(definition,step.cardName)||!canRideCard(definition,{vanguardCard:oldDefinition,crests:p.crests||[]}))return false;const sameNameRestricted=(p.crests||[]).some(card=>card?.sameNameRideRestriction===true);if(sameNameRestricted&&(!cardsShareName(definition,oldDefinition)))return false;}const remaining=looked.filter(card=>card?.uid!==selected?.uid),order=context.deckBottomUids;if(order.length!==remaining.length||new Set(order).size!==order.length||order.some(uid=>!remaining.some(card=>card?.uid===uid)))return false;return true;},
+      apply(step,context){const p=context.player,deck=p.deck,looked=deck.slice(-Math.min(step.lookCount,deck.length)),selected=context.effectUid?looked.find(card=>card?.uid===context.effectUid):null,remaining=looked.filter(card=>card?.uid!==selected?.uid),order=context.deckBottomUids;if(order.length!==remaining.length||new Set(order).size!==order.length||order.some(uid=>!remaining.some(card=>card?.uid===uid)))return false;deck.splice(deck.length-looked.length,looked.length);if(selected){const previous=p.vanguard,grade=Number(context.cardDefinitionForInstance(selected)?.grade);if(grade>=3)recordFightRide(p,{grade});p.soul.push(previous);p.vanguard={...selected,rested:false,circle:"vanguard"};if(context.match)context.match.ridePerformed=true;const oldDefinition=context.cardDefinitionForInstance(previous)||{},newDefinition=context.cardDefinitionForInstance(selected)||{};context.emitEvent?.({type:"card.moved",cardInstanceId:previous.uid,sourceCardInstanceId:previous.uid,subjectCardInstanceId:previous.uid,previousLocation:"vanguard",currentLocation:"soul",controllerSide:context.side,reason:"ride"});context.emitEvent?.({type:"card.ridden",cardInstanceId:selected.uid,sourceCardInstanceId:selected.uid,subjectCardInstanceId:selected.uid,sourceCardName:newDefinition.name||null,sourceOwnerPlayerId:selected.ownerPlayerId||p.playerId,sourceControllerPlayerId:selected.controllerPlayerId||p.playerId,previousLocation:"deck",currentLocation:"vanguard",targetCardInstanceIds:[previous.uid],targetPreviousLocation:"vanguard",targetCurrentLocation:"soul",targetLocation:"vanguard",controllerSide:context.side,phase:"ride",timingWindow:"ability-ride"});context.emitEvent?.({type:"card.placed",cardInstanceId:selected.uid,sourceCardInstanceId:selected.uid,subjectCardInstanceId:selected.uid,sourceCardName:newDefinition.name||null,sourceOwnerPlayerId:selected.ownerPlayerId||p.playerId,sourceControllerPlayerId:selected.controllerPlayerId||p.playerId,previousLocation:"deck",currentLocation:"vanguard",circle:"vanguard",controllerSide:context.side,phase:"ride",timingWindow:"ability-ride"});}const byUid=new Map(remaining.map(card=>[card.uid,card])),bottom=order.map(uid=>byUid.get(uid));deck.unshift(...bottom);for(const card of bottom)context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,sourceCardInstanceId:card.uid,subjectCardInstanceId:card.uid,previousLocation:"deck",currentLocation:"deck",destinationPosition:"bottom",reason:"put-on-bottom",controllerSide:context.side,phase:"ride",timingWindow:"ability-ride-bottom"});return{rode:Boolean(selected),riddenCardUid:selected?.uid||null,bottomCardUids:order.slice()};}
     }),
     "search-deck-named-call-to-rearguard": Object.freeze({
       validate(step,context){const p=context.player,deck=p?.deck,rear=p?.rear,zones=["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:p?.accelZones||0},(_,i)=>`accel-${i+1}`)];if(step.target!=="controller"||step.maximum!==1||step.destination!=="rear-guard"||step.position!=="stand"||typeof step.cardName!=="string"||!step.cardName.trim()||step.opensSourceCircle!==true||!Array.isArray(deck)||!Array.isArray(rear)||typeof context.cardDefinitionForInstance!=="function"||typeof context.shuffleDeck!=="function")return false;const selected=deck.find(card=>card?.uid===context.effectUid);if(!context.effectUid)return !context.callZone;if(!selected||typeof context.callZone!=="string")return false;const zoneIndex=zones.indexOf(context.callZone),sourceIndex=rear.findIndex(card=>card?.uid===context.source?.uid),opensSourceCircle=sourceIndex>=0&&sourceIndex===zoneIndex&&context.sourceInPlay===true;if(zoneIndex<0||zoneIndex>=rear.length||rear[zoneIndex]&&!(step.opensSourceCircle&&opensSourceCircle))return false;const definition=context.cardDefinitionForInstance(selected);return cardHasName(definition,step.cardName,{location:"deck"})&&/\bunit\b/i.test(String(definition?.type||""));},
@@ -367,12 +395,13 @@
     if (filter.minGrade !== undefined && (!Number.isFinite(Number(context.targetCard?.grade)) || Number(context.targetCard.grade) < Number(filter.minGrade))) return false;
     const targetLocation=context.targetZone==="vanguard"?"vanguard":/^(?:rear-(?:left|right|back-(?:left|center|right))|accel-\d+)$/.test(String(context.targetZone||""))?"rear-guard":undefined;
     if (filter.cardName && !cardHasName(context.targetCard, filter.cardName,{location:targetLocation})) return false;
+    if (Array.isArray(filter.cardNamesAny) && !filter.cardNamesAny.some(name => cardHasName(context.targetCard, name, { location: targetLocation }))) return false;
     if (filter.cardNameContains && !cardHasName(context.targetCard, filter.cardNameContains, { contains: true,location:targetLocation })) return false;
     if(filter.abilityKeyword&&!cardHasAbilityKeyword(context.targetCard,filter.abilityKeyword))return false;
     if(Array.isArray(filter.abilityKeywordsAny)&&!filter.abilityKeywordsAny.some(keyword=>cardHasAbilityKeyword(context.targetCard,keyword)))return false;
     if (filter.clan) {
       if (!hasAbilityKeyword(context.targetCard,"all-clans-and-nations")) {
-      const clan=String(filter.clan).trim().toLowerCase(), declared=[context.targetCard?.clan,...(context.targetCard?.clans||[])].filter(Boolean).map(value=>String(value).trim().toLowerCase());
+      const normalizeClan=value=>String(value||"").trim().toLocaleLowerCase().replace(/^the\s+/,""),clan=normalizeClan(filter.clan), declared=[context.targetCard?.clan,...(context.targetCard?.clans||[])].filter(Boolean).map(normalizeClan);
       const fallback=String(context.targetCard?.text||"").split(/\r?\n/)[0].split("/")[0].trim().toLowerCase();
       if(declared.length?!declared.includes(clan):fallback!==clan)return false; }
     }
@@ -396,6 +425,11 @@
     if(kind!=="CONT"||!match)return null;
     return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard"],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"cont-vanguard-card-name-alias-v1",review:"Exact VC-only CONT alias wording. The alias is active only while this exact source is on a Vanguard Circle; it is not a general card-name property in hand, deck, or other circles."},keywords:[{name:"card-name-alias",value:match[1]}]};
   }
+  function compileContinuousVanguardRearGuardCardNameAliasDefinition(cardId,abilityId,kind,printedText){
+    const match=normalizePrintedText(printedText).match(/^CONT \[VC\/RC\]: This (?:unit|card) is (?:also )?regarded as ["“]([^"”]+)["”]\.?(?![\s\S])/i);
+    if(kind!=="CONT"||!match)return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard","rear-guard"],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"cont-vc-rc-card-name-alias-v1",review:"Exact VC/RC-only CONT name alias. It is active only while this exact source instance is on a Vanguard or Rear-Guard Circle; it does not change the name in hand, deck, soul, drop, or other zones."},keywords:[{name:"card-name-alias",value:match[1]}]};
+  }
   function compileContinuousNamedDeckLimitDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT")return null;
     const match=normalizePrintedText(printedText).match(/^CONT:\s*You may (?:only )?have up to (\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve) (?:(?:cards?\s+named)\s+)?["“]([^"”]+)["”] in a deck\.?$/i);
@@ -411,6 +445,13 @@
     const grade=Number(match[1]||match[3]),clan=(match[2]||match[4]).trim(),amount=Number(match[5]);
     if(!Number.isSafeInteger(grade)||grade<0||!clan||!positiveInteger(amount))return null;
     return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"vanguard",circles:["vanguard"]},conditions:[{type:"event-subject-grade-equals",count:grade},{type:"event-subject-has-clan",value:clan}],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rc-own-vanguard-grade-clan-placement-power-v1",review:"Exact cross-unit AUTO template: the source must already be the controller's Rear-Guard when that controller's exact Vanguard instance is placed on VC; the placed Vanguard's printed grade and clan are matched from the event subject before granting only the source the printed end-of-turn power."},effects:[{op:"modify-power",target:"source",amount,duration:"turn"}]};
+  }
+  function compileOtherRearGuardPlacementPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText),match=text.match(/^AUTO \[VC\/RC\]: When your other rear-guard is placed, this unit gets power \+(\d+) until end of turn\.$/i);
+    if(!match)return null;
+    const amount=Number(match[1]);if(!positiveInteger(amount))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard","rear-guard"],trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"any",circles:["rear-guard"],excludeSourceAsSubject:true,subjectControllerRelation:"source-controller"},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-other-friendly-rearguard-placement-source-power-turn-v1",review:"Exact cross-unit placement AUTO. The exact source remains on its VC or RC; a different card instance controlled by the same player must actually enter an RC. Only that source receives the printed power until turn end."},effects:[{op:"modify-power",target:"source",amount,duration:"turn"}]};
   }
   function compileSameNameVanguardRideRestrictionDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT"||!/^CONT:\s*You cannot ride a unit with a different card name from your vanguard\.$/i.test(normalizePrintedText(printedText)))return null;
@@ -443,7 +484,7 @@
     return [...names];
   }
   function cardHasName(card,name,{contains=false,location}={}){const expected=String(name||"").trim().toLocaleLowerCase();if(!expected)return false;return getCardNames(card,{location}).some(value=>contains?value.toLocaleLowerCase().includes(expected):value.toLocaleLowerCase()===expected)}
-  function cardsShareName(left,right){const names=new Set(getCardNames(right).map(name=>name.toLocaleLowerCase()));return getCardNames(left).some(name=>names.has(name.toLocaleLowerCase()))}
+  function cardsShareName(left,right,{leftLocation,rightLocation}={}){const names=new Set(getCardNames(right,{location:rightLocation}).map(name=>name.toLocaleLowerCase()));return getCardNames(left,{location:leftLocation}).some(name=>names.has(name.toLocaleLowerCase()))}
   function cardHasAbilityKeyword(card,keyword){
     const expected=String(keyword||"").trim().toLocaleLowerCase();if(!card||!expected)return false;
     if (getCardAbilityKeywords(card).includes(expected)) return true;
@@ -459,18 +500,26 @@
         if (effect.op === "continuous-power") return !["source","all-controller-units"].includes(effect.target) || !positiveInteger(effect.amount) || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition) || (effect.target==="all-controller-units"&&(effect.condition?.op!=="controller-turn"||effect.condition.sourceFaceUp!==true||effect.condition.targetHasNoAbilities!==true));
         if (effect.op === "continuous-power-adjustment") return effect.target !== "source" || !Number.isSafeInteger(Number(effect.amount)) || Number(effect.amount) === 0 || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition);
         if (effect.op === "continuous-power-per-soul-card") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition) || effect.cardNameContains != null && (typeof effect.cardNameContains !== "string" || !effect.cardNameContains.trim());
+        if (effect.op === "continuous-power-per-clan-rearguard") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition) || typeof effect.clan !== "string" || !effect.clan.trim();
         if (effect.op === "continuous-critical") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition);
         if (effect.op === "continuous-shield") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition);
         if (effect.op === "continuous-grade") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "stride-payment" || effect.condition?.op !== "paying-stride-cost" || ![undefined,"add","treat-as-grade-three"].includes(effect.mode) || (effect.mode === "treat-as-grade-three" && Number(effect.amount) !== 3);
         if (effect.op === "modify-shield-source") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "battle";
         if (effect.op === "conditional-counter-charge") return effect.target !== "controller" || !positiveInteger(effect.count) || effect.condition?.type !== "controller-drop-has-card-name" || typeof effect.condition.cardName !== "string" || !effect.condition.cardName.trim();
         if (effect.op === "modify-drive-target") return effect.target !== "attacking-vanguard" || !positiveInteger(effect.amount) || effect.duration !== "battle";
+        if (effect.op === "grant-temporary-boost") return effect.target !== "source" || effect.duration !== "turn";
         if (effect.op === "call-top-to-guardian") return effect.target !== "controller" || !Number.isInteger(Number(effect.count)) || Number(effect.count)<1 || Number(effect.count)>10 || effect.destination !== "guardian" || effect.position !== "rest";
+        if (effect.op === "call-filtered-top-to-guardian-drop") return effect.target !== "controller" || effect.count !== 5 || effect.destination !== "guardian" || effect.position !== "rest" || effect.remainder !== "drop" || typeof effect.filter?.clan !== "string" || !effect.filter.clan.trim();
         if (effect.op === "call-checked-card-locked") return effect.target !== "checked-card" || effect.position !== "locked";
         if (effect.op === "call-source-from-drop-rested") return effect.target !== "source" || effect.position !== "rest" || effect.cannotAttackTurnKeyWhenBattlePhase !== undefined && effect.cannotAttackTurnKeyWhenBattlePhase !== true;
         if (effect.op === "search-top-up-to-one-filtered-to-hand") return effect.target !== "controller" || !positiveInteger(effect.lookCount) || effect.maximum !== 1 || !validTopSearchFilter(effect.filter);
+        if (effect.op === "move-filtered-hand-card-to-soul") return effect.target !== "controller" || effect.maximum !== 1 || !effect.filter || Object.keys(effect.filter).length !== 1 || typeof effect.filter.clan !== "string" || !effect.filter.clan.trim();
         if (effect.op === "search-top-up-to-one-grade-to-hand") return effect.target !== "controller" || !positiveInteger(effect.lookCount) || !Number.isInteger(Number(effect.maximumGrade)) || Number(effect.maximumGrade) < 0;
         if (effect.op === "search-deck-named-call-to-rearguard") return effect.target !== "controller" || effect.maximum !== 1 || typeof effect.cardName !== "string" || !effect.cardName.trim() || effect.destination !== "rear-guard" || effect.position !== "stand" || effect.opensSourceCircle !== true;
+        if (effect.op === "search-deck-or-drop-named-to-hand") return effect.target !== "controller" || effect.maximum !== 1 || typeof effect.cardName !== "string" || !effect.cardName.trim() || effect.reveal !== true || effect.shuffleIfDeckSearched !== true;
+        if (effect.op === "ride-top-five-named-card") return effect.target !== "controller" || effect.lookCount !== 5 || typeof effect.cardName !== "string" || !effect.cardName.trim() || effect.bottomOrder !== "chosen-rest";
+        if (effect.op === "schedule-damage-return-at-turn-end") return effect.target !== "controller" || effect.due !== "end-phase-start";
+        if (effect.op === "return-chosen-damage-to-deck") return effect.target !== "controller" || effect.shuffle !== true;
         if (effect.op === "reorder-deck-card") return effect.target !== "chosen" || effect.destination !== "player-choice";
         if (effect.op === "seek-mate") return effect.target !== "controller" || !positiveInteger(effect.power) || Number(effect.dropCount) !== 4 || typeof effect.mateName !== "string" || !effect.mateName.trim();
         if (effect.op === "retire-target") return effect.target !== "chosen" || effect.targetFilter?.controller !== "opponent" || effect.targetFilter?.zone !== "rear-guard";
@@ -516,6 +565,19 @@
       source: { dataset: "Cardfight Area snapshot", patternId: /During this turn,/i.test(text)?"act-counter-blast-source-power-during-turn-v1":"act-counter-blast-source-power-turn-v1", review: "Exact ACT template: circle, Counter Blast amount, source target, modifier amount, and turn duration are parsed from printed text." },
       effects: [{ op: "modify-power", target: "source", amount: Number(match[3]), duration: "turn" }] };
   }
+  function compileActFilteredCounterBlastSourcePowerDefinition(cardId, abilityId, kind, printedText) {
+    if (kind !== "ACT") return null;
+    const text = normalizePrintedText(printedText).replace(/[’‘]/g, "'");
+    const match = text.match(/^ACT \[VC\]: \[Counter Blast (\d+)-card with ["“]([^"”]+)["”] in its card name\] This unit gets power \+(\d+) until end of turn\.$/i);
+    if (!match || !match[2].trim()) return null;
+    return {
+      id: abilityId, cardId, kind, printedText, requiredLocation: ["vanguard"],
+      costs: [{ type: "counter-blast", count: Number(match[1]), filter: { cardNameContains: match[2].trim() } }],
+      costsReviewed: true,
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "act-vanguard-filtered-counter-blast-source-power-turn-v1", review: "Exact VC ACT pattern. The source must be the controller's Vanguard; each paid face-up damage card must have the printed name fragment, then only the source gets the printed power through turn end." },
+      effects: [{ op: "modify-power", target: "source", amount: Number(match[3]), duration: "turn" }]
+    };
+  }
   function compileSeekMateDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="ACT")return null;
     const text=normalizePrintedText(printedText);
@@ -531,7 +593,7 @@
   }
   function compileActSoulBlastSelfPowerDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "ACT") return null;
-    const match = String(printedText || "").match(/^ACT\s*\[(VC\/RC|VC|RC)\]:\s*\[Soul Blast (\d+)\]\s*This unit gets power \+(\d+) until end of turn\.$/i);
+    const match = String(printedText || "").match(/^ACT\s*\[(VC\/RC|VC|RC)\]:\s*(?:COST\s*)?\[Soul Blast (\d+)\],?\s*(?:and\s+)?This unit gets power \+(\d+) until end of turn\.$/i);
     if (!match) return null;
     return { id: abilityId, cardId, kind, printedText,
       source: { dataset: "Cardfight Area snapshot", patternId: "act-soul-blast-source-power-turn-v1", review: "Exact ACT template: circle, Soul Blast amount, source target, modifier amount, and duration are parsed from printed text." },
@@ -666,6 +728,11 @@
     const amount=Number(text.match(/power \+(\d+) until end of turn\.$/i)?.[1]);
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",patternId:"act-rest-source-front-row-ally-power-v1",review:"Exact ACT template: RC source rests as cost, excludes itself from target selection, restricts the target to the front row, and applies the printed turn modifier."},effects:[{op:"modify-power-target",target:"chosen",amount,duration:"turn",targetFilter:{controller:"source-controller",cardType:"unit",excludeSource:true,row:"front"}}]};
   }
+  function compileActRestSourceClanUnitPowerDefinition(cardId,abilityId,kind,printedText){
+    const match=normalizePrintedText(printedText).match(/^ACT\s*\[RC\]:\s*\[Rest this unit\]\s*Choose another of your [«<]([^»>]+)[»>], and that unit gets power \+(\d+) until end of turn\.$/i);
+    if(kind!=="ACT"||!match)return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"act-rest-source-other-clan-unit-power-v1",review:"Exact ACT wording. The source must be on RC and rest as cost; target must be a different friendly Unit of the printed clan anywhere on the field (including VC), and only the printed turn power is applied."},effects:[{op:"modify-power-target",target:"chosen",amount:Number(match[2]),duration:"turn",targetFilter:{controller:"source-controller",cardType:"unit",excludeSource:true,clan:match[1].trim()}}]};
+  }
   function compileActCounterBlastUnlockLockedDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="ACT"||!/^ACT\s*\[VC\]:\s*\[Counter Blast 1\]\s*Choose one of your locked cards, and unlock it\.$/i.test(normalizePrintedText(printedText)))return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"act-vanguard-counter-blast-unlock-friendly-locked-v1",review:"Exact VC ACT template: pay Counter-Blast 1, then choose an exact friendly locked field instance and unlock it."},effects:[{op:"unlock-target",target:"chosen",targetFilter:{controller:"source-controller",locked:true}}]};
@@ -673,6 +740,12 @@
   function compileActCounterBlastSameNameSearchPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="ACT"||!/^ACT\s*\[VC\]\s*1\/Turn:\s*COST\s*\[Counter Blast 1\],\s*search your deck for up to one card with the same card name as this unit, reveal it and put it into hand, shuffle the deck, and this unit gets power \+10000 until end of turn\.$/i.test(normalizePrintedText(printedText)))return null;
     return{id:abilityId,cardId,kind,printedText,once:true,usageRestriction:{scope:"ability",reset:"turn"},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"act-counter-blast-same-name-search-power-v1",review:"Exact ACT template: once per turn on VC; pay Counter Blast 1, optionally search a same-name card, reveal and add it, shuffle, then grant the source +10000 for the turn."},effects:[{op:"search-deck-same-name-to-hand",target:"controller",maximum:1},{op:"modify-power",target:"source",amount:10000,duration:"turn"}]};
+  }
+  function compileActCounterBlastVanguardPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="ACT")return null;
+    const match=normalizePrintedText(printedText).match(/^ACT\s*\[RC\]\s*1\/Turn:\s*COST\s*\[Counter Blast (\d+)\],\s*choose one of your vanguards, and it gets power \+(\d+) until end of turn\.$/i);
+    if(!match)return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],once:true,usageRestriction:{type:"once-per-turn",scope:"ability-instance",reset:"turn"},costs:[{type:"counter-blast",count:Number(match[1])}],costsReviewed:true,conditions:[],conditionsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"act-rc-counter-blast-choose-vanguard-power-turn-v1",review:"Exact Rear-Guard ACT template. Its controller pays the printed Counter Blast once per turn, chooses their own Vanguard, and grants only that Vanguard the printed power until turn end."},effects:[{op:"modify-power-target",target:"chosen",amount:Number(match[2]),duration:"turn",targetFilter:{controller:"source-controller",cardType:"unit",zone:"vanguard"}}]};
   }
   function compileMainPhaseSoulChargePowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;
@@ -709,6 +782,24 @@
     const match=normalizePrintedText(printedText).match(/^AUTO:\s*\[Counter Blast 1 & Soul Blast 1\] When this unit is placed on VC, you may pay the cost\. If you do, search your deck for up to one card named ["“]([^"”]+)["”], reveal it to your opponent, put it into your hand, and shuffle your deck\.$/i);
     if(!match)return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-vanguard-placement-counter-soul-named-search-v1",review:"Exact VC placement AUTO. The exact source must enter VC; the controller may pay Counter Blast 1 and Soul Blast 1, then may search for up to one exact-name card, reveal it, add it, and shuffle."},effects:[{op:"search-deck-same-name-to-hand",target:"controller",maximum:1,cardName:match[1]}]};
+  }
+  function compileRcPlacementGradeThreeClanNamedSearchDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText),match=text.match(/^AUTO:\s*\[Choose a grade 3 [«<]([^»>]+)[»>] from your hand, and discard it\] When this unit is placed on RC, you may pay the cost\. If you do, search your deck for up to one card named ["“]([^"”]+)["”], reveal it to your opponent, put it into your hand, and shuffle your deck\.$/i);
+    if(!match||!match[1].trim()||!match[2].trim())return null;
+    return{id:abilityId,cardId,kind,printedText,optional:true,requiredLocation:["rear-guard"],conditionsReviewed:true,choicesReviewed:true,costs:[{type:"discard",count:1,filter:{clan:match[1].trim(),minGrade:3,maxGrade:3}}],costsReviewed:true,trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["rear-guard"]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rc-grade-three-clan-discard-named-search-v1",review:"Exact AUTO template: this source must be placed on RC. Its controller may discard a Grade 3 card of the printed clan from hand, then may search the controller's Deck for up to one exact-name card, reveal it, add it to hand, and shuffle. The shared filtered-discard and exact-name Deck-search handlers enforce costs and choices."},effects:[{op:"search-deck-same-name-to-hand",target:"controller",maximum:1,cardName:match[2].trim()}]};
+  }
+  function compileRcPlacementDeckOrDropNamedSearchDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const match=normalizePrintedText(printedText).match(/^AUTO: When this unit is placed on RC, COST \[Counter Blast 1\], search your deck or drop for up to one ["“]([^"”]+)["”], reveal it and put it into hand, and if you searched the deck, shuffle the deck\.$/i);
+    if(!match)return null;
+    return{id:abilityId,cardId,kind,printedText,optional:true,requiredLocation:["rear-guard"],conditionsReviewed:true,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["rear-guard"]},costs:[{type:"counter-blast",count:1}],costsReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rc-placement-counter-blast-deck-or-drop-named-search-v1",review:"Exact RC placement AUTO. The controller may pay Counter Blast 1, choose their deck or Drop as the search zone, take up to one card with the exact printed name, reveal it and put it into hand; shuffle only when the deck was searched."},effects:[{op:"search-deck-or-drop-named-to-hand",target:"controller",maximum:1,cardName:match[1],reveal:true,shuffleIfDeckSearched:true}]};
+  }
+  function compileRidePhaseTopFiveNamedRideDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const match=normalizePrintedText(printedText).match(/^AUTO \[VC\]: At the beginning of your ride phase, look at five cards from the top of your deck, search for up to one card named ["“]([^"”]+)["”] from among them, ride it, and put the rest on the bottom of your deck in any order\. If you rode, you cannot normal ride during that ride phase\.$/i);
+    if(!match)return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard"],conditionsReviewed:true,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"phase.changed",subject:"controller",circles:[],requiredPhase:"ride",turnRelation:"controller"},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-ride-phase-top-five-named-ride-bottom-deck-v1",review:"Exact VC AUTO template. At this controller's Ride Phase start, inspect up to five deck-top cards; optionally ride one exact-name card subject to ride restrictions, then put every remaining looked-at card on the bottom in the controller's chosen order. Consume the Ride Phase normal-ride permission only if a card was actually ridden."},effects:[{op:"ride-top-five-named-card",target:"controller",lookCount:5,cardName:match[1],bottomOrder:"chosen-rest"}]};
   }
   function compileDriveTriggerUnitPowerDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
@@ -772,6 +863,28 @@
     if(!match&&!excluding)return null;
     return{id:abilityId,cardId,kind,printedText,optional:true,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"card.ridden",subject:"ridden-unit",riderClan:(match||excluding)[1],...(excluding?{excludedRiderName:excluding[2]}:{})},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-ridden-unit-clan-optional-source-call-v1",review:excluding?"Exact clan-and-excluded-name ride wording. Matches the ridden-upon source instance, rider clan, and excluded card name; accepting calls this source from Soul to an open Rear-Guard circle standing.":"Exact 14-card catalog family. Matches the ridden-upon source instance and the rider's printed clan separately; accepting calls this exact source from Soul to an open Rear-Guard circle standing."},effects:[{op:"call-source-from-soul",target:"source",position:"stand"}]};
   }
+  function compileRideNamedGradeCallSourceDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText);
+    const exact=text.match(/^AUTO:\s*When this unit is rode upon by ["“]([^"”]+)["”], call this card to RC\.$/i);
+    const grade=text.match(/^AUTO:\s*When this unit is rode upon by a grade (\d+) card with ["“]([^"”]+)["”] in its card name, call this card to RC\.$/i);
+    if(!exact&&!grade)return null;
+    const riderCondition=exact?{riderCardNameEquals:exact[1].trim()}:{riderGrade:Number(grade[1]),riderCardNameContains:grade[2].trim()};
+    return{id:abilityId,cardId,kind,printedText,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"card.ridden",subject:"ridden-unit",circles:["vanguard"],...riderCondition},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rode-upon-named-grade-source-call-v1",review:exact?"Exact mandatory exact-name ride trigger. The ridden source must be the exact prior Vanguard instance now in Soul; the actual rider must be controlled by the same player and have the exact printed card name. The source is called standing to a legal Rear-Guard circle.":"Exact mandatory ride-trigger wording. The ridden source must be the exact prior Vanguard instance now in Soul; the actual rider must be controlled by the same player, have the exact printed grade, and contain the printed phrase in its card name. The source is called standing to a legal Rear-Guard circle."},effects:[{op:"call-source-from-soul",target:"source",position:"stand"}]};
+  }
+  function compileNamedRideDeckSearchDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const match=normalizePrintedText(printedText).match(/^AUTO:\s*When a card named ["“]([^"”]+)["”] rides this unit, search your deck for up to one card named ["“]([^"”]+)["”], reveal it to your opponent, put it into your hand, and shuffle your deck\.$/i);
+    if(!match)return null;
+    return{id:abilityId,cardId,kind,printedText,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"card.ridden",subject:"ridden-unit",circles:["vanguard"],riderCardNameEquals:match[1].trim()},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-named-rider-ride-source-search-v1",review:"Exact named-rider ride AUTO. Matches the exact previous Vanguard instance and exact named rider controlled by the same player, then permits a private choice of zero or one exact-name card from Deck, reveals any selected card, adds it to hand, and shuffles."},effects:[{op:"search-deck-same-name-to-hand",target:"controller",maximum:1,cardName:match[2].trim()}]};
+  }
+  function compileRideSourceTopSevenTwoNameSearchDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const match=normalizePrintedText(printedText).match(/^AUTO:\s*When a card named ["“]([^"”]+)["”] rides this unit, look at up to seven cards from the top of your deck, search for up to one card named ["“]([^"”]+)["”] or ["“]([^"”]+)["”] from among them, reveal it to your opponent, put it into your hand, and shuffle your deck\.$/i);
+    if(!match)return null;
+    const rider=match[1].trim(),names=[match[2].trim(),match[3].trim()];
+    return{id:abilityId,cardId,kind,printedText,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"card.ridden",subject:"ridden-unit",circles:["vanguard"],riderCardNameEquals:rider},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-ridden-source-top-seven-two-name-search-v1",review:"Exact ride-trigger search template. The exact previous Vanguard instance and exact named rider are matched; the controller may choose zero or one of the two exact-name cards among the top seven, reveal it, add it to hand, and shuffle the deck."},effects:[{op:"search-top-up-to-one-filtered-to-hand",target:"controller",lookCount:7,maximum:1,filter:{cardNamesAny:names}}]};
+  }
   function compileResistKeywordDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT")return null;
     const text=normalizePrintedText(printedText);
@@ -800,7 +913,7 @@
   }
   function compileAutoRcPlacementChooseFriendlyPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;
-    const match=normalizePrintedText(printedText).match(/^AUTO:\s*(?:\[Counter Blast (\d+)\]\s*)?When this unit is placed on RC( from your deck)?, (?:you may pay the cost\. If you do, )?choose another of your (?:(?:grade (\d+) )?(?:[«<]([^»>]+)[»>]|units? with ["“]([^"”]+)["”] in its card name))(?: units?)?(?: [<]([^>]+)[>])?, and that unit gets power \+(\d+) until end of turn\.$/i);
+    const match=normalizePrintedText(printedText).match(/^AUTO\s*(?:\[RC\])?:\s*(?:\[Counter Blast (\d+)\]\s*)?When this unit is placed on RC( from your deck)?, (?:you may pay the cost\. If you do, )?choose another of your (?:(?:grade (\d+) )?(?:[«<]([^»>]+)[»>]|units? with ["“]([^"”]+)["”] in its card name))(?: units?)?(?: [<]([^>]+)>)?, and that unit gets power \+(\d+) until end of turn\.$/i);
     if(!match)return null;
     const targetFilter={controller:"source-controller",cardType:"unit",excludeSource:true};
     if(match[3]){targetFilter.minGrade=Number(match[3]);targetFilter.maxGrade=Number(match[3]);}
@@ -1039,6 +1152,25 @@
   function compileGuardianAttackedUnitProtectionDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;const text=normalizePrintedText(printedText),match=text.match(/^AUTO(?:\s*\[GC\])?:\s*\[([^\]]+)\]\s*When this unit is placed on GC(?: from hand)?,\s*you may pay the cost\. If you do, choose (?:one|up to one) of your (.+?) that (?:is|are) being attacked, and (?:that unit|it) cannot be hit until end of that battle\.$/i);if(!match)return null;const cost=parseAbilityCosts(`[${match[1]}]`);if(cost.status!=="supported-cost"||cost.costs.reduce((sum,item)=>sum+item.count,0)!==1)return null;const description=match[2].trim(),clan=description.match(/^[«<]([^»>]+)[»>]$/)?.[1]?.trim()||null,vanguard=/^vanguards?$/i.test(description);if(!clan&&!/^(?:units?|vanguards?)$/i.test(description))return null;const targetFilter={controller:"source-controller",cardType:"unit",...(clan?{clan}:{}),...(vanguard?{zone:"vanguard"}:{}),mustBeAttacked:true};return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-gc-discard-protect-attacked-unit-v1",review:"Exact Guardian Circle variant. The source must be placed on GC, its printed discard cost is validated (including any clan filter), and target selection is restricted to the actual attacked friendly unit for this battle."},effects:[{op:"protect-target",target:"chosen",duration:"battle",requiresAttackedTarget:true,targetFilter}]};
   }
+  // Recompile the same exact template with the source card's printed type line
+  // available. A bracketed trait is a clan when it matches the card's clan;
+  // otherwise a trait printed after the clan/nation is a race (for example,
+  // Zodiac Time Beast). Keep the typed filter in both its payment and target.
+  function compileGuardianAttackedUnitProtectionDefinition(cardId,abilityId,kind,printedText,cardContext){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText),match=text.match(/^AUTO(?:\s*\[GC\])?:\s*\[([^\]]+)\]\s*When this unit is placed on GC(?: from hand)?,\s*you may pay the cost\. If you do, choose (?:one|up to one) of your (.+?) that (?:is|are) being attacked, and (?:that unit|it) cannot be hit until end of that battle\.$/i);
+    if(!match)return null;
+    const parsedCost=parseAbilityCosts(`[${match[1]}]`);
+    if(parsedCost.status!=="supported-cost"||parsedCost.costs.reduce((sum,item)=>sum+item.count,0)!==1)return null;
+    const trait=match[2].trim().match(/^[«<]([^»>]+)[»>]$/)?.[1]?.trim()||null,vanguard=/^vanguards?$/i.test(match[2].trim());
+    if(!trait&&!/^(?:units?|vanguards?)$/i.test(match[2].trim()))return null;
+    const header=(String(cardContext?.text||"").split(/\r?\n/).map(item=>item.trim()).find(Boolean)||"").split("/").map(item=>item.trim().toLocaleLowerCase());
+    const clans=[cardContext?.clan,...(cardContext?.clans||[])].filter(Boolean).map(item=>String(item).trim().toLocaleLowerCase());
+    const traitKey=value=>clans.includes(value.toLocaleLowerCase())||header[0]===value.toLocaleLowerCase()?"clan":header.slice(1).includes(value.toLocaleLowerCase())?"race":"clan";
+    const costs=parsedCost.costs.map(cost=>cost.filter?.clan?{...cost,filter:{[traitKey(cost.filter.clan)]:cost.filter.clan}}:cost);
+    const targetFilter={controller:"source-controller",cardType:"unit",...(trait?{[traitKey(trait)]:trait}:{}),...(vanguard?{zone:"vanguard"}:{}),mustBeAttacked:true};
+    return{id:abilityId,cardId,kind,printedText,costs,costsReviewed:true,optional:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-gc-discard-protect-attacked-unit-v1",review:"Exact Guardian Circle variant. The source must be placed on GC, its printed clan or race discard cost is validated, and target selection is restricted to the actual attacked friendly unit for this battle."},effects:[{op:"protect-target",target:"chosen",duration:"battle",requiresAttackedTarget:true,targetFilter}]};
+  }
   function compileGuardianNamedDropCounterChargeDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;const text=normalizePrintedText(printedText),match=text.match(/^AUTO:\s*When this unit is placed on GC from hand, COST \[discard a card from hand\], choose one of your vanguards being attacked, and it cannot be hit until end of that battle\. If your drop has (?:a card named\s*|a\s*)["“]([^"”]+)["”], Counter Charge 1\.$/i);if(!match)return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1",review:"Exact named-drop GC family. Requires this source to enter GC from hand, pays the printed discard, protects only the controller's Vanguard currently being attacked, and resolves Counter Charge afterward only when the named card is in the Drop."},requiredLocation:["guardian"],trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["guardian"],sourceLocation:"hand"},effects:[{op:"protect-target",target:"chosen",duration:"battle",requiresAttackedTarget:true,targetFilter:{controller:"source-controller",cardType:"unit",zone:"vanguard",mustBeAttacked:true}},{op:"conditional-counter-charge",target:"controller",count:1,condition:{type:"controller-drop-has-card-name",cardName:match[1]}}]};
@@ -1065,7 +1197,8 @@
   function compileAttackGradeThresholdPowerDefinition(cardId,abilityId,kind,printedText){
     const match=normalizePrintedText(printedText).match(/^AUTO\s*\[(VC|RC|VC\/RC)\]:\s*When this unit attacks a grade (\d+) or greater unit, this unit gets power \+(\d+) until end of that battle\.(?: \(SHIFT \+ left click to get a Persona Shield ticket\))?$/i);
     if(kind!=="AUTO"||!match)return null;
-    return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-own-attack-target-grade-power-battle-v1",review:"Exact own attacker and target-unit grade threshold are checked at trigger time; UI-only Persona Shield reminder text is retained and ignored mechanically."},effects:[{op:"modify-power",target:"source",amount:Number(match[3]),duration:"battle"}]};
+    const circle=match[1].toUpperCase(),requiredLocation=circle==="VC"?["vanguard"]:circle==="RC"?["rear-guard"]:["vanguard","rear-guard"];
+    return{id:abilityId,cardId,kind,printedText,requiredLocation,trigger:{status:"recognized-trigger",eventType:"unit.attacked",subject:"source",circles:requiredLocation},conditions:[{type:"attack-target-grade-at-least",count:Number(match[2])}],conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-own-attack-target-grade-power-battle-v1",review:"Exact own attacker and target-unit grade threshold are checked at trigger time; UI-only Persona Shield reminder text is retained and ignored mechanically."},effects:[{op:"modify-power",target:"source",amount:Number(match[3]),duration:"battle"}]};
   }
   function compileOwnAttackOpponentRearGuardCapPowerDefinition(cardId,abilityId,kind,printedText){
     const match=String(printedText||"").match(/^AUTO\s*\[(VC|RC|VC\/RC)\]:\s*When this unit attacks, if the number of rear-guards your opponent has is two or less, this unit gets power \+(\d+) until end of that battle\.$/i);
@@ -1084,7 +1217,7 @@
   function compileRidePhaseDiscardBottomDeckDrawDefinition(cardId,abilityId,kind,printedText){
     const text=normalizePrintedText(printedText),match=text.match(/^AUTO:?\s*When this card is discarded from hand during your ride phase, COST \[Soul Blast (\d+)\s*&\s*put this card on the bottom of (?:your )?deck\], and draw a card\.$/i);
     if(kind!=="AUTO"||!match||Number(match[1])<1)return null;
-    return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1",review:"Exact Ride Phase discard trigger. Requires this exact instance discarded from hand during Ride, pays Soul Blast and returns that source from Drop to deck bottom as costs before drawing one card."},effects:[{op:"draw",count:1}]};
+    return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1",review:"Exact Ride Phase discard trigger. Requires this exact instance discarded from hand during its controller's Ride Phase, pays Soul Blast and returns that source from Drop to deck bottom as costs before drawing one card."},effects:[{op:"draw",count:1}]};
   }
   function compileGuardianSecondAttackShieldDefinition(cardId,abilityId,kind,printedText){
     const text=normalizePrintedText(printedText),match=text.match(/^AUTO:?\s*When this unit is put on GC, if your opponent.{0,2}s attacking unit has attacked two or more times this turn, this unit gets shield \+(\d+) until end of that battle\. \(Active if this battle is its second attack this turn or more\)$/i);
@@ -1095,6 +1228,13 @@
     const text=normalizePrintedText(printedText),match=text.match(/^AUTO:?\s*(?:\[GC\]\s*)?(?:\[Counter Blast (\d+)\]\s*)?When this unit is placed on GC from (?:your )?hand, you may pay the cost\. If you do, call (\d+|one|two|three|four|five|six|seven|eight|nine|ten) cards from the top of your deck to GC at rest\.$/i);
     if(kind!=="AUTO"||!match||printedNumberValue(match[2])<1||printedNumberValue(match[2])>10||Number(match[1]||1)!==1)return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-gc-counter-blast-call-top-to-guardian-v1",review:"Exact GC placement-from-hand trigger and optional Counter Blast 1; calls up to the printed number of top deck cards at rest, adds their shield to the current defense, and emits an exact placement event for each called card."},effects:[{op:"call-top-to-guardian",target:"controller",count:printedNumberValue(match[2]),destination:"guardian",position:"rest"}]};
+  }
+  function compileGuardianClanTopFiveDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText),match=text.match(/^AUTO:?\s*\[Counter Blast (\d+)\]\s*When this unit is placed on GC from (?:your )?hand, if you have (?:a|an) [«<]([^»>]+)[»>] vanguard, you may pay the cost\. If you do, reveal five cards from the top of your deck(?:,|\.)\s*call all [«<]([^»>]+)[»>] (?:from among them )?to GC (?:at rest|as rest),? and put the rest into (?:(?:your|the) )?drop zone\.$/i);
+    if(!match||Number(match[1])<1||match[2].trim().toLocaleLowerCase()!==match[3].trim().toLocaleLowerCase())return null;
+    const clan=match[2].trim();
+    return{id:abilityId,cardId,kind,printedText,optional:true,requiredLocation:["guardian"],trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["guardian"],sourceLocation:"hand"},conditions:[{type:"controller-vanguard-has-clan",value:clan}],costs:[{type:"counter-blast",count:Number(match[1])}],conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-gc-clan-top-five-to-guardian-rest-drop-v1",review:"Exact optional Counter-Blast AUTO on the exact source card placed from hand on GC. It checks the controller's Vanguard clan, reveals up to five cards, calls every Unit of that exact clan to Guardian at rest, and puts the remaining revealed cards into Drop; clan wording must match between condition and effect."},effects:[{op:"call-filtered-top-to-guardian-drop",target:"controller",count:5,destination:"guardian",position:"rest",filter:{clan},remainder:"drop"}]};
   }
   function compileGuardianDropToSoulDefinition(cardId,abilityId,kind,printedText){
     const text=normalizePrintedText(printedText);
@@ -1124,6 +1264,10 @@
   function compileRideDeckStrideDiscardDrawDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO"||!/^AUTO: When this card is discarded from hand while riding a grade 3 from the ride deck or paying the cost for Stride, draw a card\.$/i.test(normalizePrintedText(printedText)))return null;
     return{id:abilityId,cardId,kind,printedText,optional:false,conditions:[],conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,costs:[],trigger:{status:"recognized-trigger",eventType:"card.discarded",subject:"source",sourceLocation:"hand",destinationLocation:"drop",discardReasons:["ride-deck-grade-three-cost","stride-cost"],turnRelation:"controller"},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-ride-deck-or-stride-cost-discard-draw-v1",review:"Exact six-record AUTO wording. Requires this exact hand card to be discarded for one of the two printed costs by its controller; the trigger effect draws one card. Ride Deck cost event generation is not implemented by the current authoritative server and remains an explicit coverage gap."},effects:[{op:"draw",count:1}]};
+  }
+  function compileStrideCostDiscardDrawDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO"||!/^AUTO: When this card is discarded from hand while paying the cost for Stride, draw a card\.$/i.test(normalizePrintedText(printedText)))return null;
+    return{id:abilityId,cardId,kind,printedText,optional:false,conditions:[],conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,costs:[],trigger:{status:"recognized-trigger",eventType:"card.discarded",subject:"source",sourceLocation:"hand",destinationLocation:"drop",discardReason:"stride-cost",requiredPhase:"stride",turnRelation:"controller"},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-stride-cost-discard-draw-v1",review:"Exact Stride-cost AUTO. The exact source instance must move from its controller's hand to Drop because it was discarded while paying Stride; it resolves for that same controller and draws one card. Other discard causes, phases, copies, and players do not qualify."},effects:[{op:"draw",count:1}]};
   }
   function compileGZoneUnflipFreeStrideDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT"||!/^CONT \[G Zone\]: This card cannot be turned face up by abilities\. If this card is face up, you can Stride without paying the Stride cost\.$/i.test(normalizePrintedText(printedText)))return null;
@@ -1181,6 +1325,16 @@
     if(!match)return null;
     return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],conditionsReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"cont-rc-named-vanguard-power-v1",review:"Exact RC CONT template. The modifier applies on either player's turn only while the source remains on RC and its controller's Vanguard name contains the exact printed phrase; no grade or turn restriction is added."},effects:[{op:"continuous-power",target:"source",amount:Number(match[2]),duration:"continuous",condition:{op:"controller-vanguard-card-name-contains",name:match[1]}}]};
   }
+  function compileContinuousNamedGradeThreeVanguardPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="CONT")return null;
+    const text=normalizePrintedText(printedText).replace(/[’‘]/g,"'");
+    const match=text.match(/^CONT \[RC\]: If you have a grade (\d+) or greater vanguard with ["“]([^"”]+)["”] in its card name, this unit gets power \+(\d+)\. \(Active on opponent's turn too\)$/i);
+    if(!match||!match[2].trim())return null;
+    const grade=Number(match[1]),amount=Number(match[3]);
+    if(!Number.isInteger(grade)||grade<0||!positiveInteger(amount))return null;
+    const condition={op:"all",conditions:[{op:"controller-vanguard-grade-at-least",grade},{op:"controller-vanguard-card-name-contains",name:match[2].trim()}]};
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],conditionsReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"cont-rc-named-grade-vanguard-power-both-turns-v1",review:"Exact RC CONT condition tree. Both the printed minimum Vanguard grade and quoted name substring must hold continuously; the explicit opponent-turn reminder means no controller-turn restriction is added."},effects:[{op:"continuous-power",target:"source",amount,duration:"continuous",condition}]};
+  }
   function compileContinuousBoostedNamedVanguardPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT")return null;
     const match=normalizePrintedText(printedText).match(/^CONT \[RC\]: During the battle this unit boosted, if you have a grade (\d+) or greater vanguard with ["“]([^"”]+)["”] in its card name, this unit gets power \+(\d+)\.$/i);
@@ -1207,6 +1361,25 @@
     const grade=Number(match[1]),power=Number(match[3]),shield=Number(match[4]);if(!Number.isInteger(grade)||grade<0||!positiveInteger(power)||!positiveInteger(shield))return null;
     const condition={op:"all",conditions:[{op:"controller-vanguard-grade-at-least",grade},{op:"controller-vanguard-card-name-contains",name:match[2]}]};
     return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard","guardian"],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-rc-gc-named-grade-vanguard-power-shield-v1",review:"Exact dual-circle CONT family. Preserves the printed grade threshold, Vanguard name substring, distinct RC power and GC shield values, and opponent-turn activity."},effects:[{op:"continuous-power",target:"source",amount:power,duration:"continuous",location:"rear-guard",condition},{op:"continuous-shield",target:"source",amount:shield,duration:"continuous",location:"guardian",condition}]};
+  }
+  function compileContinuousOpponentGZonePowerShieldDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="CONT")return null;
+    const text=normalizePrintedText(printedText).replace(/[’‘]/g,String.fromCharCode(39));
+    const match=text.match(/^CONT \[RC\/GC\]: If your opponent's G zone has a card, this unit gets power \+(\d+) \/ shield \+(\d+)\. If your opponent's G zone has a face up card, this unit gets power \+(\d+) \/ shield \+(\d+) instead of power \+\d+ \/ shield \+\d+\. \(Active on opponent's turn too\)$/i);
+    if(!match)return null;
+    const [basePower,baseShield,faceUpPower,faceUpShield]=match.slice(1,5).map(Number);
+    if(![basePower,baseShield,faceUpPower,faceUpShield].every(positiveInteger))return null;
+    const shared={op:"opponent-g-zone-has-card-and-no-face-up-card"},faceUp={op:"opponent-g-zone-has-face-up-card"};
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard","guardian"],conditionsReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"cont-rc-gc-opponent-g-zone-power-shield-v1",review:"Exact dual-circle CONT template. On RC, power is +5000-equivalent when the opponent G zone is nonempty, upgraded to the printed face-up amount instead when any face-up card exists; on GC the same mutually exclusive state check grants shield. The text explicitly applies during both turns."},effects:[{op:"continuous-power",target:"source",amount:basePower,duration:"continuous",location:"rear-guard",condition:shared},{op:"continuous-power",target:"source",amount:faceUpPower,duration:"continuous",location:"rear-guard",condition:faceUp},{op:"continuous-shield",target:"source",amount:baseShield,duration:"continuous",location:"guardian",condition:shared},{op:"continuous-shield",target:"source",amount:faceUpShield,duration:"continuous",location:"guardian",condition:faceUp}]};
+  }
+  function compileAutoVanguardClanPlacementHandToSoulDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText);
+    const match=text.match(/^AUTO:\s*When this unit is placed on VC or RC, if you have an? [«<]([^»>]+)[»>] vanguard, choose up to one [«<]([^»>]+)[»>] from your hand, and put it into your soul\.$/i);
+    if(!match)return null;
+    const vanguardClan=match[1].trim(),handClan=match[2].trim();
+    if(!vanguardClan||!handClan||vanguardClan.toLocaleLowerCase()!==handClan.toLocaleLowerCase())return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard","rear-guard"],conditions:[{type:"controller-vanguard-has-clan",value:vanguardClan}],conditionsReviewed:true,choicesReviewed:true,optional:false,trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["vanguard","rear-guard"]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"auto-vc-rc-clan-vanguard-placement-hand-to-soul-v1",review:"Exact six-record placement AUTO. The exact source instance must be placed on VC or RC, the controller's Vanguard must have the printed clan, and the controller may choose zero or one matching-clan card from their own hand to move into Soul. The selected instance and hand zone are revalidated at resolution."},effects:[{op:"move-filtered-hand-card-to-soul",target:"controller",maximum:1,filter:{clan:handClan}}]};
   }
   function compileContinuousNamedSoulPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT")return null;
@@ -1256,11 +1429,40 @@
     if(kind!=="CONT"||!/^CONT \[RC\]: If you played a normal order this turn, this unit gets power \+5000\.$/i.test(normalizePrintedText(printedText)))return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-rc-normal-order-power-v1",review:"Exact RC CONT template. It grants 5000 while the controller's normal-order-played counter is nonzero; order count resets at the controller's turn end."},effects:[{op:"continuous-power",target:"source",amount:5000,duration:"continuous",condition:{op:"normal-order-played-this-turn"}}]};
   }
+  function compileContinuousOrderPlayedPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="CONT")return null;
+    const match=normalizePrintedText(printedText).match(/^CONT \[RC\]: If you played an order this turn, this unit gets power \+(\d+)\.$/i);
+    if(!match)return null;
+    const amount=Number(match[1]);if(!positiveInteger(amount))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-rc-order-played-power-v1",review:"Exact RC CONT wording across five real records. The bonus is active only during the controller's turn after an order has been played in that turn; it retains the printed per-card amount and does not treat the ability as manually activatable."},effects:[{op:"continuous-power",target:"source",amount,duration:"continuous",condition:{op:"order-played-this-turn"}}]};
+  }
+  function compileContinuousExactVanguardNamePowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="CONT")return null;
+    const match=normalizePrintedText(printedText).match(/^CONT \[RC\]: If your vanguard is ["“]([^"”]+)["”], this unit gets power \+(\d+)\.$/i);
+    if(!match)return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-rc-exact-vanguard-name-power-v1",review:"Exact RC CONT text: compares the controller's current Vanguard card name for exact equality, including official card-name aliases, then grants the printed power continuously while the source remains on RC."},effects:[{op:"continuous-power",target:"source",amount:Number(match[2]),duration:"continuous",condition:{op:"controller-vanguard-card-name-equals",name:match[1]}}]};
+  }
   function compileContinuousOwnTurnRearGuardPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT")return null;
     const match=String(printedText||"").match(/^CONT \[RC\]: During your turn, this unit gets power \+(\d+)\.$/i);
     if(!match)return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-rc-own-turn-power-v1",review:"Exact RC continuous text; the source contributes power only while its controller turn is active and the instance remains on RC."},effects:[{op:"continuous-power",target:"source",amount:Number(match[1]),duration:"continuous",condition:{op:"controller-turn"}}]};
+  }
+  function compileContinuousVanguardOwnTurnRearGuardClanCountPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="CONT")return null;
+    const match=normalizePrintedText(printedText).match(/^CONT \[VC\]: During your turn, if the number of [«<]([^»>]+)[»>] rear-guards you have is (one|two|three|four|five|six|seven|eight|nine|ten|\d+) or more, this unit gets power \+(\d+)\.$/i);
+    if(!match)return null;
+    const clan=match[1].trim(),count=printedNumberValue(match[2]),amount=Number(match[3]);
+    if(!clan||!positiveInteger(count)||!positiveInteger(amount))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard"],conditionsReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-vanguard-own-turn-rearguard-clan-count-power-v1",review:"Exact VC CONT template. The controller-turn condition and distinct friendly Rear-Guard instances of the exact printed clan are checked continuously; the Vanguard is not counted, and the source receives only the printed power."},effects:[{op:"continuous-power",target:"source",amount,duration:"continuous",condition:{op:"all",conditions:[{op:"controller-turn"},{op:"controller-rearguard-clan-count-at-least",clan,count}]}}]};
+  }
+  function compileContinuousVanguardOwnTurnPowerPerClanRearGuardDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="CONT")return null;
+    const match=normalizePrintedText(printedText).match(/^CONT \[VC\]: During your turn, this unit gets power \+(\d+) for each of your [«<]([^»>]+)[»>] rear-guards\.$/i);
+    if(!match)return null;
+    const amount=Number(match[1]),clan=match[2].trim();
+    if(!positiveInteger(amount)||!clan)return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard"],conditionsReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-vanguard-own-turn-power-per-clan-rearguard-v1",review:"Exact VC CONT scaling template. While its controller's turn is active, count each distinct friendly Rear-Guard instance whose current clan information includes the exact printed clan; do not count Vanguard or opponent units."},effects:[{op:"continuous-power-per-clan-rearguard",target:"source",amount,clan,duration:"continuous",condition:{op:"controller-turn"}}]};
   }
   function compileContinuousRearGuardNamedUnitPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT")return null;
@@ -1277,7 +1479,7 @@
   }
   function compileCenterColumnAttackPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;
-    const match=String(printedText||"").match(/^AUTO\s*\[VC\]:\s*When this unit attacks a vanguard, if you have another unit in the center column, this unit gets power \+(\d+) until end of (?:that )?battle\.$/i);
+    const match=String(printedText||"").match(/^AUTO\s*\[VC\]:\s*When this unit attacks a vanguard, if you have another unit in (?:the )?(?:center|middle) column, this unit gets power \+(\d+) until end of (?:that )?battle\.$/i);
     if(!match)return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-vanguard-attack-center-column-power-battle-v1",review:"Exact VC attack template. The condition checks the rear back-center slot, not any rear unit, and source/target identity remains tied to the declared attack."},effects:[{op:"modify-power",target:"source",amount:Number(match[1]),duration:"battle"}]};
   }
@@ -1305,6 +1507,14 @@
     if(!Number.isInteger(required)||required<1||parsed.status==="needs-review"||(match[2]&&(!reminder||reminder.count!==required)))return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-generation-break-own-vanguard-boost-power-battle-v1",review:"Exact RC booster, exact Vanguard target, and exact GB/reminder threshold are validated; the effect targets the Vanguard instance boosted in this battle."},effects:[{op:"modify-power-target",target:"boosted-unit",amount:Number(match[3]),duration:"battle",targetFilter:{controller:"source-controller",cardType:"unit",zone:"vanguard"}}]};
   }
+  function compileGenerationBreakBoostPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const match=String(printedText||"").match(/^AUTO\s*\[RC\]\s*Generation Break\s+(\d+):\s*When this unit boosts, the boosted unit gets power \+(\d+) until end of that battle\.$/i);
+    if(!match)return null;
+    const required=Number(match[1]),parsed=parseAbilityConditions(printedText);
+    if(!Number.isInteger(required)||required<1||parsed.status==="needs-review")return null;
+    return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-generation-break-boost-unit-power-battle-v1",review:"Exact Rear-Guard boost AUTO without a target-circle restriction. The source must be the actual booster, its controller must meet the printed Generation Break threshold, and only the exact unit boosted by this source receives battle-duration power."},effects:[{op:"modify-power-target",target:"boosted-unit",amount:Number(match[2]),duration:"battle",targetFilter:{controller:"source-controller",cardType:"unit"}}]};
+  }
   function compileBoostGradeThresholdSoulBlastPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;
     const match=normalizePrintedText(printedText).match(/^AUTO\s*\[RC\]:\s*When this unit boosts a grade (\d+) or greater unit, if your opponent[’']s vanguard is grade (\d+) or greater, COST \[Soul Blast (\d+)\], and this unit gets power \+(\d+) until end of that battle\.$/i);
@@ -1325,8 +1535,11 @@
       ||text.match(/^AUTO\s*\[RC\]:\s*\[Soul Blast (\d+)\]\s*When this unit boosts ["“]([^"”]+)["”], you may pay the cost\. If you do, the boosted unit gets power \+(\d+) until end of that battle\.$/i);
     const contains=text.match(/^AUTO\s*\[RC\]:\s*\[Soul Blast (\d+)\]\s*When this unit boosts (?:a|an) (?:unit|card) with ["“]([^"”]+)["”] in its card name, you may pay the cost\. If you do, the boosted unit gets power \+(\d+) until end of that battle\.$/i);
     const chosen=exact||contains;if(!chosen)return null;
-    const filter={controller:"source-controller",cardType:"unit",...(contains?{cardNameContains:chosen[2]}:{cardName:chosen[2]})};
-    return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-soul-blast-named-boost-power-battle-v1",review:"Exact booster, Soul Blast cost, optional payment, exact or substring card-name target, and boosted battle target are represented separately."},effects:[{op:"modify-power-target",target:"boosted-unit",amount:Number(chosen[3]),duration:"battle",targetFilter:filter}]};
+    const cardIdText=String(cardId),overlordCorrection=cardIdText==="cfa-513"&&String(chosen[2]).toLowerCase()==="overlord",prismCorrection=cardIdText==="cfa-1239"&&String(chosen[2]).toLowerCase()==="pr<3ism-p labrador";
+    const correctedTarget=overlordCorrection?{cardNameContains:"Overlord"}:prismCorrection?{cardName:"PR<3ISM-Promise, Labrador"}:null;
+    const filter={controller:"source-controller",cardType:"unit",...(contains?{cardNameContains:chosen[2]}:correctedTarget||{cardName:chosen[2]})};
+    const sourceReview=overlordCorrection?{officialReference:"https://en.cf-vanguard.com/cardlist/?cardno=BT05%2F039EN",review:"The local catalog snapshot omits 'in its card name'; the official card text specifies a unit with Overlord in its card name. Use substring matching per the official card list while preserving the source snapshot text."}:prismCorrection?{officialReference:"https://en.cf-vanguard.com/cardlist/?cardno=EB06%2F023EN",review:"The local snapshot abbreviates the boosted card name. The official card text requires PR♥ISM-Promise, Labrador; match its exact canonical catalog name PR<3ISM-Promise, Labrador."}:{review:"Exact booster, Soul Blast cost, optional payment, exact or substring card-name target, and boosted battle target are represented separately."};
+    return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",...sourceReview,patternId:"auto-soul-blast-named-boost-power-battle-v1"},effects:[{op:"modify-power-target",target:"boosted-unit",amount:Number(chosen[3]),duration:"battle",targetFilter:filter}]};
   }
   function compileVanguardAttackPowerTemplateDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
@@ -1340,13 +1553,19 @@
   }
   function compileClanVanguardAttackPowerTemplateDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
-    const match = String(printedText || "").match(/^AUTO\s*(?:\[(VC|RC|VC\/RC)\])?:\s*When this unit attacks(?: a vanguard)?, if you have a [<«]([^>»]+)[>»] vanguard, this unit gets power \+(\d+) until end of that battle\.$/i);
+    const match = String(printedText || "").match(/^AUTO\s*(?:\[(VC|RC|VC\/RC)\])?:\s*When this unit attacks(?: a vanguard)?, if you have (?:a|an)\s+[<«]([^>»]+)[>»] vanguard, this unit gets power \+(\d+) until end of that battle\.$/i);
     if (!match) return null;
     return {
       id: abilityId, cardId, kind, printedText,
       source: { dataset: "Cardfight Area snapshot", patternId: "auto-own-attack-vanguard-clan-power-battle-v1", review: "Exact text template validated against real catalog samples; source, target circle, clan condition, and duration have regression coverage." },
       effects: [{ op: "modify-power", target: "source", amount: Number(match[3]), duration: "battle" }]
     };
+  }
+  function compileRcNarukamiVanguardOwnAttackPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText);
+    if(!/^AUTO \[RC\]: When this unit attacks, if you have a [«<]Narukami[»>] vanguard, this unit gets power \+2000 until the end of the battle\.$/i.test(text))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],conditionsReviewed:true,trigger:{status:"recognized-trigger",eventType:"unit.attacked",subject:"source",circles:["rear-guard"]},conditions:[{type:"controller-vanguard-has-clan",value:"Narukami"}],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rc-narukami-own-attack-power-battle-v1",review:"Exact RC own-attack AUTO for the three Djinn of the Lightning cards. The source itself must attack from RC while its controller has a Narukami Vanguard; power lasts only for that attack's battle."},effects:[{op:"modify-power",target:"source",amount:2000,duration:"battle"}]};
   }
   function compileOwnAttackAgainstVanguardNamedVanguardPowerDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
@@ -1362,11 +1581,31 @@
       effects: [{ op: "modify-power", target: "source", amount: Number(match[3]), duration: "battle" }]
     };
   }
+  function compileAutoRcGradeNamedVanguardAttackPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const match=normalizePrintedText(printedText).match(/^AUTO \[RC\]: When this unit attacks, if you have a grade (\d+) or greater vanguard with ["“]([^"”]+)["”] in its card name, this unit gets power \+(\d+) until end of that battle\.$/i);
+    if(!match||!match[2].trim())return null;
+    const grade=Number(match[1]),name=match[2].trim(),amount=Number(match[3]);
+    if(!Number.isInteger(grade)||grade<0||!positiveInteger(amount))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],trigger:{status:"recognized-trigger",eventType:"unit.attacked",subject:"source",circles:["rear-guard"]},conditions:[{type:"controller-vanguard-grade-at-least",count:grade},{type:"controller-vanguard-name-contains",value:name}],conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rc-own-attack-grade-named-vanguard-power-battle-v1",review:"Exact Rear-Guard AUTO template. This exact source must attack; its controller's Vanguard must satisfy both the printed minimum grade and name fragment at eligibility and resolution; the printed power applies only during that battle."},effects:[{op:"modify-power",target:"source",amount,duration:"battle"}]};
+  }
   function compileNamedVanguardAttackPowerTemplateDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
     const match = String(printedText || "").match(/^AUTO\s*(?:\[(VC|RC|VC\/RC)\])?:\s*When this unit attacks, if you have a vanguard with ["“]([^"”]+)["”] in its card name, this unit gets power \+(\d+) until end of that battle\.$/i);
     if (!match) return null;
     return { id: abilityId, cardId, kind, printedText, source: { dataset: "Cardfight Area snapshot", patternId: "auto-own-attack-named-vanguard-power-battle-v1", review: "Exact sentence template validated against 83 catalog records; source identity, name condition, target timing, and battle duration have regression coverage." }, effects: [{ op: "modify-power", target: "source", amount: Number(match[3]), duration: "battle" }] };
+  }
+  function compileRcDeckPlacementPowerDefinition(cardId, abilityId, kind, printedText) {
+    if (kind !== "AUTO") return null;
+    const match = normalizePrintedText(printedText).match(/^AUTO:\s*When this unit is placed on RC from deck, this unit gets power \+(\d+) until end of turn\.$/i);
+    if (!match) return null;
+    return {
+      id: abilityId, cardId, kind, printedText, requiredLocation: ["rear-guard"],
+      trigger: { status: "recognized-trigger", eventType: "card.placed", subject: "source", circles: ["rear-guard"], sourceLocation: "deck" },
+      conditionsReviewed: true, costsReviewed: true, choicesReviewed: true,
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-rc-deck-placement-power-turn-v1", review: "Exact four-record AUTO template. Only the exact source instance entering an RC from the Deck qualifies; placement from hand or another zone and placement on other circles do not. The source receives the printed power until end of turn." },
+      effects: [{ op: "modify-power", target: "source", amount: Number(match[1]), duration: "turn" }]
+    };
   }
   function compileNamedVanguardAttackPowerEndOfBattleDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
@@ -1488,11 +1727,35 @@
     if(kind!=="AUTO"||!/^AUTO\s*:/i.test(text)||!/\bwhen (?:this card )?(?:is )?discarded(?: from hand)? for the cost of calling a G guardian\b/i.test(text)||!/\bCounter Charge 1 or Soul Charge 1\.$/i.test(text)||!/\bbind this card\b/i.test(text)||!/\banother[\s\S]{0,80}heal[\s\S]{0,55}drop/i.test(text))return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-g-guardian-discard-bind-heal-charge-choice-v1",review:"Exact 48-record wording family. The source must be the exact Heal discarded from hand as a G-Guardian cost. Paying binds that source and a different Heal trigger from Drop face up, then the controller chooses Counter Charge 1 or Soul Charge 1; all selected instances and costs are revalidated."},costs:[{type:"source-bind",count:1},{type:"bind-heal-from-drop",count:1,filter:{trigger:"Heal"}}],effects:[{op:"g-guardian-discard-charge-choice",target:"controller"}]};
   }
+  function compileGGuardianNamedCallDiscardDrawDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText),match=text.match(/^AUTO:\s*\[Choose a grade (\d+) or less card from your hand, and discard it\]\s*When this card is discarded from your hand for a cost to call ["“]([^"”]+)["”] from your G zone, you may pay the cost\. If you do, draw a card\.$/i);
+    if(!match)return null;
+    const maximumGrade=Number(match[1]),calledGUnitName=match[2].trim();
+    return{id:abilityId,cardId,kind,printedText,optional:true,calledGUnitName,conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,costs:[{type:"discard",count:1,filter:{maxGrade:maximumGrade}}],trigger:{status:"recognized-trigger",eventType:"card.discarded",subject:"source",sourceLocation:"hand",destinationLocation:"drop",discardReason:"g-guardian-cost",actingPlayerRelation:"source-controller",calledGUnitName,calledGUnitPreviousLocation:"g-deck"},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"auto-g-guardian-named-call-discard-grade-one-draw-v1",review:"Exact optional G-Guardian cost ability. It triggers only when this exact instance is discarded from hand as the controller's cost to call the exact named card from G zone. The controller may then discard a distinct Grade 1 or lower card from hand to draw one card."},effects:[{op:"draw",count:1}]};
+  }
+  function compileGGuardianNamedCallSoulBlastCounterChargeDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText),match=text.match(/^AUTO: \[Soul Blast (\d+)\] When this card is discarded from your hand for a cost to call ["“]([^"”]+)["”] from your G zone, if the number of face up cards in your damage zone is one or less, you may pay the cost\. If you do, Counter Charge (\d+)\.$/i);
+    if(!match)return null;
+    const soul=Number(match[1]),calledGUnitName=match[2].trim(),counterCharge=Number(match[3]);
+    if(!positiveInteger(soul)||!calledGUnitName||!positiveInteger(counterCharge))return null;
+    return{id:abilityId,cardId,kind,printedText,optional:true,calledGUnitName,conditions:[{type:"controller-face-up-damage-at-most",count:1}],conditionsReviewed:true,costs:[{type:"soul-blast",count:soul}],costsReviewed:true,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"card.discarded",subject:"source",sourceLocation:"hand",destinationLocation:"drop",discardReason:"g-guardian-cost",actingPlayerRelation:"source-controller",calledGUnitName,calledGUnitPreviousLocation:"g-deck"},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"auto-g-guardian-named-call-soul-blast-counter-charge-v1",review:"Exact G-Guardian cost AUTO. The exact source must be discarded from its controller's hand to call the printed G Guardian from G zone; at trigger and resolution, the controller must have at most one face-up Damage card. The controller may pay the printed Soul Blast, then Counter Charge the printed amount."},effects:[{op:"counter-charge",count:counterCharge}]};
+  }
   function compileVanguardTopFiveKeywordSearchDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;const text=normalizePrintedText(printedText).replace(/\s*\(SHIFT \+ left click to count up attacks\.\)\s*\(SHIFT \+ right click to count down attacks\.\)\s*\(Middle click or hover and press SPACE to set number of attacks\.\)/i,"");
     const match=text.match(/^AUTO:\s*(?:COST\s*)?\[Counter Blast (\d+)(?: & Soul Blast (\d+))?\]\s*When this unit is placed on (VC(?:\/RC| or RC)?), you may pay the cost\. If you do, look at five cards from the top of your deck, (?:search for|reveal) up to one (?:card with (?:the )?(.+?) ability|<([^>]+)>)(?: from among them)?,?\s*(?:(?:reveal it to your opponent|show it to your opponent|reveal it),\s*)?put it into your hand, and shuffle your deck\.$/i);
     if(!match)return null;const keyword=String(match[4]||"").trim(),filter=match[5]?{race:match[5].trim()}:keyword.toLowerCase().includes(" or ")?{abilityKeywordsAny:keyword.split(/\s+or\s+/i).map(value=>value.trim().toLowerCase())}:{abilityKeyword:keyword.toLowerCase()};if(!filter.race&&!filter.abilityKeyword&&!filter.abilityKeywordsAny?.length)return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-vanguard-placement-top-five-filtered-search-hand-v1",review:"Exact AUTO: pay printed Counter-Blast/Soul-Blast after this source is placed on VC; inspect the top five; optionally select up to one matching ability-keyword or race card; reveal/add it and shuffle. The typed filter is validated against the exact top-five instances."},effects:[{op:"search-top-up-to-one-filtered-to-hand",target:"controller",lookCount:5,maximum:1,filter}]};
+  }
+  function compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText);
+    const match=text.match(/^AUTO\s*\[VC\]:\s*When placed, look at seven cards from the top of your deck, reveal up to one ["“]([^"”]+)["”] or ["“]([^"”]+)["”] from among them and put it into your hand, and shuffle your deck\.$/i);
+    if(!match)return null;
+    const names=[match[1].trim(),match[2].trim()];
+    if(names.some(name=>!name)||names[0].toLowerCase()===names[1].toLowerCase())return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard"],choicesReviewed:true,optional:false,trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["vanguard"]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-vanguard-placement-top-seven-two-name-search-v1",review:"Exact two-name top-seven AUTO. Only this source instance's successful placement on VC triggers it. The controller must resolve the triggered search and may reveal zero or one exact-name card among the top seven, add it to hand, and shuffle."},effects:[{op:"search-top-up-to-one-filtered-to-hand",target:"controller",lookCount:7,maximum:1,filter:{cardNamesAny:names}}]};
   }
   function compileActRearGuardTopFiveGradeThreeSearchDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="ACT")return null;
@@ -1502,12 +1765,23 @@
     const clan=String(match[1]||match[2]||"").trim();
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"act-rc-counter-blast-source-to-soul-top-five-grade-three-search-v1",review:"Exact Rear-Guard ACT family. The controller must legally activate this ACT during their turn, pay Counter Blast 1 and move this exact source from RC to Soul, then may select up to one Grade 3+ card from the top five. Printed clan qualifiers are enforced; unqualified 'card' wording adds no Unit restriction."},effects:[{op:"search-top-up-to-one-filtered-to-hand",target:"controller",lookCount:5,maximum:1,filter:{minGrade:3,...(clan?{cardType:"unit",clan}:{})}}]};
   }
+  function compileActRcSoulBlastThreeDrawDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="ACT")return null;
+    const text=normalizePrintedText(printedText);
+    if(!/^ACT\s*\[RC\]\s*1\/Turn:\s*COST\s*\[Soul Blast 3\],\s*and draw a card\.$/i.test(text))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],once:true,usageRestriction:{type:"once-per-turn",scope:"ability-instance",reset:"turn"},conditionsReviewed:true,costs:[{type:"soul-blast",count:3}],costsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"act-rc-soul-blast-three-draw-v1",review:"Exact ACT wording on the two catalog records. This source must be controlled on RC during its controller's Main Phase; Soul Blast 3 is paid atomically, one card is drawn, and this exact ability instance is once per turn."},effects:[{op:"draw",count:1}]};
+  }
+  function compileActEnergyBlastTemporaryBoostDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="ACT"||!/^ACT \[RC\] 1\/Turn: COST \[Energy Blast 3\], until end of turn, this unit gets "Boost" and power \+5000\.$/i.test(normalizePrintedText(printedText)))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],once:true,usageRestriction:{type:"once-per-turn",scope:"ability-instance",reset:"turn"},conditionsReviewed:true,costs:[{type:"energy-blast",count:3}],costsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"act-energy-blast-temporary-boost-power-v1",review:"Exact ACT family on five Grade 2 Rear-Guards. During its controller's Main Phase, pay Energy Blast 3 once per ability per turn; the source gains Boost and +5000 only through that turn. The granted Boost is removed by authoritative turn cleanup."},effects:[{op:"modify-power",target:"source",amount:5000,duration:"turn"},{op:"grant-temporary-boost",target:"source",duration:"turn"}]};
+  }
   function expireTurnModifiers(state, endingPlayerId) {
     const seen=new Set(),walk=value=>{
       if(!value||typeof value!=="object"||seen.has(value))return;seen.add(value);
       for(const [property,expiry] of [["turnPowerBoost","turnPowerExpiry"],["turnCriticalBoost","turnCriticalExpiry"],["turnCriticalAbilityBoost","turnCriticalAbilityExpiry"],["turnDriveBoost","turnDriveExpiry"]]){
         if(value[expiry]===endingPlayerId||value[expiry]==null){if(Object.hasOwn(value,property))value[property]=0;delete value[expiry];}
       }
+      if(value.temporaryBoostAbilityExpiry===endingPlayerId){if(value.temporaryBoostAbilityPrevious!==true)delete value.boostAbility;delete value.temporaryBoostAbility;delete value.temporaryBoostAbilityExpiry;delete value.temporaryBoostAbilityPrevious;}
       if(value.cannotDriveChecksExpiry===endingPlayerId||value.cannotDriveChecksExpiry==null){delete value.cannotDriveChecksThisTurn;delete value.cannotDriveChecksExpiry;}
       if(value.blazingExpiry===endingPlayerId||value.blazingExpiry==null){if(Object.hasOwn(value,"blazing"))delete value.blazing;delete value.blazingExpiry;}
       if(value.hollowedExpiry===endingPlayerId||value.hollowedExpiry==null){if(Object.hasOwn(value,"hollowed"))delete value.hollowed;delete value.hollowedExpiry;}
@@ -1534,6 +1808,13 @@
           if(!continuousConditionMatches(effect.condition,context))continue;
           const phrase=String(effect.cardNameContains||"").toLowerCase(),count=(context.soulCardNames||[]).filter(name=>!phrase||String(name).toLowerCase().includes(phrase)).length;
           result.power+=Number(effect.amount)*count;continue;
+        }
+        if(effect.op==="continuous-power-per-clan-rearguard"&&effect.duration==="continuous"&&effect.target==="source"&&positiveInteger(effect.amount)&&typeof effect.clan==="string"){
+          if(effect.location&&effect.location!==abilityLocation)continue;
+          if(!continuousConditionMatches(effect.condition,context)||!Array.isArray(context.controllerFieldCards))continue;
+          const clan=effect.clan.trim().toLocaleLowerCase(),matchingIds=new Set();
+          for(const card of context.controllerFieldCards){if(card?.zone!=="rear-guard"||typeof card.uid!=="string")continue;const clans=Array.isArray(card.clans)?card.clans:card.clan?[card.clan]:[];if(card.allClansAndNations===true||clans.some(value=>String(value||"").trim().toLocaleLowerCase()===clan))matchingIds.add(card.uid);}
+          result.power+=Number(effect.amount)*matchingIds.size;continue;
         }
         if(!["continuous-power","continuous-critical"].includes(effect.op)||effect.duration!=="continuous"||!positiveInteger(effect.amount))continue;
         if(effect.location&&effect.location!==(context.sourceLocation||context.location))continue;
@@ -1625,13 +1906,16 @@
         const result = handlers[step.op].apply(step, draft);
         if (result === false) return { ok: false, reason: "effect-handler-rejected", applied: 0, results };
         results.push(result);
+        if (draft.effectDeckOut) break;
       }
     } catch {
       return { ok: false, reason: "effect-handler-failed", applied: 0, results };
     }
     commitEffectState(context, draft, reverse);
     if (typeof emitEvent === "function") { context.emitEvent = emitEvent; for (const event of events) context.emitEvent(event); }
-    return { ok: true, applied: results.length, results };
+    const deckOut = draft.effectDeckOut ? { ...draft.effectDeckOut } : null;
+    if (deckOut && typeof context.onEffectDeckOut === "function") context.onEffectDeckOut(deckOut);
+    return { ok: true, applied: results.length, results, ...(deckOut ? { deckOut } : {}) };
   }
   function parseAbilityLocation(raw) {
     const header=String(raw||"").match(/^(?:\(([^)]*)\)|\[([^\]]*)\])\s*:?\s*/);
@@ -1726,15 +2010,23 @@
     return {status:"needs-review",eventType:null,subject:null,circles:[]};
   }
   function parseAbilityCosts(raw) {
-    const text = String(raw || ""), costText=text.replace(/\bwhile (?:you are )?paying the cost for \[?Stride\]?/gi," ");
-    const explicit = [...costText.matchAll(/\bCOST\s*\[([^\]]+)\]|\[((?:CB|SB|Counter[- ]Blast|Soul[- ]Blast|discard|choose (?:a|one) (?:card|«[^»]+»|<[^>]+>) from (?:your )?hand[^\]]*discard it|rest this unit|put this (?:unit|card) into (?:your )?soul)[^\]]*)\]/gi)];
-    const mentionsCost = /\bCOST\b|\b(?:CB|SB|Counter[- ]Blast|Soul[- ]Blast|discard|retire this unit|rest this unit|put this unit into your soul)\b/i.test(costText);
+    // This phrase is a condition about Energy Blast already paid for card
+    // abilities during the turn, not a cost paid to activate this AUTO.
+    const text = String(raw || ""), costText=text
+      .replace(/\bwhile (?:you are )?paying the cost for \[?Stride\]?/gi," ")
+      .replace(/\bif you Energy Blast \d+ or more at the same time for the cost of your card[’']s ability this turn\b/gi," ");
+    const explicit = [...costText.matchAll(/\bCOST\s*\[([^\]]+)\]|\[((?:CB|SB|E\s*BLAST|Counter[- ]Blast|Soul[- ]Blast|Energy[- ]Blast|discard|choose (?:a|one) (?:card|«[^»]+»|<[^>]+>) from (?:your )?hand[^\]]*discard it|rest this unit|put this (?:unit|card) into (?:your )?soul)[^\]]*)\]/gi)];
+    const mentionsCost = /\bCOST\b|\b(?:CB|SB|E\s*BLAST|Counter[- ]Blast|Soul[- ]Blast|Energy[- ]Blast|discard|retire this unit|rest this unit|put this unit into your soul)\b/i.test(costText);
     if (!explicit.length) return { status: mentionsCost ? "needs-review" : "no-cost", costs: [] };
     const clause = explicit.map(match => match[1] || match[2]).join(" & ");
+    // Cost alternatives are not conjunctive. Until the ability schema represents
+    // selectable cost branches, fail closed instead of charging every branch.
+    if (/\b(?:or|either)\b/i.test(clause)) return { status: "needs-review", costs: [] };
     const costs = [];
     const patterns = [
       ["counter-blast", /(?:CB|Counter[- ]Blast)\s*\(?\s*(\d+)/gi],
       ["soul-blast", /(?:SB|Soul[- ]Blast)\s*\(?\s*(\d+)/gi],
+      ["energy-blast", /(?:E\s*Blast|Energy[- ]Blast)\s*\(?\s*(\d+)/gi],
       ["source-retire", /retire\s+this\s+(?:unit|card)/gi],
       ["source-discard", /discard\s+this\s+(?:unit|card)/gi],
       ["discard", /discard(?:ing)?\s+(?:a|one|(\d+))\s+cards?(?:\s+from\s+(?:your\s+)?hand)?/gi],
@@ -1765,14 +2057,23 @@
     const costs = ability.costs || [];
     for (const cost of costs) {
       if (cost.type === "counter-blast" && Number(resources.faceUpDamage || 0) < cost.count) return false;
-      if (cost.type === "counter-blast" && cost.filter?.clan) {
+      if (cost.type === "counter-blast" && cost.filter) {
         const cards = resources.faceUpDamageCards;
         if (!Array.isArray(cards) || typeof resources.cardDefinitionForInstance !== "function") return false;
         const matches = cards.filter(card => !card.faceDown && matchesTargetFilter(cost.filter, { targetCard: resources.cardDefinitionForInstance(card) }));
         if (matches.length < Number(cost.count)) return false;
       }
       if (cost.type === "soul-blast" && Number(resources.soulCount || 0) < cost.count) return false;
-      if (cost.type === "discard" && Number(resources.discardableHand || 0) < cost.count) return false;
+      if (cost.type === "energy-blast" && (resources.hasEnergyGenerator !== true || Number(resources.energy ?? 0) < Number(cost.count))) return false;
+      if (cost.type === "discard") {
+        if (Number(resources.discardableHand ?? resources.discardableHandCards?.length ?? 0) < cost.count) return false;
+        if (cost.filter) {
+          const cards = resources.discardableHandCards;
+          if (!Array.isArray(cards) || typeof resources.cardDefinitionForInstance !== "function") return false;
+          const matches = cards.filter(card => matchesTargetFilter(cost.filter, { targetCard: resources.cardDefinitionForInstance(card) }));
+          if (matches.length < Number(cost.count)) return false;
+        }
+      }
       if (cost.type === "reveal-grade-from-hand" && Number(resources.revealableHandByGrade?.[cost.grade] || (cost.grade===3?resources.revealableGradeThreeHand:0) || 0) < cost.count) return false;
       if (cost.type === "source-discard" && resources.sourceCanDiscard !== true) return false;
       if (cost.type === "rest-source" && resources.sourceRested) return false;
@@ -1834,7 +2135,7 @@
       [/\bif the number of rear-guards your opponent has is two or less\b/i, { type: "opponent-rear-guards-at-most", count: 2 }],
       [/\b(?:during|on) your turn\b/i, { type: "controller-turn" }],
       [/\b(?:during|on) your opponent.{0,2}s turn\b/i, { type: "opponent-turn" }],
-      [/\bif you have another unit in the center column\b/i, { type: "controller-has-center-column-rear-guard" }],
+      [/\bif you have another unit in (?:the )?(?:center|middle) column\b/i, { type: "controller-has-center-column-rear-guard" }],
       [/\bif your opponent has no rear[- ]guards?\b/i, { type: "opponent-has-no-rear-guards" }],
       [/\bif you have no rear[- ]guards?\b/i, { type: "controller-has-no-rear-guards" }],
       [/\bif this (?:unit|card) is hollowed\b/i, { type: "source-is-hollowed" }],
@@ -1903,6 +2204,7 @@
       if (condition.type === "controller-vanguard-is-attacked-unit" && context.controllerVanguardIsAttackedUnit !== true) return false;
       if (condition.type === "controller-soul-count-at-least" && Number(context.controllerSoulCount ?? -1) < condition.count) return false;
       if (condition.type === "controller-damage-count-at-least" && Number(context.controllerDamageCount ?? -1) < condition.count) return false;
+      if (condition.type === "controller-face-up-damage-at-most" && Number(context.controllerFaceUpDamageCount ?? Infinity) > condition.count) return false;
       if (condition.type === "controller-damage-count-more-than-opponent" && Number(context.controllerDamageCount ?? -1) <= Number(context.opponentDamageCount ?? Infinity)) return false;
       if (condition.type === "all-order-zones-count-at-least" && Number(context.allOrderZonesCount ?? -1) < condition.count) return false;
       if (condition.type === "any-field-card-is-locked" && context.anyFieldCardIsLocked !== true) return false;
@@ -1931,6 +2233,8 @@
   function thisAbilityHasSeekMateIcon(text){return /^ACT\s*\[VC\]:\s*Legion\s+\d{5}\s+["“]/i.test(String(text||""))}
   // Keep the exact-text compilers in one auditable list. First match wins, preserving legacy precedence.
   const abilityDefinitionCompilers = Object.freeze([
+    compileContinuousOrderPlayedPowerDefinition,
+    compileClanPlacementDamageReturnDefinition,
     compileSeekMateDefinition,
     compileBlazeDefinition,
     compileHollowKeywordDefinition,
@@ -1945,6 +2249,7 @@
     compileGuardianConditionalHandDiscardProtectionDefinition,
     compileGuardianPlacedDiscardProtectionDefinition,
     compileGuardianCallTopFiveDefinition,
+    compileGuardianClanTopFiveDefinition,
     compileGuardianSecondAttackShieldDefinition,
     compileGuardianNoGradeThreeRideChoiceDefinition,
     compileRidePhaseDiscardBottomDeckDrawDefinition,
@@ -1956,11 +2261,14 @@
     compileContinuousControllerGradePowerDefinition,
     compileContinuousOwnTurnNamedGradeVanguardPowerDefinition,
     compileContinuousNamedVanguardPowerDefinition,
+    compileContinuousNamedGradeThreeVanguardPowerDefinition,
     compileContinuousBoostedNamedVanguardPowerDefinition,
     compileContinuousBoostedSourcePowerDefinition,
     compileContinuousNamedVanguardGuardianShieldDefinition,
     compileContinuousNamedGradeVanguardPowerShieldDefinition,
+    compileAutoVanguardClanPlacementHandToSoulDefinition,
     compileContinuousNamedSoulPowerDefinition,
+    compileContinuousOpponentGZonePowerShieldDefinition,
     compileGreatDaiyushaLimitBreakDefinition,
     compileContinuousSoulCountPowerDefinition,
     compileContinuousMissingOtherNamePowerDefinition,
@@ -1968,7 +2276,10 @@
     compileVanguardSoulNameThresholdCriticalDefinition,
     compileContinuousAttackedVanguardPowerDefinition,
     compileContinuousNormalOrderPowerDefinition,
+    compileContinuousExactVanguardNamePowerDefinition,
     compileContinuousOwnTurnRearGuardPowerDefinition,
+    compileContinuousVanguardOwnTurnRearGuardClanCountPowerDefinition,
+    compileContinuousVanguardOwnTurnPowerPerClanRearGuardDefinition,
     compileContinuousRearGuardNamedUnitPowerDefinition,
     compileGuardianCircleOpponentGradeShieldDefinition,
     compileGuardianCircleLowerGradeShieldAutoDefinition,
@@ -1979,6 +2290,7 @@
     compileHandStrideCostGradeBoostDefinition,
     compileHandStrideCostTreatedGradeThreeDefinition,
     compileRideDeckStrideDiscardDrawDefinition,
+    compileStrideCostDiscardDrawDefinition,
     compileGZoneUnflipFreeStrideDefinition,
     compileAttackGradeThresholdPowerDefinition,
     compileAttackedSelfBattlePowerDefinition,
@@ -1996,6 +2308,9 @@
     compileHarmonyDefinition,
     compileForerunnerDefinition,
     compileRideUponCallSoulDefinition,
+    compileRideNamedGradeCallSourceDefinition,
+    compileNamedRideDeckSearchDefinition,
+    compileRideSourceTopSevenTwoNameSearchDefinition,
     compileRideClanCallSourceDefinition,
     compileResistKeywordDefinition,
     compileRcCannotBeChosenDefinition,
@@ -2012,6 +2327,9 @@
     compilePlacedVcPaidDrawDefinition,
     compileVanguardPlacementDiscardDrawDefinition,
     compileVanguardPlacedNamedSearchDefinition,
+    compileRcPlacementGradeThreeClanNamedSearchDefinition,
+    compileRcPlacementDeckOrDropNamedSearchDefinition,
+    compileRidePhaseTopFiveNamedRideDefinition,
     compileVanguardPlacementDrawDiscardDefinition,
     compileMissedAttackHitEffectsDefinition,
     compileRodeUponDrawQuickShieldDefinition,
@@ -2026,10 +2344,13 @@
     compilePlacedOnRearGuardSoulBlastClanDrawDefinition,
     compileActNamedSoulPowerCriticalDefinition,
     compileActSelfPowerDefinition,
+    compileActFilteredCounterBlastSourcePowerDefinition,
     compileActSoulBlastSelfPowerDefinition,
     compileActCounterBlastUnlockLockedDefinition,
     compileActCounterBlastSameNameSearchPowerDefinition,
+    compileActCounterBlastVanguardPowerDefinition,
     compileActRestSourceFrontRowPowerDefinition,
+    compileActRestSourceClanUnitPowerDefinition,
     compileActSoulCostBuffDefinition,
     compileActSourceToSoulDiscardDrawClanDefinition,
     compileActSourceToSoulOptionalFriendlyPowerDefinition,
@@ -2053,7 +2374,9 @@
     compileExactTemplateDefinition,
     compileVanguardAttackPowerTemplateDefinition,
     compileClanVanguardAttackPowerTemplateDefinition,
+    compileRcNarukamiVanguardOwnAttackPowerDefinition,
     compileOwnAttackAgainstVanguardNamedVanguardPowerDefinition,
+    compileAutoRcGradeNamedVanguardAttackPowerDefinition,
     compileRearGuardAdvantageAttackPowerDefinition,
     compileCenterColumnAttackPowerDefinition,
     compileAutoBoostedByQualifiedUnitPowerDefinition,
@@ -2071,7 +2394,9 @@
     compileGenerationBreakVanguardAttackPowerDefinition,
     compileGenerationBreakRearGuardAttackPowerDefinition,
     compileGenerationBreakVanguardBoostPowerDefinition,
+    compileGenerationBreakBoostPowerDefinition,
     compileNamedVanguardAttackPowerTemplateDefinition,
+    compileRcDeckPlacementPowerDefinition,
     compileNamedVanguardAttackPowerEndOfBattleDefinition,
     compileDrawTurnSoulBlastPowerDefinition,
     compileDrawPowerDefinition,
@@ -2092,13 +2417,20 @@
     compileRidePhaseDiscardCallRestDefinition,
     compileDiscardGradeCallRestDefinition,
     compileGGuardianDiscardChargeChoiceDefinition,
+    compileGGuardianNamedCallDiscardDrawDefinition,
+    compileGGuardianNamedCallSoulBlastCounterChargeDefinition,
     compileVanguardTopFiveKeywordSearchDefinition,
+    compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition,
     compileActRearGuardTopFiveGradeThreeSearchDefinition,
+    compileActRcSoulBlastThreeDrawDefinition,
+    compileActEnergyBlastTemporaryBoostDefinition,
     compileRodeUponSecondPlayerDrawDefinition,
     compileContinuousCardNameAliasDefinition,
     compileContinuousVanguardCardNameAliasDefinition,
+    compileContinuousVanguardRearGuardCardNameAliasDefinition,
     compileContinuousNamedDeckLimitDefinition,
     compileAutoVanguardGradeClanPlacementPowerDefinition,
+    compileOtherRearGuardPlacementPowerDefinition,
     compileSameNameVanguardRideRestrictionDefinition,
     compileRestraintRestrictionDefinition,
     compileContinuousVanguardCannotBeBoostedDefinition,
@@ -2114,9 +2446,16 @@
     compileSoulBlastNamedBoostPowerDefinition,
     compileNamedBoostPowerTemplateDefinition
   ]);
-  function compileAbilityDefinition(cardId, abilityId, kind, printedText) {
+  function compileClanPlacementDamageReturnDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText),match=text.match(/^AUTO:\s*\[Counter Blast 1\]\s*When this unit is placed on VC or RC, if you have an? [«<]([^»>]+)[»>] vanguard, you may pay the cost\. If you do, put the top card of your deck into your damage zone,?\s*(?:and )?(?:at the beginning of (?:the end phase of that turn|your end phase)|at the end of that turn), choose a card from your damage zone, return it to your deck, and shuffle your deck\.$/i);
+    if(!match)return null;
+    const clan=match[1].trim();
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard","rear-guard"],trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["vanguard","rear-guard"]},conditions:[{type:"controller-vanguard-has-clan",value:clan}],costs:[{type:"counter-blast",count:1}],optional:true,conditionsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-vc-rc-clan-placement-delayed-damage-return-v1",review:"Exact clan-gated VC/RC source-placement template. The exact source instance must be placed on VC or RC while its controller has a Vanguard of the printed clan. It offers Counter Blast 1; after payment it puts the deck top into Damage (without a damage check), then at that turn's End Phase start the controller chooses any Damage card, returns it to Deck, and shuffles. The delayed schedule is created only if the AUTO cost is accepted."},effects:[{op:"deck-to-damage",target:"controller",count:1},{op:"schedule-damage-return-at-turn-end",target:"controller",due:"end-phase-start"}]};
+  }
+  function compileAbilityDefinition(cardId, abilityId, kind, printedText, cardContext) {
     for (const compiler of abilityDefinitionCompilers) {
-      const definition = compiler(cardId, abilityId, kind, printedText);
+      const definition = compiler(cardId, abilityId, kind, printedText, cardContext);
       if (definition) return definition;
     }
     return null;
@@ -2131,11 +2470,14 @@
       starts.push({index,rawStart:index,printedStart:index,kind:"AUTO",inferred:true});
     }
     starts.sort((a,b)=>a.index-b.index);
-    return starts.map((item,index)=>{
+    const parsed = starts.map((item,index)=>{
       const end=starts[index+1]?.index??text.length,raw=text.slice(item.rawStart,end).trim(),printedText=text.slice(item.printedStart,end).trim(),kind=item.kind,abilityId=String(card.id||"")+":"+index;
-      const trigger=kind==="AUTO"?compileAutoTrigger(raw):null,costInfo=parseAbilityCosts(raw),conditionInfo=parseAbilityConditions(raw),definition=getAbilityDefinition(String(card.id||"")+":"+index,printedText)||compileAbilityDefinition(String(card.id||""),abilityId,kind,printedText),usageRestriction=parseAbilityUsageRestriction(raw)||definition?.usageRestriction||null,hasUnparsedConditions=conditionInfo.status==="needs-review"&&!definition?.conditionsReviewed&&!definition?.conditions?.length&&! ["cont-rc-normal-order-power-v1","cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","cont-rc-own-turn-named-grade-vanguard-power-v1","cont-named-soul-card-power-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1","cont-rc-gc-vanguard-grade-or-damage-power-shield-v1","cont-great-daiyusha-limit-break-critical-v1","cont-vanguard-soul-name-threshold-critical-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId),hasUnparsedChoices=definition?.choicesReviewed!==true&&(/\b(?:choose|select|target)\b/i.test(raw)||(/\bmay\b/i.test(raw)&&!/\bmay pay the cost\b/i.test(raw))||Boolean(definition?.effects?.some(step=>step.op==="draw-then-discard"||step.op==="discard-from-hand"))||definition?.source?.patternId==="auto-placement-top-five-grade-three-search-discard-v1")&&definition?.source?.patternId!=="act-source-to-soul-choose-friendly-power-turn-v1"&&definition?.source?.patternId!=="auto-rc-placement-choose-friendly-clan-power-turn-v1"&&definition?.source?.patternId!=="auto-hollow-placement-retire-turn-end-v1"&&definition?.source?.patternId!=="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"&&definition?.source?.patternId!=="auto-charge-effect-placement-bottom-deck-after-battle-v1"&&definition?.source?.patternId!=="auto-gc-retire-optional-source-to-soul-v1"&&definition?.source?.patternId!=="auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1"&&![ "auto-forerunner-same-clan-ride-call-source-v1","auto-gc-discard-protect-attacked-unit-v1","auto-gc-protect-then-conditional-discard-v1","auto-gc-sentinel-protect-friendly-unit-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-boosted-battle-close-source-to-soul-power-v1","auto-hand-ride-phase-discard-self-search-top-five-grade-two-v1","auto-boosting-unit-attack-hit-discard-draw-v1","auto-rode-upon-optional-source-call-v1","auto-drive-check-front-trigger-critical-turn-v1","auto-revelation-keyword-v1","auto-ride-phase-discard-source-call-rested-v1","auto-rc-vanguard-boost-soul-blast-draw-discard-v1","auto-rc-vanguard-boost-draw-discard-v1","act-rest-discard-draw-v1","act-vanguard-counter-blast-unlock-friendly-locked-v1","act-rest-source-front-row-ally-power-v1" ].includes(definition?.source?.patternId),hasUnparsedCosts=costInfo.status==="needs-review"&&!definition?.keywords?.includes("g-guardian-heal-cost-substitute")&&definition?.source?.patternId!=="auto-rc-vanguard-boost-draw-discard-v1"&&definition?.source?.patternId!=="auto-placement-top-five-grade-three-search-discard-v1"&&definition?.source?.patternId!=="auto-g-guardian-discard-bind-heal-charge-choice-v1";
-      return {id:abilityId,cardId:String(card.id||""),kind,raw,printedText,definition,effects:definition?.effects||null,gb:Number(raw.match(/(?:Generation\s*Break|GB)\s*[-( ]?\s*(\d+)/i)?.[1]||0),once:Boolean(usageRestriction||definition?.once),usageRestriction,requiredLocation:definition?.requiredLocation||parseAbilityLocation(raw),requiredCircle:definition?.requiredCircle||[],trigger:definition?.trigger?{...trigger,...definition.trigger,circles:definition.trigger.circles||trigger?.circles||[]}:trigger,costs:definition?.source?.patternId==="auto-g-guardian-discard-bind-heal-charge-choice-v1"?definition.costs:["auto-gc-protect-then-conditional-discard-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1"].includes(definition?.source?.patternId)?[]:costInfo.costs,conditions:["cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","auto-rode-upon-draw-quick-shield-v1","auto-gc-protect-then-conditional-discard-v1","cont-vanguard-missed-attack-hit-effects-v1","cont-vanguard-limit-break-4-active-at-three-or-less-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-hollow-placement-retire-turn-end-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1"].includes(definition?.source?.patternId)?[]:definition?.source?.patternId==="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"?(definition.conditions||[]):(definition?.conditions||conditionInfo.conditions),conditionStatus:definition?.conditions?.length?"modeled":["cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","cont-no-other-field-card-name-power-v1","cont-rc-controlled-rearguard-named-unit-power-v1","cont-gc-named-grade-vanguard-shield-v1","cont-vc-rc-non-clan-field-power-penalty-v1","cont-rc-gc-named-grade-vanguard-power-shield-v1"].includes(definition?.source?.patternId)?"modeled":["auto-rode-upon-draw-quick-shield-v1","auto-gc-protect-then-conditional-discard-v1","cont-vanguard-missed-attack-hit-effects-v1","cont-vanguard-limit-break-4-active-at-three-or-less-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-hollow-placement-retire-turn-end-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1","cont-rc-gc-vanguard-grade-or-damage-power-shield-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId)?"no-explicit-condition-detected":definition?.source?.patternId==="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"?"modeled":hasUnparsedConditions?(definition?.continuousRestrictions?.length?"modeled":"needs-review"):conditionInfo.conditions.length?"modeled":"no-explicit-condition-detected",choiceStatus:definition?.choicesReviewed===true||["auto-engorge-retire-other-rearguards-v1","auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-hollow-placement-retire-turn-end-v1","auto-rc-from-hand-reveal-grade-three-search-name-discard-v1","auto-placed-vc-rc-counter-blast-two-retire-opponent-grade-two-v1","act-counter-blast-same-name-search-power-v1","auto-rc-placement-choose-friendly-clan-power-turn-v1","auto-vanguard-placement-counter-soul-named-search-v1","auto-rc-drive-check-normal-unit-source-soul-draw-v1","auto-rc-drive-check-normal-unit-source-soul-rearguard-power-v1","auto-vanguard-placement-top-five-filtered-search-hand-v1","auto-gc-no-grade-three-ride-choice-v1","act-rc-counter-blast-source-to-soul-top-five-grade-three-search-v1","auto-afterimage-opponent-bound-card-to-hand-return-source-v1","auto-charge-effect-placement-bottom-deck-after-battle-v1","auto-gc-retire-optional-source-to-soul-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","auto-forerunner-same-clan-ride-call-source-v1","auto-gc-discard-protect-attacked-unit-v1","auto-gc-protect-then-conditional-discard-v1","auto-gc-sentinel-protect-friendly-unit-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-boosted-battle-close-source-to-soul-power-v1","auto-hand-ride-phase-discard-self-search-top-five-grade-two-v1","auto-boosting-unit-attack-hit-discard-draw-v1","auto-rode-upon-optional-source-call-v1","auto-drive-check-front-trigger-critical-turn-v1","auto-revelation-keyword-v1","auto-ride-phase-discard-source-call-rested-v1","auto-rc-vanguard-boost-soul-blast-draw-discard-v1","auto-rc-vanguard-boost-draw-discard-v1","act-rest-discard-draw-v1","act-vanguard-counter-blast-unlock-friendly-locked-v1","act-rest-source-front-row-ally-power-v1"].includes(definition?.source?.patternId)?"modeled":hasUnparsedChoices?"needs-review":"no-explicit-choice-detected",costStatus:definition?.source?.patternId==="auto-g-guardian-discard-bind-heal-charge-choice-v1"?"supported-cost":["auto-gc-protect-then-conditional-discard-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","cont-hand-g-guardian-heal-cost-substitute-v1","auto-rc-vanguard-boost-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","cont-gzone-unflip-free-stride-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId)?"no-cost":hasUnparsedCosts?"needs-review":costInfo.status,canDecline:kind!=="AUTO"||definition?.optional===true||definition?.keywords?.includes("afterimage")||definition?.source?.patternId!=="auto-revelation-keyword-v1"&&/\bmay\b|\boptional\b/i.test(raw.replace(/\bmay only be used\b/gi,"")),implementationStatus:definition?"structured-effect-definition":kind==="AUTO"?(trigger.status==="needs-review"||hasUnparsedConditions||hasUnparsedCosts?"needs-review":"trigger-definition-pending-validation"):kind==="ACT"?"manual-definition-pending-validation":"continuous-definition-pending-validation"};
+      const trigger=kind==="AUTO"?compileAutoTrigger(raw):null,costInfo=parseAbilityCosts(raw),conditionInfo=parseAbilityConditions(raw),definition=getAbilityDefinition(String(card.id||"")+":"+index,printedText)||compileAbilityDefinition(String(card.id||""),abilityId,kind,printedText,card),usageRestriction=parseAbilityUsageRestriction(raw)||definition?.usageRestriction||null,hasUnparsedConditions=conditionInfo.status==="needs-review"&&!definition?.conditionsReviewed&&!definition?.conditions?.length&&! ["cont-rc-normal-order-power-v1","cont-rc-order-played-power-v1","cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","cont-rc-own-turn-named-grade-vanguard-power-v1","cont-named-soul-card-power-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1","cont-rc-vanguard-grade-or-damage-power-shield-v1","cont-great-daiyusha-limit-break-critical-v1","cont-vanguard-soul-name-threshold-critical-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId),hasUnparsedChoices=definition?.choicesReviewed!==true&&(/\b(?:choose|select|target)\b/i.test(raw)||(/\bmay\b/i.test(raw)&&!/\bmay pay the cost\b/i.test(raw))||Boolean(definition?.effects?.some(step=>step.op==="draw-then-discard"||step.op==="discard-from-hand"))||definition?.source?.patternId==="auto-placement-top-five-grade-three-search-discard-v1")&&definition?.source?.patternId!=="act-source-to-soul-choose-friendly-power-turn-v1"&&definition?.source?.patternId!=="auto-rc-placement-choose-friendly-clan-power-turn-v1"&&definition?.source?.patternId!=="auto-hollow-placement-retire-turn-end-v1"&&definition?.source?.patternId!=="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"&&definition?.source?.patternId!=="auto-charge-effect-placement-bottom-deck-after-battle-v1"&&definition?.source?.patternId!=="auto-gc-retire-optional-source-to-soul-v1"&&definition?.source?.patternId!=="auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1"&&![ "auto-forerunner-same-clan-ride-call-source-v1","auto-gc-discard-protect-attacked-unit-v1","auto-gc-protect-then-conditional-discard-v1","auto-gc-sentinel-protect-friendly-unit-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-boosted-battle-close-source-to-soul-power-v1","auto-hand-ride-phase-discard-self-search-top-five-grade-two-v1","auto-boosting-unit-attack-hit-discard-draw-v1","auto-rode-upon-optional-source-call-v1","auto-drive-check-front-trigger-critical-turn-v1","auto-revelation-keyword-v1","auto-ride-phase-discard-source-call-rested-v1","auto-rc-vanguard-boost-soul-blast-draw-discard-v1","auto-rc-vanguard-boost-draw-discard-v1","act-rest-discard-draw-v1","act-vanguard-counter-blast-unlock-friendly-locked-v1","act-rest-source-front-row-ally-power-v1" ].includes(definition?.source?.patternId),hasUnparsedCosts=costInfo.status==="needs-review"&&!definition?.keywords?.includes("g-guardian-heal-cost-substitute")&&definition?.source?.patternId!=="auto-rc-vanguard-boost-draw-discard-v1"&&definition?.source?.patternId!=="auto-placement-top-five-grade-three-search-discard-v1"&&definition?.source?.patternId!=="auto-g-guardian-discard-bind-heal-charge-choice-v1"&&definition?.source?.patternId!=="auto-g-guardian-named-call-discard-grade-one-draw-v1";
+      return {id:abilityId,cardId:String(card.id||""),kind,raw,printedText,definition,effects:definition?.effects||null,gb:Number(raw.match(/(?:Generation\s*Break|GB)\s*[-( ]?\s*(\d+)/i)?.[1]||0),once:Boolean(usageRestriction||definition?.once),usageRestriction,requiredLocation:definition?.requiredLocation||parseAbilityLocation(raw),requiredCircle:definition?.requiredCircle||[],trigger:definition?.trigger?{...trigger,...definition.trigger,circles:definition.trigger.circles||trigger?.circles||[]}:definition?.source?.patternId==="auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1"?{...trigger,turnRelation:"controller"}:trigger,costs:["auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-g-guardian-named-call-discard-grade-one-draw-v1"].includes(definition?.source?.patternId)?definition.costs:["auto-gc-protect-then-conditional-discard-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1"].includes(definition?.source?.patternId)?[]:costInfo.costs,conditions:["cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","auto-rode-upon-draw-quick-shield-v1","auto-gc-protect-then-conditional-discard-v1","cont-vanguard-missed-attack-hit-effects-v1","cont-vanguard-limit-break-4-active-at-three-or-less-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-hollow-placement-retire-turn-end-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1"].includes(definition?.source?.patternId)?[]:definition?.source?.patternId==="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"?(definition.conditions||[]):(definition?.conditions||conditionInfo.conditions),conditionStatus:definition?.conditions?.length?"modeled":["cont-rc-order-played-power-v1","cont-rc-opponent-vanguard-grade-power-v1","cont-rc-controller-vanguard-grade-power-v1","auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","cont-no-other-field-card-name-power-v1","cont-rc-controlled-rearguard-named-unit-power-v1","cont-gc-named-grade-vanguard-shield-v1","cont-vc-rc-non-clan-field-power-penalty-v1","cont-rc-gc-named-grade-vanguard-power-shield-v1"].includes(definition?.source?.patternId)?"modeled":["auto-rode-upon-draw-quick-shield-v1","auto-gc-protect-then-conditional-discard-v1","cont-vanguard-missed-attack-hit-effects-v1","cont-vanguard-limit-break-4-active-at-three-or-less-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-hollow-placement-retire-turn-end-v1","cont-rc-gc-opponent-check-trigger-power-shield-v1","cont-rc-gc-vanguard-grade-or-damage-power-shield-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId)?"no-explicit-condition-detected":definition?.source?.patternId==="auto-afterimage-opponent-bound-card-to-hand-return-source-v1"?"modeled":hasUnparsedConditions?(definition?.continuousRestrictions?.length?"modeled":"needs-review"):conditionInfo.conditions.length?"modeled":"no-explicit-condition-detected",choiceStatus:definition?.choicesReviewed===true||["auto-engorge-retire-other-rearguards-v1","auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-hollow-placement-retire-turn-end-v1","auto-rc-from-hand-reveal-grade-three-search-name-discard-v1","auto-placed-vc-rc-counter-blast-two-retire-opponent-grade-two-v1","act-counter-blast-same-name-search-power-v1","auto-rc-placement-choose-friendly-clan-power-turn-v1","auto-vanguard-placement-counter-soul-named-search-v1","auto-rc-drive-check-normal-unit-source-soul-draw-v1","auto-rc-drive-check-normal-unit-source-soul-rearguard-power-v1","auto-vanguard-placement-top-five-filtered-search-hand-v1","auto-gc-no-grade-three-ride-choice-v1","act-rc-counter-blast-source-to-soul-top-five-grade-three-search-v1","auto-afterimage-opponent-bound-card-to-hand-return-source-v1","auto-charge-effect-placement-bottom-deck-after-battle-v1","auto-gc-retire-optional-source-to-soul-v1","auto-gc-protect-attacked-vanguard-named-drop-counter-charge-v1","auto-forerunner-same-clan-ride-call-source-v1","auto-gc-discard-protect-attacked-unit-v1","auto-gc-protect-then-conditional-discard-v1","auto-gc-sentinel-protect-friendly-unit-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","auto-boosted-battle-close-source-to-soul-power-v1","auto-hand-ride-phase-discard-self-search-top-five-grade-two-v1","auto-boosting-unit-attack-hit-discard-draw-v1","auto-rode-upon-optional-source-call-v1","auto-drive-check-front-trigger-critical-turn-v1","auto-revelation-keyword-v1","auto-ride-phase-discard-source-call-rested-v1","auto-rc-vanguard-boost-soul-blast-draw-discard-v1","auto-rc-vanguard-boost-draw-discard-v1","act-rest-discard-draw-v1","act-vanguard-counter-blast-unlock-friendly-locked-v1","act-rest-source-front-row-ally-power-v1"].includes(definition?.source?.patternId)?"modeled":hasUnparsedChoices?"needs-review":"no-explicit-choice-detected",costStatus:["auto-g-guardian-discard-bind-heal-charge-choice-v1","auto-g-guardian-named-call-discard-grade-one-draw-v1"].includes(definition?.source?.patternId)?"supported-cost":["auto-gc-protect-then-conditional-discard-v1","auto-vanguard-placement-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","cont-hand-g-guardian-heal-cost-substitute-v1","auto-rc-vanguard-boost-draw-discard-v1","auto-placement-top-five-grade-three-search-discard-v1","cont-gzone-unflip-free-stride-v1","auto-ride-deck-or-stride-cost-discard-draw-v1"].includes(definition?.source?.patternId)?"no-cost":hasUnparsedCosts?"needs-review":costInfo.status,canDecline:kind!=="AUTO"||definition?.optional===true||definition?.keywords?.includes("afterimage")||definition?.source?.patternId!=="auto-revelation-keyword-v1"&&/\bmay\b|\boptional\b/i.test(raw.replace(/\bmay only be used\b/gi,"")),implementationStatus:definition?"structured-effect-definition":kind==="AUTO"?(trigger.status==="needs-review"||hasUnparsedConditions||hasUnparsedCosts?"needs-review":"trigger-definition-pending-validation"):kind==="ACT"?"manual-definition-pending-validation":"continuous-definition-pending-validation"};
     });
+    return parsed.map(ability => ability.definition?.costsReviewed === true && Array.isArray(ability.definition.costs) && ability.definition.costs.length > 0
+      ? { ...ability, costs: ability.definition.costs || [], costStatus: "supported-cost", implementationStatus: "structured-effect-definition" }
+      : ability);
   }  function countGenerationBreakUnits(player, isGUnit = () => false) { return (player?.gZone || []).filter(card => card?.faceUp === true && isGUnit(card)).length + (player?.vanguard && isGUnit(player.vanguard) ? 1 : 0); }
   function freezeParsedValue(value){if(!value||typeof value!=="object")return value;for(const child of Object.values(value))freezeParsedValue(child);return Object.isFrozen(value)?value:Object.freeze(value)}
   function parseCardAbilitiesCached(card){if(!card||typeof card!=="object")return parseCardAbilities(card);const id=String(card.id||""),text=String(card.text||""),cached=parsedCardAbilityCache.get(card);if(cached&&cached.id===id&&cached.text===text&&cached.revision===abilityDefinitionRevision)return cached.abilities;const abilities=freezeParsedValue(JSON.parse(JSON.stringify(parseCardAbilities(card))));parsedCardAbilityCache.set(card,{id,text,revision:abilityDefinitionRevision,abilities});return abilities}
@@ -2162,7 +2504,8 @@
     if (!context.cardInstanceId || !context.controllerPlayerId || context.actorPlayerId !== context.controllerPlayerId) return { ok: false, reason: "not-controller" };
     if (context.turnPlayerId !== context.actorPlayerId) return { ok: false, reason: "not-turn-player" };
     if (context.resolutionBlocked) return { ok: false, reason: "resolution-in-progress" };
-    if (context.phase !== "main") return { ok: false, reason: "wrong-timing-window" };
+    const activationWindow = ability.definition.activationWindow || "main";
+    if (context.phase !== activationWindow) return { ok: false, reason: "wrong-timing-window" };
     if (context.inPermittedZone !== true) return { ok: false, reason: "wrong-zone" };
     if ((ability.once || ability.usageRestriction) && context.alreadyUsed) return { ok: false, reason: "usage-restriction" };
     if (!canPayAbilityCosts(ability, context.resources || {})) return { ok: false, reason: "unpayable-cost" };
@@ -2216,6 +2559,9 @@
     if(trigger.revealedClan){const clans=[event?.checkedCardClan,...(event?.checkedCardClans||[])].filter(Boolean).map(value=>String(value).toLowerCase()),fallback=String(event?.checkedCardText||"").split(/\r?\n/)[0].split("/")[0].trim().toLowerCase();if(!clans.includes(String(trigger.revealedClan).toLowerCase())&&fallback!==String(trigger.revealedClan).toLowerCase())return false}
     if(trigger.boosterClan){const declared=[event?.boosterCardClan,...(event?.boosterCardClans||[])].filter(Boolean).map(value=>String(value).toLowerCase()),fallback=String(event?.boosterCardText||"").split(/\r?\n/)[0].split("/")[0].trim().toLowerCase();if(!declared.includes(String(trigger.boosterClan).toLowerCase())&&fallback!==String(trigger.boosterClan).toLowerCase())return false}
     if(trigger.riderClan){const clans=[event?.sourceCardClan,...(event?.sourceCardClans||[])].filter(Boolean).map(value=>String(value).trim().toLowerCase());if(!clans.includes(String(trigger.riderClan).trim().toLowerCase()))return false}
+    if(trigger.riderGrade!=null&&Number(event?.sourceCardGrade)!==Number(trigger.riderGrade))return false;
+    if(trigger.riderCardNameContains&&!String(event?.sourceCardName||"").toLocaleLowerCase().includes(String(trigger.riderCardNameContains).toLocaleLowerCase()))return false;
+    if(trigger.riderCardNameEquals&&String(event?.sourceCardName||"")!==String(trigger.riderCardNameEquals))return false;
     if(trigger.excludedRiderName){const normalizeName=value=>String(value||"").normalize("NFKD").toLocaleLowerCase().replace(/[^a-z0-9]/g,"");if(!event?.sourceCardName||normalizeName(event.sourceCardName)===normalizeName(trigger.excludedRiderName))return false}
     if(trigger.boosterRace){const declared=[event?.boosterCardRace,...(event?.boosterCardRaces||[])].filter(Boolean).map(value=>String(value).toLowerCase()),fallback=String(event?.boosterCardText||"").split(/\r?\n/)[0].split("/").slice(1).map(value=>value.trim().toLowerCase());if(!declared.includes(String(trigger.boosterRace).toLowerCase())&&!fallback.includes(String(trigger.boosterRace).toLowerCase()))return false}
     if(trigger.boosterCardNameContains&&!String(event?.boosterCardName||"").toLowerCase().includes(String(trigger.boosterCardNameContains).toLowerCase()))return false;
@@ -2230,6 +2576,9 @@
     if(trigger.requiredPhase&&String(event?.phase||"").toLowerCase()!==trigger.requiredPhase)return false;
     if(trigger.discardReason&&event?.discardReason!==trigger.discardReason)return false;
     if(Array.isArray(trigger.discardReasons)&&!trigger.discardReasons.includes(event?.discardReason))return false;
+    if(trigger.actingPlayerRelation==="source-controller"&&(!sourceControllerPlayerId||event?.actingPlayerId!==sourceControllerPlayerId||event?.sourceControllerPlayerId!==sourceControllerPlayerId))return false;
+    if(trigger.calledGUnitName&&String(event?.calledGUnitCardName||"").trim().toLocaleLowerCase()!==String(trigger.calledGUnitName).trim().toLocaleLowerCase())return false;
+    if(trigger.calledGUnitPreviousLocation&&String(event?.calledGUnitPreviousLocation||"").toLowerCase()!==String(trigger.calledGUnitPreviousLocation).toLowerCase())return false;
     if(trigger.destinationLocation&&normalizeLocation(event?.currentLocation)!==trigger.destinationLocation)return false;
     if(trigger.abilitySourceControllerRelation==="opponent"&&(!sourceControllerPlayerId||!event?.abilitySourceInstanceId||!event?.abilitySourceControllerPlayerId||event.abilitySourceControllerPlayerId===sourceControllerPlayerId))return false;
     if(trigger.movedCardOwnerRelation==="opponent"&&(!sourceControllerPlayerId||event?.subjectOwnerPlayerId===sourceControllerPlayerId||!event?.subjectOwnerPlayerId))return false;
@@ -2249,11 +2598,12 @@
     if(trigger.subject==="source"&&expectedEventType==="attack.hit"&&event?.attackHitOverride===true&&event?.subjectCardInstanceId!=null&&event.subjectCardInstanceId!==sourceUid)return false;
     if(trigger.eventType==="card.placed"&&trigger.subject==="source"&&event?.subjectCardInstanceId!=null&&event.subjectCardInstanceId!==sourceUid)return false;
     if(trigger.subject==="event-subject"&&!eventSubjectMatches(event,sourceUid,"event-subject"))return false;
+    if(trigger.subjectControllerRelation==="source-controller"&&(!sourceControllerPlayerId||event?.subjectControllerPlayerId!==sourceControllerPlayerId))return false;
     if(trigger.subject==="event-target"&&!(event?.targetCardInstanceIds||[]).includes(sourceUid))return false;
     if(trigger.subject==="ridden-unit"&&!eventSubjectMatches(event,sourceUid,"ridden-unit"))return false;
     if(trigger.subject==="booster"&&!eventSubjectMatches(event,sourceUid,"booster"))return false;
     if(trigger.subject==="boosted-unit"&&!eventSubjectMatches(event,sourceUid,"boosted-unit"))return false;
-    if(trigger.subject==="controller"&&(!sourceControllerPlayerId||event?.actingPlayerId!==sourceControllerPlayerId))return false;
+    if(trigger.subject==="controller"&&(!sourceControllerPlayerId||(expectedEventType==="card.drawn"?event?.subjectControllerPlayerId!==sourceControllerPlayerId:event?.actingPlayerId!==sourceControllerPlayerId)))return false;
     if(trigger.subject==="vanguard"&&(normalizeLocation(subjectZone)!=="vanguard"||!sourceControllerPlayerId||event?.subjectControllerPlayerId!==sourceControllerPlayerId))return false;
     return true;
   }
@@ -2294,6 +2644,7 @@
       turnPlayerId: String(input.turnPlayerId || ""),
       sourceCardInstanceId: input.sourceCardInstanceId || null,
       sourceCardName: input.sourceCardName || null,
+      sourceCardGrade: input.sourceCardGrade != null && Number.isInteger(Number(input.sourceCardGrade)) ? Number(input.sourceCardGrade) : null,
       sourceOwnerPlayerId: input.sourceOwnerPlayerId || null,
       sourceControllerPlayerId: input.sourceControllerPlayerId || null,
       sourceCardClan: input.sourceCardClan || null,
@@ -2303,6 +2654,10 @@
       abilitySourceOwnerPlayerId: input.abilitySourceOwnerPlayerId || null,
       abilitySourceControllerPlayerId: input.abilitySourceControllerPlayerId || null,
       reason: input.reason || input.discardReason || null,
+      winnerPlayerId: input.winnerPlayerId || null,
+      loserPlayerId: input.loserPlayerId || null,
+      winnerSide: input.winnerSide || null,
+      loserSide: input.loserSide || null,
       powerIncludesContinuous: input.powerIncludesContinuous === true,
       position: input.position || null,
       subjectCardInstanceId: input.subjectCardInstanceId || null,
@@ -2333,6 +2688,10 @@
       previousLocation: input.previousLocation || null,
       currentLocation: input.currentLocation || null,
       discardReason: input.discardReason || input.reason || null,
+      calledGUnitCardId: input.calledGUnitCardId || null,
+      calledGUnitInstanceId: input.calledGUnitInstanceId || null,
+      calledGUnitCardName: input.calledGUnitCardName || null,
+      calledGUnitPreviousLocation: input.calledGUnitPreviousLocation || null,
       circle: input.circle || null,
       battleId: input.battleId || null,
       attackingUnitInstanceId: input.attackingUnitInstanceId || null,
@@ -2346,6 +2705,8 @@
       checkSourceLocation: input.checkSourceLocation || null,
       checkIndex: Number.isInteger(input.checkIndex) ? input.checkIndex : null,
       checkedCardInstanceId: input.checkedCardInstanceId || null,
+      checkedCardOwnerPlayerId: input.checkedCardOwnerPlayerId || null,
+      checkedCardControllerPlayerId: input.checkedCardControllerPlayerId || null,
       checkedCardName: input.checkedCardName || null,
       checkedCardGrade: input.checkedCardGrade != null && Number.isInteger(Number(input.checkedCardGrade)) ? Number(input.checkedCardGrade) : null,
       checkedCardClan: input.checkedCardClan || null,
@@ -2448,8 +2809,11 @@
       if(command==="activate-skill"){
         const [sourceUid]=args,source=typeof sourceUid==="string"?locateCardInstance(state,sourceUid):null,abilityId=args.slice(1).join(":"),separator=abilityId.lastIndexOf(":"),cardId=separator>0?abilityId.slice(0,separator):"",rawIndex=separator>0?abilityId.slice(separator+1):"";
         if(state.side!==actorSide)return{ok:false,reason:"not-actor-turn"};
-        if(Number(state.phase)!==4)return{ok:false,reason:"wrong-phase"};
-        if(!source||source.ambiguous||source.side!==actorSide||!(source.zone==="vanguard"||source.zone==="rear-guard"))return{ok:false,reason:"skill-source-not-controlled-on-field"};
+        if(!source||source.ambiguous||source.side!==actorSide||!(source.zone==="vanguard"||source.zone==="rear-guard"||source.zone==="g-deck"||source.zone==="g-zone"))return{ok:false,reason:"skill-source-not-controlled-on-field"};
+        const isGZoneSource=source.zone==="g-deck"||source.zone==="g-zone";
+        if(isGZoneSource&&(source.instance.faceUp!==false||(source.zone==="g-deck"&&source.instance.gDeckCard!==true)))return{ok:false,reason:"g-zone-act-source-must-be-face-down"};
+        const expectedPhase=isGZoneSource?3:4;
+        if(Number(state.phase)!==expectedPhase)return{ok:false,reason:"wrong-phase"};
         if(request.selected!==sourceUid)return{ok:false,reason:"skill-source-selection-mismatch"};
         if(!source||cardId!==String(source.instance.cardId)||!/^\d{1,2}$/.test(rawIndex)||Number(rawIndex)>63)return{ok:false,reason:"invalid-skill-selection"};
         if(state.pendingAbility||state.pendingTrigger||state.pendingAttack||state.pendingTurnEnd||(state.pendingAbilities||[]).length)return{ok:false,reason:"resolution-in-progress"};
@@ -2467,9 +2831,10 @@
     return{ok:false,reason:"unsupported-action"};
   }
   function payAbilityCosts(ability,context={},selection={}) {
-    const player=context.player,source=context.source,costs={"counter-blast":0,"soul-blast":0,discard:0,"reveal-grade-from-hand":0,"source-discard":0,"source-retire":0,"source-to-soul":0,"source-to-bottom-deck":0,"rest-source":0,"source-bind":0,"bind-heal-from-drop":0};
+    const player=context.player,source=context.source,costs={"counter-blast":0,"soul-blast":0,"energy-blast":0,discard:0,"reveal-grade-from-hand":0,"source-discard":0,"source-retire":0,"source-to-soul":0,"source-to-bottom-deck":0,"rest-source":0,"source-bind":0,"bind-heal-from-drop":0};
     if(!ability||!player||!source||ability.costStatus==="needs-review"||!Array.isArray(player.damage)||!Array.isArray(player.soul)||!Array.isArray(player.hand)||!Array.isArray(player.drop)||!Array.isArray(player.rear))return{ok:false,reason:"invalid-cost-context"};
     for(const cost of ability.costs||[]){if(!Object.hasOwn(costs,cost.type))return{ok:false,reason:"unsupported-cost"};if(!Number.isInteger(Number(cost.count))||Number(cost.count)<1)return{ok:false,reason:"invalid-cost-definition"};costs[cost.type]+=Number(cost.count)}
+    if(costs["energy-blast"]&&(context.hasEnergyGenerator!==true||!Number.isInteger(Number(player.energy))||Number(player.energy)<costs["energy-blast"]))return{ok:false,reason:"insufficient-energy"};
     const selected={"counter-blast":selection.cb||[],"soul-blast":selection.sb||[],discard:selection.discard||[]},chosen={};
     for(const type of Object.keys(selected)){
       const ids=selected[type];if(!Array.isArray(ids)||new Set(ids).size!==ids.length||ids.length!==costs[type])return{ok:false,reason:"invalid-cost-selection"};
@@ -2497,6 +2862,7 @@
     for(const card of revealedCostCards)context.emitEvent?.({type:"card.revealed",cardInstanceId:card.uid,controllerSide:context.side,reason:"ability-cost"});
     if(costs["source-discard"]){player.hand=player.hand.filter(card=>card.uid!==source.uid);player.drop.push(source);context.emitEvent?.({type:"card.discarded",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:"hand",currentLocation:"drop"})}
     chosen["counter-blast"].forEach(card=>{card.faceDown=true});
+    if(costs["energy-blast"]){player.energy-=costs["energy-blast"];player.energySpentThisTurn=Number(player.energySpentThisTurn||0)+costs["energy-blast"]}
     if(chosen["soul-blast"].length){const ids=new Set(chosen["soul-blast"].map(card=>card.uid));player.soul=player.soul.filter(card=>!ids.has(card.uid));player.drop.push(...chosen["soul-blast"]);for(const card of chosen["soul-blast"])context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"soul",currentLocation:"drop"})}
     if(chosen.discard.length){const ids=new Set(chosen.discard.map(card=>card.uid));player.hand=player.hand.filter(card=>!ids.has(card.uid));player.drop.push(...chosen.discard);for(const card of chosen.discard)context.emitEvent?.({type:"card.discarded",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"hand",currentLocation:"drop"})}
     if(costs["source-to-soul"]){if(sourceZone==="vanguard")player.vanguard=null;else player.rear[sourceIndex]=null;player.soul.push(source);context.emitEvent?.({type:"card.moved",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:sourceZone,currentLocation:"soul"})}
@@ -2647,7 +3013,7 @@
     return Array.isArray(cardOrAbilities)&&cardOrAbilities.some(ability=>(ability.definition?.keywords||[]).some(value=>String(typeof value==="string"?value:value?.name||"").trim().toLowerCase()===expected));
   }
   function rideCandidateDefinitions(cardOrAbilities){const parsed=Array.isArray(cardOrAbilities)?cardOrAbilities:parseCardAbilities(cardOrAbilities),definitions=parsed.map(ability=>ability.definition).filter(Boolean),cardId=String(cardOrAbilities?.id||cardOrAbilities?.cardId||"");if(cardId)definitions.push(...getReviewedAbilityDefinitionsForCard(cardId));return definitions}
-  function canRideCard(cardOrAbilities,context={}){if(hasAbilityKeyword(cardOrAbilities,"cannot-be-ridden"))return false;const currentVanguard=context.vanguardCard,definitions=rideCandidateDefinitions(cardOrAbilities);for(const restriction of definitions.flatMap(definition=>definition.continuousRestrictions||[])){if(restriction.type==="ride-from-grade-and-name"){if(!currentVanguard||Number(currentVanguard.grade)!==Number(restriction.grade)||!cardHasName(currentVanguard,restriction.name,{contains:true}))return false}}const activeRestriction=(context.crests||[]).some(card=>parseCardAbilities(card).some(ability=>ability.kind==="CONT"&&ability.definition?.continuousRestrictions?.some(restriction=>restriction.type==="ride-same-name-as-vanguard")));return !activeRestriction||cardsShareName(context.vanguardCard,cardOrAbilities)}
+  function canRideCard(cardOrAbilities,context={}){if(hasAbilityKeyword(cardOrAbilities,"cannot-be-ridden"))return false;const currentVanguard=context.vanguardCard,definitions=rideCandidateDefinitions(cardOrAbilities);for(const restriction of definitions.flatMap(definition=>definition.continuousRestrictions||[])){if(restriction.type==="ride-from-grade-and-name"){if(!currentVanguard||Number(currentVanguard.grade)!==Number(restriction.grade)||!cardHasName(currentVanguard,restriction.name,{contains:true,location:"vanguard"}))return false}}const activeRestriction=(context.crests||[]).some(card=>parseCardAbilities(card).some(ability=>ability.kind==="CONT"&&ability.definition?.continuousRestrictions?.some(restriction=>restriction.type==="ride-same-name-as-vanguard")));return !activeRestriction||cardsShareName(context.vanguardCard,cardOrAbilities,{leftLocation:"vanguard",rightLocation:"hand"})}
   function claimRemoteRequest(state, actionId, limit = 512) {
     if (!state || !actionId || (state.processedActionIds || []).includes(actionId)) return false;
     const processed = state.processedActionIds ||= [];
@@ -2667,5 +3033,5 @@
     if (subject === "any") return true;
     return false;
   }
-  return Object.freeze({ createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, countGenerationBreakUnits, parseCardAbilities, parseCardAbilitiesCached, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, canPayAbilityCosts, evaluateAutoCostPayment, registerAbilityDefinitions, getReviewedAbilityDefinitionsForCard, registerCardAbilityKeywordIndex, getCardAbilityKeywords, compileVanguardTopFiveKeywordSearchDefinition, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, expireTurnModifiers, compileAutoTrigger, isManuallyActivatable, autoAbilityReadiness, canActivateManualAbility, abilityUsageKey, validateAbilityChoices, canDeclineAbility, matchesTargetFilter, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, claimGameEvent, claimAbilityTrigger, validateRemoteRequest, validateRemoteActionRequest, canResolveAbilitySource, payAbilityCosts, validateAbilityDecision, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, claimRemoteRequest, eventSubjectMatches, recordAttackCount, getAttackCount, getPlayerAttackCount, retireHollowedUnitsAtTurnEnd, retireChargingUnitsAtBattleEnd, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance, prunePendingAbilitiesWithConsumedUsage });
+  return Object.freeze({ createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, countGenerationBreakUnits, parseCardAbilities, parseCardAbilitiesCached, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, canPayAbilityCosts, evaluateAutoCostPayment, registerAbilityDefinitions, getReviewedAbilityDefinitionsForCard, registerCardAbilityKeywordIndex, getCardAbilityKeywords, compileVanguardTopFiveKeywordSearchDefinition, compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition, compileActRcSoulBlastThreeDrawDefinition, compileAutoRcPlacementChooseFriendlyPowerDefinition, compileRearGuardVanguardAttackSacrificeDrawPowerDefinition, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, expireTurnModifiers, compileAutoTrigger, isManuallyActivatable, autoAbilityReadiness, canActivateManualAbility, abilityUsageKey, validateAbilityChoices, canDeclineAbility, matchesTargetFilter, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, claimGameEvent, claimAbilityTrigger, validateRemoteRequest, validateRemoteActionRequest, canResolveAbilitySource, payAbilityCosts, validateAbilityDecision, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, claimRemoteRequest, eventSubjectMatches, recordAttackCount, getAttackCount, getPlayerAttackCount, retireHollowedUnitsAtTurnEnd, retireChargingUnitsAtBattleEnd, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance, prunePendingAbilitiesWithConsumedUsage });
 });

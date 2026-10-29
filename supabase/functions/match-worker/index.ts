@@ -1,6 +1,8 @@
 import "../../../ability-engine.js";
 import "../../../card-ability-keywords.js";
 import "../../../ability-definitions.js";
+import "../../../card-authoritative-names.js";
+import "../../../card-authoritative-rules-metadata.js";
 import "../../../ability-server-reducer.js";
 import "./worker-core.js";
 

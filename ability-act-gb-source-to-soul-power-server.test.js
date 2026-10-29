@@ -56,7 +56,7 @@ test("host and joining player independently pay source-to-Soul and choose their 
     assert.equal(own.rear[0], null);
     assert.equal(own.soul.at(-1).uid, source.uid);
     assert.equal(target.turnPowerBoost, 2000);
-    assert.equal(target.turnPowerExpiry, side);
+    assert.equal(target.turnPowerExpiry, state.players[side].playerId);
     assert.equal(state.players[side === "bot" ? "human" : "bot"].vanguard.turnPowerBoost || 0, 0);
   }
 });

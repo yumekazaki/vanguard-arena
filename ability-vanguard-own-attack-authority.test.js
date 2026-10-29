@@ -10,6 +10,8 @@ const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 const PATTERN = "auto-own-attack-vanguard-power-battle-v1";
 const ANY_TARGET_PATTERN = "auto-own-attack-power-battle-v1";
 const CLAN_PATTERN = "auto-own-attack-vanguard-clan-power-battle-v1";
+const GB_PATTERN = "auto-generation-break-own-vanguard-attack-power-battle-v1";
+const ADVANTAGE_PATTERN = "auto-own-attack-rear-guard-advantage-power-battle-v1";
 const catalog = loadCatalog();
 const reviewed = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
   .filter(ability => ability.definition?.source?.patternId === PATTERN)
@@ -18,10 +20,10 @@ const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: 
 
 function cardDefinition(cardId) { return catalog.find(card => String(card.id) === String(cardId)); }
 
-function fixture({ side = "bot", cardId, targetLocation = "vanguard", attackSource = "source", pattern = PATTERN, vanguardClan = null } = {}) {
+function fixture({ side = "bot", cardId, targetLocation = "vanguard", attackSource = "source", pattern = PATTERN, abilityId = null, vanguardClan = null } = {}) {
   const definition = cardDefinition(cardId);
   assert.ok(definition, `catalog card ${cardId}`);
-  const ability = Engine.parseCardAbilitiesCached(definition).find(item => item.definition?.source?.patternId === pattern);
+  const ability = Engine.parseCardAbilitiesCached(definition).find(item => abilityId ? item.id === abilityId : item.definition?.source?.patternId === pattern);
   assert.ok(ability, `reviewed own-attack ability for ${cardId}`);
   const ownerId = side === "human" ? "host-player" : "guest-player";
   const otherSide = side === "human" ? "bot" : "human";
@@ -29,11 +31,11 @@ function fixture({ side = "bot", cardId, targetLocation = "vanguard", attackSour
   const source = { uid: "attacker-source", cardId, cardName: definition.name, type: definition.type,
     ownerPlayerId: ownerId, controllerPlayerId: ownerId, clan: vanguardClan || ability.conditions?.[0]?.value || definition.clan,
     power: Number(definition.power || 10000), unitCard: true };
-  const own = { playerId: ownerId, vanguard: null, rear: Array(5).fill(null), soul: [], drop: [], damage: [], hand: [], deck: [], bind: [], orders: [], guardCircle: [], triggerZone: [] };
+  const own = { playerId: ownerId, vanguard: null, rear: Array(5).fill(null), soul: [], drop: [], damage: [], hand: [], deck: [], bind: [], orders: [], guardCircle: [], triggerZone: [], gZone: ability.gb ? [{ uid: `g-unit-${side}-${cardId}`, cardId: "cfa-2454", gDeckCard: true, faceUp: true, ownerPlayerId: ownerId, controllerPlayerId: ownerId }] : [] };
   const opponent = { playerId: opponentId, vanguard: null, rear: Array(5).fill(null), soul: [], drop: [], damage: [], hand: [], deck: [], bind: [], orders: [], guardCircle: [], triggerZone: [] };
   const sourceAtVanguard = ability.requiredLocation.includes("vanguard");
   if (sourceAtVanguard) own.vanguard = source;
-  else { own.vanguard = { uid: "own-vanguard", cardId: "cfa-3", ownerPlayerId: ownerId, controllerPlayerId: ownerId,
+  else { own.vanguard = { uid: "own-vanguard", cardId: "test-own-vanguard", ownerPlayerId: ownerId, controllerPlayerId: ownerId,
     clan: vanguardClan || ability.conditions?.[0]?.value || definition.clan, grade: 3, unitCard: true }; own.rear[0] = source; }
   opponent.vanguard = { uid: "opponent-vanguard", cardId: "cfa-3", ownerPlayerId: opponentId, controllerPlayerId: opponentId, grade: 3, unitCard: true };
   if (targetLocation !== "vanguard") opponent.rear[0] = { uid: "opponent-rear", cardId: "cfa-4", ownerPlayerId: opponentId, controllerPlayerId: opponentId, grade: 2, unitCard: true };
@@ -82,6 +84,82 @@ test("all 69 exact own-Vanguard-attack power definitions are trusted with their 
     assert.deepEqual(ability.definition.effects, [{ op: "modify-power", target: "source",
       amount: Number(ability.printedText.match(/power \+(\d+)/i)?.[1]), duration: "battle" }], ability.id);
     assert.equal(Reducer.supportsServerAbilityEffects(ability), true, ability.id);
+  }
+});
+
+test("all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats", () => {
+  const family = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
+    .filter(ability => ability.definition?.source?.patternId === GB_PATTERN).map(ability => ({ card, ability })));
+  assert.equal(family.length, 51);
+  for (const { card, ability } of family) for (const side of ["human", "bot"]) {
+    const legal = fixture({ side, cardId: card.id, pattern: GB_PATTERN });
+    const discovery = Reducer.discoverAutoTriggers(legal.state, [legal.event], Engine);
+    assert.ok(discovery.queued.some(item => item.ability?.id === ability.id), `${ability.id} is included even when another ability on this unit shares the attack event`);
+    assert.equal(legal.state.pendingAbility.side, side, ability.id);
+    assert.equal(legal.state.pendingAbility.ability.id, ability.id);
+    const resolved = resolve(legal);
+    assert.equal(resolved.ok, true, `${ability.id} / ${side}: ${resolved.reason}`);
+    assert.equal(legal.state.pendingAttack.power, 10000 + ability.definition.effects[0].amount, ability.id);
+
+    const wrongSource = fixture({ side, cardId: card.id, pattern: GB_PATTERN, attackSource: "other" });
+    assert.equal(Reducer.discoverAutoTriggers(wrongSource.state, [wrongSource.event], Engine).queued.length, 0, `${ability.id} unrelated attacker`);
+
+    const noGenerationBreak = fixture({ side, cardId: card.id, pattern: GB_PATTERN });
+    noGenerationBreak.state.players[side].gZone = [];
+    const withoutGb = Reducer.discoverAutoTriggers(noGenerationBreak.state, [noGenerationBreak.event], Engine).queued;
+    assert.equal(withoutGb.some(item => item.ability?.id === ability.id), false, `${ability.id} without GB1`);
+  }
+});
+
+function setRearGuardCount(player, count, prefix) {
+  const source = player.rear.find(Boolean) || null;
+  player.rear = Array(5).fill(null);
+  let slot = 0;
+  if (source && count > 0) { player.rear[slot++] = source; }
+  while (slot < count && slot < player.rear.length) {
+    player.rear[slot] = { uid: `${prefix}-${slot}`, cardId: "cfa-2", ownerPlayerId: player.playerId,
+      controllerPlayerId: player.playerId, unitCard: true, grade: 1 };
+    slot++;
+  }
+}
+
+test("all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount", () => {
+  const family = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
+    .filter(ability => ability.definition?.source?.patternId === ADVANTAGE_PATTERN).map(ability => ({ card, ability })));
+  assert.equal(family.length, 26);
+  for (const { card, ability } of family) {
+    assert.ok(Engine.getReviewedAbilityDefinitionsForCard(card.id).some(item => item.id === ability.id), ability.id);
+    assert.equal(ability.trigger.eventType, "unit.attacked", ability.id);
+    assert.equal(ability.trigger.subject, "source", ability.id);
+    assert.deepEqual(ability.conditions, [{ type: "controller-has-more-rear-guards-than-opponent" }], ability.id);
+    assert.equal(ability.definition.effects[0].amount, Number(ability.printedText.match(/power \+(\d+)/i)?.[1]), ability.id);
+    assert.equal(Reducer.supportsServerAbilityEffects(ability), true, ability.id);
+  }
+});
+
+test("both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance", () => {
+  const family = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
+    .filter(ability => ability.definition?.source?.patternId === ADVANTAGE_PATTERN).map(ability => ({ card, ability })));
+  for (const { card, ability } of family) for (const side of ["human", "bot"]) {
+    const legal = fixture({ side, cardId: card.id, pattern: ADVANTAGE_PATTERN, abilityId: ability.id });
+    setRearGuardCount(legal.state.players[side], 3, `${ability.id}-${side}-own`);
+    setRearGuardCount(legal.state.players[side === "human" ? "bot" : "human"], 1, `${ability.id}-${side}-opponent`);
+    const powerBefore = legal.state.pendingAttack.power;
+    assert.equal(Reducer.discoverAutoTriggers(legal.state, [legal.event], Engine).queued.length, 1, `${ability.id}:${side}`);
+    assert.equal(legal.state.pendingAbility.side, side, `${ability.id}:${side}`);
+    const resolved = resolve(legal);
+    assert.equal(resolved.ok, true, `${ability.id}:${side}: ${resolved.reason}`);
+    assert.equal(legal.state.pendingAttack.power, powerBefore + ability.definition.effects[0].amount, `${ability.id}:${side}`);
+
+    const insufficient = fixture({ side, cardId: card.id, pattern: ADVANTAGE_PATTERN, abilityId: ability.id });
+    setRearGuardCount(insufficient.state.players[side], 1, `${ability.id}-${side}-tie-own`);
+    setRearGuardCount(insufficient.state.players[side === "human" ? "bot" : "human"], 1, `${ability.id}-${side}-tie-opponent`);
+    assert.equal(Reducer.discoverAutoTriggers(insufficient.state, [insufficient.event], Engine).queued.length, 0, `${ability.id}:${side} equal counts`);
+
+    const wrongSource = fixture({ side, cardId: card.id, pattern: ADVANTAGE_PATTERN, abilityId: ability.id, attackSource: "other" });
+    setRearGuardCount(wrongSource.state.players[side], 3, `${ability.id}-${side}-other-own`);
+    setRearGuardCount(wrongSource.state.players[side === "human" ? "bot" : "human"], 1, `${ability.id}-${side}-other-opponent`);
+    assert.equal(Reducer.discoverAutoTriggers(wrongSource.state, [wrongSource.event], Engine).queued.length, 0, `${ability.id}:${side} other attacker`);
   }
 });
 
@@ -172,10 +250,10 @@ test("own-attack abilities without a target restriction still trigger against ei
   }
 });
 
-test("all 35 clan-gated own-attack abilities retain exact clan, source circle, and battle power", () => {
+test("all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power", () => {
   const family = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
     .filter(ability => ability.definition?.source?.patternId === CLAN_PATTERN).map(ability => ({ card, ability })));
-  assert.equal(family.length, 35);
+  assert.equal(family.length, 42);
   for (const { card, ability } of family) {
     assert.ok(Engine.getReviewedAbilityDefinitionsForCard(card.id).some(item => item.id === ability.id), ability.id);
     assert.equal(ability.trigger.subject, "source", ability.id);
@@ -200,10 +278,12 @@ test("clan-gated own attacks prompt and resolve for each owner only with their c
     assert.equal(resolved.ok, true, resolved.reason);
     assert.equal(valid.state.pendingAttack.power, 10000 + valid.amount);
 
-    const wrongClan = fixture({ side, cardId: sample.card.id, pattern: CLAN_PATTERN, vanguardClan: "Unrelated Clan" });
-    assert.equal(Reducer.discoverAutoTriggers(wrongClan.state, [wrongClan.event], Engine).queued.length, 0);
-    assert.equal(wrongClan.state.pendingAbility, null);
-    assert.equal(wrongClan.state.pendingAttack.power, 10000);
+    if (sample.ability.requiredLocation.includes("rear-guard") && !sample.ability.requiredLocation.includes("vanguard")) {
+      const wrongClan = fixture({ side, cardId: sample.card.id, pattern: CLAN_PATTERN, vanguardClan: "Unrelated Clan" });
+      assert.equal(Reducer.discoverAutoTriggers(wrongClan.state, [wrongClan.event], Engine).queued.length, 0);
+      assert.equal(wrongClan.state.pendingAbility, null);
+      assert.equal(wrongClan.state.pendingAttack.power, 10000);
+    }
   }
 });
 

@@ -56,7 +56,13 @@ test("all nine structured-condition Intercept shields are exact and only these r
   for (const card of catalog) for (const ability of Engine.parseCardAbilitiesCached(card)) if (ability.definition?.source?.patternId === PATTERN) family.push(ability);
   assert.equal(family.length, 9);
   assert.deepEqual(family.map(item => item.cardId).sort(), IDS.slice().sort());
-  for (const item of family) assert.equal(Reducer.supportsServerAbilityEffects(item), true, item.id);
+  for (const item of family) {
+    const trusted = Engine.getReviewedAbilityDefinitionsForCard(item.cardId).find(definition => definition.id === item.id);
+    assert.ok(trusted, `${item.id} is registered in the trusted production ability registry`);
+    assert.equal(trusted.source?.patternId, PATTERN, `${item.id} trusted registry pattern`);
+    assert.equal(trusted.printedText, item.printedText, `${item.id} trusted registry text`);
+    assert.equal(Reducer.supportsServerAbilityEffects(item), true, item.id);
+  }
   for (const ability of family) {
     assert.equal(ability.definition.effects[0].amount, 10000);
     const altered = structuredClone(ability); altered.definition.effects[0].amount = 5000;

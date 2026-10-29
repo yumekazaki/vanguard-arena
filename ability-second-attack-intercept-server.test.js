@@ -11,13 +11,13 @@ const PATTERN = "auto-gc-opponent-second-attack-shield-v1";
 const IDS = ["cfa-10188", "cfa-10444", "cfa-9685", "cfa-9687", "cfa-9688", "cfa-9689", "cfa-9690"];
 const catalog = loadCatalog();
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
+const TEXT = "AUTO: When this unit is put on GC, if your opponent’s attacking unit has attacked two or more times this turn, this unit gets shield +15000 until end of that battle. (Active if this battle is its second attack this turn or more)";
 const definition = id => { const value = catalog.find(card => String(card.id) === id); assert.ok(value, `catalog card ${id}`); return value; };
 const instance = (card, uid, playerId, extra = {}) => ({ uid, cardId: String(card.id), cardName: card.name, type: card.type || "Unit", grade: Number(card.grade), shield: Number(card.shield || 0), ownerPlayerId: playerId, controllerPlayerId: playerId, ...(card.clan ? { clan: card.clan, clans: card.clans || [card.clan] } : {}), ...extra });
 
 function fixture(cardId, side = "bot") {
   const card = definition(cardId), ability = Engine.parseCardAbilitiesCached(card).find(item => item.definition?.source?.patternId === PATTERN);
   assert.ok(ability, `${cardId} belongs to the second-attack Intercept family`);
-  Engine.registerAbilityDefinitions([ability.definition]);
   const ownerId = side === "human" ? "host" : "guest", opponentSide = side === "human" ? "bot" : "human";
   const opponentId = side === "human" ? "guest" : "host", authUid = side === "human" ? seats.hostAuthUid : seats.guestAuthUid;
   const source = instance(card, `${side}-second-attack-guard`, ownerId, { zone: "guardian", circle: "guardian" });
@@ -46,6 +46,13 @@ test("all seven second-attack Intercept shields preserve their exact count and b
   assert.equal(family.length, IDS.length);
   assert.deepEqual(family.map(item => item.cardId).sort(), IDS.slice().sort());
   for (const ability of family) {
+    assert.equal(ability.id, `${ability.cardId}:0`);
+    assert.equal(ability.printedText, TEXT, ability.cardId);
+    const trusted = Engine.getReviewedAbilityDefinitionsForCard(ability.cardId).filter(item => item.source?.patternId === PATTERN);
+    assert.equal(trusted.length, 1, `${ability.cardId} has exactly one production-trusted definition`);
+    assert.equal(trusted[0].id, ability.id);
+    assert.equal(trusted[0].printedText, TEXT, ability.cardId);
+    assert.equal(trusted[0].cardId, ability.cardId);
     assert.equal(ability.conditions[0].type, "opponent-attacking-unit-attacked-at-least");
     assert.equal(ability.conditions[0].count, 2);
     assert.equal(ability.definition.effects[0].amount, 15000);

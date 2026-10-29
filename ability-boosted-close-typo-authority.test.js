@@ -9,6 +9,9 @@ const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const IDS = ["cfa-13434", "cfa-13449", "cfa-13493", "cfa-13518", "cfa-13551"];
 const catalog = loadCatalog();
+const BATCH = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
+  .filter(ability => ability.definition?.source?.patternId === "auto-boosted-battle-close-source-to-soul-power-v1")
+  .map(ability => ({ cardId: card.id, abilityId: ability.id })));
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 
 function fixture(cardId = IDS[0], side = "human", { eventBooster = true } = {}) {
@@ -43,6 +46,37 @@ test("the five exact catalog typo records preserve printed text and the reviewed
     assert.equal(f.ability.trigger.eventType, "battle.close-step", id);
     assert.equal(f.ability.trigger.subject, "booster", id);
     assert.equal(Reducer.supportsServerAbilityEffects(f.ability), true, id);
+  }
+});
+
+test("all catalog abilities in the boosted battle-close batch have production definitions and exact legal data", () => {
+  assert.equal(BATCH.length, 27);
+  for (const entry of BATCH) {
+    const card = catalog.find(item => item.id === entry.cardId);
+    const ability = Engine.parseCardAbilitiesCached(card).find(item => item.id === entry.abilityId);
+    assert.ok(Engine.getReviewedAbilityDefinitionsForCard(entry.cardId).some(item => item.id === entry.abilityId), entry.abilityId);
+    assert.equal(Reducer.supportsServerAbilityEffects(ability), true, entry.abilityId);
+    assert.equal(ability.trigger.eventType, "battle.close-step", entry.abilityId);
+    assert.equal(ability.trigger.subject, "booster", entry.abilityId);
+    assert.deepEqual(ability.requiredLocation, ["rear-guard"], entry.abilityId);
+    assert.deepEqual(ability.costs, [{ type: "source-to-soul", count: 1 }], entry.abilityId);
+    assert.equal(ability.effects[0].amount, Number(ability.printedText.match(/power \+(\d+)/i)?.[1]), entry.abilityId);
+  }
+});
+
+test("every batch card resolves for its own host or joining-player controller", () => {
+  for (const { cardId } of BATCH) for (const side of ["human", "bot"]) {
+    const f = fixture(cardId, side);
+    assert.equal(Reducer.discoverAutoTriggers(f.state, [f.event], Engine).queued.length, 1, `${cardId}:${side}`);
+    assert.equal(f.state.pendingAbility.side, side, `${cardId}:${side}`);
+    const result = Reducer.applyAbilityDecision(f.state, {
+      actorAuthUid: side === "human" ? seats.hostAuthUid : seats.guestAuthUid,
+      actionId: `boost-close-batch-${cardId}-${side}`, expectedStateVersion: f.state.stateVersion,
+      payload: { type: "ability-response", accept: true, selection: { instanceUid: f.source.uid, abilityId: f.ability.id, targetUid: f.target.uid } }
+    }, seats, Engine);
+    assert.equal(result.ok, true, `${cardId}:${side}: ${result.reason}`);
+    assert.equal(f.state.players[side].soul.some(card => card.uid === f.source.uid), true, `${cardId}:${side}`);
+    assert.equal(f.target.turnPowerBoost, Number(f.ability.effects[0].amount), `${cardId}:${side}`);
   }
 });
 

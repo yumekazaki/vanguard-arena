@@ -70,7 +70,7 @@ test("host and joining player independently choose either exact target and resol
     const powerResult = respond(power, { choice: "vanguard-power", targetUid: power.ownVanguard.uid });
     assert.equal(powerResult.ok, true, powerResult.reason);
     assert.equal(power.ownVanguard.turnPowerBoost, 10000);
-    assert.equal(power.ownVanguard.turnPowerExpiry, side);
+    assert.equal(power.ownVanguard.turnPowerExpiry, power.ownVanguard.controllerPlayerId);
     assert.equal(power.opponentVanguard.turnPowerBoost || 0, 0);
 
     const critical = setup(side);

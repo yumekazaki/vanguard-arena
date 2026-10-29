@@ -64,7 +64,7 @@ test("each exact source resolves Soul Charge then its power for its own controll
     const owner = f.state.players[ownerSide], opponent = f.state.players[ownerSide === "human" ? "bot" : "human"];
     assert.equal(owner.soul[0].uid, topUid);
     assert.equal(f.source.turnPowerBoost, amount);
-    assert.equal(f.source.turnPowerExpiry, ownerSide);
+    assert.equal(f.source.turnPowerExpiry, f.source.controllerPlayerId);
     assert.deepEqual(result.events.map(item => item.type), ["card.moved", "characteristic.changed"]);
     assert.deepEqual(opponent.soul, []);
   }

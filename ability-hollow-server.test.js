@@ -38,7 +38,6 @@ function setup({ cardId = "cfa-3937", controllerSide = "bot" } = {}) {
   const sourceDefinition = card(cardId);
   const ability = Engine.parseCardAbilitiesCached(sourceDefinition).find(item => item.definition?.source?.patternId === FAMILY);
   assert.ok(ability);
-  Engine.registerAbilityDefinitions([ability.definition]);
   const controllerId = controllerSide === "bot" ? "guest" : "host";
   const source = unit(sourceDefinition, `${controllerId}-hollow-source`, controllerId, { circle: "rear-left", rested: false });
   const other = unit(card("cfa-3"), `${controllerId}-other-unit`, controllerId, { circle: "rear-right", hollowed: false });
@@ -87,6 +86,7 @@ test("exact 32-card Hollow family is restricted to source RC placement and a sou
   assert.equal(new Set(family.map(item => item.definition.id)).size, 32);
   assert.equal(new Set(family.map(item => item.ability.printedText)).size, 3);
   for (const { definition, ability } of family) {
+    assert.ok(Engine.getReviewedAbilityDefinitionsForCard(definition.id).some(item => item.id === ability.id), `${ability.id} is in the production registry`);
     assert.equal(ability.cardId, definition.id);
     assert.equal(ability.definition.effects.length, 1);
     assert.deepEqual(ability.definition.effects[0], { op: "set-hollowed", target: "source" });

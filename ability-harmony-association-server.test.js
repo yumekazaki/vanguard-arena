@@ -27,7 +27,7 @@ function setup({ ownerSide = "bot", subjectCircle = "rear-back-left", sourceCard
   const sourceDefinition = card(sourceCardId);
   const ability = Engine.parseCardAbilitiesCached(sourceDefinition).find(item => item.definition?.source?.patternId === "auto-harmony-same-column-association-v1");
   assert.ok(ability, `${sourceCardId} has a reviewed Harmony ability`);
-  Engine.registerAbilityDefinitions([ability.definition]);
+  assert.ok(Engine.getReviewedAbilityDefinitionsForCard(sourceDefinition.id).some(item => item.id === ability.id), `${ability.id} is trusted in production`);
   const sourceCircle = "rear-left";
   const source = instance(sourceDefinition, `${ownerSide}-harmony-source`, ownerPlayerId, sourceCircle);
   const subject = instance(card("cfa-3"), `${ownerSide}-placed-copy`, ownerPlayerId, subjectCircle);

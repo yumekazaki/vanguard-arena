@@ -27,7 +27,8 @@ function setup({ ownerSide = "bot", cardId = "cfa-2471", revealable = true, plac
   const sourceDefinition = card(cardId);
   const ability = Engine.parseCardAbilitiesCached(sourceDefinition).find(item => item.definition?.source?.patternId === FAMILY);
   assert.ok(ability, `${cardId} belongs to the reviewed family`);
-  Engine.registerAbilityDefinitions([ability.definition]);
+  assert.ok(Engine.getReviewedAbilityDefinitionsForCard(sourceDefinition.id).some(item => item.id === ability.id),
+    "the production registry, not a test-only registration, must trust this exact ability");
   const source = instance(sourceDefinition, `${ownerSide}-search-source`, ownerPlayerId, { circle: "rear-left", zone: "rear-guard" });
   const reveal = instance(revealable ? card("cfa-2480") : card("cfa-2"), `${ownerSide}-reveal`, ownerPlayerId);
   const discard = instance(card("cfa-2"), `${ownerSide}-discard`, ownerPlayerId);
