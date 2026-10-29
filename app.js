@@ -75,6 +75,32 @@
     try { return JSON.parse(localStorage.getItem(deckStorageKey()) || "[]"); } catch { return []; }
   }
   function writeSavedDecks(decks) { localStorage.setItem(deckStorageKey(), JSON.stringify(decks)); updateDeckCount(); if (account.user && !account.syncing) void persistCloudDecks(decks); }
+  // A browser preference, scoped to the current deck folder; saved deck data stays unchanged.
+  const restoredDefaultDeckScopes = new Set();
+  let defaultDeckStartupSnapshot = JSON.stringify(builder);
+  function defaultDeckStorageKey() { return `${deckStorageKey()}:defaultDeckId`; }
+  function savedDefaultDeck() {
+    const id = localStorage.getItem(defaultDeckStorageKey());
+    return id ? readSavedDecks().find(deck => String(deck.id) === id) || null : null;
+  }
+  function restoreDefaultDeck() {
+    const scope = defaultDeckStorageKey(), deck = savedDefaultDeck();
+    // Account decks may arrive later. Never replace work started while they were loading.
+    if (!deck || restoredDefaultDeckScopes.has(scope) || match || JSON.stringify(builder) !== defaultDeckStartupSnapshot) return;
+    builder = { id: deck.id, name: deck.name, cards: { ...deck.cards }, starterCardId: deck.starterCardId || "" };
+    restoredDefaultDeckScopes.add(scope);
+    defaultDeckStartupSnapshot = JSON.stringify(builder);
+    renderBuilder();
+  }
+  function makeDefaultDeck(id) {
+    const deck = readSavedDecks().find(item => String(item.id) === String(id));
+    if (!deck) return;
+    localStorage.setItem(defaultDeckStorageKey(), String(deck.id));
+    restoredDefaultDeckScopes.add(defaultDeckStorageKey());
+    builder = { id: deck.id, name: deck.name, cards: { ...deck.cards }, starterCardId: deck.starterCardId || "" };
+    renderBuilder(); renderSavedDecks();
+    toast(`“${deck.name}” is your default deck for the workshop and practice`);
+  }
   function updateDeckCount() { $("#deck-count").textContent = readSavedDecks().length; }
   function escapeHtml(value) { return String(value ?? "").replace(/[&<>\"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
   function accountMessage(message, isError = false) { const el = $("#account-message"); if (!el) return; el.textContent = message; el.classList.toggle("error", isError); }
@@ -128,7 +154,7 @@
         if (!current || Date.parse(deck.updatedAt || 0) > Date.parse(current.updatedAt || 0)) decks.set(String(deck.id), deck);
       });
       const merged = [...decks.values()].sort((a, b) => Date.parse(b.updatedAt || 0) - Date.parse(a.updatedAt || 0));
-      localStorage.setItem(deckStorageKey(), JSON.stringify(merged)); updateDeckCount(); renderSavedDecks();
+      localStorage.setItem(deckStorageKey(), JSON.stringify(merged)); updateDeckCount(); restoreDefaultDeck(); renderSavedDecks();
       if (merged.length) {
         const result = await account.client.from("player_decks").upsert(cloudDeckRows(merged, userId), { onConflict: "user_id,deck_id" });
         if (result.error) throw result.error;
@@ -177,14 +203,14 @@
       account.client.auth.onAuthStateChange((event, session) => {
         const previousUserId = account.user?.id;
         account.user = session?.user || null; if (previousUserId !== account.user?.id) account.profile = null; account.recovery = event === "PASSWORD_RECOVERY";
-        refreshAccountUI(); updateDeckCount(); renderSavedDecks();
+        refreshAccountUI(); updateDeckCount(); restoreDefaultDeck(); renderSavedDecks();
         if (account.user && (event === "SIGNED_IN" || event === "INITIAL_SESSION")) setTimeout(() => { void syncCloudDecks(); void loadPlayerProfile(); }, 0);
         if (account.recovery) { accountMessage("Enter a new password, then choose Save new password."); setTimeout(openAccountDialog, 0); }
         if (!account.user) $("#account-sync-status").textContent = "Your account is signed out. Local decks remain in this browser.";
       });
       account.client.auth.getSession().then(({ data, error }) => {
         if (error) throw error;
-        account.user = data.session?.user || null; refreshAccountUI(); updateDeckCount(); renderSavedDecks();
+        account.user = data.session?.user || null; refreshAccountUI(); updateDeckCount(); restoreDefaultDeck(); renderSavedDecks();
         if (account.user) { void syncCloudDecks(); void loadPlayerProfile(); }
       }).catch((error) => accountMessage(`Couldn't restore your account session: ${error.message}`, true));
     } catch (error) { accountMessage(`Account setup error: ${error.message}`, true); }
@@ -399,10 +425,10 @@
     $("#load-deck-dialog").showModal();
   }
   function renderSavedDecks() {
-    const decks = readSavedDecks(); $("#saved-deck-subtitle").textContent = decks.length ? `${decks.length} deck${decks.length === 1 ? "" : "s"}` : "No decks yet";
+    const decks = readSavedDecks(), defaultId = savedDefaultDeck()?.id; $("#saved-deck-subtitle").textContent = decks.length ? `${decks.length} deck${decks.length === 1 ? "" : "s"}` : "No decks yet";
     $("#saved-deck-eyebrow").textContent = account.user ? "ONLINE ACCOUNT DECK FOLDER" : "DECK FOLDER · THIS BROWSER";
     $("#deck-folder-help").textContent = account.user ? "This folder syncs to your account. Your saved decks load here whenever you sign in." : "Sign in to sync this folder across devices. Save decks here, then they load whenever you sign in.";
-    $("#saved-decks").innerHTML = decks.length ? decks.map((d) => { const s = deckSummary(d); const preview = Object.keys(d.cards || {}).slice(0, 5).map((id) => cardMap.get(id)).filter(Boolean); return `<article class="saved-deck-card"><h3>${escapeHtml(d.name)}</h3><div class="saved-deck-meta">${deckCount(d)} cards · G${s.counts.join(" / ")} · ${escapeHtml(new Date(d.updatedAt || Date.now()).toLocaleDateString())}</div><div class="saved-deck-preview">${preview.map((c) => `<button class="saved-deck-preview-card" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom ${escapeHtml(c.name)}">${c.image ? `<img src="${escapeHtml(c.image)}" alt="" onerror="this.remove()"/>` : escapeHtml(c.glyph)}</button>`).join("")}</div><div class="saved-deck-actions"><button class="button button-primary" data-load-deck="${escapeHtml(d.id)}">Open</button><button class="button" data-duplicate-deck="${escapeHtml(d.id)}">Duplicate</button><button class="button" data-export-saved="${escapeHtml(d.id)}">Export</button><button class="button" data-delete-deck="${escapeHtml(d.id)}" title="Delete">×</button></div></article>`; }).join("") : `<div class="empty-saved">Saved decks appear here. Build a deck and choose Save deck.</div>`;
+    $("#saved-decks").innerHTML = decks.length ? decks.map((d) => { const s = deckSummary(d); const preview = Object.keys(d.cards || {}).slice(0, 5).map((id) => cardMap.get(id)).filter(Boolean); return `<article class="saved-deck-card${d.id === defaultId ? " is-default-deck" : ""}"><h3>${escapeHtml(d.name)}</h3><div class="saved-deck-meta">${deckCount(d)} cards · G${s.counts.join(" / ")} · ${escapeHtml(new Date(d.updatedAt || Date.now()).toLocaleDateString())}</div><div class="saved-deck-preview">${preview.map((c) => `<button class="saved-deck-preview-card" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom ${escapeHtml(c.name)}">${c.image ? `<img src="${escapeHtml(c.image)}" alt="" onerror="this.remove()"/>` : escapeHtml(c.glyph)}</button>`).join("")}</div><div class="saved-deck-actions"><button class="button button-primary" data-load-deck="${escapeHtml(d.id)}">Open</button><button class="button" data-duplicate-deck="${escapeHtml(d.id)}">Duplicate</button><button class="button" data-export-saved="${escapeHtml(d.id)}">Export</button><button class="button" data-delete-deck="${escapeHtml(d.id)}" title="Delete">×</button></div><button class="button saved-deck-default" type="button" data-default-deck="${escapeHtml(d.id)}" aria-pressed="${d.id === defaultId}">${d.id === defaultId ? "✓ Default deck" : "Make default deck"}</button></article>`; }).join("") : `<div class="empty-saved">Saved decks appear here. Build a deck and choose Save deck.</div>`;
     updateDeckCount();
   }
   function renderLibrary() {
@@ -2469,7 +2495,7 @@ html+=renderGuardianReplacementChoice(x);box.innerHTML=html;if(namedCallStep&&x.
   $("#builder-prev").addEventListener("click", () => { builderPage = Math.max(0, builderPage - 1); renderBuilderCards(); }); $("#builder-next").addEventListener("click", () => { builderPage += 1; renderBuilderCards(); });
   $("#builder-card-grid").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const node = e.target.closest("[data-card-id]"); if (!node) return; const id=node.dataset.cardId,card=cardMap.get(id);if(!card)return;const key=deckNameKey(card,id),sameNameCount=Object.entries(builder.cards||{}).reduce((sum,[otherId,qty])=>{const other=cardMap.get(otherId);return other&&isGDeckCard(other)===isGDeckCard(card)&&deckNameKey(other,otherId)===key?sum+Number(qty||0):sum},0);if(sameNameCount>=deckCopyLimitForCard(card,builder))return;builder.cards[id]=(builder.cards[id]||0)+1;renderBuilder(); });
   $("#deck-list").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const q = e.target.closest("[data-qty]"); const r = e.target.closest("[data-remove]"); if (q) { const id=q.dataset.id,card=cardMap.get(id);if(!card)return;const next=Math.max(0,(builder.cards[id]||0)+Number(q.dataset.qty));if(Number(q.dataset.qty)>0){const key=deckNameKey(card,id),sameNameCount=Object.entries(builder.cards||{}).reduce((sum,[otherId,qty])=>{const other=cardMap.get(otherId);return other&&isGDeckCard(other)===isGDeckCard(card)&&deckNameKey(other,otherId)===key?sum+Number(qty||0):sum},0);if(sameNameCount>=deckCopyLimitForCard(card,builder))return;}builder.cards[id]=next;if(!builder.cards[id])delete builder.cards[id];renderBuilder(); } if (r) { delete builder.cards[r.dataset.remove]; renderBuilder(); } });
-  $("#saved-decks").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const load = e.target.closest("[data-load-deck]"); const duplicate = e.target.closest("[data-duplicate-deck]"); const remove = e.target.closest("[data-delete-deck]"); const exp = e.target.closest("[data-export-saved]"); const decks = readSavedDecks(); if (load) { const d = decks.find((x) => x.id === load.dataset.loadDeck); if (d) loadDeck(d); } if (duplicate) { const d = decks.find((x) => x.id === duplicate.dataset.duplicateDeck); if (d) { const copy = { ...d, id: crypto.randomUUID?.() || String(Date.now()), name: `${d.name} Copy`, updatedAt: new Date().toISOString() }; decks.unshift(copy); writeSavedDecks(decks); renderSavedDecks(); toast("Deck duplicated"); } } if (remove) { const d = decks.find((x) => x.id === remove.dataset.deleteDeck); if (d && confirm(`Delete “${d.name}” from this browser?`)) { writeSavedDecks(decks.filter((x) => x.id !== d.id)); void deleteCloudDeck(d.id); renderSavedDecks(); } } if (exp) { const d = decks.find((x) => x.id === exp.dataset.exportSaved); if (d) exportDeck(d, `${d.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`); } });
+  $("#saved-decks").addEventListener("click", (e) => { const preferred = e.target.closest("[data-default-deck]"); if (preferred) { makeDefaultDeck(preferred.dataset.defaultDeck); return; } const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const load = e.target.closest("[data-load-deck]"); const duplicate = e.target.closest("[data-duplicate-deck]"); const remove = e.target.closest("[data-delete-deck]"); const exp = e.target.closest("[data-export-saved]"); const decks = readSavedDecks(); if (load) { const d = decks.find((x) => x.id === load.dataset.loadDeck); if (d) loadDeck(d); } if (duplicate) { const d = decks.find((x) => x.id === duplicate.dataset.duplicateDeck); if (d) { const copy = { ...d, id: crypto.randomUUID?.() || String(Date.now()), name: `${d.name} Copy`, updatedAt: new Date().toISOString() }; decks.unshift(copy); writeSavedDecks(decks); renderSavedDecks(); toast("Deck duplicated"); } } if (remove) { const d = decks.find((x) => x.id === remove.dataset.deleteDeck); if (d && confirm(`Delete “${d.name}” from this browser?`)) { if (String(savedDefaultDeck()?.id) === String(d.id)) localStorage.removeItem(defaultDeckStorageKey()); writeSavedDecks(decks.filter((x) => x.id !== d.id)); void deleteCloudDeck(d.id); renderSavedDecks(); } } if (exp) { const d = decks.find((x) => x.id === exp.dataset.exportSaved); if (d) exportDeck(d, `${d.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`); } });
   $("#export-deck").addEventListener("click", () => exportDeck(builder, `${builder.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`));
   $("#import-deck").addEventListener("click", () => $("#deck-file").click()); $("#deck-file").addEventListener("change", (e) => { if (e.target.files[0]) importDeckFile(e.target.files[0]); e.target.value = ""; });
   $("#library-search").addEventListener("input", () => { libraryPage = 0; renderLibrary(); }); $("#library-grade").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-clan").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-nation").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-prev").addEventListener("click", () => { libraryPage = Math.max(0, libraryPage - 1); renderLibrary(); }); $("#library-next").addEventListener("click", () => { libraryPage += 1; renderLibrary(); }); $("#library-grid").addEventListener("click", (e) => { const node = e.target.closest("[data-card-detail]"); if (node) showCardDetails(node.dataset.cardDetail); });
@@ -2484,7 +2510,7 @@ html+=renderGuardianReplacementChoice(x);box.innerHTML=html;if(namedCallStep&&x.
   $$("[data-first-choice]").forEach((button) => button.addEventListener("click", () => chooseOnlineFirstPlayer(button.dataset.firstChoice)));
   $("#online-start-dialog").addEventListener("cancel", (event) => event.preventDefault());
   $("#card-dialog").addEventListener("click", (e) => { if (e.target === $("#card-dialog")) $("#card-dialog").close(); });
-  populateClanFilters(); updateDeckCount(); renderBuilder(); renderLibrary(); renderArtGallery(); renderSavedDecks();
+  populateClanFilters(); updateDeckCount(); restoreDefaultDeck(); renderBuilder(); renderLibrary(); renderArtGallery(); renderSavedDecks();
   initializeAccounts();
   const initial = ["play", "decks", "cards"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "play"; showView(initial);
   if (!readSavedDecks().length) { $("#match-layout").classList.add("hidden"); $("#match-empty").classList.remove("hidden"); }
