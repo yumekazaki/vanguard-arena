@@ -2626,7 +2626,9 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     button?.setAttribute("aria-pressed", String(enabled));
     if (button) button.textContent = enabled ? "Mobile mode: On" : "Mobile mode";
   }
-  setMobileMode(localStorage.getItem("vanguardArenaMobileMode") === "on");
+  let mobileModeSaved = false;
+  try { mobileModeSaved = localStorage.getItem("vanguardArenaMobileMode") === "on"; } catch {}
+  setMobileMode(mobileModeSaved);
   $("#mobile-mode-button").addEventListener("click", () => setMobileMode(!document.body.classList.contains("mobile-mode")));
   $("#account-button").addEventListener("click", openAccountDialog); $("#close-account-dialog").addEventListener("click", () => $("#account-dialog").close());
   $("#account-signup").addEventListener("click", accountSignUp); $("#account-signin").addEventListener("click", accountSignIn); $("#account-signout").addEventListener("click", accountSignOut); $("#account-reset").addEventListener("click", resetAccountPassword); $("#account-update-password").addEventListener("click", updateAccountPassword); $("#account-import-local").addEventListener("click", importLocalDecks);
