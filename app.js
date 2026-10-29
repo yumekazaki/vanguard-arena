@@ -1020,13 +1020,17 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function hasIntercept(card) { return /\bIntercept\b/i.test(String(card?.text || "")) || /Intercept/i.test(String(card?.skill || "")) || cardAbilities(card).some(ability=>ability.definition?.keywords?.includes("intercept")); }
   function eligibleInterceptors() {
     const attack = match?.pendingAttack;
-    if (!attack || attack.defenderSide !== "human") return [];
+    if (!attack || attack.defenderSide !== "human" || attack.defenderDone) return [];
     const player = match.players.human;
-    return player.rear.map((unit, index) => ({ unit, index })).filter(({ unit, index }) => unit && index !== attack.targetRearIndex && (index < 2 || index >= 5) && hasIntercept(cardMap.get(unit.cardId))).map(({ unit }) => unit);
+    return (player.rear || []).map((unit, index) => ({ unit, index })).filter(({ unit, index }) => {
+      if (!unit || index === attack.targetRearIndex || !(index < 2 || index >= 5)) return false;
+      const card = cardMap.get(unit.cardId);
+      return Number(card?.grade ?? -1) >= 2 || hasIntercept(card);
+    }).map(({ unit }) => unit);
   }
     function openInterceptDialog() {
     const choices = eligibleInterceptors();
-    if (!choices.length) { toast("Only a front-row Rear-Guard with the Intercept ability that is not being attacked can intercept."); return; }
+    if (!choices.length) { toast("Only a front-row Grade 2+ Rear-Guard (or a unit with Intercept) that is not being attacked can intercept."); return; }
     $("#intercept-card-list").innerHTML = choices.map((unit) => { const c = cardMap.get(unit.cardId); return c ? `<button class="zone-view-card" type="button" data-intercept-uid="${escapeHtml(unit.uid)}">${cardImage(c)}<b>Intercept · ${escapeHtml(c.name)}</b><small>${effectiveShieldValue(unit,"human").toLocaleString()} shield</small></button>` : ""; }).join("");
     $("#intercept-dialog").showModal();
   }
@@ -1037,7 +1041,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (index < 0) return;
     player.rear[index] = null; player.guardCircle ||= []; match.pendingAttack.guardCards ||= [];
     player.guardCircle.push(unit); match.pendingAttack.guardCards.push(unit); match.pendingAttack.targetPower += shield;
-    addLog(`${player.name} intercepted with ${cardMap.get(unit.cardId)?.name || "a Grade 2 Rear-Guard"} (+${shield.toLocaleString()} shield).`);queueAbilityPrompts("place","human",unit.uid,{sourceZone:"guardian",previousLocation:rearZones[index],zone:"guardian",currentLocation:"guardian",subjectInstance:unit,timingWindow:"guard-placement",battleId:match.pendingAttack?.battleId||null,targetUid:match.pendingAttack?.targetUid||null,targetZone:match.pendingAttack?.targetZone||null});
+    addLog(`${player.name} intercepted with ${cardMap.get(unit.cardId)?.name || "a Grade 2 Rear-Guard"} (+${shield.toLocaleString()} shield).`);queueAbilityPrompts("place","human",unit.uid,{sourceZone:"guardian",previousLocation:index<5?["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right"][index]:"accel-"+(index-4),zone:"guardian",currentLocation:"guardian",subjectInstance:unit,timingWindow:"guard-placement",battleId:match.pendingAttack?.battleId||null,targetUid:match.pendingAttack?.targetUid||null,targetZone:match.pendingAttack?.targetZone||null});
     match.selected = null; renderMatch();
   }
   function moveRearCardToZone(uid, zone) {
