@@ -1537,7 +1537,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }
   function confirmAttackFinished() {
     const attack = match?.pendingAttack;
-    if (!attack || attack.attackerSide !== "human" || !attack.defenderDone || attack.driveCountPrompt || Number(attack.driveChecksRemaining || 0) > 0) {
+    if (!attack || (online.role && attack.attackerSide !== "human") || !attack.defenderDone || attack.driveCountPrompt || Number(attack.driveChecksRemaining || 0) > 0) {
       toast("Wait until the defender is done guarding before finishing this attack."); return;
     }
     finishAttack(Boolean(attack.perfectGuard || !attackHits(attack)));
