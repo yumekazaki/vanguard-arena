@@ -1196,15 +1196,26 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     buttons.innerHTML = actions.map(item => '<button class="button button-primary" type="button" data-battle-action="' + item.id + '">' + item.label + '</button>').join("");
     panel.hidden = false;
   }
-  function dismissAttackArrow(attack = match?.pendingAttack) {
-    const layer = $("#attack-arrow-layer");
-    if (!layer || !attack?.targetUid) return;
+  function hideAttackArrow(layer = document.getElementById("attack-arrow-layer")) {
+    if (!layer) return;
     layer.hidden = true;
+    layer.style.display = "none";
+    layer.style.visibility = "hidden";
+    layer.dataset.attackId = "";
+  }
+  function attackArrowIsSuppressed(attack) {
+    return !attack?.targetUid || attack.finishing || Boolean(
+      match?.pendingBattleEnd || match?.pendingHitResolution ||
+      match?.pendingDamageQueue?.length || match?.pendingTrigger
+    );
+  }
+  function dismissAttackArrow() {
+    hideAttackArrow();
   }
   function renderAttackArrow() {
     const attack = match?.pendingAttack;
     let layer = document.getElementById("attack-arrow-layer");
-    if (!attack?.targetUid) { if (layer) { layer.hidden = true; layer.dataset.attackId = ""; } return; }
+    if (attackArrowIsSuppressed(attack)) { hideAttackArrow(layer); return; }
     if (!layer) {
       layer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       layer.id = "attack-arrow-layer";
@@ -1214,13 +1225,13 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     } else if (layer.parentElement !== document.body) document.body.appendChild(layer);
     const attackId = String(attack.battleId || (attack.attackerUid + ":" + attack.targetUid));
     const draw = () => {
-      if (match?.pendingAttack !== attack || !attack.targetUid) { layer.hidden = true; return; }
+      if (match?.pendingAttack !== attack || attackArrowIsSuppressed(attack)) { hideAttackArrow(layer); return; }
       const cards = Array.from(document.querySelectorAll(".field-card[data-field-uid]"));
       const source = cards.find(card => card.dataset.fieldUid === String(attack.attackerUid));
       const target = cards.find(card => card.dataset.fieldUid === String(attack.targetUid));
-      if (!source || !target) { layer.hidden = true; return; }
+      if (!source || !target) { hideAttackArrow(layer); return; }
       const from = source.getBoundingClientRect(), to = target.getBoundingClientRect();
-      if (!from.width || !from.height || !to.width || !to.height) { layer.hidden = true; return; }
+      if (!from.width || !from.height || !to.width || !to.height) { hideAttackArrow(layer); return; }
       const width = Math.max(1, window.innerWidth), height = Math.max(1, window.innerHeight);
       layer.setAttribute("viewBox", "0 0 " + width + " " + height);
       layer.setAttribute("preserveAspectRatio", "none");
