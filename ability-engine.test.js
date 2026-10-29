@@ -1279,8 +1279,8 @@ test("supports the real rode-upon draw AUTO only for the exact ridden starter an
   assert.equal(canResolveAbilitySource({ kind: "ACT" }, pending, "p1", starter, false), false);
   assert.equal(canResolveAbilitySource(ability, { triggerControllerPlayerId: "p1", eventContext: {} }, "p1", starter, false), false);
   const app = fs.readFileSync("app.js", "utf8");
-  assert.match(app, /eventName==="ride"\?"vanguard"/);
-  assert.match(app, /subjectZone:eventName==="ride"\?structuredEvent\.previousLocation/);
+  assert.match(app, /createRideGameEvent\(match,/);
+  assert.match(app, /subjectZone:eventName==="ride"\?structuredEvent\.targetLocation/);
   assert.match(app, /findMatchInstance\(x\.instance\?\.uid\)/);
 });
 test("compiles common named-Vanguard attack boosts with exact attacker and card-name requirements", () => {
@@ -2622,6 +2622,27 @@ test("ride Quick Shield effect draws first and only creates its token at the req
   const low=makeContext(0),lowResult=resolveEffectProgram(def.effects,EFFECT_HANDLERS,low);assert.equal(lowResult.ok,true);assert.deepEqual(lowResult.results,[1,0]);assert.equal(low.player.hand.length,1);assert.equal(low.player.hand[0].cardId,"normal");
   const eligible=makeContext(1),highResult=resolveEffectProgram(def.effects,EFFECT_HANDLERS,eligible);assert.equal(highResult.ok,true);assert.deepEqual(highResult.results,[1,1]);assert.equal(eligible.player.hand.length,2);assert.equal(eligible.player.hand[1].cardId,"token-quick-shield");assert.equal(eligible.player.hand[1].ownerPlayerId,"p1");assert.equal(eligible.player.hand[1].isToken,true);
   const unknown=makeContext(1);unknown.cardDefinitionForId=()=>null;assert.equal(resolveEffectProgram(def.effects,EFFECT_HANDLERS,unknown).ok,false);assert.equal(unknown.player.deck.length,1);assert.equal(unknown.player.hand.length,0);
+});
+
+test("normal ride events identify the rider and exact previous Vanguard for rode-upon AUTO abilities",()=>{
+  const ability=parseCardAbilities({id:"cfa-5673",text:"AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand."})[0];
+  const rider={uid:"rider-1",cardId:"rider-card",cardName:"Rider",grade:1,ownerPlayerId:"p1",controllerPlayerId:"p1"};
+  const ridden={uid:"old-vanguard-1",cardId:"cfa-5673",cardName:"Lizard Runner, Undeux",grade:0,ownerPlayerId:"p1",controllerPlayerId:"p1"};
+  const state={matchId:"ride-event-test",eventSequence:0,players:{human:{playerId:"p1",vanguard:rider,soul:[ridden]}}};
+  const event=VanguardAbilityEngine.createRideGameEvent(state,{rider,ridden,actingPlayerId:"p1"});
+  assert.equal(event.type,"card.ridden");
+  assert.equal(event.sourceCardInstanceId,rider.uid);
+  assert.equal(event.subjectCardInstanceId,rider.uid);
+  assert.deepEqual(event.targetCardInstanceIds,[ridden.uid]);
+  assert.equal(event.previousLocation,"hand");
+  assert.equal(event.currentLocation,"vanguard");
+  assert.equal(event.targetPreviousLocation,"vanguard");
+  assert.equal(event.targetCurrentLocation,"soul");
+  assert.equal(event.targetLocation,"vanguard");
+  assert.equal(event.phase,"ride");
+  assert.equal(event.timingWindow,"normal-ride");
+  assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,ridden.uid,"vanguard",event.targetLocation,"p1"),true);
+  assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,"another-copy","vanguard",event.targetLocation,"p1"),false);
 });
 
 

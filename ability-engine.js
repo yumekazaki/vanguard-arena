@@ -2889,6 +2889,38 @@
     });
   }
 
+  function createRideGameEvent(state, { rider, ridden, actingPlayerId, turnPlayerId, previousLocation = "hand", timingWindow = "normal-ride", eventId } = {}) {
+    if (!rider?.uid || !ridden?.uid || !actingPlayerId) throw new TypeError("Ride events require the exact rider, ridden Vanguard, and acting player.");
+    return createGameEvent(state, {
+      eventId,
+      type: "card.ridden",
+      actingPlayerId,
+      turnPlayerId: turnPlayerId || actingPlayerId,
+      sourceCardInstanceId: rider.uid,
+      sourceCardName: rider.cardName || rider.name || null,
+      sourceCardGrade: rider.grade,
+      sourceOwnerPlayerId: rider.ownerPlayerId || actingPlayerId,
+      sourceControllerPlayerId: rider.controllerPlayerId || actingPlayerId,
+      sourceCardClan: rider.clan || null,
+      sourceCardClans: rider.clans || [],
+      subjectCardInstanceId: rider.uid,
+      subjectOwnerPlayerId: rider.ownerPlayerId || actingPlayerId,
+      subjectControllerPlayerId: rider.controllerPlayerId || actingPlayerId,
+      subjectCardName: rider.cardName || rider.name || null,
+      subjectCardGrade: rider.grade,
+      subjectCardClan: rider.clan || null,
+      subjectCardClans: rider.clans || [],
+      targetCardInstanceIds: [ridden.uid],
+      targetLocation: "vanguard",
+      targetPreviousLocation: "vanguard",
+      targetCurrentLocation: "soul",
+      previousLocation,
+      currentLocation: "vanguard",
+      phase: "ride",
+      timingWindow
+    });
+  }
+
   /** Return false for event IDs already consumed by this match. */
   function attackCountKey(state,playerId,cardInstanceId){if(!state||!playerId||!cardInstanceId)throw new TypeError("Attack counts require match, controller, and card instance identities.");return `${Number(state.turn||0)}:${playerId}:${cardInstanceId}`}
   function recordAttackCount(state,playerId,cardInstanceId){const key=attackCountKey(state,playerId,cardInstanceId),counts=state.attacksByUnitTurn||=(Object.create(null));counts[key]=Number(counts[key]||0)+1;const playerKey=`${Number(state.turn||0)}:${playerId}`,playerCounts=state.attacksByPlayerTurn||=(Object.create(null));playerCounts[playerKey]=Number(playerCounts[playerKey]||0)+1;return counts[key]}
@@ -3216,5 +3248,5 @@
     if (subject === "any") return true;
     return false;
   }
-  return Object.freeze({ createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, countGenerationBreakUnits, parseCardAbilities, parseCardAbilitiesCached, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, canPayAbilityCosts, evaluateAutoCostPayment, registerAbilityDefinitions, getReviewedAbilityDefinitionsForCard, registerCardAbilityKeywordIndex, getCardAbilityKeywords, compileVanguardTopFiveKeywordSearchDefinition, compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition, compileActRcSoulBlastThreeDrawDefinition, compileAutoRcPlacementChooseFriendlyPowerDefinition, compileRearGuardVanguardAttackSacrificeDrawPowerDefinition, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, evaluateContinuousGrade, expireTurnModifiers, compileAutoTrigger, isManuallyActivatable, autoAbilityReadiness, canActivateManualAbility, abilityUsageKey, validateAbilityChoices, canDeclineAbility, matchesTargetFilter, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, claimGameEvent, claimAbilityTrigger, validateRemoteRequest, validateRemoteActionRequest, canResolveAbilitySource, payAbilityCosts, validateAbilityDecision, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, claimRemoteRequest, eventSubjectMatches, recordAttackCount, getAttackCount, getPlayerAttackCount, retireHollowedUnitsAtTurnEnd, retireChargingUnitsAtBattleEnd, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance, prunePendingAbilitiesWithConsumedUsage });
+  return Object.freeze({ createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, countGenerationBreakUnits, parseCardAbilities, parseCardAbilitiesCached, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, canPayAbilityCosts, evaluateAutoCostPayment, registerAbilityDefinitions, getReviewedAbilityDefinitionsForCard, registerCardAbilityKeywordIndex, getCardAbilityKeywords, compileVanguardTopFiveKeywordSearchDefinition, compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition, compileActRcSoulBlastThreeDrawDefinition, compileAutoRcPlacementChooseFriendlyPowerDefinition, compileRearGuardVanguardAttackSacrificeDrawPowerDefinition, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, evaluateContinuousGrade, expireTurnModifiers, compileAutoTrigger, isManuallyActivatable, autoAbilityReadiness, canActivateManualAbility, abilityUsageKey, validateAbilityChoices, canDeclineAbility, matchesTargetFilter, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, createRideGameEvent, claimGameEvent, claimAbilityTrigger, validateRemoteRequest, validateRemoteActionRequest, canResolveAbilitySource, payAbilityCosts, validateAbilityDecision, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, claimRemoteRequest, eventSubjectMatches, recordAttackCount, getAttackCount, getPlayerAttackCount, retireHollowedUnitsAtTurnEnd, retireChargingUnitsAtBattleEnd, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance, prunePendingAbilitiesWithConsumedUsage });
 });
