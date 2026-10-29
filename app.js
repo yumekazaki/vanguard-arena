@@ -1198,7 +1198,6 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function dismissAttackArrow(attack = match?.pendingAttack) {
     const layer = $("#attack-arrow-layer");
     if (!layer || !attack?.targetUid) return;
-    layer.dataset.dismissedAttackId = String(attack.battleId || (attack.attackerUid + ":" + attack.targetUid));
     layer.hidden = true;
   }
   function renderAttackArrow() {
@@ -1212,7 +1211,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     const x1 = from.left + from.width / 2 - bounds.left, y1 = from.top + from.height / 2 - bounds.top;
     const x2 = to.left + to.width / 2 - bounds.left, y2 = to.top + to.height / 2 - bounds.top;
     const id = String(attack.battleId || (attack.attackerUid + ":" + attack.targetUid));
-    if (layer.dataset.dismissedAttackId === id) { layer.hidden = true; return; }
+
     layer.setAttribute("viewBox", "0 0 " + Math.max(1, table.clientWidth) + " " + Math.max(1, table.clientHeight));
     const path = layer.querySelector(".attack-arrow-path");
     if (layer.dataset.attackId !== id || !path) {
