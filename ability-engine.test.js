@@ -603,6 +603,8 @@ test("matches ability subjects to exact source, event, booster, or boosted-unit 
   assert.equal(eventSubjectMatches(event, "booster-copy", "source"), true);
   assert.equal(eventSubjectMatches(event, "attacker-copy", "boosted-unit"), true);
   assert.equal(eventSubjectMatches(event, "booster-copy", "event-subject"), true);
+  assert.equal(eventSubjectMatches({ type: "card.ridden", targetCardInstanceIds: ["ridden-copy"] }, "ridden-copy", "event-target"), true);
+  assert.equal(eventSubjectMatches({ type: "card.ridden", targetCardInstanceIds: ["ridden-copy"] }, "other-ridden-copy", "event-target"), false);
   assert.equal(eventSubjectMatches(event, "same-name-other-copy", "source"), false);
   assert.equal(eventSubjectMatches(event, "same-name-other-copy", "booster"), false);
 });
