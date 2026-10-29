@@ -849,7 +849,7 @@
     const noGuard = $("#no-guard"); if (noGuard) { noGuard.classList.toggle("hidden", !defending); noGuard.textContent = (attack?.guardCards?.length || 0) ? "Done guarding" : "No guard"; noGuard.disabled = !canAct || !canDefend; }
     const finishAttackButton = $("#finish-attack");
     if (finishAttackButton) {
-      finishAttackButton.hidden = !attack || attack.attackerSide !== "human";
+      finishAttackButton.hidden = !attack || attack.attackerSide !== "human" || attack.finishing || Boolean(match.pendingBattleEnd || match.pendingHitResolution || (match.pendingDamageQueue || []).length);
       finishAttackButton.disabled = !canAct || !attack?.defenderDone || Number(attack?.driveChecksRemaining || 0) > 0;
     }
     if (online.role === "watcher") $$(".action-buttons button").forEach((button) => { button.disabled = true; });
