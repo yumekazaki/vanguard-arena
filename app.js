@@ -624,7 +624,7 @@
         }
         const zoneElement = $(`.field-zone[data-side="${side}"][data-zone="${zone}"]`); const accelRow = $(`#${side}-accel-row`); if (zone.startsWith("accel-") && zoneElement && accelRow && zoneElement.parentElement !== accelRow) accelRow.appendChild(zoneElement); renderZone(side, zone, player.rear[index]);
       });
-      const accelRow = $(`#${side}-accel-row`); if (accelRow) { accelRow.style.display = player.accelZones ? "grid" : "none"; accelRow.style.gridTemplateColumns = `repeat(${3 + player.accelZones}, minmax(0, 1fr))`; accelRow.style.width = `calc(68% * ${(3 + player.accelZones) / 3})`; accelRow.style.left = `calc(50% - (68% * ${(3 + player.accelZones) / 3}) / 2)`; const leftAccelCount = Math.ceil(player.accelZones / 2); for (let i = 1; i <= player.accelZones; i++) { const column = i % 2 ? leftAccelCount - Math.floor((i - 1) / 2) : leftAccelCount + 4 + Math.floor((i - 1) / 2); const circle = $(`.field-zone[data-side="${side}"][data-zone="accel-${i}"]`); if (circle) { circle.style.gridColumn = String(column); circle.style.transform = i % 2 ? "translateX(-50%)" : "translateX(50%)"; } } }
+      const accelRow = $(`#${side}-accel-row`); if (accelRow) { accelRow.style.display = player.accelZones ? "grid" : "none"; accelRow.style.gridTemplateColumns = `repeat(${3 + player.accelZones}, minmax(0, 1fr))`; accelRow.style.width = "96%"; accelRow.style.left = "2%"; const leftAccelCount = Math.ceil(player.accelZones / 2); for (let i = 1; i <= player.accelZones; i++) { const column = i % 2 ? leftAccelCount - Math.floor((i - 1) / 2) : leftAccelCount + 4 + Math.floor((i - 1) / 2); const circle = $(`.field-zone[data-side="${side}"][data-zone="accel-${i}"]`); if (circle) { circle.style.gridColumn = String(column); circle.style.transform = "none"; } } }
     });
             $("#soul-pips").innerHTML = you.soul.slice(0, 7).map(() => `<span class="soul-pip"></span>`).join("");
     $("#hand-count").textContent = `${you.hand.length} card${you.hand.length === 1 ? "" : "s"}`;
@@ -1124,7 +1124,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       defender.rear.forEach((unit, index) => {
         if (!unit) return;
         const zone = index === 0 ? "rear-left" : index === 1 ? "rear-right" : index >= 5 ? `accel-${index - 4}` : "";
-        if (zone) choices.push({ value: `target:${zone}:${unit.uid}`, label: `Front Rear-Guard · ${cardMap.get(unit.cardId)?.name || "Unit"}` });
+        if (zone) { const circleLabel = zone.startsWith("accel-") ? `Accel Circle ${zone.slice(6)}` : "Front Rear-Guard"; choices.push({ value: `target:${zone}:${unit.uid}`, label: `${circleLabel} · ${cardMap.get(unit.cardId)?.name || "Unit"}` }); }
       });
     }
     $("#attack-choice-buttons").innerHTML = choices.map((choice) => `<button class="button button-primary" type="button" data-attack-choice="${escapeHtml(choice.value)}">${escapeHtml(choice.label)}</button>`).join("");
