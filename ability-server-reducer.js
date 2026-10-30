@@ -1428,7 +1428,7 @@
   }
   function isLegalDropTriggerUnit(instance,playerId){
     const definition=serverCardDefinition(instance),trigger=String(definition?.trigger||instance?.triggerType||instance?.trigger||"").trim().toLowerCase().replace(/\s+trigger$/i,"");
-    return Boolean(definition&&(!instance?.ownerPlayerId||instance.ownerPlayerId===playerId)&&/\b(?:unit|trigger)\b/i.test(String(definition.type||""))&&/^(draw|critical|heal|front|stand)$/.test(trigger));
+    return Boolean(definition&&(!instance?.ownerPlayerId||instance.ownerPlayerId===playerId)&&(!instance?.controllerPlayerId||instance.controllerPlayerId===playerId)&&/\b(?:unit|trigger)\b/i.test(String(definition.type||""))&&/^(draw|critical|heal|front|stand)$/.test(trigger));
   }
   function guardianDropTriggerCallEventMatches(state,ability,source,located,event,actorPlayerId){
     const attack=state?.pendingAttack,player=located&&state.players?.[located.side];

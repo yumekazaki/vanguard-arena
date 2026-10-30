@@ -264,15 +264,15 @@
       validate(step, context) {
         const attack=context.match?.pendingAttack,card=context.selectedCard,drop=context.player?.drop||[];
         if(step.target!=="controller"||step.destination!=="guardian"||step.position!=="rest"||step.filter?.cardType!=="unit"||step.filter?.triggerUnit!==true||step.filter?.excludeOverTrigger!==true||!Array.isArray(context.player?.drop)||!Array.isArray(context.player?.guardCircle)||!Array.isArray(attack?.guardCards)||attack.defenderSide!==context.side||context.match?.players?.[context.side]!==context.player||typeof context.shieldValueForInstance!=="function"||typeof context.cardDefinitionForInstance!=="function")return false;
-        const legal=drop.filter(item=>isTriggerUnit(item,context.cardDefinitionForInstance)&&(!item.ownerPlayerId||item.ownerPlayerId===context.player?.playerId));
+        const legal=drop.filter(item=>isTriggerUnit(item,context.cardDefinitionForInstance)&&(!item.ownerPlayerId||item.ownerPlayerId===context.player?.playerId)&&(!item.controllerPlayerId||item.controllerPlayerId===context.player?.playerId));
         if(!legal.length)return card==null;
-        if(!card?.uid||!legal.some(item=>item.uid===card.uid)||card.ownerPlayerId&&card.ownerPlayerId!==context.player?.playerId)return false;
+        if(!card?.uid||!legal.some(item=>item.uid===card.uid)||card.ownerPlayerId&&card.ownerPlayerId!==context.player?.playerId||card.controllerPlayerId&&card.controllerPlayerId!==context.player?.playerId)return false;
         const definition=context.cardDefinitionForInstance(card),shield=context.shieldValueForInstance(card);
         return Boolean(definition)&&/\b(?:unit|trigger)\b/i.test(String(definition.type||""))&&isTriggerUnit(card,context.cardDefinitionForInstance)&&Number.isFinite(Number(shield));
       },
       apply(_step,context) {
         const card=context.selectedCard;if(!card)return true;
-        const index=context.player.drop.findIndex(item=>item?.uid===card.uid&&(!item.ownerPlayerId||item.ownerPlayerId===context.player?.playerId));if(index<0)return false;
+        const index=context.player.drop.findIndex(item=>item?.uid===card.uid&&(!item.ownerPlayerId||item.ownerPlayerId===context.player?.playerId)&&(!item.controllerPlayerId||item.controllerPlayerId===context.player?.playerId));if(index<0)return false;
         const [called]=context.player.drop.splice(index,1),attack=context.match.pendingAttack;
         called.zone="guardian";called.circle="guardian";called.position="rest";called.rested=true;called.faceUp=true;
         context.player.guardCircle.push(called);attack.guardCards.push(called);attack.targetPower+=Number(context.shieldValueForInstance(called)||0);

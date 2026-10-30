@@ -48,6 +48,17 @@ test("Over Triggers, non-Triggers, opponent cards, forged selections, and stale 
   const wrongSource=fixture();assert.equal(discover(wrongSource).queued.length,1);assert.equal(resolve(wrongSource,{effectUid:"unowned-trigger"}).ok,false);assert.equal(wrongSource.state.players.bot.damage[0].faceDown,false);
 });
 
+test("a Drop Trigger must also be controlled by the defending player in client validation and authoritative resolution",()=>{
+  const client=fixture();assert.equal(discover(client).queued.length,1);client.called.controllerPlayerId=client.side==="human"?"player-guest":"player-host";
+  const player=client.state.players[client.side],context={selectedCard:client.called,player,side:client.side,match:client.state,cardDefinitionForInstance:card=>def(card.cardId),shieldValueForInstance:card=>Number(def(card.cardId).shield)};
+  const beforeClient=JSON.stringify(client.state),result=Engine.resolveEffectProgram(client.ability.definition.effects,Engine.EFFECT_HANDLERS,context);
+  assert.equal(result.ok,false);assert.equal(result.reason,"invalid-effect");assert.equal(JSON.stringify(client.state),beforeClient,"client effect validation mutated state");
+
+  const authority=fixture();assert.equal(discover(authority).queued.length,1);authority.called.controllerPlayerId=authority.side==="human"?"player-guest":"player-host";
+  const beforeAuthority=JSON.stringify(authority.state),rejected=resolve(authority,{effectUid:authority.called.uid});
+  assert.equal(rejected.ok,false);assert.equal(rejected.reason,"invalid-guardian-trigger-choice");assert.equal(JSON.stringify(authority.state),beforeAuthority,"authoritative rejection mutated state");
+});
+
 test("a trigger target removed after the prompt rejects resolution without paying Counter Blast",()=>{
   const f=fixture();assert.equal(discover(f).queued.length,1);f.state.players[f.side].drop=f.state.players[f.side].drop.filter(card=>card.uid!==f.called.uid);const result=resolve(f);assert.equal(result.ok,false);assert.equal(result.reason,"invalid-guardian-trigger-choice");assert.equal(f.state.players[f.side].damage[0].faceDown,false);
 });
