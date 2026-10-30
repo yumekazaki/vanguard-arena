@@ -3460,6 +3460,24 @@
     for (const event of events) {
       const eventName = EVENT_NAME_BY_TYPE[event?.type];
       if (!eventName || !event?.eventId) continue;
+      if (event.type === "unit.attacked") {
+        const attackerUid = event.attackingUnitInstanceId || event.sourceCardInstanceId;
+        const attacker = attackerUid ? engine.locateCardInstance(state, attackerUid) : null;
+        const activeTurnPlayerId = state.players?.[state.side]?.playerId;
+        const authoritativeAttack = Boolean(attacker && !attacker.ambiguous && attacker.instance?.uid === attackerUid &&
+          (!event.attackingUnitInstanceId || event.attackingUnitInstanceId === attackerUid) &&
+          event.sourceCardInstanceId === attackerUid && event.subjectCardInstanceId === attackerUid &&
+          (event.sourceOwnerPlayerId == null || event.sourceOwnerPlayerId === attacker.ownerPlayerId) &&
+          (event.subjectOwnerPlayerId == null || event.subjectOwnerPlayerId === attacker.ownerPlayerId) &&
+          (event.sourceControllerPlayerId == null || event.sourceControllerPlayerId === attacker.controllerPlayerId) &&
+          (event.subjectControllerPlayerId == null || event.subjectControllerPlayerId === attacker.controllerPlayerId) &&
+          event.actingPlayerId === attacker.controllerPlayerId && event.turnPlayerId === attacker.controllerPlayerId &&
+          event.actingPlayerId === activeTurnPlayerId);
+        if (!authoritativeAttack) {
+          skipped.push({ eventId: event.eventId, reason: "attack-event-source-identity-mismatch" });
+          continue;
+        }
+      }
       removeHarmonyAssociationsForEvent(state, event, engine);
       for (const [side, player] of Object.entries(state.players || {})) {
         const instances = [player?.vanguard, player?.vanguard?.legionMate, ...(player?.rear || []), ...(player?.guardCircle || []), ...(player?.triggerZone || []), ...(player?.orders || []), ...(player?.drop || []), ...(player?.hand || []), ...(player?.soul || []), ...(player?.damage || []), ...(player?.bind || [])].filter(card => card?.uid && card?.cardId != null);
