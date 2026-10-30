@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1405,
-    "testCount": 1405,
-    "passed": 1405,
+    "tests": 1409,
+    "testCount": 1409,
+    "passed": 1409,
     "failed": 0,
-    "durationMilliseconds": 228731,
-    "completedAt": "2026-10-30T16:49:28.099Z",
+    "durationMilliseconds": 230832,
+    "completedAt": "2026-10-30T17:07:59.106Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "c01c2a52b25ce6d36cb8c22b07a6043bd32c35b00307a846efbbf05f30d8bade"
+    "validationInputDigest": "d83bcffcda028fc9a31b27acdb1a5f44e121bbc23182ec0538d67cd927aaab37"
   },
   "records": [
     {
@@ -72276,8 +72276,88 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11916",
+      "abilityId": "cfa-11916:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-dragontree-call-restriction.test.js"
+      ],
+      "testCases": [
+        "five real CONT abilities preserve the no-ride and marker-gated normal call restriction",
+        "normal call is blocked without the controller's Rear-Guard marker and allowed with one",
+        "authoritative normal calls reject atomically without a marker and succeed for both online seats with one",
+        "hand menu and selection flow hide or explain the illegal normal call"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11951",
+      "abilityId": "cfa-11951:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-dragontree-call-restriction.test.js"
+      ],
+      "testCases": [
+        "five real CONT abilities preserve the no-ride and marker-gated normal call restriction",
+        "normal call is blocked without the controller's Rear-Guard marker and allowed with one",
+        "authoritative normal calls reject atomically without a marker and succeed for both online seats with one",
+        "hand menu and selection flow hide or explain the illegal normal call"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11956",
+      "abilityId": "cfa-11956:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-dragontree-call-restriction.test.js"
+      ],
+      "testCases": [
+        "five real CONT abilities preserve the no-ride and marker-gated normal call restriction",
+        "normal call is blocked without the controller's Rear-Guard marker and allowed with one",
+        "authoritative normal calls reject atomically without a marker and succeed for both online seats with one",
+        "hand menu and selection flow hide or explain the illegal normal call"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12032",
+      "abilityId": "cfa-12032:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-dragontree-call-restriction.test.js"
+      ],
+      "testCases": [
+        "five real CONT abilities preserve the no-ride and marker-gated normal call restriction",
+        "normal call is blocked without the controller's Rear-Guard marker and allowed with one",
+        "authoritative normal calls reject atomically without a marker and succeed for both online seats with one",
+        "hand menu and selection flow hide or explain the illegal normal call"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12058",
+      "abilityId": "cfa-12058:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-dragontree-call-restriction.test.js"
+      ],
+      "testCases": [
+        "five real CONT abilities preserve the no-ride and marker-gated normal call restriction",
+        "normal call is blocked without the controller's Rear-Guard marker and allowed with one",
+        "authoritative normal calls reject atomically without a marker and succeed for both online seats with one",
+        "hand menu and selection flow hide or explain the illegal normal call"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T16:49:14.034Z"
+  "evidenceUpdatedAt": "2026-10-30T17:07:58.870Z"
 }

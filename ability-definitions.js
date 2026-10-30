@@ -109558,6 +109558,106 @@
           }
         }
       ]
+    },
+    {
+      "id": "cfa-11916:0",
+      "cardId": "cfa-11916",
+      "kind": "CONT",
+      "printedText": "CONT: This card cannot be ridden, and cannot be normal called to RC without any Dragontree markers.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-no-ride-normal-call-requires-dragontree-marker-v1",
+        "review": "Exact CONT restriction across five catalog records. This card cannot be ridden; its normal call from hand to RC is legal only while its controller already has a Dragontree marker on a Rear-Guard Circle. Superior calls are not restricted by this wording."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "normal-call-requires-dragontree-marker"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11951:0",
+      "cardId": "cfa-11951",
+      "kind": "CONT",
+      "printedText": "CONT: This card cannot be ridden, and cannot be normal called to RC without any Dragontree markers.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-no-ride-normal-call-requires-dragontree-marker-v1",
+        "review": "Exact CONT restriction across five catalog records. This card cannot be ridden; its normal call from hand to RC is legal only while its controller already has a Dragontree marker on a Rear-Guard Circle. Superior calls are not restricted by this wording."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "normal-call-requires-dragontree-marker"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11956:0",
+      "cardId": "cfa-11956",
+      "kind": "CONT",
+      "printedText": "CONT: This card cannot be ridden, and cannot be normal called to RC without any Dragontree markers.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-no-ride-normal-call-requires-dragontree-marker-v1",
+        "review": "Exact CONT restriction across five catalog records. This card cannot be ridden; its normal call from hand to RC is legal only while its controller already has a Dragontree marker on a Rear-Guard Circle. Superior calls are not restricted by this wording."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "normal-call-requires-dragontree-marker"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12032:0",
+      "cardId": "cfa-12032",
+      "kind": "CONT",
+      "printedText": "CONT: This card cannot be ridden, and cannot be normal called to RC without any Dragontree markers.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-no-ride-normal-call-requires-dragontree-marker-v1",
+        "review": "Exact CONT restriction across five catalog records. This card cannot be ridden; its normal call from hand to RC is legal only while its controller already has a Dragontree marker on a Rear-Guard Circle. Superior calls are not restricted by this wording."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "normal-call-requires-dragontree-marker"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12058:0",
+      "cardId": "cfa-12058",
+      "kind": "CONT",
+      "printedText": "CONT: This card cannot be ridden, and cannot be normal called to RC without any Dragontree markers.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-no-ride-normal-call-requires-dragontree-marker-v1",
+        "review": "Exact CONT restriction across five catalog records. This card cannot be ridden; its normal call from hand to RC is legal only while its controller already has a Dragontree marker on a Rear-Guard Circle. Superior calls are not restricted by this wording."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "normal-call-requires-dragontree-marker"
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

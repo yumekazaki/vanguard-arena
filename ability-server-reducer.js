@@ -4694,6 +4694,7 @@
       const called = player.hand[handIndex], replaced = player.rear[rearIndex];
       if (called.ownerPlayerId !== actorPlayerId || called.controllerPlayerId !== actorPlayerId) return reject("call-source-not-owned-and-controlled");
       if (called.unitCard !== true || called.gDeckCard === true || called.gGuardian === true) return reject("card-cannot-be-called-to-rear-guard");
+      if (typeof engine.canCallCard === "function" && !engine.canCallCard({ id: String(called.cardId), name: called.cardName || called.name || "" }, { dragontreeMarkerCount: (player.giftZones || []).filter(marker => marker?.type === "Dragontree" && /^(?:rear-|accel-)/.test(String(marker.zone || ""))).length })) return reject("normal-call-requires-dragontree-marker");
       if (replaced?.locked === true) return reject("call-circle-is-locked");
       const circle = rearIndex < 5
         ? ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right"][rearIndex]
