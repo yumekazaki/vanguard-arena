@@ -72,9 +72,10 @@
   const account = { client: null, matchClient: null, user: null, syncing: false, recovery: false, profile: null };
   const profileAvatars = [
     { id: "aichi", name: "Aichi Sendou", series: "Original", src: "assets/ui/aichi-sendou.png" },
-    { id: "kai", name: "Toshiki Kai", series: "Original", src: "assets/ui/toshiki-kai.png" },
-    { id: "misaki", name: "Misaki Tokura", series: "Original", src: "assets/ui/misaki-tokura.png" },
-    { id: "kamui", name: "Kamui Katsuragi", series: "Original", src: "assets/ui/kamui-katsuragi.png" },
+    { id: "emi", name: "Emi Sendou", series: "Original", src: "https://anime.cf-vanguard.com/vg2018-if/wordpress/wp-content/uploads/char-stand-e01.png" },
+    { id: "kai", name: "Toshiki Kai", series: "Original", src: "assets/ui/profile-kai.svg" },
+    { id: "misaki", name: "Misaki Tokura", series: "Original", src: "assets/ui/profile-misaki.svg" },
+    { id: "kamui", name: "Kamui Katsuragi", series: "Original", src: "assets/ui/profile-kamui.svg" },
     { id: "ren", name: "Ren Suzugamori", series: "Original", src: "https://anime.cf-vanguard.com/vg2018-if/wordpress/wp-content/uploads/char-stand-05.png" },
     { id: "asaka", name: "Asaka Narumi", series: "Original", src: "https://anime.cf-vanguard.com/vg2018-if/wordpress/wp-content/uploads/char-stand-b12.png" },
     { id: "kourin", name: "Kourin Tatsunagi", series: "Original", src: "https://anime.cf-vanguard.com/vg2018-if/wordpress/wp-content/uploads/char-stand-b03.png" },
@@ -97,7 +98,7 @@
   }
   function profileAvatarImage(id, fallback = "✦") {
     const avatar = profileAvatars.find(item => item.id === id);
-    return avatar ? `<img src="${avatar.src}" alt="" onerror="this.replaceWith(document.createTextNode('${avatar.name[0]}'))" />` : escapeHtml(fallback);
+    return avatar ? `<img class="profile-img profile-img-${avatar.id}" src="${avatar.src}" alt="" onerror="this.replaceWith(document.createTextNode('${avatar.name[0]}'))" />` : escapeHtml(fallback);
   }
   function renderProfileAvatarPicker() {
     const picker = $("#profile-avatar-picker"); if (!picker) return;

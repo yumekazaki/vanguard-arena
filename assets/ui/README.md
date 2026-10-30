@@ -15,6 +15,8 @@ The character source images are retained intact. SVG viewports and clipping path
 
 Card artwork uses the existing numbered card assets and catalog. Menu associations: Aichi / Royal Paladin, Misaki / Oracle Think Tank, Kamui / Nova Grappler, Kai / Kagero.
 
-Profile portraits also include linked character stand art for Ren Suzugamori, Asaka Narumi, and Kourin Tatsunagi from the official Cardfight!! Vanguard anime website, plus Chrono Shindou, Shion Kiba, Tokoha Anjou, and Koji Ibuki from TV Tokyo's official Vanguard G character page. These are remote images so the game bundle does not copy another site's artwork. Their appearance depends on those sites allowing image requests; character art remains the property of its rights holders.
+Profile portraits also include linked character stand art for Emi Sendou, Ren Suzugamori, Asaka Narumi, and Kourin Tatsunagi from the official Cardfight!! Vanguard anime website, plus Chrono Shindou, Shion Kiba, Tokoha Anjou, and Koji Ibuki from TV Tokyo's official Vanguard G character page. These are remote images so the game bundle does not copy another site's artwork. Their appearance depends on those sites allowing image requests; character art remains the property of its rights holders.
+
+Square profile crops for Toshiki Kai, Misaki Tokura, and Kamui Katsuragi are small local SVG viewports over the existing full character composites. The source art remains unchanged; the viewports center the character's face for the profile picker and match HUD.
 
 The wordmark uses Barlow Condensed Black Italic by Jeremy Tribby, distributed under SIL Open Font License 1.1. Source: https://github.com/google/fonts/tree/main/ofl/barlowcondensed . License text is included in `OFL-BarlowCondensed.txt`. It is a custom Vanguard-inspired wordmark treatment, not a claim to use the official logo's proprietary typeface.

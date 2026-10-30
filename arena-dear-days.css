@@ -349,3 +349,44 @@ body:has(#match-empty:not(.hidden)) .app-shell { max-width:1540px; padding-inlin
   #match-empty .fighter-option .fighter-cards,#match-empty .fighter-option:first-child .fighter-cards,#match-empty .fighter-option:not(:first-child) .fighter-cards { left:42%; transform:scale(1); }
   #match-empty .fighter-option .fighter-reveal { width:190px; height:290px; right:-1%; bottom:-28px; }
 }
+
+/* Match the remaining three character panels to the Aichi panel's bold scale. */
+#match-empty .fighter-option:not(:first-child) .fighter-reveal { z-index:4; width:clamp(285px,30vw,360px); height:clamp(330px,35vw,405px); right:-2%; bottom:-52px; }
+#match-empty .fighter-option:not(:first-child) .fighter-portrait { object-fit:cover; object-position:center 16%; }
+#match-empty .fighter-option:not(:first-child) .fighter-name { z-index:7; right:7%; left:auto; bottom:48px; transform:skew(-8deg); }
+@media(max-width:700px) {
+  #match-empty .fighter-option:not(:first-child) .fighter-reveal { width:205px; height:305px; right:-2%; bottom:-27px; }
+}
+
+/* Larger, face-focused portraits in account settings and the match HUD. */
+.profile-avatar-current { gap:17px; padding:14px 16px; }
+.profile-current-image { width:112px; height:112px; border-width:4px; box-shadow:0 0 0 5px #6542a6a8,0 0 28px #ffcf7caa; }
+.profile-avatar-picker { grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.profile-avatar-option { min-height:128px; padding:10px 7px; gap:7px; }
+.profile-avatar-option>span { width:88px; height:88px; border-width:3px; box-shadow:0 0 14px #63bfff38; }
+.profile-avatar-option img { object-position:center 18%; transform:scale(1.35); }
+.profile-avatar-option b { font-size:11px; }
+.profile-avatar-option small { font-size:9px; }
+.profile-avatar-option .profile-img-kai { object-position:82% 20%; transform:scale(1.55) translateX(-7%); }
+.profile-avatar-option .profile-img-misaki { object-position:80% 50%; transform:scale(1.55) translateX(-7%); }
+.profile-avatar-option .profile-img-kamui { object-position:82% 18%; transform:scale(1.55) translateX(-7%); }
+.profile-avatar-option .profile-img-aichi { object-position:center 18%; transform:scale(1.15); }
+.profile-avatar-option .profile-img-emi { object-position:center 12%; transform:scale(1.48); }
+.profile-current-image .profile-img-kai { object-position:82% 20%; transform:scale(1.55) translateX(-7%); }
+.profile-current-image .profile-img-misaki { object-position:80% 50%; transform:scale(1.55) translateX(-7%); }
+.profile-current-image .profile-img-kamui { object-position:82% 18%; transform:scale(1.55) translateX(-7%); }
+.profile-current-image .profile-img-emi { object-position:center 12%; transform:scale(1.48); }
+#match-layout .player-line .avatar { width:clamp(104px,7.4vw,132px); height:clamp(104px,7.4vw,132px); border-width:5px; box-shadow:0 0 0 6px #39247f,0 0 36px #ffcd66bb; }
+#match-layout .player-line .human-avatar { box-shadow:0 0 0 6px #263281,0 0 36px #41ceffd0; }
+#match-layout .opponent-line .player-title,#match-layout .human-line .player-title { left:calc(13% + clamp(138px,9vw,168px)); }
+#match-layout .player-line .avatar img { object-position:center 16%; }
+@media(max-width:760px) {
+  .profile-avatar-current { padding:12px; }
+  .profile-current-image { width:90px; height:90px; }
+  .profile-avatar-picker { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+  .profile-avatar-option { min-height:118px; }
+  .profile-avatar-option>span { width:76px; height:76px; }
+  #match-layout .player-line .avatar { width:64px; height:64px; border-width:3px; }
+  #match-layout .opponent-line .player-title { left:calc(12% + 72px); }
+  #match-layout .human-line .player-title { left:calc(12% + 72px); }
+}
