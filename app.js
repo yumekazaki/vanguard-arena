@@ -2068,6 +2068,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     } else if (action === "guard") {
       if (!match.pendingAttack) { toast("There is no incoming attack to guard."); return; }
       humanGuard(); return;
+    } else if(action.startsWith("order-to-soul:")) {
+      const uid=action.slice("order-to-soul:".length),index=player.orders.findIndex(item=>item.uid===uid);if(index<0)return;const moved=player.orders.splice(index,1)[0];moved.rested=false;moved.faceDown=false;player.soul.push(moved);queueMovedCardAbility(moved,"human","soulMove","order",{currentLocation:"soul"});match.selected=null;addLog(`${player.name} moved ${cardMap.get(moved.cardId)?.name||"an Order"} from the Order zone to Soul.`);
     } else if(action.startsWith("order-rest:")) {
       const uid=action.slice("order-rest:".length),item=player.orders.find(card=>card.uid===uid);if(!item)return;item.rested=!item.rested;addLog(`${player.name} ${item.rested?"rested":"stood"} ${cardMap.get(item.cardId)?.name||"an Order"}.`);
     } else if(action.startsWith("order-flip:")) {
