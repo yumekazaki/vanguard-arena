@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1381,
-    "testCount": 1381,
-    "passed": 1381,
+    "tests": 1387,
+    "testCount": 1387,
+    "passed": 1387,
     "failed": 0,
-    "durationMilliseconds": 231998,
-    "completedAt": "2026-10-30T15:31:12.743Z",
+    "durationMilliseconds": 219926,
+    "completedAt": "2026-10-30T15:48:35.998Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "85f7bb594e6e9f0d6bdc4085ca4d312b9a87d9d57c696a29348de4d81f50ed67"
+    "validationInputDigest": "5af530fe1a1584c8f1e8244f0376bf10bba39fb2531324124c1bfccae8f5149a"
   },
   "records": [
     {
@@ -2230,16 +2230,19 @@
     {
       "cardId": "cfa-1079",
       "abilityId": "cfa-1079:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-10818",
@@ -3161,16 +3164,19 @@
     {
       "cardId": "cfa-1107",
       "abilityId": "cfa-1107:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-11070",
@@ -16074,16 +16080,19 @@
     {
       "cardId": "cfa-1342",
       "abilityId": "cfa-1342:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-1343",
@@ -16185,16 +16194,19 @@
     {
       "cardId": "cfa-1344",
       "abilityId": "cfa-1344:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-13447",
@@ -18030,16 +18042,19 @@
     {
       "cardId": "cfa-1388",
       "abilityId": "cfa-1388:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-13896",
@@ -19580,16 +19595,19 @@
     {
       "cardId": "cfa-1452",
       "abilityId": "cfa-1452:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-1456",
@@ -19783,16 +19801,19 @@
     {
       "cardId": "cfa-1471",
       "abilityId": "cfa-1471:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-1478",
@@ -20487,16 +20508,19 @@
     {
       "cardId": "cfa-1534",
       "abilityId": "cfa-1534:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-1535",
@@ -20992,16 +21016,19 @@
     {
       "cardId": "cfa-158",
       "abilityId": "cfa-158:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-1582",
@@ -21222,16 +21249,19 @@
     {
       "cardId": "cfa-1592",
       "abilityId": "cfa-1592:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-1593",
@@ -21611,16 +21641,19 @@
     {
       "cardId": "cfa-1629",
       "abilityId": "cfa-1629:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-1630",
@@ -21992,16 +22025,19 @@
     {
       "cardId": "cfa-1658",
       "abilityId": "cfa-1658:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-1659",
@@ -26350,16 +26386,19 @@
     {
       "cardId": "cfa-2035",
       "abilityId": "cfa-2035:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-2036",
@@ -26479,16 +26518,19 @@
     {
       "cardId": "cfa-2047",
       "abilityId": "cfa-2047:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-2048",
@@ -28383,16 +28425,19 @@
     {
       "cardId": "cfa-2195",
       "abilityId": "cfa-2195:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-2199",
@@ -29108,16 +29153,19 @@
     {
       "cardId": "cfa-2249",
       "abilityId": "cfa-2249:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-225",
@@ -29246,16 +29294,19 @@
     {
       "cardId": "cfa-2261",
       "abilityId": "cfa-2261:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-2262",
@@ -31344,16 +31395,19 @@
     {
       "cardId": "cfa-245",
       "abilityId": "cfa-245:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-2450",
@@ -34448,16 +34502,19 @@
     {
       "cardId": "cfa-2869",
       "abilityId": "cfa-2869:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-2876",
@@ -34526,16 +34583,19 @@
     {
       "cardId": "cfa-289",
       "abilityId": "cfa-289:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-2891",
@@ -36995,16 +37055,19 @@
     {
       "cardId": "cfa-325",
       "abilityId": "cfa-325:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-3259",
@@ -37196,16 +37259,19 @@
     {
       "cardId": "cfa-33",
       "abilityId": "cfa-33:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-3301",
@@ -39997,16 +40063,19 @@
     {
       "cardId": "cfa-366",
       "abilityId": "cfa-366:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-3662",
@@ -51387,16 +51456,19 @@
     {
       "cardId": "cfa-559",
       "abilityId": "cfa-559:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-5594",
@@ -53874,16 +53946,19 @@
     {
       "cardId": "cfa-608",
       "abilityId": "cfa-608:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-609",
@@ -55102,16 +55177,19 @@
     {
       "cardId": "cfa-650",
       "abilityId": "cfa-650:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-6500",
@@ -56795,16 +56873,19 @@
     {
       "cardId": "cfa-687",
       "abilityId": "cfa-687:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-6870",
@@ -57874,16 +57955,19 @@
     {
       "cardId": "cfa-714",
       "abilityId": "cfa-714:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-7140",
@@ -59121,338 +59205,434 @@
     {
       "cardId": "cfa-7533",
       "abilityId": "cfa-7533:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7535",
       "abilityId": "cfa-7535:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7536",
       "abilityId": "cfa-7536:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7537",
       "abilityId": "cfa-7537:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7538",
       "abilityId": "cfa-7538:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7539",
       "abilityId": "cfa-7539:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7540",
       "abilityId": "cfa-7540:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7541",
       "abilityId": "cfa-7541:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7542",
       "abilityId": "cfa-7542:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7543",
       "abilityId": "cfa-7543:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7544",
       "abilityId": "cfa-7544:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7545",
       "abilityId": "cfa-7545:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7546",
       "abilityId": "cfa-7546:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7547",
       "abilityId": "cfa-7547:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7548",
       "abilityId": "cfa-7548:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7549",
       "abilityId": "cfa-7549:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7550",
       "abilityId": "cfa-7550:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7551",
       "abilityId": "cfa-7551:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7552",
       "abilityId": "cfa-7552:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7553",
       "abilityId": "cfa-7553:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7554",
       "abilityId": "cfa-7554:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7555",
       "abilityId": "cfa-7555:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7556",
       "abilityId": "cfa-7556:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7557",
       "abilityId": "cfa-7557:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "match-worker.test.js"
+        "ability-cont-stride-cost-grade-three-catalog.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 34 exact Hand CONT Stride replacements preserve printed text and legal cost-window behavior",
-        "the exact catalog replacement resolves Stride for host and joining player"
+        "all 24 sole-skill critical triggers preserve the exact hand-only Stride replacement",
+        "each exact card counts as grade 3 only from hand during its controller’s Stride payment",
+        "the live Stride legality path evaluates the selected hand card only while paying Stride",
+        "discard-replacement CONT counts as grade 3 only when this exact Hand instance pays Stride"
       ],
-      "fullyVerified": false,
-      "remaining": "Per-ability rule and server behavior have regression evidence; complete card verification requires every other printed ability and card-level gameplay review."
+      "fullyVerified": true,
+      "remaining": "This card’s sole CONT ability retains its exact printed wording and acts only as a grade-3 replacement when this card is in hand and is being selected to pay Stride. Regression coverage includes both player seats and rejects use outside the payment window or outside the hand.",
+      "verifiedAt": "2026-10-30T15:48:35.998Z"
     },
     {
       "cardId": "cfa-7568",
@@ -62724,16 +62904,19 @@
     {
       "cardId": "cfa-843",
       "abilityId": "cfa-843:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-844",
@@ -67651,16 +67834,19 @@
     {
       "cardId": "cfa-993",
       "abilityId": "cfa-993:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-act-counter-blast-source-power-batch.test.js"
       ],
       "testCases": [
         "all 42 exact Counter-Blast source-power ACT records preserve their text, costs, circles, and turn effects",
-        "host and joining player each pay their own exact Counter Blast for representative circle and cost variants"
+        "30 sole-skill ACT cards preserve their full card text, metadata, exact location, costs, and no once-per-turn limit",
+        "every sole-skill ACT resolves repeatedly for its controller on either seat while costs are payable",
+        "illegal ACT requests from every sole-skill card reject atomically for both seats"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed abilities on this card still require independent implementation and whole-card validation."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. The source, exact printed ACT, cost, legal circle, absence of a once-per-turn limit, effect amount and duration, both player seats, repeated legal payment, and atomic rejection of unaffordable, forged, wrong-turn, and off-circle activations are covered by regression tests.",
+      "verifiedAt": "2026-10-30T15:39:52.653Z"
     },
     {
       "cardId": "cfa-995",
@@ -69964,5 +70150,5 @@
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T14:16:05.000Z"
+  "evidenceUpdatedAt": "2026-10-30T15:48:35.998Z"
 }
