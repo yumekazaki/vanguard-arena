@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-30T22:00:06.354Z",
+  "generatedAt": "2026-10-30T22:23:39.949Z",
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "catalogSource": "scripts/audit-ability-catalog.js (local catalog file or committed HEAD snapshot)",
   "cards": {
@@ -29,21 +29,21 @@
       "command": "node --test",
       "testCommand": "node --test",
       "status": "passed",
-      "tests": 1462,
-      "testCount": 1462,
-      "passed": 1462,
+      "tests": 1463,
+      "testCount": 1463,
+      "passed": 1463,
       "failed": 0,
-      "durationMilliseconds": 312132,
-      "completedAt": "2026-10-30T22:00:00.556Z",
+      "durationMilliseconds": 400892,
+      "completedAt": "2026-10-30T22:23:33.665Z",
       "runDate": "2026-10-30",
-      "validationInputDigest": "383abcfbec32f16d41d0bd6223902f0cdff0cd58b38e88405b955fadf9b024be"
+      "validationInputDigest": "45ce9e22e074f4d2314678b8de9694905dc8e9314b52e0e861338c5b6aa8dba0"
     },
     "fullyVerifiedRequiresAllPrintedAbilitiesAndRulesEvidence": true,
     "note": "Aggregate parsing or a passing pattern test does not make a whole card fully verified. Only explicit manifest records count as regression evidence; zero fully verified cards is reported when no complete card-level evidence exists."
   },
   "workflow": {
-    "catalogLoadMilliseconds": 167.4,
-    "fullCatalogParseAndAuditMilliseconds": 5106.9,
+    "catalogLoadMilliseconds": 170.5,
+    "fullCatalogParseAndAuditMilliseconds": 5529.9,
     "repeatedAuditsOfTheSameCatalogUseTheExistingDigestCache": true,
     "parseCacheExperiment": "Rejected JSON-clone-per-call caching after three full catalog parse passes measured about 9.5 seconds uncached versus 12.1 seconds with cloning. Adopted immutable per-card snapshots with definition-revision invalidation: the same three passes measured about 9.5 seconds uncached versus 3.82 seconds cached; cache-hit passes were about 2.5 milliseconds each.",
     "measuredBottlenecks": [
@@ -57,7 +57,7 @@
         "area": "Unbounded all-in-one verification feedback",
         "evidence": "Full Node suite measured 245.62 seconds before the cache and 37.96 seconds after it.",
         "optimization": "Run focused rule/worker checks per ability batch and reserve the full suite for milestones.",
-        "result": "Latest full suite: 1462/1462 passed in 312.13 seconds."
+        "result": "Latest full suite: 1463/1463 passed in 400.89 seconds."
       },
       {
         "area": "Manual card semantics and validation backlog",
