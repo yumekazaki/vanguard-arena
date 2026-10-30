@@ -89,7 +89,7 @@
   function createHarmonyAssociation(state,firstUid,secondUid,turnKey,allowMovedSinceTrigger=false){if(!state||!firstUid||!secondUid||firstUid===secondUid||!turnKey)return false;const first=locateCardInstance(state,firstUid),second=locateCardInstance(state,secondUid);if(!first||!second||first.ambiguous||second.ambiguous||!["vanguard","rear-guard"].includes(first.zone)||!["vanguard","rear-guard"].includes(second.zone)||first.side!==second.side||first.controllerPlayerId!==second.controllerPlayerId||!allowMovedSinceTrigger&&(!harmonyColumn(first.circle||first.zone)||harmonyColumn(first.circle||first.zone)!==harmonyColumn(second.circle||second.zone)))return false;const active=(state.harmonyAssociations||[]).filter(pair=>pair?.turnKey===turnKey&&harmonyFieldPair(state,pair));state.harmonyAssociations=active;if(active.some(pair=>pair.firstUid===firstUid&&pair.secondUid===secondUid||pair.firstUid===secondUid&&pair.secondUid===firstUid))return true;state.harmonyAssociations.push({firstUid,secondUid,controllerPlayerId:first.controllerPlayerId,turnKey});return true}
   function isCardInHarmony(state,uid,turnKey){if(!state||!uid||!turnKey)return false;let found=false;for(const pair of state.harmonyAssociations||[]){if(pair?.turnKey!==turnKey||!harmonyFieldPair(state,pair))continue;if(pair.firstUid===uid||pair.secondUid===uid)found=true}return found}
   function expireHarmonyAssociations(state,endingTurnKey){if(!Array.isArray(state?.harmonyAssociations))return 0;const before=state.harmonyAssociations.length;state.harmonyAssociations=state.harmonyAssociations.filter(pair=>pair?.turnKey!==endingTurnKey&&harmonyFieldPair(state,pair));return before-state.harmonyAssociations.length}
-  const effectOperations = new Set(["draw", "modify-power", "modify-power-target", "modify-critical", "grant-temporary-boost", "continuous-power", "continuous-power-adjustment", "continuous-power-per-soul-card", "continuous-power-per-clan-rearguard", "continuous-power-per-dragontree-marker", "continuous-power-per-controller-rearguard", "continuous-power-per-named-face-up-damage-card", "continuous-critical", "continuous-shield", "continuous-grade", "modify-drive", "modify-drive-target", "counter-charge", "conditional-counter-charge", "soul-charge", "revelation-choice", "rest-target", "engorge", "g-guardian-discard-charge-choice", "g-guardian-grade-three-replacement-choice", "set-blazing", "set-hollowed", "set-charging", "set-successful", "deck-to-damage", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "reorder-deck-card", "retire-target", "stand-target", "unlock-target", "protect-target", "protect-attacked-source", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "modify-defending-source-power", "rest-source", "stand-source", "create-token", "discard-from-hand", "draw-then-discard", "search-top-grade-three-to-hand-then-discard", "search-top-up-to-one-grade-to-hand", "search-top-up-to-one-filtered-to-hand", "search-deck-named-grade-three-then-discard", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "call-checked-card-locked", "call-source-from-drop-rested", "call-source-from-soul", "associate-harmony-units", "modify-shield-source", "seek-mate", "place-circle-marker"]);
+  const effectOperations = new Set(["draw", "modify-power", "modify-power-target", "modify-critical", "grant-temporary-boost", "continuous-power", "continuous-power-adjustment", "continuous-power-per-soul-card", "continuous-power-per-clan-rearguard", "continuous-power-per-dragontree-marker", "continuous-power-per-controller-rearguard", "continuous-power-per-named-face-up-damage-card", "continuous-critical", "continuous-shield", "continuous-grade", "modify-drive", "modify-drive-target", "counter-charge", "conditional-counter-charge", "soul-charge", "soul-charge-and-return-source-to-deck", "revelation-choice", "rest-target", "engorge", "g-guardian-discard-charge-choice", "g-guardian-grade-three-replacement-choice", "set-blazing", "set-hollowed", "set-charging", "set-successful", "deck-to-damage", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "reorder-deck-card", "retire-target", "stand-target", "unlock-target", "protect-target", "protect-attacked-source", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "modify-defending-source-power", "rest-source", "stand-source", "create-token", "discard-from-hand", "draw-then-discard", "search-top-grade-three-to-hand-then-discard", "search-top-up-to-one-grade-to-hand", "search-top-up-to-one-filtered-to-hand", "search-deck-named-grade-three-then-discard", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "call-checked-card-locked", "call-source-from-drop-rested", "call-source-from-soul", "associate-harmony-units", "modify-shield-source", "seek-mate", "place-circle-marker"]);
   effectOperations.add("call-drop-trigger-to-guardian");
   effectOperations.add("put-chosen-normal-drop-to-deck-bottom");
   const positiveInteger = value => Number.isInteger(Number(value)) && Number(value) > 0;
@@ -175,6 +175,31 @@
     "soul-charge": Object.freeze({
       validate(step, context) { return positiveInteger(step.count)&&Array.isArray(context.player?.deck)&&Array.isArray(context.player?.soul)&&context.player.deck.length>=Number(step.count); },
       apply(step, context) { const cards=[];for(let i=0;i<Number(step.count);i++)cards.push(context.player.deck.pop());context.player.soul.push(...cards);for(const card of cards)context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,previousLocation:"deck",currentLocation:"soul"});return cards.length; }
+    }),
+    "soul-charge-and-return-source-to-deck": Object.freeze({
+      validate(step, context) {
+        const source=context?.source, player=context?.player, ownerId=source?.ownerPlayerId;
+        const owner=ownerId?Object.values(context?.match?.players||{}).find(candidate=>candidate?.playerId===ownerId):player;
+        const sourceIndex=Array.isArray(player?.rear)?player.rear.findIndex(card=>card?.uid===source?.uid):-1;
+        return step.target==="source"&&step.count===1&&step.shuffle===true&&Boolean(source?.uid)&&Boolean(source?.controllerPlayerId)&&source.controllerPlayerId===context.actorPlayerId&&
+          context.sourceInPlay===true&&context.sourceZone&&/^(?:rear-(?:left|right|back-left|back-center|back-right)|accel-\d+)$/.test(String(context.sourceZone))&&
+          sourceIndex>=0&&player?.rear[sourceIndex]===source&&owner&&Array.isArray(owner.deck)&&Array.isArray(player.soul)&&typeof context.shuffleDeck==="function";
+      },
+      apply(_step, context) {
+        const source=context.source, player=context.player, sourceIndex=player.rear.findIndex(card=>card?.uid===source.uid);
+        if(sourceIndex<0||player.rear[sourceIndex]!==source)return false;
+        if(!player.deck.length)return 0;
+        const charged=player.deck.pop();
+        if(!charged)return 0;
+        player.soul.push(charged);
+        context.emitEvent?.({type:"card.moved",cardInstanceId:charged.uid,controllerSide:context.side,previousLocation:"deck",currentLocation:"soul",reason:"soul-charge"});
+        const ownerId=source.ownerPlayerId||player.playerId,owner=Object.values(context.match?.players||{}).find(candidate=>candidate?.playerId===ownerId)||player;
+        player.rear[sourceIndex]=null;
+        source.zone="deck";source.circle=null;delete source.position;source.faceUp=false;source.rested=false;source.locked=false;source.isLocked=false;source.controllerPlayerId=owner.playerId||ownerId;
+        owner.deck.push(source);context.shuffleDeck(owner.deck);
+        context.emitEvent?.({type:"card.moved",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:context.sourceZone,currentLocation:"deck",destinationPlayerId:owner.playerId||ownerId,reason:"ability-return-source-to-owner-deck"});
+        return 1;
+      }
     }),
     "g-guardian-discard-charge-choice": Object.freeze({
       validate(step, context) {
@@ -675,6 +700,7 @@
         if (effect.op === "modify-power-target") return !["chosen","boosted-unit"].includes(effect.target) || !positiveInteger(effect.amount) || !["turn","battle"].includes(effect.duration) || !effect.targetFilter || typeof effect.targetFilter !== "object" || effect.optionalTarget != null && (typeof effect.optionalTarget !== "boolean" || effect.target !== "chosen" || effect.duration !== "turn");
         if (effect.op.startsWith("modify-")) return effect.target !== "source" || !positiveInteger(effect.amount) || !["turn","battle"].includes(effect.duration);
         if (["draw", "counter-charge", "soul-charge"].includes(effect.op)) return !positiveInteger(effect.count);
+        if (effect.op === "soul-charge-and-return-source-to-deck") return effect.target !== "source" || effect.count !== 1 || effect.shuffle !== true;
         if (["rest-source", "stand-source"].includes(effect.op)) return effect.target !== "source";
         return false;
       })) throw new TypeError("An ability definition contains an unsupported or invalid effect operation.");

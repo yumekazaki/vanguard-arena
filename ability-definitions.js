@@ -111770,6 +111770,27 @@
         { op: "modify-power", target: "source", amount: 5000, duration: "battle" }
       ]
     })),
+    ...["cfa-443", "cfa-734", "cfa-785"].map(cardId => ({
+      id: `${cardId}:0`,
+      cardId,
+      kind: "AUTO",
+      printedText: "AUTO [RC]: When an attack hits during the battle that this unit boosted, you may Soul Charge 1. If you do, return this unit to your deck, and shuffle your deck.",
+      requiredLocation: ["rear-guard"],
+      trigger: { status: "recognized-trigger", eventType: "attack.hit", subject: "booster", requiresBoostedBattle: true },
+      optional: true,
+      conditions: [],
+      conditionsReviewed: true,
+      costs: [],
+      costsReviewed: true,
+      choicesReviewed: true,
+      source: {
+        dataset: "Cardfight Area snapshot",
+        snapshotDate: "2025-05-09",
+        patternId: "auto-boosted-attack-hit-soul-charge-return-source-v1",
+        review: "Exact three-card AUTO family. The controller may Soul Charge one only when this exact Rear-Guard instance boosted the unit in the battle that hit; only if a card was Soul Charged does this same source return to its owner's deck and that deck is shuffled."
+      },
+      effects: [{ op: "soul-charge-and-return-source-to-deck", target: "source", count: 1, shuffle: true }]
+    }))
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;

@@ -1265,6 +1265,7 @@
   ]);
   SERVER_EFFECT_OPS.add("call-drop-trigger-to-guardian");
   SERVER_EFFECT_OPS.add("put-chosen-normal-drop-to-deck-bottom");
+  SERVER_EFFECT_OPS.add("soul-charge-and-return-source-to-deck");
   const CLAN_PLACEMENT_DAMAGE_RETURN = Object.freeze(["cfa-187","cfa-208","cfa-279","cfa-295","cfa-458","cfa-466","cfa-712","cfa-719","cfa-749","cfa-762","cfa-798","cfa-816","cfa-841","cfa-858","cfa-938","cfa-943","cfa-959","cfa-965","cfa-978","cfa-980","cfa-995","cfa-999","cfa-1057","cfa-1332","cfa-1333","cfa-1378","cfa-1379","cfa-1383","cfa-1384","cfa-1445","cfa-1570","cfa-1722","cfa-1723","cfa-1891","cfa-1892","cfa-1903"]);
   const QUICK_SHIELD_RIDE_TEXT = "AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.";
   const CHARGE_CARD_IDS = new Set(["cfa-3429", "cfa-3474", "cfa-3490", "cfa-3492", "cfa-3495", "cfa-3500", "cfa-3501", "cfa-3506", "cfa-4142", "cfa-4232", "cfa-4269", "cfa-4275", "cfa-4312", "cfa-4327", "cfa-5203", "cfa-5204", "cfa-5206", "cfa-5207", "cfa-5208", "cfa-5215", "cfa-5226", "cfa-5313", "cfa-5316"]);
@@ -2016,6 +2017,35 @@
       JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&!(ability.conditions||[]).length&&ability.canDecline===true&&definition.optional===true&&
       JSON.stringify(ability.costs||[])===JSON.stringify([{type:"discard",count:1}])&&ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="attack.hit"&&ability.trigger.subject==="booster"&&ability.trigger.requiresBoostedBattle===true&&
       definition.effects?.length===1&&definition.effects[0]?.op==="draw"&&Number(definition.effects[0]?.count)===1;
+  }
+  const BOOSTED_HIT_SOUL_CHARGE_RETURN_IDS = new Set(["cfa-443", "cfa-734", "cfa-785"]);
+  const BOOSTED_HIT_SOUL_CHARGE_RETURN_TEXT = "AUTO [RC]: When an attack hits during the battle that this unit boosted, you may Soul Charge 1. If you do, return this unit to your deck, and shuffle your deck.";
+  function isExactBoostedHitSoulChargeReturnAbility(ability) {
+    const definition=ability?.definition,cardId=String(ability?.cardId||""),printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim();
+    const effect=definition?.effects?.[0];
+    return BOOSTED_HIT_SOUL_CHARGE_RETURN_IDS.has(cardId)&&ability?.id===`${cardId}:0`&&definition?.id===ability.id&&definition?.cardId===cardId&&
+      ability.kind==="AUTO"&&definition.kind==="AUTO"&&printed===BOOSTED_HIT_SOUL_CHARGE_RETURN_TEXT&&
+      definition.source?.patternId==="auto-boosted-attack-hit-soul-charge-return-source-v1"&&
+      JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&!(ability.conditions||[]).length&&!(ability.costs||[]).length&&
+      ability.canDecline===true&&definition.optional===true&&definition.conditionsReviewed===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&
+      ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="attack.hit"&&ability.trigger.subject==="booster"&&ability.trigger.requiresBoostedBattle===true&&
+      definition.effects?.length===1&&effect?.op==="soul-charge-and-return-source-to-deck"&&effect.target==="source"&&effect.count===1&&effect.shuffle===true;
+  }
+  function boostedHitSoulChargeReturnEventMatches(state,ability,source,located,event,actorPlayerId,engine) {
+    const controller=located?.controllerPlayerId,player=located&&state?.players?.[located.side],attack=state?.pendingAttack,attackerUid=event?.attackingUnitInstanceId;
+    const current=source?.uid&&engine?.locateCardInstance?.(state,source.uid),attacker=attackerUid&&engine?.locateCardInstance?.(state,attackerUid),targetUid=attack?.targetUid,target=targetUid&&engine?.locateCardInstance?.(state,targetUid);
+    return Boolean(isExactBoostedHitSoulChargeReturnAbility(ability)&&source?.uid&&controller===actorPlayerId&&located?.side===state?.side&&located?.zone==="rear-guard"&&
+      player?.playerId===actorPlayerId&&Number(state.phase)===5&&source.controllerPlayerId===actorPlayerId&&source.ownerPlayerId===located.ownerPlayerId&&
+      !source.locked&&source.isLocked!==true&&source.faceUp!==false&&player.rear?.some(card=>card?.uid===source.uid)&&current&&!current.ambiguous&&current.instance===source&&current.zone==="rear-guard"&&current.circle===located.circle&&
+      event?.eventId&&event.type==="attack.hit"&&event.didNotHit!==true&&event.phase==="battle"&&event.timingWindow==="attack-hit"&&event.battleId&&
+      event.sourceCardInstanceId===attackerUid&&event.attackingUnitInstanceId===attackerUid&&event.boosterCardInstanceId===source.uid&&event.boostedCardInstanceId===source.uid&&attackerUid!==source.uid&&
+      event.sourceControllerPlayerId===actorPlayerId&&event.sourceOwnerPlayerId===attacker?.ownerPlayerId&&event.actingPlayerId===actorPlayerId&&event.turnPlayerId===actorPlayerId&&
+      event.battleId===attack?.battleId&&attack?.attackerUid===attackerUid&&attack.boostUid===source.uid&&attack.attackerPlayerId===actorPlayerId&&attack.attackerSide===located.side&&attack.attackerZone&&
+      isUnitAttackCircle(attack.attackerZone)&&attack.targetZone===event.targetLocation&&isUnitAttackCircle(attack.targetZone)&&
+      Array.isArray(event.targetCardInstanceIds)&&event.targetCardInstanceIds.length===1&&event.targetCardInstanceIds[0]===targetUid&&target&&!target.ambiguous&&target.side!==located.side&&
+      target.controllerPlayerId!==actorPlayerId&&target.zone===(attack.targetZone==="vanguard"?"vanguard":"rear-guard")&&
+      event.cardInstanceId===targetUid&&event.subjectCardInstanceId===targetUid&&event.subjectOwnerPlayerId===target.ownerPlayerId&&event.subjectControllerPlayerId===target.controllerPlayerId&&
+      (attack.targetZone==="vanguard"?target.instance?.uid===state.players?.[target.side]?.vanguard?.uid:target.circle===attack.targetZone));
   }
   function boostedHitDiscardDrawEventMatches(state,ability,source,located,event,actorPlayerId,engine) {
     const controller=located?.controllerPlayerId,player=located&&state?.players?.[located.side],attackUid=event?.attackingUnitInstanceId;
@@ -3071,6 +3101,8 @@
     const hasDeckToDamage = effects.some(step => step?.op === "deck-to-damage");
     const hasDelayedDamageReturn = effects.some(step => step?.op === "schedule-damage-return-at-turn-end" || step?.op === "return-chosen-damage-to-deck");
     const hasScheduledSourceReturn = effects.some(step => step?.op === "schedule-source-return-to-deck-at-turn-end");
+    const hasSoulChargeReturn = effects.some(step => step?.op === "soul-charge-and-return-source-to-deck");
+    if (hasSoulChargeReturn && !isExactBoostedHitSoulChargeReturnAbility(ability)) return false;
     if (hasScheduledSourceReturn && !isExactBoostPowerReturnAbility(ability)) return false;
     const hasPlacementTopFiveSearchDiscard = effects.some(step => step?.op === "search-top-grade-three-to-hand-then-discard");
     const hasRcGradeThreeNameSearch = effects.some(step => step?.op === "search-deck-named-grade-three-then-discard");
@@ -3927,6 +3959,7 @@
                 !ownAttackTargetGradeEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (isExactAfterimageAbility(ability) && !afterimageEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (isExactBoostedHitDiscardDrawAbility(ability) && !boostedHitDiscardDrawEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
+            if (isExactBoostedHitSoulChargeReturnAbility(ability) && !boostedHitSoulChargeReturnEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (ability.definition?.source?.patternId === "auto-boosted-close-set-order-counter-charge-v1" && !boostSetOrderCloseEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (isExactCenterColumnVanguardAttackAbility(ability) && !centerColumnVanguardAttackEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (isExactGbBoostVanguardPowerAbility(ability) && !gbBoostVanguardPowerEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
@@ -5541,6 +5574,8 @@
         !ownBoostTurnPowerEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("own-boost-turn-power-context-invalid");
     if (ability.definition?.source?.patternId === "auto-boost-power-battle-then-return-self-end-phase-v1" &&
         !boostPowerReturnEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("boost-power-return-context-invalid");
+    if (isExactBoostedHitSoulChargeReturnAbility(ability) &&
+        !boostedHitSoulChargeReturnEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("boosted-hit-soul-charge-return-context-invalid");
     if (ability.definition?.source?.patternId === "auto-boosted-close-set-order-counter-charge-v1") {
       if (!boostSetOrderCloseEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("boost-set-order-close-context-invalid");
       const currentConditions=buildConditionContext(state,triggerEvent,located,engine);
