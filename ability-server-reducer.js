@@ -1235,6 +1235,7 @@
     "counter-charge", "soul-charge", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "call-source-from-soul", "engorge", "seek-mate", "modify-defending-source-power", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-source-from-drop-rested", "unlock-target", "protect-attacked-source", "set-successful", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "place-circle-marker"
   ]);
   SERVER_EFFECT_OPS.add("call-drop-trigger-to-guardian");
+  SERVER_EFFECT_OPS.add("put-chosen-normal-drop-to-deck-bottom");
   const CLAN_PLACEMENT_DAMAGE_RETURN = Object.freeze(["cfa-187","cfa-208","cfa-279","cfa-295","cfa-458","cfa-466","cfa-712","cfa-719","cfa-749","cfa-762","cfa-798","cfa-816","cfa-841","cfa-858","cfa-938","cfa-943","cfa-959","cfa-965","cfa-978","cfa-980","cfa-995","cfa-999","cfa-1057","cfa-1332","cfa-1333","cfa-1378","cfa-1379","cfa-1383","cfa-1384","cfa-1445","cfa-1570","cfa-1722","cfa-1723","cfa-1891","cfa-1892","cfa-1903"]);
   const QUICK_SHIELD_RIDE_TEXT = "AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.";
   const CHARGE_CARD_IDS = new Set(["cfa-3429", "cfa-3474", "cfa-3490", "cfa-3492", "cfa-3495", "cfa-3500", "cfa-3501", "cfa-3506", "cfa-4142", "cfa-4232", "cfa-4269", "cfa-4275", "cfa-4312", "cfa-4327", "cfa-5203", "cfa-5204", "cfa-5206", "cfa-5207", "cfa-5208", "cfa-5215", "cfa-5226", "cfa-5313", "cfa-5316"]);
@@ -2972,6 +2973,12 @@
       pending.side===side&&pending.playerId===actorPlayerId&&Number(pending.turn)===Number(state.turn)&&
       Number(event.turnId??state.turn)===Number(state.turn)&&Number(state.phase)===6);
   }
+  const RC_NORMAL_DROP_BOTTOM_POWER_IDS = new Set(["cfa-13823", "cfa-13830", "cfa-13844", "cfa-13891", "cfa-13921"]);
+  const RC_NORMAL_DROP_BOTTOM_POWER_TEXT = "AUTO: When this unit is placed on RC from hand, if you have a grade 3 or greater vanguard, choose up to one normal unit without sentinel from your drop, and put it on the bottom of the deck. If you chose a card, this unit gets power +2000 until end of turn.";
+  function isExactRcPlacementNormalDropBottomPowerAbility(ability) {
+    const definition=ability?.definition,cardId=String(ability?.cardId||""),printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim();
+    return RC_NORMAL_DROP_BOTTOM_POWER_IDS.has(cardId)&&ability?.id===`${cardId}:0`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&definition.cardId===cardId&&printed===RC_NORMAL_DROP_BOTTOM_POWER_TEXT&&definition.source?.patternId==="auto-rc-placement-hand-normal-drop-bottom-power-v1"&&ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="card.placed"&&ability.trigger.subject==="source"&&JSON.stringify(ability.trigger.circles||[])===JSON.stringify(["rear-guard"])&&ability.trigger.sourceLocation==="hand"&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.conditions||[])===JSON.stringify([{type:"controller-vanguard-grade-at-least",count:3}])&&!(ability.costs||[]).length&&ability.canDecline===false&&definition.conditionsReviewed===true&&definition.choicesReviewed===true&&definition.effects?.length===2&&JSON.stringify(definition.effects[0])===JSON.stringify({op:"put-chosen-normal-drop-to-deck-bottom",target:"chosen",destination:"deck-bottom",optionalTarget:true,filter:{cardType:"normal-unit",excludeSentinel:true}})&&definition.effects[1]?.op==="modify-power"&&definition.effects[1]?.target==="source"&&Number(definition.effects[1]?.amount)===2000&&definition.effects[1]?.duration==="turn"&&definition.effects[1]?.ifPreviousEffectSucceeded===0;
+  }
   function supportsServerAbilityEffects(ability) {
     const effects = ability?.definition?.effects;
     if (!Array.isArray(effects) || !effects.length) return false;
@@ -3004,6 +3011,7 @@
     if (ability?.definition?.source?.patternId === "auto-self-revealed-damage-check-draw-v1" && !isExactSelfRevealedDamageDrawAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-own-attack-counter-blast-power-battle-v1" && !isExactOwnAttackCounterBlastPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-own-attack-counter-blast-power-mandatory-battle-v1" && !isExactOwnAttackMandatoryCounterBlastPowerAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-rc-placement-hand-normal-drop-bottom-power-v1" && !isExactRcPlacementNormalDropBottomPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-gb-boosted-vanguard-attack-counter-blast-draw-v1" && !isExactGbBoostedVanguardAttackDrawAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-placement-choose-friendly-clan-power-turn-v1" && !isExactRcPlacementChooseFriendlyPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-placement-soul-blast-choose-friendly-power-turn-v1" && !isExactRcPlacementSoulBlastFriendlyPowerAbility(ability)) return false;
@@ -5428,6 +5436,16 @@
       : pending.field || sourceZone;
     const authoritativeTriggerEvent = authoritativeSoulBlastBoostEvent(state, ability, triggerEvent, engine);
     if (!engine.eventMatchesAbilityTrigger(ability, triggerContext.event, authoritativeTriggerEvent, located.instance.uid, eventSourceZone, triggerContext.subjectZone || triggerEvent.currentLocation, actorPlayerId)) return reject("trigger-event-mismatch");
+    if (ability?.definition?.source?.patternId === "auto-rc-placement-hand-normal-drop-bottom-power-v1") {
+      if (!isExactRcPlacementNormalDropBottomPowerAbility(ability) || triggerEvent.type !== "card.placed" ||
+          triggerEvent.cardInstanceId !== located.instance.uid || triggerEvent.subjectCardInstanceId !== located.instance.uid ||
+          triggerEvent.sourceCardInstanceId !== located.instance.uid || triggerEvent.previousLocation !== "hand" ||
+          !/^(?:rear-(?:left|right|back-left|back-center|back-right)|accel-\d+)$/.test(String(triggerEvent.currentLocation||triggerEvent.circle||"")) || triggerEvent.sourceControllerPlayerId !== actorPlayerId ||
+          triggerEvent.subjectControllerPlayerId !== actorPlayerId || located.zone !== "rear-guard" ||
+          located.controllerPlayerId !== actorPlayerId || state.players?.[side]?.rear?.some(card => card?.uid === located.instance.uid) !== true) return reject("rc-placement-normal-drop-bottom-event-invalid");
+      const currentConditions=buildConditionContext(state,triggerEvent,located,engine);
+      if(!currentConditions||!engine.evaluateAbilityConditions(ability,currentConditions))return reject("rc-placement-normal-drop-bottom-grade-condition-no-longer-met");
+    }
     if(ability.definition?.source?.patternId==="auto-other-hand-discard-energy-blast-remove-source-return-discard-v1"){
       if(!otherHandDiscardReturnEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,engine))return reject("other-discard-trigger-context-invalid");
       if(command.payload.accept){

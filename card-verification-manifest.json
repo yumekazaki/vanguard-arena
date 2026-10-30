@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1456,
-    "testCount": 1456,
-    "passed": 1456,
+    "tests": 1462,
+    "testCount": 1462,
+    "passed": 1462,
     "failed": 0,
-    "durationMilliseconds": 283957,
-    "completedAt": "2026-10-30T21:10:52.557Z",
+    "durationMilliseconds": 312132,
+    "completedAt": "2026-10-30T22:00:00.556Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "6f5d57ab3d1590b65de2fd732f3a8cd15a72cadff21968b11863eb3e46617131"
+    "validationInputDigest": "383abcfbec32f16d41d0bd6223902f0cdff0cd58b38e88405b955fadf9b024be"
   },
   "records": [
     {
@@ -73763,8 +73763,98 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13823",
+      "abilityId": "cfa-13823:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-placement-normal-drop-bottom-power-server.test.js"
+      ],
+      "testCases": [
+        "the five exact AUTO abilities preserve the from-hand RC trigger, Grade 3 gate, optional target, and conditional +2000",
+        "host and joining player independently resolve the exact source placement and may put one eligible Drop unit on Deck bottom",
+        "no target is a legal up-to-one choice and does not grant power",
+        "another source, another circle, non-hand placement, or a Vanguard below Grade 3 cannot trigger",
+        "trigger and Sentinel cards, foreign-owned cards, stale selections, and forged owners are rejected atomically",
+        "condition and target are revalidated immediately before resolution"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13830",
+      "abilityId": "cfa-13830:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-placement-normal-drop-bottom-power-server.test.js"
+      ],
+      "testCases": [
+        "the five exact AUTO abilities preserve the from-hand RC trigger, Grade 3 gate, optional target, and conditional +2000",
+        "host and joining player independently resolve the exact source placement and may put one eligible Drop unit on Deck bottom",
+        "no target is a legal up-to-one choice and does not grant power",
+        "another source, another circle, non-hand placement, or a Vanguard below Grade 3 cannot trigger",
+        "trigger and Sentinel cards, foreign-owned cards, stale selections, and forged owners are rejected atomically",
+        "condition and target are revalidated immediately before resolution"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13844",
+      "abilityId": "cfa-13844:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-placement-normal-drop-bottom-power-server.test.js"
+      ],
+      "testCases": [
+        "the five exact AUTO abilities preserve the from-hand RC trigger, Grade 3 gate, optional target, and conditional +2000",
+        "host and joining player independently resolve the exact source placement and may put one eligible Drop unit on Deck bottom",
+        "no target is a legal up-to-one choice and does not grant power",
+        "another source, another circle, non-hand placement, or a Vanguard below Grade 3 cannot trigger",
+        "trigger and Sentinel cards, foreign-owned cards, stale selections, and forged owners are rejected atomically",
+        "condition and target are revalidated immediately before resolution"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13891",
+      "abilityId": "cfa-13891:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-placement-normal-drop-bottom-power-server.test.js"
+      ],
+      "testCases": [
+        "the five exact AUTO abilities preserve the from-hand RC trigger, Grade 3 gate, optional target, and conditional +2000",
+        "host and joining player independently resolve the exact source placement and may put one eligible Drop unit on Deck bottom",
+        "no target is a legal up-to-one choice and does not grant power",
+        "another source, another circle, non-hand placement, or a Vanguard below Grade 3 cannot trigger",
+        "trigger and Sentinel cards, foreign-owned cards, stale selections, and forged owners are rejected atomically",
+        "condition and target are revalidated immediately before resolution"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13921",
+      "abilityId": "cfa-13921:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-placement-normal-drop-bottom-power-server.test.js"
+      ],
+      "testCases": [
+        "the five exact AUTO abilities preserve the from-hand RC trigger, Grade 3 gate, optional target, and conditional +2000",
+        "host and joining player independently resolve the exact source placement and may put one eligible Drop unit on Deck bottom",
+        "no target is a legal up-to-one choice and does not grant power",
+        "another source, another circle, non-hand placement, or a Vanguard below Grade 3 cannot trigger",
+        "trigger and Sentinel cards, foreign-owned cards, stale selections, and forged owners are rejected atomically",
+        "condition and target are revalidated immediately before resolution"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T21:05:37.322Z"
+  "evidenceUpdatedAt": "2026-10-30T21:53:34.836Z"
 }

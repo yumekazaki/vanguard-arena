@@ -111466,6 +111466,261 @@
         }
       ]
     },
+    {
+      "id": "cfa-13823:0",
+      "cardId": "cfa-13823",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, if you have a grade 3 or greater vanguard, choose up to one normal unit without sentinel from your drop, and put it on the bottom of the deck. If you chose a card, this unit gets power +2000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-hand-normal-drop-bottom-power-v1",
+        "review": "Exact five-card AUTO wording. This exact source must enter an RC from hand while its controller has a grade 3 or greater Vanguard. Its controller may choose up to one owned normal unit without Sentinel from their Drop and put it on the bottom of their Deck; the source receives +2000 power until end of turn only if a card was chosen and moved."
+      },
+      "effects": [
+        {
+          "op": "put-chosen-normal-drop-to-deck-bottom",
+          "target": "chosen",
+          "destination": "deck-bottom",
+          "optionalTarget": true,
+          "filter": {
+            "cardType": "normal-unit",
+            "excludeSentinel": true
+          }
+        },
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn",
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
+    {
+      "id": "cfa-13830:0",
+      "cardId": "cfa-13830",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, if you have a grade 3 or greater vanguard, choose up to one normal unit without sentinel from your drop, and put it on the bottom of the deck. If you chose a card, this unit gets power +2000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-hand-normal-drop-bottom-power-v1",
+        "review": "Exact five-card AUTO wording. This exact source must enter an RC from hand while its controller has a grade 3 or greater Vanguard. Its controller may choose up to one owned normal unit without Sentinel from their Drop and put it on the bottom of their Deck; the source receives +2000 power until end of turn only if a card was chosen and moved."
+      },
+      "effects": [
+        {
+          "op": "put-chosen-normal-drop-to-deck-bottom",
+          "target": "chosen",
+          "destination": "deck-bottom",
+          "optionalTarget": true,
+          "filter": {
+            "cardType": "normal-unit",
+            "excludeSentinel": true
+          }
+        },
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn",
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
+    {
+      "id": "cfa-13844:0",
+      "cardId": "cfa-13844",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, if you have a grade 3 or greater vanguard, choose up to one normal unit without sentinel from your drop, and put it on the bottom of the deck. If you chose a card, this unit gets power +2000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-hand-normal-drop-bottom-power-v1",
+        "review": "Exact five-card AUTO wording. This exact source must enter an RC from hand while its controller has a grade 3 or greater Vanguard. Its controller may choose up to one owned normal unit without Sentinel from their Drop and put it on the bottom of their Deck; the source receives +2000 power until end of turn only if a card was chosen and moved."
+      },
+      "effects": [
+        {
+          "op": "put-chosen-normal-drop-to-deck-bottom",
+          "target": "chosen",
+          "destination": "deck-bottom",
+          "optionalTarget": true,
+          "filter": {
+            "cardType": "normal-unit",
+            "excludeSentinel": true
+          }
+        },
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn",
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
+    {
+      "id": "cfa-13891:0",
+      "cardId": "cfa-13891",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, if you have a grade 3 or greater vanguard, choose up to one normal unit without sentinel from your drop, and put it on the bottom of the deck. If you chose a card, this unit gets power +2000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-hand-normal-drop-bottom-power-v1",
+        "review": "Exact five-card AUTO wording. This exact source must enter an RC from hand while its controller has a grade 3 or greater Vanguard. Its controller may choose up to one owned normal unit without Sentinel from their Drop and put it on the bottom of their Deck; the source receives +2000 power until end of turn only if a card was chosen and moved."
+      },
+      "effects": [
+        {
+          "op": "put-chosen-normal-drop-to-deck-bottom",
+          "target": "chosen",
+          "destination": "deck-bottom",
+          "optionalTarget": true,
+          "filter": {
+            "cardType": "normal-unit",
+            "excludeSentinel": true
+          }
+        },
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn",
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
+    {
+      "id": "cfa-13921:0",
+      "cardId": "cfa-13921",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, if you have a grade 3 or greater vanguard, choose up to one normal unit without sentinel from your drop, and put it on the bottom of the deck. If you chose a card, this unit gets power +2000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-hand-normal-drop-bottom-power-v1",
+        "review": "Exact five-card AUTO wording. This exact source must enter an RC from hand while its controller has a grade 3 or greater Vanguard. Its controller may choose up to one owned normal unit without Sentinel from their Drop and put it on the bottom of their Deck; the source receives +2000 power until end of turn only if a card was chosen and moved."
+      },
+      "effects": [
+        {
+          "op": "put-chosen-normal-drop-to-deck-bottom",
+          "target": "chosen",
+          "destination": "deck-bottom",
+          "optionalTarget": true,
+          "filter": {
+            "cardType": "normal-unit",
+            "excludeSentinel": true
+          }
+        },
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn",
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;

@@ -91,6 +91,7 @@
   function expireHarmonyAssociations(state,endingTurnKey){if(!Array.isArray(state?.harmonyAssociations))return 0;const before=state.harmonyAssociations.length;state.harmonyAssociations=state.harmonyAssociations.filter(pair=>pair?.turnKey!==endingTurnKey&&harmonyFieldPair(state,pair));return before-state.harmonyAssociations.length}
   const effectOperations = new Set(["draw", "modify-power", "modify-power-target", "modify-critical", "grant-temporary-boost", "continuous-power", "continuous-power-adjustment", "continuous-power-per-soul-card", "continuous-power-per-clan-rearguard", "continuous-power-per-dragontree-marker", "continuous-power-per-controller-rearguard", "continuous-power-per-named-face-up-damage-card", "continuous-critical", "continuous-shield", "continuous-grade", "modify-drive", "modify-drive-target", "counter-charge", "conditional-counter-charge", "soul-charge", "revelation-choice", "rest-target", "engorge", "g-guardian-discard-charge-choice", "g-guardian-grade-three-replacement-choice", "set-blazing", "set-hollowed", "set-charging", "set-successful", "deck-to-damage", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "reorder-deck-card", "retire-target", "stand-target", "unlock-target", "protect-target", "protect-attacked-source", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "modify-defending-source-power", "rest-source", "stand-source", "create-token", "discard-from-hand", "draw-then-discard", "search-top-grade-three-to-hand-then-discard", "search-top-up-to-one-grade-to-hand", "search-top-up-to-one-filtered-to-hand", "search-deck-named-grade-three-then-discard", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "call-checked-card-locked", "call-source-from-drop-rested", "call-source-from-soul", "associate-harmony-units", "modify-shield-source", "seek-mate", "place-circle-marker"]);
   effectOperations.add("call-drop-trigger-to-guardian");
+  effectOperations.add("put-chosen-normal-drop-to-deck-bottom");
   const positiveInteger = value => Number.isInteger(Number(value)) && Number(value) > 0;
   const isTriggerUnit = (instance, cardDefinitionForInstance) => {
     const definition=typeof cardDefinitionForInstance==="function"?cardDefinitionForInstance(instance):null;
@@ -282,6 +283,34 @@
     "reorder-deck-card": Object.freeze({
       validate(step, context) { return step.target === "chosen" && step.destination === "player-choice" && Boolean(context.selectedCard) && context.player?.deck?.some(card => card.uid === context.selectedCard.uid) && ["top", "bottom"].includes(context.deckDestination); },
       apply(_step, context) { const index=context.player.deck.findIndex(card=>card.uid===context.selectedCard.uid);if(index<0)return false;const [card]=context.player.deck.splice(index,1);if(context.deckDestination==="top")context.player.deck.push(card);else context.player.deck.unshift(card);context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,previousLocation:"deck",currentLocation:"deck"});return true; }
+    }),
+    "put-chosen-normal-drop-to-deck-bottom": Object.freeze({
+      validate(step, context) {
+        if (step.target !== "chosen" || step.destination !== "deck-bottom" || step.optionalTarget !== true ||
+            step.filter?.cardType !== "normal-unit" || step.filter?.excludeSentinel !== true ||
+            context.match?.players?.[context.side] !== context.player || !Array.isArray(context.player?.drop) ||
+            !Array.isArray(context.player?.deck) || typeof context.cardDefinitionForInstance !== "function") return false;
+        const eligible = context.player.drop.filter(card => {
+          const definition = context.cardDefinitionForInstance(card);
+          const normalUnit = definition && String(definition.type || "").toLowerCase() === "unit" &&
+            !String(definition.trigger || card.triggerType || card.trigger || "").trim();
+          return normalUnit && (!card.ownerPlayerId || card.ownerPlayerId === context.actorPlayerId) &&
+            !cardHasAbilityKeyword(definition, "Sentinel");
+        });
+        if (context.optionalNoTarget === true) return context.effectUid == null;
+        if (context.effectUid == null) return true;
+        return eligible.some(card => card.uid === context.effectUid);
+      },
+      apply(_step, context) {
+        if (context.optionalNoTarget === true || context.effectUid == null) return 0;
+        const index = context.player.drop.findIndex(card => card?.uid === context.effectUid);
+        if (index < 0) return false;
+        const [card] = context.player.drop.splice(index, 1);
+        card.zone = "deck"; card.circle = null; card.position = null; card.faceUp = false; card.rested = false;
+        context.player.deck.unshift(card);
+        context.emitEvent?.({ type: "card.moved", cardInstanceId: card.uid, previousLocation: "drop", currentLocation: "deck", destinationPosition: "bottom", reason: "ability-put-on-bottom-deck" });
+        return card.uid;
+      }
     }),
     "call-checked-card-locked": Object.freeze({
       validate(step, context) {
@@ -1143,6 +1172,13 @@
     if(!match)return null;
     const effects=[{op:"modify-power",target:"source",amount:Number(match[4]),duration:"battle"}];if(match[5])effects.push({op:"modify-critical",target:"source",amount:Number(match[5]),duration:"battle"});
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-own-attack-hand-condition-power-battle-v1",review:"Exact AUTO attack template: source identity, printed attack target/circle, GB threshold, hand-size condition, and battle-scoped power/critical effects are modeled independently."},effects};
+  }
+  function compileAutoRcPlacementNormalDropBottomPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const text=normalizePrintedText(printedText);
+    const match=text.match(/^AUTO:\s*When this unit is placed on RC from hand, if (?:you have|your vanguard is) a grade 3 or greater vanguard, choose up to one normal unit without sentinel from your drop, and put it on the bottom of (?:the|your) deck\. If you chose a card, this unit gets power \+(\d+) until end of turn\.$/i);
+    if(!match)return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["rear-guard"],sourceLocation:"hand"},conditions:[{type:"controller-vanguard-grade-at-least",count:3}],conditionsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rc-placement-hand-normal-drop-bottom-power-v1",review:"Exact five-card AUTO wording. This exact source must enter an RC from hand while its controller has a grade 3 or greater Vanguard. Its controller may choose up to one owned normal unit without Sentinel from their Drop and put it on the bottom of their Deck; the source receives the printed power only if a card was chosen and moved."},effects:[{op:"put-chosen-normal-drop-to-deck-bottom",target:"chosen",destination:"deck-bottom",optionalTarget:true,filter:{cardType:"normal-unit",excludeSentinel:true}},{op:"modify-power",target:"source",amount:Number(match[1]),duration:"turn",ifPreviousEffectSucceeded:0}]};
   }
   function compileAutoAttackCounterBlastPowerDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
@@ -2742,6 +2778,7 @@
     compileContinuousRearGuardCannotBeBoostedDefinition,
     compileContinuousInterceptKeywordDefinition,
     compileAutoOwnAttackHandConditionPowerDefinition,
+    compileAutoRcPlacementNormalDropBottomPowerDefinition,
     compileAutoOwnAttackEmptySoulPowerDefinition,
     compileMandatoryAttackCounterBlastPowerDefinition,
     compileAutoAttackSoulBlastPowerDefinition,
@@ -3008,6 +3045,7 @@
       targetCurrentLocation: input.targetCurrentLocation || null,
       previousLocation: input.previousLocation || null,
       currentLocation: input.currentLocation || null,
+      destinationPosition: input.destinationPosition || null,
       discardReason: input.discardReason || input.reason || null,
       calledGUnitCardId: input.calledGUnitCardId || null,
       calledGUnitInstanceId: input.calledGUnitInstanceId || null,
