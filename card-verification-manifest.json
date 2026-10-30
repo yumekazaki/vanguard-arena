@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1442,
-    "testCount": 1442,
-    "passed": 1442,
+    "tests": 1446,
+    "testCount": 1446,
+    "passed": 1446,
     "failed": 0,
-    "durationMilliseconds": 239352,
-    "completedAt": "2026-10-30T19:35:49.415Z",
+    "durationMilliseconds": 242092,
+    "completedAt": "2026-10-30T19:51:44.862Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "e1eeb7ab015050e7ba15d0fb2bf31a4c5e1ef49e43a8aaf0ff59130d722b278b"
+    "validationInputDigest": "7513a6c5900dfabd390488e8dcdf8c9f06cc31e2314d6a8539d2b6d6be7de149"
   },
   "records": [
     {
@@ -73230,8 +73230,56 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2064",
+      "abilityId": "cfa-2064:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-own-attack-hit-counter-charge.test.js"
+      ],
+      "testCases": [
+        "the three exact mandatory hit abilities require this own attack to hit the opposing Vanguard",
+        "host and joining player independently Counter Charge their own selected damage from VC or RC",
+        "different attacker, non-Vanguard target, stale battle, forged player, or no face-down Damage never grants a prompt",
+        "missing or forged Damage selection is rejected, and a forged card definition is not trusted"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2378",
+      "abilityId": "cfa-2378:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-own-attack-hit-counter-charge.test.js"
+      ],
+      "testCases": [
+        "the three exact mandatory hit abilities require this own attack to hit the opposing Vanguard",
+        "host and joining player independently Counter Charge their own selected damage from VC or RC",
+        "different attacker, non-Vanguard target, stale battle, forged player, or no face-down Damage never grants a prompt",
+        "missing or forged Damage selection is rejected, and a forged card definition is not trusted"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2742",
+      "abilityId": "cfa-2742:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-own-attack-hit-counter-charge.test.js"
+      ],
+      "testCases": [
+        "the three exact mandatory hit abilities require this own attack to hit the opposing Vanguard",
+        "host and joining player independently Counter Charge their own selected damage from VC or RC",
+        "different attacker, non-Vanguard target, stale battle, forged player, or no face-down Damage never grants a prompt",
+        "missing or forged Damage selection is rejected, and a forged card definition is not trusted"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T19:31:36.724Z"
+  "evidenceUpdatedAt": "2026-10-30T19:47:18.588Z"
 }

@@ -565,6 +565,35 @@
     ["cfa-214", [0, "Gold Paladin"]], ["cfa-306", [0, "Great Nature"]], ["cfa-377", [0, "Neo Nectar"]]
   ]);
 
+  const ATTACK_HIT_COUNTER_CHARGE_CARD_IDS = new Set(["cfa-2064", "cfa-2378", "cfa-2742"]);
+  function isExactAttackHitCounterChargeAbility(ability) {
+    const definition = ability?.definition, cardId = String(ability?.cardId || "");
+    const printed = String(definition?.printedText || ability?.printedText || "").replace(/[’‘]/g, "'").replace(/\s+/g, " ").trim();
+    const expected = "AUTO [VC/RC]: When this unit's attack hits a vanguard, choose a card from your damage zone, and turn it face up. (Counter Charge 1)";
+    return ATTACK_HIT_COUNTER_CHARGE_CARD_IDS.has(cardId) && ability?.id === `${cardId}:0` && ability.kind === "AUTO" && definition?.kind === "AUTO" &&
+      definition.cardId === cardId && definition.source?.patternId === "auto-own-attack-hit-counter-charge-v1" && printed === expected &&
+      ability.trigger?.status === "recognized-trigger" && ability.trigger.eventType === "attack.hit" && ability.trigger.subject === "source" && ability.trigger.targetLocation === "vanguard" &&
+      JSON.stringify(ability.requiredLocation || definition.requiredLocation || []) === JSON.stringify(["vanguard", "rear-guard"]) &&
+      !(ability.conditions || []).length && !(ability.costs || []).length && definition.choicesReviewed === true && definition.effects?.length === 1 &&
+      definition.effects[0]?.op === "counter-charge" && Number(definition.effects[0]?.count) === 1;
+  }
+  function attackHitCounterChargeEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
+    const attack = state?.pendingAttack, player = located && state.players?.[located.side], targetUid = attack?.targetUid;
+    const target = targetUid ? engine.locateCardInstance(state, targetUid) : null;
+    const sourceZone = located?.zone === "vanguard" ? "vanguard" : located?.zone === "rear-guard" ? located.circle : null;
+    return isExactAttackHitCounterChargeAbility(ability) && event?.type === "attack.hit" && Boolean(event.eventId && event.battleId) &&
+      event.battleId === attack?.battleId && event.phase === "battle" && event.timingWindow === "attack-hit" &&
+      event.sourceCardInstanceId === source?.uid && event.attackingUnitInstanceId === source?.uid && event.sourceOwnerPlayerId === located?.ownerPlayerId &&
+      event.sourceControllerPlayerId === actorPlayerId && event.actingPlayerId === actorPlayerId && event.turnPlayerId === actorPlayerId &&
+      event.targetLocation === "vanguard" && event.subjectCardInstanceId === targetUid && event.cardInstanceId === targetUid &&
+      (event.targetCardInstanceIds || []).length === 1 && event.targetCardInstanceIds[0] === targetUid &&
+      attack?.attackerUid === source?.uid && attack.attackerSide === located?.side && attack.attackerPlayerId === actorPlayerId &&
+      attack.attackerZone === sourceZone && attack.targetZone === "vanguard" && attack.defenderSide !== located?.side &&
+      located?.controllerPlayerId === actorPlayerId && player?.playerId === actorPlayerId &&
+      (sourceZone === "vanguard" ? player.vanguard?.uid === source.uid : sourceZone && player.rear?.some(card => card?.uid === source.uid)) &&
+      target && !target.ambiguous && target.zone === "vanguard" && target.side === attack.defenderSide && state.players?.[attack.defenderSide]?.vanguard?.uid === targetUid;
+  }
+
   function isExactVanguardHitClanStandAbility(ability) {
     const definition = ability?.definition, cardId = String(ability?.cardId || ""), [index, clan] = VANGUARD_HIT_CLAN_STAND.get(cardId) || [];
     const printed = String(definition?.printedText || ability?.printedText || "").replace(/[’‘]/g, "'").replace(/\s+/g, " ").trim();
@@ -2995,6 +3024,7 @@
     const hasCallCheckedCardLocked = effects.some(step => step?.op === "call-checked-card-locked");
     const hasModifyDrive = effects.some(step => step?.op === "modify-drive");
     const hasSuccess = effects.some(step => step?.op === "set-successful");
+    if (ability?.definition?.source?.patternId === "auto-own-attack-hit-counter-charge-v1" && !isExactAttackHitCounterChargeAbility(ability)) return false;
     const isVanguardHitClanStand = ability?.definition?.source?.patternId === "auto-vanguard-own-attack-hit-clan-counter-blast-stand-v1";
     if (ability?.definition?.source?.patternId === "auto-rc-drive-check-trigger-unit-power-turn-v1" && !isExactTriggerUnitDrivePowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-drive-check-normal-unit-source-power-turn-v1" && !isExactNormalUnitDrivePowerAbility(ability)) return false;
@@ -3826,11 +3856,19 @@
                 !strideCostDiscardDrawEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId)) continue;
             if (isExactNamedGGuardianDiscardDrawAbility(ability) && !namedGGuardianDiscardDrawEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (ability.definition?.source?.patternId === "auto-g-guardian-named-call-soul-blast-counter-charge-v1" && !gGuardianSoulBlastCounterChargeEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
+            const sourceControllerForCost = Object.values(state.players || {}).find(player => player?.playerId === located.controllerPlayerId);
             if (isExactVanguardHitClanStandAbility(ability) &&
                 !vanguardHitClanStandEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (isExactRcAttackHitClanLowGradeStandAbility(ability) &&
                 !rcAttackHitClanLowGradeStandEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
-            const sourceControllerForCost = Object.values(state.players || {}).find(player => player?.playerId === located.controllerPlayerId);
+            if (isExactAttackHitCounterChargeAbility(ability)) {
+              if (!attackHitCounterChargeEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
+              const ownDamage = sourceControllerForCost?.damage || [];
+              if (!ownDamage.some(card => card?.faceDown)) {
+                if (engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) skipped.push({ eventId: event.eventId, cardInstanceId: instance.uid, abilityId: ability.id, reason: "no-face-down-damage" });
+                continue;
+              }
+            }
             if (isExactRcAttackHitClanLowGradeStandAbility(ability) && !engine.canPayAbilityCosts(ability, { faceUpDamage: (sourceControllerForCost?.damage || []).filter(card => !card.faceDown).length })) {
               if (engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) skipped.push({ eventId: event.eventId, cardInstanceId: instance.uid, abilityId: ability.id, reason: "unpayable-cost" });
               continue;
@@ -5480,6 +5518,7 @@
       const controller = state.players?.[side];
       if (!engine.canPayAbilityCosts(ability, { faceUpDamage: (controller?.damage || []).filter(card => !card.faceDown).length })) return reject("unpayable-cost");
     }
+    if (isExactAttackHitCounterChargeAbility(ability) && !attackHitCounterChargeEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("attack-hit-counter-charge-context-invalid");
     const successTriggerValidated = isExactSuccessAbility(ability) && successThresholdEventMatches(state, ability, located.instance, located, triggerEvent, engine);
     if (isExactSuccessAbility(ability) && !successTriggerValidated) return reject("success-threshold-condition-no-longer-met");
     if (isExactClanSoulBlastAttackPowerAbility(ability)) {

@@ -1268,6 +1268,15 @@
     const circle=match[1].toUpperCase();
     return{id:abilityId,cardId,kind,printedText,requiredLocation:circle==="VC"?["vanguard"]:circle==="RC"?["rear-guard"]:["vanguard","rear-guard"],choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"attack.hit",subject:"source",targetLocation:"vanguard",circles:[]},conditions:[{type:"controller-vanguard-has-clan",value:match[2]}],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-own-attack-hit-clan-vanguard-counter-charge-v1",review:"Exact eight-record clan-gated AUTO family. The ability source's own attack must hit the opposing Vanguard, its controller's current Vanguard must match the printed clan, and the controller chooses a face-down Damage card for the printed Counter Charge amount."},effects:[{op:"counter-charge",count:Number(match[3])}]};
   }
+  function compileAttackHitCounterChargeDefinition(cardId, abilityId, kind, printedText) {
+    if (kind !== "AUTO") return null;
+    const match = normalizePrintedText(printedText).match(/^AUTO \[(VC\/RC)\]: When this unit(?:'|’)s attack hits a vanguard, choose a card from your damage zone, and turn it face up\. \(Counter Charge 1\)\.?$/i);
+    if (!match) return null;
+    return { id: abilityId, cardId, kind, printedText, requiredLocation: ["vanguard", "rear-guard"], choicesReviewed: true,
+      trigger: { status: "recognized-trigger", eventType: "attack.hit", subject: "source", targetLocation: "vanguard", circles: [] },
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-own-attack-hit-counter-charge-v1", review: "Exact mandatory AUTO. The exact source unit's attack must hit the opposing Vanguard; its controller chooses one of their face-down Damage cards to turn face up." },
+      effects: [{ op: "counter-charge", count: 1 }] };
+  }
   function compileUnboostedAttackSelfProtectionDefinition(cardId,abilityId,kind,printedText){
     const text=normalizePrintedText(printedText);
     if(kind!=="AUTO"||!/^AUTO\s*\[RC\]:\s*When this unit is attacked without being boosted, this unit cannot be hit until (?:the end of )?that battle\.?$/i.test(text))return null;
@@ -2641,6 +2650,7 @@
     compileOwnAttackLimitBreakClanFieldPowerDefinition,
     compileBoostedClanVanguardHitReturnHandDefinition,
     compileAttackHitClanVanguardCounterChargeDefinition,
+    compileAttackHitCounterChargeDefinition,
     compileBoostSelfPowerOnBoostDefinition,
     compileBoostThenDeckReturnDefinition,
     compileLegionVanguardBoostPowerDefinition,

@@ -110829,6 +110829,96 @@
           "count": 1
         }
       ]
+    },
+    {
+      "id": "cfa-2064:0",
+      "cardId": "cfa-2064",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit’s attack hits a vanguard, choose a card from your damage zone, and turn it face up. (Counter Charge 1)",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-hit-counter-charge-v1",
+        "review": "Exact mandatory AUTO. The exact source unit's attack must hit the opposing Vanguard; its controller chooses one of their face-down Damage cards to turn face up."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-2378:0",
+      "cardId": "cfa-2378",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit’s attack hits a vanguard, choose a card from your damage zone, and turn it face up. (Counter Charge 1)",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-hit-counter-charge-v1",
+        "review": "Exact mandatory AUTO. The exact source unit's attack must hit the opposing Vanguard; its controller chooses one of their face-down Damage cards to turn face up."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-2742:0",
+      "cardId": "cfa-2742",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit’s attack hits a vanguard, choose a card from your damage zone, and turn it face up. (Counter Charge 1)",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-hit-counter-charge-v1",
+        "review": "Exact mandatory AUTO. The exact source unit's attack must hit the opposing Vanguard; its controller chooses one of their face-down Damage cards to turn face up."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
