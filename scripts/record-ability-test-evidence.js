@@ -11,6 +11,19 @@ function atomicWrite(file, contents) {
   catch (error) { fs.rmSync(temporary, { force: true }); throw error; }
 }
 
+function mergeAbilityEvidence(existing, update) {
+  const wasFullyVerified = existing?.status === "fully-verified" && existing.fullyVerified === true;
+  return {
+    ...existing,
+    ...update,
+    status: wasFullyVerified ? "fully-verified" : update.status,
+    testFiles: [...new Set([...(existing?.testFiles || []), ...(update.testFiles || [])])],
+    testCases: [...new Set([...(existing?.testCases || []), ...(update.testCases || [])])],
+    fullyVerified: wasFullyVerified || update.fullyVerified === true,
+    remaining: wasFullyVerified ? existing.remaining : update.remaining
+  };
+}
+
 function recordPassingEvidence(root, abilityIds, testFiles) {
   if (!Array.isArray(abilityIds) || !abilityIds.length || new Set(abilityIds).size !== abilityIds.length) throw new TypeError("Supply unique ability IDs.");
   if (!Array.isArray(testFiles) || !testFiles.length) throw new TypeError("Supply at least one test file.");
@@ -44,7 +57,7 @@ function recordPassingEvidence(root, abilityIds, testFiles) {
     };
     const index = manifest.records.findIndex(existing => existing.abilityId === abilityId);
     if (index < 0) manifest.records.push(record);
-    else manifest.records[index] = { ...manifest.records[index], ...record };
+    else manifest.records[index] = mergeAbilityEvidence(manifest.records[index], record);
   }
   manifest.evidenceUpdatedAt = now;
   atomicWrite(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
@@ -63,4 +76,4 @@ if (require.main === module) {
   } catch (error) { process.stderr.write(`${error.message}\n`); process.exitCode = 1; }
 }
 
-module.exports = { recordPassingEvidence };
+module.exports = { mergeAbilityEvidence, recordPassingEvidence };

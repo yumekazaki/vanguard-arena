@@ -73572,7 +73572,8 @@
         "all 16 Guardian top-five AUTO definitions retain the exact two printed variants",
         "host and joining defender each pay CB1 and call the top five units at rest with exact shield",
         "Guardian top-five AUTO is exact to its controller, source, circle, and active battle",
-        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve"
+        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve",
+        "a Drop Trigger must also be controlled by the defending player in client validation and authoritative resolution"
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
@@ -73600,7 +73601,8 @@
         "all 16 Guardian top-five AUTO definitions retain the exact two printed variants",
         "host and joining defender each pay CB1 and call the top five units at rest with exact shield",
         "Guardian top-five AUTO is exact to its controller, source, circle, and active battle",
-        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve"
+        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve",
+        "a Drop Trigger must also be controlled by the defending player in client validation and authoritative resolution"
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
@@ -73628,7 +73630,8 @@
         "all 16 Guardian top-five AUTO definitions retain the exact two printed variants",
         "host and joining defender each pay CB1 and call the top five units at rest with exact shield",
         "Guardian top-five AUTO is exact to its controller, source, circle, and active battle",
-        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve"
+        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve",
+        "a Drop Trigger must also be controlled by the defending player in client validation and authoritative resolution"
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
@@ -73656,7 +73659,8 @@
         "all 16 Guardian top-five AUTO definitions retain the exact two printed variants",
         "host and joining defender each pay CB1 and call the top five units at rest with exact shield",
         "Guardian top-five AUTO is exact to its controller, source, circle, and active battle",
-        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve"
+        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve",
+        "a Drop Trigger must also be controlled by the defending player in client validation and authoritative resolution"
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
@@ -73684,7 +73688,8 @@
         "all 16 Guardian top-five AUTO definitions retain the exact two printed variants",
         "host and joining defender each pay CB1 and call the top five units at rest with exact shield",
         "Guardian top-five AUTO is exact to its controller, source, circle, and active battle",
-        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve"
+        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve",
+        "a Drop Trigger must also be controlled by the defending player in client validation and authoritative resolution"
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
@@ -73924,5 +73929,5 @@
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T22:31:54.632Z"
+  "evidenceUpdatedAt": "2026-10-30T22:51:38.994Z"
 }
