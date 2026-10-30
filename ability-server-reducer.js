@@ -3151,6 +3151,7 @@
       opponentTriggerRevealedThisTurn: player.opponentTriggerRevealedThisTurn === true,
       controllerFieldCards: [...(player.vanguard ? [player.vanguard] : []), ...(player.rear || [])].filter(Boolean).map(card => { const definition = serverCardDefinition(card); return { uid: card.uid, zone: card.uid === player.vanguard?.uid ? "vanguard" : "rear-guard", names: engine.getCardNames?.(definition,{location:card.uid===player.vanguard?.uid?"vanguard":"rear-guard"}) || [card.cardName].filter(Boolean), clans: [definition.clan, ...(definition.clans || [])].filter(Boolean), allClansAndNations: engine.hasAbilityKeyword?.(card.cardId, "all-clans-and-nations") === true }; }),
       generationBreakCount: engine.countGenerationBreakUnits?.(player, card => card?.gDeckCard === true) || 0,
+      sourceAttackedThisBattle: attackContext?.attackerUid === instance.uid,
       attackingVanguard: attackContext?.attackTargetZone === "vanguard" || (attackContext?.attackerUid === instance.uid && attackContext?.attackerZone === "vanguard"), sourceWasBooster: attackContext?.boosterCardInstanceId === instance.uid && Boolean(attackContext?.boostedUnitInstanceId)
     };
     const ownAbilities = serverReviewedAbilities(instance, engine);

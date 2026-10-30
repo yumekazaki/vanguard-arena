@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1415,
-    "testCount": 1415,
-    "passed": 1415,
+    "tests": 1419,
+    "testCount": 1419,
+    "passed": 1419,
     "failed": 0,
-    "durationMilliseconds": 232332,
-    "completedAt": "2026-10-30T17:48:30.000Z",
+    "durationMilliseconds": 234645,
+    "completedAt": "2026-10-30T17:59:30.000Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "21927c79b45e8bee30f782b172425f1fa2bc254adac954c7bc152c368c2840c2"
+    "validationInputDigest": "a7efcc689a3b23377aad406af511cc917fdc25d8792fbf87a5c60b4e7caccc2e"
   },
   "records": [
     {
@@ -72800,8 +72800,56 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-8233",
+      "abilityId": "cfa-8233:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-own-attack-battle-power.test.js"
+      ],
+      "testCases": [
+        "all three exact own-attack CONT abilities preserve source circles and battle power",
+        "the bonus requires this exact source to be the attacker in the current battle",
+        "host and joining player get the bonus only for their own attacking source",
+        "browser and authoritative continuous contexts identify the exact attacking instance"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-8237",
+      "abilityId": "cfa-8237:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-own-attack-battle-power.test.js"
+      ],
+      "testCases": [
+        "all three exact own-attack CONT abilities preserve source circles and battle power",
+        "the bonus requires this exact source to be the attacker in the current battle",
+        "host and joining player get the bonus only for their own attacking source",
+        "browser and authoritative continuous contexts identify the exact attacking instance"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10048",
+      "abilityId": "cfa-10048:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-own-attack-battle-power.test.js"
+      ],
+      "testCases": [
+        "all three exact own-attack CONT abilities preserve source circles and battle power",
+        "the bonus requires this exact source to be the attacker in the current battle",
+        "host and joining player get the bonus only for their own attacking source",
+        "browser and authoritative continuous contexts identify the exact attacking instance"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T17:44:17.024Z"
+  "evidenceUpdatedAt": "2026-10-30T17:55:02.862Z"
 }

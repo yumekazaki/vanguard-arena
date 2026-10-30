@@ -109805,6 +109805,87 @@
           "type": "restraint"
         }
       ]
+    },
+    {
+      "id": "cfa-8233:1",
+      "cardId": "cfa-8233",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During the battle this unit attacked, this unit gets power +2000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-own-attack-battle-power-v1",
+        "review": "Exact CONT battle power template. This exact source instance gains its printed power only while it is the attacking unit in the current battle; attacks by another unit do not satisfy it."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "source-attacked-this-battle"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-8237:1",
+      "cardId": "cfa-8237",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During the battle this unit attacked, this unit gets power +2000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-own-attack-battle-power-v1",
+        "review": "Exact CONT battle power template. This exact source instance gains its printed power only while it is the attacking unit in the current battle; attacks by another unit do not satisfy it."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "source-attacked-this-battle"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10048:0",
+      "cardId": "cfa-10048",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During the battle this unit attacked, this unit gets power +2000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-own-attack-battle-power-v1",
+        "review": "Exact CONT battle power template. This exact source instance gains its printed power only while it is the attacking unit in the current battle; attacks by another unit do not satisfy it."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "source-attacked-this-battle"
+          }
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

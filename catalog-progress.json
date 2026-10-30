@@ -1,49 +1,49 @@
 {
-  "generatedAt": "2026-10-30T17:49:04.943Z",
+  "generatedAt": "2026-10-30T18:00:01.494Z",
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "catalogSource": "scripts/audit-ability-catalog.js (local catalog file or committed HEAD snapshot)",
   "cards": {
     "imported": 14022,
     "parsed": 14022,
     "withAbilities": 11841,
-    "withAtLeastOneCompiledAbility": 3463,
+    "withAtLeastOneCompiledAbility": 3466,
     "withAllAbilityBlocksCompiledAndAuditValid": 1893,
     "withUnsupportedAbilityBlocks": 9948,
     "withUnmodeledRequirements": 9948,
-    "withExplicitPassingRegressionEvidence": 2789,
+    "withExplicitPassingRegressionEvidence": 2792,
     "fullyVerified": 618
   },
   "abilities": {
     "parsed": 17240,
-    "compiled": 4233,
-    "unsupportedOrUnreviewed": 13007,
+    "compiled": 4236,
+    "unsupportedOrUnreviewed": 13004,
     "invalidCompiled": 0,
-    "patterns": 242,
-    "compiledPercent": 24.55
+    "patterns": 243,
+    "compiledPercent": 24.57
   },
   "verification": {
     "manifest": "card-verification-manifest.json",
-    "manifestRecords": 4169,
-    "passingTestCases": 15495,
+    "manifestRecords": 4172,
+    "passingTestCases": 15507,
     "latestFullSuite": {
       "command": "node --test",
       "testCommand": "node --test",
       "status": "passed",
-      "tests": 1415,
-      "testCount": 1415,
-      "passed": 1415,
+      "tests": 1419,
+      "testCount": 1419,
+      "passed": 1419,
       "failed": 0,
-      "durationMilliseconds": 232332,
-      "completedAt": "2026-10-30T17:48:30.000Z",
+      "durationMilliseconds": 234645,
+      "completedAt": "2026-10-30T17:59:30.000Z",
       "runDate": "2026-10-30",
-      "validationInputDigest": "21927c79b45e8bee30f782b172425f1fa2bc254adac954c7bc152c368c2840c2"
+      "validationInputDigest": "a7efcc689a3b23377aad406af511cc917fdc25d8792fbf87a5c60b4e7caccc2e"
     },
     "fullyVerifiedRequiresAllPrintedAbilitiesAndRulesEvidence": true,
     "note": "Aggregate parsing or a passing pattern test does not make a whole card fully verified. Only explicit manifest records count as regression evidence; zero fully verified cards is reported when no complete card-level evidence exists."
   },
   "workflow": {
-    "catalogLoadMilliseconds": 151.1,
-    "fullCatalogParseAndAuditMilliseconds": 4359.1,
+    "catalogLoadMilliseconds": 143.2,
+    "fullCatalogParseAndAuditMilliseconds": 4333.4,
     "repeatedAuditsOfTheSameCatalogUseTheExistingDigestCache": true,
     "parseCacheExperiment": "Rejected JSON-clone-per-call caching after three full catalog parse passes measured about 9.5 seconds uncached versus 12.1 seconds with cloning. Adopted immutable per-card snapshots with definition-revision invalidation: the same three passes measured about 9.5 seconds uncached versus 3.82 seconds cached; cache-hit passes were about 2.5 milliseconds each.",
     "measuredBottlenecks": [
@@ -57,11 +57,11 @@
         "area": "Unbounded all-in-one verification feedback",
         "evidence": "Full Node suite measured 245.62 seconds before the cache and 37.96 seconds after it.",
         "optimization": "Run focused rule/worker checks per ability batch and reserve the full suite for milestones.",
-        "result": "Latest full suite: 1415/1415 passed in 232.33 seconds."
+        "result": "Latest full suite: 1419/1419 passed in 234.65 seconds."
       },
       {
         "area": "Manual card semantics and validation backlog",
-        "evidence": "13007 ability blocks remain unsupported or unreviewed; 9948 cards contain at least one such block. Repository history has no per-stage time logs to substantiate the reported 22 hours.",
+        "evidence": "13004 ability blocks remain unsupported or unreviewed; 9948 cards contain at least one such block. Repository history has no per-stage time logs to substantiate the reported 22 hours.",
         "optimization": "Process exact recurring templates in reusable batches; preserve per-card evidence and leave ambiguous text unreviewed.",
         "result": "Reusable Soul-count power and critical patterns plus signed continuous power adjustments cover the current verified examples; per-card evidence stays partial until the other printed abilities are implemented."
       }
