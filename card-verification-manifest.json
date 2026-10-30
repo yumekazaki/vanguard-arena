@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1419,
-    "testCount": 1419,
-    "passed": 1419,
+    "tests": 1423,
+    "testCount": 1423,
+    "passed": 1423,
     "failed": 0,
-    "durationMilliseconds": 234645,
-    "completedAt": "2026-10-30T17:59:30.000Z",
+    "durationMilliseconds": 238327,
+    "completedAt": "2026-10-30T18:17:00.000Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "a7efcc689a3b23377aad406af511cc917fdc25d8792fbf87a5c60b4e7caccc2e"
+    "validationInputDigest": "b201a10b5d36fd95954b562133c22e86461b235baafbb3d10d76e86dda4ff867"
   },
   "records": [
     {
@@ -72848,8 +72848,56 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1619",
+      "abilityId": "cfa-1619:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-power-named-face-up-damage.test.js"
+      ],
+      "testCases": [
+        "all three exact named-face-up Damage Zone CONT abilities preserve the printed card name",
+        "scaling counts distinct face-up matching instances in only the controller's Damage Zone",
+        "both online seats use their own face-up named damage for authoritative attack power",
+        "browser and authoritative continuous contexts pass only the controller's damage instances"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1622",
+      "abilityId": "cfa-1622:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-power-named-face-up-damage.test.js"
+      ],
+      "testCases": [
+        "all three exact named-face-up Damage Zone CONT abilities preserve the printed card name",
+        "scaling counts distinct face-up matching instances in only the controller's Damage Zone",
+        "both online seats use their own face-up named damage for authoritative attack power",
+        "browser and authoritative continuous contexts pass only the controller's damage instances"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1623",
+      "abilityId": "cfa-1623:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-power-named-face-up-damage.test.js"
+      ],
+      "testCases": [
+        "all three exact named-face-up Damage Zone CONT abilities preserve the printed card name",
+        "scaling counts distinct face-up matching instances in only the controller's Damage Zone",
+        "both online seats use their own face-up named damage for authoritative attack power",
+        "browser and authoritative continuous contexts pass only the controller's damage instances"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T17:55:02.862Z"
+  "evidenceUpdatedAt": "2026-10-30T18:12:15.313Z"
 }

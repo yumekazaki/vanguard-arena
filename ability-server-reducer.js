@@ -3150,6 +3150,7 @@
       controllerDamageCount: (player.damage || []).length,
       opponentTriggerRevealedThisTurn: player.opponentTriggerRevealedThisTurn === true,
       controllerFieldCards: [...(player.vanguard ? [player.vanguard] : []), ...(player.rear || [])].filter(Boolean).map(card => { const definition = serverCardDefinition(card); return { uid: card.uid, zone: card.uid === player.vanguard?.uid ? "vanguard" : "rear-guard", names: engine.getCardNames?.(definition,{location:card.uid===player.vanguard?.uid?"vanguard":"rear-guard"}) || [card.cardName].filter(Boolean), clans: [definition.clan, ...(definition.clans || [])].filter(Boolean), allClansAndNations: engine.hasAbilityKeyword?.(card.cardId, "all-clans-and-nations") === true }; }),
+      controllerDamageCards: (player.damage || []).filter(card => card && typeof card.uid === "string").map(card => ({ uid: card.uid, faceDown: card.faceDown === true, names: engine.getCardNames?.(serverCardDefinition(card), { location: "damage" }) || [serverCardDefinition(card).name || card.cardName].filter(Boolean) })),
       generationBreakCount: engine.countGenerationBreakUnits?.(player, card => card?.gDeckCard === true) || 0,
       sourceAttackedThisBattle: attackContext?.attackerUid === instance.uid,
       attackingVanguard: attackContext?.attackTargetZone === "vanguard" || (attackContext?.attackerUid === instance.uid && attackContext?.attackerZone === "vanguard"), sourceWasBooster: attackContext?.boosterCardInstanceId === instance.uid && Boolean(attackContext?.boostedUnitInstanceId)

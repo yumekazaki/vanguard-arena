@@ -109886,6 +109886,90 @@
           }
         }
       ]
+    },
+    {
+      "id": "cfa-1619:0",
+      "cardId": "cfa-1619",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, this unit gets power +2000 for each card named \"Operation Celestial, Armen\" face up in your damage zone.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-own-turn-named-face-up-damage-power-v1",
+        "review": "Exact own-turn CONT power template. Counts distinct face-up cards with the exact printed name in this controller's Damage Zone; preserves source VC/RC scope and excludes face-down cards and the opponent's Damage Zone."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-named-face-up-damage-card",
+          "target": "source",
+          "amount": 2000,
+          "cardName": "Operation Celestial, Armen",
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1622:0",
+      "cardId": "cfa-1622",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, this unit gets power +2000 for each card named \"Operation Celestial, Armen\" face up in your damage zone.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-own-turn-named-face-up-damage-power-v1",
+        "review": "Exact own-turn CONT power template. Counts distinct face-up cards with the exact printed name in this controller's Damage Zone; preserves source VC/RC scope and excludes face-down cards and the opponent's Damage Zone."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-named-face-up-damage-card",
+          "target": "source",
+          "amount": 2000,
+          "cardName": "Operation Celestial, Armen",
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1623:0",
+      "cardId": "cfa-1623",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, this unit gets power +2000 for each card named \"Operation Celestial, Armen\" face up in your damage zone.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-own-turn-named-face-up-damage-power-v1",
+        "review": "Exact own-turn CONT power template. Counts distinct face-up cards with the exact printed name in this controller's Damage Zone; preserves source VC/RC scope and excludes face-down cards and the opponent's Damage Zone."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-named-face-up-damage-card",
+          "target": "source",
+          "amount": 2000,
+          "cardName": "Operation Celestial, Armen",
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
