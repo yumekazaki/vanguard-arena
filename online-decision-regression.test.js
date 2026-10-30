@@ -58,6 +58,28 @@ test("joining player can choose their own Heal trigger target and skip", () => {
   );
 });
 
+test("joining player's power trigger target is authorized only for their pending trigger", () => {
+  const game = state();
+  game.players.bot.rear = [{ uid: "joiner-rearguard" }, null, null, null, null];
+  game.pendingTrigger = { side: "bot", stage: "power-target", power: 10000 };
+  assert.deepEqual(
+    validateRemoteActionRequest(game, request("manual:trigger-pick:joiner-rearguard", "joiner-power-choice"), "joining-player"),
+    { ok: true }
+  );
+  assert.equal(
+    validateRemoteActionRequest(game, request("manual:trigger-pick:host-vanguard", "host-power-choice"), "joining-player").reason,
+    "invalid-trigger-unit-target"
+  );
+  assert.equal(
+    validateRemoteActionRequest(game, request("manual:trigger-pick:joiner-rearguard", "wrong-player", { actorPlayerId: "host-player" }), "joining-player").reason,
+    "wrong-actor"
+  );
+  assert.equal(
+    validateRemoteActionRequest(game, request("manual:trigger-skip", "cannot-skip-power"), "joining-player").reason,
+    "no-skippable-heal-choice"
+  );
+});
+
 test("joining player can reveal and flip only their own G-deck card", () => {
   const game = state();
   assert.deepEqual(validateRemoteActionRequest(game, request("manual:gdeck-reveal:joiner-g-unit", "reveal-g"), "joining-player"), { ok: true });

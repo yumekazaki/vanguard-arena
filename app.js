@@ -1489,20 +1489,20 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (!fieldUnits(side).length && pending.stage !== "heal-target" && pending.stage !== "stand-target") return false;
     match.pendingTrigger = pending; return true;
   }
-  function chooseTriggerTarget(uid) {
-    const pending = match?.pendingTrigger; if (!pending || pending.side !== "human") return;
-    const player = match.players.human;
+  function chooseTriggerTarget(uid, side = "human") {
+    const pending = match?.pendingTrigger; if (!pending || pending.side !== side) return false;
+    const player = match.players[side];
     if (pending.stage === "heal-target") {
       const index = player.damage.findIndex((item) => item.uid === uid); if (index < 0) return;
-      const healed=player.damage.splice(index,1)[0];player.drop.push(healed);queueAbilityPrompts("damageLeave","human",healed.uid,{zone:"damage"});addLog(`${player.name} healed one damage to Drop.`);pending.stage = "power-target";
-      if (!fieldUnits("human").length) finishTriggerResolution();
+      const healed=player.damage.splice(index,1)[0];player.drop.push(healed);queueAbilityPrompts("damageLeave",side,healed.uid,{zone:"damage"});addLog(`${player.name} healed one damage to Drop.`);pending.stage = "power-target";
+      if (!fieldUnits(side).length) finishTriggerResolution();
     } else {
-      const unit = fieldUnits("human").find((item) => item.instance.uid === uid && (pending.stage !== "stand-target" || (item.zone !== "vanguard" && item.instance.rested))); if (!unit) return;
+      const unit = fieldUnits(side).find((item) => item.instance.uid === uid && (pending.stage !== "stand-target" || (item.zone !== "vanguard" && item.instance.rested))); if (!unit) return false;
       if (pending.stage === "critical-target") { unit.instance.turnCriticalBoost = Number(unit.instance.turnCriticalBoost || 0) + 1; unit.instance.turnCriticalExpiry=pending.turnOwner; if (match.pendingAttack?.attackerUid === unit.instance.uid) match.pendingAttack.critical = Number(match.pendingAttack.critical || 1) + 1; addLog(`${cardMap.get(unit.instance.cardId)?.name || "A unit"} gets +1 critical until end of turn.`); pending.stage = "power-target"; }
-      else if (pending.stage === "stand-target") { standUnitAndQueue("human",unit); addLog(`${cardMap.get(unit.instance.cardId)?.name || "A Rear-Guard"} stood.`); pending.stage = "power-target"; }
+      else if (pending.stage === "stand-target") { standUnitAndQueue(side,unit); addLog(`${cardMap.get(unit.instance.cardId)?.name || "A Rear-Guard"} stood.`); pending.stage = "power-target"; }
       else { unit.instance.turnPowerBoost = Number(unit.instance.turnPowerBoost || 0) + pending.power; unit.instance.turnPowerExpiry=pending.turnOwner; if(match.pendingAttack?.attackerUid===unit.instance.uid)match.pendingAttack.power+=pending.power; addLog(`${cardMap.get(unit.instance.cardId)?.name || "A unit"} gets +${pending.power >= 1000000 ? `${Math.round(pending.power / 1000000)}M` : `${Math.round(pending.power / 1000)}k`} power until end of turn.`); finishTriggerResolution(); }
     }
-    renderMatch();
+    renderMatch(); return true;
   }
   function drawForHuman() {
     if (!match || match.ended) { toast("Start a match before drawing."); return; }
@@ -2445,6 +2445,20 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     }
     if (online.role !== "host" || !match || !["action", "select"].includes(message.type)) return;
     const requestStatus=window.VanguardAbilityEngine.validateRemoteActionRequest(match,message,match.players.bot.playerId);if(!requestStatus.ok){sendOnlineSnapshot();return;}if(message.type==="select"&&message.selected!==null){const joiner=match.players.bot,exists=Object.values(joiner).some(value=>Array.isArray(value)?value.some(card=>card?.uid===message.selected):value?.uid===message.selected);if(!exists){sendOnlineSnapshot();return}}window.VanguardAbilityEngine.claimRemoteRequest(match,message.actionId);
+
+    // Trigger choices belong to the player who revealed the trigger. Resolve these
+    // directly on that player's host-authoritative side instead of relying on the
+    // temporary player-side swap used for ordinary remote actions.
+    if(message.type==="action"&&message.action?.startsWith("manual:trigger-")){
+      const action=message.action.slice("manual:".length);
+      if(action.startsWith("trigger-pick:"))chooseTriggerTarget(action.slice("trigger-pick:".length),"bot");
+      else if(action==="trigger-skip"&&match.pendingTrigger?.side==="bot"&&match.pendingTrigger.stage==="heal-target"){
+        match.pendingTrigger.stage="power-target";
+        if(!fieldUnits("bot").length)finishTriggerResolution();
+        renderMatch();
+      }
+      return;
+    }
 
     const players = match.players;
     match.players = { human: players.bot, bot: players.human };
