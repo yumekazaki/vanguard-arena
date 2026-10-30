@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1453,
-    "testCount": 1453,
-    "passed": 1453,
+    "tests": 1456,
+    "testCount": 1456,
+    "passed": 1456,
     "failed": 0,
-    "durationMilliseconds": 303234,
-    "completedAt": "2026-10-30T20:50:55.500Z",
+    "durationMilliseconds": 283957,
+    "completedAt": "2026-10-30T21:10:52.557Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "2b5ae526f4ada944ea4865adfba478d3ee41036d164a1c7f2039639368675b26"
+    "validationInputDigest": "6f5d57ab3d1590b65de2fd732f3a8cd15a72cadff21968b11863eb3e46617131"
   },
   "records": [
     {
@@ -73688,8 +73688,83 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12378",
+      "abilityId": "cfa-12378:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-gc-ride-deck-discard-draw.test.js"
+      ],
+      "testCases": [
+        "the five exact real cards retain two exclusive costs and both exact AUTO events",
+        "host and joining player independently draw after paying either exact alternative cost",
+        "unrelated discards, wrong turn, wrong player, wrong zone, and unaffordable branches never resolve"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12403",
+      "abilityId": "cfa-12403:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-gc-ride-deck-discard-draw.test.js"
+      ],
+      "testCases": [
+        "the five exact real cards retain two exclusive costs and both exact AUTO events",
+        "host and joining player independently draw after paying either exact alternative cost",
+        "unrelated discards, wrong turn, wrong player, wrong zone, and unaffordable branches never resolve"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12410",
+      "abilityId": "cfa-12410:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-gc-ride-deck-discard-draw.test.js"
+      ],
+      "testCases": [
+        "the five exact real cards retain two exclusive costs and both exact AUTO events",
+        "host and joining player independently draw after paying either exact alternative cost",
+        "unrelated discards, wrong turn, wrong player, wrong zone, and unaffordable branches never resolve"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12498",
+      "abilityId": "cfa-12498:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-gc-ride-deck-discard-draw.test.js"
+      ],
+      "testCases": [
+        "the five exact real cards retain two exclusive costs and both exact AUTO events",
+        "host and joining player independently draw after paying either exact alternative cost",
+        "unrelated discards, wrong turn, wrong player, wrong zone, and unaffordable branches never resolve"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12512",
+      "abilityId": "cfa-12512:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-gc-ride-deck-discard-draw.test.js"
+      ],
+      "testCases": [
+        "the five exact real cards retain two exclusive costs and both exact AUTO events",
+        "host and joining player independently draw after paying either exact alternative cost",
+        "unrelated discards, wrong turn, wrong player, wrong zone, and unaffordable branches never resolve"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T20:29:26.834Z"
+  "evidenceUpdatedAt": "2026-10-30T21:05:37.322Z"
 }

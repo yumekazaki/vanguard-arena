@@ -111155,7 +111155,317 @@
           }
         }
       ]
-    }
+    },
+    {
+      "id": "cfa-12378:0",
+      "cardId": "cfa-12378",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC from hand or discarded from hand while riding from the ride deck, COST [Counter Blast 1 or Energy Blast 3], and draw a card.",
+      "requiredLocation": [],
+      "conditionsReviewed": true,
+      "costAlternatives": [
+        [
+          {
+            "type": "counter-blast",
+            "count": 1
+          }
+        ],
+        [
+          {
+            "type": "energy-blast",
+            "count": 3
+          }
+        ]
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "source",
+            "circles": [
+              "guardian"
+            ],
+            "sourceLocation": "hand"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "source",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-gc-or-ride-deck-discard-alt-cost-draw-v1",
+        "review": "Exact five-card AUTO family. It triggers only when this exact card enters GC from hand or is discarded as the Ride Deck ride cost during Ride Phase. The controller selects exactly one payable printed cost branch, then draws one card; neither an unrelated hand discard nor an unrelated GC move qualifies."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-12403:0",
+      "cardId": "cfa-12403",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC from hand or discarded from hand while riding from the ride deck, COST [Counter Blast 1 or Energy Blast 3], and draw a card.",
+      "requiredLocation": [],
+      "conditionsReviewed": true,
+      "costAlternatives": [
+        [
+          {
+            "type": "counter-blast",
+            "count": 1
+          }
+        ],
+        [
+          {
+            "type": "energy-blast",
+            "count": 3
+          }
+        ]
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "source",
+            "circles": [
+              "guardian"
+            ],
+            "sourceLocation": "hand"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "source",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-gc-or-ride-deck-discard-alt-cost-draw-v1",
+        "review": "Exact five-card AUTO family. It triggers only when this exact card enters GC from hand or is discarded as the Ride Deck ride cost during Ride Phase. The controller selects exactly one payable printed cost branch, then draws one card; neither an unrelated hand discard nor an unrelated GC move qualifies."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-12410:0",
+      "cardId": "cfa-12410",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC from hand or discarded from hand while riding from the ride deck, COST [Counter Blast 1 or Energy Blast 3], and draw a card.",
+      "requiredLocation": [],
+      "conditionsReviewed": true,
+      "costAlternatives": [
+        [
+          {
+            "type": "counter-blast",
+            "count": 1
+          }
+        ],
+        [
+          {
+            "type": "energy-blast",
+            "count": 3
+          }
+        ]
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "source",
+            "circles": [
+              "guardian"
+            ],
+            "sourceLocation": "hand"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "source",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-gc-or-ride-deck-discard-alt-cost-draw-v1",
+        "review": "Exact five-card AUTO family. It triggers only when this exact card enters GC from hand or is discarded as the Ride Deck ride cost during Ride Phase. The controller selects exactly one payable printed cost branch, then draws one card; neither an unrelated hand discard nor an unrelated GC move qualifies."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-12498:0",
+      "cardId": "cfa-12498",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC from hand or discarded from hand while riding from the ride deck, COST [Counter Blast 1 or Energy Blast 3], and draw a card.",
+      "requiredLocation": [],
+      "conditionsReviewed": true,
+      "costAlternatives": [
+        [
+          {
+            "type": "counter-blast",
+            "count": 1
+          }
+        ],
+        [
+          {
+            "type": "energy-blast",
+            "count": 3
+          }
+        ]
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "source",
+            "circles": [
+              "guardian"
+            ],
+            "sourceLocation": "hand"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "source",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-gc-or-ride-deck-discard-alt-cost-draw-v1",
+        "review": "Exact five-card AUTO family. It triggers only when this exact card enters GC from hand or is discarded as the Ride Deck ride cost during Ride Phase. The controller selects exactly one payable printed cost branch, then draws one card; neither an unrelated hand discard nor an unrelated GC move qualifies."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-12512:0",
+      "cardId": "cfa-12512",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC from hand or discarded from hand while riding from the ride deck, COST [Counter Blast 1 or Energy Blast 3], and draw a card.",
+      "requiredLocation": [],
+      "conditionsReviewed": true,
+      "costAlternatives": [
+        [
+          {
+            "type": "counter-blast",
+            "count": 1
+          }
+        ],
+        [
+          {
+            "type": "energy-blast",
+            "count": 3
+          }
+        ]
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "source",
+            "circles": [
+              "guardian"
+            ],
+            "sourceLocation": "hand"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "source",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-gc-or-ride-deck-discard-alt-cost-draw-v1",
+        "review": "Exact five-card AUTO family. It triggers only when this exact card enters GC from hand or is discarded as the Ride Deck ride cost during Ride Phase. The controller selects exactly one payable printed cost branch, then draws one card; neither an unrelated hand discard nor an unrelated GC move qualifies."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;

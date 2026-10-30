@@ -1404,6 +1404,10 @@
     if(kind!=="AUTO"||!/^AUTO:\s*When this card is discarded from hand during your ride phase, COST \[Soul Blast 2\], and draw a card\.$/i.test(normalizePrintedText(printedText)))return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-ride-phase-discard-soul-blast-draw-v1",review:"Exact discarded card, hand source, Ride phase, Soul Blast 2, and one draw."},effects:[{op:"draw",count:1}]};
   }
+  function compileGuardianOrRideDeckDiscardAltCostDrawDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO"||!/^AUTO:\s*When this unit is put on GC from hand or discarded from hand while riding from the ride deck, COST \[Counter Blast 1 or Energy Blast 3\], and draw a card\.$/i.test(normalizePrintedText(printedText)))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:[],costAlternatives:[[{type:"counter-blast",count:1}],[{type:"energy-blast",count:3}]],conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,optional:false,trigger:{status:"recognized-trigger",circles:[],anyOf:[{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["guardian"],sourceLocation:"hand"},{status:"recognized-trigger",eventType:"card.discarded",subject:"source",sourceLocation:"hand",destinationLocation:"drop",requiredPhase:"ride",requiredTimingWindow:"ride-deck-cost",discardReason:"ride-deck-cost"}]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-gc-or-ride-deck-discard-alt-cost-draw-v1",review:"Exact five-card AUTO family. It triggers only when this exact card enters GC from hand or is discarded as the Ride Deck ride cost during Ride Phase. The controller selects exactly one payable printed cost branch, then draws one card; neither an unrelated hand discard nor an unrelated GC move qualifies."},effects:[{op:"draw",count:1}]};
+  }
   function compileRidePhaseDiscardBottomDeckDrawDefinition(cardId,abilityId,kind,printedText){
     const text=normalizePrintedText(printedText),match=text.match(/^AUTO:?\s*When this card is discarded from hand during your ride phase, COST \[Soul Blast (\d+)\s*&\s*put this card on the bottom of (?:your )?deck\], and draw a card\.$/i);
     if(kind!=="AUTO"||!match||Number(match[1])<1)return null;
@@ -2539,6 +2543,7 @@
     compileGuardianSecondAttackShieldDefinition,
     compileGuardianNoGradeThreeRideChoiceDefinition,
     compileRidePhaseDiscardBottomDeckDrawDefinition,
+    compileGuardianOrRideDeckDiscardAltCostDrawDefinition,
     compileRearGuardVanguardAttackSacrificeDrawPowerDefinition,
     compileNamedGradeVanguardAttackSacrificeDrawPowerDefinition,
     compileGradeNamedVanguardAttackSacrificeDrawPowerDefinition,
@@ -2864,6 +2869,8 @@
     if(trigger.targetLocation&&normalizeLocation(event?.targetLocation)!==trigger.targetLocation)return false;
     if(trigger.checkKind&&event?.checkKind!==trigger.checkKind)return false;
     if(trigger.checkSourceLocation&&event?.checkSourceLocation!==trigger.checkSourceLocation)return false;
+    if(trigger.discardReason&&event?.discardReason!==trigger.discardReason)return false;
+    if(trigger.requiredTimingWindow&&event?.timingWindow!==trigger.requiredTimingWindow)return false;
     if(Object.hasOwn(trigger,"checkedCardTriggerType")&&event?.checkedCardTriggerType!==trigger.checkedCardTriggerType)return false;
     if(trigger.checkedCardHasTriggerUnit===true&&!String(event?.checkedCardTriggerType||"").trim())return false;
     if(trigger.requiresBattleSourceMatch&&(!event?.battleId||event?.sourceCardInstanceId!==sourceUid))return false;
