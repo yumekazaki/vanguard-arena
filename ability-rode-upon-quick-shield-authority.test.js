@@ -66,6 +66,28 @@ test("all 115 catalog abilities are registered with exact original text and the 
   assert.ok(matches.every(ability => Engine.getReviewedAbilityDefinitionsForCard(ability.cardId).some(definition => definition.id === ability.id)));
 });
 
+test("all 115 Quick Shield ride starters are complete single-skill cards with usable catalog metadata", () => {
+  const matches = [];
+  for (const definition of loadCatalog()) {
+    const abilities = Engine.parseCardAbilitiesCached(definition);
+    if (!abilities.some(ability => ability.definition?.source?.patternId === PATTERN)) continue;
+    assert.equal(abilities.length, 1, `${definition.id} must not hide an additional unmodeled skill`);
+    const [ability] = abilities;
+    assert.equal(ability.definition?.source?.patternId, PATTERN, definition.id);
+    assert.equal(ability.printedText, TEXT, definition.id);
+    assert.equal(definition.type, "Unit", definition.id);
+    assert.equal(Number(definition.grade), 0, definition.id);
+    assert.equal(String(definition.trigger || ""), "", definition.id);
+    assert.ok([5000, 6000].includes(Number(definition.power)), `${definition.id} power metadata`);
+    assert.equal(Number(definition.shield), 10000, `${definition.id} shield metadata`);
+    assert.deepEqual(ability.effects, [{ op: "draw", count: 1 }, { op: "create-token", target: "controller", tokenId: "token-quick-shield", count: 1, condition: { op: "opponent-vanguard-grade-at-least", grade: 1 } }], definition.id);
+    assert.equal(Reducer.supportsServerAbilityEffects(ability), true, definition.id);
+    matches.push(definition.id);
+  }
+  assert.equal(matches.length, 115);
+  assert.equal(new Set(matches).size, 115);
+});
+
 test("host and joining player each receive and resolve only their own ridden Vanguard's Quick Shield ability", () => {
   for (const side of ["human", "bot"]) {
     const fixture = makeState({ side });
