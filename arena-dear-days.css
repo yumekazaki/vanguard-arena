@@ -153,3 +153,76 @@
 @media(prefers-reduced-motion:reduce) {
   #match-empty .fighter-option,#match-empty .fighter-cards,#match-empty .fighter-reveal { transition:none!important; }
 }
+
+/* Layout redesign inspired by the full-screen Vanguard Days battle HUD. */
+body:has(#match-empty:not(.hidden)) .app-shell { max-width:1540px; padding-inline:clamp(16px,3.3vw,52px); }
+#match-empty { max-width:1360px; margin:0 auto; padding-top:clamp(24px,4vw,58px); }
+#match-empty .fighter-menu-heading { justify-content:flex-start; margin-bottom:26px; }
+#match-empty .fighter-menu-heading>div { position:relative; padding-left:20px; }
+#match-empty .fighter-menu-heading>div:before { content:""; position:absolute; left:0; top:0; bottom:0; width:4px; border-radius:6px; background:linear-gradient(#54d9ff,#9c6aff,#ff6ca8); box-shadow:0 0 18px #6cbaffaa; }
+#match-empty .fighter-menu-heading .q4-badge { margin-left:auto; }
+#match-empty .fighter-menu { grid-template-columns:minmax(0,1.35fr) minmax(310px,.85fr); grid-template-rows:repeat(3,minmax(126px,1fr)); gap:15px; }
+#match-empty .fighter-option { display:grid; grid-template-rows:1fr auto; border-radius:14px; border-color:#aebeff45; background:#111636; box-shadow:0 14px 35px #0307199c,inset 0 1px #ffffff1a; }
+#match-empty .fighter-option:first-child { grid-row:1 / span 3; }
+#match-empty .fighter-option:first-child .fighter-scene { height:100%; min-height:430px; }
+#match-empty .fighter-option:first-child .fighter-option-copy { min-height:148px; }
+#match-empty .fighter-option:not(:first-child) { grid-template-columns:minmax(120px,.72fr) minmax(0,1fr); grid-template-rows:minmax(124px,1fr); }
+#match-empty .fighter-option:not(:first-child) .fighter-scene { grid-column:1; grid-row:1; height:100%; min-height:124px; }
+#match-empty .fighter-option:not(:first-child) .fighter-cards { left:39%; top:51%; transform:scale(.63); }
+#match-empty .fighter-option:not(:first-child) .fighter-reveal { right:-5%; bottom:-40px; width:112px; height:175px; opacity:.88; }
+#match-empty .fighter-option:not(:first-child) .fighter-name { display:none; }
+#match-empty .fighter-option:not(:first-child) .fighter-option-copy { grid-column:2; grid-row:1; display:flex; flex-direction:column; justify-content:center; min-height:0; padding:16px 17px; border:0; background:linear-gradient(110deg,#151b3ce8,#11162de8); }
+#match-empty .fighter-option:not(:first-child) .fighter-kicker { font-size:8px; }
+#match-empty .fighter-option:not(:first-child) .fighter-title-row strong { font-size:clamp(22px,2vw,30px); }
+#match-empty .fighter-option:not(:first-child) .fighter-description { margin-top:7px; padding:0; font-size:10px; }
+#match-empty .fighter-option:not(:first-child) .clan-label { position:static; align-self:flex-start; margin-top:9px; font-size:8px; }
+#match-empty .fighter-option:first-child .fighter-scene { background:radial-gradient(ellipse at 70% 65%,color-mix(in srgb,var(--glow) 45%,transparent),transparent 58%),linear-gradient(135deg,#10285a,#121239 64%,#1b173d); }
+#match-empty .fighter-option:first-child .fighter-cards { left:31%; top:48%; transform:scale(1.38); }
+#match-empty .fighter-option:first-child .fighter-reveal { right:0; bottom:-42px; height:min(70vh,485px); width:44%; }
+#match-empty .fighter-option:first-child .fighter-name { right:14%; bottom:60px; left:auto; font-size:25px; }
+#match-empty .fighter-option:first-child .fighter-option-copy { background:linear-gradient(105deg,#0d1939,#15295ae8); }
+#match-empty .fighter-option:focus-visible { outline:3px solid #fff0b1; outline-offset:3px; }
+
+@media(min-width:1180px) {
+  body:has(#match-layout:not(.hidden)) .app-shell { max-width:none; padding-inline:18px; }
+  body:has(#match-layout:not(.hidden)) #view-play { padding-top:14px; }
+  #match-layout { grid-template-columns:minmax(160px,205px) minmax(0,1fr) minmax(185px,220px); gap:12px; }
+  #match-layout>.card-inspector { max-height:calc(100dvh - 112px); position:sticky; top:10px; overflow:auto; }
+  #match-layout>.match-rail { max-height:calc(100dvh - 112px); }
+  #match-layout .game-table { height:min(76dvh,850px); min-height:650px; }
+}
+#match-layout .game-table { border-radius:8px; isolation:isolate; background:#171640; }
+#match-layout .mat-half { background:#171640 url("./assets/ui/arena-circuit-mat.svg") center/cover no-repeat !important; }
+#match-layout .mat-half img { opacity:.12!important; mix-blend-mode:screen; filter:saturate(.7) brightness(1.4)!important; }
+#match-layout .table-glow { z-index:1; opacity:.72; background:radial-gradient(ellipse at 50% 50%,#9456ff32,transparent 56%),linear-gradient(90deg,#10103410,#38caff12 50%,#10103410); }
+#match-layout .field-row,#match-layout .rear-row { z-index:3; }
+#match-layout .field-zone:before { inset:8%; border:2px solid #54deff9c; background:radial-gradient(circle,#533c9b3d 0 48%,#3fb8ff33 50% 54%,#13184708 61%); box-shadow:0 0 0 4px #a54cff21,0 0 18px #40caff65,inset 0 0 23px #4a5cff66; }
+#match-layout .rear-row-zone:before { border:2px solid #5edbff8c; box-shadow:0 0 0 4px #9d4cff1c,0 0 14px #4acaff55,inset 0 0 20px #4a5cff55; }
+#match-layout .vanguard-zone:before { border-color:#fff0ac; box-shadow:0 0 0 5px #ffbd4230,0 0 32px #ffab3eaa,inset 0 0 30px #ffc75e68; }
+#match-layout .opponent-side .field-zone:before { border-color:#ff668cbb; box-shadow:0 0 0 5px #ff437030,0 0 24px #ff3f7990,inset 0 0 24px #d638a257; background:radial-gradient(circle,#aa375b50 0 48%,#ff658c42 50% 54%,#22133e12 62%); }
+#match-layout .opponent-side .vanguard-zone:before { border-color:#ffd688; box-shadow:0 0 0 5px #ff9b4738,0 0 32px #ff714b99,inset 0 0 30px #ffc75e68; }
+#match-layout .field-zone>span { top:auto; bottom:2px; z-index:0; color:#e9e8ff8a; font-size:8px; letter-spacing:.1em; }
+#match-layout .field-card { z-index:2; }
+#match-layout .player-line .avatar { z-index:4; }
+#match-layout .player-line .avatar img { border-radius:50%; }
+#match-layout .player-line .avatar { border-color:#ffd56f; box-shadow:0 0 0 3px #39247f,0 0 22px #ffcd6677; }
+#match-layout .player-line .human-avatar { border-color:#49d8ff; box-shadow:0 0 0 3px #263281,0 0 22px #41ceff90; }
+#match-layout .player-line .damage-track { z-index:4; }
+#match-layout .player-line .deck-zone,#match-layout .player-line .drop-zone,#match-layout .player-line .gdeck-button { border-radius:6px; border-color:#94cfff; background:linear-gradient(145deg,#20265aeF,#101332f2); box-shadow:0 0 0 2px #582fa7,0 0 18px #6f7bff6c; }
+#match-layout .center-divider { z-index:5; left:10%; right:10%; border-radius:4px; font:700 9px var(--mono); letter-spacing:.15em; }
+#match-layout .hand-panel { border:1px solid #7b9bff78; background:linear-gradient(125deg,#121634f5,#201347f5); box-shadow:0 12px 36px #0009,inset 0 1px #fff2; }
+#match-layout .hand-heading .eyebrow { color:#66ddff; }
+#match-layout .action-bar:not(.manual-actions) { border-color:#7fcfff8a; background:linear-gradient(110deg,#171a3cf5,#151329f5); }
+#match-layout .battle-phase-toolbar { border-color:#7dcfff70; background:linear-gradient(110deg,#171a3df5,#251943f5); }
+@media(max-width:1179px) and (min-width:761px) { #match-layout .game-table { height:min(70vw,770px); min-height:590px; } }
+@media(max-width:700px) {
+  #match-empty .fighter-menu { grid-template-columns:1fr; grid-template-rows:auto; }
+  #match-empty .fighter-option:first-child { grid-row:auto; }
+  #match-empty .fighter-option:first-child .fighter-scene { min-height:245px; }
+  #match-empty .fighter-option:first-child .fighter-reveal { height:260px; width:158px; }
+  #match-empty .fighter-option:first-child .fighter-cards { left:32%; transform:scale(1.02); }
+  #match-empty .fighter-option:not(:first-child) { grid-template-columns:125px minmax(0,1fr); grid-template-rows:125px; }
+  #match-empty .fighter-option:not(:first-child) .fighter-scene { min-height:125px; }
+  #match-layout .game-table { border-radius:4px; }
+}
+@media(prefers-reduced-motion:reduce) { #match-layout .field-zone:before { animation:none!important; } }

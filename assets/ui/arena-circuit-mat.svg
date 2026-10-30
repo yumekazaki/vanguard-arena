@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="base" x2="0" y2="1"><stop stop-color="#171844"/><stop offset=".5" stop-color="#29205d"/><stop offset="1" stop-color="#11183d"/></linearGradient>
+    <radialGradient id="center"><stop stop-color="#7251b5" stop-opacity=".34"/><stop offset="1" stop-color="#19163f" stop-opacity="0"/></radialGradient>
+    <pattern id="hex" width="56" height="48" patternUnits="userSpaceOnUse"><path d="M14 1h28l13 23-13 23H14L1 24z" fill="none" stroke="#a6a1ff" stroke-opacity=".085" stroke-width="1.2"/></pattern>
+    <pattern id="circuit" width="320" height="240" patternUnits="userSpaceOnUse"><path d="M0 42h78v32h36v50h66v-32h46V42h94M0 194h48v-30h53v-44h48M206 240v-45h56v-37h58" fill="none" stroke="#43c9ff" stroke-opacity=".22" stroke-width="2"/><path d="M78 42v-20m36 102h28m108-82v-24m-149 96v22m61-22h35m-97 80v18m173-52h31m-116-85h28" stroke="#92ddff" stroke-opacity=".28" stroke-width="3"/><circle cx="78" cy="42" r="4" fill="#72d7ff" fill-opacity=".55"/><circle cx="180" cy="124" r="4" fill="#be8cff" fill-opacity=".7"/><circle cx="262" cy="195" r="4" fill="#72d7ff" fill-opacity=".55"/></pattern>
+    <linearGradient id="edge" x2="0" y2="1"><stop stop-color="#36d9ff" stop-opacity=".46"/><stop offset=".12" stop-color="#36d9ff" stop-opacity="0"/><stop offset=".88" stop-color="#ff4da6" stop-opacity="0"/><stop offset="1" stop-color="#ff4da6" stop-opacity=".36"/></linearGradient>
+  </defs>
+  <rect width="1600" height="800" fill="url(#base)"/>
+  <rect width="1600" height="800" fill="url(#center)"/>
+  <rect width="1600" height="800" fill="url(#hex)"/>
+  <rect width="1600" height="800" fill="url(#circuit)"/>
+  <path d="M0 80h170l28 28h85m1317 0h-170l-28 28h-85M0 720h170l28-28h85m1317 0h-170l-28-28h-85" fill="none" stroke="#d6b5ff" stroke-opacity=".3" stroke-width="2"/>
+  <path d="M0 0h1600v800H0z" fill="none" stroke="url(#edge)" stroke-width="18"/>
+  <path d="M0 400h1600" stroke="#c5b4ff" stroke-opacity=".14" stroke-width="2" stroke-dasharray="12 12"/>
+</svg>
