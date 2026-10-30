@@ -53,6 +53,13 @@
 .account-dialog { max-height:min(90dvh,850px); overflow:auto; overscroll-behavior:contain; }
 .profile-avatar-section h3 { margin:0 0 5px; font-size:15px; }
 .profile-avatar-section>p { margin:0 0 13px; font-size:11px; }
+.profile-avatar-current { display:flex; align-items:center; gap:13px; padding:11px 13px; margin:0 0 13px; border:1px solid #ffd7869c; border-radius:12px; background:linear-gradient(105deg,#553b78b8,#102849d9 78%); box-shadow:0 0 20px #b575ff20,inset 0 1px #fff2; }
+.profile-current-image { display:grid; place-items:center; flex:none; width:62px; height:62px; overflow:hidden; border:3px solid #ffdc91; border-radius:50%; background:#15284b; box-shadow:0 0 0 4px #6542a6a8,0 0 20px #ffcf7c77; color:#ffe8b4; font-size:24px; }
+.profile-current-image img { width:100%; height:100%; object-fit:cover; object-position:center 20%; }
+.profile-avatar-current>span:last-child { display:flex; flex-direction:column; gap:3px; }
+.profile-avatar-current small { color:#a9dcff; font:9px var(--mono); letter-spacing:.14em; }
+.profile-avatar-current b { color:#fff4d4; font-size:14px; }
+.profile-avatar-current em { color:#b8bfd8; font-size:10px; font-style:normal; }
 .profile-avatar-picker { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
 .profile-avatar-option { min-width:0; padding:7px; display:flex; flex-direction:column; align-items:center; gap:5px; border:1px solid #95c9e83b; border-radius:10px; background:#081529a6; color:#e9f7ff; transition:transform .2s,border-color .2s,box-shadow .2s; }
 .profile-avatar-option:hover,.profile-avatar-option.selected { transform:translateY(-2px); border-color:#9ae1ff; box-shadow:0 0 0 2px #65caff33,0 8px 18px #02071288; }

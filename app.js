@@ -102,6 +102,8 @@
   function renderProfileAvatarPicker() {
     const picker = $("#profile-avatar-picker"); if (!picker) return;
     const selected = selectedProfileAvatar();
+    const current = $("#profile-avatar-current"), chosen = profileAvatars.find(avatar => avatar.id === selected);
+    if (current) current.innerHTML = `<span class="profile-current-image">${profileAvatarImage(selected, "?")}</span><span><small>YOUR PROFILE PORTRAIT</small><b>${escapeHtml(chosen?.name || "Choose a fighter portrait")}</b><em>${chosen ? `${escapeHtml(chosen.series)} series` : "Pick a character below"}</em></span>`;
     picker.innerHTML = profileAvatars.map(avatar => `<button class="profile-avatar-option${selected === avatar.id ? " selected" : ""}" type="button" data-profile-avatar="${avatar.id}" aria-pressed="${selected === avatar.id}" aria-label="Choose ${avatar.name}"><span>${profileAvatarImage(avatar.id)}</span><b>${avatar.name}</b><small>${avatar.series} series</small></button>`).join("");
   }
   function paintMatchAvatar(selector, id, fallback) {
