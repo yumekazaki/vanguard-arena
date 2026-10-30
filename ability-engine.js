@@ -528,7 +528,10 @@
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-crest-ride-same-name-vanguard-v1",review:"Exact Crest CONT wording. The restriction is active for its controller while this card is in their Crest zone and compares the candidate ride with the current Vanguard, including structured card-name aliases."},continuousRestrictions:[{type:"ride-same-name-as-vanguard"}]};
   }
   function compileRestraintRestrictionDefinition(cardId,abilityId,kind,printedText){
-    if(kind!=="CONT"||!/^CONT \[VC\/RC\]: Restraint \(This unit cannot attack\.\)$/i.test(normalizePrintedText(printedText)))return null;
+    if(kind!=="CONT")return null;
+    const text=normalizePrintedText(printedText);
+    if(/^CONT \[RC\]: Restraint\.$/i.test(text))return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-rc-restraint-cannot-attack-v1",review:"Exact RC Restraint keyword ability. The source cannot attack only while it is on a Rear-Guard Circle; moving it to another zone ends this location-scoped restriction. It is continuous, not manually activated."},keywords:["restraint"],continuousRestrictions:[{type:"restraint"}]};
+    if(!/^CONT \[VC\/RC\]: Restraint \(This unit cannot attack\.\)$/i.test(text))return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-vc-rc-restraint-cannot-attack-v1",review:"Exact Restraint keyword reminder text. This continuous restriction prevents this exact unit from attacking while it is on VC or RC; it is not a manual activation."},keywords:["restraint"],continuousRestrictions:[{type:"restraint"}]};
   }
   function compileContinuousVanguardCannotBeBoostedDefinition(cardId,abilityId,kind,printedText){

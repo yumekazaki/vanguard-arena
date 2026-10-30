@@ -400,6 +400,13 @@ test("all six real Restraint CONT abilities compile to circle-scoped passive att
  assert.equal(count,6);
 });
 
+test("the three exact RC-only Restraint abilities compile with Rear-Guard-only attack restrictions",()=>{
+ const cards=loadCatalog(),report=auditCatalog(cards),matches=[];assert.equal(report.patterns["cont-rc-restraint-cannot-attack-v1"],3);assert.deepEqual(report.invalidCompiled,[]);
+ for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="cont-rc-restraint-cannot-attack-v1")matches.push({card,ability});
+ assert.deepEqual(matches.map(item=>item.card.id).sort(),["cfa-5788","cfa-6269","cfa-6271"]);
+ for(const {ability} of matches){assert.equal(ability.kind,"CONT");assert.deepEqual(ability.requiredLocation,["rear-guard"]);assert.deepEqual(ability.definition.keywords,["restraint"]);assert.deepEqual(ability.definition.continuousRestrictions,[{type:"restraint"}]);assert.equal(ability.trigger,null)}
+});
+
 test("all six exact RC/GC Intercept grant CONT abilities compile with continuous shield",()=>{
  const cards=loadCatalog(),report=auditCatalog(cards),expected=["cfa-13995","cfa-13999","cfa-14000","cfa-14005","cfa-14010","cfa-14013"],matches=[];assert.equal(report.patterns["cont-rc-gc-grant-intercept-shield-v1"],6);assert.deepEqual(report.invalidCompiled,[]);
  for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="cont-rc-gc-grant-intercept-shield-v1")matches.push({card,ability});

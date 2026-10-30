@@ -13,6 +13,7 @@ const reviewed = pattern => catalog.flatMap(definition => Engine.parseCardAbilit
   .filter(ability => ability.definition?.source?.patternId === pattern).map(ability => ({ definition, ability })));
 const lords = reviewed("cont-lord-attack-restriction-v1");
 const restraints = reviewed("cont-vc-rc-restraint-cannot-attack-v1");
+const rearGuardRestraints = reviewed("cont-rc-restraint-cannot-attack-v1");
 const allClans = reviewed("cont-all-clans-and-nations-v1");
 function card(definition, uid, playerId, extra = {}) {
   return { uid, cardId: String(definition.id), cardName: definition.name, type: definition.type || "Unit", unitCard: true,
@@ -89,5 +90,16 @@ test("Restraint blocks only the exact restricted attacker; an unrelated unit can
     }
     const allowed = attackFixture({ side, sourceDefinition: plain, foreignDefinition: findCard("cfa-934") });
     assert.equal(allowed.result.ok, true, `${side}: an unrelated attacker is not restricted by another card's CONT`);
+  }
+});
+
+test("RC-only Restraint blocks its own Rear-Guard attack for either seat but is inactive on Vanguard", () => {
+  assert.equal([...rearGuardRestraints].map(item => item.definition.id).sort().join(","), "cfa-5788,cfa-6269,cfa-6271");
+  for (const side of ["human", "bot"]) for (const item of rearGuardRestraints) {
+    const blocked = attackFixture({ side, sourceDefinition: item.definition, location: "rear-left" });
+    assert.equal(blocked.result.ok, false, `${side}/${item.definition.id} on RC`);
+    assert.equal(blocked.result.reason, "unit-with-restraint-cannot-attack");
+    const inactive = attackFixture({ side, sourceDefinition: item.definition, location: "vanguard" });
+    assert.equal(inactive.result.ok, true, `${side}/${item.definition.id} moved to VC`);
   }
 });

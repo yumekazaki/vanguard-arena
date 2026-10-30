@@ -109736,6 +109736,75 @@
           }
         }
       ]
+    },
+    {
+      "id": "cfa-5788:0",
+      "cardId": "cfa-5788",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: Restraint.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-restraint-cannot-attack-v1",
+        "review": "Exact RC Restraint keyword ability. The source cannot attack only while it is on a Rear-Guard Circle; moving it to another zone ends this location-scoped restriction. It is continuous, not manually activated."
+      },
+      "keywords": [
+        "restraint"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "restraint"
+        }
+      ]
+    },
+    {
+      "id": "cfa-6269:0",
+      "cardId": "cfa-6269",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: Restraint.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-restraint-cannot-attack-v1",
+        "review": "Exact RC Restraint keyword ability. The source cannot attack only while it is on a Rear-Guard Circle; moving it to another zone ends this location-scoped restriction. It is continuous, not manually activated."
+      },
+      "keywords": [
+        "restraint"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "restraint"
+        }
+      ]
+    },
+    {
+      "id": "cfa-6271:0",
+      "cardId": "cfa-6271",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: Restraint.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-restraint-cannot-attack-v1",
+        "review": "Exact RC Restraint keyword ability. The source cannot attack only while it is on a Rear-Guard Circle; moving it to another zone ends this location-scoped restriction. It is continuous, not manually activated."
+      },
+      "keywords": [
+        "restraint"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "restraint"
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

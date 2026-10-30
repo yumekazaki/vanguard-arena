@@ -3049,11 +3049,16 @@
         definition.continuousRestrictions.length === 1 && definition.continuousRestrictions[0]?.type === "lord";
       if (pattern === "cont-vc-rc-restraint-cannot-attack-v1") return text === "CONT [VC/RC]: Restraint (This unit cannot attack.)" &&
         definition.continuousRestrictions.length === 1 && definition.continuousRestrictions[0]?.type === "restraint";
+      if (pattern === "cont-rc-restraint-cannot-attack-v1") return text === "CONT [RC]: Restraint." &&
+        definition.requiredLocation?.length === 1 && definition.requiredLocation[0] === "rear-guard" &&
+        definition.continuousRestrictions.length === 1 && definition.continuousRestrictions[0]?.type === "restraint";
       return false;
     });
     const abilities = exactRestrictions.map(definition => ({
       id: definition.id, kind: definition.kind, definition,
-      requiredLocation: ["cont-lord-attack-restriction-v1", "cont-vc-rc-restraint-cannot-attack-v1"].includes(definition.source?.patternId)
+      requiredLocation: definition.source?.patternId === "cont-rc-restraint-cannot-attack-v1"
+        ? ["rear-guard"]
+        : ["cont-lord-attack-restriction-v1", "cont-vc-rc-restraint-cannot-attack-v1"].includes(definition.source?.patternId)
         ? ["vanguard", "rear-guard"] : []
     }));
     const ruleCard = instance => ({ ...serverCardDefinition(instance), abilityKeywords: reviewedAbilityKeywords(instance, engine) });
