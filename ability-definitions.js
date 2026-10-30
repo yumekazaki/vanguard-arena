@@ -111749,6 +111749,27 @@
         { op: "modify-power-target", target: "chosen", amount: 5000, duration: "battle", targetFilter: { controller: "source-controller", cardType: "unit", zone: "vanguard" } }
       ]
     })),
+    ...[
+      "cfa-1018",
+      "cfa-1059",
+      "cfa-1767"
+    ].map(cardId => ({
+      id: `${cardId}:0`,
+      cardId,
+      kind: "AUTO",
+      printedText: "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle.",
+      requiredLocation: ["vanguard"],
+      conditions: [{ type: "limit-break-active", count: 4 }],
+      source: {
+        dataset: "Cardfight Area snapshot",
+        snapshotDate: "2025-05-09",
+        patternId: "auto-legacy-limit-break-vanguard-attack-power-v1",
+        review: "Exact legacy reminder Limit Break attack template; source circle, damage threshold, target circle, and source instance are separately enforced."
+      },
+      effects: [
+        { op: "modify-power", target: "source", amount: 5000, duration: "battle" }
+      ]
+    })),
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;

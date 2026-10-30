@@ -56592,7 +56592,8 @@
         "the exact-name RC CONT compiler covers only the four exact catalog abilities",
         "exact Vanguard-name power rejects substring matches and applies only on RC for either seat",
         "trusted battle power applies exact-name CONT only when the controller's Vanguard matches"
-      ]
+      ],
+      "fullyVerified": false
     },
     {
       "cardId": "cfa-6239",
@@ -56605,7 +56606,8 @@
         "the exact-name RC CONT compiler covers only the four exact catalog abilities",
         "exact Vanguard-name power rejects substring matches and applies only on RC for either seat",
         "trusted battle power applies exact-name CONT only when the controller's Vanguard matches"
-      ]
+      ],
+      "fullyVerified": false
     },
     {
       "cardId": "cfa-6244",
@@ -57276,7 +57278,8 @@
         "the exact-name RC CONT compiler covers only the four exact catalog abilities",
         "exact Vanguard-name power rejects substring matches and applies only on RC for either seat",
         "trusted battle power applies exact-name CONT only when the controller's Vanguard matches"
-      ]
+      ],
+      "fullyVerified": false
     },
     {
       "cardId": "cfa-646",
@@ -66023,7 +66026,8 @@
         "the exact-name RC CONT compiler covers only the four exact catalog abilities",
         "exact Vanguard-name power rejects substring matches and applies only on RC for either seat",
         "trusted battle power applies exact-name CONT only when the controller's Vanguard matches"
-      ]
+      ],
+      "fullyVerified": false
     },
     {
       "cardId": "cfa-866",
@@ -73926,8 +73930,56 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1018",
+      "abilityId": "cfa-1018:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-limit-break-vanguard-attack-power-server.test.js",
+        "ability-engine.test.js"
+      ],
+      "testCases": [
+        "all 38 exact legacy Limit Break attack definitions are in the production registry",
+        "Limit Break attack AUTO matches its own Vanguard, requires four damage, and resolves for either player",
+        "legacy Limit Break attack text ending with 'end of battle' uses the same exact battle duration"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1059",
+      "abilityId": "cfa-1059:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-limit-break-vanguard-attack-power-server.test.js",
+        "ability-engine.test.js"
+      ],
+      "testCases": [
+        "all 38 exact legacy Limit Break attack definitions are in the production registry",
+        "Limit Break attack AUTO matches its own Vanguard, requires four damage, and resolves for either player",
+        "legacy Limit Break attack text ending with 'end of battle' uses the same exact battle duration"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1767",
+      "abilityId": "cfa-1767:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-limit-break-vanguard-attack-power-server.test.js",
+        "ability-engine.test.js"
+      ],
+      "testCases": [
+        "all 38 exact legacy Limit Break attack definitions are in the production registry",
+        "Limit Break attack AUTO matches its own Vanguard, requires four damage, and resolves for either player",
+        "legacy Limit Break attack text ending with 'end of battle' uses the same exact battle duration"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T22:51:38.994Z"
+  "evidenceUpdatedAt": "2026-10-30T23:11:58.301Z"
 }

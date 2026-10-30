@@ -34,22 +34,27 @@ function fixture(cardId, side, damageCount) {
   return { state, source, ability, event, side, playerId };
 }
 
-test("all 35 exact legacy Limit Break attack definitions are in the production registry", () => {
-  assert.equal(family.length, 35);
+test("all 38 exact legacy Limit Break attack definitions are in the production registry", () => {
+  assert.equal(family.length, 38);
   for (const { card, ability } of family) {
     const trusted = Engine.getReviewedAbilityDefinitionsForCard(card.id).find(item => item.id === ability.id);
     assert.ok(trusted, `${ability.id} is trusted for authoritative play`);
+    assert.deepEqual(trusted.requiredLocation, ["vanguard"], ability.id);
     assert.deepEqual(trusted.conditions, [{ type: "limit-break-active", count: 4 }], ability.id);
     assert.equal(Reducer.supportsServerAbilityEffects(ability), true, ability.id);
   }
 });
 
 test("Limit Break attack AUTO matches its own Vanguard, requires four damage, and resolves for either player", () => {
-  for (const cardId of ["cfa-218", family.find(item => item.ability.printedText.includes("Limit Break 4:"))?.card.id].filter(Boolean)) {
+  for (const cardId of ["cfa-218", "cfa-1018", "cfa-1059", "cfa-1767", family.find(item => item.ability.printedText.includes("Limit Break 4:"))?.card.id].filter(Boolean)) {
     for (const side of ["human", "bot"]) {
       const inactive = fixture(cardId, side, 3);
       assert.equal(Reducer.discoverAutoTriggers(inactive.state, [inactive.event], Engine).queued.length, 0, `${cardId} ${side} below threshold`);
       const legal = fixture(cardId, side, 4);
+      const otherAttackerEvent = { ...legal.event, sourceCardInstanceId: "other-attacker", subjectCardInstanceId: "other-attacker", attackingCardInstanceIds: ["other-attacker"] };
+      assert.equal(Reducer.discoverAutoTriggers(legal.state, [otherAttackerEvent], Engine).queued.length, 0, `${cardId} ${side} another unit attacks`);
+      const rearGuardTargetEvent = { ...legal.event, targetLocation: "rear-guard" };
+      assert.equal(Reducer.discoverAutoTriggers(legal.state, [rearGuardTargetEvent], Engine).queued.length, 0, `${cardId} ${side} attacks a Rear-Guard`);
       assert.equal(Reducer.discoverAutoTriggers(legal.state, [legal.event], Engine).queued.length, 1, `${cardId} ${side} at threshold`);
       assert.equal(legal.state.pendingAbility.side, side);
       assert.equal(legal.state.pendingAbility.instance.uid, legal.source.uid);

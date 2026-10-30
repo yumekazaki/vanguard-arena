@@ -641,6 +641,22 @@ test("legacy Limit Break attack AUTO parses its exact source, circle, damage thr
   assert.equal(resolveEffectProgram(ability.effects,EFFECT_HANDLERS,{source,sourceInPlay:true,side:"p1",match}).ok,true);
   assert.equal(match.pendingAttack.power,18000);
 });
+test("legacy Limit Break attack text ending with 'end of battle' uses the same exact battle duration", () => {
+  const cards = [
+    { id: "cfa-1018", text: "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle." },
+    { id: "cfa-1059", text: "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle." },
+    { id: "cfa-1767", text: "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle." }
+  ];
+  for (const card of cards) {
+    const ability = parseCardAbilities(card)[0];
+    assert.equal(ability.definition.source.patternId, "auto-legacy-limit-break-vanguard-attack-power-v1", card.id);
+    assert.deepEqual(ability.requiredLocation, ["vanguard"], card.id);
+    assert.deepEqual(ability.conditions, [{ type: "limit-break-active", count: 4 }], card.id);
+    assert.deepEqual(ability.definition.effects, [{ op: "modify-power", target: "source", amount: 5000, duration: "battle" }], card.id);
+    assert.equal(evaluateAbilityConditions(ability, { damageCount: 3 }), false, card.id);
+    assert.equal(evaluateAbilityConditions(ability, { damageCount: 4 }), true, card.id);
+  }
+});
 test("legacy Limit Break text with conflicting thresholds stays unsupported", () => {
   const ability=parseCardAbilities({id:"bad-limit-break",text:"[VC] Limit Break 4 (This ability is active if you have three or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of that battle."})[0];
   assert.equal(ability.definition,null);
