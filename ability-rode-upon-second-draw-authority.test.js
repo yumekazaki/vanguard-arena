@@ -9,6 +9,11 @@ const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const PATTERN = "auto-rode-upon-second-player-draw-v1";
 const catalog = loadCatalog();
+const rideDrawCards = catalog.flatMap(definition => {
+  const abilities = Engine.parseCardAbilitiesCached(definition);
+  return abilities.length === 1 && abilities[0].definition?.source?.patternId === PATTERN
+    ? [{ definition, ability: abilities[0] }] : [];
+});
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 const cardDefinition = id => { const card = catalog.find(item => String(item.id) === String(id)); assert.ok(card, `card ${id}`); return card; };
 const card = (definition, uid, playerId, extra = {}) => ({ uid, cardId: String(definition.id), cardName: definition.name, type: definition.type || "Unit", grade: Number(definition.grade || 0), ownerPlayerId: playerId, controllerPlayerId: playerId, ...(definition.clan ? { clan: definition.clan, clans: definition.clans || [definition.clan] } : {}), ...extra });
@@ -57,6 +62,51 @@ test("all 153 catalog ride-draw abilities bind to the ridden Vanguard and exact 
     assert.deepEqual(ability.conditions, [{ type: "controller-went-second" }]);
     assert.deepEqual(ability.effects, [{ op: "draw", count: 1 }]);
     assert.equal(Reducer.supportsServerAbilityEffects(ability), true);
+  }
+});
+
+test("all 152 single-skill ride-draw cards preserve their complete text and metadata", () => {
+  assert.equal(rideDrawCards.length, 152);
+  assert.equal(new Set(rideDrawCards.map(({ definition }) => definition.id)).size, 152);
+  for (const { definition, ability } of rideDrawCards) {
+    assert.equal(Engine.parseCardAbilitiesCached(definition).length, 1, `${definition.id} has no other unreviewed printed ability`);
+    assert.ok(definition.text.includes(ability.printedText), `${definition.id} preserves its exact AUTO text`);
+    assert.equal(ability.id, `${definition.id}:0`, `${definition.id} skill identity is stable`);
+    assert.equal(ability.kind, "AUTO");
+    assert.equal(ability.canDecline, false, `${definition.id} has a mandatory draw when its condition is met`);
+    assert.deepEqual(ability.trigger, {
+      status: "recognized-trigger", eventType: "card.ridden", subject: "event-target", circles: ["vanguard"]
+    }, `${definition.id} refers to the prior Vanguard that is ridden`);
+    assert.deepEqual(ability.conditions, [{ type: "controller-went-second" }]);
+    assert.deepEqual(ability.effects, [{ op: "draw", count: 1 }]);
+    assert.equal(definition.type, "Unit");
+    assert.equal(Number(definition.grade), 0);
+    assert.ok(Number.isFinite(Number(definition.power)));
+    assert.ok(Number.isFinite(Number(definition.shield)));
+    const trusted = Engine.getReviewedAbilityDefinitionsForCard(definition.id).find(item => item.id === ability.id);
+    assert.ok(trusted, `${definition.id} has a trusted server definition`);
+    assert.equal(trusted.printedText, ability.printedText);
+    assert.deepEqual(trusted.effects, ability.effects);
+    assert.equal(Reducer.supportsServerAbilityEffects(ability), true, definition.id);
+  }
+});
+
+test("every single-skill ride-draw card triggers only for its controller going second", () => {
+  for (const { definition } of rideDrawCards) for (const side of ["human", "bot"]) {
+    const second = fixture({ cardId: definition.id, side, wentSecond: true });
+    assert.equal(discover(second).queued.length, 1, `${definition.id}/${side}/second`);
+    assert.equal(second.state.pendingAbility.side, side);
+    assert.equal(second.state.pendingAbility.instance.uid, second.oldVanguard.uid);
+    assert.equal(second.state.pendingAbility.eventContext.gameEvent.subjectCardInstanceId, second.rider.uid);
+    const result = resolve(second);
+    assert.equal(result.ok, true, `${definition.id}/${side}: ${result.reason}`);
+    assert.equal(second.owner.hand[0]?.uid, `${side}-draw`);
+    assert.equal(second.opponent.hand.length, 0);
+
+    const first = fixture({ cardId: definition.id, side, wentSecond: false });
+    assert.equal(discover(first).queued.length, 0, `${definition.id}/${side}/first`);
+    assert.equal(first.owner.deck.length, 1);
+    assert.equal(first.owner.hand.length, 0);
   }
 });
 
