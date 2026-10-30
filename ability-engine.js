@@ -704,6 +704,17 @@
       source: { dataset: "Cardfight Area snapshot", patternId: "act-source-to-soul-counter-charge-v1", review: "Exact ACT template: RC placement, source-to-Soul cost, and Counter Charge amount are parsed from printed text." },
       effects: [{ op: "counter-charge", count: Number(match[1]) }] };
   }
+  function compileActSoulClanCounterChargeDefinition(cardId, abilityId, kind, printedText) {
+    if (kind !== "ACT") return null;
+    const text = normalizePrintedText(printedText);
+    const match = text.match(/^ACT \[RC\]: \[Put this unit into your soul\] If you have a [«<]([^»>]+)[»>] vanguard, choose a card from your damage zone, and turn it face up\. \(Counter Charge 1\)$/i);
+    if (!match) return null;
+    const clan = match[1].trim();
+    return { id: abilityId, cardId, kind, printedText, requiredLocation: ["rear-guard"], conditions: [{ type: "controller-vanguard-has-clan", value: clan }], conditionsReviewed: true, choicesReviewed: true,
+      costs: [{ type: "source-to-soul", count: 1 }],
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "act-source-to-soul-clan-counter-charge-v1", review: "Exact RC ACT. The controller needs the printed clan's Vanguard, then pays by moving this exact source from RC to Soul and chooses one face-down Damage card to turn face up." },
+      effects: [{ op: "counter-charge", count: 1 }] };
+  }
   function compileActSoulCostBuffDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "ACT") return null;
     const match = String(printedText || "").match(/^ACT\s*\[RC\]:\s*(?:COST\s*)?\[Put this unit into your soul\],?\s*Choose one of your units, and (?:it|that unit) gets power \+(\d+) until end of turn\.$/i);
@@ -1057,6 +1068,17 @@
     if(!match)return null;
     const clan=match[1].trim(),amount=Number(match[2]);
     return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"attack.hit",subject:"source",targetLocation:"vanguard",circles:[]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"auto-rc-own-attack-hit-clan-power-turn-v1",review:"Exact Rear-Guard AUTO wording. The exact source must attack and hit the opposing Vanguard; its controller then chooses a friendly unit of the printed clan and applies the printed power until end of turn."},effects:[{op:"modify-power-target",target:"chosen",amount,duration:"turn",noOpIfNoLegalTargets:true,targetFilter:{controller:"source-controller",cardType:"unit",clan}}]};
+  }
+  function compileRcAttackHitClanLowGradeStandDefinition(cardId, abilityId, kind, printedText) {
+    if (kind !== "AUTO") return null;
+    const match = normalizePrintedText(printedText).match(/^AUTO \[RC\]: \[Counter Blast 2\] When this unit(?:'|’)s attack hits a vanguard, you may pay the cost\. If you do, choose one of your grade 1 or less [«<]([^»>]+)[»>] rear-guards, and stand it\.$/i);
+    if (!match) return null;
+    const clan = match[1].trim();
+    return { id: abilityId, cardId, kind, printedText, requiredLocation: ["rear-guard"], optional: true, choicesReviewed: true,
+      trigger: { status: "recognized-trigger", eventType: "attack.hit", subject: "source", targetLocation: "vanguard", circles: [] },
+      costs: [{ type: "counter-blast", count: 2 }],
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-rc-own-attack-hit-clan-grade-one-stand-v1", review: "Exact RC source attack-hit AUTO. Requires this exact Rear-Guard's attack to hit the opposing Vanguard; the controller may Counter Blast 2, then chooses a friendly Rear-Guard of the printed clan and Grade 1 or lower to stand." },
+      effects: [{ op: "stand-target", target: "chosen", allowAlreadyStanding: true, noOpIfNoLegalTargets: true, targetFilter: { controller: "source-controller", cardType: "unit", zone: "rear-guard", clan, maxGrade: 1 } }] };
   }
   function compileOpponentAbilityRetirementSoulBlastDrawDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
@@ -2588,6 +2610,7 @@
     compileOwnAttackHitCounterBlastDrawWithClanDefinition,
     compileAutoLegionOwnAttackHitDrawDefinition,
     compileAutoOwnAttackHitClanPowerDefinition,
+    compileRcAttackHitClanLowGradeStandDefinition,
     compileOpponentAbilityRetirementSoulBlastDrawDefinition,
     compileOpponentAbilityRetirementSoulBlastDrawDefinition,
     compilePlacedVanguardOrRearGuardClanSoulChargeDefinition,
@@ -2600,6 +2623,7 @@
     compileDiscardSelfOptionalSoulDefinition,
     compileVanguardAttackSoulChargePowerDefinition,
     compileActSoulCounterChargeDefinition,
+    compileActSoulClanCounterChargeDefinition,
     compileActRestDiscardDrawDefinition,
     compileActSoulCostDrawDefinition,
     compileExactTemplateDefinition,

@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1434,
-    "testCount": 1434,
-    "passed": 1434,
+    "tests": 1442,
+    "testCount": 1442,
+    "passed": 1442,
     "failed": 0,
-    "durationMilliseconds": 238926,
-    "completedAt": "2026-10-30T19:02:52.763Z",
+    "durationMilliseconds": 239352,
+    "completedAt": "2026-10-30T19:35:49.415Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "26837609247a64a575979df0b703a4d85951c79d400af0f83e7df7ae4e20d26b"
+    "validationInputDigest": "e1eeb7ab015050e7ba15d0fb2bf31a4c5e1ef49e43a8aaf0ff59130d722b278b"
   },
   "records": [
     {
@@ -73134,8 +73134,104 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-214",
+      "abilityId": "cfa-214:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rc-attack-hit-clan-grade-one-stand.test.js"
+      ],
+      "testCases": [
+        "three exact RC attack-hit abilities preserve source, clan, Grade 1 cap, cost, and stand effect",
+        "host and joining player resolve only their own Rear-Guard hit and pay their own Counter Blast",
+        "wrong attacker, target grade or clan, missing cost, stale battle, and host proxy reject without partial payment",
+        "declining does not pay, and tampered printed identity is not trusted"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-306",
+      "abilityId": "cfa-306:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rc-attack-hit-clan-grade-one-stand.test.js"
+      ],
+      "testCases": [
+        "three exact RC attack-hit abilities preserve source, clan, Grade 1 cap, cost, and stand effect",
+        "host and joining player resolve only their own Rear-Guard hit and pay their own Counter Blast",
+        "wrong attacker, target grade or clan, missing cost, stale battle, and host proxy reject without partial payment",
+        "declining does not pay, and tampered printed identity is not trusted"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-377",
+      "abilityId": "cfa-377:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-rc-attack-hit-clan-grade-one-stand.test.js"
+      ],
+      "testCases": [
+        "three exact RC attack-hit abilities preserve source, clan, Grade 1 cap, cost, and stand effect",
+        "host and joining player resolve only their own Rear-Guard hit and pay their own Counter Blast",
+        "wrong attacker, target grade or clan, missing cost, stale battle, and host proxy reject without partial payment",
+        "declining does not pay, and tampered printed identity is not trusted"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1329",
+      "abilityId": "cfa-1329:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-source-to-soul-clan-counter-charge.test.js"
+      ],
+      "testCases": [
+        "three clan-gated source-to-Soul ACT definitions preserve their clan, target choice, and costs",
+        "both online seats pay their own source-to-Soul cost and flip only their selected damage",
+        "wrong Vanguard clan, actor, circle, timing, or damage selection rejects atomically",
+        "tampered clan or cost cannot bypass the server ability allowlist"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-786",
+      "abilityId": "cfa-786:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-source-to-soul-clan-counter-charge.test.js"
+      ],
+      "testCases": [
+        "three clan-gated source-to-Soul ACT definitions preserve their clan, target choice, and costs",
+        "both online seats pay their own source-to-Soul cost and flip only their selected damage",
+        "wrong Vanguard clan, actor, circle, timing, or damage selection rejects atomically",
+        "tampered clan or cost cannot bypass the server ability allowlist"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-879",
+      "abilityId": "cfa-879:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-source-to-soul-clan-counter-charge.test.js"
+      ],
+      "testCases": [
+        "three clan-gated source-to-Soul ACT definitions preserve their clan, target choice, and costs",
+        "both online seats pay their own source-to-Soul cost and flip only their selected damage",
+        "wrong Vanguard clan, actor, circle, timing, or damage selection rejects atomically",
+        "tampered clan or cost cannot bypass the server ability allowlist"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T18:48:28.911Z"
+  "evidenceUpdatedAt": "2026-10-30T19:31:36.724Z"
 }

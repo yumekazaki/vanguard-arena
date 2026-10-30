@@ -110589,6 +110589,246 @@
           "duration": "battle"
         }
       ]
+    },
+    {
+      "id": "cfa-214:1",
+      "cardId": "cfa-214",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Counter Blast 2] When this unit’s attack hits a vanguard, you may pay the cost. If you do, choose one of your grade 1 or less «Gold Paladin» rear-guards, and stand it.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 2
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-own-attack-hit-clan-grade-one-stand-v1",
+        "review": "Exact RC source attack-hit AUTO. Requires this exact Rear-Guard's attack to hit the opposing Vanguard; the controller may Counter Blast 2, then chooses a friendly Rear-Guard of the printed clan and Grade 1 or lower to stand."
+      },
+      "effects": [
+        {
+          "op": "stand-target",
+          "target": "chosen",
+          "allowAlreadyStanding": true,
+          "noOpIfNoLegalTargets": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "rear-guard",
+            "clan": "Gold Paladin",
+            "maxGrade": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-306:1",
+      "cardId": "cfa-306",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Counter Blast 2] When this unit’s attack hits a vanguard, you may pay the cost. If you do, choose one of your grade 1 or less «Great Nature» rear-guards, and stand it.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 2
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-own-attack-hit-clan-grade-one-stand-v1",
+        "review": "Exact RC source attack-hit AUTO. Requires this exact Rear-Guard's attack to hit the opposing Vanguard; the controller may Counter Blast 2, then chooses a friendly Rear-Guard of the printed clan and Grade 1 or lower to stand."
+      },
+      "effects": [
+        {
+          "op": "stand-target",
+          "target": "chosen",
+          "allowAlreadyStanding": true,
+          "noOpIfNoLegalTargets": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "rear-guard",
+            "clan": "Great Nature",
+            "maxGrade": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-377:1",
+      "cardId": "cfa-377",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Counter Blast 2] When this unit’s attack hits a vanguard, you may pay the cost. If you do, choose one of your grade 1 or less «Neo Nectar» rear-guards, and stand it.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 2
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-own-attack-hit-clan-grade-one-stand-v1",
+        "review": "Exact RC source attack-hit AUTO. Requires this exact Rear-Guard's attack to hit the opposing Vanguard; the controller may Counter Blast 2, then chooses a friendly Rear-Guard of the printed clan and Grade 1 or lower to stand."
+      },
+      "effects": [
+        {
+          "op": "stand-target",
+          "target": "chosen",
+          "allowAlreadyStanding": true,
+          "noOpIfNoLegalTargets": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "rear-guard",
+            "clan": "Neo Nectar",
+            "maxGrade": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-786:0",
+      "cardId": "cfa-786",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul] If you have a «Pale Moon» vanguard, choose a card from your damage zone, and turn it face up. (Counter Charge 1)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Pale Moon"
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "act-source-to-soul-clan-counter-charge-v1",
+        "review": "Exact RC ACT. The controller needs the printed clan's Vanguard, then pays by moving this exact source from RC to Soul and chooses one face-down Damage card to turn face up."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-879:0",
+      "cardId": "cfa-879",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul] If you have a «Murakumo» vanguard, choose a card from your damage zone, and turn it face up. (Counter Charge 1)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Murakumo"
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "act-source-to-soul-clan-counter-charge-v1",
+        "review": "Exact RC ACT. The controller needs the printed clan's Vanguard, then pays by moving this exact source from RC to Soul and chooses one face-down Damage card to turn face up."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-1329:0",
+      "cardId": "cfa-1329",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul] If you have a «Tachikaze» vanguard, choose a card from your damage zone, and turn it face up. (Counter Charge 1)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Tachikaze"
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "act-source-to-soul-clan-counter-charge-v1",
+        "review": "Exact RC ACT. The controller needs the printed clan's Vanguard, then pays by moving this exact source from RC to Soul and chooses one face-down Damage card to turn face up."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
