@@ -111790,7 +111790,52 @@
         review: "Exact three-card AUTO family. The controller may Soul Charge one only when this exact Rear-Guard instance boosted the unit in the battle that hit; only if a card was Soul Charged does this same source return to its owner's deck and that deck is shuffled."
       },
       effects: [{ op: "soul-charge-and-return-source-to-deck", target: "source", count: 1, shuffle: true }]
-    }))
+    })),
+    {
+      id: "cfa-717:0",
+      cardId: "cfa-717",
+      kind: "AUTO",
+      printedText: "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.",
+      requiredLocation: ["vanguard", "rear-guard"],
+      trigger: { status: "recognized-trigger", eventType: "card.damage_moved", subject: "any", destinationLocation: "damage", subjectControllerRelation: "source-controller" },
+      conditions: [{ type: "controller-vanguard-has-clan", value: "Angel Feather" }],
+      conditionsReviewed: true,
+      costs: [],
+      costsReviewed: true,
+      optional: false,
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1", review: "Exact AUTO family on Thousand Ray Pegasus, Million Ray Pegasus, and The Phoenix, Calamity Flame. Only a card entering this controller's Damage Zone triggers the exact VC/RC source instance; its controller must have an Angel Feather Vanguard, and the +2000 expires at the active turn's end even when this trigger occurs during the opponent's turn." },
+      effects: [{ op: "modify-power", target: "source", amount: 2000, duration: "turn", expiry: "active-turn" }]
+    },
+    {
+      id: "cfa-725:0",
+      cardId: "cfa-725",
+      kind: "AUTO",
+      printedText: "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.",
+      requiredLocation: ["vanguard", "rear-guard"],
+      trigger: { status: "recognized-trigger", eventType: "card.damage_moved", subject: "any", destinationLocation: "damage", subjectControllerRelation: "source-controller" },
+      conditions: [{ type: "controller-vanguard-has-clan", value: "Angel Feather" }],
+      conditionsReviewed: true,
+      costs: [],
+      costsReviewed: true,
+      optional: false,
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1", review: "Exact AUTO family on Thousand Ray Pegasus, Million Ray Pegasus, and The Phoenix, Calamity Flame. Only a card entering this controller's Damage Zone triggers the exact VC/RC source instance; its controller must have an Angel Feather Vanguard, and the +2000 expires at the active turn's end even when this trigger occurs during the opponent's turn." },
+      effects: [{ op: "modify-power", target: "source", amount: 2000, duration: "turn", expiry: "active-turn" }]
+    },
+    {
+      id: "cfa-732:0",
+      cardId: "cfa-732",
+      kind: "AUTO",
+      printedText: "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.",
+      requiredLocation: ["vanguard", "rear-guard"],
+      trigger: { status: "recognized-trigger", eventType: "card.damage_moved", subject: "any", destinationLocation: "damage", subjectControllerRelation: "source-controller" },
+      conditions: [{ type: "controller-vanguard-has-clan", value: "Angel Feather" }],
+      conditionsReviewed: true,
+      costs: [],
+      costsReviewed: true,
+      optional: false,
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1", review: "Exact AUTO family on Thousand Ray Pegasus, Million Ray Pegasus, and The Phoenix, Calamity Flame. Only a card entering this controller's Damage Zone triggers the exact VC/RC source instance; its controller must have an Angel Feather Vanguard, and the +2000 expires at the active turn's end even when this trigger occurs during the opponent's turn." },
+      effects: [{ op: "modify-power", target: "source", amount: 2000, duration: "turn", expiry: "active-turn" }]
+    },
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;

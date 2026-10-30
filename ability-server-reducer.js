@@ -29,6 +29,8 @@
     return {};
   })();
   const REVOLDRESS_CARD_IDS = new Set(["cfa-10050","cfa-10130","cfa-13899"]);
+  const DAMAGE_ZONE_CLAN_POWER_IDS = new Set(["cfa-717", "cfa-725", "cfa-732"]);
+  const DAMAGE_ZONE_CLAN_POWER_TEXT = "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.";
   function reject(reason) { return { ok: false, reason }; }
   const NAMED_G_GUARDIAN_DISCARD_DRAW_IDS = Object.freeze({
     "cfa-4692": "Seven Stars Mutant Deity, Relish Lady",
@@ -245,6 +247,21 @@
   function isExactOtherRearGuardPlacementPowerAbility(ability) {
     const cardId=String(ability?.cardId||""),definition=ability?.definition,printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim();
     return Object.hasOwn(OTHER_REAR_GUARD_PLACEMENT_POWER_IDS,cardId)&&ability?.id===`${cardId}:${OTHER_REAR_GUARD_PLACEMENT_POWER_IDS[cardId]}`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&definition.cardId===cardId&&printed===OTHER_REAR_GUARD_PLACEMENT_POWER_TEXT&&definition.source?.patternId==="auto-other-friendly-rearguard-placement-source-power-turn-v1"&&ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="card.placed"&&ability.trigger.subject==="any"&&ability.trigger.excludeSourceAsSubject===true&&ability.trigger.subjectControllerRelation==="source-controller"&&JSON.stringify(ability.trigger.circles||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["vanguard","rear-guard"])&&!(ability.conditions||[]).length&&!(ability.costs||[]).length&&definition.effects?.length===1&&definition.effects[0]?.op==="modify-power"&&definition.effects[0]?.target==="source"&&Number(definition.effects[0]?.amount)===3000&&definition.effects[0]?.duration==="turn";
+  }
+  function isExactDamageZoneClanPowerAbility(ability) {
+    const cardId=String(ability?.cardId||""),definition=ability?.definition,printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim(),effect=definition?.effects?.[0],trigger=ability?.trigger;
+    return DAMAGE_ZONE_CLAN_POWER_IDS.has(cardId)&&ability?.id===`${cardId}:0`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&String(definition.cardId)===cardId&&definition.id===ability.id&&printed===DAMAGE_ZONE_CLAN_POWER_TEXT&&definition.source?.patternId==="auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1"&&
+      trigger?.status==="recognized-trigger"&&trigger.eventType==="card.damage_moved"&&trigger.subject==="any"&&trigger.destinationLocation==="damage"&&trigger.subjectControllerRelation==="source-controller"&&
+      JSON.stringify(ability.requiredLocation||definition.requiredLocation||[])===JSON.stringify(["vanguard","rear-guard"])&&JSON.stringify(ability.conditions||[])===JSON.stringify([{type:"controller-vanguard-has-clan",value:"Angel Feather"}])&&
+      !(ability.costs||[]).length&&definition.conditionsReviewed===true&&definition.costsReviewed===true&&definition.optional===false&&ability.canDecline===false&&
+      definition.effects?.length===1&&effect?.op==="modify-power"&&effect.target==="source"&&Number(effect.amount)===2000&&effect.duration==="turn"&&effect.expiry==="active-turn";
+  }
+  function damageZoneClanPowerEventMatches(state,ability,source,located,event,actorPlayerId,engine,{requireSubjectInDamage=true}={}){
+    const side=located?.side,player=side&&state?.players?.[side],currentSource=source?.uid&&engine?.locateCardInstance?.(state,source.uid),subjectUid=event?.subjectCardInstanceId,subject=subjectUid&&engine?.locateCardInstance?.(state,subjectUid),subjectInControllerDamage=Boolean(subject&&!subject.ambiguous&&subject.zone==="damage"&&subject.side===side&&subject.controllerPlayerId===actorPlayerId&&subject.ownerPlayerId===event?.subjectOwnerPlayerId);
+    const sourceOnLegalCircle=located?.zone==="vanguard"?player?.vanguard?.uid===source?.uid&&located.circle==="vanguard":located?.zone==="rear-guard"&&player?.rear?.some(card=>card?.uid===source?.uid)&&/^(?:rear-(?:left|right|back-(?:left|center|right))|accel-\d+)$/.test(String(located.circle||""));
+    return Boolean(isExactDamageZoneClanPowerAbility(ability)&&source?.uid&&source.cardId===ability.cardId&&located&&!located.ambiguous&&located.instance===source&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&sourceOnLegalCircle&&currentSource&&!currentSource.ambiguous&&currentSource.instance===source&&currentSource.side===side&&currentSource.controllerPlayerId===actorPlayerId&&currentSource.zone===located.zone&&currentSource.circle===located.circle&&
+      event?.eventId&&event.type==="card.damage_moved"&&event.cardInstanceId===subjectUid&&typeof subjectUid==="string"&&subjectUid.length>0&&event.currentLocation==="damage"&&typeof event.previousLocation==="string"&&event.previousLocation!=="damage"&&event.subjectControllerPlayerId===actorPlayerId&&event.subjectOwnerPlayerId&&
+      (!requireSubjectInDamage||subjectInControllerDamage));
   }
   function isExactActSourceToSoulCounterChargeAbility(ability) {
     const cardId = String(ability?.cardId || ""), definition = ability?.definition;
@@ -3078,6 +3095,7 @@
     if (ability?.definition?.source?.patternId === "auto-vanguard-name-attack-source-soul-draw-power-battle-v1" && !isExactOwnVanguardNameAttackSourceSoulDrawAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-g-guardian-named-call-soul-blast-counter-charge-v1" && !isExactGGuardianSoulBlastCounterChargeAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-other-friendly-rearguard-placement-source-power-turn-v1" && !isExactOtherRearGuardPlacementPowerAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1" && !isExactDamageZoneClanPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-stride-cost-discard-draw-v1" && !isExactStrideCostDiscardDrawAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-grade-three-clan-discard-named-search-v1" && !isExactRcGradeThreeClanNamedSearchAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-narukami-own-attack-power-battle-v1" && !isExactRcNarukamiOwnAttackPowerAbility(ability)) return false;
@@ -3860,6 +3878,8 @@
             const eventForMatch = authoritativeSoulBlastBoostEvent(state, ability, event, engine);
             const eventMatch = engine.eventMatchesAbilityTrigger(ability, eventName, eventForMatch, instance.uid, triggerSourceZone, subjectZone, located.controllerPlayerId);
             if (!eventMatch) continue;
+            if(ability.definition?.source?.patternId==="auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1"&&
+              !damageZoneClanPowerEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,engine))continue;
             if(isExactGuardianDropTriggerCallAbility(ability)&&!engine.canPayAbilityCosts(ability,{faceUpDamage:(state.players?.[side]?.damage||[]).filter(card=>!card.faceDown).length})){
               if(engine.claimAbilityTrigger(state,event.eventId,instance.uid,ability.id))skipped.push({eventId:event.eventId,cardInstanceId:instance.uid,abilityId:ability.id,reason:"unpayable-cost"});
               continue;
@@ -5500,6 +5520,11 @@
       : pending.field || sourceZone;
     const authoritativeTriggerEvent = authoritativeSoulBlastBoostEvent(state, ability, triggerEvent, engine);
     if (!engine.eventMatchesAbilityTrigger(ability, triggerContext.event, authoritativeTriggerEvent, located.instance.uid, eventSourceZone, triggerContext.subjectZone || triggerEvent.currentLocation, actorPlayerId)) return reject("trigger-event-mismatch");
+    if(ability.definition?.source?.patternId==="auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1"){
+      if(!damageZoneClanPowerEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,engine,{requireSubjectInDamage:false}))return reject("damage-zone-power-trigger-context-invalid");
+      const currentConditions=buildConditionContext(state,triggerEvent,located,engine);
+      if(!currentConditions||!engine.evaluateAbilityConditions(ability,currentConditions))return reject("damage-zone-power-vanguard-condition-no-longer-met");
+    }
     if (ability?.definition?.source?.patternId === "auto-rc-placement-hand-normal-drop-bottom-power-v1") {
       if (!isExactRcPlacementNormalDropBottomPowerAbility(ability) || triggerEvent.type !== "card.placed" ||
           triggerEvent.cardInstanceId !== located.instance.uid || triggerEvent.subjectCardInstanceId !== located.instance.uid ||
