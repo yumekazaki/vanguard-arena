@@ -20,3 +20,53 @@ test('an unrelated source, non-RC placement, unavailable optional cost, or oppon
 test('trusted definitions equal the deterministic parser output for all 21 printed variants',()=>{for(const {card,ability} of batch){const expected=Engine.compileAutoRcPlacementChooseFriendlyPowerDefinition(String(card.id),ability.id,'AUTO',ability.printedText);assert.ok(expected,ability.id);assert.deepEqual(ability.definition.effects,expected.effects,ability.id);assert.equal(ability.trigger.sourceLocation,ability.printedText.includes('from your deck')?'deck':null,ability.id);assert.equal(ability.costs[0]?.type||null,ability.printedText.includes('[Counter Blast')?'counter-blast':null,ability.id);}});
 
 test('Rear-Guard-only placement and printed target filters reject mismatched events and targets',()=>{const item=batch.find(entry=>entry.card.id==='cfa-14');assert.ok(item);const wrongCircle=fixture(item,'bot');wrongCircle.event={...wrongCircle.event,currentLocation:'vanguard',circle:'vanguard',targetLocation:'vanguard'};assert.equal(Reducer.discoverAutoTriggers(wrongCircle.state,[wrongCircle.event],Engine).queued.length,0);const f=fixture(item,'bot');const filter=item.ability.definition.effects[0].targetFilter;const wrongCard=catalog.find(card=>card.type==='Unit'&&!Engine.matchesTargetFilter(filter,{target:{uid:'wrong-target'},targetCard:card,source:{uid:f.source.uid},sourceControllerPlayerId:f.ownerId,targetControllerPlayerId:f.ownerId,targetZone:'rear-left'}));assert.ok(wrongCard);Object.assign(f.target,{cardId:String(wrongCard.id),cardName:wrongCard.name,name:wrongCard.name,type:wrongCard.type,grade:Number(wrongCard.grade),clan:wrongCard.clan,race:wrongCard.race});assert.equal(Reducer.discoverAutoTriggers(f.state,[f.event],Engine).queued.length,1);const before=JSON.stringify(f.state);const result=Reducer.applyAbilityDecision(f.state,{actorAuthUid:seats.guestAuthUid,actionId:'wrong-filter-target',expectedStateVersion:f.state.stateVersion,payload:{type:'ability-response',accept:true,selection:{instanceUid:f.source.uid,abilityId:f.ability.id,targetUid:f.target.uid}}},seats,Engine);assert.equal(result.ok,false);assert.equal(JSON.stringify(f.state),before);});
+
+test('all 26 skills are the card’s sole printed ability with exact source and effect metadata',()=>{
+ assert.equal(batch.length,26);assert.equal(new Set(batch.map(item=>item.card.id)).size,26);
+ for(const {card,ability} of batch){
+  assert.equal(Engine.parseCardAbilitiesCached(card).length,1,`${card.id}: no other ability is left unreviewed`);
+  assert.ok(card.text.includes(ability.printedText),`${card.id}: exact printed text is retained`);
+  assert.equal(ability.kind,'AUTO',card.id);assert.equal(ability.definition.source.patternId,pattern,card.id);
+  assert.equal(ability.trigger.eventType,'card.placed',card.id);assert.equal(ability.trigger.subject,'source',card.id);
+  assert.equal(ability.trigger.circles.join(','),'rear-guard',card.id);
+  assert.equal(ability.effects.length,1,card.id);assert.equal(ability.effects[0].op,'modify-power-target',card.id);
+  assert.equal(ability.effects[0].target,'chosen',card.id);assert.ok(Number.isInteger(ability.effects[0].amount),card.id);
+  assert.ok(ability.definition.effects[0].targetFilter,`${card.id}: exact target filter exists`);
+  assert.ok(Number.isFinite(Number(card.grade))&&Number.isFinite(Number(card.power)),`${card.id}: base metadata`);
+ }
+});
+
+test('each target filter rejects an illegal card and a card controlled by the opponent',()=>{
+ for(const item of batch)for(const side of ['human','bot']){
+  const f=fixture(item,side),filter=item.ability.definition.effects[0].targetFilter;
+  const matchContext=card=>({target:{uid:'candidate'},targetCard:card,source:f.source,sourceControllerPlayerId:f.ownerId,targetControllerPlayerId:f.ownerId,targetZone:'rear-left'});
+  const illegal=catalog.find(card=>card.type==='Unit'&&String(card.id)!==String(item.card.id)&&!Engine.matchesTargetFilter(filter,matchContext(card)));
+  assert.ok(illegal,`${item.ability.id}: at least one non-matching target exists`);
+  const discovery=Reducer.discoverAutoTriggers(f.state,[f.event],Engine);assert.equal(discovery.queued.length,1,`${item.ability.id}/${side}`);
+  Object.assign(f.target,{cardId:String(illegal.id),cardName:illegal.name,name:illegal.name,type:illegal.type,grade:Number(illegal.grade),clan:illegal.clan,race:illegal.race});
+  const before=JSON.stringify(f.state);
+  const rejected=Reducer.applyAbilityDecision(f.state,{actorAuthUid:side==='human'?seats.hostAuthUid:seats.guestAuthUid,actionId:`bad-target-${item.ability.id}-${side}`,expectedStateVersion:f.state.stateVersion,payload:{type:'ability-response',accept:true,selection:{instanceUid:f.source.uid,abilityId:item.ability.id,targetUid:f.target.uid,costSelections:{cb:f.damage.map(card=>card.uid)}}}},seats,Engine);
+  assert.equal(rejected.ok,false,`${item.ability.id}: wrong clan/name/grade/race must reject`);assert.equal(JSON.stringify(f.state),before,`${item.ability.id}: invalid target does not partially apply`);
+
+  const foreign=fixture(item,side),opponentSide=side==='human'?'bot':'human';
+  foreign.state.players[opponentSide].rear[0]={...foreign.target,uid:`foreign-${item.card.id}-${side}`,ownerPlayerId:foreign.state.players[opponentSide].playerId,controllerPlayerId:foreign.state.players[opponentSide].playerId};
+  assert.equal(Reducer.discoverAutoTriggers(foreign.state,[foreign.event],Engine).queued.length,1);
+  const foreignBefore=JSON.stringify(foreign.state);
+  const foreignResult=Reducer.applyAbilityDecision(foreign.state,{actorAuthUid:side==='human'?seats.hostAuthUid:seats.guestAuthUid,actionId:`foreign-target-${item.ability.id}-${side}`,expectedStateVersion:foreign.state.stateVersion,payload:{type:'ability-response',accept:true,selection:{instanceUid:foreign.source.uid,abilityId:item.ability.id,targetUid:`foreign-${item.card.id}-${side}`,costSelections:{cb:foreign.damage.map(card=>card.uid)}}}},seats,Engine);
+  assert.equal(foreignResult.ok,false,`${item.ability.id}: opponent unit is not a legal target`);assert.equal(JSON.stringify(foreign.state),foreignBefore);
+ }
+});
+
+test('deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline',()=>{
+ const deckOrigin=batch.filter(item=>item.ability.trigger.sourceLocation==='deck');assert.equal(JSON.stringify(deckOrigin.map(item=>item.card.id).sort()),JSON.stringify(['cfa-1135','cfa-1449','cfa-173'].sort()));
+ for(const item of deckOrigin){const f=fixture(item,'bot');assert.equal(Reducer.discoverAutoTriggers(f.state,[f.event],Engine).queued.length,1);const wrong=fixture(item,'bot');wrong.event={...wrong.event,previousLocation:'hand',eventId:'wrong-origin-'+item.card.id};assert.equal(Reducer.discoverAutoTriggers(wrong.state,[wrong.event],Engine).queued.length,0,item.card.id);}
+ const optional=batch.filter(item=>item.ability.costs?.some(cost=>cost.type==='counter-blast'));
+ assert.equal(optional.length,4);
+ for(const item of optional)for(const side of ['human','bot']){
+  assert.equal(item.ability.canDecline,true,item.card.id);
+  const f=fixture(item,side);assert.equal(Reducer.discoverAutoTriggers(f.state,[f.event],Engine).queued.length,1);
+  const beforeRear=JSON.stringify(f.state.players[side].rear),beforeDamage=JSON.stringify(f.state.players[side].damage);
+  const declined=Reducer.applyAbilityDecision(f.state,{actorAuthUid:side==='human'?seats.hostAuthUid:seats.guestAuthUid,actionId:`decline-${item.card.id}-${side}`,expectedStateVersion:f.state.stateVersion,payload:{type:'ability-response',accept:false,selection:{instanceUid:f.source.uid,abilityId:item.ability.id}}},seats,Engine);
+  assert.equal(declined.ok,true,`${item.card.id}: optional cost can be declined`);assert.equal(JSON.stringify(f.state.players[side].rear),beforeRear);assert.equal(JSON.stringify(f.state.players[side].damage),beforeDamage);
+ }
+});

@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1377,
-    "testCount": 1377,
-    "passed": 1377,
+    "tests": 1381,
+    "testCount": 1381,
+    "passed": 1381,
     "failed": 0,
-    "durationMilliseconds": 214405,
-    "completedAt": "2026-10-30T15:06:00.606Z",
+    "durationMilliseconds": 230298,
+    "completedAt": "2026-10-30T15:23:55.891Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "94458bbabb31f0ee6ee29519c9df6bacb84e383d2a6a5371151359bdec2818cf"
+    "validationInputDigest": "261ebb84180957d9ca830aabbe5a31722f8b8f7be64e9eb0cb75b6e771dd4efa"
   },
   "records": [
     {
@@ -719,7 +719,7 @@
     {
       "cardId": "cfa-1024",
       "abilityId": "cfa-1024:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -728,10 +728,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-10241",
@@ -1113,28 +1117,34 @@
     {
       "cardId": "cfa-10441",
       "abilityId": "cfa-10441:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-10442",
       "abilityId": "cfa-10442:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-10444",
@@ -1680,15 +1690,18 @@
     {
       "cardId": "cfa-10621",
       "abilityId": "cfa-10621:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-10635",
@@ -5642,28 +5655,34 @@
     {
       "cardId": "cfa-11228",
       "abilityId": "cfa-11228:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-11229",
       "abilityId": "cfa-11229:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-1123",
@@ -6230,7 +6249,7 @@
     {
       "cardId": "cfa-1135",
       "abilityId": "cfa-1135:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -6239,10 +6258,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-11356",
@@ -7854,7 +7877,7 @@
     {
       "cardId": "cfa-1171",
       "abilityId": "cfa-1171:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -7863,10 +7886,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-1172",
@@ -9171,28 +9198,34 @@
     {
       "cardId": "cfa-11995",
       "abilityId": "cfa-11995:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-11996",
       "abilityId": "cfa-11996:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-12",
@@ -9324,28 +9357,34 @@
     {
       "cardId": "cfa-12008",
       "abilityId": "cfa-12008:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-12009",
       "abilityId": "cfa-12009:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-1201",
@@ -11195,28 +11234,34 @@
     {
       "cardId": "cfa-12343",
       "abilityId": "cfa-12343:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-12344",
       "abilityId": "cfa-12344:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-12345",
@@ -13847,28 +13892,34 @@
     {
       "cardId": "cfa-12905",
       "abilityId": "cfa-12905:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-12906",
       "abilityId": "cfa-12906:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-12908",
@@ -16083,28 +16134,34 @@
     {
       "cardId": "cfa-13436",
       "abilityId": "cfa-13436:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13437",
       "abilityId": "cfa-13437:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13438",
@@ -16142,28 +16199,34 @@
     {
       "cardId": "cfa-13447",
       "abilityId": "cfa-13447:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13448",
       "abilityId": "cfa-13448:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13449",
@@ -16500,28 +16563,34 @@
     {
       "cardId": "cfa-13494",
       "abilityId": "cfa-13494:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13495",
       "abilityId": "cfa-13495:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13499",
@@ -16692,15 +16761,18 @@
     {
       "cardId": "cfa-13519",
       "abilityId": "cfa-13519:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-1352",
@@ -16749,15 +16821,18 @@
     {
       "cardId": "cfa-13525",
       "abilityId": "cfa-13525:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13528",
@@ -16794,15 +16869,18 @@
     {
       "cardId": "cfa-13550",
       "abilityId": "cfa-13550:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13551",
@@ -16824,15 +16902,18 @@
     {
       "cardId": "cfa-13552",
       "abilityId": "cfa-13552:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13557",
@@ -18276,28 +18357,34 @@
     {
       "cardId": "cfa-13971",
       "abilityId": "cfa-13971:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13972",
       "abilityId": "cfa-13972:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-13973",
@@ -18565,7 +18652,7 @@
     {
       "cardId": "cfa-14",
       "abilityId": "cfa-14:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -18574,10 +18661,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-14003",
@@ -19427,7 +19518,7 @@
     {
       "cardId": "cfa-1449",
       "abilityId": "cfa-1449:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -19436,10 +19527,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-1450",
@@ -20668,7 +20763,7 @@
     {
       "cardId": "cfa-1557",
       "abilityId": "cfa-1557:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -20677,10 +20772,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-1559",
@@ -22676,7 +22775,7 @@
     {
       "cardId": "cfa-173",
       "abilityId": "cfa-173:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -22685,10 +22784,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-1730",
@@ -23133,7 +23236,7 @@
     {
       "cardId": "cfa-1762",
       "abilityId": "cfa-1762:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -23142,10 +23245,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-1763",
@@ -23999,7 +24106,7 @@
     {
       "cardId": "cfa-1822",
       "abilityId": "cfa-1822:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -24008,10 +24115,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-1825",
@@ -24258,7 +24369,7 @@
     {
       "cardId": "cfa-185",
       "abilityId": "cfa-185:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -24267,10 +24378,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-186",
@@ -24883,7 +24998,7 @@
     {
       "cardId": "cfa-1913",
       "abilityId": "cfa-1913:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -24892,10 +25007,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-1915",
@@ -25864,7 +25983,7 @@
     {
       "cardId": "cfa-200",
       "abilityId": "cfa-200:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -25873,10 +25992,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-2001",
@@ -31422,7 +31545,7 @@
     {
       "cardId": "cfa-247",
       "abilityId": "cfa-247:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -31431,10 +31554,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-2470",
@@ -31619,7 +31746,7 @@
     {
       "cardId": "cfa-248",
       "abilityId": "cfa-248:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -31628,10 +31755,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-2485",
@@ -31693,7 +31824,7 @@
     {
       "cardId": "cfa-249",
       "abilityId": "cfa-249:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -31702,10 +31833,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-2491",
@@ -34472,7 +34607,7 @@
     {
       "cardId": "cfa-291",
       "abilityId": "cfa-291:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -34481,10 +34616,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-2911",
@@ -37331,7 +37470,7 @@
     {
       "cardId": "cfa-334",
       "abilityId": "cfa-334:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -37340,10 +37479,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-3340",
@@ -48547,7 +48690,7 @@
     {
       "cardId": "cfa-515",
       "abilityId": "cfa-515:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -48556,10 +48699,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-5154",
@@ -52112,7 +52259,7 @@
     {
       "cardId": "cfa-571",
       "abilityId": "cfa-571:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -52121,10 +52268,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-572",
@@ -55214,7 +55365,7 @@
     {
       "cardId": "cfa-659",
       "abilityId": "cfa-659:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -55223,10 +55374,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-6602",
@@ -55558,7 +55713,7 @@
     {
       "cardId": "cfa-671",
       "abilityId": "cfa-671:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -55567,10 +55722,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-6712",
@@ -61200,7 +61359,7 @@
     {
       "cardId": "cfa-805",
       "abilityId": "cfa-805:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -61209,10 +61368,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-8053",
@@ -62864,7 +63027,7 @@
     {
       "cardId": "cfa-851",
       "abilityId": "cfa-851:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -62873,10 +63036,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-8511",
@@ -63193,15 +63360,18 @@
     {
       "cardId": "cfa-8592",
       "abilityId": "cfa-8592:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-8604",
@@ -63268,15 +63438,18 @@
     {
       "cardId": "cfa-8612",
       "abilityId": "cfa-8612:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-862",
@@ -63297,15 +63470,18 @@
     {
       "cardId": "cfa-8628",
       "abilityId": "cfa-8628:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-864",
@@ -63328,15 +63504,18 @@
     {
       "cardId": "cfa-8645",
       "abilityId": "cfa-8645:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-865",
@@ -63397,15 +63576,18 @@
     {
       "cardId": "cfa-8664",
       "abilityId": "cfa-8664:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-868",
@@ -63611,15 +63793,18 @@
     {
       "cardId": "cfa-8780",
       "abilityId": "cfa-8780:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-8781",
@@ -65516,7 +65701,7 @@
     {
       "cardId": "cfa-923",
       "abilityId": "cfa-923:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -65525,10 +65710,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-9235",
@@ -65641,15 +65830,18 @@
     {
       "cardId": "cfa-9277",
       "abilityId": "cfa-9277:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-9298",
@@ -65711,15 +65903,18 @@
     {
       "cardId": "cfa-9312",
       "abilityId": "cfa-9312:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-9318",
@@ -65738,15 +65933,18 @@
     {
       "cardId": "cfa-9330",
       "abilityId": "cfa-9330:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-934",
@@ -65777,15 +65975,18 @@
     {
       "cardId": "cfa-9349",
       "abilityId": "cfa-9349:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-935",
@@ -65813,7 +66014,7 @@
     {
       "cardId": "cfa-937",
       "abilityId": "cfa-937:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -65822,10 +66023,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-9370",
@@ -65846,15 +66051,18 @@
     {
       "cardId": "cfa-9375",
       "abilityId": "cfa-9375:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-938",
@@ -65878,15 +66086,18 @@
     {
       "cardId": "cfa-9393",
       "abilityId": "cfa-9393:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-9421",
@@ -66071,28 +66282,34 @@
     {
       "cardId": "cfa-9530",
       "abilityId": "cfa-9530:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-9531",
       "abilityId": "cfa-9531:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-954",
@@ -66779,28 +66996,34 @@
     {
       "cardId": "cfa-9751",
       "abilityId": "cfa-9751:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-9752",
       "abilityId": "cfa-9752:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-catalog-audit.test.js"
+        "ability-catalog-audit.test.js",
+        "ability-engine.test.js"
       ],
       "testCases": [
-        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC"
+        "all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",
+        "41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds"
       ],
-      "fullyVerified": false,
-      "remaining": "Other printed card abilities and gameplay-specific rules on this card are not all fully implemented and validated."
+      "fullyVerified": true,
+      "remaining": "The sole CONT is checked against its exact printed threshold (+5000 shield on Guardian Circle only), full card text and metadata, and both player seats. Below-threshold and wrong-circle states apply no bonus; this is continuous and never a manual activation.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-976",
@@ -67071,7 +67294,7 @@
     {
       "cardId": "cfa-984",
       "abilityId": "cfa-984:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-placement-choose-friendly-power-server.test.js"
       ],
@@ -67080,10 +67303,14 @@
         "each exact placed source privately resolves its legal target and optional cost for both seats",
         "an unrelated source, non-RC placement, unavailable optional cost, or opponent proxy cannot resolve these AUTO abilities",
         "trusted definitions equal the deterministic parser output for all 21 printed variants",
-        "Rear-Guard-only placement and printed target filters reject mismatched events and targets"
+        "Rear-Guard-only placement and printed target filters reject mismatched events and targets",
+        "all 26 skills are the card’s sole printed ability with exact source and effect metadata",
+        "each target filter rejects an illegal card and a card controlled by the opponent",
+        "deck-origin variants require this exact source to be placed from Deck, and optional Counter-Blast variants can decline"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level placement, cost, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is checked against exact Rear-Guard source placement and its printed target filter, optional costs, target ownership, and end-of-turn power. All 26 resolve on both seats; illegal targets, wrong circles, wrong deck origin, unavailable costs, and opponent control are rejected.",
+      "verifiedAt": "2026-10-30T15:23:55.891Z"
     },
     {
       "cardId": "cfa-9847",

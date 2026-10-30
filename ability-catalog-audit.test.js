@@ -165,6 +165,35 @@ test("all 55 opponent-grade Guardian Circle shields retain exact threshold and a
   }
 });
 
+test("41 single-skill Guardian shield cards preserve their full text, metadata, and both grade thresholds",()=>{
+  const complete=[];
+  for(const card of loadCatalog()){
+    const abilities=engine.parseCardAbilitiesCached(card);
+    if(abilities.length!==1||abilities[0].definition?.source?.patternId!=="cont-gc-opponent-grade-shield-v1")continue;
+    complete.push({card,ability:abilities[0]});
+  }
+  assert.equal(complete.length,41);
+  assert.equal(new Set(complete.map(item=>item.card.id)).size,41);
+  for(const {card,ability} of complete){
+    assert.ok(card.text.includes(ability.printedText),`${card.id} preserves its sole printed ability`);
+    assert.equal(ability.kind,"CONT",card.id);
+    assert.equal(engine.isManuallyActivatable(ability),false,`${card.id} CONT is not a manual skill`);
+    assert.deepEqual(ability.requiredLocation,["guardian"],card.id);
+    assert.deepEqual(ability.conditions,[{type:"opponent-vanguard-grade-at-least",count:ability.definition.effects[0].condition.grade}],card.id);
+    assert.deepEqual(ability.definition.effects,[{op:"continuous-shield",target:"source",amount:5000,duration:"continuous",condition:{op:"opponent-vanguard-grade-at-least",grade:ability.definition.effects[0].condition.grade}}],card.id);
+    assert.ok([2,3].includes(ability.definition.effects[0].condition.grade),`${card.id} retains the printed grade threshold`);
+    assert.equal(card.grade!==null&&card.grade!==undefined,true,`${card.id} retains grade metadata`);
+    assert.equal(card.shield!==null&&card.shield!==undefined,true,`${card.id} retains base shield metadata`);
+    assert.equal(ability.definition.source.patternId,"cont-gc-opponent-grade-shield-v1",`${card.id} compiles to the reviewed CONT handler`);
+    for(const controllerSide of ["human","bot"]){
+      const threshold=ability.definition.effects[0].condition.grade;
+      assert.equal(engine.evaluateContinuousShieldEffects([ability],{location:"guardian",controllerSide,opponentVanguardGrade:threshold}).shield,5000,`${card.id}/${controllerSide}/eligible`);
+      assert.equal(engine.evaluateContinuousShieldEffects([ability],{location:"guardian",controllerSide,opponentVanguardGrade:threshold-1}).shield,0,`${card.id}/${controllerSide}/below-threshold`);
+      assert.equal(engine.evaluateContinuousShieldEffects([ability],{location:"rear-guard",controllerSide,opponentVanguardGrade:threshold}).shield,0,`${card.id}/${controllerSide}/wrong-circle`);
+    }
+  }
+});
+
 test("qualified boosted-unit AUTO power definitions cover reviewed catalog records only",()=>{
   const {loadCatalog}=require("./scripts/audit-ability-catalog.js");
   const report=auditCatalog(loadCatalog());
