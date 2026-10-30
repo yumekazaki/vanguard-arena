@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baselineCommit": "a25328e6ad08f066b1675a710400fc9547499f01",
-  "generatedAt": "2026-10-30T16:29:50.163Z",
+  "baselineCommit": "a0f1970674efaeb66ff6cf40b6de405bc29c4516",
+  "generatedAt": "2026-10-30T16:50:58.561Z",
   "sourceQueue": "current catalog + trusted ability definitions + verification manifest",
   "concurrencyProtocol": "GitHub atomic branch creation at refs/heads/claims/<batchId>; the first successful non-forced create owns the batch.",
   "counts": {
