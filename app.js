@@ -755,7 +755,7 @@
     match.selected = uid;
     $("#context-menu-title").textContent = card.name;
     $("#context-menu-help").textContent = "Order zone card actions.";
-    const actions = [[`order-rest:${uid}`, item.rested?"Stand":"Rest"], [`order-flip:${uid}`, item.faceDown?"Turn face up":"Turn face down"], [`order-to-hand:${uid}`, "Add to hand"], [`order-to-top:${uid}`, "Return to deck top"], [`order-to-bottom:${uid}`, "Return to deck bottom"], [`order-to-drop:${uid}`, "Send to Drop"]];
+    const actions = [[`order-rest:${uid}`, item.rested?"Stand":"Rest"], [`order-flip:${uid}`, item.faceDown?"Turn face up":"Turn face down"], [`order-to-hand:${uid}`, "Add to hand"], [`order-to-soul:${uid}`, "Add to Soul"], [`order-to-top:${uid}`, "Return to deck top"], [`order-to-bottom:${uid}`, "Return to deck bottom"], [`order-to-drop:${uid}`, "Send to Drop"]];
     $("#context-menu-actions").innerHTML = actions.map(([action, label]) => `<button class="button" type="button" data-context-action="${escapeHtml(action)}">${label}</button>`).join("");
     if (!$("#context-menu-dialog").open) $("#context-menu-dialog").showModal();
   }
