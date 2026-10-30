@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1409,
-    "testCount": 1409,
-    "passed": 1409,
+    "tests": 1413,
+    "testCount": 1413,
+    "passed": 1413,
     "failed": 0,
-    "durationMilliseconds": 230832,
-    "completedAt": "2026-10-30T17:07:59.106Z",
+    "durationMilliseconds": 234995,
+    "completedAt": "2026-10-30T17:34:00.000Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "d83bcffcda028fc9a31b27acdb1a5f44e121bbc23182ec0538d67cd927aaab37"
+    "validationInputDigest": "0d91099a8ee370a42a68e0273a022468e5f9bcd62b30b28dbac9e9c319f1ab38"
   },
   "records": [
     {
@@ -72356,8 +72356,56 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-5985",
+      "abilityId": "cfa-5985:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-power-per-rearguard.test.js"
+      ],
+      "testCases": [
+        "all exact own-turn per-Rear-Guard CONT text preserves source circle and amount",
+        "continuous scaling counts distinct friendly Rear-Guard instances and respects turn and circle",
+        "host and joining player receive their own authoritative per-Rear-Guard power",
+        "client and authority supply exact owned field instances for the continuous count"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11951",
+      "abilityId": "cfa-11951:2",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-power-per-rearguard.test.js"
+      ],
+      "testCases": [
+        "all exact own-turn per-Rear-Guard CONT text preserves source circle and amount",
+        "continuous scaling counts distinct friendly Rear-Guard instances and respects turn and circle",
+        "host and joining player receive their own authoritative per-Rear-Guard power",
+        "client and authority supply exact owned field instances for the continuous count"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12675",
+      "abilityId": "cfa-12675:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-power-per-rearguard.test.js"
+      ],
+      "testCases": [
+        "all exact own-turn per-Rear-Guard CONT text preserves source circle and amount",
+        "continuous scaling counts distinct friendly Rear-Guard instances and respects turn and circle",
+        "host and joining player receive their own authoritative per-Rear-Guard power",
+        "client and authority supply exact owned field instances for the continuous count"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T17:07:58.870Z"
+  "evidenceUpdatedAt": "2026-10-30T17:12:18.367Z"
 }

@@ -28,7 +28,10 @@ test("bounded card workers stage validated catalog shards and resume only matchi
     else assert.equal(first.metrics.validatedAbilities, 0);
     assert.ok(Number.isInteger(first.metrics.fullyVerifiedCards) && first.metrics.fullyVerifiedCards >= 0);
     assert.ok(Number.isFinite(first.metrics.verifiedCardsPerMinute) && first.metrics.verifiedCardsPerMinute >= 0);
-    if (first.metrics.fullyVerifiedCards > 0) assert.ok(first.metrics.verifiedCardsPerMinute > 0);
+    if (first.metrics.fullyVerifiedCards > 0) {
+      assert.equal(first.metrics.newlyVerifiedCards, 0, "staging existing evidence does not verify new cards");
+      assert.equal(first.metrics.verifiedCardsPerMinute, 0, "only newly verified cards count toward verification throughput");
+    }
     assert.ok(first.metrics.parsedCardsPerMinute > 0);
     assert.equal(first.resumedShards, 0);
     const second = execute();

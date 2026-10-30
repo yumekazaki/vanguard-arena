@@ -109658,6 +109658,84 @@
           "type": "normal-call-requires-dragontree-marker"
         }
       ]
+    },
+    {
+      "id": "cfa-5985:0",
+      "cardId": "cfa-5985",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: During your turn, this unit gets power +2000 for each of your rear-guards.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-during-turn-power-per-rearguard-v1",
+        "review": "Exact own-turn power-per-Rear-Guard CONT template. Count distinct Rear-Guard card instances controlled by this ability's controller, including the source when it is itself on RC; preserve the printed source circle."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-controller-rearguard",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11951:2",
+      "cardId": "cfa-11951",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: During your turn, this unit gets power +2000 for each of your rear-guards.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-during-turn-power-per-rearguard-v1",
+        "review": "Exact own-turn power-per-Rear-Guard CONT template. Count distinct Rear-Guard card instances controlled by this ability's controller, including the source when it is itself on RC; preserve the printed source circle."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-controller-rearguard",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12675:0",
+      "cardId": "cfa-12675",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: During your turn, this unit gets power +2000 for each of your rear-guards.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-during-turn-power-per-rearguard-v1",
+        "review": "Exact own-turn power-per-Rear-Guard CONT template. Count distinct Rear-Guard card instances controlled by this ability's controller, including the source when it is itself on RC; preserve the printed source circle."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-controller-rearguard",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

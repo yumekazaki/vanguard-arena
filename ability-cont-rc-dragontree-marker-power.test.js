@@ -51,7 +51,8 @@ test("authoritative attack power uses only the acting player's Rear-Guard marker
     const state = { matchId: `dragontree-scale-${side}-${cardId}`, stateVersion: 0, turn: 2, side, phase: 5, firstTurnComplete: true, processedActionIds: [], pendingAttack: null, pendingAbility: null, pendingAbilities: [], pendingTrigger: null, players: { [side]: owner, [otherSide]: opponent } };
     const result = Reducer.applyGameAction(state, { actorAuthUid: side === "human" ? seats.hostAuthUid : seats.guestAuthUid, actionId: `attack-${state.matchId}`, expectedStateVersion: 0, payload: { type: "game-action", action: "attack", attackerCardInstanceId: source.uid, targetCardInstanceId: opposingVanguard.uid } }, seats, Engine);
     assert.equal(result.ok, true, `${side}/${cardId}: ${result.reason}`);
-    assert.equal(state.pendingAttack.power, Number(card.power) + 4000, `${side}/${cardId} counts two own RC markers, not Vanguard or opposing markers`);
+    const separateOwnRearGuardBonus = cardId === "cfa-11951" ? 2000 : 0;
+    assert.equal(state.pendingAttack.power, Number(card.power) + 4000 + separateOwnRearGuardBonus, `${side}/${cardId} counts two own RC markers, not Vanguard or opposing markers; other continuous abilities on the same source also apply`);
   }
 });
 
