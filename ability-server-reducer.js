@@ -3410,8 +3410,12 @@
     };
   }
 
-  function mandatoryAutoAbilityCostIsPayable(state, ability, located, controller, engine) {
-    if (ability?.canDecline === true || !Array.isArray(ability?.costs) || ability.costs.length === 0) return true;
+  function automaticAbilityCostIsPayable(state, ability, located, controller, engine) {
+    if (!Array.isArray(ability?.costs) || ability.costs.length === 0) return true;
+    // Optional AUTO costs that require a specific card selection are not legal
+    // choices when that selection is unavailable; do not show a dead-end prompt.
+    const needsHealBindTarget = ability.costs.some(cost => cost?.type === "bind-heal-from-drop");
+    if (ability.canDecline === true && !needsHealBindTarget) return true;
     if (!controller || typeof engine?.canPayAbilityCosts !== "function") return false;
     const supportedCostTypes = new Set(["counter-blast", "soul-blast", "energy-blast", "discard", "reveal-grade-from-hand", "source-discard", "rest-source", "source-to-soul", "source-to-bottom-deck", "source-retire", "source-bind", "source-bind-from-field-or-drop", "bind-heal-from-drop"]);
     if (ability.costs.some(cost => !supportedCostTypes.has(cost?.type))) return false;
@@ -3841,7 +3845,7 @@
               }
               continue;
             }
-            if (!mandatoryAutoAbilityCostIsPayable(state, ability, located, controller, engine)) {
+            if (!automaticAbilityCostIsPayable(state, ability, located, controller, engine)) {
               const unavailableKey = `${side}:${instance.uid}:${ability.id}:${event.eventId}`;
               if (!pendingKeys.has(unavailableKey) && engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) {
                 pendingKeys.add(unavailableKey);

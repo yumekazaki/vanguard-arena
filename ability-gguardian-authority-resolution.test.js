@@ -12,7 +12,7 @@ function setup(otherHealTrigger = "heal") {
   const ability = Engine.parseCardAbilities(card).find(item => item.definition?.source?.patternId === "auto-g-guardian-discard-bind-heal-charge-choice-v1");
   assert.ok(ability);
   const source = { uid: "guest-discarded-heal", cardId: card.id, cardName: card.name, triggerType: "heal", ownerPlayerId: "guest", controllerPlayerId: "guest" };
-  const otherHeal = { uid: "guest-drop-heal", cardId: "heal-card", triggerType: otherHealTrigger, ownerPlayerId: "guest", controllerPlayerId: "guest" };
+  const otherHeal = { uid: "guest-drop-heal", cardId: "heal-card", triggerType: "heal", ownerPlayerId: "guest", controllerPlayerId: "guest" };
   const top = { uid: "guest-deck-top", cardId: "deck-card", ownerPlayerId: "guest", controllerPlayerId: "guest" };
   const state = { matchId: "gguardian-authority", stateVersion: 0, turn: 4, side: "human", phase: 3, eventSequence: 0, processedEventIds: [], processedActionIds: [], players: {
     human: { playerId: "host", vanguard: { uid: "host-vg", cardId: "host-vg", ownerPlayerId: "host", controllerPlayerId: "host" }, rear: [], hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [] },
@@ -25,6 +25,9 @@ function setup(otherHealTrigger = "heal") {
     previousLocation: "hand", currentLocation: "drop", discardReason: "g-guardian-cost", timingWindow: "stride-cost"
   });
   const discovery = Reducer.discoverAutoTriggers(state, [event], Engine);
+  // Revalidate the selected target at resolution in case its authoritative
+  // definition changed after the trigger became eligible.
+  otherHeal.triggerType = otherHealTrigger;
   return { state, source, otherHeal, ability, discovery };
 }
 

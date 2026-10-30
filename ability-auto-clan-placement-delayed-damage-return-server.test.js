@@ -53,16 +53,42 @@ function decide(f, { accept = true, actor = authFor(f.side), effectUid = null, a
 }
 
 test("all 36 clan-gated placement abilities use one reviewed delayed-damage handler", () => {
+  assert.equal(new Set(CARD_IDS).size, CARD_IDS.length, "the reviewed batch has no duplicate card IDs");
   const definitions = CARD_IDS.map(cardId => abilityFor(cardId)?.definition).filter(definition => definition?.source?.patternId === PATTERN);
   assert.equal(definitions.length, CARD_IDS.length);
   for (const cardId of CARD_IDS) {
+    const card = byId(cardId);
+    const parsedAbilities = Engine.parseCardAbilitiesCached(card);
     const ability = abilityFor(cardId);
     assert.ok(ability, cardId);
+    assert.equal(parsedAbilities.length, 1, `${cardId} has no other unreviewed printed abilities`);
+    assert.equal(card.type, "Unit", `${cardId} is a unit card`);
+    assert.ok(Number.isFinite(Number(card.grade)), `${cardId} has grade metadata`);
+    assert.ok(Number.isFinite(Number(card.power)), `${cardId} has power metadata`);
+    assert.ok(Number.isFinite(Number(card.shield)), `${cardId} has shield metadata`);
+    assert.ok(card.text.includes(ability.printedText), `${cardId} compiled text is preserved in the catalog text`);
     assert.equal(ability.kind, "AUTO");
+    assert.equal(ability.printedText, ability.definition.printedText);
     assert.equal(ability.canDecline, true);
     assert.deepEqual(ability.requiredLocation, ["vanguard", "rear-guard"]);
     assert.deepEqual(ability.costs, [{ type: "counter-blast", count: 1 }]);
+    assert.deepEqual(ability.conditions, [{ type: "controller-vanguard-has-clan", value: card.clan }], `${cardId} checks its printed clan`);
+    assert.deepEqual(ability.trigger, {
+      status: "recognized-trigger", eventType: "card.placed", subject: "source", circles: ["vanguard", "rear-guard"],
+      sameSourceCircle: false, excludeSourceAsSubject: false, sourceLocation: null
+    }, `${cardId} triggers only when this exact card is placed on VC or RC`);
+    assert.deepEqual(ability.definition.effects, [
+      { op: "deck-to-damage", target: "controller", count: 1 },
+      { op: "schedule-damage-return-at-turn-end", target: "controller", due: "end-phase-start" }
+    ], `${cardId} preserves effect order and end-phase timing`);
+    assert.equal(ability.once, false, `${cardId} has no once-per-turn restriction`);
+    assert.equal(ability.conditionStatus, "modeled");
+    assert.equal(ability.choiceStatus, "modeled");
     assert.equal(Reducer.supportsServerAbilityEffects(ability), true, cardId);
+    const trusted = Engine.getReviewedAbilityDefinitionsForCard(cardId).find(item => item.id === ability.id);
+    assert.ok(trusted, `${cardId} has a production-reviewed definition`);
+    assert.equal(trusted.printedText, ability.printedText);
+    assert.deepEqual(trusted.effects, ability.definition.effects);
   }
 });
 
@@ -79,8 +105,8 @@ test("the exact placed source prompts only its controller on either circle and e
   }
 });
 
-test("the five end-of-turn wording variants resolve their exact clan, cost, and owner for both seats", () => {
-  for (const cardId of NEW_CARD_IDS) for (const side of ["human", "bot"]) {
+test("all 36 card definitions enforce their own clan, cost, and controller for both seats", () => {
+  for (const cardId of CARD_IDS) for (const side of ["human", "bot"]) {
     const f = fixture({ cardId, side });
     const discovery = Reducer.discoverAutoTriggers(f.state, [f.event], Engine);
     assert.equal(discovery.queued.length, 1, `${cardId}/${side}: ${JSON.stringify(discovery.skipped)}`);
@@ -89,6 +115,7 @@ test("the five end-of-turn wording variants resolve their exact clan, cost, and 
     assert.equal(paid.ok, true, paid.reason);
     assert.equal(f.own.damage.some(card => card.uid === f.top.uid && card.faceDown === false), true);
     assert.equal(f.state.scheduledEffects.length, 1);
+    assert.equal(f.state.scheduledEffects[0].sourceCardInstanceId, f.source.uid);
     const wrongClan = fixture({ cardId, side, matchingClan: false });
     assert.equal(Reducer.discoverAutoTriggers(wrongClan.state, [wrongClan.event], Engine).queued.length, 0, `${cardId}/${side}/wrong-clan`);
   }

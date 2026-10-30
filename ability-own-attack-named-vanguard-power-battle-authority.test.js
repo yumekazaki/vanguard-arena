@@ -92,6 +92,29 @@ test("83 named-Vanguard own-attack abilities retain exact source, condition, amo
   assert.equal(family.filter(ability => ability.definition.effects[0].amount === 5000).length, 1);
 });
 
+test("68 single-skill cards in the +3000 named-Vanguard attack family have complete card metadata", () => {
+  const matches = [];
+  for (const card of cards) {
+    const abilities = Engine.parseCardAbilitiesCached(card);
+    if (abilities.length !== 1 || abilities[0].definition?.source?.patternId !== PATTERN) continue;
+    const ability = abilities[0];
+    assert.ok(card.text.includes(ability.printedText), `${card.id} preserves its exact original skill text`);
+    assert.ok(["Unit", "Trigger"].includes(card.type), `${card.id} card type`);
+    assert.ok([0, 1, 2].includes(Number(card.grade)), `${card.id} grade`);
+    assert.ok([4000, 7000, 9000].includes(Number(card.power)), `${card.id} power`);
+    assert.ok([5000, 10000].includes(Number(card.shield)), `${card.id} shield`);
+    assert.equal(ability.trigger?.eventType, "unit.attacked", card.id);
+    assert.deepEqual(ability.requiredLocation, ["rear-guard"], card.id);
+    assert.deepEqual(ability.costs, [], card.id);
+    assert.equal(ability.conditions?.length, 1, card.id);
+    assert.equal(ability.conditions[0].type, "controller-vanguard-name-contains", card.id);
+    assert.deepEqual(ability.effects, [{ op: "modify-power", target: "source", amount: 3000, duration: "battle" }], card.id);
+    matches.push(card.id);
+  }
+  assert.equal(matches.length, 68);
+  assert.equal(new Set(matches).size, 68);
+});
+
 test("matching RC attack resolves for either seat and applies only the printed battle power", () => {
   for (const [side, cardId, amount] of [["bot", "cfa-1706", 2000], ["human", "cfa-27", 3000], ["bot", "cfa-9370", 5000]]) {
     const f = fixture({ side, cardId });
@@ -105,6 +128,27 @@ test("matching RC attack resolves for either seat and applies only the printed b
     f.state.pendingAttack = null;
     assert.equal(f.source.power, 10000, "after the battle, the source has no residual power modifier");
   }
+});
+
+test("all 83 exact named-Vanguard attack abilities resolve for their own controller on both seats", () => {
+  let index = 0;
+  for (const card of cards) for (const ability of Engine.parseCardAbilitiesCached(card)) {
+    if (ability.definition?.source?.patternId !== PATTERN) continue;
+    const side = index++ % 2 === 0 ? "bot" : "human";
+    const f = fixture({ cardId: card.id, side });
+    assert.equal(f.ability.id, ability.id, `${card.id} ability identity`);
+    assert.equal(Reducer.discoverAutoTriggers(f.state, [f.event], Engine).queued.length, 1, `${card.id}/${side} exact own attack triggers`);
+    assert.equal(f.state.pendingAbility.side, side, `${card.id}/${side} decision belongs to the controller`);
+    assert.equal(f.state.pendingAbility.instance.uid, f.source.uid, `${card.id}/${side} exact source owns the pending skill`);
+    const amount = ability.definition.effects[0].amount;
+    const result = resolve(f);
+    assert.equal(result.ok, true, `${card.id}/${side}: ${result.reason || ""}`);
+    assert.equal(f.state.pendingAttack.power, 10000 + amount, `${card.id}/${side} exact battle power`);
+    f.state.pendingAttack = null;
+    assert.equal(f.source.power, 10000, `${card.id}/${side} battle bonus expires`);
+    assert.equal(f.source.turnPowerBoost, undefined, `${card.id}/${side} creates no turn-long modifier`);
+  }
+  assert.equal(index, 83);
 });
 
 test("unmatched Vanguard name, other attacker, and non-RC source do not trigger; a valid Rear-Guard target is not required", () => {

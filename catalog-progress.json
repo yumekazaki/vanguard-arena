@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-30T13:59:24.665Z",
+  "generatedAt": "2026-10-30T14:57:39.125Z",
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "catalogSource": "scripts/audit-ability-catalog.js (local catalog file or committed HEAD snapshot)",
   "cards": {
@@ -10,8 +10,8 @@
     "withAllAbilityBlocksCompiledAndAuditValid": 1892,
     "withUnsupportedAbilityBlocks": 9949,
     "withUnmodeledRequirements": 9949,
-    "withExplicitPassingRegressionEvidence": 3254,
-    "fullyVerified": 143
+    "withExplicitPassingRegressionEvidence": 3102,
+    "fullyVerified": 295
   },
   "abilities": {
     "parsed": 17240,
@@ -24,26 +24,26 @@
   "verification": {
     "manifest": "card-verification-manifest.json",
     "manifestRecords": 4153,
-    "passingTestCases": 15325,
+    "passingTestCases": 14747,
     "latestFullSuite": {
       "command": "node --test",
       "testCommand": "node --test",
       "status": "passed",
-      "tests": 1369,
-      "testCount": 1369,
-      "passed": 1369,
+      "tests": 1375,
+      "testCount": 1375,
+      "passed": 1375,
       "failed": 0,
-      "durationMilliseconds": 211761,
-      "completedAt": "2026-10-30T13:57:25.000Z",
+      "durationMilliseconds": 213242,
+      "completedAt": "2026-10-30T14:57:34.261Z",
       "runDate": "2026-10-30",
-      "validationInputDigest": "5c94dc4b412a82ef9bf62f2d5c5f3f455d99cb01858770261fc5ae3b7cf9abea"
+      "validationInputDigest": "cb781258457c2cf0b1f1f554601fcfb58775329e7cc9e5a13eb672a5f1231d97"
     },
     "fullyVerifiedRequiresAllPrintedAbilitiesAndRulesEvidence": true,
     "note": "Aggregate parsing or a passing pattern test does not make a whole card fully verified. Only explicit manifest records count as regression evidence; zero fully verified cards is reported when no complete card-level evidence exists."
   },
   "workflow": {
-    "catalogLoadMilliseconds": 141.4,
-    "fullCatalogParseAndAuditMilliseconds": 4329,
+    "catalogLoadMilliseconds": 150.7,
+    "fullCatalogParseAndAuditMilliseconds": 4466.5,
     "repeatedAuditsOfTheSameCatalogUseTheExistingDigestCache": true,
     "parseCacheExperiment": "Rejected JSON-clone-per-call caching after three full catalog parse passes measured about 9.5 seconds uncached versus 12.1 seconds with cloning. Adopted immutable per-card snapshots with definition-revision invalidation: the same three passes measured about 9.5 seconds uncached versus 3.82 seconds cached; cache-hit passes were about 2.5 milliseconds each.",
     "measuredBottlenecks": [
@@ -57,7 +57,7 @@
         "area": "Unbounded all-in-one verification feedback",
         "evidence": "Full Node suite measured 245.62 seconds before the cache and 37.96 seconds after it.",
         "optimization": "Run focused rule/worker checks per ability batch and reserve the full suite for milestones.",
-        "result": "Latest full suite: 1369/1369 passed in 211.76 seconds."
+        "result": "Latest full suite: 1375/1375 passed in 213.24 seconds."
       },
       {
         "area": "Manual card semantics and validation backlog",
