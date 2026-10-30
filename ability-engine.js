@@ -90,7 +90,13 @@
   function isCardInHarmony(state,uid,turnKey){if(!state||!uid||!turnKey)return false;let found=false;for(const pair of state.harmonyAssociations||[]){if(pair?.turnKey!==turnKey||!harmonyFieldPair(state,pair))continue;if(pair.firstUid===uid||pair.secondUid===uid)found=true}return found}
   function expireHarmonyAssociations(state,endingTurnKey){if(!Array.isArray(state?.harmonyAssociations))return 0;const before=state.harmonyAssociations.length;state.harmonyAssociations=state.harmonyAssociations.filter(pair=>pair?.turnKey!==endingTurnKey&&harmonyFieldPair(state,pair));return before-state.harmonyAssociations.length}
   const effectOperations = new Set(["draw", "modify-power", "modify-power-target", "modify-critical", "grant-temporary-boost", "continuous-power", "continuous-power-adjustment", "continuous-power-per-soul-card", "continuous-power-per-clan-rearguard", "continuous-power-per-dragontree-marker", "continuous-power-per-controller-rearguard", "continuous-power-per-named-face-up-damage-card", "continuous-critical", "continuous-shield", "continuous-grade", "modify-drive", "modify-drive-target", "counter-charge", "conditional-counter-charge", "soul-charge", "revelation-choice", "rest-target", "engorge", "g-guardian-discard-charge-choice", "g-guardian-grade-three-replacement-choice", "set-blazing", "set-hollowed", "set-charging", "set-successful", "deck-to-damage", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "reorder-deck-card", "retire-target", "stand-target", "unlock-target", "protect-target", "protect-attacked-source", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "modify-defending-source-power", "rest-source", "stand-source", "create-token", "discard-from-hand", "draw-then-discard", "search-top-grade-three-to-hand-then-discard", "search-top-up-to-one-grade-to-hand", "search-top-up-to-one-filtered-to-hand", "search-deck-named-grade-three-then-discard", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "call-checked-card-locked", "call-source-from-drop-rested", "call-source-from-soul", "associate-harmony-units", "modify-shield-source", "seek-mate", "place-circle-marker"]);
+  effectOperations.add("call-drop-trigger-to-guardian");
   const positiveInteger = value => Number.isInteger(Number(value)) && Number(value) > 0;
+  const isTriggerUnit = (instance, cardDefinitionForInstance) => {
+    const definition=typeof cardDefinitionForInstance==="function"?cardDefinitionForInstance(instance):null;
+    const trigger=String(definition?.trigger||instance?.triggerType||instance?.trigger||"").trim().toLocaleLowerCase().replace(/\s+trigger$/i,"");
+    return /^(draw|critical|heal|front|stand)$/.test(trigger);
+  };
   function validTopSearchFilter(filter) {
     if (!filter || typeof filter !== "object" || Array.isArray(filter)) return false;
     const keys = Object.keys(filter).sort().join(",");
@@ -252,6 +258,26 @@
     "call-filtered-top-to-guardian-drop": Object.freeze({
       validate(step,context){const attack=context.match?.pendingAttack;if(step.target!=="controller"||step.count!==5||step.destination!=="guardian"||step.position!=="rest"||step.remainder!=="drop"||typeof step.filter?.clan!=="string"||!step.filter.clan.trim()||!Array.isArray(context.player?.deck)||!Array.isArray(context.player?.guardCircle)||!Array.isArray(context.player?.drop)||!Array.isArray(attack?.guardCards)||attack.defenderSide!==context.side||context.match?.players?.[context.side]!==context.player||typeof context.shieldValueForInstance!=="function"||typeof context.cardDefinitionForInstance!=="function")return false;const cards=context.player.deck.slice(-Math.min(5,context.player.deck.length));return cards.filter(card=>{const def=context.cardDefinitionForInstance(card),clans=[def?.clan,...(def?.clans||[])].filter(Boolean).map(value=>String(value).toLocaleLowerCase());return clans.includes(step.filter.clan.toLocaleLowerCase())}).every(card=>{const def=context.cardDefinitionForInstance(card),shield=context.shieldValueForInstance(card);return Boolean(def&&/\bunit\b/i.test(String(def.type||""))&&Number.isFinite(Number(def.shield))&&Number.isFinite(Number(shield)))});},
       apply(step,context){const attack=context.match.pendingAttack,cards=context.player.deck.splice(-Math.min(5,context.player.deck.length)).reverse();for(const card of cards){const def=context.cardDefinitionForInstance(card),clans=[def?.clan,...(def?.clans||[])].filter(Boolean).map(value=>String(value).toLocaleLowerCase()),matches=clans.includes(step.filter.clan.toLocaleLowerCase());if(matches){card.zone="guardian";card.circle="guardian";card.position="rest";card.rested=true;card.faceUp=true;context.player.guardCircle.push(card);attack.guardCards.push(card);attack.targetPower+=Number(context.shieldValueForInstance(card)||0);context.emitEvent?.({type:"card.placed",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"deck",currentLocation:"guardian",position:"rest"})}else{context.player.drop.push(card);context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"deck",currentLocation:"drop",reason:"guardian-clan-reveal"})}}return cards.length}
+    }),
+    "call-drop-trigger-to-guardian": Object.freeze({
+      validate(step, context) {
+        const attack=context.match?.pendingAttack,card=context.selectedCard,drop=context.player?.drop||[];
+        if(step.target!=="controller"||step.destination!=="guardian"||step.position!=="rest"||step.filter?.cardType!=="unit"||step.filter?.triggerUnit!==true||step.filter?.excludeOverTrigger!==true||!Array.isArray(context.player?.drop)||!Array.isArray(context.player?.guardCircle)||!Array.isArray(attack?.guardCards)||attack.defenderSide!==context.side||context.match?.players?.[context.side]!==context.player||typeof context.shieldValueForInstance!=="function"||typeof context.cardDefinitionForInstance!=="function")return false;
+        const legal=drop.filter(item=>isTriggerUnit(item,context.cardDefinitionForInstance)&&(!item.ownerPlayerId||item.ownerPlayerId===context.player?.playerId));
+        if(!legal.length)return card==null;
+        if(!card?.uid||!legal.some(item=>item.uid===card.uid)||card.ownerPlayerId&&card.ownerPlayerId!==context.player?.playerId)return false;
+        const definition=context.cardDefinitionForInstance(card),shield=context.shieldValueForInstance(card);
+        return Boolean(definition)&&/\b(?:unit|trigger)\b/i.test(String(definition.type||""))&&isTriggerUnit(card,context.cardDefinitionForInstance)&&Number.isFinite(Number(shield));
+      },
+      apply(_step,context) {
+        const card=context.selectedCard;if(!card)return true;
+        const index=context.player.drop.findIndex(item=>item?.uid===card.uid&&(!item.ownerPlayerId||item.ownerPlayerId===context.player?.playerId));if(index<0)return false;
+        const [called]=context.player.drop.splice(index,1),attack=context.match.pendingAttack;
+        called.zone="guardian";called.circle="guardian";called.position="rest";called.rested=true;called.faceUp=true;
+        context.player.guardCircle.push(called);attack.guardCards.push(called);attack.targetPower+=Number(context.shieldValueForInstance(called)||0);
+        context.emitEvent?.({type:"card.placed",cardInstanceId:called.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"guardian",circle:"guardian",position:"rest",battleId:attack.battleId,timingWindow:"effect-guardian-call"});
+        return called;
+      }
     }),
     "reorder-deck-card": Object.freeze({
       validate(step, context) { return step.target === "chosen" && step.destination === "player-choice" && Boolean(context.selectedCard) && context.player?.deck?.some(card => card.uid === context.selectedCard.uid) && ["top", "bottom"].includes(context.deckDestination); },
@@ -590,6 +616,7 @@
         if (effect.op === "grant-temporary-boost") return effect.target !== "source" || effect.duration !== "turn";
         if (effect.op === "call-top-to-guardian") return effect.target !== "controller" || !Number.isInteger(Number(effect.count)) || Number(effect.count)<1 || Number(effect.count)>10 || effect.destination !== "guardian" || effect.position !== "rest";
         if (effect.op === "call-filtered-top-to-guardian-drop") return effect.target !== "controller" || effect.count !== 5 || effect.destination !== "guardian" || effect.position !== "rest" || effect.remainder !== "drop" || typeof effect.filter?.clan !== "string" || !effect.filter.clan.trim();
+        if (effect.op === "call-drop-trigger-to-guardian") return effect.target !== "controller" || effect.destination !== "guardian" || effect.position !== "rest" || effect.filter?.cardType !== "unit" || effect.filter?.triggerUnit !== true || effect.filter?.excludeOverTrigger !== true;
         if (effect.op === "call-checked-card-locked") return effect.target !== "checked-card" || effect.position !== "locked";
         if (effect.op === "call-source-from-drop-rested") return effect.target !== "source" || effect.position !== "rest" || effect.cannotAttackTurnKeyWhenBattlePhase !== undefined && effect.cannotAttackTurnKeyWhenBattlePhase !== true;
         if (effect.op === "ride-revoldress-source-from-soul-rested") return effect.target !== "controller" || effect.rested !== true;
@@ -1398,6 +1425,12 @@
     if(!match||Number(match[1])<1||match[2].trim().toLocaleLowerCase()!==match[3].trim().toLocaleLowerCase())return null;
     const clan=match[2].trim();
     return{id:abilityId,cardId,kind,printedText,optional:true,requiredLocation:["guardian"],trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["guardian"],sourceLocation:"hand"},conditions:[{type:"controller-vanguard-has-clan",value:clan}],costs:[{type:"counter-blast",count:Number(match[1])}],conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-gc-clan-top-five-to-guardian-rest-drop-v1",review:"Exact optional Counter-Blast AUTO on the exact source card placed from hand on GC. It checks the controller's Vanguard clan, reveals up to five cards, calls every Unit of that exact clan to Guardian at rest, and puts the remaining revealed cards into Drop; clan wording must match between condition and effect."},effects:[{op:"call-filtered-top-to-guardian-drop",target:"controller",count:5,destination:"guardian",position:"rest",filter:{clan},remainder:"drop"}]};
+  }
+  function compileGuardianDropTriggerCallDefinition(cardId,abilityId,kind,printedText){
+    const cardIds=new Set(["cfa-13854","cfa-13875","cfa-13894","cfa-13913","cfa-13997"]),text=normalizePrintedText(printedText);
+    const exact="AUTO: When this unit is placed on GC from hand, COST [Counter Blast 1], choose a trigger unit from your drop other than over trigger, and call it to GC.";
+    if(kind!=="AUTO"||!cardIds.has(String(cardId))||abilityId!==`${cardId}:0`||text!==exact)return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["guardian"],trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["guardian"],sourceLocation:"hand"},optional:false,costs:[{type:"counter-blast",count:1}],costsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",officialReference:"https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",patternId:"auto-gc-counter-blast-call-trigger-from-drop-v1",review:"Exact five-card AUTO family. The exact source must be placed from hand on GC during a battle and its controller pays Counter Blast 1, then chooses one of their Trigger units in Drop other than an Over Trigger. The called card enters GC rested, as required for Guardian Circle placement by Comprehensive Rules 4.52 §4.9.2.4.1."},effects:[{op:"call-drop-trigger-to-guardian",target:"controller",destination:"guardian",position:"rest",filter:{cardType:"unit",triggerUnit:true,excludeOverTrigger:true}}]};
   }
   function compileGuardianDropToSoulDefinition(cardId,abilityId,kind,printedText){
     const text=normalizePrintedText(printedText);
@@ -2502,6 +2535,7 @@
     compileGuardianPlacedDiscardProtectionDefinition,
     compileGuardianCallTopFiveDefinition,
     compileGuardianClanTopFiveDefinition,
+    compileGuardianDropTriggerCallDefinition,
     compileGuardianSecondAttackShieldDefinition,
     compileGuardianNoGradeThreeRideChoiceDefinition,
     compileRidePhaseDiscardBottomDeckDrawDefinition,

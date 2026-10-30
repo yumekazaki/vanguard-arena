@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1447,
-    "testCount": 1447,
-    "passed": 1447,
+    "tests": 1453,
+    "testCount": 1453,
+    "passed": 1453,
     "failed": 0,
-    "durationMilliseconds": 242611,
-    "completedAt": "2026-10-30T20:02:18.592Z",
+    "durationMilliseconds": 303234,
+    "completedAt": "2026-10-30T20:50:55.500Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "601a4f9c4d46605ac1857ccba1dfa1c58b35325b7f2ba5f8ca11e6d1bea79144"
+    "validationInputDigest": "2b5ae526f4ada944ea4865adfba478d3ee41036d164a1c7f2039639368675b26"
   },
   "records": [
     {
@@ -73548,8 +73548,148 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13854",
+      "abilityId": "cfa-13854:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-gc-drop-trigger-call.test.js",
+        "ability-gc-clan-top-five-to-guardian-server.test.js",
+        "ability-guardian-top-five-authority.test.js"
+      ],
+      "testCases": [
+        "all eight clan GC reveal AUTO abilities compile to strict trusted programs",
+        "host and joining defender independently reveal five, call only their clan rested, and move the rest to Drop",
+        "wrong clan Vanguard, wrong source/circle, and wrong player cannot receive a prompt",
+        "declining is free and an uncallable matching Clan card rejects atomically before CB payment",
+        "the five exact GC abilities preserve the own-card placement, Counter Blast, and Trigger-only Drop choice",
+        "host and joining defender independently pay and call their selected Trigger from Drop to GC rested",
+        "the exact source, hand-to-GC move, battle, defender, and cost are required before a prompt",
+        "Over Triggers, non-Triggers, opponent cards, forged selections, and stale targets cannot be called",
+        "a trigger target removed after the prompt rejects resolution without paying Counter Blast",
+        "a source placed from the field or on a different circle cannot borrow the trigger",
+        "all 16 Guardian top-five AUTO definitions retain the exact two printed variants",
+        "host and joining defender each pay CB1 and call the top five units at rest with exact shield",
+        "Guardian top-five AUTO is exact to its controller, source, circle, and active battle",
+        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13875",
+      "abilityId": "cfa-13875:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-gc-drop-trigger-call.test.js",
+        "ability-gc-clan-top-five-to-guardian-server.test.js",
+        "ability-guardian-top-five-authority.test.js"
+      ],
+      "testCases": [
+        "all eight clan GC reveal AUTO abilities compile to strict trusted programs",
+        "host and joining defender independently reveal five, call only their clan rested, and move the rest to Drop",
+        "wrong clan Vanguard, wrong source/circle, and wrong player cannot receive a prompt",
+        "declining is free and an uncallable matching Clan card rejects atomically before CB payment",
+        "the five exact GC abilities preserve the own-card placement, Counter Blast, and Trigger-only Drop choice",
+        "host and joining defender independently pay and call their selected Trigger from Drop to GC rested",
+        "the exact source, hand-to-GC move, battle, defender, and cost are required before a prompt",
+        "Over Triggers, non-Triggers, opponent cards, forged selections, and stale targets cannot be called",
+        "a trigger target removed after the prompt rejects resolution without paying Counter Blast",
+        "a source placed from the field or on a different circle cannot borrow the trigger",
+        "all 16 Guardian top-five AUTO definitions retain the exact two printed variants",
+        "host and joining defender each pay CB1 and call the top five units at rest with exact shield",
+        "Guardian top-five AUTO is exact to its controller, source, circle, and active battle",
+        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13894",
+      "abilityId": "cfa-13894:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-gc-drop-trigger-call.test.js",
+        "ability-gc-clan-top-five-to-guardian-server.test.js",
+        "ability-guardian-top-five-authority.test.js"
+      ],
+      "testCases": [
+        "all eight clan GC reveal AUTO abilities compile to strict trusted programs",
+        "host and joining defender independently reveal five, call only their clan rested, and move the rest to Drop",
+        "wrong clan Vanguard, wrong source/circle, and wrong player cannot receive a prompt",
+        "declining is free and an uncallable matching Clan card rejects atomically before CB payment",
+        "the five exact GC abilities preserve the own-card placement, Counter Blast, and Trigger-only Drop choice",
+        "host and joining defender independently pay and call their selected Trigger from Drop to GC rested",
+        "the exact source, hand-to-GC move, battle, defender, and cost are required before a prompt",
+        "Over Triggers, non-Triggers, opponent cards, forged selections, and stale targets cannot be called",
+        "a trigger target removed after the prompt rejects resolution without paying Counter Blast",
+        "a source placed from the field or on a different circle cannot borrow the trigger",
+        "all 16 Guardian top-five AUTO definitions retain the exact two printed variants",
+        "host and joining defender each pay CB1 and call the top five units at rest with exact shield",
+        "Guardian top-five AUTO is exact to its controller, source, circle, and active battle",
+        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13913",
+      "abilityId": "cfa-13913:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-gc-drop-trigger-call.test.js",
+        "ability-gc-clan-top-five-to-guardian-server.test.js",
+        "ability-guardian-top-five-authority.test.js"
+      ],
+      "testCases": [
+        "all eight clan GC reveal AUTO abilities compile to strict trusted programs",
+        "host and joining defender independently reveal five, call only their clan rested, and move the rest to Drop",
+        "wrong clan Vanguard, wrong source/circle, and wrong player cannot receive a prompt",
+        "declining is free and an uncallable matching Clan card rejects atomically before CB payment",
+        "the five exact GC abilities preserve the own-card placement, Counter Blast, and Trigger-only Drop choice",
+        "host and joining defender independently pay and call their selected Trigger from Drop to GC rested",
+        "the exact source, hand-to-GC move, battle, defender, and cost are required before a prompt",
+        "Over Triggers, non-Triggers, opponent cards, forged selections, and stale targets cannot be called",
+        "a trigger target removed after the prompt rejects resolution without paying Counter Blast",
+        "a source placed from the field or on a different circle cannot borrow the trigger",
+        "all 16 Guardian top-five AUTO definitions retain the exact two printed variants",
+        "host and joining defender each pay CB1 and call the top five units at rest with exact shield",
+        "Guardian top-five AUTO is exact to its controller, source, circle, and active battle",
+        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13997",
+      "abilityId": "cfa-13997:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-gc-drop-trigger-call.test.js",
+        "ability-gc-clan-top-five-to-guardian-server.test.js",
+        "ability-guardian-top-five-authority.test.js"
+      ],
+      "testCases": [
+        "all eight clan GC reveal AUTO abilities compile to strict trusted programs",
+        "host and joining defender independently reveal five, call only their clan rested, and move the rest to Drop",
+        "wrong clan Vanguard, wrong source/circle, and wrong player cannot receive a prompt",
+        "declining is free and an uncallable matching Clan card rejects atomically before CB payment",
+        "the five exact GC abilities preserve the own-card placement, Counter Blast, and Trigger-only Drop choice",
+        "host and joining defender independently pay and call their selected Trigger from Drop to GC rested",
+        "the exact source, hand-to-GC move, battle, defender, and cost are required before a prompt",
+        "Over Triggers, non-Triggers, opponent cards, forged selections, and stale targets cannot be called",
+        "a trigger target removed after the prompt rejects resolution without paying Counter Blast",
+        "a source placed from the field or on a different circle cannot borrow the trigger",
+        "all 16 Guardian top-five AUTO definitions retain the exact two printed variants",
+        "host and joining defender each pay CB1 and call the top five units at rest with exact shield",
+        "Guardian top-five AUTO is exact to its controller, source, circle, and active battle",
+        "Guardian top-five declines safely and invalid costs or non-Unit deck cards do not partially resolve"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T19:57:38.542Z"
+  "evidenceUpdatedAt": "2026-10-30T20:29:26.834Z"
 }

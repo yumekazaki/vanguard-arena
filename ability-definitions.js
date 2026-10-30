@@ -110920,6 +110920,242 @@
         }
       ]
     }
+,
+    {
+      "id": "cfa-13854:0",
+      "cardId": "cfa-13854",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on GC from hand, COST [Counter Blast 1], choose a trigger unit from your drop other than over trigger, and call it to GC.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "optional": false,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-gc-counter-blast-call-trigger-from-drop-v1",
+        "review": "Exact five-card AUTO family. The exact source must be placed from hand on GC during a battle and its controller pays Counter Blast 1, then chooses one of their Trigger units in Drop other than an Over Trigger. The called card enters GC rested, as required for Guardian Circle placement by Comprehensive Rules 4.52 §4.9.2.4.1."
+      },
+      "effects": [
+        {
+          "op": "call-drop-trigger-to-guardian",
+          "target": "controller",
+          "destination": "guardian",
+          "position": "rest",
+          "filter": {
+            "cardType": "unit",
+            "triggerUnit": true,
+            "excludeOverTrigger": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13875:0",
+      "cardId": "cfa-13875",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on GC from hand, COST [Counter Blast 1], choose a trigger unit from your drop other than over trigger, and call it to GC.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "optional": false,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-gc-counter-blast-call-trigger-from-drop-v1",
+        "review": "Exact five-card AUTO family. The exact source must be placed from hand on GC during a battle and its controller pays Counter Blast 1, then chooses one of their Trigger units in Drop other than an Over Trigger. The called card enters GC rested, as required for Guardian Circle placement by Comprehensive Rules 4.52 §4.9.2.4.1."
+      },
+      "effects": [
+        {
+          "op": "call-drop-trigger-to-guardian",
+          "target": "controller",
+          "destination": "guardian",
+          "position": "rest",
+          "filter": {
+            "cardType": "unit",
+            "triggerUnit": true,
+            "excludeOverTrigger": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13894:0",
+      "cardId": "cfa-13894",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on GC from hand, COST [Counter Blast 1], choose a trigger unit from your drop other than over trigger, and call it to GC.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "optional": false,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-gc-counter-blast-call-trigger-from-drop-v1",
+        "review": "Exact five-card AUTO family. The exact source must be placed from hand on GC during a battle and its controller pays Counter Blast 1, then chooses one of their Trigger units in Drop other than an Over Trigger. The called card enters GC rested, as required for Guardian Circle placement by Comprehensive Rules 4.52 §4.9.2.4.1."
+      },
+      "effects": [
+        {
+          "op": "call-drop-trigger-to-guardian",
+          "target": "controller",
+          "destination": "guardian",
+          "position": "rest",
+          "filter": {
+            "cardType": "unit",
+            "triggerUnit": true,
+            "excludeOverTrigger": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13913:0",
+      "cardId": "cfa-13913",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on GC from hand, COST [Counter Blast 1], choose a trigger unit from your drop other than over trigger, and call it to GC.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "optional": false,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-gc-counter-blast-call-trigger-from-drop-v1",
+        "review": "Exact five-card AUTO family. The exact source must be placed from hand on GC during a battle and its controller pays Counter Blast 1, then chooses one of their Trigger units in Drop other than an Over Trigger. The called card enters GC rested, as required for Guardian Circle placement by Comprehensive Rules 4.52 §4.9.2.4.1."
+      },
+      "effects": [
+        {
+          "op": "call-drop-trigger-to-guardian",
+          "target": "controller",
+          "destination": "guardian",
+          "position": "rest",
+          "filter": {
+            "cardType": "unit",
+            "triggerUnit": true,
+            "excludeOverTrigger": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13997:0",
+      "cardId": "cfa-13997",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on GC from hand, COST [Counter Blast 1], choose a trigger unit from your drop other than over trigger, and call it to GC.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "optional": false,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-gc-counter-blast-call-trigger-from-drop-v1",
+        "review": "Exact five-card AUTO family. The exact source must be placed from hand on GC during a battle and its controller pays Counter Blast 1, then chooses one of their Trigger units in Drop other than an Over Trigger. The called card enters GC rested, as required for Guardian Circle placement by Comprehensive Rules 4.52 §4.9.2.4.1."
+      },
+      "effects": [
+        {
+          "op": "call-drop-trigger-to-guardian",
+          "target": "controller",
+          "destination": "guardian",
+          "position": "rest",
+          "filter": {
+            "cardType": "unit",
+            "triggerUnit": true,
+            "excludeOverTrigger": true
+          }
+        }
+      ]
+    }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;

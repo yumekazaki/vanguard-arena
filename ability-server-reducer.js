@@ -1234,6 +1234,7 @@
     "draw", "modify-power", "modify-power-target", "retire-target", "rest-target", "stand-target", "protect-target", "revelation-choice", "modify-critical", "rest-source", "stand-source", "set-charging", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "g-guardian-discard-charge-choice",
     "counter-charge", "soul-charge", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "call-source-from-soul", "engorge", "seek-mate", "modify-defending-source-power", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-source-from-drop-rested", "unlock-target", "protect-attacked-source", "set-successful", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "place-circle-marker"
   ]);
+  SERVER_EFFECT_OPS.add("call-drop-trigger-to-guardian");
   const CLAN_PLACEMENT_DAMAGE_RETURN = Object.freeze(["cfa-187","cfa-208","cfa-279","cfa-295","cfa-458","cfa-466","cfa-712","cfa-719","cfa-749","cfa-762","cfa-798","cfa-816","cfa-841","cfa-858","cfa-938","cfa-943","cfa-959","cfa-965","cfa-978","cfa-980","cfa-995","cfa-999","cfa-1057","cfa-1332","cfa-1333","cfa-1378","cfa-1379","cfa-1383","cfa-1384","cfa-1445","cfa-1570","cfa-1722","cfa-1723","cfa-1891","cfa-1892","cfa-1903"]);
   const QUICK_SHIELD_RIDE_TEXT = "AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.";
   const CHARGE_CARD_IDS = new Set(["cfa-3429", "cfa-3474", "cfa-3490", "cfa-3492", "cfa-3495", "cfa-3500", "cfa-3501", "cfa-3506", "cfa-4142", "cfa-4232", "cfa-4269", "cfa-4275", "cfa-4312", "cfa-4327", "cfa-5203", "cfa-5204", "cfa-5206", "cfa-5207", "cfa-5208", "cfa-5215", "cfa-5226", "cfa-5313", "cfa-5316"]);
@@ -1411,6 +1412,20 @@
     if(!clan||ability?.id!==`${cardId}:1`||String(definition?.cardId)!==cardId||definition?.kind!=="AUTO"||ability?.kind!=="AUTO"||definition?.source?.patternId!=="auto-gc-clan-top-five-to-guardian-rest-drop-v1")return false;
     const textMatch=/^AUTO:?\s*\[Counter Blast 1\]\s*When this unit is placed on GC from (?:your )?hand, if you have (?:a|an) [«<]([^»>]+)[»>] vanguard, you may pay the cost\. If you do, reveal five cards from the top of your deck(?:,|\.)\s*call all [«<]([^»>]+)[»>] (?:from among them )?to GC (?:at rest|as rest),? and put the rest into (?:(?:your|the) )?drop zone\.$/i.exec(printed);
     return Boolean(textMatch&&textMatch[1].trim()===clan&&textMatch[2].trim()===clan&&trigger?.status==="recognized-trigger"&&trigger.eventType==="card.placed"&&trigger.subject==="source"&&JSON.stringify(trigger.circles||[])===JSON.stringify(["guardian"])&&trigger.sourceLocation==="hand"&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["guardian"])&&JSON.stringify(ability.conditions||[])===JSON.stringify([{type:"controller-vanguard-has-clan",value:clan}])&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"counter-blast",count:1}])&&ability.canDecline===true&&definition.optional===true&&definition.conditionsReviewed===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&definition.effects?.length===1&&effect?.op==="call-filtered-top-to-guardian-drop"&&effect.target==="controller"&&effect.count===5&&effect.destination==="guardian"&&effect.position==="rest"&&JSON.stringify(effect.filter)===JSON.stringify({clan})&&effect.remainder==="drop");
+  }
+
+  const GUARDIAN_DROP_TRIGGER_CALL_IDS=new Set(["cfa-13854","cfa-13875","cfa-13894","cfa-13913","cfa-13997"]);
+  function isExactGuardianDropTriggerCallAbility(ability){
+    const cardId=String(ability?.cardId||""),definition=ability?.definition,printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim(),effect=definition?.effects?.[0],trigger=ability?.trigger||definition?.trigger;
+    return GUARDIAN_DROP_TRIGGER_CALL_IDS.has(cardId)&&ability?.id===`${cardId}:0`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&String(definition.cardId)===cardId&&definition.id===ability.id&&definition.source?.patternId==="auto-gc-counter-blast-call-trigger-from-drop-v1"&&printed==="AUTO: When this unit is placed on GC from hand, COST [Counter Blast 1], choose a trigger unit from your drop other than over trigger, and call it to GC."&&trigger?.status==="recognized-trigger"&&trigger.eventType==="card.placed"&&trigger.subject==="source"&&JSON.stringify(trigger.circles||[])===JSON.stringify(["guardian"])&&trigger.sourceLocation==="hand"&&JSON.stringify(ability.requiredLocation||definition.requiredLocation||[])===JSON.stringify(["guardian"])&&definition.optional===false&&!(ability.conditions||[]).length&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"counter-blast",count:1}])&&definition.costsReviewed===true&&definition.choicesReviewed===true&&ability.canDecline===false&&effect?.op==="call-drop-trigger-to-guardian"&&effect.target==="controller"&&effect.destination==="guardian"&&effect.position==="rest"&&JSON.stringify(effect.filter)===JSON.stringify({cardType:"unit",triggerUnit:true,excludeOverTrigger:true});
+  }
+  function isLegalDropTriggerUnit(instance,playerId){
+    const definition=serverCardDefinition(instance),trigger=String(definition?.trigger||instance?.triggerType||instance?.trigger||"").trim().toLowerCase().replace(/\s+trigger$/i,"");
+    return Boolean(definition&&(!instance?.ownerPlayerId||instance.ownerPlayerId===playerId)&&/\b(?:unit|trigger)\b/i.test(String(definition.type||""))&&/^(draw|critical|heal|front|stand)$/.test(trigger));
+  }
+  function guardianDropTriggerCallEventMatches(state,ability,source,located,event,actorPlayerId){
+    const attack=state?.pendingAttack,player=located&&state.players?.[located.side];
+    return isExactGuardianDropTriggerCallAbility(ability)&&Boolean(attack?.battleId)&&event?.type==="card.placed"&&event.eventId&&event.battleId===attack.battleId&&event.phase==="battle"&&event.timingWindow==="guard-placement"&&event.circle==="guardian"&&event.sourceCardInstanceId===source?.uid&&event.cardInstanceId===source?.uid&&event.subjectCardInstanceId===source?.uid&&event.previousLocation==="hand"&&event.currentLocation==="guardian"&&event.actingPlayerId===actorPlayerId&&event.subjectControllerPlayerId===actorPlayerId&&located?.zone==="guardian"&&located.side===attack.defenderSide&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&player.guardCircle?.some(card=>card?.uid===source.uid)&&attack.guardCards?.some(card=>card?.uid===source.uid);
   }
 
   function guardianClanTopFiveTriggerMatches(state,ability,source,located,event,actorPlayerId){
@@ -3015,6 +3030,7 @@
     const hasCharging = effects.some(step => step?.op === "set-charging");
     const hasGuardianTopFiveCall = effects.some(step => step?.op === "call-top-to-guardian");
     const hasGuardianClanTopFiveCall = effects.some(step => step?.op === "call-filtered-top-to-guardian-drop");
+    const hasGuardianDropTriggerCall = effects.some(step => step?.op === "call-drop-trigger-to-guardian");
     const hasAttackedSelfBattlePower = effects.some(step => step?.op === "modify-defending-source-power");
     const hasRidePhaseDiscardCall = effects.some(step => step?.op === "call-source-from-drop-rested");
     const hasUnlockTarget = effects.some(step => step?.op === "unlock-target");
@@ -3087,6 +3103,7 @@
     if (hasCharging && !isExactChargeAbility(ability)) return false;
     if (hasGuardianTopFiveCall && !isExactGuardianTopFiveCallAbility(ability)) return false;
     if (hasGuardianClanTopFiveCall && !isExactGuardianClanTopFiveAbility(ability)) return false;
+    if (hasGuardianDropTriggerCall && !isExactGuardianDropTriggerCallAbility(ability)) return false;
     if (hasAttackedSelfBattlePower && !isExactAttackedSelfBattlePowerAbility(ability)) return false;
     if (hasRidePhaseDiscardCall && !(isExactRidePhaseDiscardCallAbility(ability) || isExactDiscardGradeCallAbility(ability))) return false;
     if (hasUnlockTarget && !isExactVanguardUnlockAbility(ability)) return false;
@@ -3120,6 +3137,7 @@
       (hasCharging && step?.op === "set-charging") ||
       (hasGuardianTopFiveCall && step?.op === "call-top-to-guardian") ||
       (hasGuardianClanTopFiveCall && step?.op === "call-filtered-top-to-guardian-drop" && isExactGuardianClanTopFiveAbility(ability)) ||
+      (hasGuardianDropTriggerCall && step?.op === "call-drop-trigger-to-guardian" && isExactGuardianDropTriggerCallAbility(ability)) ||
       (hasRidePhaseDiscardCall && step?.op === "call-source-from-drop-rested" && (isExactRidePhaseDiscardCallAbility(ability) || isExactDiscardGradeCallAbility(ability))) ||
       (hasUnlockTarget && step?.op === "unlock-target" && isExactVanguardUnlockAbility(ability)) ||
       (hasAttackedUnboostedProtect && step?.op === "protect-attacked-source" && isExactAttackedUnboostedProtectAbility(ability)) ||
@@ -3351,6 +3369,15 @@
   }
 
   function locateReviewedEffectTarget(state, pending, source, actorPlayerId, selection, engine) {
+    const guardianDropCall=(pending?.ability?.definition?.effects||[]).find(effect=>effect?.op==="call-drop-trigger-to-guardian");
+    if(guardianDropCall){
+      const player=Object.values(state.players||{}).find(candidate=>candidate?.playerId===actorPlayerId),legal=(player?.drop||[]).filter(card=>isLegalDropTriggerUnit(card,actorPlayerId));
+      if(!legal.length)return{ok:false,reason:"invalid-guardian-trigger-choice"};
+      if(typeof selection?.effectUid!=="string")return{ok:false,reason:"guardian-trigger-choice-required"};
+      const selectedCard=legal.find(card=>card?.uid===selection.effectUid);
+      if(!selectedCard)return{ok:false,reason:"invalid-guardian-trigger-choice"};
+      return{ok:true,context:{selectedCard}};
+    }
     const markerStep=(pending?.ability?.definition?.effects||[]).find(effect=>effect?.op==="place-circle-marker");
     if(markerStep){const actor=Object.values(state.players||{}).find(player=>player?.playerId===actorPlayerId),zone=selection?.circleZone,rearIndex=({"rear-left":0,"rear-right":1,"rear-back-left":2,"rear-back-center":3,"rear-back-right":4})[zone],accel=typeof zone==="string"?zone.match(/^accel-(\d+)$/):null,zoneType=zone==="vanguard"?"vanguard":rearIndex!=null||accel?"rear-guard":null,configuration=markerStep.markerType==="Treasures"&&JSON.stringify(markerStep.circleTypes)===JSON.stringify(["vanguard","rear-guard"])||markerStep.markerType==="Dragontree"&&JSON.stringify(markerStep.circleTypes)===JSON.stringify(["rear-guard"]),zoneExists=zone==="vanguard"?Boolean(actor?.vanguard):rearIndex!=null?rearIndex<(actor?.rear||[]).length:Boolean(accel&&Number(accel[1])<=Number(actor?.accelZones||0));if(!actor||!configuration||!markerStep.circleTypes.includes(zoneType)||!zoneExists)return{ok:false,reason:"invalid-marker-circle"};if((actor.giftZones||[]).some(marker=>marker?.zone===zone&&marker?.type===markerStep.markerType))return{ok:false,reason:"marker-already-present"};return{ok:true,context:{circleZone:zone,sourceControllerPlayerId:actorPlayerId}};}
     const step = (pending?.ability?.definition?.effects || []).find(effect =>
@@ -3727,6 +3754,8 @@
                 !guardianTopFiveCallTriggerMatches(state, ability, located.instance, located, event, located.controllerPlayerId)) continue;
             if (isExactGuardianClanTopFiveAbility(ability) &&
                 !guardianClanTopFiveTriggerMatches(state, ability, located.instance, located, event, located.controllerPlayerId)) continue;
+            if (isExactGuardianDropTriggerCallAbility(ability) &&
+                !guardianDropTriggerCallEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId)) continue;
             if (isExactAutoVanguardTopFiveSearchAbility(ability) && event.type === "card.placed") {
               const claimedLocation = String(event.currentLocation || event.circle || "");
               const sourceAtClaimedLocation = claimedLocation === "vanguard"
@@ -3743,6 +3772,14 @@
             const eventForMatch = authoritativeSoulBlastBoostEvent(state, ability, event, engine);
             const eventMatch = engine.eventMatchesAbilityTrigger(ability, eventName, eventForMatch, instance.uid, triggerSourceZone, subjectZone, located.controllerPlayerId);
             if (!eventMatch) continue;
+            if(isExactGuardianDropTriggerCallAbility(ability)&&!engine.canPayAbilityCosts(ability,{faceUpDamage:(state.players?.[side]?.damage||[]).filter(card=>!card.faceDown).length})){
+              if(engine.claimAbilityTrigger(state,event.eventId,instance.uid,ability.id))skipped.push({eventId:event.eventId,cardInstanceId:instance.uid,abilityId:ability.id,reason:"unpayable-cost"});
+              continue;
+            }
+            if(isExactGuardianDropTriggerCallAbility(ability)&&!(state.players?.[side]?.drop||[]).some(card=>isLegalDropTriggerUnit(card,located.controllerPlayerId))){
+              if(engine.claimAbilityTrigger(state,event.eventId,instance.uid,ability.id))skipped.push({eventId:event.eventId,cardInstanceId:instance.uid,abilityId:ability.id,reason:"no-legal-guardian-trigger"});
+              continue;
+            }
             if(ability.definition?.source?.patternId==="auto-other-hand-discard-energy-blast-remove-source-return-discard-v1"){
               if(!otherHandDiscardReturnEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,engine))continue;
               const abilityController=state.players?.[side],hasEnergyGenerator=(abilityController?.crests||[]).some(card=>/energy generator/i.test(String(serverCardDefinition(card)?.name||card?.crestName||card?.cardName||"")));
@@ -5548,6 +5585,7 @@
         !guardianTopFiveCallTriggerMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId)) return reject("guardian-top-five-battle-context-invalid");
     if (isExactGuardianClanTopFiveAbility(ability) &&
         !guardianClanTopFiveTriggerMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId)) return reject("guardian-clan-top-five-battle-context-invalid");
+    if (isExactGuardianDropTriggerCallAbility(ability) && !guardianDropTriggerCallEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId)) return reject("guardian-drop-trigger-call-context-invalid");
     if (isExactForerunnerAbility(ability) && !forerunnerRideMatches(state, ability, located.instance, located, triggerEvent, engine)) return reject("forerunner-ride-context-invalid");
     if (ability.definition?.source?.patternId === "auto-rode-upon-named-grade-source-call-v1" && !namedGradeRideCallMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("named-grade-ride-call-context-invalid");
     if (ability.definition?.source?.patternId === "auto-named-rider-ride-source-search-v1" && !namedRideDeckSearchMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("named-rider-ride-search-context-invalid");
