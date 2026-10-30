@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1387,
-    "testCount": 1387,
-    "passed": 1387,
+    "tests": 1389,
+    "testCount": 1389,
+    "passed": 1389,
     "failed": 0,
-    "durationMilliseconds": 219926,
-    "completedAt": "2026-10-30T15:48:35.998Z",
+    "durationMilliseconds": 219421,
+    "completedAt": "2026-10-30T15:58:04.958Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "5af530fe1a1584c8f1e8244f0376bf10bba39fb2531324124c1bfccae8f5149a"
+    "validationInputDigest": "a63e1d85c911eea27d521386038603fca87f7fa504e2df6a06998d76f4ffd111"
   },
   "records": [
     {
@@ -5234,20 +5234,20 @@
     {
       "cardId": "cfa-1117",
       "abilityId": "cfa-1117:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-11170",
@@ -5613,20 +5613,20 @@
     {
       "cardId": "cfa-11217",
       "abilityId": "cfa-11217:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-1122",
@@ -6973,20 +6973,20 @@
     {
       "cardId": "cfa-1154",
       "abilityId": "cfa-1154:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-1155",
@@ -9172,20 +9172,20 @@
     {
       "cardId": "cfa-1199",
       "abilityId": "cfa-1199:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-11994",
@@ -11168,20 +11168,20 @@
     {
       "cardId": "cfa-1233",
       "abilityId": "cfa-1233:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-1234",
@@ -13304,20 +13304,20 @@
     {
       "cardId": "cfa-1276",
       "abilityId": "cfa-1276:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-12778",
@@ -21551,20 +21551,20 @@
     {
       "cardId": "cfa-162",
       "abilityId": "cfa-162:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-1624",
@@ -21592,20 +21592,20 @@
     {
       "cardId": "cfa-1626",
       "abilityId": "cfa-1626:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-1627",
@@ -28301,20 +28301,20 @@
     {
       "cardId": "cfa-219",
       "abilityId": "cfa-219:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-2191",
@@ -35929,20 +35929,20 @@
     {
       "cardId": "cfa-305",
       "abilityId": "cfa-305:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-3055",
@@ -39016,20 +39016,20 @@
     {
       "cardId": "cfa-352",
       "abilityId": "cfa-352:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-3523",
@@ -43618,20 +43618,20 @@
     {
       "cardId": "cfa-426",
       "abilityId": "cfa-426:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-4265",
@@ -58588,20 +58588,20 @@
     {
       "cardId": "cfa-731",
       "abilityId": "cfa-731:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-7312",
@@ -60226,20 +60226,20 @@
     {
       "cardId": "cfa-772",
       "abilityId": "cfa-772:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-773",
@@ -61851,20 +61851,20 @@
     {
       "cardId": "cfa-818",
       "abilityId": "cfa-818:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-8180",
@@ -63693,20 +63693,20 @@
     {
       "cardId": "cfa-864",
       "abilityId": "cfa-864:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-8645",
@@ -65509,20 +65509,20 @@
     {
       "cardId": "cfa-908",
       "abilityId": "cfa-908:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-9080",
@@ -66386,20 +66386,20 @@
     {
       "cardId": "cfa-946",
       "abilityId": "cfa-946:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-948",
@@ -66959,20 +66959,20 @@
     {
       "cardId": "cfa-9652",
       "abilityId": "cfa-9652:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-967",
@@ -67023,20 +67023,20 @@
     {
       "cardId": "cfa-968",
       "abilityId": "cfa-968:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-9685",
@@ -67553,20 +67553,20 @@
     {
       "cardId": "cfa-986",
       "abilityId": "cfa-986:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-boosted-by-qualified-authority.test.js",
-        "match-bootstrap.test.js",
-        "match-worker.test.js"
+        "ability-boosted-by-qualified-authority.test.js"
       ],
       "testCases": [
-        "42 qualified-booster abilities preserve exact source circle, clan or race qualifier, printed power, and duration",
-        "trusted unit.boosted events identify the actual booster and boosted source with authoritative clan/race metadata",
-        "both seats resolve their own boost-triggered power",
-        "wrong booster qualifier and unboosted attack do not prompt"
+        "all 42 qualified-booster abilities are trusted and retain exact clan/race, source circle, amount, and duration",
+        "21 sole-skill boost cards retain their complete text and structured card metadata",
+        "every legally attackable qualified booster AUTO resolves for its exact source on either player seat",
+        "wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities",
+        "a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction"
       ],
-      "fullyVerified": false,
-      "remaining": "Family-level reducer and bootstrap tests pass; all abilities on each card and live online browser integration remain unverified."
+      "fullyVerified": true,
+      "remaining": "This card has one printed ability. Its exact own-unit boost trigger, printed booster clan or race, source circle, power amount and duration are verified for both player seats. A mismatched booster cannot trigger it; separate multi-skill Restraint cards remain subject to their other abilities and are not included in whole-card completion.",
+      "verifiedAt": "2026-10-30T15:58:04.958Z"
     },
     {
       "cardId": "cfa-9861",
@@ -70150,5 +70150,5 @@
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T15:48:35.998Z"
+  "evidenceUpdatedAt": "2026-10-30T15:58:04.958Z"
 }

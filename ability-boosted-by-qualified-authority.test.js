@@ -11,6 +11,10 @@ const PATTERN = "auto-boosted-by-qualified-unit-power-v1";
 const catalog = loadCatalog();
 const family = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
   .filter(ability => ability.definition?.source?.patternId === PATTERN).map(ability => ({ card, ability })));
+const attackableFamily = family.filter(({ card }) => !Engine.parseCardAbilitiesCached(card)
+  .some(ability => ability.definition?.continuousRestrictions?.some(restriction => restriction.type === "restraint")));
+const qualifierTestFamily = attackableFamily.filter(({ card }) => !Engine.parseCardAbilitiesCached(card)
+  .some(ability => ability.definition?.continuousRestrictions?.some(restriction => restriction.type === "lord")));
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 
 function makeUnit(definition, uid, playerId, overrides = {}) {
@@ -32,7 +36,7 @@ function findAbility(cardId, pattern = PATTERN) {
   return { card, ability };
 }
 
-function findBoostCard(ability, wrong = false) {
+function findBoostCard(ability, wrong = false, requiredClan = null) {
   const field = ability.trigger.boosterClan ? "clan" : "race";
   const qualifier = ability.trigger.boosterClan || ability.trigger.boosterRace;
   const identity = card => {
@@ -44,7 +48,8 @@ function findBoostCard(ability, wrong = false) {
     if (Number(card.grade) !== 1 || !/unit/i.test(String(card.type || ""))) return false;
     const fields = identity(card), values = field === "clan" ? [fields.clan] : fields.races;
     const matches = values.some(value => String(value || "").toLowerCase() === qualifier.toLowerCase());
-    return wrong ? !matches : matches;
+    const clanMatches = !requiredClan || String(fields.clan || "").toLowerCase() === requiredClan.toLowerCase();
+    return clanMatches && (wrong ? !matches : matches);
   });
 }
 
@@ -68,7 +73,13 @@ function setup({ cardId, side = "bot", wrongBooster = false, includeBooster = tr
       { grade: 3, power: 10000 });
     own.rear[0] = source;
   }
-  const boosterDefinition = findBoostCard(ability, wrongBooster);
+  const abilities = Engine.parseCardAbilitiesCached(card);
+  const hasLord = abilities.some(item => item.definition?.continuousRestrictions?.some(restriction => restriction.type === "lord"));
+  const sourceClan = card.clan || card.clans?.[0];
+  const ownVanguardDefinition = hasLord ? catalog.find(item => Number(item.grade) === 3 && /unit/i.test(String(item.type || "")) && String(item.clan || item.clans?.[0] || "").toLowerCase() === String(sourceClan || "").toLowerCase()) : null;
+  if (hasLord) assert.ok(ownVanguardDefinition, `${card.id}: same-clan Vanguard exists for the Lord condition`);
+  if (!sourceAtVanguard) own.vanguard = makeUnit(ownVanguardDefinition || catalog.find(item => item.id === "cfa-3") || { id: "own-vg", grade: 3, power: 10000 }, "own-vanguard", ownerId, { grade: 3, power: 10000 });
+  const boosterDefinition = findBoostCard(ability, wrongBooster, hasLord ? sourceClan : null);
   const booster = includeBooster ? makeUnit(boosterDefinition, "booster", ownerId, { boostAbility: true, power: Number(boosterDefinition.power || 5000) }) : null;
   const boosterIndex = sourceAtVanguard ? 3 : 2;
   if (booster) own.rear[boosterIndex] = booster;
@@ -115,38 +126,62 @@ test("all 42 qualified-booster abilities are trusted and retain exact clan/race,
   }
 });
 
-test("trusted boost events expose canonical booster clan and race and resolve only for the boosted source's controller", () => {
-  const clanSample = family.find(item => item.ability.trigger.boosterClan);
-  const raceSample = family.find(item => item.ability.trigger.boosterRace);
-  assert.ok(findBoostCard(clanSample.ability));
-  assert.ok(findBoostCard(raceSample.ability));
-  for (const [side, sample] of [["human", clanSample], ["bot", raceSample]]) {
-    const f = setup({ cardId: sample.card.id, side });
-    const declared = declare(f);
-    assert.equal(declared.ok, true, declared.reason);
-    assert.equal(f.state.pendingAbility?.instance.uid, f.source.uid);
-    assert.equal(f.state.pendingAbility?.side, side);
-    const event = declared.events.find(item => item.type === "unit.boosted");
-    assert.ok(event);
-    if (sample.ability.trigger.boosterClan) assert.ok(event.boosterCardClan === sample.ability.trigger.boosterClan || event.boosterCardClans.includes(sample.ability.trigger.boosterClan));
-    if (sample.ability.trigger.boosterRace) assert.ok(event.boosterCardRace === sample.ability.trigger.boosterRace || event.boosterCardRaces.includes(sample.ability.trigger.boosterRace));
-    assert.equal(event.boosterCardInstanceId, f.booster.uid);
-    assert.equal(event.boostedCardInstanceId, f.source.uid);
-    const basePower = f.state.pendingAttack.power;
-    const result = resolve(f);
-    assert.equal(result.ok, true, result.reason);
-    assert.equal(f.state.pendingAttack.power, basePower + sample.ability.definition.effects[0].amount);
+test("21 sole-skill boost cards retain their complete text and structured card metadata", () => {
+  const soleSkill = family.filter(({ card }) => Engine.parseCardAbilitiesCached(card).length === 1);
+  assert.equal(soleSkill.length, 21);
+  assert.equal(new Set(soleSkill.map(({ card }) => String(card.id))).size, 21);
+  for (const { card, ability } of soleSkill) {
+    assert.ok(card.text.includes(ability.printedText), `${ability.id}: complete printed skill retained`);
+    assert.equal(card.type, "Unit", ability.id);
+    assert.ok(Number.isFinite(Number(card.grade)), `${ability.id}: grade metadata`);
+    assert.ok(Number.isFinite(Number(card.power)), `${ability.id}: power metadata`);
+    assert.ok(card.clan || card.clans?.length || String(card.text).split(/\r?\n/, 1)[0].includes("/"), `${ability.id}: clan metadata`);
   }
 });
 
-test("a different booster qualifier or an unboosted attack cannot prompt the source ability", () => {
-  const sample = family.find(item => item.ability.trigger.boosterClan);
-  const wrong = setup({ cardId: sample.card.id, wrongBooster: true });
-  const wrongResult = declare(wrong);
-  assert.equal(wrongResult.ok, true, wrongResult.reason);
-  assert.equal(wrong.state.pendingAbility, null);
-  const unboosted = setup({ cardId: sample.card.id, includeBooster: false });
-  const plainAttack = declare(unboosted);
-  assert.equal(plainAttack.ok, true, plainAttack.reason);
-  assert.equal(unboosted.state.pendingAbility, null);
+test("every legally attackable qualified booster AUTO resolves for its exact source on either player seat", () => {
+  assert.equal(attackableFamily.length, 38);
+  for (const sample of attackableFamily) for (const side of ["human", "bot"]) {
+    assert.ok(findBoostCard(sample.ability), `${sample.ability.id}: matching Grade 1 booster exists`);
+    const f = setup({ cardId: sample.card.id, side });
+    const declared = declare(f);
+    assert.equal(declared.ok, true, `${side} ${sample.ability.id}: ${declared.reason}`);
+    assert.equal(f.state.pendingAbility?.instance.uid, f.source.uid, `${side} ${sample.ability.id}: exact boosted source owns prompt`);
+    assert.equal(f.state.pendingAbility?.side, side, `${side} ${sample.ability.id}: controller owns prompt`);
+    const event = declared.events.find(item => item.type === "unit.boosted");
+    assert.ok(event, `${side} ${sample.ability.id}: structured boost event emitted`);
+    if (sample.ability.trigger.boosterClan) assert.ok(event.boosterCardClan === sample.ability.trigger.boosterClan || event.boosterCardClans.includes(sample.ability.trigger.boosterClan), `${sample.ability.id}: exact clan qualifier`);
+    if (sample.ability.trigger.boosterRace) assert.ok(event.boosterCardRace === sample.ability.trigger.boosterRace || event.boosterCardRaces.includes(sample.ability.trigger.boosterRace), `${sample.ability.id}: exact race qualifier`);
+    assert.equal(event.boosterCardInstanceId, f.booster.uid, `${side} ${sample.ability.id}: exact booster identity`);
+    assert.equal(event.boostedCardInstanceId, f.source.uid, `${side} ${sample.ability.id}: exact boosted identity`);
+    const basePower = f.state.pendingAttack.power;
+    const result = resolve(f);
+    assert.equal(result.ok, true, `${side} ${sample.ability.id}: ${result.reason}`);
+    assert.equal(f.state.pendingAttack.power, basePower + sample.ability.definition.effects[0].amount, `${side} ${sample.ability.id}: only its own source gets battle power`);
+  }
+});
+
+test("wrong clan/race boosters and unboosted attacks never prompt qualified-booster abilities", () => {
+  for (const sample of qualifierTestFamily) for (const side of ["human", "bot"]) {
+    assert.ok(findBoostCard(sample.ability, true), `${sample.ability.id}: nonmatching Grade 1 booster exists`);
+    const wrong = setup({ cardId: sample.card.id, side, wrongBooster: true });
+    const wrongResult = declare(wrong);
+    assert.equal(wrongResult.ok, true, `${side} ${sample.ability.id}: ${wrongResult.reason}`);
+    assert.equal(wrong.state.pendingAbility, null, `${side} ${sample.ability.id}: unrelated booster qualifier rejected`);
+    const unboosted = setup({ cardId: sample.card.id, side, includeBooster: false });
+    const plainAttack = declare(unboosted);
+    assert.equal(plainAttack.ok, true, `${side} ${sample.ability.id}: ${plainAttack.reason}`);
+    assert.equal(unboosted.state.pendingAbility, null, `${side} ${sample.ability.id}: no booster, no trigger`);
+  }
+});
+
+test("a qualified-booster AUTO cannot bypass another CONT ability's Restraint attack restriction", () => {
+  const sample = family.find(({ card }) => Engine.parseCardAbilitiesCached(card)
+    .some(ability => ability.definition?.continuousRestrictions?.some(restriction => restriction.type === "restraint")));
+  assert.ok(sample, "a multi-skill card has both Restraint and the qualified-booster AUTO");
+  const f = setup({ cardId: sample.card.id, side: "bot" });
+  const result = declare(f);
+  assert.equal(result.ok, false);
+  assert.equal(result.reason, "unit-with-restraint-cannot-attack");
+  assert.equal(f.state.pendingAbility, null, "an illegal attack cannot generate a boost-trigger prompt");
 });
