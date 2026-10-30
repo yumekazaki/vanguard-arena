@@ -3132,6 +3132,7 @@
     if (!player || !instance || typeof engine.evaluateContinuousEffects !== "function") return 0;
     const opponent = Object.values(state.players || {}).find(candidate => candidate && candidate !== player);
     const common = {
+      dragontreeMarkerCount: (player.giftZones || []).filter(marker => marker?.type === "Dragontree" && /^(?:rear-|accel-)/.test(String(marker.zone || ""))).length,
       isControllerTurn: state.side === side,
       soulCardNames: (player.soul || []).map(card => card?.cardName).filter(Boolean),
       opponentVanguardGrade: Number(opponent?.vanguard?.grade ?? -1),

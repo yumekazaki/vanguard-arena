@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1401,
-    "testCount": 1401,
-    "passed": 1401,
+    "tests": 1405,
+    "testCount": 1405,
+    "passed": 1405,
     "failed": 0,
-    "durationMilliseconds": 230492,
-    "completedAt": "2026-10-30T16:25:58.486Z",
+    "durationMilliseconds": 228731,
+    "completedAt": "2026-10-30T16:49:28.099Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "6953bf7b26d5b2a44d8810203c3dbf9cb16079f35f8275e15002835c3a1886e7"
+    "validationInputDigest": "c01c2a52b25ce6d36cb8c22b07a6043bd32c35b00307a846efbbf05f30d8bade"
   },
   "records": [
     {
@@ -72196,8 +72196,88 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11916",
+      "abilityId": "cfa-11916:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-dragontree-marker-power.test.js"
+      ],
+      "testCases": [
+        "five real Dragontree-marker CONT abilities compile with their exact Rear-Guard scope",
+        "power scales by the controller's Rear-Guard Dragontree markers only",
+        "authoritative attack power uses only the acting player's Rear-Guard markers for all five cards",
+        "browser and authoritative continuous-power contexts both include marker counts"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11951",
+      "abilityId": "cfa-11951:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-dragontree-marker-power.test.js"
+      ],
+      "testCases": [
+        "five real Dragontree-marker CONT abilities compile with their exact Rear-Guard scope",
+        "power scales by the controller's Rear-Guard Dragontree markers only",
+        "authoritative attack power uses only the acting player's Rear-Guard markers for all five cards",
+        "browser and authoritative continuous-power contexts both include marker counts"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11956",
+      "abilityId": "cfa-11956:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-dragontree-marker-power.test.js"
+      ],
+      "testCases": [
+        "five real Dragontree-marker CONT abilities compile with their exact Rear-Guard scope",
+        "power scales by the controller's Rear-Guard Dragontree markers only",
+        "authoritative attack power uses only the acting player's Rear-Guard markers for all five cards",
+        "browser and authoritative continuous-power contexts both include marker counts"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12032",
+      "abilityId": "cfa-12032:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-dragontree-marker-power.test.js"
+      ],
+      "testCases": [
+        "five real Dragontree-marker CONT abilities compile with their exact Rear-Guard scope",
+        "power scales by the controller's Rear-Guard Dragontree markers only",
+        "authoritative attack power uses only the acting player's Rear-Guard markers for all five cards",
+        "browser and authoritative continuous-power contexts both include marker counts"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12058",
+      "abilityId": "cfa-12058:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-dragontree-marker-power.test.js"
+      ],
+      "testCases": [
+        "five real Dragontree-marker CONT abilities compile with their exact Rear-Guard scope",
+        "power scales by the controller's Rear-Guard Dragontree markers only",
+        "authoritative attack power uses only the acting player's Rear-Guard markers for all five cards",
+        "browser and authoritative continuous-power contexts both include marker counts"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T16:25:58.486Z"
+  "evidenceUpdatedAt": "2026-10-30T16:49:14.034Z"
 }

@@ -109213,21 +109213,352 @@
           }
         }
       ]
-    }, ...Object.entries({
-      "cfa-10622":"https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2F003EN",
-      "cfa-10639":"https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2F012EN",
-      "cfa-10662":"https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2FFFR15EN",
-      "cfa-10717":"https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2FFFR09EN",
-      "cfa-10730":"https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=201&s_param=d-Dark+States&sort=no&view=image&view=text"
-    }).map(([cardId,officialReference])=>({
-      "id": `${cardId}:0`, "cardId": cardId, "kind": "AUTO",
+    },
+    {
+      "id": "cfa-10622:0",
+      "cardId": "cfa-10622",
+      "kind": "AUTO",
       "printedText": "AUTO: When this unit is placed on RC, COST [Counter Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker.",
-      "requiredLocation": ["rear-guard"], "optional": false,
-      "trigger": {"status":"recognized-trigger","eventType":"card.placed","subject":"source","circles":["rear-guard"]},
-      "conditionsReviewed": true, "costs": [{"type":"counter-blast","count":1}], "costsReviewed": true, "choicesReviewed": true,
-      "source": {"dataset":"Bushiroad official card list","officialReference":officialReference,"patternId":"auto-rc-placement-counter-blast-place-dragontree-marker-v1","review":"Exact five-card D-BT09 family confirmed against official Bushiroad card listings. This exact source must be placed on RC; its controller may pay Counter Blast 1 and choose an unmarked Rear-Guard Circle for the Dragontree marker."},
-      "effects": [{"op":"place-circle-marker","target":"chosen-controller-circle","markerType":"Dragontree","circleTypes":["rear-guard"]}]
-    }))
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2F003EN",
+        "patternId": "auto-rc-placement-counter-blast-place-dragontree-marker-v1",
+        "review": "Exact five-card D-BT09 family confirmed against official Bushiroad card listings. This exact source must be placed on RC; its controller may pay Counter Blast 1 and choose an unmarked Rear-Guard Circle for the Dragontree marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Dragontree",
+          "circleTypes": [
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-10639:0",
+      "cardId": "cfa-10639",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Counter Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2F012EN",
+        "patternId": "auto-rc-placement-counter-blast-place-dragontree-marker-v1",
+        "review": "Exact five-card D-BT09 family confirmed against official Bushiroad card listings. This exact source must be placed on RC; its controller may pay Counter Blast 1 and choose an unmarked Rear-Guard Circle for the Dragontree marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Dragontree",
+          "circleTypes": [
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-10662:0",
+      "cardId": "cfa-10662",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Counter Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2FFFR15EN",
+        "patternId": "auto-rc-placement-counter-blast-place-dragontree-marker-v1",
+        "review": "Exact five-card D-BT09 family confirmed against official Bushiroad card listings. This exact source must be placed on RC; its controller may pay Counter Blast 1 and choose an unmarked Rear-Guard Circle for the Dragontree marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Dragontree",
+          "circleTypes": [
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-10717:0",
+      "cardId": "cfa-10717",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Counter Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT09%2FFFR09EN",
+        "patternId": "auto-rc-placement-counter-blast-place-dragontree-marker-v1",
+        "review": "Exact five-card D-BT09 family confirmed against official Bushiroad card listings. This exact source must be placed on RC; its controller may pay Counter Blast 1 and choose an unmarked Rear-Guard Circle for the Dragontree marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Dragontree",
+          "circleTypes": [
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-10730:0",
+      "cardId": "cfa-10730",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Counter Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=201&s_param=d-Dark+States&sort=no&view=image&view=text",
+        "patternId": "auto-rc-placement-counter-blast-place-dragontree-marker-v1",
+        "review": "Exact five-card D-BT09 family confirmed against official Bushiroad card listings. This exact source must be placed on RC; its controller may pay Counter Blast 1 and choose an unmarked Rear-Guard Circle for the Dragontree marker."
+      },
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Dragontree",
+          "circleTypes": [
+            "rear-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cfa-11916:1",
+      "cardId": "cfa-11916",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: During your turn, this unit gets power +2000 for each Dragontree marker on your RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-during-turn-power-per-dragontree-marker-v1",
+        "review": "Exact Rear-Guard CONT template confirmed across five catalog records. During its controller's turn, this source gets the printed power for each Dragontree marker on that controller's Rear-Guard Circles; markers on Vanguard Circles are excluded."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-dragontree-marker",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11951:1",
+      "cardId": "cfa-11951",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: During your turn, this unit gets power +2000 for each Dragontree marker on your RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-during-turn-power-per-dragontree-marker-v1",
+        "review": "Exact Rear-Guard CONT template confirmed across five catalog records. During its controller's turn, this source gets the printed power for each Dragontree marker on that controller's Rear-Guard Circles; markers on Vanguard Circles are excluded."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-dragontree-marker",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11956:1",
+      "cardId": "cfa-11956",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: During your turn, this unit gets power +2000 for each Dragontree marker on your RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-during-turn-power-per-dragontree-marker-v1",
+        "review": "Exact Rear-Guard CONT template confirmed across five catalog records. During its controller's turn, this source gets the printed power for each Dragontree marker on that controller's Rear-Guard Circles; markers on Vanguard Circles are excluded."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-dragontree-marker",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12032:1",
+      "cardId": "cfa-12032",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: During your turn, this unit gets power +2000 for each Dragontree marker on your RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-during-turn-power-per-dragontree-marker-v1",
+        "review": "Exact Rear-Guard CONT template confirmed across five catalog records. During its controller's turn, this source gets the printed power for each Dragontree marker on that controller's Rear-Guard Circles; markers on Vanguard Circles are excluded."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-dragontree-marker",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12058:1",
+      "cardId": "cfa-12058",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: During your turn, this unit gets power +2000 for each Dragontree marker on your RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-during-turn-power-per-dragontree-marker-v1",
+        "review": "Exact Rear-Guard CONT template confirmed across five catalog records. During its controller's turn, this source gets the printed power for each Dragontree marker on that controller's Rear-Guard Circles; markers on Vanguard Circles are excluded."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-dragontree-marker",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
