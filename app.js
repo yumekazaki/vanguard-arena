@@ -70,6 +70,43 @@
   let online = { role: null, peer: null, connection: null, watchConnection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, joinRetry: null, remoteRequestTimer: null, remoteRequestPending: null, relayStateReceived: false, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false, abilityResponsePending: null, lastSentStateSignature: null, turnOrderAnnouncementPending: false, turnOrderAnnouncementMatchId: null, turnOrderAnnouncementTimer: null };
   const localDeckStorageKey = "vanguardArenaDecks";
   const account = { client: null, matchClient: null, user: null, syncing: false, recovery: false, profile: null };
+  const profileAvatars = [
+    { id: "aichi", name: "Aichi Sendou", series: "Original", src: "assets/ui/aichi-sendou.png" },
+    { id: "kai", name: "Toshiki Kai", series: "Original", src: "assets/ui/toshiki-kai.png" },
+    { id: "misaki", name: "Misaki Tokura", series: "Original", src: "assets/ui/misaki-tokura.png" },
+    { id: "kamui", name: "Kamui Katsuragi", series: "Original", src: "assets/ui/kamui-katsuragi.png" },
+    { id: "ren", name: "Ren Suzugamori", series: "Original", src: "https://anime.cf-vanguard.com/vg2018-if/wordpress/wp-content/uploads/char-stand-05.png" },
+    { id: "asaka", name: "Asaka Narumi", series: "Original", src: "https://anime.cf-vanguard.com/vg2018-if/wordpress/wp-content/uploads/char-stand-b12.png" },
+    { id: "kourin", name: "Kourin Tatsunagi", series: "Original", src: "https://anime.cf-vanguard.com/vg2018-if/wordpress/wp-content/uploads/char-stand-b03.png" },
+    { id: "chrono", name: "Chrono Shindou", series: "Vanguard G", src: "https://www.tv-tokyo.co.jp/anime/cf-vanguard-g/images/chara/chara01.png" },
+    { id: "shion", name: "Shion Kiba", series: "Vanguard G", src: "https://www.tv-tokyo.co.jp/anime/cf-vanguard-g/images/chara/chara02.png" },
+    { id: "tokoha", name: "Tokoha Anjou", series: "Vanguard G", src: "https://www.tv-tokyo.co.jp/anime/cf-vanguard-g/images/chara/chara03.png" },
+    { id: "ibuki", name: "Koji Ibuki", series: "Vanguard G", src: "https://www.tv-tokyo.co.jp/anime/cf-vanguard-g/images/chara/chara08.png" }
+  ];
+  function profileAvatarStorageKey() { return `vanguardArenaProfileAvatar:${account.user?.id || "local"}`; }
+  function selectedProfileAvatar() { return localStorage.getItem(profileAvatarStorageKey()) || account.user?.user_metadata?.profile_avatar || ""; }
+  async function saveProfileAvatar(id) {
+    localStorage.setItem(profileAvatarStorageKey(), id);
+    if (account.user && account.client) {
+      const { data, error } = await account.client.auth.updateUser({ data: { ...(account.user.user_metadata || {}), profile_avatar: id } });
+      if (!error && data?.user) account.user = data.user;
+      else if ($("#profile-status")) $("#profile-status").textContent = "Portrait saved on this device; account sync failed.";
+    }
+    renderProfileAvatarPicker();
+    if (match) renderMatch();
+  }
+  function profileAvatarImage(id, fallback = "✦") {
+    const avatar = profileAvatars.find(item => item.id === id);
+    return avatar ? `<img src="${avatar.src}" alt="" onerror="this.replaceWith(document.createTextNode('${avatar.name[0]}'))" />` : escapeHtml(fallback);
+  }
+  function renderProfileAvatarPicker() {
+    const picker = $("#profile-avatar-picker"); if (!picker) return;
+    const selected = selectedProfileAvatar();
+    picker.innerHTML = profileAvatars.map(avatar => `<button class="profile-avatar-option${selected === avatar.id ? " selected" : ""}" type="button" data-profile-avatar="${avatar.id}" aria-pressed="${selected === avatar.id}" aria-label="Choose ${avatar.name}"><span>${profileAvatarImage(avatar.id)}</span><b>${avatar.name}</b><small>${avatar.series} series</small></button>`).join("");
+  }
+  function paintMatchAvatar(selector, id, fallback) {
+    const element = $(selector); if (element) element.innerHTML = profileAvatarImage(id, fallback);
+  }
 
   function deckStorageKey() { return account.user ? `${localDeckStorageKey}:${account.user.id}` : localDeckStorageKey; }
   function readSavedDecks() {
@@ -122,6 +159,7 @@
     $("#profile-display-name").value = account.profile?.display_name || "";
     $("#profile-bio").value = account.profile?.bio || "";
     if (account.profile?.username) $("#account-button").textContent = `@${account.profile.username}`;
+    renderProfileAvatarPicker();
     if (config?.url && config?.publishableKey && !window.supabase?.createClient) {
       $("#account-setup-needed").classList.remove("hidden");
       $("#account-setup-needed").innerHTML = "The account service library did not load. Check your internet connection and reload the page.";
@@ -499,7 +537,7 @@
     return list;
   }
   function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-  function makePlayer(deck, name, human = false) {
+  function makePlayer(deck, name, human = false, avatarId = "") {
     const playerId = crypto.randomUUID?.() || 'player-' + Date.now() + '-' + Math.random().toString(36).slice(2);
     const allCards = cardInstances(deck, playerId);
     const gDeck = allCards.filter((instance) => isGDeckCard(cardMap.get(instance.cardId)));
@@ -515,7 +553,7 @@
       if (starterIndex >= 0) vanguard = { ...pile.splice(starterIndex, 1)[0], rested: false };
     }
     shuffle(pile);
-    return { playerId, name, format: deck.format === "standard" ? "standard" : "premium", deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rideDeck, rodeGradeThreePlusThisFight: false, opponentTriggerRevealedThisTurn:false, rear: [null, null, null, null, null], accelZones: 0, accelTypes: [], giftZones: [], orders: [], crests: [], energy: 0, energySpentThisTurn: 0, guardCircle: [], extra: [], gDeck: shuffle(gDeck), gZone: [], removed: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
+    return { playerId, name, avatarId: profileAvatars.some(avatar => avatar.id === avatarId) ? avatarId : "", format: deck.format === "standard" ? "standard" : "premium", deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rideDeck, rodeGradeThreePlusThisFight: false, opponentTriggerRevealedThisTurn:false, rear: [null, null, null, null, null], accelZones: 0, accelTypes: [], giftZones: [], orders: [], crests: [], energy: 0, energySpentThisTurn: 0, guardCircle: [], extra: [], gDeck: shuffle(gDeck), gZone: [], removed: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
   }
   function openPracticeSetup() { $("#practice-setup-dialog").showModal(); }
   function openPracticeMulligan() {
@@ -553,7 +591,7 @@
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
     if (chosen?.format === "standard" && deckReadyErrors(chosen).length) { toast(`Cannot start this Standard deck: ${deckReadyErrors(chosen).join("; ")}.`); return; }
-    match = { matchId: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`, stateVersion: 0, processedActionIds: [], eventSequence: 0, processedEventIds: [], players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, practiceOpeningChoicePending: !onlineSetup && !online.role, practiceMulliganSelection: [], phase: 0, drewThisTurn: false, ridePerformed: false, stridePerformed: false, turnStartGrades: { human: 0, bot: 0 }, pendingStride: null, pendingRide: null, pendingProtectGuard: null, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingBattleEnd: null, pendingTrigger: null, pendingAbility: null, pendingAbilities: [], attacksByUnitTurn: Object.create(null), pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
+    match = { matchId: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`, stateVersion: 0, processedActionIds: [], eventSequence: 0, processedEventIds: [], players: { human: makePlayer(readyDeck, online.localName || "Player", true, selectedProfileAvatar()), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, practiceOpeningChoicePending: !onlineSetup && !online.role, practiceMulliganSelection: [], phase: 0, drewThisTurn: false, ridePerformed: false, stridePerformed: false, turnStartGrades: { human: 0, bot: 0 }, pendingStride: null, pendingRide: null, pendingProtectGuard: null, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingBattleEnd: null, pendingTrigger: null, pendingAbility: null, pendingAbilities: [], attacksByUnitTurn: Object.create(null), pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
     if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
@@ -653,11 +691,14 @@
   function setMessage(message) { $("#table-message").textContent = message; }
   function renderMatch() {
     if (!match) return;
+    window.VanguardArenaVisualEffects?.beforeRender();
     checkDamageEnd();
     const you = match.players.human, bot = match.players.bot;
     for (const side of [you, bot]) for (const instance of [...(side.hand || []), ...(side.crests || [])]) if (instance?.crestName) ensureCrestCard(instance.crestName);
     $("#human-name").textContent = you.name; $("#table-human-name").textContent = you.name;
     $("#opponent-name").textContent = bot.name; $("#table-opponent-name").textContent = bot.name;
+    paintMatchAvatar(".human-avatar", online.role === "watcher" ? you.avatarId : selectedProfileAvatar(), "P");
+    paintMatchAvatar(".bot-avatar", online.role === "guest" ? you.avatarId : bot.avatarId, "✦");
     $("#match-status").textContent = online.role === "watcher" ? "SPECTATING · LIVE" : online.role ? "ONLINE MATCH" : "PRACTICE MATCH";
     $("#opponent-deck-label").textContent = online.role ? "OPPONENT" : "DEMO DECK";
     $("#turn-label").textContent = match.side === "human" ? "YOUR TURN" : "OPPONENT TURN";
@@ -703,6 +744,7 @@
     updateActionAvailability(); renderLog(); renderGAssistDialog(); renderRemotePaymentPrompt();
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
     renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderBattleActionPrompt(); renderAttackArrow(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal(); renderOnlineTurnOrderAnnouncement(); renderRideDeckFlow();
+    window.VanguardArenaVisualEffects?.afterRender(match);
     if(!online.applyingRemote)showNextAbilityPrompt();
     if (!online.applyingRemote && match.pendingAttack?.awaitingDrive) setTimeout(resolvePracticeAttackAfterDrives, 0);
     if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
@@ -2366,7 +2408,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       if (!match) startMatch(onlineDeck(), "human", true);
       const deck = sanitizedDeck(message.deck);
       const playerName = String(message.name || "Opponent").slice(0, 24);
-      match.players.bot = makePlayer(deck.cards && deckCount(deck) ? deck : defaultDeck(), playerName);
+      match.players.bot = makePlayer(deck.cards && deckCount(deck) ? deck : defaultDeck(), playerName, false, message.avatarId);
       match.deckName = online.selectedDeck?.name || builder.name || "Online match";
       addLog(`${playerName} joined with ${deck.name}.`); setMessage("Opponent connected — your turn."); renderMatch();
       sendOnlineSnapshot();
@@ -2445,7 +2487,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if(role==="host-watcher")online.watchConnection=connection;else online.connection = connection;
     connection.on("open", () => {
       if (role === "guest") {
-        const sendJoin = () => connection.send({ type: "join", name: online.localName, deck: onlineDeck() });
+        const sendJoin = () => connection.send({ type: "join", name: online.localName, avatarId: selectedProfileAvatar(), deck: onlineDeck() });
         sendJoin();
         if (connection.isRelay) {
           setOnlineError("Connected to the relay. Waiting for the host to send the match…");
@@ -2714,6 +2756,10 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   setMobileMode(mobileModeSaved);
   $("#mobile-mode-button").addEventListener("click", () => setMobileMode(!document.body.classList.contains("mobile-mode")));
   $("#account-button").addEventListener("click", openAccountDialog); $("#close-account-dialog").addEventListener("click", () => $("#account-dialog").close());
+  $("#profile-avatar-picker")?.addEventListener("click", event => {
+    const option = event.target.closest("[data-profile-avatar]"); if (!option) return;
+    void saveProfileAvatar(option.dataset.profileAvatar);
+  });
   $("#account-signup").addEventListener("click", accountSignUp); $("#account-signin").addEventListener("click", accountSignIn); $("#account-signout").addEventListener("click", accountSignOut); $("#account-reset").addEventListener("click", resetAccountPassword); $("#account-update-password").addEventListener("click", updateAccountPassword); $("#account-import-local").addEventListener("click", importLocalDecks);
   $("#profile-save").addEventListener("click", savePlayerProfile);
   $("#online-confirm").addEventListener("click", () => online.dialogMode === "host" ? beginHosting() : beginJoining());

@@ -1,0 +1,71 @@
+/* Dear Days inspired motion and framing. This layer only decorates existing controls. */
+:root { --arena-sky:#7dd6ff; --arena-violet:#b59aff; --arena-gold:#ffd58c; }
+.active-view { animation: arena-view-arrive .42s cubic-bezier(.2,.75,.25,1) both; }
+@keyframes arena-view-arrive { from { opacity:0; translate:0 9px; } to { opacity:1; translate:0 0; } }
+
+.lobby-hero { border-color:#93d9ff55; box-shadow:0 25px 90px #0207149c,inset 0 1px #ffffff25; }
+.lobby-card,.card-center { filter:drop-shadow(0 20px 22px #020711a3); transition:transform .45s cubic-bezier(.2,.8,.2,1),filter .35s; }
+.lobby-hero:hover .card-center { transform:translateY(-7px) rotate(-1deg) scale(1.035); filter:drop-shadow(0 28px 27px #020711c7) drop-shadow(0 0 18px #81dcff55); }
+.mode-card { overflow:hidden; transform:translateZ(0); box-shadow:0 8px 24px #01061040,inset 0 1px #ffffff15; }
+.mode-card:before { content:""; position:absolute; inset:0; pointer-events:none; opacity:0; background:linear-gradient(112deg,transparent 22%,#d4f7ff16 48%,transparent 72%); transform:translateX(-100%); transition:opacity .25s; }
+.mode-card:hover:before,.mode-card:focus-visible:before { opacity:1; animation:arena-sheen .8s ease forwards; }
+@keyframes arena-sheen { to { transform:translateX(100%); } }
+.fighter-option { transition:transform .32s cubic-bezier(.2,.8,.2,1),border-color .25s,box-shadow .3s; }
+@media(hover:hover) { .fighter-option:hover { transform:translateY(-5px) scale(1.008); } }
+
+@media(min-width:1201px) {
+  #view-decks .visual-workshop { grid-template-columns:minmax(245px, .78fr) minmax(500px, 2fr) minmax(235px, .72fr); gap:18px; }
+  .visual-workshop .workshop-search { grid-column:1; grid-row:1; }
+  .visual-workshop .deck-builder-panel { grid-column:2; grid-row:1; }
+  .visual-workshop .workshop-inspector { grid-column:3; grid-row:1; }
+}
+#view-decks .workshop-search,#view-decks .deck-builder-panel,#view-decks .workshop-inspector { box-shadow:0 18px 46px #03071483,inset 0 1px #ffffff16; }
+#view-decks .deck-builder-panel { border-color:#91d7ff65; }
+#view-decks .workshop-deck-section { box-shadow:inset 0 1px #ffffff10,0 8px 22px #02071435; }
+#view-decks .deck-grid-card { transition:transform .2s cubic-bezier(.2,.8,.2,1),border-color .2s,box-shadow .2s,filter .2s; }
+#view-decks .deck-grid-card:hover,#view-decks .deck-grid-card:focus-within { transform:translateY(-4px) scale(1.055); filter:brightness(1.08); box-shadow:0 12px 20px #020714a6,0 0 0 2px #8bd9ff68; }
+#view-decks .game-card-wrap { transition:transform .22s cubic-bezier(.2,.8,.2,1),filter .2s; }
+#view-decks .game-card-wrap:hover { transform:translateY(-4px) scale(1.025); filter:drop-shadow(0 12px 16px #020714aa); z-index:3; }
+
+#match-layout .game-table { perspective:1200px; }
+#match-layout .field-zone { transition:transform .22s,border-color .2s,box-shadow .2s,background .2s; }
+#match-layout .field-card { transform-style:preserve-3d; }
+#match-layout .field-card.arena-card-call { animation:arena-card-settle .62s cubic-bezier(.18,.82,.22,1) both; }
+#match-layout .field-card.arena-card-ride,#match-layout .field-card.arena-card-stride { animation:arena-vanguard-arrive .72s cubic-bezier(.16,.8,.22,1) both; }
+#match-layout .field-card.arena-card-move { animation:arena-card-settle .46s cubic-bezier(.18,.82,.22,1) both; }
+@keyframes arena-card-settle { 0% { filter:brightness(1.8) drop-shadow(0 0 18px #85e3ff); } 72% { filter:brightness(1.12) drop-shadow(0 0 10px #85e3ff99); } 100% { filter:none; } }
+@keyframes arena-vanguard-arrive { 0% { filter:brightness(2) drop-shadow(0 0 25px #ffe09b); } 55% { filter:brightness(1.4) drop-shadow(0 0 20px #ffe09b); } 100% { filter:none; } }
+#match-layout .field-zone.arena-ride-circle:after,#match-layout .field-zone.arena-stride-circle:after { content:""; position:absolute; inset:-6px; pointer-events:none; border:2px solid #ffe3a2; border-radius:inherit; animation:arena-circle-pulse .72s ease-out both; }
+@keyframes arena-circle-pulse { 0% { opacity:0; transform:scale(.72); box-shadow:0 0 0 #ffe3a200; } 30% { opacity:1; box-shadow:0 0 28px #ffe3a2a8; } 100% { opacity:0; transform:scale(1.12); } }
+#match-layout .field-card.arena-attack-lunge { animation:arena-attack-lunge .42s cubic-bezier(.18,.82,.22,1) both; }
+@keyframes arena-attack-lunge { 0% { transform:translateY(0) scale(1); } 45% { transform:translateY(-11px) scale(1.06); filter:drop-shadow(0 0 18px #72d8ff); } 100% { transform:translateY(0) scale(1); } }
+#match-layout .field-card.arena-attack-impact { animation:arena-hit .5s ease-out both; }
+#match-layout .field-card.arena-guard-impact { animation:arena-guard .48s ease-out both; }
+@keyframes arena-hit { 0%,100% { transform:translateX(0); } 18% { transform:translateX(-7px); filter:brightness(2) drop-shadow(0 0 16px #ff8390); } 36% { transform:translateX(6px); } 54% { transform:translateX(-4px); } 72% { transform:translateX(2px); } }
+@keyframes arena-guard { 0% { filter:brightness(1); } 35% { filter:brightness(1.8) drop-shadow(0 0 18px #a6e7ff); } 100% { filter:brightness(1); } }
+#match-layout .field-card-stats b.arena-power-up { animation:arena-power-up .7s ease-out both; }
+#match-layout .field-card-stats b.arena-power-down { animation:arena-power-down .7s ease-out both; }
+@keyframes arena-power-up { 30% { color:#d9ffd9; text-shadow:0 0 16px #83ff91; transform:scale(1.3); } }
+@keyframes arena-power-down { 30% { color:#ffd4d4; text-shadow:0 0 16px #ff596b; transform:scale(.88); } }
+.arena-retire-ghost { border-color:#ff9fa8!important; box-shadow:0 0 40px #ff6571b0!important; }
+
+.profile-avatar-section { margin:18px 0 22px; padding:15px; border:1px solid #91d7ff40; border-radius:14px; background:linear-gradient(140deg,#142b49,#1b1b36); }
+.account-dialog { max-height:min(90dvh,850px); overflow:auto; overscroll-behavior:contain; }
+.profile-avatar-section h3 { margin:0 0 5px; font-size:15px; }
+.profile-avatar-section>p { margin:0 0 13px; font-size:11px; }
+.profile-avatar-picker { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; }
+.profile-avatar-option { min-width:0; padding:7px; display:flex; flex-direction:column; align-items:center; gap:5px; border:1px solid #95c9e83b; border-radius:10px; background:#081529a6; color:#e9f7ff; transition:transform .2s,border-color .2s,box-shadow .2s; }
+.profile-avatar-option:hover,.profile-avatar-option.selected { transform:translateY(-2px); border-color:#9ae1ff; box-shadow:0 0 0 2px #65caff33,0 8px 18px #02071288; }
+.profile-avatar-option>span { width:55px; height:55px; overflow:hidden; display:grid; place-items:center; border:2px solid #bcecff88; border-radius:50%; background:#0d1c30; }
+.profile-avatar-option img { width:100%; height:100%; object-fit:cover; object-position:center 20%; }
+.profile-avatar-option b { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px; }
+.profile-avatar-option small { color:#a8c5d9; font-size:8px; }
+.player-line .avatar { overflow:hidden; border:2px solid #a9ddfa; background:#122844; box-shadow:0 0 14px #54bfff4d; }
+.player-line .avatar img { width:100%; height:100%; object-fit:cover; object-position:center 20%; }
+.player-line .human-avatar { border-color:#ffd996; }
+@media(max-width:760px) { .profile-avatar-picker { grid-template-columns:repeat(2,minmax(0,1fr)); }.profile-avatar-option>span { width:62px;height:62px; } }
+@media(prefers-reduced-motion:reduce) {
+  .active-view,.lobby-card,.card-center,.mode-card,.fighter-option,#view-decks .deck-grid-card,#view-decks .game-card-wrap { animation:none!important; transition:none!important; }
+  #match-layout .field-card.arena-card-call,#match-layout .field-card.arena-card-ride,#match-layout .field-card.arena-card-stride,#match-layout .field-card.arena-card-move,#match-layout .field-card.arena-attack-lunge,#match-layout .field-card.arena-attack-impact,#match-layout .field-card.arena-guard-impact,#match-layout .field-card-stats b.arena-power-up,#match-layout .field-card-stats b.arena-power-down { animation:none!important; }
+  #match-layout .field-zone.arena-ride-circle:after,#match-layout .field-zone.arena-stride-circle:after { animation:none!important; }
+}
