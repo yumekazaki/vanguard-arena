@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1468,
-    "testCount": 1468,
-    "passed": 1468,
+    "tests": 1481,
+    "testCount": 1481,
+    "passed": 1481,
     "failed": 0,
-    "durationMilliseconds": 359215,
-    "completedAt": "2026-10-30T22:46:38.932Z",
+    "durationMilliseconds": 289142,
+    "completedAt": "2026-10-30T23:46:11.030Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "57b09505e11f2218ccf5f4a6a69348b484823e18b801d4e0aa77db2aebc02f5c"
+    "validationInputDigest": "12b7c108309e6d2272cd98eb3ebdf6c58c430340e51d01e55ece4fef414951ab"
   },
   "records": [
     {
@@ -73978,8 +73978,110 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-443",
+      "abilityId": "cfa-443:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boosted-attack-hit-soul-charge-return-source-server.test.js"
+      ],
+      "testCases": [
+        "the exact three-card family keeps its boosted-hit trigger optional and tied to the exact Rear-Guard source",
+        "host and joining player independently Soul Charge and return the exact booster to its owner deck",
+        "the controller Soul Charges, while a source with a different owner returns to that owner’s deck",
+        "a missing deck resolves the optional ability without moving the booster or repeating the prompt",
+        "a different booster, different battle, unrelated attacker, or foreign player cannot trigger or resolve it",
+        "declining consumes this trigger and leaves all cards in their original zones"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-734",
+      "abilityId": "cfa-734:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boosted-attack-hit-soul-charge-return-source-server.test.js"
+      ],
+      "testCases": [
+        "the exact three-card family keeps its boosted-hit trigger optional and tied to the exact Rear-Guard source",
+        "host and joining player independently Soul Charge and return the exact booster to its owner deck",
+        "the controller Soul Charges, while a source with a different owner returns to that owner’s deck",
+        "a missing deck resolves the optional ability without moving the booster or repeating the prompt",
+        "a different booster, different battle, unrelated attacker, or foreign player cannot trigger or resolve it",
+        "declining consumes this trigger and leaves all cards in their original zones"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-785",
+      "abilityId": "cfa-785:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-boosted-attack-hit-soul-charge-return-source-server.test.js"
+      ],
+      "testCases": [
+        "the exact three-card family keeps its boosted-hit trigger optional and tied to the exact Rear-Guard source",
+        "host and joining player independently Soul Charge and return the exact booster to its owner deck",
+        "the controller Soul Charges, while a source with a different owner returns to that owner’s deck",
+        "a missing deck resolves the optional ability without moving the booster or repeating the prompt",
+        "a different booster, different battle, unrelated attacker, or foreign player cannot trigger or resolve it",
+        "declining consumes this trigger and leaves all cards in their original zones"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-717",
+      "abilityId": "cfa-717:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-damage-zone-clan-vanguard-power-server.test.js"
+      ],
+      "testCases": [
+        "the three exact catalog abilities compile as mandatory source-local AUTO effects",
+        "host and joiner each resolve only their exact VC or RC source for their own Damage Zone",
+        "opponent Damage Zone, forged zone metadata, wrong circle, or non-Angel Feather Vanguard cannot qualify on either seat",
+        "duplicate damage events cannot grant power twice, and the controller condition is revalidated before resolution"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-725",
+      "abilityId": "cfa-725:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-damage-zone-clan-vanguard-power-server.test.js"
+      ],
+      "testCases": [
+        "the three exact catalog abilities compile as mandatory source-local AUTO effects",
+        "host and joiner each resolve only their exact VC or RC source for their own Damage Zone",
+        "opponent Damage Zone, forged zone metadata, wrong circle, or non-Angel Feather Vanguard cannot qualify on either seat",
+        "duplicate damage events cannot grant power twice, and the controller condition is revalidated before resolution"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-732",
+      "abilityId": "cfa-732:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-damage-zone-clan-vanguard-power-server.test.js"
+      ],
+      "testCases": [
+        "the three exact catalog abilities compile as mandatory source-local AUTO effects",
+        "host and joiner each resolve only their exact VC or RC source for their own Damage Zone",
+        "opponent Damage Zone, forged zone metadata, wrong circle, or non-Angel Feather Vanguard cannot qualify on either seat",
+        "duplicate damage events cannot grant power twice, and the controller condition is revalidated before resolution"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T23:11:58.301Z"
+  "evidenceUpdatedAt": "2026-10-30T23:39:52.959Z"
 }

@@ -5,7 +5,8 @@
 - Repository: https://github.com/yumekazaki/vanguard-arena
 - Local checkout: `C:\Users\yumek\Documents\Codex\2026-10-24\ne\work\vanguard-arena`
 - Active branch: `codex/standard-ride-deck`
-- Engine checkpoint: `3a59b94d75263bd022e7db6c2020b66aa60eab10`
+- Local branch checkpoint: `98a536329d32263eb76b7dc54018aee806a674d8`
+- Ability engine baseline used by the registry: `98a536329d32263eb76b7dc54018aee806a674d8`
 - The active branch is local and has not been pushed. External Work chats cannot use this checkpoint until the branch is pushed.
 - Card source: `assets/cards/catalog-data.js` when present; the catalog loader also supports the committed Git snapshot.
 
@@ -19,9 +20,9 @@
 - Atomic remote claim: `scripts/claim-ability-batch.js`
 - Contribution contract: `ABILITY_CONTRIBUTION_GUIDE.md`
 
-Current catalog snapshot: 17,240 ability blocks; 4,277 compiled (24.81%); 12,963 unsupported or unreviewed; 645 fully verified cards. The queue contains 16,595 ability records whose cards are not yet fully verified. It has 84 abilities reserved across 30 primary-session cards and 447 available batches. The batch file is a snapshot: a GitHub claim ref is the live ownership record.
+Current catalog snapshot: 17,240 ability blocks; 4,290 compiled (24.88%); 12,950 unsupported or unreviewed; 645 fully verified cards. The latest full regression suite passed 1,481/1,481 in 289.14 seconds, with fresh source evidence. The queue contains 16,595 ability records whose cards are not yet fully verified. It has 84 abilities reserved across 30 primary-session cards and 447 available batches. The batch file is a snapshot: a GitHub claim ref is the live ownership record.
 
-Top overlapping dependencies in the generated queue are choice review (5,397 abilities), condition review (4,882), and trigger review (2,878). Missing client and server effect-handler counts are currently zero. Similarity groups are triage candidates only; they do not establish that card effects are equivalent.
+The latest audit reports zero invalid compiled abilities and zero missing client or server effect handlers. Similarity groups are triage candidates only; they do not establish that card effects are equivalent. The deterministic eight-worker catalog pass classified all 14,022 cards in 2.59 seconds; it does not count as semantic verification.
 
 ## Safe worker setup
 
