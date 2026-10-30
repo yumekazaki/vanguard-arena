@@ -408,3 +408,11 @@ body:has(#match-empty:not(.hidden)) .app-shell { max-width:1540px; padding-inlin
   #match-empty .fighter-option:first-child,
   #match-empty .fighter-option:not(:first-child) { grid-template-rows:265px 135px!important; }
 }
+
+/* Profile portrait files are face crops; do not zoom them a second time in the circular frames. */
+.profile-avatar-option .profile-img-kai,
+.profile-avatar-option .profile-img-misaki,
+.profile-avatar-option .profile-img-kamui,
+.profile-current-image .profile-img-kai,
+.profile-current-image .profile-img-misaki,
+.profile-current-image .profile-img-kamui { object-fit:cover!important; object-position:center center!important; transform:none!important; }
