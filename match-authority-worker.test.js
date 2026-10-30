@@ -7,6 +7,26 @@ const Reducer = require("./ability-server-reducer.js");
 
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 
+test("joined Standard player pays their own Ride Deck cost and rides through the authoritative action", () => {
+  const oldVanguard = { uid: "guest-vg-g0", cardId: "guest-g0", grade: 0, unitCard: true, cardName: "Starter", ownerPlayerId: "player-guest", controllerPlayerId: "player-guest" };
+  const rider = { uid: "guest-ride-g1", cardId: "guest-g1", grade: 1, unitCard: true, cardName: "Rider", ownerPlayerId: "player-guest", controllerPlayerId: "player-guest" };
+  const discard = { uid: "guest-cost", cardId: "cost-card", grade: 1, unitCard: true, ownerPlayerId: "player-guest", controllerPlayerId: "player-guest" };
+  const state = { matchId: "standard-ride-room", stateVersion: 0, eventSequence: 0, turn: 1, side: "bot", phase: 2, ridePerformed: false, processedActionIds: [], processedEventIds: [], processedAbilityTriggers: [], players: {
+    human: { playerId: "player-host", format: "premium", vanguard: { uid: "host-vg", grade: 0, ownerPlayerId: "player-host", controllerPlayerId: "player-host" }, rear: [], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [], gDeck: [], gZone: [] },
+    bot: { playerId: "player-guest", format: "standard", vanguard: oldVanguard, rideDeck: [rider], rear: [], guardCircle: [], orders: [], drop: [], hand: [discard], soul: [], bind: [], damage: [], deck: [], gDeck: [], gZone: [] }
+  }};
+  const result = Reducer.applyGameAction(state, { actorAuthUid: "auth-guest", actionId: "guest-ride-action", expectedStateVersion: 0, payload: { action: "rideDeck", rideDeckCardInstanceId: rider.uid, discardCardInstanceId: discard.uid } }, seats, Engine);
+  assert.equal(result.ok, true, result.reason);
+  assert.equal(state.players.bot.vanguard.uid, rider.uid);
+  assert.equal(state.players.bot.rideDeck.length, 0);
+  assert.equal(state.players.bot.hand.length, 0);
+  assert.equal(state.players.bot.drop[0].uid, discard.uid);
+  assert.equal(state.players.bot.soul[0].uid, oldVanguard.uid);
+  assert.equal(state.ridePerformed, true);
+  assert.ok(result.events.some(event => event.type === "card.discarded" && event.actingPlayerId === "player-guest"));
+  assert.ok(result.events.some(event => event.type === "card.ridden" && event.sourceCardInstanceId === rider.uid));
+});
+
 test("server discovers a reviewed AUTO only for the exact source card event and queues it once", () => {
   const source = { uid: "attack-source-copy", cardId: "cfa-103", ownerPlayerId: "player-host", controllerPlayerId: "player-host" };
   const state = {

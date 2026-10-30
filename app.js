@@ -57,7 +57,7 @@
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => [...document.querySelectorAll(q)];
   let view = "play";
-  let builder = { id: null, name: "Untitled deck", cards: {}, starterCardId: "" };
+  let builder = { id: null, name: "Untitled deck", format: "premium", cards: {}, starterCardId: "", rideDeck: [] };
   let selectedCard = null;
   let pendingCallSelectionUid = null;
   let zoneFieldSelection = null;
@@ -88,7 +88,7 @@
     const scope = defaultDeckStorageKey(), deck = savedDefaultDeck();
     // Account decks may arrive later. Never replace work started while they were loading.
     if (!deck || restoredDefaultDeckScopes.has(scope) || match || JSON.stringify(builder) !== defaultDeckStartupSnapshot) return;
-    builder = { id: deck.id, name: deck.name, cards: { ...deck.cards }, starterCardId: deck.starterCardId || "" };
+    builder = { id: deck.id, name: deck.name, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, starterCardId: deck.starterCardId || "", rideDeck: [...(deck.rideDeck || [])] };
     restoredDefaultDeckScopes.add(scope);
     defaultDeckStartupSnapshot = JSON.stringify(builder);
     renderBuilder();
@@ -98,7 +98,7 @@
     if (!deck) return;
     localStorage.setItem(defaultDeckStorageKey(), String(deck.id));
     restoredDefaultDeckScopes.add(defaultDeckStorageKey());
-    builder = { id: deck.id, name: deck.name, cards: { ...deck.cards }, starterCardId: deck.starterCardId || "" };
+    builder = { id: deck.id, name: deck.name, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, starterCardId: deck.starterCardId || "", rideDeck: [...(deck.rideDeck || [])] };
     renderBuilder(); renderSavedDecks();
     toast(`“${deck.name}” is your default deck for the workshop and practice`);
   }
@@ -128,7 +128,7 @@
     }
   }
   function localDecksToImport() { try { return JSON.parse(localStorage.getItem(localDeckStorageKey) || "[]"); } catch { return []; } }
-  function cloudDeckRows(decks, userId = account.user?.id) { return decks.map((deck) => ({ user_id: userId, deck_id: String(deck.id), name: String(deck.name || "Untitled deck"), cards: { ...(deck.cards && typeof deck.cards === "object" ? deck.cards : {}), __starterCardId: deck.starterCardId || null }, updated_at: deck.updatedAt || new Date().toISOString() })); }
+  function cloudDeckRows(decks, userId = account.user?.id) { return decks.map((deck) => ({ user_id: userId, deck_id: String(deck.id), name: String(deck.name || "Untitled deck"), cards: { ...(deck.cards && typeof deck.cards === "object" ? deck.cards : {}), __starterCardId: deck.starterCardId || null, __deckFormat: deck.format === "standard" ? "standard" : "premium", __rideDeck: Array.isArray(deck.rideDeck) ? deck.rideDeck : [] }, updated_at: deck.updatedAt || new Date().toISOString() })); }
   async function persistCloudDecks(decks) {
     if (!account.client || !account.user || !decks.length) return;
     $("#account-sync-status").textContent = "Saving decks to your account…";
@@ -150,7 +150,7 @@
       const { data, error } = await account.client.from("player_decks").select("deck_id,name,cards,updated_at").eq("user_id", userId).order("updated_at", { ascending: false });
       if (error) throw error;
       const decks = new Map();
-      [...readSavedDecks(), ...(data || []).map((row) => { const stored = row.cards || {}; const { __starterCardId, ...cards } = stored; return { id: row.deck_id, name: row.name, cards, starterCardId: __starterCardId || "", updatedAt: row.updated_at }; })].forEach((deck) => {
+      [...readSavedDecks(), ...(data || []).map((row) => { const stored = row.cards || {}; const { __starterCardId, __deckFormat, __rideDeck, ...cards } = stored; return { id: row.deck_id, name: row.name, cards, starterCardId: __starterCardId || "", format: __deckFormat === "standard" ? "standard" : "premium", rideDeck: Array.isArray(__rideDeck) ? __rideDeck : [], updatedAt: row.updated_at }; })].forEach((deck) => {
         const current = decks.get(String(deck.id));
         if (!current || Date.parse(deck.updatedAt || 0) > Date.parse(current.updatedAt || 0)) decks.set(String(deck.id), deck);
       });
@@ -288,13 +288,13 @@
     if (next === "cards") renderLibrary();
     window.location.hash = next;
   }
-  function emptyDeck() { builder = { id: null, name: "Untitled deck", cards: {}, starterCardId: "" }; renderBuilder(); }
+  function emptyDeck(format = "premium") { builder = { id: null, name: "Untitled deck", format: format === "standard" ? "standard" : "premium", cards: {}, starterCardId: "", rideDeck: [] }; renderBuilder(); }
   function defaultDeck() {
     const cards = {};
     const pool = cardList.filter((c) => c.type === "Unit" || c.type === "Trigger");
     for (let i = 0; i < 50; i++) { const card = pool[(i * 7 + Math.floor(i / pool.length)) % pool.length]; cards[card.id] = (cards[card.id] || 0) + 1; }
     const starterCardId = Object.keys(cards).find((id) => Number(cardMap.get(id)?.grade) === 0 && isUnitCard(cardMap.get(id))) || "";
-    return { id: crypto.randomUUID?.() || String(Date.now()), name: "Demo Practice Deck", cards, starterCardId };
+    return { id: crypto.randomUUID?.() || String(Date.now()), name: "Demo Practice Deck", format: "premium", cards, starterCardId, rideDeck: [] };
   }
   function practiceBotDeck() {
     const cards = {
@@ -310,6 +310,25 @@
   function isGGuardian(card) { const info=(String(card?.type||"")+" "+String(card?.text||"")+" "+String(card?.name||"")).toLowerCase(); return info.includes("g guardian") || info.includes("g-guard") || info.includes("g guard") || (isGDeckCard(card) && Number(card?.grade)>=4 && Number(card?.power||0)===0 && Number(card?.shield||0)>0); }
   function deckCount(deck) { return Object.entries(deck.cards || {}).reduce((total, [id, qty]) => total + (isGDeckCard(cardMap.get(id)) ? 0 : Number(qty || 0)), 0); }
   function gDeckCount(deck) { return Object.entries(deck.cards || {}).reduce((total, [id, qty]) => total + (isGDeckCard(cardMap.get(id)) ? Number(qty || 0) : 0), 0); }
+  function standardRideDeckErrors(deck) {
+    if (deck?.format !== "standard") return [];
+    const selected = Array.isArray(deck.rideDeck) ? deck.rideDeck : [], errors = [];
+    [0, 1, 2, 3].forEach((grade, index) => {
+      const id = selected[index], card = cardMap.get(id);
+      if (!card || !isUnitCard(card) || Number(card.grade) !== grade || Number(deck.cards?.[id] || 0) < selected.filter(value => value === id).length) errors.push(`select a Grade ${grade} unit for the Ride Deck`);
+    });
+    return errors;
+  }
+  function deckReadyErrors(deck) {
+    const errors = standardRideDeckErrors(deck), total = deckCount(deck), gTotal = gDeckCount(deck);
+    if (total !== 50) errors.push(`deck has ${total}/50 cards`);
+    if (deck?.format === "standard") { if (gTotal) errors.push("Standard decks cannot include G-deck cards"); }
+    else if (!deck?.starterCardId || Number(cardMap.get(deck.starterCardId)?.grade) !== 0 || !isUnitCard(cardMap.get(deck.starterCardId)) || Number(deck.cards?.[deck.starterCardId] || 0) < 1) errors.push("choose a Grade 0 starting Vanguard from the deck");
+    return errors;
+  }
+  function rideDeckOptions(grade) {
+    return Object.entries(builder.cards || {}).filter(([id, qty]) => Number(qty) > 0 && Number(cardMap.get(id)?.grade) === grade && isUnitCard(cardMap.get(id))).map(([id]) => cardMap.get(id)).filter(Boolean).sort((a, b) => a.name.localeCompare(b.name));
+  }
   function deckNameKey(card, id) { return String(card?.name || id).normalize("NFKD").toLowerCase().replace(/[^a-z0-9]/g, ""); }
   function namedDeckLimits(deck) {
     const limits = new Map(), engine = window.VanguardAbilityEngine;
@@ -343,14 +362,21 @@
     $("#deck-name").value = builder.name || "";
     $("#builder-title").textContent = builder.name || "Untitled deck";
     const total = deckCount(builder), gTotal = gDeckCount(builder); const { counts, triggers, heals, overs, sentinels, regalis, nameViolations } = deckSummary(builder);
-    $("#deck-total").textContent = `${total} / ${gTotal}`;
+    $("#deck-total").textContent = builder.format === "standard" ? `${total} / ${(builder.rideDeck || []).filter(Boolean).length}` : `${total} / ${gTotal}`;
+    $("#main-gdeck-label").textContent = builder.format === "standard" ? "MAIN / RIDE DECK" : "MAIN / G DECK";
     $("#grade-breakdown").textContent = counts.join(" / ");
     $("#trigger-count").textContent = triggers;
     const validation = $("#deck-validation");
-    const errors = []; if (!builder.starterCardId) errors.push("choose a Grade 0 starting Vanguard"); if (total !== 50) errors.push(`${total}/50 main-deck cards`); if (gTotal > 16) errors.push(`${gTotal}/16 G-deck cards`); if (triggers !== 16) errors.push(`${triggers}/16 triggers`); if (heals > 4) errors.push(`${heals}/4 Heal triggers`); if (overs > 1) errors.push(`${overs}/1 Over Trigger`); if (sentinels > 4) errors.push(`${sentinels}/4 Sentinels`); if (regalis > 1) errors.push(`${regalis}/1 Regalis Piece`); if (nameViolations) errors.push(`${nameViolations} card name limits`);
+    const isStandard = builder.format === "standard", errors = isStandard ? standardRideDeckErrors(builder) : [];
+    if (isStandard && gTotal) errors.push("Standard decks cannot include G-deck cards");
+    if (!isStandard && !builder.starterCardId) errors.push("choose a Grade 0 starting Vanguard"); if (total !== 50) errors.push(`${total}/50 main-deck cards`); if (!isStandard && gTotal > 16) errors.push(`${gTotal}/16 G-deck cards`); if (triggers !== 16) errors.push(`${triggers}/16 triggers`); if (heals > 4) errors.push(`${heals}/4 Heal triggers`); if (overs > 1) errors.push(`${overs}/1 Over Trigger`); if (sentinels > 4) errors.push(`${sentinels}/4 Sentinels`); if (regalis > 1) errors.push(`${regalis}/1 Regalis Piece`); if (nameViolations) errors.push(`${nameViolations} card name limits`);
     validation.className = `deck-validation${errors.length ? " invalid" : total ? " valid" : ""}`; validation.textContent = errors.length ? `Deck rules to fix: ${errors.join(" · ")}.` : total ? "Deck construction limits are satisfied (Ride Deck rules excluded)." : "Add cards from the library to start building.";
     const starterOptions = Object.entries(builder.cards || {}).filter(([id, qty]) => qty > 0 && Number(cardMap.get(id)?.grade) === 0 && isUnitCard(cardMap.get(id))).map(([id, qty]) => ({ card: cardMap.get(id), qty })).filter((entry) => entry.card).sort((a, b) => a.card.name.localeCompare(b.card.name));
     if (builder.starterCardId && !starterOptions.some(({ card }) => card.id === builder.starterCardId)) builder.starterCardId = "";
+    $("#deck-format-label").textContent = isStandard ? "STANDARD" : "PREMIUM";
+    $("#premium-deck-fields").classList.toggle("hidden", isStandard); $("#standard-deck-fields").classList.toggle("hidden", !isStandard);
+    if (!Array.isArray(builder.rideDeck)) builder.rideDeck = [];
+    [0, 1, 2, 3].forEach((grade) => { const select = $(`#ride-deck-${grade}`); if (!select) return; select.innerHTML = `<option value="">Choose a Grade ${grade} unit…</option>${rideDeckOptions(grade).map((card) => `<option value="${escapeHtml(card.id)}">${escapeHtml(card.name)} · ×${Number(builder.cards[card.id] || 0)}</option>`).join("")}`; select.value = builder.rideDeck[grade] || ""; });
     $("#starter-vanguard").innerHTML = `<option value="">Choose a Grade 0 unit…</option>${starterOptions.map(({ card, qty }) => `<option value="${escapeHtml(card.id)}">${escapeHtml(card.name)} · ×${qty}</option>`).join("")}`;
     $("#starter-vanguard").value = builder.starterCardId || "";
     $("#starter-vanguard-help").textContent = builder.starterCardId ? `${cardMap.get(builder.starterCardId)?.name || "Selected unit"} will begin on your Vanguard circle.` : "Choose a Grade 0 unit from your deck. It starts on your Vanguard circle.";
@@ -362,7 +388,7 @@
       const slots = Array.from({length:Math.max(0,limit-count)}, () => '<span class="deck-empty-slot" aria-hidden="true"></span>').join("");
       return `<section class="workshop-deck-section${extra ? " workshop-gdeck" : ""}" aria-label="${title}"><header><h3>${title}</h3><span>${count} / ${limit}</span></header><div class="deck-grid-stage"><div class="deck-card-grid">${cards}${slots}</div>${!count ? `<div class="deck-empty-prompt"><b>${extra ? "Your G deck" : "Your next deck starts here"}</b><span>${extra ? "G Units and G Guardians appear here." : "Search on the right, then click a card to add it."}</span></div>` : ""}</div></section>`;
     };
-    $("#deck-list").innerHTML = visualSection(rows.filter(({card}) => !isGDeckCard(card)), "Main deck", total, 50) + visualSection(rows.filter(({card}) => isGDeckCard(card)), "G deck", gTotal, 16, true);
+    $("#deck-list").innerHTML = visualSection(rows.filter(({card}) => !isGDeckCard(card)), "Main deck", total, 50) + (isStandard ? "" : visualSection(rows.filter(({card}) => isGDeckCard(card)), "G deck", gTotal, 16, true));
     renderBuilderCards();
   }
   function renderBuilderCards() {
@@ -412,13 +438,13 @@
   function saveDeck() {
     const name = $("#deck-name").value.trim() || "Untitled deck"; const existing = readSavedDecks();
     const id = builder.id || (crypto.randomUUID?.() || String(Date.now()));
-    const saved = { id, name, cards: { ...builder.cards }, starterCardId: builder.starterCardId || "", updatedAt: new Date().toISOString() };
+    const saved = { id, name, format: builder.format === "standard" ? "standard" : "premium", cards: { ...builder.cards }, starterCardId: builder.starterCardId || "", rideDeck: [...(builder.rideDeck || [])], updatedAt: new Date().toISOString() };
     const index = existing.findIndex((d) => d.id === id);
     if (index >= 0) existing[index] = saved; else existing.unshift(saved);
     builder = { ...saved }; writeSavedDecks(existing); renderBuilder(); renderSavedDecks();
     toast(account.user ? "Deck saved to your account folder" : "Deck saved in this browser");
   }
-  function loadDeck(deck) { builder = { id: deck.id, name: deck.name, cards: { ...deck.cards }, starterCardId: deck.starterCardId || "" }; renderBuilder(); showView("decks"); toast(`Loaded “${deck.name}” into the builder`); }
+  function loadDeck(deck) { builder = { id: deck.id, name: deck.name, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, starterCardId: deck.starterCardId || "", rideDeck: [...(deck.rideDeck || [])] }; renderBuilder(); showView("decks"); toast(`Loaded “${deck.name}” into the builder`); }
   function openLoadDeckDialog() {
     const decks = readSavedDecks(), select = $("#load-deck-choice"), confirm = $("#load-deck-confirm");
     select.innerHTML = decks.length ? decks.map((deck) => `<option value="${escapeHtml(deck.id)}">${escapeHtml(deck.name)} · ${deckCount(deck)} cards</option>`).join("") : '<option value="">No saved decks yet</option>';
@@ -477,12 +503,18 @@
     const allCards = cardInstances(deck, playerId);
     const gDeck = allCards.filter((instance) => isGDeckCard(cardMap.get(instance.cardId)));
     gDeck.forEach(instance => { instance.faceUp = false; });
-    const pile = allCards.filter((instance) => !gDeck.includes(instance));
-    const starterId = deck.starterCardId || pile.find((instance) => Number(cardMap.get(instance.cardId)?.grade) === 0 && isUnitCard(cardMap.get(instance.cardId)))?.cardId;
-    const starterIndex = pile.findIndex((instance) => instance.cardId === starterId);
-    const vanguard = starterIndex >= 0 ? { ...pile.splice(starterIndex, 1)[0], rested: false } : null;
+    let pile = allCards.filter((instance) => !gDeck.includes(instance)), vanguard = null, rideDeck = [];
+    if (deck.format === "standard") {
+      (deck.rideDeck || []).forEach((cardId) => { const index = pile.findIndex((instance) => instance.cardId === cardId); if (index >= 0) rideDeck.push(pile.splice(index, 1)[0]); });
+      const starter = rideDeck.find((instance) => Number(cardMap.get(instance.cardId)?.grade) === 0);
+      if (starter) { rideDeck = rideDeck.filter((instance) => instance.uid !== starter.uid); vanguard = { ...starter, rested: false }; }
+    } else {
+      const starterId = deck.starterCardId || pile.find((instance) => Number(cardMap.get(instance.cardId)?.grade) === 0 && isUnitCard(cardMap.get(instance.cardId)))?.cardId;
+      const starterIndex = pile.findIndex((instance) => instance.cardId === starterId);
+      if (starterIndex >= 0) vanguard = { ...pile.splice(starterIndex, 1)[0], rested: false };
+    }
     shuffle(pile);
-    return { playerId, name, deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rodeGradeThreePlusThisFight: false, opponentTriggerRevealedThisTurn:false, rear: [null, null, null, null, null], accelZones: 0, accelTypes: [], giftZones: [], orders: [], crests: [], energy: 0, energySpentThisTurn: 0, guardCircle: [], extra: [], gDeck: shuffle(gDeck), gZone: [], removed: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
+    return { playerId, name, format: deck.format === "standard" ? "standard" : "premium", deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rideDeck, rodeGradeThreePlusThisFight: false, opponentTriggerRevealedThisTurn:false, rear: [null, null, null, null, null], accelZones: 0, accelTypes: [], giftZones: [], orders: [], crests: [], energy: 0, energySpentThisTurn: 0, guardCircle: [], extra: [], gDeck: shuffle(gDeck), gZone: [], removed: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
   }
   function openPracticeSetup() { $("#practice-setup-dialog").showModal(); }
   function openPracticeMulligan() {
@@ -519,7 +551,8 @@
   function startMatch(deck = null, firstSide = "human", onlineSetup = false) {
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
-    match = { matchId: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`, stateVersion: 0, processedActionIds: [], eventSequence: 0, processedEventIds: [], players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, practiceOpeningChoicePending: !onlineSetup && !online.role, practiceMulliganSelection: [], phase: 0, drewThisTurn: false, ridePerformed: false, stridePerformed: false, turnStartGrades: { human: 0, bot: 0 }, pendingStride: null, pendingProtectGuard: null, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingBattleEnd: null, pendingTrigger: null, pendingAbility: null, pendingAbilities: [], attacksByUnitTurn: Object.create(null), pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
+    if (chosen?.format === "standard" && deckReadyErrors(chosen).length) { toast(`Cannot start this Standard deck: ${deckReadyErrors(chosen).join("; ")}.`); return; }
+    match = { matchId: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`, stateVersion: 0, processedActionIds: [], eventSequence: 0, processedEventIds: [], players: { human: makePlayer(readyDeck, online.localName || "Player", true), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, practiceOpeningChoicePending: !onlineSetup && !online.role, practiceMulliganSelection: [], phase: 0, drewThisTurn: false, ridePerformed: false, stridePerformed: false, turnStartGrades: { human: 0, bot: 0 }, pendingStride: null, pendingRide: null, pendingProtectGuard: null, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingBattleEnd: null, pendingTrigger: null, pendingAbility: null, pendingAbilities: [], attacksByUnitTurn: Object.create(null), pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
     if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
@@ -629,12 +662,14 @@
     $("#turn-label").textContent = match.side === "human" ? "YOUR TURN" : "OPPONENT TURN";
     $("#phase-label").textContent = match.side === "human" ? `${phases[match.phase]} phase` : `Practice Bot · ${phases[match.phase]} phase`;
     $("#turn-number").textContent = String(match.turn).padStart(2, "0"); $("#table-turn").textContent = String(match.turn).padStart(2, "0");
-    $("#phase-count").textContent = `${match.phase + 1} / ${phases.length}`;
-    $("#phase-list").innerHTML = phases.map((p, i) => `<div class="phase-item${i === match.phase ? " active" : ""}${i < match.phase ? " past" : ""}"><span class="phase-bullet">${i < match.phase ? "✓" : i + 1}</span>${p} phase</div>`).join("");
-    $$(".phase-segment").forEach((el, i) => { el.classList.toggle("done", i < match.phase); el.classList.toggle("current", i === match.phase); });
+    const visiblePhaseIndices = match.players[match.side]?.format === "standard" ? [0, 1, 2, 4, 5, 6] : [0, 1, 2, 3, 4, 5, 6], currentVisiblePhase = visiblePhaseIndices.indexOf(match.phase);
+    $("#phase-count").textContent = `${Math.max(0, currentVisiblePhase) + 1} / ${visiblePhaseIndices.length}`;
+    $("#phase-list").innerHTML = visiblePhaseIndices.map((phase, i) => `<div class="phase-item${phase === match.phase ? " active" : ""}${phase < match.phase ? " past" : ""}"><span class="phase-bullet">${phase < match.phase ? "✓" : i + 1}</span>${phases[phase]} phase</div>`).join("");
+    $$(".phase-segment").forEach((el, i) => { const phase = visiblePhaseIndices[i]; el.classList.toggle("done", phase !== undefined && phase < match.phase); el.classList.toggle("current", phase === match.phase); el.classList.toggle("hidden", phase === undefined); });
     $("#human-deck-count").textContent = you.deck.length; $("#bot-deck-count").textContent = bot.deck.length; $("#human-drop-count").textContent = you.drop.length; $("#bot-drop-count").textContent = bot.drop.length;
     $("#soul-count").textContent = String(you.soul.length);
-    $("#human-gdeck-count").textContent = you.gDeck?.length || 0; $("#bot-gdeck-count").textContent = bot.gDeck?.length || 0; $("#human-bind-count").textContent = you.bind?.length || 0; $("#bot-soul-count").textContent = bot.soul?.length || 0;
+    $("#human-gdeck-count").textContent = you.format === "standard" ? (you.rideDeck?.length || 0) : (you.gDeck?.length || 0); $("#bot-gdeck-count").textContent = bot.format === "standard" ? (bot.rideDeck?.length || 0) : (bot.gDeck?.length || 0); $("#human-bind-count").textContent = you.bind?.length || 0; $("#bot-soul-count").textContent = bot.soul?.length || 0;
+    [["human", you], ["bot", bot]].forEach(([side, player]) => { const button = $(`.gdeck-button[data-gdeck-side="${side}"]`); if (button) { button.querySelector("small").textContent = player.format === "standard" ? "RIDE DECK" : "G DECK"; button.classList.toggle("ride-deck-button", player.format === "standard"); } const label = $(`#${side}-gzone`).previousElementSibling; if (label) label.textContent = player.format === "standard" ? "RIDE DECK" : "G ZONE"; });
     $("#human-order-zone").innerHTML = renderOrderCards(you.orders, "human"); $("#bot-order-zone").innerHTML = renderOrderCards(bot.orders, "bot"); $("#human-order-count").textContent=String(you.orders?.length||0); $("#bot-order-count").textContent=String(bot.orders?.length||0); $("#human-crest-zone").innerHTML = renderCrests(you.crests); $("#bot-crest-zone").innerHTML = renderCrests(bot.crests);
     $("#human-gzone").innerHTML = renderGZone(you, true); $("#bot-gzone").innerHTML = renderGZone(bot, false);
     $("#human-guard-circle").innerHTML = renderGuardCircle(you); $("#bot-guard-circle").innerHTML = renderGuardCircle(bot);
@@ -645,7 +680,7 @@
     $("#bot-damage").innerHTML = renderDamageCards(bot);
     $("#bot-hand-count").textContent = `${bot.hand.length} CARDS`;
     $("#bot-hand").innerHTML = Array.from({ length: Math.min(8, bot.hand.length) }, () => `<span class="mini-back"></span>`).join("");
-    renderZone("human", "vanguard", you.vanguard); renderZone("bot", "vanguard", bot.vanguard);
+    renderZone("human", "vanguard", you.vanguard); renderZone("bot", "vanguard", bot.vanguard); renderRideDeckFlow();
     const standardRearZones = ["rear-left", "rear-right", "rear-back-left", "rear-back-center", "rear-back-right"];
     ["human", "bot"].forEach((side) => {
       const player = match.players[side]; player.accelZones = Math.max(0, Number(player.accelZones) || 0);
@@ -666,7 +701,7 @@
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog(); renderGAssistDialog(); renderRemotePaymentPrompt();
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
-    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderBattleActionPrompt(); renderAttackArrow(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal(); renderOnlineTurnOrderAnnouncement();
+    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderBattleActionPrompt(); renderAttackArrow(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal(); renderOnlineTurnOrderAnnouncement(); renderRideDeckFlow();
     if(!online.applyingRemote)showNextAbilityPrompt();
     if (!online.applyingRemote && match.pendingAttack?.awaitingDrive) setTimeout(resolvePracticeAttackAfterDrives, 0);
     if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
@@ -730,9 +765,26 @@
     }
     if (!$("#g-assist-dialog").open) $("#g-assist-dialog").showModal();
   }  function renderGZone(player, canFlip = false) {
+    if (player.format === "standard") return (player.rideDeck || []).map((instance) => { const card = cardMap.get(instance.cardId); return card ? `<button class="zone-card ride-deck-card" type="button" data-ride-deck-open="1" title="Grade ${escapeHtml(card.grade)} · available during Ride phase">G${escapeHtml(card.grade)} · ${escapeHtml(card.name)}</button>` : ""; }).join("") || '<span class="zone-empty">Ride Deck is empty</span>';
     const faceUp = (player.gZone || []).map((instance) => { const c = cardMap.get(instance.cardId); if (!c) return ""; return instance.faceUp ? `<button class="zone-card" data-card-zoom="${escapeHtml(c.id)}" title="Zoom ${escapeHtml(c.name)}">${escapeHtml(c.name)}</button>` : canFlip ? `<button class="zone-card" type="button" data-gzone-flip-up="${escapeHtml(instance.uid)}" title="Flip this G-zone card face up">Face-down G card · Flip face up</button>` : `<span class="zone-card" aria-label="Face-down G-zone card">Face-down G card</span>`; }).join("");
     const deck = player.gDeck || [], faceDownCount = deck.filter((item) => !item.faceUp).length, faceUpCount = deck.filter((item) => item.faceUp).length;
     return `${faceUp}<span class="zone-empty">${faceDownCount} face down · ${faceUpCount} face up in G deck</span>`;
+  }
+  function renderRideDeckFlow() {
+    const state = match?.pendingRide;
+    if (!state || state.ownerSide !== "human" || match.players.human.format !== "standard" || online.role === "watcher") { if ($("#ride-deck-dialog")?.open) $("#ride-deck-dialog").close(); if ($("#ride-deck-cost-dialog")?.open) $("#ride-deck-cost-dialog").close(); return; }
+    const player = match.players.human, currentGrade = Number(cardMap.get(player.vanguard?.cardId)?.grade ?? -1);
+    if (state.stage === "choose") {
+      const eligible = (player.rideDeck || []).filter(item => { const grade = Number(cardMap.get(item.cardId)?.grade); return Number.isInteger(grade) && grade >= currentGrade && grade <= currentGrade + 1; });
+      $("#ride-deck-dialog-help").textContent = `Current Vanguard grade ${currentGrade}. Choose a same-grade or one-grade-higher unit.`;
+      $("#ride-deck-card-list").innerHTML = eligible.map(item => { const card = cardMap.get(item.cardId); return card ? `<button class="zone-view-card${item.uid === state.unitUid ? " selected" : ""}" type="button" data-ride-deck-select="${escapeHtml(item.uid)}">${cardImage(card)}<b>${escapeHtml(card.name)}</b><small>Grade ${escapeHtml(card.grade)}${item.uid === state.unitUid ? " · selected" : " · select"}</small></button>` : ""; }).join("") || '<p class="zone-empty-message">No eligible units remain in your Ride Deck.</p>';
+      $("#ride-deck-begin").disabled = !eligible.some(item => item.uid === state.unitUid); if (!$("#ride-deck-dialog").open) $("#ride-deck-dialog").showModal();
+      if ($("#ride-deck-cost-dialog").open) $("#ride-deck-cost-dialog").close(); return;
+    }
+    const rider = player.rideDeck.find(item => item.uid === state.unitUid), riderCard = cardMap.get(rider?.cardId); if (!riderCard) { match.pendingRide = null; return; }
+    $("#ride-deck-cost-title").textContent = `Discard to ride ${riderCard.name}`;
+    $("#ride-deck-cost-cards").innerHTML = player.hand.map(item => { const card = cardMap.get(item.cardId); return card ? `<button class="zone-view-card${state.costUid === item.uid ? " selected" : ""}" type="button" data-ride-deck-cost="${escapeHtml(item.uid)}">${cardImage(card)}<b>${escapeHtml(card.name)}</b><small>${state.costUid === item.uid ? "Selected · discard" : "Choose as cost"}</small></button>` : ""; }).join("") || '<p class="zone-empty-message">You need a card in hand to pay the ride cost.</p>';
+    $("#ride-deck-cost-confirm").disabled = !state.costUid || !player.hand.some(item => item.uid === state.costUid); if ($("#ride-deck-dialog").open) $("#ride-deck-dialog").close(); if (!$("#ride-deck-cost-dialog").open) $("#ride-deck-cost-dialog").showModal();
   }
   function renderGuardCircle(player) { const side=player===match?.players?.human?"human":"bot"; return (player.guardCircle || []).map((instance) => { const c = cardMap.get(instance.cardId); return c ? `<span class="zone-card guard-card" title="${escapeHtml(c.name)} · ${effectiveShieldValue(instance,side).toLocaleString()} shield">${escapeHtml(c.name)}</span>` : ""; }).join("") || '<span class="zone-empty">Empty</span>'; }
   function renderCrests(crests = []) {
@@ -843,7 +895,8 @@
     };
     Object.keys(contextualActions).forEach((action) => $$(`.selected-card-actions [data-manual-action="${action}"]`).forEach((button) => { button.hidden = false; }));
     $("#manual-selection-help").textContent = onHumanHand ? "Hand card selected · choose where to move or play it." : onHumanField ? `${fieldCard.zone === "vanguard" ? "Vanguard" : "Rear-Guard"} selected · choose a card action.` : "Select a card on your hand or field to see its actions.";
-    $("#advance-phase").innerHTML = match.phase === phases.length - 1 ? `End turn <span>→</span>` : `Continue ${phases[match.phase + 1].toLowerCase()} phase <span>→</span>`;
+    const nextPhase = match.players.human.format === "standard" && match.phase === 2 ? 4 : match.phase + 1;
+    $("#advance-phase").innerHTML = match.phase === phases.length - 1 ? `End turn <span>→</span>` : `Continue ${phases[nextPhase].toLowerCase()} phase <span>→</span>`;
     if (match.selected) {
       const cardId = handCard?.cardId || fieldCard?.instance.cardId; const c = cardMap.get(cardId);
       $("#selection-hint").textContent = c ? `${c.name} · G${c.grade}` : "Selected";
@@ -1744,7 +1797,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (!match || match.ended) return;
     if (match.side !== "human" || match.pendingAttack || match.pendingTurnEnd || match.pendingAbility || match.pendingAbilities?.length || match.pendingTrigger) { toast("Wait until it is your turn and all pending actions are resolved."); return; }
     if (match.phase >= phases.length - 1) { endTurn(); return; }
-    const previousPhase=phases[match.phase]; match.phase += 1; match.selected = null; queuePhaseChangeEvent("human",previousPhase,phases[match.phase]); if(match.phase===2)chargeEnergyAtRidePhase(match.players.human);
+    const previousPhase=phases[match.phase]; match.phase += 1; if(match.players.human.format==="standard"&&match.phase===3)match.phase=4; match.selected = null; queuePhaseChangeEvent("human",previousPhase,phases[match.phase]); if(match.phase===2)chargeEnergyAtRidePhase(match.players.human);
     if (match.phase === 1 && !match.drewThisTurn) {
       const drawn = draw("human"); match.drewThisTurn = true;
       addLog(drawn ? `${match.players.human.name} drew a card for the Draw phase.` : `${match.players.human.name} has no cards to draw.`);
@@ -1788,6 +1841,13 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if(match?.pendingTurnEnd){toast("Resolve the pending end-of-turn abilities first.");return;}
     if (!match || match.ended) return;
     const player = match.players.human, card = selectedHandCard();
+    if (player.format === "standard" && (action === "stride" || action.startsWith("stride:") || action.startsWith("stride-cost:") || action === "stride-confirm" || action === "g-guard" || action.startsWith("g-guard:"))) { toast("Standard decks have a Ride Deck instead of a G-deck."); return; }
+    if (action === "ride-deck-open") { if (player.format !== "standard" || match.side !== "human" || match.phase !== 2 || match.ridePerformed || match.pendingRide) { toast("Use your Ride Deck during your Ride phase, once per turn."); return; } match.pendingRide = { ownerSide: "human", stage: "choose", unitUid: "", costUid: "" }; return; }
+    if (action === "ride-deck-cancel") { if (match.pendingRide?.ownerSide === "human") match.pendingRide = null; $("#ride-deck-dialog").close(); $("#ride-deck-cost-dialog").close(); return; }
+    if (action.startsWith("ride-deck-select:")) { const state = match.pendingRide, uid = action.slice("ride-deck-select:".length), rider = player.rideDeck?.find(item => item.uid === uid), grade = Number(cardMap.get(rider?.cardId)?.grade), current = Number(cardMap.get(player.vanguard?.cardId)?.grade); if (!state || state.ownerSide !== "human" || state.stage !== "choose" || match.side !== "human" || match.phase !== 2 || match.ridePerformed || !rider || grade < current || grade > current + 1) { toast("That Ride Deck unit cannot be ridden now."); return; } state.unitUid = uid; return; }
+    if (action === "ride-deck-begin") { const state = match.pendingRide, rider = player.rideDeck?.find(item => item.uid === state?.unitUid), grade = Number(cardMap.get(rider?.cardId)?.grade), current = Number(cardMap.get(player.vanguard?.cardId)?.grade); if (!state || state.ownerSide !== "human" || state.stage !== "choose" || !rider || grade < current || grade > current + 1 || match.side !== "human" || match.phase !== 2 || match.ridePerformed) { toast("Select a legal unit from your Ride Deck first."); return; } state.stage = "cost"; state.costUid = ""; return; }
+    if (action.startsWith("ride-deck-cost:")) { const state = match.pendingRide, uid = action.slice("ride-deck-cost:".length); if (!state || state.ownerSide !== "human" || state.stage !== "cost" || !player.hand.some(item => item.uid === uid)) { toast("Choose a card in your hand to discard as the ride cost."); return; } state.costUid = uid; return; }
+    if (action === "ride-deck-confirm") { const state = match.pendingRide, rideIndex = player.rideDeck?.findIndex(item => item.uid === state?.unitUid) ?? -1, costIndex = player.hand.findIndex(item => item.uid === state?.costUid), rider = rideIndex >= 0 ? player.rideDeck[rideIndex] : null, riderCard = cardMap.get(rider?.cardId), grade = Number(riderCard?.grade), current = Number(cardMap.get(player.vanguard?.cardId)?.grade); if (!state || state.ownerSide !== "human" || state.stage !== "cost" || match.side !== "human" || match.phase !== 2 || match.ridePerformed || rideIndex < 0 || costIndex < 0 || grade < current || grade > current + 1 || !window.VanguardAbilityEngine.canRideCard(riderCard, { vanguardCard: cardMap.get(player.vanguard?.cardId), crests: (player.crests || []).map(crest => cardMap.get(crest.cardId)) })) { toast("The Ride Deck choice or discard cost is no longer legal."); return; } const cost = player.hand.splice(costIndex, 1)[0], previous = player.vanguard; player.drop.push(cost); player.rideDeck.splice(rideIndex, 1); if (previous) player.soul.push(previous); player.vanguard = { ...rider, rested: false }; window.VanguardAbilityEngine.recordFightRide(player, riderCard); match.ridePerformed = true; match.pendingRide = null; $("#ride-deck-dialog").close(); $("#ride-deck-cost-dialog").close(); addLog(`${player.name} discarded a card and rode ${riderCard.name} from the Ride Deck.`); queueMovedCardAbility(cost, "human", "discard", "hand", { discardReason: "ride-deck-cost", timingWindow: "ride-cost" }); if (previous) queueAbilityPrompts("ride", "human", previous.uid, { zone: "soul" }); queueAbilityPrompts("place", "human", rider.uid, { source: "ride-deck", zone: "vanguard" }); askForCardCrest("human", rider); return; }
     if (action.startsWith("activate-skill:")) { const [,uid,...idParts]=action.split(":"); const abilityId=idParts.join(":"); const field=findFieldCard(uid),located=field?null:window.VanguardAbilityEngine.locateCardInstance(match,uid); const source=field?.side==="human"?{...field,side:"human"}:located&&!located.ambiguous&&located.side==="human"&&located.zone==="g-deck"?{side:"human",zone:"g-deck",instance:located.instance}:null; if(!source)return; const ability=eligibleActivatedAbilities(source).find(candidate=>candidate.id===abilityId); if(!ability){toast("This skill cannot be activated right now; check its conditions and once-per-turn use.");return;} if(match.pendingAbility||match.pendingTrigger){toast("Finish the current skill prompt first.");return;} match.pendingAbility={side:"human",field:source.zone,instance:source.instance,ability};showNextAbilityPrompt();return; }
     if (action.startsWith("superior-ride:")) { const [,source,uid]=action.split(":"); performSuperiorRide(source,uid); return; }
     if (action === "g-assist") {
@@ -2120,8 +2180,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }
   function flipSide(side) { return side === "human" ? "bot" : side === "bot" ? "human" : side; }
   function onlineDeck() {
-    if (online.selectedDeck && deckCount(online.selectedDeck)) return { name: online.selectedDeck.name, cards: { ...online.selectedDeck.cards }, starterCardId: online.selectedDeck.starterCardId || "" };
-    if (builder.cards && deckCount(builder)) return { name: builder.name || "My Deck", cards: { ...builder.cards }, starterCardId: builder.starterCardId || "" };
+    if (online.selectedDeck && deckCount(online.selectedDeck)) return { name: online.selectedDeck.name, format: online.selectedDeck.format === "standard" ? "standard" : "premium", cards: { ...online.selectedDeck.cards }, starterCardId: online.selectedDeck.starterCardId || "", rideDeck: [...(online.selectedDeck.rideDeck || [])] };
+    if (builder.cards && deckCount(builder)) return { name: builder.name || "My Deck", format: builder.format === "standard" ? "standard" : "premium", cards: { ...builder.cards }, starterCardId: builder.starterCardId || "", rideDeck: [...(builder.rideDeck || [])] };
     return defaultDeck();
   }
   async function registerOnlineDeckForAuthority(roomCode) {
@@ -2145,7 +2205,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function selectOnlineDeck() {
     const deck = readSavedDecks().find((item) => item.id === $("#online-deck-choice").value);
     if (!deck || !deckCount(deck)) { setOnlineError("Choose a saved deck before starting an online match. Save a deck from the Deck folder first."); return false; }
-    online.selectedDeck = { ...deck, cards: { ...deck.cards } }; return true;
+    const errors = deckReadyErrors(deck); if (errors.length) { setOnlineError(`Fix this deck before online play: ${errors.join("; ")}.`); return false; }
+    online.selectedDeck = { ...deck, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, rideDeck: [...(deck.rideDeck || [])] }; return true;
   }
   function setOnlineError(message = "") { $("#online-error").textContent = message; }
   function setConnectionPill(label) { $("#connection-pill").innerHTML = `<i></i> ${escapeHtml(label)}`; }
@@ -2215,7 +2276,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function sanitizedDeck(deck) {
     const cards = {};
     Object.entries(deck?.cards || {}).forEach(([id, qty]) => { if (cardMap.has(id)) cards[id] = Math.max(0, Math.min(50, Number(qty) || 0)); });
-    return { name: String(deck?.name || "Online Deck").slice(0, 40), cards, starterCardId: cardMap.has(deck?.starterCardId) ? deck.starterCardId : "" };
+    return { name: String(deck?.name || "Online Deck").slice(0, 40), format: deck?.format === "standard" ? "standard" : "premium", cards, starterCardId: cardMap.has(deck?.starterCardId) ? deck.starterCardId : "", rideDeck: Array.isArray(deck?.rideDeck) ? deck.rideDeck.slice(0, 4).filter(id => cardMap.has(id)) : [] };
   }
   function revealLocalMatch() { if (!match) return; $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden"); showView("play"); }
   function snapshotForGuest() {
@@ -2230,6 +2291,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (snapshot.pendingAttack) { snapshot.pendingAttack.attackerSide = flipSide(snapshot.pendingAttack.attackerSide); snapshot.pendingAttack.defenderSide = flipSide(snapshot.pendingAttack.defenderSide); }
     if (snapshot.pendingGAssist?.ownerSide) { snapshot.pendingGAssist.ownerSide = flipSide(snapshot.pendingGAssist.ownerSide); if (snapshot.pendingGAssist.ownerSide !== "human") snapshot.pendingGAssist = null; }
     if (snapshot.pendingStride?.ownerSide) { snapshot.pendingStride.ownerSide = flipSide(snapshot.pendingStride.ownerSide); if(snapshot.pendingStride.ownerSide!=="human")snapshot.pendingStride=null; }
+    if (snapshot.pendingRide?.ownerSide) { snapshot.pendingRide.ownerSide = flipSide(snapshot.pendingRide.ownerSide); if(snapshot.pendingRide.ownerSide!=="human")snapshot.pendingRide=null; }
     if (snapshot.pendingProtectGuard?.ownerSide) { snapshot.pendingProtectGuard.ownerSide = flipSide(snapshot.pendingProtectGuard.ownerSide); if(snapshot.pendingProtectGuard.ownerSide!=="human")snapshot.pendingProtectGuard=null; }
     if (snapshot.pendingAttackSetup) { snapshot.pendingAttackSetup.attackerSide = flipSide(snapshot.pendingAttackSetup.attackerSide); snapshot.pendingAttackSetup.defenderSide = flipSide(snapshot.pendingAttackSetup.defenderSide); }
     if (snapshot.pendingTrigger?.side) snapshot.pendingTrigger.side = flipSide(snapshot.pendingTrigger.side);
@@ -2274,7 +2336,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     versionMatchSnapshot();
     try {
       if (online.connection?.open) online.connection.send({ type: "state", match: snapshotForGuest() });
-      const publicMatch = JSON.parse(JSON.stringify(match)); publicMatch.pendingGAssist = null; publicMatch.pendingAbility = null; publicMatch.pendingAbilities = []; publicMatch.pendingStride = null; publicMatch.pendingProtectGuard = null; delete publicMatch.processedActionIds;
+      const publicMatch = JSON.parse(JSON.stringify(match)); publicMatch.pendingGAssist = null; publicMatch.pendingAbility = null; publicMatch.pendingAbilities = []; publicMatch.pendingStride = null; publicMatch.pendingRide = null; publicMatch.pendingProtectGuard = null; delete publicMatch.processedActionIds;
       window.VanguardMatchStateProjection.hidePrivateZones(publicMatch, ["human", "bot"]);
       online.watchers = online.watchers.filter((connection) => connection.open);
       online.watchers.forEach((connection) => connection.send({ type: "watch-state", match: publicMatch }));
@@ -2350,7 +2412,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (match.pendingTrigger?.turnOwner) match.pendingTrigger.turnOwner=flipSide(match.pendingTrigger.turnOwner); if (match.pendingCrest?.side) match.pendingCrest.side=flipSide(match.pendingCrest.side);
     if(match.pendingAbility?.side)match.pendingAbility.side=flipSide(match.pendingAbility.side);(match.pendingAbilities||[]).forEach(item=>{if(item.side)item.side=flipSide(item.side)});
     if(match.pendingAttack){match.pendingAttack.attackerSide=flipSide(match.pendingAttack.attackerSide);match.pendingAttack.defenderSide=flipSide(match.pendingAttack.defenderSide);}if(match.pendingGAssist?.ownerSide)match.pendingGAssist.ownerSide=flipSide(match.pendingGAssist.ownerSide);
-    if(match.pendingStride?.ownerSide)match.pendingStride.ownerSide=flipSide(match.pendingStride.ownerSide);
+    if(match.pendingStride?.ownerSide)match.pendingStride.ownerSide=flipSide(match.pendingStride.ownerSide); if(match.pendingRide?.ownerSide)match.pendingRide.ownerSide=flipSide(match.pendingRide.ownerSide);
       if(match.pendingProtectGuard?.ownerSide)match.pendingProtectGuard.ownerSide=flipSide(match.pendingProtectGuard.ownerSide);
     if(match.pendingAttackSetup){match.pendingAttackSetup.attackerSide=flipSide(match.pendingAttackSetup.attackerSide);match.pendingAttackSetup.defenderSide=flipSide(match.pendingAttackSetup.defenderSide);}
     match.selected = message.selected || null;
@@ -2371,7 +2433,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       if (match.pendingTrigger?.turnOwner) match.pendingTrigger.turnOwner=flipSide(match.pendingTrigger.turnOwner); if (match.pendingCrest?.side) match.pendingCrest.side=flipSide(match.pendingCrest.side);
       if(match.pendingAbility?.side)match.pendingAbility.side=flipSide(match.pendingAbility.side);(match.pendingAbilities||[]).forEach(item=>{if(item.side)item.side=flipSide(item.side)});
       if(match.pendingAttack){match.pendingAttack.attackerSide=flipSide(match.pendingAttack.attackerSide);match.pendingAttack.defenderSide=flipSide(match.pendingAttack.defenderSide);}if(match.pendingGAssist?.ownerSide)match.pendingGAssist.ownerSide=flipSide(match.pendingGAssist.ownerSide);
-    if(match.pendingStride?.ownerSide)match.pendingStride.ownerSide=flipSide(match.pendingStride.ownerSide);
+    if(match.pendingStride?.ownerSide)match.pendingStride.ownerSide=flipSide(match.pendingStride.ownerSide); if(match.pendingRide?.ownerSide)match.pendingRide.ownerSide=flipSide(match.pendingRide.ownerSide);
       if(match.pendingProtectGuard?.ownerSide)match.pendingProtectGuard.ownerSide=flipSide(match.pendingProtectGuard.ownerSide);
       if(match.pendingAttackSetup){match.pendingAttackSetup.attackerSide=flipSide(match.pendingAttackSetup.attackerSide);match.pendingAttackSetup.defenderSide=flipSide(match.pendingAttackSetup.defenderSide);}
       online.applyingRemote = false;
@@ -2570,6 +2632,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }
   function openGDeckDialog(kind, healUid = "") {
     if (!match) { toast("Start a match first."); return; }
+    if (match.players.human.format === "standard" && kind !== "inspect") { toast("Standard decks use a Ride Deck and cannot stride or G-Guard."); return; }
     if (kind === "stride" && (match.stridePerformed || !canStrideForSide("human", match.turnStartGrades?.human))) { toast("Stride is once per turn. Your Vanguard must be grade 3 or greater, and either your opponent's Vanguard is grade 3 or greater or yours was grade 3 at the start of your turn."); return; }
     const isGuard = kind === "g-guard", isInspect = kind === "inspect";
     const player=match.players.human,healCards=player.hand.filter(item=>triggerKind(item)==="heal"),vanguardGrade=Number(cardMap.get(player.vanguard?.cardId)?.grade||0),attackerGrade=Number(cardMap.get(match.players[match.pendingAttack?.attackerSide]?.vanguard?.cardId)?.grade||0),selectedHeal=healCards.find(item=>item.uid===healUid);
@@ -2612,7 +2675,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       return;
     }
     if (action === "counter-blast" || action === "counter-charge" || action === "heal-damage") { openDamageDialog(action); return; }
-    if (action === "g-assist" || action === "g-assist-none" || action === "g-assist-finish" || action.startsWith("g-assist-pick:") || action.startsWith("g-assist-discard:") || action.startsWith("g-guard:") || action.startsWith("intercept:") || action.startsWith("superior-ride:") || action.startsWith("attack-choice:") || action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("gift-force:") || action.startsWith("gift-accel:") || action.startsWith("gdeck-reveal:") || action.startsWith("gdeck-flip-up:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done" || action.startsWith("g-assist") ) { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}sendGuestRequest("action",{action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("superior-ride:")){["deck-view-dialog","soul-dialog","bind-dialog","drop-dialog","damage-dialog","reveal-dialog"].forEach(id=>{if($("#"+id).open)$("#"+id).close()});} if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
+    if (action.startsWith("ride-deck-") || action === "g-assist" || action === "g-assist-none" || action === "g-assist-finish" || action.startsWith("g-assist-pick:") || action.startsWith("g-assist-discard:") || action.startsWith("g-guard:") || action.startsWith("intercept:") || action.startsWith("superior-ride:") || action.startsWith("attack-choice:") || action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("gift-force:") || action.startsWith("gift-accel:") || action.startsWith("gdeck-reveal:") || action.startsWith("gdeck-flip-up:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done" || action.startsWith("g-assist") ) { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}sendGuestRequest("action",{action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("superior-ride:")){["deck-view-dialog","soul-dialog","bind-dialog","drop-dialog","damage-dialog","reveal-dialog"].forEach(id=>{if($("#"+id).open)$("#"+id).close()});} if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog(); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
     if (action === "reveal-top-cards") { if (!match) { toast("Start a match first."); return; } $("#reveal-count-dialog").showModal(); return; }
     if (action === "gift-force" || action === "gift-accel") { openGiftDialog(action === "gift-force" ? "force" : "accel"); return; }
     if (online.role === "guest") {
@@ -2622,11 +2685,11 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     manualGameAction(action);
   }
   function exportDeck(deck, filename) {
-    const content = JSON.stringify({ format: "Vanguard Arena local demo deck", name: deck.name, cards: deck.cards, starterCardId: deck.starterCardId || "", exportedAt: new Date().toISOString() }, null, 2);
+    const content = JSON.stringify({ format: "Vanguard Arena deck", name: deck.name, deckFormat: deck.format === "standard" ? "standard" : "premium", cards: deck.cards, starterCardId: deck.starterCardId || "", rideDeck: Array.isArray(deck.rideDeck) ? deck.rideDeck : [], exportedAt: new Date().toISOString() }, null, 2);
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([content], { type: "application/json" })); a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
   function importDeckFile(file) {
-    const reader = new FileReader(); reader.onload = () => { try { const data = JSON.parse(reader.result); const cards = data.cards || data; if (!cards || typeof cards !== "object") throw new Error("Invalid deck format"); builder = { id: null, name: data.name || file.name.replace(/\.json$/i, ""), cards: {}, starterCardId: data.starterCardId || "" }; Object.entries(cards).forEach(([id, qty]) => { if (cardMap.has(id)) builder.cards[id] = Math.max(0, Math.min(50, Number(qty) || 0)); }); renderBuilder(); showView("decks"); toast("Deck imported"); } catch { toast("Could not read that deck JSON"); } }; reader.readAsText(file);
+    const reader = new FileReader(); reader.onload = () => { try { const data = JSON.parse(reader.result); const cards = data.cards || data; if (!cards || typeof cards !== "object") throw new Error("Invalid deck format"); builder = { id: null, name: data.name || file.name.replace(/\.json$/i, ""), format: data.deckFormat === "standard" || data.format === "standard" ? "standard" : "premium", cards: {}, starterCardId: data.starterCardId || "", rideDeck: Array.isArray(data.rideDeck) ? data.rideDeck.slice(0, 4) : [] }; Object.entries(cards).forEach(([id, qty]) => { if (cardMap.has(id)) builder.cards[id] = Math.max(0, Math.min(50, Number(qty) || 0)); }); renderBuilder(); showView("decks"); toast("Deck imported"); } catch { toast("Could not read that deck JSON"); } }; reader.readAsText(file);
   }
   function toast(text) {
     let el = $("#toast"); if (!el) { el = document.createElement("div"); el.id = "toast"; el.style.cssText = "position:fixed;bottom:23px;left:50%;transform:translateX(-50%);background:#252633;border:1px solid #ffffff2a;color:#fff;padding:11px 15px;border-radius:9px;box-shadow:0 12px 35px #0009;font:11px 'DM Sans',sans-serif;z-index:20;transition:.2s"; document.body.appendChild(el); }
@@ -2700,7 +2763,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     const crestZone = event.target.closest("#human-crest-zone");
     if (crestZone && cardMap.get(selectedHandCard()?.cardId)?.type === "Crest") { performManualAction("crest-place"); return; }
   });  $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) sendGuestRequest("select",{selected:match.selected}); renderMatch(); showContextMenu("hand"); });
-  $(".game-table").addEventListener("click", (e) => { const zoom=e.target.closest("[data-card-zoom]"); if(zoom){e.stopPropagation();showCardDetails(zoom.dataset.cardZoom);return;} const zone=e.target.closest(".field-zone[data-side='human']"); if(zone&&match&&online.role!=="watcher"){if(pendingCallSelectionUid){if(zone.dataset.zone==="vanguard"){toast("Choose a Rear-Guard circle to call this Unit.");return;}const selected=selectedHandCard();if(!selected||selected.uid!==pendingCallSelectionUid){pendingCallSelectionUid=null;toast("That hand selection changed. Choose Call again.");return;}pendingCallSelectionUid=null;performManualAction(`place:${zone.dataset.zone}`);return;}if(zone.dataset.zone==="vanguard"&&selectedHandCard()){showContextMenu("hand");return;}if(zoneFieldSelection){const {source,uid}=zoneFieldSelection;zoneFieldSelection=null;performManualAction(`zone-move:${source}:field:${uid}:${zone.dataset.zone}`);return;}const selectedField=findFieldCard(match.selected);if(selectedField?.side==="human"&&selectedField.zone!=="vanguard"&&zone.dataset.zone!=="vanguard"&&zone.dataset.zone!==selectedField.zone){performManualAction(`move-rear-to:${match.selected}:${zone.dataset.zone}`);return;}if(!e.target.closest("[data-field-uid]")&&match.selected&&selectedHandCard()){performManualAction(`place:${zone.dataset.zone}`);return;}}if(e.target.closest("[data-gdeck-side='human']")){if(match.phase===3&&match.side==="human")performManualAction("stride");else openGDeckDialog("inspect");return;}const field=e.target.closest("[data-field-uid]");if(!field||!match||online.role==="watcher"||field.dataset.side!=="human")return;const uid=field.dataset.fieldUid;match.selected=match.selected===uid?null:uid;if(online.role==="guest"&&online.connection?.open)sendGuestRequest("select",{selected:match.selected});renderMatch();showContextMenu("field");});
+  $(".game-table").addEventListener("click", (e) => { const zoom=e.target.closest("[data-card-zoom]"); if(zoom){e.stopPropagation();showCardDetails(zoom.dataset.cardZoom);return;} if(e.target.closest("[data-ride-deck-open]")){performManualAction("ride-deck-open");return;} const zone=e.target.closest(".field-zone[data-side='human']"); if(zone&&match&&online.role!=="watcher"){if(pendingCallSelectionUid){if(zone.dataset.zone==="vanguard"){toast("Choose a Rear-Guard circle to call this Unit.");return;}const selected=selectedHandCard();if(!selected||selected.uid!==pendingCallSelectionUid){pendingCallSelectionUid=null;toast("That hand selection changed. Choose Call again.");return;}pendingCallSelectionUid=null;performManualAction(`place:${zone.dataset.zone}`);return;}if(zone.dataset.zone==="vanguard"&&selectedHandCard()){showContextMenu("hand");return;}if(zoneFieldSelection){const {source,uid}=zoneFieldSelection;zoneFieldSelection=null;performManualAction(`zone-move:${source}:field:${uid}:${zone.dataset.zone}`);return;}const selectedField=findFieldCard(match.selected);if(selectedField?.side==="human"&&selectedField.zone!=="vanguard"&&zone.dataset.zone!=="vanguard"&&zone.dataset.zone!==selectedField.zone){performManualAction(`move-rear-to:${match.selected}:${zone.dataset.zone}`);return;}if(!e.target.closest("[data-field-uid]")&&match.selected&&selectedHandCard()){performManualAction(`place:${zone.dataset.zone}`);return;}}if(e.target.closest("[data-gdeck-side='human']")){if(match.players.human.format==="standard")performManualAction("ride-deck-open");else if(match.phase===3&&match.side==="human")performManualAction("stride");else openGDeckDialog("inspect");return;}const field=e.target.closest("[data-field-uid]");if(!field||!match||online.role==="watcher"||field.dataset.side!=="human")return;const uid=field.dataset.fieldUid;match.selected=match.selected===uid?null:uid;if(online.role==="guest"&&online.connection?.open)sendGuestRequest("select",{selected:match.selected});renderMatch();showContextMenu("field");});
   $("#gift-cancel").addEventListener("click", () => $("#gift-dialog").close()); $("#gift-close").addEventListener("click", () => $("#gift-dialog").close());
   $("#gift-confirm").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind === "force") { const zone = $("#gift-zone").value; if (!zone) { toast("Choose a circle for the Force marker."); return; } performManualAction(`gift-force:${type}:${zone}`); } else performManualAction(`gift-accel:${type}`); dialog.close(); });
   $("#gift-place-vanguard").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind !== "force") return; performManualAction(`gift-force:${type}:vanguard`); dialog.close(); });
@@ -2728,6 +2791,13 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#g-assist-content").addEventListener("click",(event)=>{const pick=event.target.closest("[data-gassist-choose]");if(pick){performManualAction("g-assist-pick:"+pick.dataset.gassistChoose);return;}const discard=event.target.closest("[data-gassist-discard]");if(discard)performManualAction("g-assist-discard:"+discard.dataset.gassistDiscard);});
   $("#g-assist-none").addEventListener("click",()=>performManualAction("g-assist-none"));
   $("#open-gdeck").addEventListener("click",()=>openGDeckDialog("inspect"));
+  $("#ride-deck-card-list").addEventListener("click", event => { const card = event.target.closest("[data-ride-deck-select]"); if (card) performManualAction("ride-deck-select:" + card.dataset.rideDeckSelect); });
+  $("#ride-deck-begin").addEventListener("click", () => performManualAction("ride-deck-begin"));
+  $("#ride-deck-cost-cards").addEventListener("click", event => { const card = event.target.closest("[data-ride-deck-cost]"); if (card) performManualAction("ride-deck-cost:" + card.dataset.rideDeckCost); });
+  $("#ride-deck-cost-confirm").addEventListener("click", () => performManualAction("ride-deck-confirm"));
+  $("#ride-deck-dialog").addEventListener("click", event => { if (event.target.closest("[data-ride-cancel]")) performManualAction("ride-deck-cancel"); });
+  $("#ride-deck-cost-dialog").addEventListener("click", event => { if (event.target.closest("[data-ride-cancel]")) performManualAction("ride-deck-cancel"); });
+  ["#ride-deck-dialog", "#ride-deck-cost-dialog"].forEach(selector => $(selector).addEventListener("cancel", event => { event.preventDefault(); performManualAction("ride-deck-cancel"); }));
   $("#g-assist-finish").addEventListener("click",()=>performManualAction("g-assist-finish"));
   $("#human-gzone").addEventListener("click",(e)=>{const flip=e.target.closest("[data-gzone-flip-up]");if(flip)performManualAction("gzone-flip-up:"+flip.dataset.gzoneFlipUp);else{const zoom=e.target.closest("[data-card-zoom]");if(zoom)showCardDetails(zoom.dataset.cardZoom);}});  $("#gdeck-card-list").addEventListener("click",(e)=>{const reveal=e.target.closest("[data-gdeck-reveal]");if(reveal){performManualAction("gdeck-reveal:"+reveal.dataset.gdeckReveal);return;}const zoom=e.target.closest("[data-card-zoom]");if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const activate=e.target.closest("[data-gdeck-activate]");if(activate){let abilityId;try{abilityId=decodeURIComponent(activate.dataset.abilityId)}catch{return;}$("#gdeck-dialog").close();performManualAction("activate-skill:"+activate.dataset.gdeckActivate+":"+abilityId);return;}const flip=e.target.closest("[data-gdeck-flip]");if(flip){performManualAction("gdeck-flip-up:"+flip.dataset.gdeckFlip);if(match)openGDeckDialog($("#gdeck-dialog").dataset.kind);return;}const move=e.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);return;}const action=e.target.closest("[data-gdeck-action]");if(action){$("#gdeck-dialog").close();performManualAction(action.dataset.gdeckAction);}});
   $("#g-guard-heal-list").addEventListener("click",(event)=>{const button=event.target.closest("[data-g-guard-heal]");if(!button)return;const uid=button.dataset.gGuardHeal;$("#g-guard-cost-dialog").close();openGDeckDialog("g-guard",uid);});
@@ -2758,8 +2828,11 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   const noGuardButton = document.createElement("button"); noGuardButton.id = "no-guard"; noGuardButton.className = "button button-quiet hidden"; noGuardButton.textContent = "No guard"; noGuardButton.addEventListener("click", () => performOnlineAction("noGuard")); $(".action-buttons").insertBefore(noGuardButton, $("#guard-card"));
   $("#sort-hand").addEventListener("click", () => { if (!match) return; match.players.human.hand.sort((a, b) => { const ca = cardMap.get(a.cardId), cb = cardMap.get(b.cardId); return (ca?.grade || 0) - (cb?.grade || 0) || ca?.name.localeCompare(cb?.name); }); renderMatch(); });
   $("#clear-log").addEventListener("click", () => { if (match) { match.log = []; renderLog(); } });
-  $("#create-deck").addEventListener("click", () => { emptyDeck(); showView("decks"); $("#deck-name").focus(); });
-  $("#save-deck").addEventListener("click", saveDeck); $("#load-deck-editor").addEventListener("click", openLoadDeckDialog); $("#load-deck-confirm").addEventListener("click", () => { const deck = readSavedDecks().find((item) => item.id === $("#load-deck-choice").value); if (!deck) { toast("Choose a saved deck first."); return; } $("#load-deck-dialog").close(); loadDeck(deck); }); $("#starter-vanguard").addEventListener("change", () => { builder.starterCardId = $("#starter-vanguard").value; renderBuilder(); }); $("#deck-name").addEventListener("input", () => { builder.name = $("#deck-name").value; $("#builder-title").textContent = builder.name || "Untitled deck"; });
+  $("#create-deck").addEventListener("click", () => $("#deck-format-dialog").showModal());
+  $("#new-premium-deck").addEventListener("click", () => { $("#deck-format-dialog").close(); emptyDeck("premium"); showView("decks"); $("#deck-name").focus(); });
+  $("#new-standard-deck").addEventListener("click", () => { $("#deck-format-dialog").close(); emptyDeck("standard"); showView("decks"); $("#deck-name").focus(); });
+  $("#change-deck-format").addEventListener("click", () => { builder.format = builder.format === "standard" ? "premium" : "standard"; if (builder.format === "premium" && !builder.starterCardId) builder.starterCardId = builder.rideDeck?.[0] || ""; if (builder.format === "standard") builder.rideDeck ||= []; renderBuilder(); });
+  $("#save-deck").addEventListener("click", saveDeck); $("#load-deck-editor").addEventListener("click", openLoadDeckDialog); $("#load-deck-confirm").addEventListener("click", () => { const deck = readSavedDecks().find((item) => item.id === $("#load-deck-choice").value); if (!deck) { toast("Choose a saved deck first."); return; } $("#load-deck-dialog").close(); loadDeck(deck); }); $("#starter-vanguard").addEventListener("change", () => { builder.starterCardId = $("#starter-vanguard").value; renderBuilder(); }); [0,1,2,3].forEach(grade => $(`#ride-deck-${grade}`).addEventListener("change", () => { builder.rideDeck[grade] = $(`#ride-deck-${grade}`).value; renderBuilder(); })); $("#deck-name").addEventListener("input", () => { builder.name = $("#deck-name").value; $("#builder-title").textContent = builder.name || "Untitled deck"; });
   $("#card-text-search").addEventListener("input", () => { builderPage = 0; renderBuilderCards(); });
   $("#card-search").addEventListener("input", () => { builderPage = 0; renderBuilderCards(); }); $("#grade-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-clan-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); }); $("#builder-nation-filter").addEventListener("change", () => { builderPage = 0; renderBuilderCards(); });
   $("#builder-prev").addEventListener("click", () => { builderPage = Math.max(0, builderPage - 1); renderBuilderCards(); }); $("#builder-next").addEventListener("click", () => { builderPage += 1; renderBuilderCards(); });

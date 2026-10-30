@@ -29,7 +29,7 @@
   }
 
   const GAME_ACTION_FIELDS = Object.freeze({
-    draw: [], ride: ["cardInstanceId"], call: ["cardInstanceId", "rearIndex"],
+    draw: [], ride: ["cardInstanceId"], rideDeck: ["rideDeckCardInstanceId", "discardCardInstanceId"], call: ["cardInstanceId", "rearIndex"],
     stride: ["strideCardInstanceId", "costCardInstanceIds"],
     attack: ["attackerCardInstanceId", "targetCardInstanceId", "boosterCardInstanceId"],
     guard: ["cardInstanceId", "discardCardInstanceId"], noGuard: [],

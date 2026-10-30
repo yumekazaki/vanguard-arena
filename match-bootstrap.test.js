@@ -82,6 +82,27 @@ test("bootstrap shuffles only after separating the selected starter and preserve
   assert.equal(host.hand.length + host.deck.length + 1, 50);
 });
 
+test("standard bootstrap keeps the four selected Ride Deck instances out of the main deck and starts with grade zero", () => {
+  catalog["ride-grade-2"] = { id: "ride-grade-2", name: "Ride Grade 2", grade: 2, type: "Unit", text: "" };
+  catalog["ride-grade-3"] = { id: "ride-grade-3", name: "Ride Grade 3", grade: 3, type: "Unit", text: "" };
+  const deck = legalDeck();
+  deck.format = "standard";
+  deck.rideDeck = ["starter", "unit-1", "ride-grade-2", "ride-grade-3"];
+  deck.cards["unit-1"] = 3; deck.cards["unit-2"] = 3;
+  deck.cards["ride-grade-2"] = 1; deck.cards["ride-grade-3"] = 1;
+  try {
+    assert.equal(Bootstrap.validateDecklist(deck, cardById, Engine).ok, true);
+    const built = Bootstrap.createInitialMatchState(options({ hostDeck: deck }));
+    assert.equal(built.ok, true);
+    const player = built.state.players.human;
+    assert.equal(player.format, "standard");
+    assert.equal(player.vanguard.cardId, "starter");
+    assert.deepEqual(player.rideDeck.map(card => Number(card.grade)).sort(), [1, 2, 3]);
+    assert.equal(player.hand.length + player.deck.length + player.rideDeck.length + 1, 50);
+    assert.equal(player.gDeck.length, 0);
+  } finally { delete catalog["ride-grade-2"]; delete catalog["ride-grade-3"]; }
+});
+
 test("bootstrap preserves the trusted Ultimate Stride cost restriction on G-deck instances", () => {
   const previousText = catalog["g-unit-1"].text;
   catalog["g-unit-1"].text = "Ultimate Stride - discard a card with the same name as a card in your heart.";

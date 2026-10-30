@@ -71,9 +71,19 @@
         ? { ok: false, reason: "named-deck-copy-limit-exceeded", cardName: exception.cardName, maximum: limit, actual: count }
         : { ok: false, reason: "same-name-limit-exceeded" };
     }
+    if (deck.format === "standard") {
+      const rideDeck = Array.isArray(deck.rideDeck) ? deck.rideDeck : [];
+      if (gCount !== 0) return { ok: false, reason: "standard-deck-cannot-have-g-deck" };
+      if (rideDeck.length !== 4 || new Set(rideDeck).size !== 4) return { ok: false, reason: "invalid-ride-deck-size" };
+      for (let grade = 0; grade <= 3; grade++) {
+        const cardId = rideDeck[grade], card = typeof cardId === "string" ? cardById(cardId) : null;
+        if (!card || Number(card.grade) !== grade || !isUnitCard(card) || Number(deck.cards[cardId] || 0) < 1) return { ok: false, reason: "invalid-ride-deck-card", grade };
+      }
+      return { ok: true, mainCount, gCount, format: "standard", rideDeck: [...rideDeck] };
+    }
     const starter = typeof deck.starterCardId === "string" ? cardById(deck.starterCardId) : null;
     if (!starter || !(Number(starter.grade) === 0 && isUnitCard(starter) && Number(deck.cards[starter.id]) > 0 && !isGDeckCard(starter))) return { ok: false, reason: "invalid-starter" };
-    return { ok: true, mainCount, gCount, starterCardId: starter.id };
+    return { ok: true, mainCount, gCount, starterCardId: starter.id, format: "premium" };
   }
 
   function shuffleInPlace(cards, random) {
@@ -130,16 +140,22 @@
       };
       for (let copy = 0; copy < count; copy++) all.push(engine.createCardInstance(cardId, playerId, uidFactory(), instanceState));
     }
+    const format = deck.format === "standard" ? "standard" : "premium";
     const gDeck = all.filter(instance => isGDeckCard(cardById(instance.cardId))).map(instance => ({ ...instance, faceUp: false }));
-    const main = all.filter(instance => !isGDeckCard(cardById(instance.cardId)));
-    const starterId = deck.starterCardId || main.find(instance => Number(cardById(instance.cardId)?.grade) === 0 && isUnitCard(cardById(instance.cardId)))?.cardId;
+    let main = all.filter(instance => !isGDeckCard(cardById(instance.cardId))), rideDeck = [], starterId = deck.starterCardId;
+    if (format === "standard") {
+      (deck.rideDeck || []).forEach(cardId => { const index = main.findIndex(instance => instance.cardId === cardId); if (index >= 0) rideDeck.push(main.splice(index, 1)[0]); });
+      starterId = deck.rideDeck?.[0] || "";
+      rideDeck = rideDeck.filter(instance => instance.cardId !== starterId || Number(instance.grade) !== 0);
+    }
     const starterIndex = main.findIndex(instance => instance.cardId === starterId);
-    if (starterIndex < 0) throw new Error("Validated starter instance was not created");
-    const vanguard = { ...main.splice(starterIndex, 1)[0], rested: false };
+    const standardStarter = format === "standard" ? all.find(instance => instance.cardId === starterId && Number(instance.grade) === 0) : null;
+    if (starterIndex < 0 && !standardStarter) throw new Error("Validated starter instance was not created");
+    const vanguard = { ...(standardStarter || main.splice(starterIndex, 1)[0]), rested: false };
     shuffleInPlace(main, random);
     shuffleInPlace(gDeck, random);
     return {
-      playerId, name: String(name || "Player").slice(0, 24), deck: main.slice(5), hand: main.slice(0, 5), damage: [], drop: [], soul: [], bind: [],
+      playerId, name: String(name || "Player").slice(0, 24), format, rideDeck, deck: main.slice(5), hand: main.slice(0, 5), damage: [], drop: [], soul: [], bind: [],
       vanguard, rodeGradeThreePlusThisFight: false, opponentTriggerRevealedThisTurn: false, rear: Array(DEFAULT_REAR_ZONES).fill(null),
       accelZones: 0, accelTypes: [], giftZones: [], orders: [], crests: [], guardCircle: [], triggerZone: [], extra: [], gDeck, gZone: [], removed: [],
       quickShields: 0, protectMarkers: 0, gifts: 0, human: Boolean(human)

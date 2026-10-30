@@ -289,3 +289,5 @@
   .battle-phase-toolbar .phase-item{font-size:8px}
   .battle-phase-toolbar>.wide{max-width:150px;white-space:normal}
 }
+.workshop-format-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;color:var(--muted,#aab1c3);font-size:13px}.workshop-format-bar b{color:var(--accent,#d9c0ff);letter-spacing:.08em}.ride-deck-builder-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 18px}.ride-deck-builder-grid label{display:grid;gap:6px;font-size:12px;color:var(--muted,#aab1c3)}.ride-deck-card{min-width:132px;white-space:normal;line-height:1.25}.gdeck-button.ride-deck-button{border-color:rgba(178,130,255,.65);box-shadow:0 0 18px rgba(178,130,255,.12)}
+@media(max-width:650px){.ride-deck-builder-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ride-deck-card{min-width:112px;font-size:10px}}

@@ -4756,6 +4756,73 @@
         previousLocation: "hand", currentLocation: "vanguard", circle: "vanguard",
         phase: "ride", timingWindow: "normal-ride"
       }));
+    } else if (action === "rideDeck") {
+      if (Number(state.phase) !== 2) return reject("wrong-timing-window");
+      if (player.format !== "standard") return reject("ride-deck-requires-standard-format");
+      if (state.ridePerformed === true) return reject("ride-already-performed");
+      if (!Array.isArray(player.rideDeck) || !Array.isArray(player.hand) || !Array.isArray(player.drop) || !Array.isArray(player.soul) || !player.vanguard) return reject("invalid-ride-deck-zones");
+      const riderUid = command.payload?.rideDeckCardInstanceId, discardUid = command.payload?.discardCardInstanceId;
+      if (typeof riderUid !== "string" || typeof discardUid !== "string" || riderUid === discardUid) return reject("invalid-ride-deck-payment");
+      const riderIndex = player.rideDeck.findIndex(card => card?.uid === riderUid), discardIndex = player.hand.findIndex(card => card?.uid === discardUid);
+      if (riderIndex < 0) return reject("ride-source-not-in-ride-deck");
+      if (discardIndex < 0) return reject("ride-cost-not-in-hand");
+      const rider = player.rideDeck[riderIndex], discard = player.hand[discardIndex], previousVanguard = player.vanguard;
+      if (rider.ownerPlayerId !== actorPlayerId || rider.controllerPlayerId !== actorPlayerId || discard.ownerPlayerId !== actorPlayerId || discard.controllerPlayerId !== actorPlayerId) return reject("ride-deck-card-not-owned-and-controlled");
+      const riderGrade = Number(rider.grade), vanguardGrade = Number(previousVanguard.grade);
+      if (rider.unitCard !== true || rider.gDeckCard === true || rider.cannotBeRidden === true) return reject("card-cannot-be-ridden");
+      if (!Number.isInteger(riderGrade) || !Number.isInteger(vanguardGrade) || riderGrade < vanguardGrade || riderGrade > vanguardGrade + 1) return reject("illegal-ride-grade");
+      if (typeof engine.canRideCard === "function" && !engine.canRideCard({ id: String(rider.cardId), name: rider.cardName || rider.name || "" }, { vanguardCard: serverCardDefinition(previousVanguard) })) return reject("ride-restriction");
+      const sameNameRestricted = (player.crests || []).some(card => card?.sameNameRideRestriction === true);
+      if (sameNameRestricted) {
+        const nameKey = value => String(value || "").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]/g, "");
+        if (!rider.cardName || !previousVanguard.cardName) return reject("ride-name-metadata-missing");
+        if (nameKey(rider.cardName) !== nameKey(previousVanguard.cardName)) return reject("crest-requires-same-name-ride");
+      }
+      if (riderGrade >= 3) engine.recordFightRide?.(player, { grade: riderGrade });
+      player.rideDeck.splice(riderIndex, 1);
+      player.hand.splice(discardIndex, 1);
+      player.drop.push(discard);
+      player.soul.push(previousVanguard);
+      player.vanguard = { ...rider, rested: false };
+      state.ridePerformed = true;
+      events.push(engine.createGameEvent(state, {
+        type: "card.discarded", actingPlayerId: actorPlayerId, turnPlayerId: actorPlayerId,
+        sourceCardInstanceId: discard.uid, sourceOwnerPlayerId: discard.ownerPlayerId,
+        sourceControllerPlayerId: discard.controllerPlayerId, cardInstanceId: discard.uid,
+        subjectCardInstanceId: discard.uid, subjectOwnerPlayerId: discard.ownerPlayerId,
+        subjectControllerPlayerId: discard.controllerPlayerId, previousLocation: "hand", currentLocation: "drop",
+        phase: "ride", timingWindow: "ride-deck-cost", discardReason: "ride-deck-cost"
+      }));
+      events.push(engine.createGameEvent(state, {
+        type: "card.moved", actingPlayerId: actorPlayerId, turnPlayerId: actorPlayerId,
+        sourceCardInstanceId: previousVanguard.uid, sourceOwnerPlayerId: previousVanguard.ownerPlayerId || actorPlayerId,
+        sourceControllerPlayerId: previousVanguard.controllerPlayerId || actorPlayerId,
+        cardInstanceId: previousVanguard.uid, subjectCardInstanceId: previousVanguard.uid,
+        subjectOwnerPlayerId: previousVanguard.ownerPlayerId || actorPlayerId,
+        subjectControllerPlayerId: previousVanguard.controllerPlayerId || actorPlayerId,
+        previousLocation: "vanguard", currentLocation: "soul", phase: "ride", timingWindow: "ride-deck"
+      }));
+      events.push(engine.createGameEvent(state, {
+        type: "card.ridden", actingPlayerId: actorPlayerId, turnPlayerId: actorPlayerId,
+        sourceCardInstanceId: rider.uid, sourceCardName: rider.cardName || rider.name || null,
+        sourceCardGrade: riderGrade, sourceOwnerPlayerId: rider.ownerPlayerId,
+        sourceControllerPlayerId: rider.controllerPlayerId, sourceCardClan: rider.clan || null,
+        sourceCardClans: rider.clans || [], cardInstanceId: rider.uid, subjectCardInstanceId: rider.uid,
+        subjectOwnerPlayerId: rider.ownerPlayerId, subjectControllerPlayerId: rider.controllerPlayerId,
+        previousLocation: "ride-deck", currentLocation: "vanguard", targetCardInstanceIds: [previousVanguard.uid],
+        targetPreviousLocation: "vanguard", targetCurrentLocation: "soul", targetLocation: "vanguard",
+        phase: "ride", timingWindow: "ride-deck"
+      }));
+      events.push(engine.createGameEvent(state, {
+        type: "card.placed", actingPlayerId: actorPlayerId, turnPlayerId: actorPlayerId,
+        sourceCardInstanceId: rider.uid, sourceCardName: rider.cardName || rider.name || null,
+        sourceOwnerPlayerId: rider.ownerPlayerId, sourceControllerPlayerId: rider.controllerPlayerId,
+        sourceCardClan: rider.clan || null, sourceCardClans: rider.clans || [],
+        cardInstanceId: rider.uid, subjectCardInstanceId: rider.uid,
+        subjectOwnerPlayerId: rider.ownerPlayerId, subjectControllerPlayerId: rider.controllerPlayerId,
+        previousLocation: "ride-deck", currentLocation: "vanguard", circle: "vanguard",
+        phase: "ride", timingWindow: "ride-deck"
+      }));
     } else if (action === "stride") {
       if (Number(state.phase) !== 3) return reject("wrong-timing-window");
       if (state.stridePerformed === true) return reject("stride-already-performed");

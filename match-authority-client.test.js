@@ -28,6 +28,8 @@ test("authority action adapter creates only allowlisted reducer commands", () =>
     { type: "game-action", action: "guard", cardInstanceId: "guard-1", discardCardInstanceId: "cost-1" });
   assert.deepEqual(AuthorityClient.gameActionPayload("stride", { strideCardInstanceId: "g-unit-1", costCardInstanceIds: ["cost-1", "cost-2"] }),
     { type: "game-action", action: "stride", strideCardInstanceId: "g-unit-1", costCardInstanceIds: ["cost-1", "cost-2"] });
+  assert.deepEqual(AuthorityClient.gameActionPayload("rideDeck", { rideDeckCardInstanceId: "ride-g1", discardCardInstanceId: "cost-1" }),
+    { type: "game-action", action: "rideDeck", rideDeckCardInstanceId: "ride-g1", discardCardInstanceId: "cost-1" });
   assert.throws(() => AuthorityClient.gameActionPayload("manual-legacy-action", {}), /not supported/);
   assert.throws(() => AuthorityClient.gameActionPayload("attack", { attackerCardInstanceId: "a", actingPlayerId: "host" }), /Unsupported fields/);
 });
