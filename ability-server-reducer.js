@@ -863,6 +863,15 @@
       Number(effect.amount) === Number(match[7]) && effect.duration === "turn" && effect.noOpIfNoLegalTargets === true &&
       JSON.stringify(effect.targetFilter) === JSON.stringify(targetFilter);
   }
+  function isExactRcPlacementSoulBlastFriendlyPowerAbility(ability) {
+    const definition=ability?.definition,printed=String(definition?.printedText||ability?.printedText||"").replace(/[’‘]/g,"'").replace(/\s+/g," ").trim();
+    const indexes={"cfa-2121":0,"cfa-2134":0,"cfa-2144":0},cardId=String(ability?.cardId||"");
+    return printed==="AUTO: [Soul Blast 1] When this unit is placed on RC, you may pay the cost. If you do, choose one of your other units, and that unit gets power +5000 until end of turn."&&
+      Object.hasOwn(indexes,cardId)&&ability.id===`${cardId}:${indexes[cardId]}`&&String(definition?.cardId)===cardId&&definition.id===ability.id&&ability.kind==="AUTO"&&definition.kind==="AUTO"&&
+      definition.source?.patternId==="auto-rc-placement-soul-blast-choose-friendly-power-turn-v1"&&ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="card.placed"&&ability.trigger.subject==="source"&&JSON.stringify(ability.trigger.circles||[])===JSON.stringify(["rear-guard"])&&
+      !ability.trigger.sourceLocation&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"soul-blast",count:1}])&&ability.canDecline===true&&!(ability.conditions||[]).length&&!ability.usageRestriction&&
+      definition.optional===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&definition.effects?.length===1&&definition.effects[0]?.op==="modify-power-target"&&definition.effects[0]?.target==="chosen"&&Number(definition.effects[0]?.amount)===5000&&definition.effects[0]?.duration==="turn"&&definition.effects[0]?.noOpIfNoLegalTargets===true&&JSON.stringify(definition.effects[0]?.targetFilter)===JSON.stringify({controller:"source-controller",cardType:"unit",excludeSource:true});
+  }
 
   const OWN_ATTACK_TARGET_GRADE_POWER_IDS = new Set([
     "cfa-13021", "cfa-13707", "cfa-13709", "cfa-13710", "cfa-13711", "cfa-13712", "cfa-13713"
@@ -2866,6 +2875,7 @@
     if (ability?.definition?.source?.patternId === "auto-own-attack-counter-blast-power-mandatory-battle-v1" && !isExactOwnAttackMandatoryCounterBlastPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-gb-boosted-vanguard-attack-counter-blast-draw-v1" && !isExactGbBoostedVanguardAttackDrawAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-placement-choose-friendly-clan-power-turn-v1" && !isExactRcPlacementChooseFriendlyPowerAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-rc-placement-soul-blast-choose-friendly-power-turn-v1" && !isExactRcPlacementSoulBlastFriendlyPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-gb-vanguard-attack-sacrifice-draw-power-v1" && !isExactRearGuardVanguardAttackSacrificeAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-g-guardian-named-call-soul-blast-counter-charge-v1" && !isExactGGuardianSoulBlastCounterChargeAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-other-friendly-rearguard-placement-source-power-turn-v1" && !isExactOtherRearGuardPlacementPowerAbility(ability)) return false;
@@ -3825,6 +3835,10 @@
               continue;
             }
             if (isExactRcPlacementChooseFriendlyPowerAbility(ability) && !engine.canPayAbilityCosts(ability, { faceUpDamage: (controller.damage || []).filter(card => !card.faceDown).length })) {
+              if (engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) skipped.push({ eventId: event.eventId, cardInstanceId: instance.uid, abilityId: ability.id, reason: "unpayable-cost" });
+              continue;
+            }
+            if (isExactRcPlacementSoulBlastFriendlyPowerAbility(ability) && !engine.canPayAbilityCosts(ability, { soulCount: (controller.soul || []).length })) {
               if (engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) skipped.push({ eventId: event.eventId, cardInstanceId: instance.uid, abilityId: ability.id, reason: "unpayable-cost" });
               continue;
             }

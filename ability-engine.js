@@ -1022,6 +1022,12 @@
     if(match[4])targetFilter.clan=match[4];if(match[5])targetFilter.cardNameContains=match[5];if(match[6])targetFilter.race=match[6];
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rc-placement-choose-friendly-clan-power-turn-v1",review:"Exact RC placement AUTO: source instance must be placed on RC (and from deck where printed); optional Counter-Blast, source-excluding friendly unit target, clan/name/grade/race filters, and turn power are structured."},effects:[{op:"modify-power-target",target:"chosen",amount:Number(match[7]),duration:"turn",targetFilter,noOpIfNoLegalTargets:true}]};
   }
+  function compileAutoRcPlacementSoulBlastFriendlyPowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const match=normalizePrintedText(printedText).match(/^AUTO: \[Soul Blast 1\] When this unit is placed on RC, you may pay the cost\. If you do, choose one of your other units, and that unit gets power \+5000 until end of turn\.$/i);
+    if(!match)return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],optional:true,costs:[{type:"soul-blast",count:1}],costsReviewed:true,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["rear-guard"]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rc-placement-soul-blast-choose-friendly-power-turn-v1",review:"Exact RC-placement AUTO. The exact source must be placed on an RC; its controller may decline or pay Soul Blast 1, then choose another friendly Unit for +5000 until end of turn. Targeting excludes the source and opponent-controlled Units."},effects:[{op:"modify-power-target",target:"chosen",amount:5000,duration:"turn",targetFilter:{controller:"source-controller",cardType:"unit",excludeSource:true},noOpIfNoLegalTargets:true}]};
+  }
   function compileExactTemplateDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
     const match = String(printedText || "").match(/^(?:AUTO\s*)?(?:\[(VC|RC|VC\/RC)\])?:\s*When this unit attacks, this unit gets power \+(\d+) until (?:the )?end of (?:that|the) battle\.$/i);
@@ -2544,6 +2550,7 @@
     compileMainPhaseSourceSoulNamedCallDefinition,
     compileLegacyLimitBreakAttackPowerDefinition,
     compileAutoRcPlacementChooseFriendlyPowerDefinition,
+    compileAutoRcPlacementSoulBlastFriendlyPowerDefinition,
     compileEmptyDamageZonePlacementDefinition,
     compileBoostedAttackHitDiscardDrawDefinition,
     compileBoostedVanguardAttackCounterBlastDrawDefinition,

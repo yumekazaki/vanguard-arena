@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1423,
-    "testCount": 1423,
-    "passed": 1423,
+    "tests": 1428,
+    "testCount": 1428,
+    "passed": 1428,
     "failed": 0,
-    "durationMilliseconds": 238327,
-    "completedAt": "2026-10-30T18:17:00.000Z",
+    "durationMilliseconds": 238822,
+    "completedAt": "2026-10-30T18:27:50.000Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "b201a10b5d36fd95954b562133c22e86461b235baafbb3d10d76e86dda4ff867"
+    "validationInputDigest": "a576abe14b1cf45215f1780f7f3b3dc8fe40805f2b4fe205a337bf32d6352914"
   },
   "records": [
     {
@@ -72896,8 +72896,59 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2121",
+      "abilityId": "cfa-2121:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-soul-blast-friendly-power.test.js"
+      ],
+      "testCases": [
+        "the exact three RC-placement abilities preserve source, Soul Blast, optionality, target, and power",
+        "each seat privately resolves its own source, pays one Soul, and powers only a friendly other Unit",
+        "insufficient Soul, wrong circle, or another instance never creates the prompt",
+        "declining is free and only the prompted player can accept the cost",
+        "foreign or source targets and duplicate resolutions reject without a second effect"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2134",
+      "abilityId": "cfa-2134:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-soul-blast-friendly-power.test.js"
+      ],
+      "testCases": [
+        "the exact three RC-placement abilities preserve source, Soul Blast, optionality, target, and power",
+        "each seat privately resolves its own source, pays one Soul, and powers only a friendly other Unit",
+        "insufficient Soul, wrong circle, or another instance never creates the prompt",
+        "declining is free and only the prompted player can accept the cost",
+        "foreign or source targets and duplicate resolutions reject without a second effect"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2144",
+      "abilityId": "cfa-2144:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-soul-blast-friendly-power.test.js"
+      ],
+      "testCases": [
+        "the exact three RC-placement abilities preserve source, Soul Blast, optionality, target, and power",
+        "each seat privately resolves its own source, pays one Soul, and powers only a friendly other Unit",
+        "insufficient Soul, wrong circle, or another instance never creates the prompt",
+        "declining is free and only the prompted player can accept the cost",
+        "foreign or source targets and duplicate resolutions reject without a second effect"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T18:12:15.313Z"
+  "evidenceUpdatedAt": "2026-10-30T18:23:45.258Z"
 }
