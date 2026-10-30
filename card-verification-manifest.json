@@ -9,10 +9,10 @@
     "testCount": 1381,
     "passed": 1381,
     "failed": 0,
-    "durationMilliseconds": 230298,
-    "completedAt": "2026-10-30T15:23:55.891Z",
+    "durationMilliseconds": 231998,
+    "completedAt": "2026-10-30T15:31:12.743Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "261ebb84180957d9ca830aabbe5a31722f8b8f7be64e9eb0cb75b6e771dd4efa"
+    "validationInputDigest": "85f7bb594e6e9f0d6bdc4085ca4d312b9a87d9d57c696a29348de4d81f50ed67"
   },
   "records": [
     {
@@ -55666,17 +55666,18 @@
     {
       "cardId": "cfa-6705",
       "abilityId": "cfa-6705:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6707",
@@ -55752,152 +55753,162 @@
     {
       "cardId": "cfa-6720",
       "abilityId": "cfa-6720:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6721",
       "abilityId": "cfa-6721:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6722",
       "abilityId": "cfa-6722:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6723",
       "abilityId": "cfa-6723:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6724",
       "abilityId": "cfa-6724:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6725",
       "abilityId": "cfa-6725:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6726",
       "abilityId": "cfa-6726:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6727",
       "abilityId": "cfa-6727:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6728",
       "abilityId": "cfa-6728:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6729",
       "abilityId": "cfa-6729:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-673",
@@ -55920,152 +55931,162 @@
     {
       "cardId": "cfa-6730",
       "abilityId": "cfa-6730:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6731",
       "abilityId": "cfa-6731:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6732",
       "abilityId": "cfa-6732:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6733",
       "abilityId": "cfa-6733:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6734",
       "abilityId": "cfa-6734:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6735",
       "abilityId": "cfa-6735:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6736",
       "abilityId": "cfa-6736:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6737",
       "abilityId": "cfa-6737:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6738",
       "abilityId": "cfa-6738:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6739",
       "abilityId": "cfa-6739:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-674",
@@ -56087,47 +56108,50 @@
     {
       "cardId": "cfa-6740",
       "abilityId": "cfa-6740:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6741",
       "abilityId": "cfa-6741:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6742",
       "abilityId": "cfa-6742:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-rc-gb-vanguard-attack-sacrifice-draw-power-server.test.js"
       ],
       "testCases": [
-        "all 24 GB1 Vanguard-attack sacrifice abilities are trusted and preserve the ordered source cost, draw, and power effects",
+        "all 24 GB1 Vanguard-attack sacrifice abilities are complete single-skill cards with exact metadata and ordered effects",
         "the exact Vanguard attack prompts its controller and resolves the source cost, draw, and battle power for both seats",
         "wrong attacker, insufficient GB, foreign target, host proxy, and duplicate trigger are rejected atomically"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level trigger, GB1, source-to-Soul cost, ordered draw, target, and multiplayer evidence passes; remaining printed abilities and whole-card rules verification are incomplete."
+      "fullyVerified": true,
+      "remaining": "The sole AUTO is tied to its controller’s Vanguard attack while this exact unit is on RC and GB1 is active. It mandatorily moves this source to Soul, draws one, then gives a friendly Vanguard +10000 for that battle. Both seats, effect order, the exact source, insufficient GB, wrong attacker, invalid/foreign target, host proxy, and duplicate events are tested.",
+      "verifiedAt": "2026-10-30T15:31:12.743Z"
     },
     {
       "cardId": "cfa-6743",
