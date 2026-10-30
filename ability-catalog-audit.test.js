@@ -407,6 +407,13 @@ test("the three exact RC-only Restraint abilities compile with Rear-Guard-only a
  for(const {ability} of matches){assert.equal(ability.kind,"CONT");assert.deepEqual(ability.requiredLocation,["rear-guard"]);assert.deepEqual(ability.definition.keywords,["restraint"]);assert.deepEqual(ability.definition.continuousRestrictions,[{type:"restraint"}]);assert.equal(ability.trigger,null)}
 });
 
+test("five exact RC Soul Blast placement abilities compile with their friendly-target power effects",()=>{
+ const cards=loadCatalog(),report=auditCatalog(cards),matches=[];assert.equal(report.patterns["auto-rc-placement-soul-blast-choose-friendly-power-turn-v1"],5);assert.deepEqual(report.invalidCompiled,[]);
+ for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="auto-rc-placement-soul-blast-choose-friendly-power-turn-v1")matches.push(ability);
+ assert.deepEqual(matches.map(ability=>ability.id).sort(),["cfa-2121:0","cfa-2134:0","cfa-2144:0","cfa-2148:0","cfa-2358:0"]);
+ for(const ability of matches){assert.equal(ability.kind,"AUTO");assert.deepEqual(ability.requiredLocation,["rear-guard"]);assert.deepEqual(ability.costs,[{type:"soul-blast",count:1}]);assert.equal(ability.canDecline,true);assert.equal(ability.definition.effects[0].op,"modify-power-target");assert.equal(ability.definition.effects[0].amount,5000);assert.deepEqual(ability.definition.effects[0].targetFilter,{controller:"source-controller",cardType:"unit",excludeSource:true})}
+});
+
 test("all six exact RC/GC Intercept grant CONT abilities compile with continuous shield",()=>{
  const cards=loadCatalog(),report=auditCatalog(cards),expected=["cfa-13995","cfa-13999","cfa-14000","cfa-14005","cfa-14010","cfa-14013"],matches=[];assert.equal(report.patterns["cont-rc-gc-grant-intercept-shield-v1"],6);assert.deepEqual(report.invalidCompiled,[]);
  for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="cont-rc-gc-grant-intercept-shield-v1")matches.push({card,ability});

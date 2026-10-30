@@ -110108,6 +110108,98 @@
           "noOpIfNoLegalTargets": true
         }
       ]
+    },
+    {
+      "id": "cfa-2148:0",
+      "cardId": "cfa-2148",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Soul Blast 1] When this unit is placed on RC, you may pay the cost. If you do, choose one of your other units, and that gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-soul-blast-choose-friendly-power-turn-v1",
+        "review": "Exact RC-placement AUTO, including both printed 'that unit gets' and 'that gets' variants. The exact source must be placed on an RC; its controller may decline or pay the printed Soul Blast, then choose another friendly Unit for the printed power until end of turn. Targeting excludes the source and opponent-controlled Units."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "excludeSource": true
+          },
+          "noOpIfNoLegalTargets": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-2358:0",
+      "cardId": "cfa-2358",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Soul Blast 1] When this unit is placed on RC, you may pay the cost. If you do, choose one of your other units, and that gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-soul-blast-choose-friendly-power-turn-v1",
+        "review": "Exact RC-placement AUTO, including both printed 'that unit gets' and 'that gets' variants. The exact source must be placed on an RC; its controller may decline or pay the printed Soul Blast, then choose another friendly Unit for the printed power until end of turn. Targeting excludes the source and opponent-controlled Units."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "excludeSource": true
+          },
+          "noOpIfNoLegalTargets": true
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

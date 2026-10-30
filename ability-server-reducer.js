@@ -865,12 +865,13 @@
   }
   function isExactRcPlacementSoulBlastFriendlyPowerAbility(ability) {
     const definition=ability?.definition,printed=String(definition?.printedText||ability?.printedText||"").replace(/[’‘]/g,"'").replace(/\s+/g," ").trim();
-    const indexes={"cfa-2121":0,"cfa-2134":0,"cfa-2144":0},cardId=String(ability?.cardId||"");
-    return printed==="AUTO: [Soul Blast 1] When this unit is placed on RC, you may pay the cost. If you do, choose one of your other units, and that unit gets power +5000 until end of turn."&&
+    const indexes={"cfa-2121":0,"cfa-2134":0,"cfa-2144":0,"cfa-2148":0,"cfa-2358":0},cardId=String(ability?.cardId||"");
+    const match=/^AUTO: \[Soul Blast (\d+)\] When this unit is placed on RC, you may pay the cost\. If you do, choose one of your other units, and that(?: unit)? gets power \+(\d+) until end of turn\.$/i.exec(printed);
+    return Boolean(match&&
       Object.hasOwn(indexes,cardId)&&ability.id===`${cardId}:${indexes[cardId]}`&&String(definition?.cardId)===cardId&&definition.id===ability.id&&ability.kind==="AUTO"&&definition.kind==="AUTO"&&
       definition.source?.patternId==="auto-rc-placement-soul-blast-choose-friendly-power-turn-v1"&&ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="card.placed"&&ability.trigger.subject==="source"&&JSON.stringify(ability.trigger.circles||[])===JSON.stringify(["rear-guard"])&&
-      !ability.trigger.sourceLocation&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"soul-blast",count:1}])&&ability.canDecline===true&&!(ability.conditions||[]).length&&!ability.usageRestriction&&
-      definition.optional===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&definition.effects?.length===1&&definition.effects[0]?.op==="modify-power-target"&&definition.effects[0]?.target==="chosen"&&Number(definition.effects[0]?.amount)===5000&&definition.effects[0]?.duration==="turn"&&definition.effects[0]?.noOpIfNoLegalTargets===true&&JSON.stringify(definition.effects[0]?.targetFilter)===JSON.stringify({controller:"source-controller",cardType:"unit",excludeSource:true});
+      !ability.trigger.sourceLocation&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"soul-blast",count:Number(match[1])}])&&ability.canDecline===true&&!(ability.conditions||[]).length&&!ability.usageRestriction&&
+      definition.optional===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&definition.effects?.length===1&&definition.effects[0]?.op==="modify-power-target"&&definition.effects[0]?.target==="chosen"&&Number(definition.effects[0]?.amount)===Number(match[2])&&definition.effects[0]?.duration==="turn"&&definition.effects[0]?.noOpIfNoLegalTargets===true&&JSON.stringify(definition.effects[0]?.targetFilter)===JSON.stringify({controller:"source-controller",cardType:"unit",excludeSource:true}));
   }
 
   const OWN_ATTACK_TARGET_GRADE_POWER_IDS = new Set([

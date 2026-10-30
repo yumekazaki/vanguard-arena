@@ -5,7 +5,7 @@ const Engine=require("./ability-engine.js");
 Engine.registerAbilityDefinitions(require("./ability-definitions.js"));
 const Reducer=require("./ability-server-reducer.js");
 const {loadCatalog}=require("./scripts/audit-ability-catalog.js");
-const catalog=loadCatalog(),IDS=["cfa-2121","cfa-2134","cfa-2144"],PATTERN="auto-rc-placement-soul-blast-choose-friendly-power-turn-v1";
+const catalog=loadCatalog(),IDS=["cfa-2121","cfa-2134","cfa-2144","cfa-2148","cfa-2358"],PATTERN="auto-rc-placement-soul-blast-choose-friendly-power-turn-v1";
 const seats={hostAuthUid:"auth-host",guestAuthUid:"auth-guest",hostSide:"human",guestSide:"bot"};
 function card(id,uid,playerId,{power=8000,grade=1,name=null}={}){const def=catalog.find(item=>item.id===id);return{uid,cardId:id,cardName:name||def?.name||id,name:name||def?.name||id,type:"Normal Unit",unitCard:true,grade,power,critical:1,ownerPlayerId:playerId,controllerPlayerId:playerId};}
 function fixture(id=IDS[0],side="human",soulCount=1){
@@ -20,7 +20,7 @@ function fixture(id=IDS[0],side="human",soulCount=1){
 function discover(f){return Reducer.discoverAutoTriggers(f.state,[f.event],Engine);}
 function respond(f,{accept=true,actor=f.side,targetUid=f.target.uid,actionId=`resolve-${f.state.matchId}`,soulUids:fSoulUids=f.soul.map(item=>item.uid)}={}){return Reducer.applyAbilityDecision(f.state,{actorAuthUid:actor==="human"?seats.hostAuthUid:seats.guestAuthUid,actionId,expectedStateVersion:f.state.stateVersion,payload:{type:"ability-response",accept,selection:{instanceUid:f.source.uid,abilityId:f.ability.id,targetUid,costSelections:{sb:fSoulUids}}}},seats,Engine);}
 
-test("the exact three RC-placement abilities preserve source, Soul Blast, optionality, target, and power",()=>{
+test("all five exact RC-placement abilities preserve source, Soul Blast, optionality, target, and power",()=>{
   for(const id of IDS){const f=fixture(id);assert.equal(f.ability.definition.source.patternId,PATTERN,id);assert.equal(f.ability.kind,"AUTO",id);assert.deepEqual(f.ability.requiredLocation,["rear-guard"],id);assert.deepEqual(f.ability.costs,[{type:"soul-blast",count:1}],id);assert.equal(f.ability.canDecline,true,id);assert.equal(Reducer.supportsServerAbilityEffects(f.ability),true,id);}
 });
 test("each seat privately resolves its own source, pays one Soul, and powers only a friendly other Unit",()=>{
