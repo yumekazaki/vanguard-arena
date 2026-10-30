@@ -2074,14 +2074,14 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       const uid=action.slice("order-flip:".length),item=player.orders.find(card=>card.uid===uid);if(!item)return;item.faceDown=!item.faceDown;addLog(`${player.name} turned ${cardMap.get(item.cardId)?.name||"an Order"} ${item.faceDown?"face down":"face up"}.`);
     } else if (action.startsWith("order-to-hand:") || action.startsWith("order-to-top:") || action.startsWith("order-to-bottom:")) {
       const [destination, uid] = action.split(":"); const index = player.orders.findIndex(item => item.uid === uid); if (index < 0) return;
-      const instance = player.orders.splice(index, 1)[0];
+      const instance = player.orders.splice(index, 1)[0]; instance.rested=false; instance.faceDown=false;
       if (destination === "order-to-hand") { player.hand.push(instance); queueMovedCardAbility(instance,"human","move","order",{currentLocation:"hand"}); }
       else if (destination === "order-to-top") { player.deck.push(instance); queueMovedCardAbility(instance,"human","move","order",{currentLocation:"deck"}); }
       else { player.deck.unshift(instance); queueMovedCardAbility(instance,"human","move","order",{currentLocation:"deck"}); }
       match.selected = null; addLog(`${player.name} moved ${cardMap.get(instance.cardId)?.name || "an Order"} from the Order zone.`);    } else if (action.startsWith("order-to-drop:")) {
       const uid = action.slice("order-to-drop:".length), index = player.orders.findIndex((item) => item.uid === uid);
       if (index < 0) return;
-      const moved=player.orders.splice(index, 1)[0]; player.drop.push(moved); queueMovedCardAbility(moved,"human","move","order",{currentLocation:"drop"}); addLog(`${player.name} moved an Order from the Order zone to drop.`);
+      const moved=player.orders.splice(index, 1)[0]; moved.rested=false; moved.faceDown=false; player.drop.push(moved); queueMovedCardAbility(moved,"human","move","order",{currentLocation:"drop"}); addLog(`${player.name} moved an Order from the Order zone to drop.`);
     } else if (action === "selected-to-top" || action === "selected-to-bottom") {
       const field = findFieldCard(match.selected); if (field?.side !== "human") { toast("Select one of your field cards first."); return; }
       if (field.zone === "vanguard") player.vanguard = null; else player.rear[field.index] = null;
