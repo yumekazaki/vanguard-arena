@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1342,
-    "testCount": 1342,
-    "passed": 1342,
+    "tests": 1367,
+    "testCount": 1367,
+    "passed": 1367,
     "failed": 0,
-    "durationMilliseconds": 285842,
-    "completedAt": "2026-10-29T05:23:02.969Z",
-    "runDate": "2026-10-29",
-    "validationInputDigest": "f44c5f5e7741bdbb80a5c4c9f70ebe97ccc29d76c43e2b7a7c041b42287675fc"
+    "durationMilliseconds": 229803,
+    "completedAt": "2026-10-30T12:52:19.235Z",
+    "runDate": "2026-10-30",
+    "validationInputDigest": "136653e47492cf0ee018384bda91ba0485e67ab2d4ddd90f04b70193e4aee651"
   },
   "records": [
     {
@@ -68808,6 +68808,6 @@
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
-  "generatedAt": "2026-10-29T04:38:36.057Z",
+  "generatedAt": "2026-10-30T12:52:19.497Z",
   "evidenceUpdatedAt": "2026-10-29T05:35:11.874Z"
 }

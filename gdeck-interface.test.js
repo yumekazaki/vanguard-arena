@@ -16,6 +16,7 @@ function harness() {
   const requests = [];
   const context = {
     window:{ VanguardAbilityEngine:Engine }, crypto:{randomUUID:()=>"player"},
+    profileAvatars:[],
     cardMap:cards, isGDeckCard:c=>c?.type==="G Unit", isUnitCard:c=>c?.type==="Unit",
     match:null, online:{role:null}, selectedHandCard:()=>null, toast:()=>{}, addLog:()=>{},
     renderMatch:()=>{}, sendGuestRequest:(type,payload)=>requests.push({type,payload}),

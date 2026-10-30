@@ -252,7 +252,7 @@ test("both Order Zone hand actions emit placement events for the moved instance"
 
 test("intercept placement carries the source circle and current battle into its AUTO event",()=>{
  const app=fs.readFileSync("app.js","utf8"),start=app.indexOf("function interceptWith(uid)"),end=app.indexOf("function moveRearCardToZone",start),branch=app.slice(start,end);
- assert.ok(start>=0);assert.match(branch,/previousLocation:rearZones\[index\]/);assert.match(branch,/currentLocation:"guardian"/);assert.match(branch,/battleId:match\.pendingAttack\?\.battleId/);assert.match(branch,/targetUid:match\.pendingAttack\?\.targetUid/);assert.match(branch,/targetZone:match\.pendingAttack\?\.targetZone/);
+ assert.ok(start>=0);assert.match(branch,/previousLocation:index<5\?\["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right"\]\[index\]:"accel-"\+\(index-4\)/);assert.match(branch,/currentLocation:"guardian"/);assert.match(branch,/battleId:match\.pendingAttack\?\.battleId/);assert.match(branch,/targetUid:match\.pendingAttack\?\.targetUid/);assert.match(branch,/targetZone:match\.pendingAttack\?\.targetZone/);
  assert.match(app,/function placeAbilityMatchesSubject\(raw,source,context\)\{if\(\/\\\\bwhen this unit intercepts/);
 });
 
@@ -264,7 +264,7 @@ test("instance location is derived from the owning match zone and duplicate plac
 
 test("player setup creates its identity before stamping deck instances", () => {
   const source = fs.readFileSync("app.js", "utf8");
-  const playerSetup = source.match(/function makePlayer\(deck, name, human = false\) \{([\s\S]*?)\n  \}/)?.[1] || "";
+  const playerSetup = source.match(/function makePlayer\(deck, name, human = false, avatarId = ""\) \{([\s\S]*?)\n  \}/)?.[1] || "";
   assert.match(playerSetup, /const playerId\s*=\s*crypto\.randomUUID/);
   assert.match(playerSetup, /cardInstances\(deck, playerId\)/);
   assert.match(playerSetup, /return \{ playerId,/);
@@ -885,11 +885,11 @@ test("dual-circle Intercept CONT grants the keyword and continuous shield on RC 
   const card={id:"intercept-grant",text:"CONT [RC/GC]: This unit gets \"Intercept\", and it gets shield +5000."},ability=parseCardAbilities(card)[0];
   assert.equal(ability.kind,"CONT");assert.equal(ability.definition?.source?.patternId,"cont-rc-gc-grant-intercept-shield-v1");assert.deepEqual(ability.requiredLocation,["rear-guard","guardian"]);assert.deepEqual(ability.definition?.keywords,["intercept"]);assert.equal(isManuallyActivatable(ability),false);assert.equal(hasAbilityKeyword(card,"intercept"),true);
   assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"rear-guard"}),{shield:5000});assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"guardian"}),{shield:5000});assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"vanguard"}),{shield:0});assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"hand"}),{shield:0});
-  const app=fs.readFileSync("app.js","utf8");assert.match(app,/function hasIntercept\(card\)[\s\S]{0,260}definition\?\.keywords\?\.includes\("intercept"\)/);assert.match(app,/function eligibleInterceptors\(\)[\s\S]{0,700}hasIntercept\(cardMap\.get\(unit\.cardId\)\)/);assert.doesNotMatch(app,/eligibleInterceptors\(\)[\s\S]{0,500}Number\(cardMap\.get\(unit\.cardId\)\?\.grade\) === 2/);
+  const app=fs.readFileSync("app.js","utf8");assert.match(app,/function hasIntercept\(card\)[\s\S]{0,260}definition\?\.keywords\?\.includes\("intercept"\)/);assert.match(app,/function eligibleInterceptors\(\)[\s\S]{0,900}Number\(card\?\.grade \?\? -1\) >= 2 \|\| hasIntercept\(card\)/);assert.doesNotMatch(app,/eligibleInterceptors\(\)[\s\S]{0,500}Number\(cardMap\.get\(unit\.cardId\)\?\.grade\) === 2/);
 });
 
 test("the app initializes and records the Grade 3+ ride fact on every ride path",()=>{
- const app=fs.readFileSync("app.js","utf8"),ride=app.slice(app.indexOf("function rideHuman()"),app.indexOf("function callUnitToRear(",app.indexOf("function rideHuman()"))),superior=app.slice(app.indexOf("function performSuperiorRide("),app.indexOf("function manualGameAction(",app.indexOf("function performSuperiorRide(")));assert.match(app,/rodeGradeThreePlusThisFight:\s*false/);assert.equal((app.match(/VanguardAbilityEngine\.recordFightRide\(/g)||[]).length,4);assert.match(ride,/recordFightRide\(p,/);assert.match(superior,/recordFightRide\(player,/);assert.ok(app.includes("window.VanguardAbilityEngine.recordFightRide(bot,ride.c)"));assert.ok(app.includes("window.VanguardAbilityEngine.recordFightRide(player,cardMap.get(instance.cardId))"));
+ const app=fs.readFileSync("app.js","utf8"),ride=app.slice(app.indexOf("function rideHuman()"),app.indexOf("function callUnitToRear(",app.indexOf("function rideHuman()"))),superior=app.slice(app.indexOf("function performSuperiorRide("),app.indexOf("function manualGameAction(",app.indexOf("function performSuperiorRide(")));assert.match(app,/rodeGradeThreePlusThisFight:\s*false/);assert.equal((app.match(/VanguardAbilityEngine\.recordFightRide\(/g)||[]).length,5);assert.match(ride,/recordFightRide\(p,/);assert.match(superior,/recordFightRide\(player,/);assert.ok(app.includes("window.VanguardAbilityEngine.recordFightRide(bot,ride.c)"));assert.ok(app.includes("window.VanguardAbilityEngine.recordFightRide(player,cardMap.get(instance.cardId))"));
 });
 test("models Battle Sister, Cocoa clan condition while keeping it subject to validation", () => {
   const cocoa = parseCardAbilities({
@@ -1529,7 +1529,7 @@ test("Guardian Circle placement skills match only the exact card placed on GC", 
   assert.equal(eventMatchesAbilityTrigger(ability, "place", event, "guard-copy", "rear-left", "rear-left"), false);
   const app = fs.readFileSync("app.js", "utf8");
   assert.ok(app.includes('queueAbilityPrompts("place","human",instance.uid,{sourceZone:"guardian",previousLocation:"hand",zone:"guardian"'));
-  assert.ok(app.includes('queueAbilityPrompts("place","human",unit.uid,{sourceZone:"guardian",previousLocation:rearZones[index]'));
+  assert.ok(app.includes('queueAbilityPrompts("place","human",unit.uid,{sourceZone:"guardian",previousLocation:index<5?["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right"][index]:"accel-"+(index-4)'));
   assert.ok(app.includes('queueAbilityPrompts("place","human",marker.uid,{sourceZone:"guardian",previousLocation:"hand"'));
   assert.ok(app.includes('queueAbilityPrompts("place","human",instance.uid,{sourceZone:"guardian",previousLocation:"g-deck"'));
   assert.ok(app.includes('f.zone==="guardian"?"GC"'));
@@ -1782,7 +1782,7 @@ test("ordinary stand phases and manual stand choices dispatch exact-instance sta
   assert.ok(botTurn.indexOf("botTimer = setTimeout(") < botTurn.indexOf('queueTurnStartEvent("bot")'));
   assert.ok(botTurn.indexOf('queueTurnStartEvent("bot")') < botTurn.indexOf('standAllUnits("bot")'));
   assert.match(app, /function completeTurnTransition\(endingPlayerId\)[\s\S]{0,2200}queueTurnStartEvent\("human"\);standAllUnits\("human"\)/);
-  assert.match(app, /else if \(pending\.stage === "stand-target"\) \{ standUnitAndQueue\("human",unit\)/);
+  assert.match(app, /if \(pending\.stage === "stand-target"\) \{ standUnitAndQueue\(side,unit\)/);
   assert.match(app, /if \(pending\.stage === "stand-target"\)[\s\S]{0,220}standUnitAndQueue\(side,target\)/);
 });
 
@@ -1898,7 +1898,7 @@ test("remote Perfect Guard and Stride cost prompts are projected to the joining 
   assert.ok(app.includes("snapshot.pendingProtectGuard.ownerSide = flipSide(snapshot.pendingProtectGuard.ownerSide)"));
   assert.ok(app.includes('if(snapshot.pendingStride.ownerSide!=="human")snapshot.pendingStride=null'));
   assert.ok(app.includes('if(snapshot.pendingProtectGuard.ownerSide!=="human")snapshot.pendingProtectGuard=null'));
-  assert.ok(app.includes("publicMatch.pendingStride = null; publicMatch.pendingProtectGuard = null"));
+  assert.match(app, /publicMatch\.pendingStride\s*=\s*null;\s*publicMatch\.pendingRide\s*=\s*null;\s*publicMatch\.pendingProtectGuard\s*=\s*null/);
   assert.ok(app.includes("match.pendingProtectGuard.ownerSide=flipSide(match.pendingProtectGuard.ownerSide)"));
   assert.ok(app.includes("renderGAssistDialog(); renderRemotePaymentPrompt()"));
   assert.ok(app.includes('performManualAction("stride-cancel")'));
@@ -1916,7 +1916,7 @@ test("spectator and player relays use separate topics and private decisions are 
 
 
   assert.ok(app.includes('if(!["player","guest"].includes(envelope.senderRole))return'));
-  assert.ok(app.includes("publicMatch.pendingStride = null; publicMatch.pendingProtectGuard = null"));
+  assert.match(app, /publicMatch\.pendingStride\s*=\s*null;\s*publicMatch\.pendingRide\s*=\s*null;\s*publicMatch\.pendingProtectGuard\s*=\s*null/);
   assert.ok(app.includes('bindOnlineConnection(createRelayConnection(secret, "host-watcher"), "host-watcher")'));
   assert.ok(app.includes('createRelayConnection(secret, watching ? "watcher" : "guest")'));
 });
@@ -2612,7 +2612,14 @@ test("Lord continuous restriction only blocks its own attack when a friendly uni
 });
 
 
-test("triggered AUTO resolution uses the source circle from its triggering event after the source moves", () => {\n  const ability = { kind: "AUTO" };\n  const pending = { field: "vanguard", eventContext: { eventId: "ride-event-1", sourceZone: "soul" } };\n  assert.equal(abilitySourceZoneAtResolution(ability, pending, "soul"), "vanguard");\n  assert.equal(abilitySourceZoneAtResolution({ kind: "ACT" }, pending, "soul"), "soul");\n});\n\ntest("ride draw and Quick Shield AUTO matches only the exact card that was ridden",()=>{
+test("triggered AUTO resolution uses the source circle from its triggering event after the source moves", () => {
+  const ability = { kind: "AUTO" };
+  const pending = { field: "vanguard", eventContext: { eventId: "ride-event-1", sourceZone: "soul" } };
+  assert.equal(abilitySourceZoneAtResolution(ability, pending, "soul"), "vanguard");
+  assert.equal(abilitySourceZoneAtResolution({ kind: "ACT" }, pending, "soul"), "soul");
+});
+
+test("ride draw and Quick Shield AUTO matches only the exact card that was ridden",()=>{
   const card={id:"cfa-5673",text:"AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand."};const ability=parseCardAbilities(card)[0];assert.equal(ability.definition?.source?.patternId,"auto-rode-upon-draw-quick-shield-v1");assert.equal(ability.trigger?.eventType,"card.ridden");assert.equal(ability.trigger?.subject,"event-target");assert.deepEqual(ability.conditions,[]);
   const event={type:"card.ridden",sourceCardInstanceId:"rider-1",subjectCardInstanceId:"rider-1",targetCardInstanceIds:["ridden-1"],targetPreviousLocation:"vanguard",targetCurrentLocation:"soul"};
   assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,"ridden-1","vanguard","vanguard","player-a"),true);assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,"other-copy","vanguard","vanguard","player-a"),false);assert.equal(eventMatchesAbilityTrigger(ability,"place",{...event,type:"card.placed"},"ridden-1","vanguard","vanguard","player-a"),false);
@@ -3247,7 +3254,7 @@ test("Dauntless Dominate Dragon locks only its exact normal drive-check card and
 
 test("the site cache-busts every changed engine script bundle",()=>{
   const html=fs.readFileSync("index.html","utf8");
-  assert.match(html,/ability-engine\.js\?v=20261028-gc-race-protect-1/);assert.match(html,/app\.js\?v=20261028-bot-prompt-recovery-1/);assert.match(html,/ability-definitions\.js\?v=20261028-clan-hand-soul-1/);assert.match(html,/practice-bot\.js\?v=20261028-ability-batch-v1/);
+  assert.match(html,/ability-engine\.js\?v=20261029-ability-response-null-defaults-1/);assert.match(html,/app\.js\?v=20261030-face-crops-3/);assert.match(html,/ability-definitions\.js\?v=20261028-clan-hand-soul-1/);assert.match(html,/practice-bot\.js\?v=20261028-ability-batch-v1/);
 });
 
 test("ride-phase discard AUTO calls only its exact source from Drop to a legal rested circle",()=>{
