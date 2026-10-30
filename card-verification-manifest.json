@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1463,
-    "testCount": 1463,
-    "passed": 1463,
+    "tests": 1468,
+    "testCount": 1468,
+    "passed": 1468,
     "failed": 0,
-    "durationMilliseconds": 400892,
-    "completedAt": "2026-10-30T22:23:33.665Z",
+    "durationMilliseconds": 359215,
+    "completedAt": "2026-10-30T22:46:38.932Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "45ce9e22e074f4d2314678b8de9694905dc8e9314b52e0e861338c5b6aa8dba0"
+    "validationInputDigest": "57b09505e11f2218ccf5f4a6a69348b484823e18b801d4e0aa77db2aebc02f5c"
   },
   "records": [
     {
@@ -73853,8 +73853,76 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-3842",
+      "abilityId": "cfa-3842:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-vanguard-name-source-soul-draw-server.test.js"
+      ],
+      "testCases": [
+        "only the four exact named-Vanguard texts compile and preserve each catalog string",
+        "all four abilities resolve for either seat: source to Soul, draw one, then give the attacking Vanguard +5000 for this battle",
+        "declining is free, and wrong-name or wrong-attacker events cannot create a prompt",
+        "stale source, stale or foreign Vanguard target, and a forged resolving seat reject atomically",
+        "replay is rejected and the battle-only modifier stays tied to this battle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-3959",
+      "abilityId": "cfa-3959:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-vanguard-name-source-soul-draw-server.test.js"
+      ],
+      "testCases": [
+        "only the four exact named-Vanguard texts compile and preserve each catalog string",
+        "all four abilities resolve for either seat: source to Soul, draw one, then give the attacking Vanguard +5000 for this battle",
+        "declining is free, and wrong-name or wrong-attacker events cannot create a prompt",
+        "stale source, stale or foreign Vanguard target, and a forged resolving seat reject atomically",
+        "replay is rejected and the battle-only modifier stays tied to this battle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-3980",
+      "abilityId": "cfa-3980:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-vanguard-name-source-soul-draw-server.test.js"
+      ],
+      "testCases": [
+        "only the four exact named-Vanguard texts compile and preserve each catalog string",
+        "all four abilities resolve for either seat: source to Soul, draw one, then give the attacking Vanguard +5000 for this battle",
+        "declining is free, and wrong-name or wrong-attacker events cannot create a prompt",
+        "stale source, stale or foreign Vanguard target, and a forged resolving seat reject atomically",
+        "replay is rejected and the battle-only modifier stays tied to this battle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-3998",
+      "abilityId": "cfa-3998:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-vanguard-name-source-soul-draw-server.test.js"
+      ],
+      "testCases": [
+        "only the four exact named-Vanguard texts compile and preserve each catalog string",
+        "all four abilities resolve for either seat: source to Soul, draw one, then give the attacking Vanguard +5000 for this battle",
+        "declining is free, and wrong-name or wrong-attacker events cannot create a prompt",
+        "stale source, stale or foreign Vanguard target, and a forged resolving seat reject atomically",
+        "replay is rejected and the battle-only modifier stays tied to this battle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T21:53:34.836Z"
+  "evidenceUpdatedAt": "2026-10-30T22:31:54.632Z"
 }
