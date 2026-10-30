@@ -226,3 +226,40 @@ body:has(#match-empty:not(.hidden)) .app-shell { max-width:1540px; padding-inlin
   #match-layout .game-table { border-radius:4px; }
 }
 @media(prefers-reduced-motion:reduce) { #match-layout .field-zone:before { animation:none!important; } }
+
+/* Ambient animation: give the table a living game-board feel without moving
+   controls, card hitboxes, or stateful game elements. */
+@keyframes arena-mat-drift { from { background-position:48% 48%; } to { background-position:53% 52%; } }
+@keyframes arena-energy-drift { 0% { background-position:0% 50%,50% 50%; filter:hue-rotate(0deg); } 50% { background-position:100% 45%,55% 50%; filter:hue-rotate(12deg); } 100% { background-position:0% 50%,48% 50%; filter:hue-rotate(0deg); } }
+@keyframes arena-border-breathe { 0%,100% { opacity:.48; box-shadow:inset 0 0 20px #70baff11,0 0 16px #546dff25; } 50% { opacity:.95; box-shadow:inset 0 0 30px #70baff22,0 0 30px #a15dff62; } }
+@keyframes arena-circle-breathe { 0%,100% { filter:brightness(.86); transform:scale(.97); } 50% { filter:brightness(1.24); transform:scale(1.025); } }
+@keyframes arena-orbit-spin { to { transform:rotate(360deg); } }
+@keyframes arena-vanguard-pulse { 0%,100% { filter:brightness(.95) drop-shadow(0 0 7px #ffc65b4d); } 50% { filter:brightness(1.22) drop-shadow(0 0 21px #ffb744ad); } }
+@keyframes arena-menu-portrait { 0%,100% { translate:0 0; } 50% { translate:0 -7px; } }
+@keyframes arena-menu-light-sweep { from { transform:translateX(-110%) skewX(-18deg); } to { transform:translateX(210%) skewX(-18deg); } }
+@keyframes arena-card-idle { 0%,100% { translate:0 0; } 50% { translate:0 -3px; } }
+#match-layout .mat-half { background-size:108% 108%!important; animation:arena-mat-drift 34s ease-in-out infinite alternate; }
+#match-layout .table-glow { background-size:180% 180%; animation:arena-energy-drift 18s ease-in-out infinite; }
+#match-layout .game-table:before { animation:arena-border-breathe 4.5s ease-in-out infinite; }
+#match-layout .field-zone:not(.arena-ride-circle):not(.arena-stride-circle):after { content:""; position:absolute; z-index:1; inset:3%; border-radius:50%; pointer-events:none; opacity:.46; background:repeating-conic-gradient(from 0deg,#72dcff 0deg 1.3deg,transparent 1.3deg 13deg,#a468ff 13deg 14deg,transparent 14deg 28deg); mask:radial-gradient(transparent 61%,#000 63% 66%,transparent 68%); animation:arena-orbit-spin 22s linear infinite; }
+#match-layout .field-zone:not(.vanguard-zone):before { animation:arena-circle-breathe 3.8s ease-in-out infinite; }
+#match-layout .opponent-side .field-zone:not(.vanguard-zone):after { background:repeating-conic-gradient(from 0deg,#ff9aab 0deg 1.3deg,transparent 1.3deg 13deg,#ff65c1 13deg 14deg,transparent 14deg 28deg); animation-duration:28s; }
+#match-layout .vanguard-zone:before { animation:arena-vanguard-pulse 3s ease-in-out infinite; }
+#match-layout .field-zone:has(.field-card):before { opacity:.78; }
+#match-layout .field-card { transition:filter .2s,box-shadow .2s; }
+#match-layout .field-card:hover { filter:brightness(1.12) drop-shadow(0 0 13px #72dcff88); }
+#match-layout .player-line .avatar img { animation:arena-menu-portrait 5s ease-in-out infinite; }
+#match-layout .attack-choice-panel,#match-layout .battle-action-panel { animation:arena-prompt-arrive .24s cubic-bezier(.2,.75,.25,1) both; }
+@keyframes arena-prompt-arrive { from { opacity:0; transform:translateY(9px) scale(.985); } to { opacity:1; transform:translateY(0) scale(1); } }
+#match-empty .fighter-option .fighter-reveal { animation:arena-menu-portrait 5.4s ease-in-out infinite; }
+#match-empty .fighter-option .scene-shine { opacity:.13; background:linear-gradient(115deg,transparent 28%,#ffffff38 48%,transparent 65%); animation:arena-menu-light-sweep 8s ease-in-out infinite; }
+#match-empty .fighter-option:first-child .menu-card-2 { animation:arena-card-idle 4.2s ease-in-out infinite; }
+#match-empty .fighter-option:nth-child(2) .fighter-reveal { animation-delay:-1.2s; }
+#match-empty .fighter-option:nth-child(3) .fighter-reveal { animation-delay:-2.4s; }
+#match-empty .fighter-option:nth-child(4) .fighter-reveal { animation-delay:-3.1s; }
+#view-decks .deck-grid-card { transition:transform .2s ease,filter .2s ease,box-shadow .2s ease; }
+#view-decks .deck-grid-card:hover { transform:translateY(-5px) rotate(-1deg) scale(1.045); filter:brightness(1.12); }
+#view-decks .workshop-search,#view-decks .deck-builder-panel,#view-decks .workshop-inspector { backdrop-filter:blur(14px); }
+@media(prefers-reduced-motion:reduce) {
+  #match-layout .mat-half,#match-layout .table-glow,#match-layout .game-table:before,#match-layout .field-zone:before,#match-layout .field-zone:after,#match-layout .vanguard-zone:before,#match-layout .player-line .avatar img,#match-layout .attack-choice-panel,#match-layout .battle-action-panel,#match-empty .fighter-option .fighter-reveal,#match-empty .fighter-option .scene-shine,#match-empty .menu-card-2 { animation:none!important; }
+}
