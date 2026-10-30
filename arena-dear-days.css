@@ -350,12 +350,14 @@ body:has(#match-empty:not(.hidden)) .app-shell { max-width:1540px; padding-inlin
   #match-empty .fighter-option .fighter-reveal { width:190px; height:290px; right:-1%; bottom:-28px; }
 }
 
-/* Match the remaining three character panels to the Aichi panel's bold scale. */
-#match-empty .fighter-option:not(:first-child) .fighter-reveal { z-index:4; width:clamp(285px,30vw,360px); height:clamp(330px,35vw,405px); right:-2%; bottom:-52px; }
-#match-empty .fighter-option:not(:first-child) .fighter-portrait { object-fit:cover; object-position:center 16%; }
+/* The non-Aichi panels use tightly cropped PNG portraits and the same frame as Aichi. */
+#match-empty .fighter-option .fighter-reveal,
+#match-empty .fighter-option:first-child .fighter-reveal,
+#match-empty .fighter-option:not(:first-child) .fighter-reveal { z-index:6; width:clamp(250px,26vw,320px); height:clamp(340px,36vw,410px); right:-2%; bottom:-67px; }
+#match-empty .fighter-option .fighter-portrait { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:contain; object-position:center top; }
 #match-empty .fighter-option:not(:first-child) .fighter-name { z-index:7; right:7%; left:auto; bottom:48px; transform:skew(-8deg); }
 @media(max-width:700px) {
-  #match-empty .fighter-option:not(:first-child) .fighter-reveal { width:205px; height:305px; right:-2%; bottom:-27px; }
+  #match-empty .fighter-option .fighter-reveal { width:190px; height:290px; right:-1%; bottom:-28px; }
 }
 
 /* Larger, face-focused portraits in account settings and the match HUD. */
