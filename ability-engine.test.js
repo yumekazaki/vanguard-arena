@@ -3,7 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const curatedDefinitions = require("./ability-definitions.js");
 const VanguardAbilityEngine = require("./ability-engine.js");
-const { createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, canResolveAbilitySource, canActivateManualAbility, autoAbilityReadiness, abilityUsageKey, validateAbilityChoices, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, expireTurnModifiers, parseCardAbilities, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, createGameEvent, claimGameEvent, claimAbilityTrigger, eventSubjectMatches, isManuallyActivatable, eventMatchesAbilityTrigger, canPayAbilityCosts, evaluateAutoCostPayment, evaluateAbilityConditions, validateRemoteRequest, validateRemoteActionRequest, validateAbilityDecision, payAbilityCosts, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, matchesTargetFilter, claimRemoteRequest, GAME_EVENT_TYPES, registerAbilityDefinitions, canDeclineAbility, validateEffectProgram, resolveEffectProgram, EFFECT_HANDLERS, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance } = require("./ability-engine.js");
+const { createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, canResolveAbilitySource, abilitySourceZoneAtResolution, canActivateManualAbility, autoAbilityReadiness, abilityUsageKey, validateAbilityChoices, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, expireTurnModifiers, parseCardAbilities, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, createGameEvent, claimGameEvent, claimAbilityTrigger, eventSubjectMatches, isManuallyActivatable, eventMatchesAbilityTrigger, canPayAbilityCosts, evaluateAutoCostPayment, evaluateAbilityConditions, validateRemoteRequest, validateRemoteActionRequest, validateAbilityDecision, payAbilityCosts, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, matchesTargetFilter, claimRemoteRequest, GAME_EVENT_TYPES, registerAbilityDefinitions, canDeclineAbility, validateEffectProgram, resolveEffectProgram, EFFECT_HANDLERS, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance } = require("./ability-engine.js");
 registerAbilityDefinitions(curatedDefinitions);
 test("Perfect Raizer continuous field restriction is per instance and only applies to its own source",()=>{
  const ability=parseCardAbilities({id:"cfa-165",text:"CONT [VC/RC]: If you do not have another card with \"Raizer\" in its card name on your VC or RC, this unit gets power -2000."})[0];
@@ -2611,6 +2611,13 @@ test("Lord continuous restriction only blocks its own attack when a friendly uni
   assert.equal(evaluateContinuousRestrictions([ability],{sourceInstanceId:"lord-1",sourceCard:source.card,location:"guardian",controlledUnits:[source,foreign]}).legal,true);
 });
 
+
+test("triggered AUTO resolution uses the source circle from its triggering event after the source moves", () => {
+  const ability = { kind: "AUTO" };
+  const pending = { field: "vanguard", eventContext: { eventId: "ride-event-1", sourceZone: "soul" } };
+  assert.equal(abilitySourceZoneAtResolution(ability, pending, "soul"), "vanguard");
+  assert.equal(abilitySourceZoneAtResolution({ kind: "ACT" }, pending, "soul"), "soul");
+});
 
 test("ride draw and Quick Shield AUTO matches only the exact card that was ridden",()=>{
   const card={id:"cfa-5673",text:"AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand."};const ability=parseCardAbilities(card)[0];assert.equal(ability.definition?.source?.patternId,"auto-rode-upon-draw-quick-shield-v1");assert.equal(ability.trigger?.eventType,"card.ridden");assert.equal(ability.trigger?.subject,"event-target");assert.deepEqual(ability.conditions,[]);
