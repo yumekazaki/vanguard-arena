@@ -1348,6 +1348,13 @@
   function compileRearGuardVanguardAttackSacrificeDrawPowerDefinition(cardId,abilityId,kind,printedText){
     const match=normalizePrintedText(printedText).match(/^AUTO \[RC\] Generation Break 1: When your vanguard attacks, COST \[put this unit into your soul\], draw a card, and one of your vanguards gets power \+(\d+) until end of that battle\.$/i);if(kind!=="AUTO"||!match)return null;return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-rc-gb-vanguard-attack-sacrifice-draw-power-v1",review:"Exact RC/GB1 AUTO in 24 catalog records. The player's Vanguard attack is the trigger, the exact Rear-Guard pays by moving into Soul, then draw resolves before power is applied to the attacking friendly Vanguard."},effects:[{op:"draw",count:1},{op:"modify-power-target",target:"chosen",amount:Number(match[1]),duration:"battle",targetFilter:{controller:"source-controller",cardType:"unit",zone:"vanguard"}}]};
   }
+  function compileOwnVanguardNameAttackSourceSoulDrawPowerDefinition(cardId,abilityId,kind,printedText){
+    const names={"cfa-3842":"Gavrail","cfa-3959":"Bigbelly","cfa-3980":"Yasuie","cfa-3998":"Darkface"},name=names[String(cardId)];
+    if(kind!=="AUTO"||!name||abilityId!==`${cardId}:0`)return null;
+    const exact=`AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a vanguard with "${name}" in its card name, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.`;
+    if(String(printedText)!==exact)return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],optional:true,conditions:[{type:"controller-vanguard-name-contains",value:name}],conditionsReviewed:true,costs:[{type:"source-to-soul",count:1}],costsReviewed:true,choicesReviewed:true,trigger:{status:"recognized-trigger",eventType:"unit.attacked",subject:"vanguard",circles:[]},source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-vanguard-name-attack-source-soul-draw-power-battle-v1",review:"Exact four-card AUTO family. The controller's exact Vanguard attack triggers this Rear-Guard's optional source-to-Soul cost; the live Vanguard must contain its card's printed name fragment. If paid, draw one, then select the friendly Vanguard to receive +5000 for that same battle."},effects:[{op:"draw",count:1},{op:"modify-power-target",target:"chosen",amount:5000,duration:"battle",targetFilter:{controller:"source-controller",cardType:"unit",zone:"vanguard"}}]};
+  }
   function compileNamedGradeVanguardAttackSacrificeDrawPowerDefinition(cardId,abilityId,kind,printedText){
     const text=normalizePrintedText(printedText);
     const match=text.match(/^AUTO \[RC\]: \[Put this unit into your soul\] When your vanguard attacks, if you have a grade (\d+) or greater vanguard with ["“]([^"”]+)["”] in its card name, you may pay the cost\. If you do, draw a card, choose one of your vanguards, and it gets power \+(\d+) until end of that battle\.$/i);
@@ -2581,6 +2588,7 @@
     compileRidePhaseDiscardBottomDeckDrawDefinition,
     compileGuardianOrRideDeckDiscardAltCostDrawDefinition,
     compileRearGuardVanguardAttackSacrificeDrawPowerDefinition,
+    compileOwnVanguardNameAttackSourceSoulDrawPowerDefinition,
     compileNamedGradeVanguardAttackSacrificeDrawPowerDefinition,
     compileGradeNamedVanguardAttackSacrificeDrawPowerDefinition,
     compileOwnAttackHitClanRearGuardDrawDefinition,

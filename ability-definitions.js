@@ -111721,6 +111721,34 @@
         }
       ]
     },
+    ...[
+      ["cfa-3842", "Gavrail"],
+      ["cfa-3959", "Bigbelly"],
+      ["cfa-3980", "Yasuie"],
+      ["cfa-3998", "Darkface"]
+    ].map(([cardId, name]) => ({
+      id: `${cardId}:0`,
+      cardId,
+      kind: "AUTO",
+      printedText: `AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a vanguard with "${name}" in its card name, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.`,
+      requiredLocation: ["rear-guard"],
+      optional: true,
+      conditions: [{ type: "controller-vanguard-name-contains", value: name }],
+      conditionsReviewed: true,
+      costs: [{ type: "source-to-soul", count: 1 }],
+      costsReviewed: true,
+      choicesReviewed: true,
+      source: {
+        dataset: "Cardfight Area snapshot",
+        snapshotDate: "2025-05-09",
+        patternId: "auto-vanguard-name-attack-source-soul-draw-power-battle-v1",
+        review: "Exact four-card AUTO family. The controller's exact Vanguard attack triggers this Rear-Guard's optional source-to-Soul cost; the live Vanguard must contain its card's printed name fragment. If paid, draw one, then select the friendly Vanguard to receive +5000 for that same battle."
+      },
+      effects: [
+        { op: "draw", count: 1 },
+        { op: "modify-power-target", target: "chosen", amount: 5000, duration: "battle", targetFilter: { controller: "source-controller", cardType: "unit", zone: "vanguard" } }
+      ]
+    })),
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;

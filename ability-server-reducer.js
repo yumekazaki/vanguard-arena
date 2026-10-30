@@ -1051,6 +1051,35 @@
       Number(engine.countGenerationBreakUnits(controller, card => card?.gDeckCard === true)) >= 1;
   }
 
+  const OWN_VANGUARD_NAME_ATTACK_SOURCE_SOUL_DRAW_RULES=new Map([["cfa-3842","Gavrail"],["cfa-3959","Bigbelly"],["cfa-3980","Yasuie"],["cfa-3998","Darkface"]]);
+  function isExactOwnVanguardNameAttackSourceSoulDrawAbility(ability){
+    const cardId=String(ability?.cardId||""),name=OWN_VANGUARD_NAME_ATTACK_SOURCE_SOUL_DRAW_RULES.get(cardId),definition=ability?.definition;
+    const printed=String(definition?.printedText||ability?.printedText||"");
+    const expected=name&&`AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a vanguard with "${name}" in its card name, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.`;
+    return Boolean(expected&&ability?.id===`${cardId}:0`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&String(definition.cardId)===cardId&&definition.id===ability.id&&printed===expected&&
+      definition.source?.patternId==="auto-vanguard-name-attack-source-soul-draw-power-battle-v1"&&definition.optional===true&&ability.canDecline===true&&definition.conditionsReviewed===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&
+      JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(definition.requiredLocation||[])===JSON.stringify(["rear-guard"])&&
+      ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="unit.attacked"&&ability.trigger.subject==="vanguard"&&JSON.stringify(ability.trigger.circles||[])===JSON.stringify([])&&
+      JSON.stringify(ability.conditions||[])===JSON.stringify([{type:"controller-vanguard-name-contains",value:name}])&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"source-to-soul",count:1}])&&
+      !(ability.once||ability.usageRestriction)&&definition.effects?.length===2&&JSON.stringify(definition.effects[0])===JSON.stringify({op:"draw",count:1})&&
+      JSON.stringify(definition.effects[1])===JSON.stringify({op:"modify-power-target",target:"chosen",amount:5000,duration:"battle",targetFilter:{controller:"source-controller",cardType:"unit",zone:"vanguard"}}));
+  }
+  function ownVanguardNameAttackSourceSoulDrawEventMatches(state,ability,source,located,event,actorPlayerId,engine){
+    if(!isExactOwnVanguardNameAttackSourceSoulDrawAbility(ability))return false;
+    const side=located?.side,player=side&&state.players?.[side],attack=state?.pendingAttack,attackerUid=attack?.attackerUid,target=attack?.targetUid;
+    const attackerLocation=attackerUid&&engine.locateCardInstance(state,attackerUid),targetLocation=target&&engine.locateCardInstance(state,target);
+    const conditionContext=buildConditionContext(state,event,located,engine);
+    return Boolean(side&&player&&attack?.battleId&&event?.eventId&&event.type==="unit.attacked"&&event.battleId===attack.battleId&&event.phase==="battle"&&event.timingWindow==="attack-declared"&&
+      state.side===side&&Number(state.phase)===5&&player.playerId===actorPlayerId&&event.actingPlayerId===actorPlayerId&&event.turnPlayerId===actorPlayerId&&
+      located.zone==="rear-guard"&&located.controllerPlayerId===actorPlayerId&&located.ownerPlayerId===actorPlayerId&&player.rear?.some(card=>card?.uid===source?.uid)&&source?.uid!==attackerUid&&
+      attack.attackerSide===side&&attack.attackerPlayerId===actorPlayerId&&attack.attackerZone==="vanguard"&&player.vanguard?.uid===attackerUid&&attackerLocation&&!attackerLocation.ambiguous&&attackerLocation.zone==="vanguard"&&attackerLocation.side===side&&attackerLocation.controllerPlayerId===actorPlayerId&&
+      event.sourceCardInstanceId===attackerUid&&event.cardInstanceId===attackerUid&&event.subjectCardInstanceId===attackerUid&&(event.attackingCardInstanceIds||[]).includes(attackerUid)&&
+      event.sourceOwnerPlayerId===attackerLocation.ownerPlayerId&&event.subjectOwnerPlayerId===attackerLocation.ownerPlayerId&&event.sourceControllerPlayerId===actorPlayerId&&event.subjectControllerPlayerId===actorPlayerId&&
+      event.previousLocation==="vanguard"&&event.currentLocation==="vanguard"&&attack.defenderSide!==side&&targetLocation&&!targetLocation.ambiguous&&targetLocation.side===attack.defenderSide&&targetLocation.controllerPlayerId===state.players?.[attack.defenderSide]?.playerId&&
+      ["vanguard","rear-guard"].includes(targetLocation.zone)&&(targetLocation.circle||targetLocation.zone)===attack.targetZone&&event.targetLocation===attack.targetZone&&(event.targetCardInstanceIds||[]).length===1&&event.targetCardInstanceIds[0]===target&&
+      Boolean(conditionContext)&&engine.evaluateAbilityConditions(ability,conditionContext));
+  }
+
   function exactDriveCheckAbility(ability, cardId, patternId, expectedText, effects, costs, conditions) {
     const definition = ability?.definition;
     return ability?.kind === "AUTO" && definition?.kind === "AUTO" && String(ability.cardId) === cardId &&
@@ -3016,6 +3045,7 @@
     if (ability?.definition?.source?.patternId === "auto-rc-placement-choose-friendly-clan-power-turn-v1" && !isExactRcPlacementChooseFriendlyPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-placement-soul-blast-choose-friendly-power-turn-v1" && !isExactRcPlacementSoulBlastFriendlyPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-gb-vanguard-attack-sacrifice-draw-power-v1" && !isExactRearGuardVanguardAttackSacrificeAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-vanguard-name-attack-source-soul-draw-power-battle-v1" && !isExactOwnVanguardNameAttackSourceSoulDrawAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-g-guardian-named-call-soul-blast-counter-charge-v1" && !isExactGGuardianSoulBlastCounterChargeAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-other-friendly-rearguard-placement-source-power-turn-v1" && !isExactOtherRearGuardPlacementPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-stride-cost-discard-draw-v1" && !isExactStrideCostDiscardDrawAbility(ability)) return false;
@@ -3913,6 +3943,7 @@
             }
             if (isExactRcNarukamiOwnAttackPowerAbility(ability) && !rcNarukamiOwnAttackEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId)) continue;
             if (isExactRearGuardVanguardAttackSacrificeAbility(ability) && !rearGuardVanguardAttackSacrificeEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
+            if (isExactOwnVanguardNameAttackSourceSoulDrawAbility(ability) && !ownVanguardNameAttackSourceSoulDrawEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (ability.definition?.source?.patternId === "auto-other-friendly-rearguard-placement-source-power-turn-v1" &&
                 !otherRearGuardPlacementPowerEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (ability.definition?.source?.patternId === "auto-stride-cost-discard-draw-v1" &&
@@ -5571,6 +5602,7 @@
     if (isExactOpponentRearGuardCapOwnAttackAbility(ability) && !opponentRearGuardCapOwnAttackEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("opponent-rear-guard-cap-own-attack-context-invalid");
     if (ability.definition?.source?.patternId === "auto-soul-blast-named-boost-power-battle-v1" && !soulBlastNamedBoostEventMatches(state, ability, located.instance, located, triggerEvent, engine)) return reject("named-boost-event-context-invalid");
     if (isExactRearGuardVanguardAttackSacrificeAbility(ability) && !rearGuardVanguardAttackSacrificeEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("gb-vanguard-attack-sacrifice-context-invalid");
+    if (isExactOwnVanguardNameAttackSourceSoulDrawAbility(ability) && !ownVanguardNameAttackSourceSoulDrawEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("vanguard-name-source-soul-draw-context-invalid");
     if (isExactRcNarukamiOwnAttackPowerAbility(ability) && !rcNarukamiOwnAttackEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId)) return reject("narukami-own-attack-event-context-invalid");
     if (isExactRcNarukamiOwnAttackPowerAbility(ability)) {
       const currentConditions=buildConditionContext(state,triggerEvent,located,engine);
