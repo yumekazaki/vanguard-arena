@@ -111,6 +111,26 @@ test("all 51 exact Generation Break own-attack power AUTO abilities resolve only
   }
 });
 
+test("the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage", () => {
+  const expectedIds = ["cfa-2477", "cfa-2522", "cfa-2524", "cfa-2536", "cfa-2548", "cfa-2550", "cfa-2561", "cfa-2567", "cfa-2577", "cfa-2580", "cfa-2680", "cfa-2684", "cfa-2694", "cfa-2696", "cfa-2747", "cfa-2755", "cfa-2796", "cfa-2818", "cfa-2924", "cfa-2951", "cfa-2958", "cfa-2972", "cfa-2989", "cfa-3380", "cfa-3384", "cfa-3504", "cfa-3518"];
+  const actual = catalog.filter(card => {
+    const abilities = Engine.parseCardAbilitiesCached(card);
+    return abilities.length === 1 && abilities[0].definition?.source?.patternId === GB_PATTERN;
+  });
+  assert.deepEqual([...actual.map(card => card.id)].sort(), expectedIds.slice().sort());
+  for (const card of actual) {
+    const [ability] = Engine.parseCardAbilitiesCached(card);
+    assert.equal(card.type, "Unit", card.id);
+    assert.equal(ability.kind, "AUTO", card.id);
+    assert.equal(ability.requiredLocation.includes("rear-guard"), true, card.id);
+    assert.match(ability.printedText, /^AUTO \[RC\] Generation Break 1\b/i, card.id);
+    assert.match(ability.printedText, /When this unit attacks a vanguard, this unit gets power \+3000 until end of (that )?battle\.$/i, card.id);
+    assert.ok(card.text.includes(ability.printedText), `${card.id}: exact parsed skill retained in catalog text`);
+    assert.ok(Engine.getReviewedAbilityDefinitionsForCard(card.id).some(entry => entry.id === ability.id), `${card.id}: trusted definition`);
+    assert.equal(Reducer.supportsServerAbilityEffects(ability), true, card.id);
+  }
+});
+
 function setRearGuardCount(player, count, prefix) {
   const source = player.rear.find(Boolean) || null;
   player.rear = Array(5).fill(null);

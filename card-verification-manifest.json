@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1446,
-    "testCount": 1446,
-    "passed": 1446,
+    "tests": 1447,
+    "testCount": 1447,
+    "passed": 1447,
     "failed": 0,
-    "durationMilliseconds": 242092,
-    "completedAt": "2026-10-30T19:51:44.862Z",
+    "durationMilliseconds": 242611,
+    "completedAt": "2026-10-30T20:02:18.592Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "7513a6c5900dfabd390488e8dcdf8c9f06cc31e2314d6a8539d2b6d6be7de149"
+    "validationInputDigest": "601a4f9c4d46605ac1857ccba1dfa1c58b35325b7f2ba5f8ca11e6d1bea79144"
   },
   "records": [
     {
@@ -32735,17 +32735,27 @@
     {
       "cardId": "cfa-2477",
       "abilityId": "cfa-2477:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2479",
@@ -33286,17 +33296,27 @@
     {
       "cardId": "cfa-2522",
       "abilityId": "cfa-2522:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2523",
@@ -33318,17 +33338,27 @@
     {
       "cardId": "cfa-2524",
       "abilityId": "cfa-2524:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2525",
@@ -33410,17 +33440,27 @@
     {
       "cardId": "cfa-2536",
       "abilityId": "cfa-2536:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2537",
@@ -33455,17 +33495,27 @@
     {
       "cardId": "cfa-2548",
       "abilityId": "cfa-2548:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2549",
@@ -33520,17 +33570,27 @@
     {
       "cardId": "cfa-2550",
       "abilityId": "cfa-2550:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2552",
@@ -33593,17 +33653,27 @@
     {
       "cardId": "cfa-2561",
       "abilityId": "cfa-2561:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2564",
@@ -33643,32 +33713,52 @@
     {
       "cardId": "cfa-2567",
       "abilityId": "cfa-2567:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2577",
       "abilityId": "cfa-2577:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2578",
@@ -33708,17 +33798,27 @@
     {
       "cardId": "cfa-2580",
       "abilityId": "cfa-2580:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2590",
@@ -34565,17 +34665,27 @@
     {
       "cardId": "cfa-2680",
       "abilityId": "cfa-2680:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2681",
@@ -34627,17 +34737,27 @@
     {
       "cardId": "cfa-2684",
       "abilityId": "cfa-2684:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2691",
@@ -34705,17 +34825,27 @@
     {
       "cardId": "cfa-2694",
       "abilityId": "cfa-2694:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2695",
@@ -34737,17 +34867,27 @@
     {
       "cardId": "cfa-2696",
       "abilityId": "cfa-2696:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2697",
@@ -35008,32 +35148,52 @@
     {
       "cardId": "cfa-2747",
       "abilityId": "cfa-2747:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2755",
       "abilityId": "cfa-2755:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-276",
@@ -35341,17 +35501,27 @@
     {
       "cardId": "cfa-2796",
       "abilityId": "cfa-2796:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-28",
@@ -35403,17 +35573,27 @@
     {
       "cardId": "cfa-2818",
       "abilityId": "cfa-2818:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2822",
@@ -35818,17 +35998,27 @@
     {
       "cardId": "cfa-2924",
       "abilityId": "cfa-2924:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2926",
@@ -36094,32 +36284,52 @@
     {
       "cardId": "cfa-2951",
       "abilityId": "cfa-2951:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2958",
       "abilityId": "cfa-2958:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2959",
@@ -36252,17 +36462,27 @@
     {
       "cardId": "cfa-2972",
       "abilityId": "cfa-2972:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-2973",
@@ -36434,17 +36654,27 @@
     {
       "cardId": "cfa-2989",
       "abilityId": "cfa-2989:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-299",
@@ -38957,17 +39187,27 @@
     {
       "cardId": "cfa-3380",
       "abilityId": "cfa-3380:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-3383",
@@ -39005,17 +39245,27 @@
     {
       "cardId": "cfa-3384",
       "abilityId": "cfa-3384:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-3387",
@@ -39978,17 +40228,27 @@
     {
       "cardId": "cfa-3504",
       "abilityId": "cfa-3504:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-3505",
@@ -40217,17 +40477,27 @@
     {
       "cardId": "cfa-3518",
       "abilityId": "cfa-3518:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
-        "ability-engine.test.js",
         "ability-vanguard-own-attack-authority.test.js"
       ],
       "testCases": [
-        "real Generation Break vanguard-attack power AUTO checks its GB reminder and exact attacker",
-        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats"
+        "all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount",
+        "all 51 exact Generation Break own-attack power AUTO abilities resolve only for their source on both seats",
+        "the 27 single-ability GB1 own-Vanguard-attack cards have complete printed-text and trusted-definition coverage",
+        "all 26 rear-guard-advantage attack abilities are trusted with their printed circle, condition, and amount",
+        "both players resolve all 26 rear-guard-advantage AUTO abilities only for the exact attacking instance",
+        "host and joining player resolve only their own exact-source attack AUTO",
+        "other attackers, rear-guard targets, wrong actor, and replay cannot resolve this source ability",
+        "cfa-3406 is fully covered: its only printed ability resolves for either Vanguard and rejects unrelated attackers",
+        "all 11 any-target own-attack abilities retain their trusted circle, printed power, and battle duration",
+        "own-attack abilities without a target restriction still trigger against either opposing circle",
+        "all 42 clan-gated own-attack abilities retain exact clan, source circle, and battle power",
+        "clan-gated own attacks prompt and resolve for each owner only with their controller Vanguard clan"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level evidence only. Other printed card abilities and whole-card rules verification remain outstanding."
+      "fullyVerified": true,
+      "remaining": null,
+      "verificationScope": "Complete card: exactly one parsed printed ability; exact catalog text, trusted definition, [RC], GB1, own attack against Vanguard, +3000 through battle end, authoritative trigger/owner checks and both-seat resolution/rejection coverage."
     },
     {
       "cardId": "cfa-3519",
@@ -73281,5 +73551,5 @@
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T19:47:18.588Z"
+  "evidenceUpdatedAt": "2026-10-30T19:57:38.542Z"
 }
