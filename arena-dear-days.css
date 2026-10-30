@@ -392,3 +392,19 @@ body:has(#match-empty:not(.hidden)) .app-shell { max-width:1540px; padding-inlin
   #match-layout .opponent-line .player-title { left:calc(12% + 72px); }
   #match-layout .human-line .player-title { left:calc(12% + 72px); }
 }
+
+/* Keep each menu choice as one full-width scene above its copy, including the three non-Aichi cards. */
+#match-empty .fighter-option,
+#match-empty .fighter-option:first-child,
+#match-empty .fighter-option:not(:first-child) { grid-template-columns:minmax(0,1fr)!important; grid-template-rows:minmax(285px,1fr) 135px!important; }
+#match-empty .fighter-option .fighter-scene,
+#match-empty .fighter-option:first-child .fighter-scene,
+#match-empty .fighter-option:not(:first-child) .fighter-scene { grid-column:1!important; grid-row:1!important; width:100%; }
+#match-empty .fighter-option .fighter-option-copy,
+#match-empty .fighter-option:first-child .fighter-option-copy,
+#match-empty .fighter-option:not(:first-child) .fighter-option-copy { grid-column:1!important; grid-row:2!important; width:100%; }
+@media(max-width:700px) {
+  #match-empty .fighter-option,
+  #match-empty .fighter-option:first-child,
+  #match-empty .fighter-option:not(:first-child) { grid-template-rows:265px 135px!important; }
+}
