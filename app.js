@@ -635,7 +635,7 @@
     $("#human-deck-count").textContent = you.deck.length; $("#bot-deck-count").textContent = bot.deck.length; $("#human-drop-count").textContent = you.drop.length; $("#bot-drop-count").textContent = bot.drop.length;
     $("#soul-count").textContent = String(you.soul.length);
     $("#human-gdeck-count").textContent = you.gDeck?.length || 0; $("#bot-gdeck-count").textContent = bot.gDeck?.length || 0; $("#human-bind-count").textContent = you.bind?.length || 0; $("#bot-soul-count").textContent = bot.soul?.length || 0;
-    $("#human-order-zone").innerHTML = renderOrderCards(you.orders, "human"); $("#bot-order-zone").innerHTML = renderOrderCards(bot.orders, "bot"); $("#human-crest-zone").innerHTML = renderCrests(you.crests); $("#bot-crest-zone").innerHTML = renderCrests(bot.crests);
+    $("#human-order-zone").innerHTML = renderOrderCards(you.orders, "human"); $("#bot-order-zone").innerHTML = renderOrderCards(bot.orders, "bot"); $("#human-order-count").textContent=String(you.orders?.length||0); $("#bot-order-count").textContent=String(bot.orders?.length||0); $("#human-crest-zone").innerHTML = renderCrests(you.crests); $("#bot-crest-zone").innerHTML = renderCrests(bot.crests);
     $("#human-gzone").innerHTML = renderGZone(you, true); $("#bot-gzone").innerHTML = renderGZone(bot, false);
     $("#human-guard-circle").innerHTML = renderGuardCircle(you); $("#bot-guard-circle").innerHTML = renderGuardCircle(bot);
     $("#gift-count").textContent = String(you.gifts || 0);
@@ -711,7 +711,7 @@
     return `${cards}<span class="damage-total" aria-label="${player.damage.length} damage">${player.damage.length}/6</span>`;
   }
   function renderOrderCards(orders = [], side) {
-    return (orders || []).map((instance) => { const c = cardMap.get(instance.cardId); return c ? `<span class="zone-card-wrap"><button class="zone-card" data-order-uid="${escapeHtml(instance.uid)}" data-side="${side}" title="Move ${escapeHtml(c.name)} to drop">${escapeHtml(c.name)}</button><button class="zone-zoom" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}">⤢</button></span>` : ""; }).join("") || `<span class="zone-empty">No orders</span>`;
+    return (orders || []).map((instance) => { const c = cardMap.get(instance.cardId); if (!c) return ""; const faceDown=instance.faceDown===true,hidden=faceDown&&side!=="human",label=hidden?"Face-down Order":`${c.name}${instance.rested?" · RESTED":""}${faceDown?" · FACE-DOWN":""}`; return `<span class="zone-card-wrap${instance.rested?" order-rested":""}"><button class="zone-card${instance.rested?" order-rested":""}" type="button" ${side==="human"?`data-order-uid="${escapeHtml(instance.uid)}"`:`${hidden?"":"data-card-zoom=\""+escapeHtml(c.id)+"\""}`} data-side="${side}" title="${hidden?"Face-down Order":escapeHtml(c.name)+(instance.rested?" · Rested":"")+(faceDown?" · Face down":"")}">${escapeHtml(label)}</button>${side==="human"&&!hidden?`<button class="zone-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}">⤢</button>`:""}</span>`; }).join("") || `<span class="zone-empty">No orders</span>`;
   }
   function canGAssist(player) { const grade = gradeOf(cardMap.get(player?.vanguard?.cardId)); return grade >= 0 && grade < 3 && !player.hand.some((item) => isUnitCard(cardMap.get(item.cardId)) && Number(cardMap.get(item.cardId)?.grade) === grade + 1) && player.deck.length > 0; }
   function renderGAssistDialog() {
@@ -741,13 +741,21 @@
       return card ? `<button class="zone-card crest-card" type="button" data-card-zoom="${escapeHtml(card.id)}" title="${escapeHtml(card.name)} · Crest">${cardImage(card, "crest-card-art")}<span>${escapeHtml(card.name)}</span></button>` : "";
     }).join("") || '<span class="zone-empty">No Crest</span>';
   }
+  function openOrdersDialog(side="human") {
+    if(!match)return;
+    const player=match.players[side],orders=player?.orders||[],isOwner=side==="human"&&online.role!=="watcher";
+    $("#order-zone-dialog-title").textContent=isOwner?"Your Order zone":`${player?.name||"Opponent"} · Order zone`;
+    $("#order-zone-dialog-help").textContent=isOwner?"Select any Order to rest or stand it, flip it face down or face up, add it to your hand, or send it to Drop.":"Opponent Orders are shown face up; face-down Orders remain hidden.";
+    $("#order-zone-card-list").innerHTML=orders.length?orders.map(item=>{const card=cardMap.get(item.cardId),hidden=item.faceDown===true&&!isOwner;if(!card)return"";return `<article class="zone-view-card">${hidden?'<div class="zone-card-face order-hidden-card"><span>V</span><b>Face-down Order</b></div>':`<button class="zone-card-face" type="button" ${isOwner?`data-order-view-uid="${escapeHtml(item.uid)}"`:`data-card-zoom="${escapeHtml(card.id)}"`}>${cardImage(card)}<b>${escapeHtml(card.name)}</b><small>${item.rested?"Rested · ":""}${item.faceDown?"Face down":"Face up"}</small></button>`}${!hidden?`<button class="zone-card-zoom" type="button" data-card-zoom="${escapeHtml(card.id)}" aria-label="Zoom ${escapeHtml(card.name)}">⤢</button>`:""}</article>`}).join(""):'<p class="zone-empty-message">No Orders are in this zone yet. Play an Order from your hand to place it here.</p>';
+    if(!$("#order-zone-dialog").open)$("#order-zone-dialog").showModal();
+  }
   function showOrderMenu(uid) {
     const item = match?.players.human.orders?.find(card => card.uid === uid), card = item && cardMap.get(item.cardId);
     if (!item || !card) return;
     match.selected = uid;
     $("#context-menu-title").textContent = card.name;
     $("#context-menu-help").textContent = "Order zone card actions.";
-    const actions = [[`order-to-hand:${uid}`, "Return to hand"], [`order-to-top:${uid}`, "Return to deck top"], [`order-to-bottom:${uid}`, "Return to deck bottom"], [`order-to-drop:${uid}`, "Move to Drop"]];
+    const actions = [[`order-rest:${uid}`, item.rested?"Stand":"Rest"], [`order-flip:${uid}`, item.faceDown?"Turn face up":"Turn face down"], [`order-to-hand:${uid}`, "Add to hand"], [`order-to-top:${uid}`, "Return to deck top"], [`order-to-bottom:${uid}`, "Return to deck bottom"], [`order-to-drop:${uid}`, "Send to Drop"]];
     $("#context-menu-actions").innerHTML = actions.map(([action, label]) => `<button class="button" type="button" data-context-action="${escapeHtml(action)}">${label}</button>`).join("");
     if (!$("#context-menu-dialog").open) $("#context-menu-dialog").showModal();
   }
@@ -2060,16 +2068,20 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     } else if (action === "guard") {
       if (!match.pendingAttack) { toast("There is no incoming attack to guard."); return; }
       humanGuard(); return;
+    } else if(action.startsWith("order-rest:")) {
+      const uid=action.slice("order-rest:".length),item=player.orders.find(card=>card.uid===uid);if(!item)return;item.rested=!item.rested;addLog(`${player.name} ${item.rested?"rested":"stood"} ${cardMap.get(item.cardId)?.name||"an Order"}.`);
+    } else if(action.startsWith("order-flip:")) {
+      const uid=action.slice("order-flip:".length),item=player.orders.find(card=>card.uid===uid);if(!item)return;item.faceDown=!item.faceDown;addLog(`${player.name} turned ${cardMap.get(item.cardId)?.name||"an Order"} ${item.faceDown?"face down":"face up"}.`);
     } else if (action.startsWith("order-to-hand:") || action.startsWith("order-to-top:") || action.startsWith("order-to-bottom:")) {
       const [destination, uid] = action.split(":"); const index = player.orders.findIndex(item => item.uid === uid); if (index < 0) return;
-      const instance = player.orders.splice(index, 1)[0];
+      const instance = player.orders.splice(index, 1)[0]; instance.rested=false; instance.faceDown=false;
       if (destination === "order-to-hand") { player.hand.push(instance); queueMovedCardAbility(instance,"human","move","order",{currentLocation:"hand"}); }
       else if (destination === "order-to-top") { player.deck.push(instance); queueMovedCardAbility(instance,"human","move","order",{currentLocation:"deck"}); }
       else { player.deck.unshift(instance); queueMovedCardAbility(instance,"human","move","order",{currentLocation:"deck"}); }
       match.selected = null; addLog(`${player.name} moved ${cardMap.get(instance.cardId)?.name || "an Order"} from the Order zone.`);    } else if (action.startsWith("order-to-drop:")) {
       const uid = action.slice("order-to-drop:".length), index = player.orders.findIndex((item) => item.uid === uid);
       if (index < 0) return;
-      const moved=player.orders.splice(index, 1)[0]; player.drop.push(moved); queueMovedCardAbility(moved,"human","move","order",{currentLocation:"drop"}); addLog(`${player.name} moved an Order from the Order zone to drop.`);
+      const moved=player.orders.splice(index, 1)[0]; moved.rested=false; moved.faceDown=false; player.drop.push(moved); queueMovedCardAbility(moved,"human","move","order",{currentLocation:"drop"}); addLog(`${player.name} moved an Order from the Order zone to drop.`);
     } else if (action === "selected-to-top" || action === "selected-to-bottom") {
       const field = findFieldCard(match.selected); if (field?.side !== "human") { toast("Select one of your field cards first."); return; }
       if (field.zone === "vanguard") player.vanguard = null; else player.rear[field.index] = null;
@@ -2738,6 +2750,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#drop-card-list").addEventListener("change",(e)=>{const select=e.target.closest("[data-drop-uid]");if(select?.value)performManualAction("drop-action:field:"+select.dataset.dropUid+":"+select.value);});
   $("#human-damage").addEventListener("click", (e) => { if (e.target.closest("[data-card-zoom]")) return; performManualAction("counter-blast"); });
   $("#human-order-zone").addEventListener("click", (e) => { if (e.target.closest("[data-card-zoom]")) return; const selected = selectedHandCard(); if (selected && /Order/i.test(cardMap.get(selected.cardId)?.type || "")) { performManualAction("play-order"); return; } const order = e.target.closest("[data-order-uid]"); if (order) { showOrderMenu(order.dataset.orderUid); return; } });
+  $("#view-human-orders").addEventListener("click",()=>openOrdersDialog("human")); $("#view-bot-orders").addEventListener("click",()=>openOrdersDialog("bot"));
+  $("#order-zone-card-list").addEventListener("click",event=>{const view=event.target.closest("[data-order-view-uid]");if(view){const uid=view.dataset.orderViewUid;$("#order-zone-dialog").close();showOrderMenu(uid);return;}const zoom=event.target.closest("[data-card-zoom]");if(zoom)showCardDetails(zoom.dataset.cardZoom);});
   $("#advance-phase").addEventListener("click", () => { if (match?.pendingAttack) return; });
   const noGuardButton = document.createElement("button"); noGuardButton.id = "no-guard"; noGuardButton.className = "button button-quiet hidden"; noGuardButton.textContent = "No guard"; noGuardButton.addEventListener("click", () => performOnlineAction("noGuard")); $(".action-buttons").insertBefore(noGuardButton, $("#guard-card"));
   $("#sort-hand").addEventListener("click", () => { if (!match) return; match.players.human.hand.sort((a, b) => { const ca = cardMap.get(a.cardId), cb = cardMap.get(b.cardId); return (ca?.grade || 0) - (cb?.grade || 0) || ca?.name.localeCompare(cb?.name); }); renderMatch(); });
