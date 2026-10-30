@@ -1117,6 +1117,22 @@
       source: { dataset: "Cardfight Area snapshot", patternId: "auto-own-attack-clan-counter-blast-power-battle-v1", review: "Exact printed clan cost and Vanguard condition are preserved. The source instance must attack from VC/RC; a distinct face-up Damage card of the printed clan must be paid before applying battle-only power." },
       effects: [{ op: "modify-power", target: "source", amount: Number(match[4]), duration: "battle" }] };
   }
+  function compileClanDiscardOwnAttackPowerDefinition(cardId, abilityId, kind, printedText) {
+    if (kind !== "AUTO") return null;
+    const text = normalizePrintedText(printedText);
+    const match = text.match(/^AUTO \[(VC\/RC|VC|RC)\]:?\s*(?:\[Choose a [«<]([^»>]+)[»>] from your hand, and discard it\]\s*)When this unit attacks(?: a vanguard)?, (?:you may pay the cost\. If you do, |COST \[Choose a [«<]([^»>]+)[»>] from your hand, and discard it\], and )this unit gets power \+(\d+)(?: \/ critical \+(\d+))? until end of that battle\.$/i);
+    if (!match) return null;
+    const clan = (match[2] || match[3] || "").trim();
+    if (!clan) return null;
+    const effects = [{ op: "modify-power", target: "source", amount: Number(match[4]), duration: "battle" }];
+    if (match[5]) effects.push({ op: "modify-critical", target: "source", amount: Number(match[5]), duration: "battle" });
+    const circle = match[1].toUpperCase();
+    const locations = circle === "VC" ? ["vanguard"] : circle === "RC" ? ["rear-guard"] : ["vanguard", "rear-guard"];
+    return { id: abilityId, cardId, kind, printedText, optional: /you may pay the cost/i.test(text), choicesReviewed: true, requiredLocation: locations,
+      trigger: { status: "recognized-trigger", eventType: "unit.attacked", subject: "source", turnRelation: "any", circles: locations },
+      costs: [{ type: "discard", count: 1, filter: { clan } }],
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-own-attack-clan-discard-power-battle-v1", review: "Exact own-unit attack template. The printed source circle, clan-filtered hand discard, optionality, power/critical amount and battle duration are represented; the attack event must identify this exact source instance." }, effects };
+  }
   function compileBoostedAttackHitDiscardDrawDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;
     if(!/^AUTO\s*\[RC\]:\s*\[Choose a card from your hand, and discard it\]\s*When an attack hits during the battle that this unit boosted, you may pay the cost\. If you do, draw a card\.$/i.test(normalizePrintedText(printedText)))return null;
@@ -2658,6 +2674,7 @@
     compileAutoAttackSoulBlastPowerDefinition,
     compileAutoAttackCounterBlastPowerDefinition,
     compileClanCounterBlastAttackPowerDefinition,
+    compileClanDiscardOwnAttackPowerDefinition,
     compileBoostGradeThresholdSoulBlastPowerDefinition,
     compileSoulBlastNamedBoostPowerDefinition,
     compileNamedBoostPowerTemplateDefinition

@@ -110200,6 +110200,395 @@
           "noOpIfNoLegalTargets": true
         }
       ]
+    },
+    {
+      "id": "cfa-1017:0",
+      "cardId": "cfa-1017",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: [Choose a «Pale Moon» from your hand, and discard it] When this unit attacks, you may pay the cost. If you do, this unit gets power +6000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Pale Moon"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-discard-power-battle-v1",
+        "review": "Exact own-unit attack template. The printed source circle, clan-filtered hand discard, optionality, power/critical amount and battle duration are represented; the attack event must identify this exact source instance."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 6000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1017:1",
+      "cardId": "cfa-1017",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Choose a «Pale Moon» from your hand, and discard it] When this unit attacks, you may pay the cost. If you do, this unit gets power +3000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Pale Moon"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-discard-power-battle-v1",
+        "review": "Exact own-unit attack template. The printed source circle, clan-filtered hand discard, optionality, power/critical amount and battle duration are represented; the attack event must identify this exact source instance."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1066:0",
+      "cardId": "cfa-1066",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: [Choose a «Gold Paladin» from your hand, and discard it] When this unit attacks, you may pay the cost. If you do, this unit gets power +6000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Gold Paladin"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-discard-power-battle-v1",
+        "review": "Exact own-unit attack template. The printed source circle, clan-filtered hand discard, optionality, power/critical amount and battle duration are represented; the attack event must identify this exact source instance."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 6000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1066:1",
+      "cardId": "cfa-1066",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Choose a «Gold Paladin» from your hand, and discard it] When this unit attacks, you may pay the cost. If you do, this unit gets power +3000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Gold Paladin"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-discard-power-battle-v1",
+        "review": "Exact own-unit attack template. The printed source circle, clan-filtered hand discard, optionality, power/critical amount and battle duration are represented; the attack event must identify this exact source instance."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1668:0",
+      "cardId": "cfa-1668",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: [Choose a «Narukami» from your hand, and discard it] When this unit attacks, you may pay the cost. If you do, this unit gets power +6000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Narukami"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-discard-power-battle-v1",
+        "review": "Exact own-unit attack template. The printed source circle, clan-filtered hand discard, optionality, power/critical amount and battle duration are represented; the attack event must identify this exact source instance."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 6000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1668:1",
+      "cardId": "cfa-1668",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Choose a «Narukami» from your hand, and discard it] When this unit attacks, you may pay the cost. If you do, this unit gets power +3000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Narukami"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-discard-power-battle-v1",
+        "review": "Exact own-unit attack template. The printed source circle, clan-filtered hand discard, optionality, power/critical amount and battle duration are represented; the attack event must identify this exact source instance."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1725:0",
+      "cardId": "cfa-1725",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: [Choose a «Kagero» from your hand, and discard it] When this unit attacks, you may pay the cost. If you do, this unit gets power +6000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Kagero"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-discard-power-battle-v1",
+        "review": "Exact own-unit attack template. The printed source circle, clan-filtered hand discard, optionality, power/critical amount and battle duration are represented; the attack event must identify this exact source instance."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 6000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1725:1",
+      "cardId": "cfa-1725",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Choose a «Kagero» from your hand, and discard it] When this unit attacks, you may pay the cost. If you do, this unit gets power +3000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Kagero"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-discard-power-battle-v1",
+        "review": "Exact own-unit attack template. The printed source circle, clan-filtered hand discard, optionality, power/critical amount and battle duration are represented; the attack event must identify this exact source instance."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1958:0",
+      "cardId": "cfa-1958",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: [Choose a «Bermuda Triangle» from your hand, and discard it] When this unit attacks, you may pay the cost. If you do, this unit gets power +5000 until end of that battle.",
+      "optional": true,
+      "choicesReviewed": true,
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "vanguard",
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Bermuda Triangle"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-discard-power-battle-v1",
+        "review": "Exact own-unit attack template. The printed source circle, clan-filtered hand discard, optionality, power/critical amount and battle duration are represented; the attack event must identify this exact source instance."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
+      ]
     }
   ];
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);

@@ -411,6 +411,30 @@
       Number(definition.effects[0]?.amount) === 4000 && definition.effects[0]?.duration === "battle");
   }
 
+  function isExactClanDiscardOwnAttackPowerAbility(ability) {
+    const expected = new Map([
+      ["cfa-1017:0", ["Pale Moon", "vanguard", 6000]], ["cfa-1017:1", ["Pale Moon", "rear-guard", 3000]],
+      ["cfa-1066:0", ["Gold Paladin", "vanguard", 6000]], ["cfa-1066:1", ["Gold Paladin", "rear-guard", 3000]],
+      ["cfa-1668:0", ["Narukami", "vanguard", 6000]], ["cfa-1668:1", ["Narukami", "rear-guard", 3000]],
+      ["cfa-1725:0", ["Kagero", "vanguard", 6000]], ["cfa-1725:1", ["Kagero", "rear-guard", 3000]],
+      ["cfa-1958:0", ["Bermuda Triangle", "vanguard", 5000, true]]
+    ]);
+    const key = String(ability?.id || ""), [clan, circle, power, both] = expected.get(key) || [];
+    const definition = ability?.definition;
+    const printed = String(definition?.printedText || ability?.printedText || "").replace(/\s+/g, " ").trim();
+    const locations = both ? ["vanguard", "rear-guard"] : [circle];
+    const circleText = both ? "VC/RC" : circle === "vanguard" ? "VC" : "RC";
+    const expectedText = `AUTO [${circleText}]: [Choose a «${clan || ""}» from your hand, and discard it] When this unit attacks, you may pay the cost. If you do, this unit gets power +${power} until end of that battle.`;
+    return Boolean(clan && ability?.kind === "AUTO" && definition?.kind === "AUTO" && key === `${ability.cardId}:${key.split(":").at(-1)}` &&
+      definition.source?.patternId === "auto-own-attack-clan-discard-power-battle-v1" && printed === expectedText &&
+      ability.trigger?.status === "recognized-trigger" && ability.trigger?.eventType === "unit.attacked" && ability.trigger?.subject === "source" &&
+      JSON.stringify(ability.requiredLocation || definition.requiredLocation || []) === JSON.stringify(locations) &&
+      JSON.stringify(ability.costs || []) === JSON.stringify([{ type: "discard", count: 1, filter: { clan } }]) &&
+      definition.optional === true && definition.choicesReviewed === true && definition.effects?.length === 1 &&
+      definition.effects[0]?.op === "modify-power" && definition.effects[0]?.target === "source" &&
+      Number(definition.effects[0]?.amount) === power && definition.effects[0]?.duration === "battle");
+  }
+
   function isExactClanSoulBlastAttackPowerAbility(ability) {
     const expected = new Map([["cfa-1798", ["Genesis", 3, 4000]], ["cfa-520", ["Kagero", 1, 3000]], ["cfa-605", ["Spike Brothers", 1, 3000]], ["cfa-646", ["Royal Paladin", 1, 3000]], ["cfa-844", ["Narukami", 1, 3000]]]);
     const cardId = String(ability?.cardId || ""), [clan, soul, power] = expected.get(cardId) || [];
@@ -2959,6 +2983,7 @@
     if (hasNamedCounterBlastFilter && !isExactActVanguardFilteredCounterBlastPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "act-vanguard-filtered-counter-blast-source-power-turn-v1" && !isExactActVanguardFilteredCounterBlastPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-own-attack-clan-soul-blast-power-battle-v1" && !isExactClanSoulBlastAttackPowerAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-own-attack-clan-discard-power-battle-v1" && !isExactClanDiscardOwnAttackPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-own-attack-soul-blast-power-battle-v1" && !isExactOwnAttackSoulBlastPowerAbility(ability)) return false;
     if (isVanguardHitClanStand && !isExactVanguardHitClanStandAbility(ability)) return false;
     if (hasSuccess && !isExactSuccessAbility(ability)) return false;
@@ -3431,10 +3456,10 @@
 
   function automaticAbilityCostIsPayable(state, ability, located, controller, engine) {
     if (!Array.isArray(ability?.costs) || ability.costs.length === 0) return true;
-    // Optional AUTO costs that require a specific card selection are not legal
-    // choices when that selection is unavailable; do not show a dead-end prompt.
-    const needsHealBindTarget = ability.costs.some(cost => cost?.type === "bind-heal-from-drop");
-    if (ability.canDecline === true && !needsHealBindTarget) return true;
+    // Optionality does not make its costs payable. Keep existing reviewed
+    // prompt flows intact while enforcing filtered discard availability for
+    // the exact clan-discard attack family.
+    if (ability.canDecline === true && ability.definition?.source?.patternId !== "auto-own-attack-clan-discard-power-battle-v1" && !ability.costs.some(cost => cost?.type === "bind-heal-from-drop")) return true;
     if (!controller || typeof engine?.canPayAbilityCosts !== "function") return false;
     const supportedCostTypes = new Set(["counter-blast", "soul-blast", "energy-blast", "discard", "reveal-grade-from-hand", "source-discard", "rest-source", "source-to-soul", "source-to-bottom-deck", "source-retire", "source-bind", "source-bind-from-field-or-drop", "bind-heal-from-drop"]);
     if (ability.costs.some(cost => !supportedCostTypes.has(cost?.type))) return false;

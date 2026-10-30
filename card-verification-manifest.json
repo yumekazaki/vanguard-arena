@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1429,
-    "testCount": 1429,
-    "passed": 1429,
+    "tests": 1434,
+    "testCount": 1434,
+    "passed": 1434,
     "failed": 0,
-    "durationMilliseconds": 237847,
-    "completedAt": "2026-10-30T18:37:35.000Z",
+    "durationMilliseconds": 238926,
+    "completedAt": "2026-10-30T19:02:52.763Z",
     "runDate": "2026-10-30",
-    "validationInputDigest": "da54322c773877c638951c7a762ff41156a50903c93b6b8baaef62078ac1f150"
+    "validationInputDigest": "26837609247a64a575979df0b703a4d85951c79d400af0f83e7df7ae4e20d26b"
   },
   "records": [
     {
@@ -72981,8 +72981,161 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1017",
+      "abilityId": "cfa-1017:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-clan-discard-power-server.test.js"
+      ],
+      "testCases": [
+        "nine exact catalog abilities preserve source circle, clan discard, optionality, power, and duration",
+        "host and joining player independently pay their own matching clan card and gain battle power",
+        "VC and RC amounts and clan filters match each card's exact wording",
+        "another attack, wrong circle, missing cost card, or invalid discard cannot resolve the skill",
+        "declining is free, and a modified card definition is rejected by authoritative validation"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1017",
+      "abilityId": "cfa-1017:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-clan-discard-power-server.test.js"
+      ],
+      "testCases": [
+        "nine exact catalog abilities preserve source circle, clan discard, optionality, power, and duration",
+        "host and joining player independently pay their own matching clan card and gain battle power",
+        "VC and RC amounts and clan filters match each card's exact wording",
+        "another attack, wrong circle, missing cost card, or invalid discard cannot resolve the skill",
+        "declining is free, and a modified card definition is rejected by authoritative validation"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1066",
+      "abilityId": "cfa-1066:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-clan-discard-power-server.test.js"
+      ],
+      "testCases": [
+        "nine exact catalog abilities preserve source circle, clan discard, optionality, power, and duration",
+        "host and joining player independently pay their own matching clan card and gain battle power",
+        "VC and RC amounts and clan filters match each card's exact wording",
+        "another attack, wrong circle, missing cost card, or invalid discard cannot resolve the skill",
+        "declining is free, and a modified card definition is rejected by authoritative validation"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1066",
+      "abilityId": "cfa-1066:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-clan-discard-power-server.test.js"
+      ],
+      "testCases": [
+        "nine exact catalog abilities preserve source circle, clan discard, optionality, power, and duration",
+        "host and joining player independently pay their own matching clan card and gain battle power",
+        "VC and RC amounts and clan filters match each card's exact wording",
+        "another attack, wrong circle, missing cost card, or invalid discard cannot resolve the skill",
+        "declining is free, and a modified card definition is rejected by authoritative validation"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1668",
+      "abilityId": "cfa-1668:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-clan-discard-power-server.test.js"
+      ],
+      "testCases": [
+        "nine exact catalog abilities preserve source circle, clan discard, optionality, power, and duration",
+        "host and joining player independently pay their own matching clan card and gain battle power",
+        "VC and RC amounts and clan filters match each card's exact wording",
+        "another attack, wrong circle, missing cost card, or invalid discard cannot resolve the skill",
+        "declining is free, and a modified card definition is rejected by authoritative validation"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1668",
+      "abilityId": "cfa-1668:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-clan-discard-power-server.test.js"
+      ],
+      "testCases": [
+        "nine exact catalog abilities preserve source circle, clan discard, optionality, power, and duration",
+        "host and joining player independently pay their own matching clan card and gain battle power",
+        "VC and RC amounts and clan filters match each card's exact wording",
+        "another attack, wrong circle, missing cost card, or invalid discard cannot resolve the skill",
+        "declining is free, and a modified card definition is rejected by authoritative validation"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1725",
+      "abilityId": "cfa-1725:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-clan-discard-power-server.test.js"
+      ],
+      "testCases": [
+        "nine exact catalog abilities preserve source circle, clan discard, optionality, power, and duration",
+        "host and joining player independently pay their own matching clan card and gain battle power",
+        "VC and RC amounts and clan filters match each card's exact wording",
+        "another attack, wrong circle, missing cost card, or invalid discard cannot resolve the skill",
+        "declining is free, and a modified card definition is rejected by authoritative validation"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1725",
+      "abilityId": "cfa-1725:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-clan-discard-power-server.test.js"
+      ],
+      "testCases": [
+        "nine exact catalog abilities preserve source circle, clan discard, optionality, power, and duration",
+        "host and joining player independently pay their own matching clan card and gain battle power",
+        "VC and RC amounts and clan filters match each card's exact wording",
+        "another attack, wrong circle, missing cost card, or invalid discard cannot resolve the skill",
+        "declining is free, and a modified card definition is rejected by authoritative validation"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1958",
+      "abilityId": "cfa-1958:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-clan-discard-power-server.test.js"
+      ],
+      "testCases": [
+        "nine exact catalog abilities preserve source circle, clan discard, optionality, power, and duration",
+        "host and joining player independently pay their own matching clan card and gain battle power",
+        "VC and RC amounts and clan filters match each card's exact wording",
+        "another attack, wrong circle, missing cost card, or invalid discard cannot resolve the skill",
+        "declining is free, and a modified card definition is rejected by authoritative validation"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T18:38:51.325Z"
+  "evidenceUpdatedAt": "2026-10-30T18:48:28.911Z"
 }
