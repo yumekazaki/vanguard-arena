@@ -1,0 +1,77 @@
+/* Battle-only presentation effects. Existing DOM, timing, controls, and game state stay authoritative. */
+#match-layout .game-table {
+  border: 1px solid #91d7ff8a;
+  background:
+    radial-gradient(ellipse at 50% 49%, #2a6580 0, #173f57 30%, transparent 69%),
+    linear-gradient(145deg, #102c46 0%, #0c1d32 48%, #132744 100%);
+  box-shadow: 0 28px 80px #010712b8, inset 0 0 110px #020c1cbb, inset 0 1px #e6f8ff2b;
+}
+#match-layout .game-table:before { inset: 9px; border: 1px solid #a4ddff42; border-radius: 13px; }
+#match-layout .game-table:after { inset: 18px; border-color: #d8f0ff20; box-shadow: inset 0 0 42px #5fbaff0d; }
+#match-layout .game-table .mat-half img { opacity: .32; filter: saturate(.8) contrast(1.1) brightness(.7); }
+#match-layout .center-divider { color: #dbf2ff; border-color: #7ac8ef80; background: linear-gradient(90deg, #071629ef, #1c4360ed 50%, #071629ef); text-shadow: 0 0 12px #73ccff66; }
+
+#match-layout .field-zone {
+  border: 1px solid #8bcaed86;
+  background: radial-gradient(ellipse, #4bb7ee19 0, #06152863 72%);
+  box-shadow: inset 0 0 20px #4bb7ee12, 0 2px 14px #02081730;
+  transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+#match-layout .field-zone:before { display: block; inset: 6px; border: 1px solid #c8ecff25; border-radius: inherit; pointer-events: none; }
+#match-layout .field-zone>span { color: #d6efffc4; font-size: 9px; letter-spacing: .14em; text-shadow: 0 2px 6px #000; }
+#match-layout .vanguard-zone { border: 1px solid #f0d18ca8; background: radial-gradient(ellipse, #f1c36f32 0, #1b3e557d 72%); box-shadow: inset 0 0 25px #f1c36f17, 0 0 20px #f1c36f12; }
+#match-layout .vanguard-zone:before { border-color: #ffe7ad4c; }
+#match-layout .zone-stack { border-color: #a4d7f572; background: linear-gradient(145deg, #173750, #09172a); box-shadow: 0 8px 20px #02081770, inset 0 1px #fff2; }
+#match-layout .zone-stack b { color: #e5f5ff; }
+#match-layout .damage-heart.filled { box-shadow: 0 0 12px #ff7779aa, 0 0 26px #ff5a6470; }
+
+#match-layout .field-card {
+  border-color: #c8e8ff88;
+  background-color: #0a1729;
+  box-shadow: 0 10px 22px #000a, inset 0 0 0 1px #ffffff14;
+  backface-visibility: hidden;
+}
+#match-layout .field-card.selected { outline-color: #b8e8ff; box-shadow: 0 0 0 3px #6ecaff6b, 0 0 28px #56bcff7d, 0 10px 24px #000a; }
+#match-layout .field-card.rested { filter: drop-shadow(0 0 8px #78c8ff5c); }
+#match-layout .field-card .field-card-name { color: #f3f9ff; }
+#match-layout .field-card .field-card-stats b { border-color: #8fd5ff; box-shadow: 0 0 12px #55baff32, 0 1px 5px #000b; }
+#match-layout .hand-panel { border-color: #87c8ef65; background: linear-gradient(150deg, #142d48, #0c1b30 80%); box-shadow: 0 14px 36px #02081775, inset 0 1px #e6f8ff15; }
+#match-layout .game-card { border-color: #a5cce877; box-shadow: 0 8px 24px #0009, inset 0 1px #fff2; }
+#match-layout .game-card.selected { border-color: #b7e7ff; box-shadow: 0 0 0 2px #61bfff68, 0 0 24px #48aaff55, 0 8px 24px #0009; }
+
+#match-layout .attack-choice-panel, #match-layout .battle-action-panel {
+  border: 1px solid #b4e3ffcc;
+  background: linear-gradient(135deg, #173858f5, #0a192bf7 80%);
+  box-shadow: 0 24px 70px #000d, 0 0 34px #42acff47, inset 0 1px #fff3;
+}
+#match-layout .attack-choice-panel>b, #match-layout .battle-action-panel>b { color: #e9f7ff; font-size: 16px; text-shadow: 0 0 18px #7acfff50; }
+#match-layout .attack-choice-panel .button-primary, #match-layout .battle-action-panel .button-primary { box-shadow: 0 5px 22px #45adff45, inset 0 1px #fff9; }
+
+#attack-arrow-layer .attack-arrow-glow { stroke: #36aaff !important; stroke-width: 18 !important; opacity: .38; filter: drop-shadow(0 0 16px #28a4ff); }
+#attack-arrow-layer .attack-arrow-path:not(.attack-arrow-glow) { stroke: #c3edff !important; stroke-width: 7 !important; stroke-dasharray: 16 9 !important; filter: drop-shadow(0 0 8px #40b8ff) drop-shadow(0 0 18px #2f95ff); }
+#attack-arrow-layer .attack-arrow-head { fill: #d9f5ff !important; stroke: #49b8ff !important; stroke-width: 2px; filter: drop-shadow(0 0 9px #43baff); }
+#attack-arrow-layer .attack-arrow-origin { fill: #d8f6ff !important; stroke: #49b8ff !important; filter: drop-shadow(0 0 12px #43baff); }
+
+#match-layout .match-rail .turn-banner { border-color: #83d3ff68; background: linear-gradient(110deg, #369cff25, #84d8ff0c); }
+#match-layout .match-rail .phase-item.active .phase-bullet { border-color: #9bdcff; color: #d4f1ff; background: #44adff22; box-shadow: 0 0 15px #4db5ff62; }
+#match-layout .match-rail .phase-segment.current { background: linear-gradient(90deg, #51baff, #e0f5ff); box-shadow: 0 0 12px #50b7ff9c; }
+#match-layout .match-rail .match-log-card { border-top: 2px solid #69c3ff9c; }
+
+/* The existing check reveal is already event-driven; this only upgrades its presentation. */
+#check-reveal-flash { background: radial-gradient(ellipse at center, #102a46df, #030814f2 76%); }
+#check-reveal-flash>small { color: #b6e6ff; text-shadow: 0 0 18px #48b5ff; letter-spacing: .2em; }
+#check-reveal-art { border: 1px solid #d3f0ffcc; box-shadow: 0 0 0 1px #5cbaff44, 0 0 38px #38aaff7d, 0 22px 75px #000d; }
+#check-reveal-card>b { color: #f0f9ff; font-size: 16px; }
+#check-reveal-flash.flash { animation: arena-check-reveal 1.15s cubic-bezier(.18,.8,.2,1) both; }
+@keyframes arena-check-reveal { 0% { opacity: 0; transform: scale(.92); } 10% { opacity: 1; transform: scale(1.015); } 22% { transform: scale(1); } 86% { opacity: 1; } 100% { opacity: 0; transform: scale(.99); } }
+#check-reveal-flash.flash #check-reveal-art { animation: arena-card-reveal 1.15s cubic-bezier(.16,.82,.24,1) both; }
+@keyframes arena-card-reveal { 0% { transform: translateY(22px) rotateY(14deg) scale(.92); filter: brightness(.55); } 18% { transform: translateY(0) rotateY(0) scale(1.025); filter: brightness(1.25); } 35%,100% { transform: translateY(0) rotateY(0) scale(1); filter: brightness(1); } }
+
+@media (hover:hover) and (pointer:fine) {
+  #match-layout .field-zone:hover { border-color: #c2edff; background-color: #48baff25; box-shadow: inset 0 0 26px #48baff22, 0 0 20px #48baff26; }
+  #match-layout .game-card-wrap:hover .game-card { border-color: #d3efff; box-shadow: 0 14px 32px #000b, 0 0 22px #54bdff46; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #check-reveal-flash.flash, #check-reveal-flash.flash #check-reveal-art { animation: none !important; }
+  #attack-arrow-layer .attack-arrow-path { animation: none !important; }
+}
