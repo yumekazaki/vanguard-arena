@@ -40,11 +40,11 @@ function integrateContribution(root, batchId) {
   const declaration = /\bconst\s+definitions\s*=\s*\[/g.exec(source);
   if (!declaration) throw new Error("Could not locate the curated definition array.");
   const arrayOpen = declaration.index + declaration[0].lastIndexOf("[");
-  const closingMatches = [...source.matchAll(/^  \];\s*$/gm)].filter(match => match.index > arrayOpen);
-  if (closingMatches.length !== 1) throw new Error("Could not find exactly one trusted definition-array insertion point.");
+  const closingMatch = [...source.matchAll(/^  \];\s*$/gm)].find(match => match.index > arrayOpen);
+  if (!closingMatch) throw new Error("Could not find the trusted definition-array insertion point.");
   const newline = source.includes("\r\n") ? "\r\n" : "\n";
   const formatted = contribution.map(definition => JSON.stringify(definition, null, 2).split("\n").map(line => `    ${line}`).join(newline)).join(`,${newline}`);
-  const insertAt = closingMatches[0].index;
+  const insertAt = closingMatch.index;
   const arrayBody = source.slice(arrayOpen + 1, insertAt).trimEnd();
   const separator = arrayBody && !arrayBody.endsWith(",") ? `,${newline}` : newline;
   const updated = `${source.slice(0, insertAt)}${separator}${formatted}${source.slice(insertAt)}`;

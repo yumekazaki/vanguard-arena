@@ -25,7 +25,11 @@ test("game-event snapshots fill source and subject owner/controller from their e
     actingPlayerId: "controller-a",
     turnPlayerId: "controller-a",
     sourceCardInstanceId: source.uid,
-    cardInstanceId: subject.uid
+    sourceOwnerPlayerId: null,
+    sourceControllerPlayerId: null,
+    cardInstanceId: subject.uid,
+    subjectOwnerPlayerId: null,
+    subjectControllerPlayerId: null
   });
 
   assert.equal(event.subjectCardInstanceId, subject.uid);
