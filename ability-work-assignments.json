@@ -30,10 +30,12 @@
         "cfa-12657:0",
         "cfa-12658:0"
       ]
-    },
+    }
+  ],
+  "completedAssignments": [
     {
       "batchId": "PRIMARY-DRAGONTREE-GC-SHIELD-AUTO",
-      "status": "in-progress",
+      "status": "completed",
       "workerOwner": "primary-session/dragontree_gc_shield_family",
       "reason": "Verifying and implementing the exact GC placement AUTO conditioned on the controller's Dragontree marker, with battle-scoped ability and shield changes.",
       "abilityIds": [
@@ -42,11 +44,21 @@
         "cfa-13607:0",
         "cfa-13609:0",
         "cfa-13638:0"
-      ]
+      ],
+      "sourceWorkerCommit": "a71de18efd5842d3eed26e49825be8b9ac475f29",
+      "integratedCommit": "471fff3f5555945bbc5559550f25ba7809acba2f",
+      "evidenceCommit": "4505cc8ec24cf4042ca1c3ff3eb66499cb82be0e",
+      "testFiles": [
+        "ability-auto-dragontree-gc-shield-server.test.js"
+      ],
+      "testResults": {
+        "familyCases": 9,
+        "engineTests": 309
+      }
     },
     {
       "batchId": "PRIMARY-PERSONA-SHIELD-TICKET-AUTO",
-      "status": "in-progress",
+      "status": "completed",
       "workerOwner": "primary-session/persona_shield_family",
       "reason": "Audit and implement the six exact hand-to-RC/Ride-Deck AUTO Persona Shield abilities, their Grade-3 attack abilities, and the generated Persona Shield ticket's protection ability; preserve exact player ownership and ticket choices.",
       "abilityIds": [
@@ -63,7 +75,21 @@
         "cfa-13712:1",
         "cfa-13713:0",
         "cfa-13713:1"
-      ]
+      ],
+      "sourceWorkerCommit": "2fff83435462816ef8a3b81875fd567cfc77a30d",
+      "integratedCommit": "26f31ad2e4f81594298d53447703344855a86425",
+      "evidenceCommit": "4505cc8ec24cf4042ca1c3ff3eb66499cb82be0e",
+      "testFiles": [
+        "ability-auto-persona-shield-ticket-server.test.js",
+        "ability-auto-own-attack-target-grade-power-server.test.js",
+        "scripts/build-persona-ride-metadata.test.js"
+      ],
+      "testResults": {
+        "personaCases": 7,
+        "attackCases": 8,
+        "engineTests": 309,
+        "metadataTests": 1
+      }
     }
   ]
 }

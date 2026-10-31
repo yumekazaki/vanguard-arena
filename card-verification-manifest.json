@@ -17723,7 +17723,7 @@
         "tampered trusted definitions are not accepted for this exact family"
       ],
       "fullyVerified": false,
-      "remaining": "Focused source/event/grade server tests pass; whole-card verification and fresh full-suite evidence await the next checkpoint."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-13709",
@@ -17743,7 +17743,7 @@
         "tampered trusted definitions are not accepted for this exact family"
       ],
       "fullyVerified": false,
-      "remaining": "Focused source/event/grade server tests pass; whole-card verification and fresh full-suite evidence await the next checkpoint."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-1371",
@@ -17779,7 +17779,7 @@
         "tampered trusted definitions are not accepted for this exact family"
       ],
       "fullyVerified": false,
-      "remaining": "Focused source/event/grade server tests pass; whole-card verification and fresh full-suite evidence await the next checkpoint."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-13711",
@@ -17799,7 +17799,7 @@
         "tampered trusted definitions are not accepted for this exact family"
       ],
       "fullyVerified": false,
-      "remaining": "Focused source/event/grade server tests pass; whole-card verification and fresh full-suite evidence await the next checkpoint."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-13712",
@@ -17819,7 +17819,7 @@
         "tampered trusted definitions are not accepted for this exact family"
       ],
       "fullyVerified": false,
-      "remaining": "Focused source/event/grade server tests pass; whole-card verification and fresh full-suite evidence await the next checkpoint."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-13713",
@@ -17839,7 +17839,7 @@
         "tampered trusted definitions are not accepted for this exact family"
       ],
       "fullyVerified": false,
-      "remaining": "Focused source/event/grade server tests pass; whole-card verification and fresh full-suite evidence await the next checkpoint."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-1372",
@@ -75526,5 +75526,5 @@
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T03:39:07.706Z"
+  "evidenceUpdatedAt": "2026-10-31T03:41:56.026Z"
 }
