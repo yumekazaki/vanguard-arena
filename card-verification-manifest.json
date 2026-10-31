@@ -74080,8 +74080,28 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2923",
+      "abilityId": "cfa-2923:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-gb-boosted-vanguard-attack-soul-charge-power-server.test.js"
+      ],
+      "testCases": [
+        "Squallmaker Vampir has its exact trusted GB1 boosted-Vanguard-attack Counter Blast Soul Charge/power AUTO",
+        "the reusable parser preserves the cost/effect order and parameters for this exact text shape",
+        "host and joining player each resolve their own boosted attack, pay their own Counter Blast, Soul Charge 2, then gain battle power",
+        "another booster, wrong target, missing GB, source mismatch, or unpayable cost cannot queue the ability",
+        "a controlled Squallmaker can resolve its skill from the controller seat even when its owner is the other player",
+        "decline is free; accepted resolution rechecks Generation Break, Counter Blast, and the full Soul Charge before committing",
+        "duplicate trigger processing and duplicate resolution cannot pay or resolve the ability twice",
+        "the authoritative attack action emits the exact boost identity used by this AUTO matcher"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-30T23:39:52.959Z"
+  "evidenceUpdatedAt": "2026-10-31T00:16:09.314Z"
 }
