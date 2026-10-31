@@ -112417,6 +112417,17 @@
   for (const [cardId, printedText] of crestFrontRowGZonePowerTexts) {
     const definition = root?.VanguardAbilityEngine?.compileCrestFrontRowFaceUpGZonePowerDefinition?.(cardId, `${cardId}:2`, "CONT", printedText);    if (definition) definitions.push(definition);
   }
+  const breakRideCardIds = ["cfa-1251", "cfa-1671", "cfa-1879", "cfa-1945", "cfa-1954"];
+  for (const cardId of breakRideCardIds) {
+    const spec = root?.VanguardAbilityEngine?.getBreakRideSpec?.(cardId);
+    if (!spec) continue;
+    const printedText = `AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «${spec.clan}» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and "${spec.abilityText}".`;
+    const definition = root?.VanguardAbilityEngine?.compileBreakRideAbilityDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
+    if (definition) definitions.push(definition);
+  }
+  const pacificaSoulText = 'ACT [Soul]: [Counter Blast 1 & Choose a unit named "Top Idol, Pacifica" from your RC, and put it into your soul] Put this card into your hand, choose up to one of your «Bermuda Triangle» rear-guards, and return it to your hand.';
+  const pacificaSoulDefinition = root?.VanguardAbilityEngine?.compilePacificaSoulCycleDefinition?.("cfa-1954", "cfa-1954:1", "ACT", pacificaSoulText);
+  if (pacificaSoulDefinition) definitions.push(pacificaSoulDefinition);
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
 })(typeof globalThis === "undefined" ? this : globalThis);
