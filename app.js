@@ -361,9 +361,10 @@
     });
     return errors;
   }
+  function deckBuildLimit(deck) { return deck?.format === "standard" ? 54 : 50; }
   function deckReadyErrors(deck) {
     const errors = standardRideDeckErrors(deck), total = deckCount(deck), gTotal = gDeckCount(deck);
-    if (total !== 50) errors.push(`deck has ${total}/50 cards`);
+    if (total !== deckBuildLimit(deck)) errors.push(`deck has ${total}/${deckBuildLimit(deck)} cards`);
     if (deck?.format === "standard") { if (gTotal) errors.push("Standard decks cannot include G-deck cards"); }
     else if (!deck?.starterCardId || Number(cardMap.get(deck.starterCardId)?.grade) !== 0 || !isUnitCard(cardMap.get(deck.starterCardId)) || Number(deck.cards?.[deck.starterCardId] || 0) < 1) errors.push("choose a Grade 0 starting Vanguard from the deck");
     return errors;
@@ -405,13 +406,13 @@
     $("#builder-title").textContent = builder.name || "Untitled deck";
     const total = deckCount(builder), gTotal = gDeckCount(builder); const { counts, triggers, heals, overs, sentinels, regalis, nameViolations } = deckSummary(builder);
     $("#deck-total").textContent = builder.format === "standard" ? `${total} / ${(builder.rideDeck || []).filter(Boolean).length}` : `${total} / ${gTotal}`;
-    $("#main-gdeck-label").textContent = builder.format === "standard" ? "MAIN / RIDE DECK" : "MAIN / G DECK";
+    $("#main-gdeck-label").textContent = builder.format === "standard" ? "TOTAL / RIDE DECK" : "MAIN / G DECK";
     $("#grade-breakdown").textContent = counts.join(" / ");
     $("#trigger-count").textContent = triggers;
     const validation = $("#deck-validation");
     const isStandard = builder.format === "standard", errors = isStandard ? standardRideDeckErrors(builder) : [];
     if (isStandard && gTotal) errors.push("Standard decks cannot include G-deck cards");
-    if (!isStandard && !builder.starterCardId) errors.push("choose a Grade 0 starting Vanguard"); if (total !== 50) errors.push(`${total}/50 main-deck cards`); if (!isStandard && gTotal > 16) errors.push(`${gTotal}/16 G-deck cards`); if (triggers !== 16) errors.push(`${triggers}/16 triggers`); if (heals > 4) errors.push(`${heals}/4 Heal triggers`); if (overs > 1) errors.push(`${overs}/1 Over Trigger`); if (sentinels > 4) errors.push(`${sentinels}/4 Sentinels`); if (regalis > 1) errors.push(`${regalis}/1 Regalis Piece`); if (nameViolations) errors.push(`${nameViolations} card name limits`);
+    if (!isStandard && !builder.starterCardId) errors.push("choose a Grade 0 starting Vanguard"); if (total !== deckBuildLimit(builder)) errors.push(`${total}/${deckBuildLimit(builder)} ${isStandard ? "total" : "main-deck"} cards`); if (!isStandard && gTotal > 16) errors.push(`${gTotal}/16 G-deck cards`); if (triggers !== 16) errors.push(`${triggers}/16 triggers`); if (heals > 4) errors.push(`${heals}/4 Heal triggers`); if (overs > 1) errors.push(`${overs}/1 Over Trigger`); if (sentinels > 4) errors.push(`${sentinels}/4 Sentinels`); if (regalis > 1) errors.push(`${regalis}/1 Regalis Piece`); if (nameViolations) errors.push(`${nameViolations} card name limits`);
     validation.className = `deck-validation${errors.length ? " invalid" : total ? " valid" : ""}`; validation.textContent = errors.length ? `Deck rules to fix: ${errors.join(" · ")}.` : total ? "Deck construction limits are satisfied (Ride Deck rules excluded)." : "Add cards from the library to start building.";
     const starterOptions = Object.entries(builder.cards || {}).filter(([id, qty]) => qty > 0 && Number(cardMap.get(id)?.grade) === 0 && isUnitCard(cardMap.get(id))).map(([id, qty]) => ({ card: cardMap.get(id), qty })).filter((entry) => entry.card).sort((a, b) => a.card.name.localeCompare(b.card.name));
     if (builder.starterCardId && !starterOptions.some(({ card }) => card.id === builder.starterCardId)) builder.starterCardId = "";
@@ -430,7 +431,7 @@
       const slots = Array.from({length:Math.max(0,limit-count)}, () => '<span class="deck-empty-slot" aria-hidden="true"></span>').join("");
       return `<section class="workshop-deck-section${extra ? " workshop-gdeck" : ""}" aria-label="${title}"><header><h3>${title}</h3><span>${count} / ${limit}</span></header><div class="deck-grid-stage"><div class="deck-card-grid">${cards}${slots}</div>${!count ? `<div class="deck-empty-prompt"><b>${extra ? "Your G deck" : "Your next deck starts here"}</b><span>${extra ? "G Units and G Guardians appear here." : "Search on the right, then click a card to add it."}</span></div>` : ""}</div></section>`;
     };
-    $("#deck-list").innerHTML = visualSection(rows.filter(({card}) => !isGDeckCard(card)), "Main deck", total, 50) + (isStandard ? "" : visualSection(rows.filter(({card}) => isGDeckCard(card)), "G deck", gTotal, 16, true));
+    $("#deck-list").innerHTML = visualSection(rows.filter(({card}) => !isGDeckCard(card)), isStandard ? "Deck including Ride Deck" : "Main deck", total, deckBuildLimit(builder)) + (isStandard ? "" : visualSection(rows.filter(({card}) => isGDeckCard(card)), "G deck", gTotal, 16, true));
     renderBuilderCards();
   }
   function renderBuilderCards() {
