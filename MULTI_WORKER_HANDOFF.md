@@ -5,8 +5,8 @@
 - Repository: https://github.com/yumekazaki/vanguard-arena
 - Local checkout: `C:\Users\yumek\Documents\Codex\2026-10-24\ne\work\vanguard-arena`
 - Active branch: `codex/standard-ride-deck`
-- Current local checkpoint: `e6068faf9671b1c7d2a7d807e9a035f320215637` (`Tighten ability verification and add Glitter support`). Current registry/progress refreshes are uncommitted on top of this checkpoint.
-- Ability queue and registry baseline: `e6068faf9671b1c7d2a7d807e9a035f320215637`.
+- Current local checkpoint: `a81e8925f8c8f844223689c6fd468cfce75fa6ca` (`Group ability queue by candidate mechanic families`). The local ability registry and progress report are refreshed against this checkpoint.
+- Ability queue and registry baseline: `a81e8925f8c8f844223689c6fd468cfce75fa6ca`.
 - The branch is local and has not been confirmed pushed to GitHub. Do not start external workers until it is published and the registry is visible there. The Pages publishing branch is not the collaboration branch.
 - Card catalog: `assets/cards/catalog-data.js` when available; `scripts/audit-ability-catalog.js` also supports the committed catalog snapshot.
 
@@ -22,7 +22,7 @@
 - Whole-card promotion gate: `scripts/promote-fully-verified-cards.js` (dry-run by default; `--apply` writes evidence only when the complete source-validation suite is fresh).
 - Contribution contract: `ABILITY_CONTRIBUTION_GUIDE.md`
 
-Current catalog snapshot: **17,240 abilities; 4,331 compiled (25.12%); 12,909 unsupported or unreviewed; 645 fully verified cards**. The queue contains 16,595 abilities on cards that are not yet fully verified. The registry reserves 134 ability entries across 65 cards, with 446 available batches. The latest complete suite passed **1,584/1,584 in 384.29 seconds**, but its digest is stale after the whole-card gate was tightened. The current focused Glitter, contribution, queue, registry, and promotion-gate checks pass **24/24**. `catalog-progress.json` now reports the suite freshness explicitly. The queue reports no missing registered client/server effect handlers; online matches still relay ability decisions through the host browser, so reducer tests do not establish live authoritative multiplayer behavior.
+Current catalog snapshot: **17,240 abilities; 4,331 compiled (25.12%); 12,909 unsupported or unreviewed; 645 fully verified cards**. The queue contains 16,595 abilities on cards that are not yet fully verified. The registry reserves 138 ability entries across 69 cards and exposes 470 available batches. Twenty-nine batches group 125 candidate cards by normalized ability text for triage; every ability on a card stays in the same batch, and similarity is not treated as rules equivalence. The latest complete suite passed **1,584/1,584 in 384.29 seconds**, but its digest is stale after subsequent source changes. The current focused Glitter, contribution, queue, registry, and promotion-gate checks pass **25/25**. Registry generation also validated all seven active reservations. `catalog-progress.json` reports suite freshness explicitly. The queue reports no missing registered client/server effect handlers; online matches still relay ability decisions through the host browser, so reducer tests do not establish live authoritative multiplayer behavior.
 
 Three disjoint batches are reserved for isolated internal worktrees: `PRIMARY-WORKER-CONT-CONDITIONAL-CARD-NAME-6` (six abilities), `PRIMARY-WORKER-AUTO-CLAN-CB-ATTACK-POWER-4` (four abilities), and `PRIMARY-WORKER-AUTO-SAME-NAME-DROP-CALL-4` (four abilities). Each worker must preserve exact card text and leave whole-card verification pending until all abilities and live-game requirements are satisfied.
 

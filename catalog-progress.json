@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T06:33:57.022Z",
+  "generatedAt": "2026-10-31T06:54:13.464Z",
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "catalogSource": "scripts/audit-ability-catalog.js (local catalog file or committed HEAD snapshot)",
   "cards": {
@@ -43,8 +43,8 @@
     "note": "Aggregate parsing or a passing pattern test does not make a whole card fully verified. Only explicit manifest records count as regression evidence; zero fully verified cards is reported when no complete card-level evidence exists."
   },
   "workflow": {
-    "catalogLoadMilliseconds": 145.2,
-    "fullCatalogParseAndAuditMilliseconds": 5302.9,
+    "catalogLoadMilliseconds": 202.1,
+    "fullCatalogParseAndAuditMilliseconds": 5819.2,
     "repeatedAuditsOfTheSameCatalogUseTheExistingDigestCache": true,
     "parseCacheExperiment": "Rejected JSON-clone-per-call caching after three full catalog parse passes measured about 9.5 seconds uncached versus 12.1 seconds with cloning. Adopted immutable per-card snapshots with definition-revision invalidation: the same three passes measured about 9.5 seconds uncached versus 3.82 seconds cached; cache-hit passes were about 2.5 milliseconds each.",
     "measuredBottlenecks": [

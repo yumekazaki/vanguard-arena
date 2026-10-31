@@ -60,7 +60,7 @@
     },
     {
       "batchId": "PRIMARY-WORKER-CONT-CONDITIONAL-CARD-NAME-6",
-      "status": "reserved",
+      "status": "in-progress",
       "workerOwner": "worker-conditional-name",
       "reason": "Independent six-card CONT batch for conditional name grants. Review every exact source text, required location and Vanguard-name condition; add host/joiner and false-condition coverage. Do not promote whole cards until every printed ability and live-game gap is cleared.",
       "abilityIds": [
@@ -74,7 +74,7 @@
     },
     {
       "batchId": "PRIMARY-WORKER-AUTO-CLAN-CB-ATTACK-POWER-4",
-      "status": "reserved",
+      "status": "in-progress",
       "workerOwner": "worker-clan-counterblast",
       "reason": "Independent four-card AUTO batch for exact clan-filtered Counter-Blast costs and own-attack battle power. Verify attack source, controller Vanguard clan, legal clan damage, optional payment and end-of-battle expiry; do not reuse unless every printed rule matches.",
       "abilityIds": [
@@ -82,6 +82,18 @@
         "cfa-1159:0",
         "cfa-1170:0",
         "cfa-1187:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-AUTO-SAME-NAME-DROP-CALL-4",
+      "status": "in-progress",
+      "workerOwner": "worker-same-name-drop-call",
+      "reason": "Independent four-card AUTO batch. Worker has begun the exact hand-to-RC, Counter Blast 1, named Unit from own Drop, empty unlocked Rear-Guard implementation in an isolated worktree; focused trigger and invalid-cost/target/occupied-circle checks are in progress.",
+      "abilityIds": [
+        "cfa-8541:0",
+        "cfa-8571:0",
+        "cfa-8577:0",
+        "cfa-8585:0"
       ]
     }
   ],
