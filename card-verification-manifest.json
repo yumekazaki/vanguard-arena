@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1481,
-    "testCount": 1481,
-    "passed": 1481,
+    "tests": 1495,
+    "testCount": 1495,
+    "passed": 1495,
     "failed": 0,
-    "durationMilliseconds": 289142,
-    "completedAt": "2026-10-30T23:46:11.030Z",
-    "runDate": "2026-10-30",
-    "validationInputDigest": "12b7c108309e6d2272cd98eb3ebdf6c58c430340e51d01e55ece4fef414951ab"
+    "durationMilliseconds": 352479,
+    "completedAt": "2026-10-31T00:58:17.110Z",
+    "runDate": "2026-10-31",
+    "validationInputDigest": "eb45888671b2872365da46f7f16e32d37e4a22be97432d8c21486344b447ea18"
   },
   "records": [
     {
@@ -74205,5 +74205,5 @@
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T00:47:29.596Z"
+  "evidenceUpdatedAt": "2026-10-31T00:58:17.110Z"
 }
