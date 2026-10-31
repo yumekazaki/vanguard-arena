@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "batchId": "CANDIDATE-C0086556-0015",
+  "workerId": "codex-cont-name-vg-penalty",
+  "baselineCommit": "c00865569ef43a5915401e313ef036c25dc963b2",
+  "abilityIds": [
+    "cfa-24:0",
+    "cfa-24:1",
+    "cfa-251:0",
+    "cfa-251:1",
+    "cfa-536:0",
+    "cfa-536:1",
+    "cfa-63:0",
+    "cfa-63:1"
+  ],
+  "claimedAt": "2026-10-31T15:29:01.622Z"
+}
