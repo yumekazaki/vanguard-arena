@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
   "baselineCommit": "48b551b666fc84cbdd24ceaa5394011982e6923d",
-  "generatedAt": "2026-10-31T07:40:18.108Z",
+  "generatedAt": "2026-10-31T07:44:27.574Z",
   "sourceQueue": "current catalog + trusted ability definitions + verification manifest",
   "concurrencyProtocol": "GitHub atomic branch creation at refs/heads/claims/<batchId>; the first successful non-forced create owns the batch.",
   "counts": {
     "queuedAbilities": 16595,
     "uniqueAbilityIds": 16595,
-    "reservedAbilities": 138,
-    "availableAbilities": 16457,
-    "reservedCards": 69,
-    "activeAssignments": 7,
-    "availableBatches": 470,
+    "reservedAbilities": 155,
+    "availableAbilities": 16440,
+    "reservedCards": 82,
+    "activeAssignments": 10,
+    "availableBatches": 467,
     "validationEvidenceFresh": true
   },
   "abilitiesFile": "ability-work-registry.jsonl",
@@ -321,11 +321,133 @@
       ]
     },
     {
+      "batchId": "PRIMARY-WORKER-AUTO-RIDE-DRAW-CREST-5",
+      "status": "in-progress",
+      "workerOwner": "worker-ride-draw-crest",
+      "reason": "Exact five-card ride-triggered draw plus crest batch. Implement reusable ride-source identity, controller-specific draw, crest choice/state, timing, and replay-safe resolution; audit every ability on each card and leave whole-card verification pending.",
+      "cardIds": [
+        "cfa-10475",
+        "cfa-10764",
+        "cfa-12185",
+        "cfa-13174",
+        "cfa-13188"
+      ],
+      "abilityIds": [
+        "cfa-10475:0",
+        "cfa-10764:0",
+        "cfa-12185:0",
+        "cfa-13174:0",
+        "cfa-13188:0"
+      ],
+      "focusAbilityIds": [
+        "cfa-10475:0",
+        "cfa-10764:0",
+        "cfa-12185:0",
+        "cfa-13174:0",
+        "cfa-13188:0"
+      ],
+      "dependencies": [
+        "candidate-review:candidate:AUTO\u0000when this unit is placed by riding from \"<card-name>\", draw a card, and you get a \"<card-name>\" crest. (you will be prompted to get the crest upon ride.)",
+        "regression-evidence:cfa-10475:0",
+        "regression-evidence:cfa-10764:0",
+        "regression-evidence:cfa-12185:0",
+        "regression-evidence:cfa-13174:0",
+        "regression-evidence:cfa-13188:0",
+        "requirement-review:trigger",
+        "whole-card-evidence:cfa-10475",
+        "whole-card-evidence:cfa-10764",
+        "whole-card-evidence:cfa-12185",
+        "whole-card-evidence:cfa-13174",
+        "whole-card-evidence:cfa-13188"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-AUTO-END-PHASE-NAMED-SEARCH-4",
+      "status": "in-progress",
+      "workerOwner": "worker-end-phase-named-search",
+      "reason": "Exact four-card Great Nature end-phase AUTO batch. Require this exact source to leave RC for Drop during its controller End Phase, matching Great Nature Vanguard, optional Counter Blast, exact named deck search/reveal/hand/shuffle; audit each full card and both seats.",
+      "cardIds": [
+        "cfa-273",
+        "cfa-284",
+        "cfa-301",
+        "cfa-309"
+      ],
+      "abilityIds": [
+        "cfa-273:0",
+        "cfa-284:0",
+        "cfa-301:0",
+        "cfa-309:0"
+      ],
+      "focusAbilityIds": [
+        "cfa-273:0",
+        "cfa-284:0",
+        "cfa-301:0",
+        "cfa-309:0"
+      ],
+      "dependencies": [
+        "candidate-review:candidate:AUTO\u0000[counter blast n] during your end phase, when this unit is put into the drop zone from rc, if you have a <clan> vanguard, you may pay the cost. if you do, search your deck for up to one card name \"<card-name>\", reveal it to your opponent, put it into your hand, and shuffle your deck.",
+        "regression-evidence:cfa-273:0",
+        "regression-evidence:cfa-284:0",
+        "regression-evidence:cfa-301:0",
+        "regression-evidence:cfa-309:0",
+        "whole-card-evidence:cfa-273",
+        "whole-card-evidence:cfa-284",
+        "whole-card-evidence:cfa-301",
+        "whole-card-evidence:cfa-309"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-AUTO-NAMED-RIDER-TOP-SEVEN-4",
+      "status": "in-progress",
+      "workerOwner": "worker-named-rider-top-seven",
+      "reason": "Exact four-card named-rider top-seven search batch. Bind each trigger to the exact named ridden card and prior Vanguard instance; resolve private top-seven selection/reveal/hand/shuffle for the controller; audit the sibling ride-call AUTO on every card.",
+      "cardIds": [
+        "cfa-274",
+        "cfa-743",
+        "cfa-948",
+        "cfa-974"
+      ],
+      "abilityIds": [
+        "cfa-274:0",
+        "cfa-274:1",
+        "cfa-743:0",
+        "cfa-743:1",
+        "cfa-948:0",
+        "cfa-948:1",
+        "cfa-974:0",
+        "cfa-974:1"
+      ],
+      "focusAbilityIds": [
+        "cfa-274:0",
+        "cfa-274:1",
+        "cfa-743:0",
+        "cfa-743:1",
+        "cfa-948:0",
+        "cfa-948:1",
+        "cfa-974:0",
+        "cfa-974:1"
+      ],
+      "dependencies": [
+        "candidate-review:candidate:AUTO\u0000when a card named \"<card-name>\" rides this unit, look at up to seven cards from the top of your deck, search for up to one card name \"<card-name>\" or \"<card-name>\" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.",
+        "regression-evidence:cfa-274:0",
+        "regression-evidence:cfa-743:0",
+        "regression-evidence:cfa-948:0",
+        "regression-evidence:cfa-974:0",
+        "requirement-review:trigger",
+        "whole-card-evidence:cfa-274",
+        "whole-card-evidence:cfa-743",
+        "whole-card-evidence:cfa-948",
+        "whole-card-evidence:cfa-974"
+      ]
+    },
+    {
       "batchId": "PRIMARY-GZONE-STRIDE",
       "status": "reserved",
       "workerOwner": "primary-session",
       "reason": "Current primary-session G-zone ACT/Stride implementation scope; includes every outstanding ability on each affected card.",
       "cardIds": [
+        "cfa-10475",
+        "cfa-10764",
         "cfa-10780",
         "cfa-11102",
         "cfa-11104",
@@ -355,6 +477,7 @@
         "cfa-1170",
         "cfa-1187",
         "cfa-12062",
+        "cfa-12185",
         "cfa-12576",
         "cfa-12581",
         "cfa-12592",
@@ -371,12 +494,19 @@
         "cfa-13122",
         "cfa-13123",
         "cfa-13124",
+        "cfa-13174",
+        "cfa-13188",
         "cfa-13520",
         "cfa-13542",
         "cfa-13584",
         "cfa-13608",
         "cfa-13621",
         "cfa-13689",
+        "cfa-273",
+        "cfa-274",
+        "cfa-284",
+        "cfa-301",
+        "cfa-309",
         "cfa-3766",
         "cfa-3801",
         "cfa-3870",
@@ -389,14 +519,19 @@
         "cfa-5264",
         "cfa-5349",
         "cfa-6666",
+        "cfa-743",
         "cfa-7484",
         "cfa-7528",
         "cfa-8541",
         "cfa-8571",
         "cfa-8577",
-        "cfa-8585"
+        "cfa-8585",
+        "cfa-948",
+        "cfa-974"
       ],
       "abilityIds": [
+        "cfa-10475:0",
+        "cfa-10764:0",
         "cfa-10780:0",
         "cfa-10780:1",
         "cfa-10780:2",
@@ -475,6 +610,7 @@
         "cfa-1187:0",
         "cfa-12062:0",
         "cfa-12062:1",
+        "cfa-12185:0",
         "cfa-12576:0",
         "cfa-12576:1",
         "cfa-12581:0",
@@ -495,6 +631,8 @@
         "cfa-13122:0",
         "cfa-13123:0",
         "cfa-13124:0",
+        "cfa-13174:0",
+        "cfa-13188:0",
         "cfa-13520:0",
         "cfa-13542:0",
         "cfa-13584:0",
@@ -502,6 +640,12 @@
         "cfa-13621:0",
         "cfa-13689:0",
         "cfa-13689:1",
+        "cfa-273:0",
+        "cfa-274:0",
+        "cfa-274:1",
+        "cfa-284:0",
+        "cfa-301:0",
+        "cfa-309:0",
         "cfa-3766:0",
         "cfa-3766:1",
         "cfa-3801:0",
@@ -527,6 +671,8 @@
         "cfa-5349:2",
         "cfa-6666:0",
         "cfa-6666:1",
+        "cfa-743:0",
+        "cfa-743:1",
         "cfa-7484:0",
         "cfa-7484:1",
         "cfa-7528:0",
@@ -534,7 +680,11 @@
         "cfa-8541:0",
         "cfa-8571:0",
         "cfa-8577:0",
-        "cfa-8585:0"
+        "cfa-8585:0",
+        "cfa-948:0",
+        "cfa-948:1",
+        "cfa-974:0",
+        "cfa-974:1"
       ],
       "dependencies": [
         "candidate-review:candidate:ACT\u0000[g zone] unite: if your vanguard is grade n, cost [counter blast n & discard a card from your hand], and stride this card on your vc from face down.",
@@ -551,6 +701,7 @@
         "candidate-review:candidate:ACT\u0000[vc] n/turn: cost [counter blast n & turn a card with the same card name as this unit from g zone face up], choose up to five of your rear-guards, and retire them. look at the top seven cards of your deck, choose up to the same number of cards with \"<card-name>\" in their card names as the number of units retired by this effect from among them, call them to rc, and they get power + n until end of turn for each face up card in your g zone with \"<card-name>\" in its card names. shuffle the deck. (shift + left click to create force gifts and crest)",
         "candidate-review:candidate:ACT\u0000[vc] n/turn: cost [soul blast n & turn a card from your g zone face up], look at five cards from the top of your deck, call two cards from among them to rc, and shuffle your deck.",
         "candidate-review:candidate:ACT\u0000[vc] n/turn: cost [turn a card from g zone face up], if you have a heart card with \"<card-name>\" in its card name, and if you have three or more rear-guards with \"<card-name>\" in their card names, all of your units with \"<card-name>\" in their card names get power + n for each face up card named \"<card-name>\" in your g zone until end of turn. (shift + left click to create force gifts and crest)",
+        "candidate-review:candidate:AUTO\u0000[counter blast n] during your end phase, when this unit is put into the drop zone from rc, if you have a <clan> vanguard, you may pay the cost. if you do, search your deck for up to one card name \"<card-name>\", reveal it to your opponent, put it into your hand, and shuffle your deck.",
         "candidate-review:candidate:AUTO\u0000[rc] generation break n wave-1st or 4th time: [soul blast n] when this unit boosts, if you have a vanguard with \"<card-name>\" in its card name, you may pay the cost. if you do, your opponent chooses one of his or her rear-guards, and retires it. (shift + left click to count up attacks.) (shift + right click to count down attacks.) (middle click or hover and press space to set number of attacks.)",
         "candidate-review:candidate:AUTO\u0000[vc/rc]: when placed, cost [counter blast n & soul blast n], return a card with \"<card-name>\" in its card name and a \"<card-name>\" each from your drop zone to your hand.",
         "candidate-review:candidate:AUTO\u0000[vc] limit break n: at the end of the battle this unit attacked, if you have a heart card with \"<card-name>\" in its card name, cost [counter blast n & soul blast n & retire two rear-guards, and discard two grade n <clan> from hand], put this unit into g zone face up, choose up to one face down \"<card-name>\" from your g zone, stride it on vc as stand, and it gets drive -n until end of turn. (shift + left click to create force gifts and crest)",
@@ -578,12 +729,16 @@
         "candidate-review:candidate:AUTO\u0000[vc]: when this unit's attack hits a vanguard, soul charge n, and if your soul has is six or more cards, draw a card. (shift + left click to create protect gifts.)",
         "candidate-review:candidate:AUTO\u0000[vc]: when this unit's attack hits a vanguard, your opponent chooses a card from their hand, and discards it. (shift + left click to create protect gifts.)",
         "candidate-review:candidate:AUTO\u0000[vc]: when this unit's attack hits a vanguard, your opponent chooses one of their rear-guards, retires it, you choose up to two cards from your opponent's drop, and bind them. (shift + left click to create accel gifts.)",
+        "candidate-review:candidate:AUTO\u0000when a card named \"<card-name>\" rides this unit, look at up to seven cards from the top of your deck, search for up to one card name \"<card-name>\" or \"<card-name>\" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.",
         "candidate-review:candidate:AUTO\u0000when this unit is placed by riding from \"<card-name>\", cost [reveal a grade n card with \"<card-name>\" in its card name from the ride deck], search your deck for up to one tiding card, reveal it and put it into hand, and shuffle the deck.",
+        "candidate-review:candidate:AUTO\u0000when this unit is placed by riding from \"<card-name>\", draw a card, and you get a \"<card-name>\" crest. (you will be prompted to get the crest upon ride.)",
         "candidate-review:candidate:AUTO\u0000when this unit is placed on rc during your main phase, you may soul charge n. choose up to one grade n card from your hand, and reveal it. if your revealed a card, or you have a grade n or greater vanguard with \"<card-name>\" in its card name, choose up to one card from your soul with a different card name from this unit and grade less than or equal to your vanguard, and call it to rc. at the end of that turn, put that called unit into soul.",
         "candidate-review:candidate:AUTO\u0000when this unit is placed on rc from hand, if you did not play any orders this turn, cost [discard a card from hand], search your deck for up to one order card without regalis piece, discard it, and it gets \"<card-name>\" until end of turn. shuffle the deck.",
         "candidate-review:candidate:AUTO\u0000when this unit is placed on rc, look at the top three cards of your deck, choose up to one card with \"<card-name>\" in its card name from among them, reveal it and put it into hand, and put the rest on the bottom of the deck in any order.",
         "candidate-review:candidate:CONT\u0000[front row rc]: during your turn, auto abilities cannot activate from your opponent's intercepts, and all of your opponent's units that were put on gc from rc lose all of their cont and auto abilities.",
         "candidate-review:candidate:CONT\u0000[rc]: if you have a vanguard with \"<card-name>\" in its card name, this unit gets \"<card-name>\".",
+        "regression-evidence:cfa-10475:0",
+        "regression-evidence:cfa-10764:0",
         "regression-evidence:cfa-10780:0",
         "regression-evidence:cfa-10780:2",
         "regression-evidence:cfa-11102:0",
@@ -632,6 +787,7 @@
         "regression-evidence:cfa-11146:0",
         "regression-evidence:cfa-11146:2",
         "regression-evidence:cfa-12062:0",
+        "regression-evidence:cfa-12185:0",
         "regression-evidence:cfa-12576:0",
         "regression-evidence:cfa-12576:1",
         "regression-evidence:cfa-12581:0",
@@ -651,7 +807,14 @@
         "regression-evidence:cfa-13122:0",
         "regression-evidence:cfa-13123:0",
         "regression-evidence:cfa-13124:0",
+        "regression-evidence:cfa-13174:0",
+        "regression-evidence:cfa-13188:0",
         "regression-evidence:cfa-13689:0",
+        "regression-evidence:cfa-273:0",
+        "regression-evidence:cfa-274:0",
+        "regression-evidence:cfa-284:0",
+        "regression-evidence:cfa-301:0",
+        "regression-evidence:cfa-309:0",
         "regression-evidence:cfa-3766:0",
         "regression-evidence:cfa-5264:0",
         "regression-evidence:cfa-5264:1",
@@ -659,13 +822,18 @@
         "regression-evidence:cfa-5349:2",
         "regression-evidence:cfa-6666:0",
         "regression-evidence:cfa-6666:1",
+        "regression-evidence:cfa-743:0",
         "regression-evidence:cfa-7484:0",
         "regression-evidence:cfa-7484:1",
         "regression-evidence:cfa-7528:0",
+        "regression-evidence:cfa-948:0",
+        "regression-evidence:cfa-974:0",
         "requirement-review:choices",
         "requirement-review:conditions",
         "requirement-review:costs",
         "requirement-review:trigger",
+        "whole-card-evidence:cfa-10475",
+        "whole-card-evidence:cfa-10764",
         "whole-card-evidence:cfa-10780",
         "whole-card-evidence:cfa-11102",
         "whole-card-evidence:cfa-11104",
@@ -695,6 +863,7 @@
         "whole-card-evidence:cfa-1170",
         "whole-card-evidence:cfa-1187",
         "whole-card-evidence:cfa-12062",
+        "whole-card-evidence:cfa-12185",
         "whole-card-evidence:cfa-12576",
         "whole-card-evidence:cfa-12581",
         "whole-card-evidence:cfa-12592",
@@ -711,12 +880,19 @@
         "whole-card-evidence:cfa-13122",
         "whole-card-evidence:cfa-13123",
         "whole-card-evidence:cfa-13124",
+        "whole-card-evidence:cfa-13174",
+        "whole-card-evidence:cfa-13188",
         "whole-card-evidence:cfa-13520",
         "whole-card-evidence:cfa-13542",
         "whole-card-evidence:cfa-13584",
         "whole-card-evidence:cfa-13608",
         "whole-card-evidence:cfa-13621",
         "whole-card-evidence:cfa-13689",
+        "whole-card-evidence:cfa-273",
+        "whole-card-evidence:cfa-274",
+        "whole-card-evidence:cfa-284",
+        "whole-card-evidence:cfa-301",
+        "whole-card-evidence:cfa-309",
         "whole-card-evidence:cfa-3766",
         "whole-card-evidence:cfa-3801",
         "whole-card-evidence:cfa-3870",
@@ -729,12 +905,15 @@
         "whole-card-evidence:cfa-5264",
         "whole-card-evidence:cfa-5349",
         "whole-card-evidence:cfa-6666",
+        "whole-card-evidence:cfa-743",
         "whole-card-evidence:cfa-7484",
         "whole-card-evidence:cfa-7528",
         "whole-card-evidence:cfa-8541",
         "whole-card-evidence:cfa-8571",
         "whole-card-evidence:cfa-8577",
-        "whole-card-evidence:cfa-8585"
+        "whole-card-evidence:cfa-8585",
+        "whole-card-evidence:cfa-948",
+        "whole-card-evidence:cfa-974"
       ]
     },
     {
@@ -991,48 +1170,6 @@
       "status": "available",
       "workerOwner": null,
       "cardIds": [
-        "cfa-10475",
-        "cfa-10764",
-        "cfa-12185",
-        "cfa-13174",
-        "cfa-13188"
-      ],
-      "abilityIds": [
-        "cfa-10475:0",
-        "cfa-10764:0",
-        "cfa-12185:0",
-        "cfa-13174:0",
-        "cfa-13188:0"
-      ],
-      "focusedAbilityIds": [
-        "cfa-10475:0",
-        "cfa-10764:0",
-        "cfa-12185:0",
-        "cfa-13174:0",
-        "cfa-13188:0"
-      ],
-      "candidateMechanicGroup": "candidate:AUTO\u0000when this unit is placed by riding from \"<card-name>\", draw a card, and you get a \"<card-name>\" crest. (you will be prompted to get the crest upon ride.)",
-      "groupingNote": "Similarity triage only: review each printed ability independently; matching this group does not establish rule equivalence.",
-      "dependencies": [
-        "candidate-review:candidate:AUTO\u0000when this unit is placed by riding from \"<card-name>\", draw a card, and you get a \"<card-name>\" crest. (you will be prompted to get the crest upon ride.)",
-        "regression-evidence:cfa-10475:0",
-        "regression-evidence:cfa-10764:0",
-        "regression-evidence:cfa-12185:0",
-        "regression-evidence:cfa-13174:0",
-        "regression-evidence:cfa-13188:0",
-        "requirement-review:trigger",
-        "whole-card-evidence:cfa-10475",
-        "whole-card-evidence:cfa-10764",
-        "whole-card-evidence:cfa-12185",
-        "whole-card-evidence:cfa-13174",
-        "whole-card-evidence:cfa-13188"
-      ]
-    },
-    {
-      "batchId": "FAMILY-48B551B6-0006",
-      "status": "available",
-      "workerOwner": null,
-      "cardIds": [
         "cfa-13068",
         "cfa-13087",
         "cfa-13096",
@@ -1073,7 +1210,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0007",
+      "batchId": "FAMILY-48B551B6-0006",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1150,7 +1287,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0008",
+      "batchId": "FAMILY-48B551B6-0007",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1205,7 +1342,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0009",
+      "batchId": "FAMILY-48B551B6-0008",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1289,7 +1426,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0010",
+      "batchId": "FAMILY-48B551B6-0009",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1319,7 +1456,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0011",
+      "batchId": "FAMILY-48B551B6-0010",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1371,43 +1508,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0012",
-      "status": "available",
-      "workerOwner": null,
-      "cardIds": [
-        "cfa-273",
-        "cfa-284",
-        "cfa-301",
-        "cfa-309"
-      ],
-      "abilityIds": [
-        "cfa-273:0",
-        "cfa-284:0",
-        "cfa-301:0",
-        "cfa-309:0"
-      ],
-      "focusedAbilityIds": [
-        "cfa-273:0",
-        "cfa-284:0",
-        "cfa-301:0",
-        "cfa-309:0"
-      ],
-      "candidateMechanicGroup": "candidate:AUTO\u0000[counter blast n] during your end phase, when this unit is put into the drop zone from rc, if you have a <clan> vanguard, you may pay the cost. if you do, search your deck for up to one card name \"<card-name>\", reveal it to your opponent, put it into your hand, and shuffle your deck.",
-      "groupingNote": "Similarity triage only: review each printed ability independently; matching this group does not establish rule equivalence.",
-      "dependencies": [
-        "candidate-review:candidate:AUTO\u0000[counter blast n] during your end phase, when this unit is put into the drop zone from rc, if you have a <clan> vanguard, you may pay the cost. if you do, search your deck for up to one card name \"<card-name>\", reveal it to your opponent, put it into your hand, and shuffle your deck.",
-        "regression-evidence:cfa-273:0",
-        "regression-evidence:cfa-284:0",
-        "regression-evidence:cfa-301:0",
-        "regression-evidence:cfa-309:0",
-        "whole-card-evidence:cfa-273",
-        "whole-card-evidence:cfa-284",
-        "whole-card-evidence:cfa-301",
-        "whole-card-evidence:cfa-309"
-      ]
-    },
-    {
-      "batchId": "FAMILY-48B551B6-0013",
+      "batchId": "FAMILY-48B551B6-0011",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1462,7 +1563,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0014",
+      "batchId": "FAMILY-48B551B6-0012",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1505,48 +1606,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0015",
-      "status": "available",
-      "workerOwner": null,
-      "cardIds": [
-        "cfa-274",
-        "cfa-743",
-        "cfa-948",
-        "cfa-974"
-      ],
-      "abilityIds": [
-        "cfa-274:0",
-        "cfa-274:1",
-        "cfa-743:0",
-        "cfa-743:1",
-        "cfa-948:0",
-        "cfa-948:1",
-        "cfa-974:0",
-        "cfa-974:1"
-      ],
-      "focusedAbilityIds": [
-        "cfa-274:0",
-        "cfa-743:0",
-        "cfa-948:0",
-        "cfa-974:0"
-      ],
-      "candidateMechanicGroup": "candidate:AUTO\u0000when a card named \"<card-name>\" rides this unit, look at up to seven cards from the top of your deck, search for up to one card name \"<card-name>\" or \"<card-name>\" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.",
-      "groupingNote": "Similarity triage only: review each printed ability independently; matching this group does not establish rule equivalence.",
-      "dependencies": [
-        "candidate-review:candidate:AUTO\u0000when a card named \"<card-name>\" rides this unit, look at up to seven cards from the top of your deck, search for up to one card name \"<card-name>\" or \"<card-name>\" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.",
-        "regression-evidence:cfa-274:0",
-        "regression-evidence:cfa-743:0",
-        "regression-evidence:cfa-948:0",
-        "regression-evidence:cfa-974:0",
-        "requirement-review:trigger",
-        "whole-card-evidence:cfa-274",
-        "whole-card-evidence:cfa-743",
-        "whole-card-evidence:cfa-948",
-        "whole-card-evidence:cfa-974"
-      ]
-    },
-    {
-      "batchId": "FAMILY-48B551B6-0016",
+      "batchId": "FAMILY-48B551B6-0013",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1601,7 +1661,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0017",
+      "batchId": "FAMILY-48B551B6-0014",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1638,7 +1698,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0018",
+      "batchId": "FAMILY-48B551B6-0015",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1691,7 +1751,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0019",
+      "batchId": "FAMILY-48B551B6-0016",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1735,7 +1795,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0020",
+      "batchId": "FAMILY-48B551B6-0017",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1790,7 +1850,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0021",
+      "batchId": "FAMILY-48B551B6-0018",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1840,7 +1900,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0022",
+      "batchId": "FAMILY-48B551B6-0019",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1881,7 +1941,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0023",
+      "batchId": "FAMILY-48B551B6-0020",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1917,7 +1977,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0024",
+      "batchId": "FAMILY-48B551B6-0021",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1962,7 +2022,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0025",
+      "batchId": "FAMILY-48B551B6-0022",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1999,7 +2059,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0026",
+      "batchId": "FAMILY-48B551B6-0023",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -2041,7 +2101,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0027",
+      "batchId": "FAMILY-48B551B6-0024",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -2091,7 +2151,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0028",
+      "batchId": "FAMILY-48B551B6-0025",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -2161,7 +2221,7 @@
       ]
     },
     {
-      "batchId": "FAMILY-48B551B6-0029",
+      "batchId": "FAMILY-48B551B6-0026",
       "status": "available",
       "workerOwner": null,
       "cardIds": [

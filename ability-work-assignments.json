@@ -95,6 +95,50 @@
         "cfa-8577:0",
         "cfa-8585:0"
       ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-AUTO-RIDE-DRAW-CREST-5",
+      "status": "in-progress",
+      "workerOwner": "worker-ride-draw-crest",
+      "reason": "Exact five-card ride-triggered draw plus crest batch. Implement reusable ride-source identity, controller-specific draw, crest choice/state, timing, and replay-safe resolution; audit every ability on each card and leave whole-card verification pending.",
+      "sourceBatchId": "FAMILY-48B551B6-0005",
+      "abilityIds": [
+        "cfa-10475:0",
+        "cfa-10764:0",
+        "cfa-12185:0",
+        "cfa-13174:0",
+        "cfa-13188:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-AUTO-END-PHASE-NAMED-SEARCH-4",
+      "status": "in-progress",
+      "workerOwner": "worker-end-phase-named-search",
+      "reason": "Exact four-card Great Nature end-phase AUTO batch. Require this exact source to leave RC for Drop during its controller End Phase, matching Great Nature Vanguard, optional Counter Blast, exact named deck search/reveal/hand/shuffle; audit each full card and both seats.",
+      "sourceBatchId": "FAMILY-48B551B6-0012",
+      "abilityIds": [
+        "cfa-273:0",
+        "cfa-284:0",
+        "cfa-301:0",
+        "cfa-309:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-AUTO-NAMED-RIDER-TOP-SEVEN-4",
+      "status": "in-progress",
+      "workerOwner": "worker-named-rider-top-seven",
+      "reason": "Exact four-card named-rider top-seven search batch. Bind each trigger to the exact named ridden card and prior Vanguard instance; resolve private top-seven selection/reveal/hand/shuffle for the controller; audit the sibling ride-call AUTO on every card.",
+      "sourceBatchId": "FAMILY-48B551B6-0015",
+      "abilityIds": [
+        "cfa-274:0",
+        "cfa-274:1",
+        "cfa-743:0",
+        "cfa-743:1",
+        "cfa-948:0",
+        "cfa-948:1",
+        "cfa-974:0",
+        "cfa-974:1"
+      ]
     }
   ],
   "completedAssignments": [
