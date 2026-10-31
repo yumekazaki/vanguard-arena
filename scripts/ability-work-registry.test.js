@@ -6,6 +6,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { execFileSync, spawn } = require("node:child_process");
 const { buildRegistry } = require("./build-ability-work-registry.js");
+const { claimBatch } = require("./claim-ability-batch.js");
 
 const BASELINE = "0123456789abcdef0123456789abcdef01234567";
 
@@ -80,6 +81,43 @@ test("candidate mechanic families group intact cards for triage without treating
   assert.equal(result.records.find(record => record.abilityId === "cfa-3999:0").batchId, `ABILITY-${BASELINE.slice(0, 8).toUpperCase()}-0001`);
   const assignedCards = result.batches.flatMap(batch => batch.cardIds);
   assert.equal(new Set(assignedCards).size, assignedCards.length, "a card must not be placed into more than one work batch");
+});
+
+test("candidate-family IDs cannot collide with active worker assignments or create ambiguous claims", () => {
+  const mechanicGroup = "candidate-auto-test-family";
+  const queue = { validationEvidenceFresh: false, items: [
+    ...["cfa-5000", "cfa-5001", "cfa-5002", "cfa-5003"].map((cardId, index) => ({
+      abilityId: `${cardId}:0`, cardId, kind: "AUTO", printedText: `AUTO candidate ${index}`, effects: [], dependencies: [],
+      workFlags: ["unsupported-or-unreviewed"], mechanicGroup, mechanicGroupType: "unreviewed-similarity-candidate"
+    })),
+    { abilityId: "cfa-6000:0", cardId: "cfa-6000", kind: "ACT", printedText: "ACT active", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] }
+  ] };
+  const activeBatchId = `FAMILY-${BASELINE.slice(0, 8).toUpperCase()}-0001`;
+  const result = buildRegistry(queue, { baselineCommit: BASELINE, assignments: [{
+    batchId: activeBatchId, status: "in-progress", workerOwner: "worker-active", reason: "Active assignment.", abilityIds: ["cfa-6000:0"]
+  }] });
+  const candidate = result.batches.find(batch => batch.candidateMechanicGroup === mechanicGroup);
+  assert.ok(candidate);
+  assert.notEqual(candidate.batchId, activeBatchId);
+  assert.equal(new Set(result.batches.map(batch => batch.batchId)).size, result.batches.length);
+  assert.equal(result.records.find(record => record.abilityId === "cfa-5000:0").batchId, candidate.batchId);
+  assert.throws(() => buildRegistry(queue, { baselineCommit: BASELINE, assignments: [
+    { batchId: activeBatchId, status: "in-progress", workerOwner: "worker-a", abilityIds: ["cfa-6000:0"] },
+    { batchId: activeBatchId, status: "reserved", workerOwner: "worker-b", abilityIds: ["cfa-5000:0"] }
+  ] }), /Batch ID .* assigned more than once/);
+});
+
+test("claim refuses an ambiguous duplicate batch ID before creating a remote claim", () => {
+  const root = fs.mkdtempSync(path.join(path.resolve(__dirname, "..", ".card-pipeline"), "duplicate-claim-test-"));
+  try {
+    fs.writeFileSync(path.join(root, "ability-work-batches.json"), JSON.stringify({ baselineCommit: BASELINE, batches: [
+      { batchId: "BTEST", status: "available", abilityIds: ["cfa-1:0"] },
+      { batchId: "BTEST", status: "in-progress", abilityIds: ["cfa-2:0"] }
+    ] }));
+    assert.throws(() => claimBatch({ root, batchId: "BTEST", workerId: "worker-a" }), /appears 2 times.*cannot be claimed safely/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
 });
 
 function git(cwd, args, input, env = process.env) {

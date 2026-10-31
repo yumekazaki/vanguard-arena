@@ -13,8 +13,10 @@ function claimBatch({ root = process.cwd(), batchId, workerId, remote = "origin"
   if (!/^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$/.test(String(workerId || ""))) throw new Error("Worker ID must use letters, digits, dot, underscore, or hyphen.");
   const registryPath = path.join(root, "ability-work-batches.json");
   const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
-  const batch = registry.batches?.find(item => item.batchId === batchId);
-  if (!batch) throw new Error(`Batch ${batchId} is not in the registry.`);
+  const matches = registry.batches?.filter(item => item.batchId === batchId) || [];
+  if (!matches.length) throw new Error(`Batch ${batchId} is not in the registry.`);
+  if (matches.length !== 1) throw new Error(`Batch ${batchId} appears ${matches.length} times in the registry and cannot be claimed safely.`);
+  const batch = matches[0];
   if (batch.status !== "available") throw new Error(`Batch ${batchId} is not available (${batch.status}).`);
   if (!registry.baselineCommit || !/^[0-9a-f]{40}$/i.test(registry.baselineCommit)) throw new Error("Registry baseline commit is invalid.");
   git(["cat-file", "-e", `${registry.baselineCommit}^{commit}`], { cwd: root });

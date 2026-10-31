@@ -36,13 +36,15 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
   }
 
   const queueByAbility = new Map(queue.items.map(item => [item.abilityId, item]));
-  const assignedAbilityIds = new Set(), assignedCards = new Map(), assignmentBatches = [];
+  const assignedAbilityIds = new Set(), assignedCards = new Map(), assignedBatchIds = new Set(), assignmentBatches = [];
   for (const assignment of assignments) {
     if (!assignment || !/^[A-Z0-9][A-Z0-9-]{1,80}$/.test(String(assignment.batchId || "")) ||
         !/^[A-Za-z0-9][A-Za-z0-9._/-]{0,119}$/.test(String(assignment.workerOwner || "")) ||
         !["reserved", "in-progress"].includes(assignment.status) || !Array.isArray(assignment.abilityIds) || !assignment.abilityIds.length) {
       throw new Error("Each active assignment needs a valid batch ID, status, worker owner, and ability ID list.");
     }
+    if (assignedBatchIds.has(assignment.batchId)) throw new Error(`Batch ID ${assignment.batchId} is assigned more than once.`);
+    assignedBatchIds.add(assignment.batchId);
     const focusAbilityIds = [...new Set(assignment.abilityIds.map(String))];
     if (focusAbilityIds.length !== assignment.abilityIds.length) throw new Error(`Assignment ${assignment.batchId} contains duplicate ability IDs.`);
     const cardIds = [...new Set(focusAbilityIds.map(id => {
@@ -109,7 +111,7 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
       const rows = cardIds.flatMap(cardId => byCard.get(cardId));
       const focusedAbilityIds = rows.filter(item => item.mechanicGroup === mechanicGroup).map(item => item.abilityId).sort();
       batches.push({
-        batchId: `FAMILY-${baselineCommit.slice(0, 8).toUpperCase()}-${String(familyBatchSequence++).padStart(4, "0")}`,
+        batchId: `CANDIDATE-${baselineCommit.slice(0, 8).toUpperCase()}-${String(familyBatchSequence++).padStart(4, "0")}`,
         status: "available",
         workerOwner: null,
         cardIds,
@@ -134,6 +136,12 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
       abilityIds: rows.map(item => item.abilityId).sort(),
       dependencies: [...new Set(rows.flatMap(item => (item.dependencies || []).map(dep => dep.id)))].sort()
     });
+  }
+
+  const uniqueBatchIds = new Set();
+  for (const batch of batches) {
+    if (uniqueBatchIds.has(batch.batchId)) throw new Error(`Duplicate batch ID ${batch.batchId}; batch claims would be ambiguous.`);
+    uniqueBatchIds.add(batch.batchId);
   }
 
   const batchForCard = new Map(batches.flatMap(batch => batch.cardIds.map(cardId => [cardId, batch.batchId])));
