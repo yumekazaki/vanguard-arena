@@ -15,7 +15,7 @@ function fixture(ability, side = 'human') {
   const source = instance(ability.cardId, `booster-${side}-${ability.id}`, ownerId), attacker = instance('cfa-3', `attacker-${side}-${ability.id}`, ownerId), defender = instance('cfa-3', `defender-${side}-${ability.id}`, otherId);
   const own = { playerId: ownerId, vanguard: attacker, rear: [source, null, null, null, null], soul: [], deck: [instance('cfa-4', `draw-${side}-${ability.id}`, ownerId)], hand: [instance('cfa-3', `discard-a-${side}-${ability.id}`, ownerId), instance('cfa-3', `discard-b-${side}-${ability.id}`, ownerId)], drop: [], bind: [], damage: [], orders: [], guardCircle: [], triggerZone: [], gDeck: [], gZone: [] };
   const opponent = { playerId: otherId, vanguard: defender, rear: Array(5).fill(null), soul: [], deck: [], hand: [], drop: [], bind: [], damage: [], orders: [], guardCircle: [], triggerZone: [], gDeck: [], gZone: [] };
-  const state = { matchId: `boost-hit-${ability.id}-${side}`, stateVersion: 1, turn: 4, side, phase: 4, eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], processedActionIds: [], pendingAbility: null, pendingAbilities: [], pendingAttack: null, players: side === 'human' ? { human: own, bot: opponent } : { human: opponent, bot: own } };
+  const state = { matchId: `boost-hit-${ability.id}-${side}`, stateVersion: 1, turn: 4, side, phase: 5, eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], processedActionIds: [], pendingAbility: null, pendingAbilities: [], pendingAttack: { battleId: `battle-${ability.id}`, attackerUid: attacker.uid, attackerSide: side, attackerPlayerId: ownerId, attackerZone: 'vanguard', attackingCardInstanceIds: [attacker.uid], defenderSide: side === 'human' ? 'bot' : 'human', targetUid: defender.uid, targetZone: 'vanguard', boostUid: source.uid, power: 20000, targetPower: 10000, critical: 1, blocked: false }, players: side === 'human' ? { human: own, bot: opponent } : { human: opponent, bot: own } };
   const event = Engine.createGameEvent(state, { type: 'attack.hit', actingPlayerId: ownerId, turnPlayerId: ownerId, sourceCardInstanceId: attacker.uid, sourceOwnerPlayerId: ownerId, sourceControllerPlayerId: ownerId, attackingUnitInstanceId: attacker.uid, boosterCardInstanceId: source.uid, boostedCardInstanceId: source.uid, cardInstanceId: defender.uid, subjectCardInstanceId: defender.uid, subjectOwnerPlayerId: otherId, subjectControllerPlayerId: otherId, targetCardInstanceIds: [defender.uid], targetLocation: 'vanguard', battleId: `battle-${ability.id}`, phase: 'battle', timingWindow: 'attack-hit' });
   return { state, event, source, attacker, defender, own, opponent, side, ownerId };
 }
@@ -78,4 +78,19 @@ test('declining consumes the event; a joiner prompt cannot be proxied by the hos
   const before = JSON.stringify(joiner.state);
   assert.equal(decide(joiner, ability.id, true, seats.hostAuthUid).ok, false);
   assert.equal(JSON.stringify(joiner.state), before);
+});
+
+test('closed battle identity survives pendingAttack clearing and attack-hit accepts the source UID when the optional alias is absent', () => {
+  const ability = family[0], f = fixture(ability, 'bot');
+  const event = Object.freeze({ ...f.event, attackingUnitInstanceId: null });
+  assert.equal(Reducer.discoverAutoTriggers(f.state, [event], Engine).queued.length, 1);
+  const context = f.state.authoritativeBattleContexts?.[event.battleId];
+  assert.ok(context, 'the reducer stored an authoritative battle snapshot');
+  assert.equal(Object.isFrozen(context), true, 'identity snapshots are immutable');
+  assert.equal(context.attackerUid, f.attacker.uid);
+  f.state.pendingAttack = null;
+  const resolved = decide(f, ability.id, true, seats.guestAuthUid);
+  assert.equal(resolved.ok, true, resolved.reason);
+  assert.ok(f.own.drop.some(card => card.uid === `discard-a-bot-${ability.id}`));
+  assert.ok(f.own.hand.some(card => card.uid === `draw-bot-${ability.id}`));
 });

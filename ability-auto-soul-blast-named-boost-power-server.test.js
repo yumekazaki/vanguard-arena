@@ -46,7 +46,7 @@ function fixture(cardId, side = "bot", options = {}) {
   const state = { matchId: `named-boost-${cardId}-${side}`, stateVersion: 1, eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], processedActionIds: [],
     pendingAbilities: [], turn: 3, phase: "battle", side, players: { [side]: own, [side === "human" ? "bot" : "human"]: opponent },
     pendingAttack: { battleId: `battle-${cardId}-${side}`, attackerUid: attacker.uid, attackerSide: options.opponentTarget ? (side === "human" ? "bot" : "human") : side,
-      attackerPlayerId: attacker.controllerPlayerId, attackerZone: "vanguard", boostUid: source.uid, power: 10000, defenderSide: side === "human" ? "bot" : "human", targetUid: "defender-vanguard", targetZone: "vanguard" } };
+      attackerPlayerId: attacker.controllerPlayerId, attackerZone: "vanguard", boostUid: source.uid, power: 10000, defenderSide: side === "human" ? "bot" : "human", targetUid: opponent.vanguard.uid, targetZone: "vanguard" } };
   let event = Engine.createGameEvent(state, { type: "unit.boosted", actingPlayerId: actorId, turnPlayerId: actorId,
     sourceCardInstanceId: source.uid, sourceOwnerPlayerId: actorId, sourceControllerPlayerId: actorId,
     cardInstanceId: source.uid, subjectCardInstanceId: source.uid, subjectOwnerPlayerId: actorId, subjectControllerPlayerId: actorId,

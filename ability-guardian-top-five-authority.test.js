@@ -23,8 +23,8 @@ function guardianState(defenderSide = "bot", cardId = "cfa-1987") {
       bot: { playerId: "guest-player", vanguard: makeCard("guest-vg", "guest-vg", "guest-player", { grade: 3, power: 13000 }), rear: [null, null, null, null, null], hand: [], deck: defenderSide === "bot" ? [...topCards] : [], damage: defenderSide === "bot" ? [{ uid: "guest-cb", cardId: "damage", ownerPlayerId: defenderId, controllerPlayerId: defenderId, faceDown: true }] : [], drop: [], soul: [], bind: [], guardCircle: defenderSide === "bot" ? [source] : [], triggerZone: [], orders: [], crests: [], extra: [], gDeck: [], gZone: [], removed: [] }
     },
     pendingAttack: {
-      battleId: "guardian-battle", attackerSide, attackerPlayerId: attackerId, attackerUid: `${attackerSide}-vg`, attackerZone: "vanguard",
-      defenderSide, defenderPlayerId: defenderId, targetUid: `${defenderSide}-vg`, targetZone: "vanguard", power: 23000, targetPower: 13000,
+      battleId: "guardian-battle", attackerSide, attackerPlayerId: attackerId, attackerUid: attackerSide === "human" ? "host-vg" : "guest-vg", attackerZone: "vanguard",
+      defenderSide, defenderPlayerId: defenderId, targetUid: defenderSide === "human" ? "host-vg" : "guest-vg", targetZone: "vanguard", power: 23000, targetPower: 13000,
       critical: 1, guardCards: [source], defenderDone: false, driveChecksRemaining: 0, driveCountPrompt: false
     }
   };

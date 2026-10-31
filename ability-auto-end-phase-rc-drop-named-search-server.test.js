@@ -55,7 +55,6 @@ function fixture({ cardId = FAMILY[0][0], side = "bot", eventType = "card.retire
   const event = Engine.createGameEvent(state, {
     eventId: `leave-rc-${cardId}-${side}`, type: eventType,
     actingPlayerId: opponentId, turnPlayerId: playerId,
-    sourceCardInstanceId: `effect-source-${side}`, sourceOwnerPlayerId: opponentId, sourceControllerPlayerId: opponentId,
     cardInstanceId: source.uid, subjectCardInstanceId: source.uid,
     subjectOwnerPlayerId: playerId, subjectControllerPlayerId: playerId,
     previousLocation: "rear-left", currentLocation: "drop", circle: "rear-left",

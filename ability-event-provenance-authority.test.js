@@ -94,7 +94,10 @@ test("contradictory or unresolved source and subject provenance is rejected befo
     { targetCardInstanceIds: ["missing-target"] }
   ]) {
     const f = fixture("human");
-    const discovery = discover(f, cloneEvent(f, changes));
+    const event = changes.sourceOwnerPlayerId === null
+      ? Object.freeze({ ...f.event, ...changes, eventId: `raw-missing-owner-${++sequence}` })
+      : cloneEvent(f, changes);
+    const discovery = discover(f, event);
     assert.equal(discovery.queued.length, 0, JSON.stringify(changes));
     assert.equal(f.state.pendingAbility, null, JSON.stringify(changes));
   }
@@ -142,5 +145,52 @@ test("resolution revalidates queued identity and battle provenance without mutat
       assert.equal(JSON.stringify(f.state), before, `${side}: rejection must not partially apply the effect`);
     }
   }
+});
+
+test("typed movement and drive-check snapshots validate departed instances while arbitrary missing references fail closed", () => {
+  const f = fixture("human"), departedUid = "departed-movement-card";
+  const moved = Engine.createGameEvent(f.state, {
+    type: "card.moved", actingPlayerId: f.attackerPlayerId, turnPlayerId: f.attackerPlayerId,
+    sourceCardInstanceId: departedUid, sourceOwnerPlayerId: f.attackerPlayerId, sourceControllerPlayerId: f.attackerPlayerId,
+    cardInstanceId: departedUid, subjectCardInstanceId: departedUid,
+    subjectOwnerPlayerId: f.attackerPlayerId, subjectControllerPlayerId: f.attackerPlayerId,
+    previousLocation: "rear-left", currentLocation: "drop", phase: "end", timingWindow: "end-phase-cleanup"
+  });
+  const movedResult = Reducer.discoverAutoTriggers(f.state, [moved], Engine);
+  assert.deepEqual(movedResult.skipped, [], "the moved card is recognized from matching typed identity and location snapshots");
+  assert.equal(movedResult.queued.length, 0);
+
+  const checkedUid = "departed-drive-check-card";
+  const checked = Engine.createGameEvent(f.state, {
+    type: "drive.checked", actingPlayerId: f.attackerPlayerId, turnPlayerId: f.attackerPlayerId,
+    sourceCardInstanceId: f.source.uid, sourceOwnerPlayerId: f.source.ownerPlayerId, sourceControllerPlayerId: f.source.controllerPlayerId,
+    cardInstanceId: checkedUid, subjectCardInstanceId: checkedUid,
+    subjectOwnerPlayerId: f.attackerPlayerId, subjectControllerPlayerId: f.attackerPlayerId,
+    checkedCardInstanceId: checkedUid, checkedCardOwnerPlayerId: f.attackerPlayerId, checkedCardControllerPlayerId: f.attackerPlayerId,
+    checkKind: "drive", checkedCardTriggerType: "draw", previousLocation: "deck", currentLocation: "trigger",
+    battleId: f.event.battleId, phase: "battle", timingWindow: "drive-check"
+  });
+  const checkedResult = Reducer.discoverAutoTriggers(f.state, [checked], Engine);
+  assert.deepEqual(checkedResult.skipped, [], "the departed check card retains its exact checked owner/controller snapshot");
+
+  const forged = Object.freeze({ ...checked, eventId: `forged-list-${++sequence}`, targetCardInstanceIds: ["arbitrary-missing-target"] });
+  const forgedResult = Reducer.discoverAutoTriggers(f.state, [forged], Engine);
+  assert.ok(forgedResult.skipped.some(item => item.reason === "event-provenance-card-not-found"));
+});
+
+test("closing a reducer-owned battle retains a frozen participant snapshot after pendingAttack clears", () => {
+  const f = fixture("human");
+  Object.assign(f.state.pendingAttack, { blocked: true, defenderDone: true, driveChecksRemaining: 0, driveCountPrompt: false, awaitingDrive: false });
+  const result = Reducer.applyGameAction(f.state, {
+    actorAuthUid: seats.hostAuthUid, actionId: `close-${f.state.matchId}`, expectedStateVersion: f.state.stateVersion,
+    payload: { action: "resolveBattle" }
+  }, seats, Engine);
+  assert.equal(result.ok, true, result.reason);
+  assert.equal(f.state.pendingAttack, null);
+  const snapshot = f.state.closedBattleContexts?.[f.event.battleId];
+  assert.ok(snapshot, "battle close preserves its authoritative identity and outcome context");
+  assert.equal(Object.isFrozen(snapshot), true);
+  assert.equal(snapshot.attackAtClose.attackerUid, f.source.uid);
+  assert.equal(snapshot.attackAtClose.targetUid, f.target.uid);
 });
 

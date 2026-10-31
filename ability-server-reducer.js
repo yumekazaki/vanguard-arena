@@ -214,10 +214,10 @@
       definition.effects?.length === 1 && definition.effects[0]?.op === "draw" && Number(definition.effects[0]?.count) === 1;
   }
   function vanguardOwnAttackHitDrawEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
-    const attack = state?.pendingAttack, player = located && state.players?.[located.side];
+    const attack = authoritativeBattleForEvent(state, event, engine), player = located && state.players?.[located.side];
     return Boolean(isExactVanguardOwnAttackHitDrawAbility(ability) && source?.uid && located && event?.type === "attack.hit" &&
       event.eventId && event.battleId && event.phase === "battle" && event.timingWindow === "attack-hit" &&
-      event.sourceCardInstanceId === source.uid && event.attackingUnitInstanceId === source.uid &&
+      event.sourceCardInstanceId === source.uid && attackingInstanceUidFromEvent(event) === source.uid &&
       event.sourceOwnerPlayerId === located.ownerPlayerId && event.sourceControllerPlayerId === actorPlayerId &&
       event.actingPlayerId === actorPlayerId && event.turnPlayerId === actorPlayerId &&
       attack?.battleId === event.battleId && attack.attackerUid === source.uid && attack.attackerSide === located.side &&
@@ -268,9 +268,9 @@
     const player=located&&state?.players?.[located.side],circle=String(event?.circle||"");
     return isExactDragontreePlacementAbility(ability)&&Boolean(source?.uid)&&located?.zone==="rear-guard"&&located?.circle===circle&&/^(?:rear-|accel-|rear\d)/.test(circle)&&player?.rear?.some(card=>card?.uid===source.uid)&&event?.type==="card.placed"&&Boolean(event.eventId)&&event.sourceCardInstanceId===source.uid&&event.cardInstanceId===source.uid&&event.subjectCardInstanceId===source.uid&&/^(?:rear-|accel-|rear\d)/.test(String(event.currentLocation||""))&&event.subjectOwnerPlayerId===located.ownerPlayerId&&event.sourceOwnerPlayerId===located.ownerPlayerId&&event.subjectControllerPlayerId===actorPlayerId&&event.sourceControllerPlayerId===actorPlayerId&&event.actingPlayerId===actorPlayerId&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&dragontreeMarkerZones(player).length>0;
   }
-  function treasuresOwnAttackHitEventMatches(state,ability,source,located,event,actorPlayerId) {
-    const attack=state?.pendingAttack,player=located&&state.players?.[located.side],zone=located?.circle||located?.zone;
-    return Boolean(isExactTreasuresHitAbility(ability)&&source?.uid&&located&&["vanguard","rear-guard"].includes(located.zone)&&event?.type==="attack.hit"&&event.eventId&&event.battleId&&event.phase==="battle"&&event.timingWindow==="attack-hit"&&event.attackHitOverride!==true&&event.didNotHit!==true&&event.sourceCardInstanceId===source.uid&&event.attackingUnitInstanceId===source.uid&&event.sourceOwnerPlayerId===located.ownerPlayerId&&event.sourceControllerPlayerId===actorPlayerId&&event.actingPlayerId===actorPlayerId&&event.turnPlayerId===actorPlayerId&&attack?.battleId===event.battleId&&attack.attackerUid===source.uid&&attack.attackerSide===located.side&&attack.attackerPlayerId===actorPlayerId&&attack.attackerZone===zone&&attack.defenderSide!==located.side&&attack.targetUid&&Array.isArray(event.targetCardInstanceIds)&&event.targetCardInstanceIds.includes(attack.targetUid)&&attack.blocked!==true&&Number(attack.power)>=Number(attack.targetPower)&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&(located.zone!=="vanguard"||player.vanguard?.uid===source.uid)&&zone&&treasureMarkerZones(player).length>0);
+  function treasuresOwnAttackHitEventMatches(state,ability,source,located,event,actorPlayerId,engine) {
+    const attack=authoritativeBattleForEvent(state,event,engine),player=located&&state.players?.[located.side],zone=located?.circle||located?.zone;
+    return Boolean(isExactTreasuresHitAbility(ability)&&source?.uid&&located&&["vanguard","rear-guard"].includes(located.zone)&&event?.type==="attack.hit"&&event.eventId&&event.battleId&&event.phase==="battle"&&event.timingWindow==="attack-hit"&&event.attackHitOverride!==true&&event.didNotHit!==true&&event.sourceCardInstanceId===source.uid&&attackingInstanceUidFromEvent(event)===source.uid&&event.sourceOwnerPlayerId===located.ownerPlayerId&&event.sourceControllerPlayerId===actorPlayerId&&event.actingPlayerId===actorPlayerId&&event.turnPlayerId===actorPlayerId&&attack?.battleId===event.battleId&&attack.attackerUid===source.uid&&attack.attackerSide===located.side&&attack.attackerPlayerId===actorPlayerId&&attack.attackerZone===zone&&attack.defenderSide!==located.side&&attack.targetUid&&Array.isArray(event.targetCardInstanceIds)&&event.targetCardInstanceIds.includes(attack.targetUid)&&attack.blocked!==true&&Number(attack.power)>=Number(attack.targetPower)&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&(located.zone!=="vanguard"||player.vanguard?.uid===source.uid)&&zone&&treasureMarkerZones(player).length>0);
   }
   const OTHER_HAND_DISCARD_RETURN_IDS=new Set(["cfa-12773","cfa-12774","cfa-12782","cfa-12783","cfa-12791","cfa-12792"]);
   const OTHER_HAND_DISCARD_RETURN_TEXT="AUTO [RC/Drop]: When your other card is discarded from hand during your turn, COST [Energy Blast 3 & remove this card], choose one of the discarded cards, and put it into hand.";
@@ -699,12 +699,12 @@
       definition.effects[0]?.op === "counter-charge" && Number(definition.effects[0]?.count) === 1;
   }
   function attackHitCounterChargeEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
-    const attack = state?.pendingAttack, player = located && state.players?.[located.side], targetUid = attack?.targetUid;
+    const attack = authoritativeBattleForEvent(state, event, engine), player = located && state.players?.[located.side], targetUid = attack?.targetUid;
     const target = targetUid ? engine.locateCardInstance(state, targetUid) : null;
     const sourceZone = located?.zone === "vanguard" ? "vanguard" : located?.zone === "rear-guard" ? located.circle : null;
     return isExactAttackHitCounterChargeAbility(ability) && event?.type === "attack.hit" && Boolean(event.eventId && event.battleId) &&
       event.battleId === attack?.battleId && event.phase === "battle" && event.timingWindow === "attack-hit" &&
-      event.sourceCardInstanceId === source?.uid && event.attackingUnitInstanceId === source?.uid && event.sourceOwnerPlayerId === located?.ownerPlayerId &&
+      event.sourceCardInstanceId === source?.uid && attackingInstanceUidFromEvent(event) === source?.uid && event.sourceOwnerPlayerId === located?.ownerPlayerId &&
       event.sourceControllerPlayerId === actorPlayerId && event.actingPlayerId === actorPlayerId && event.turnPlayerId === actorPlayerId &&
       event.targetLocation === "vanguard" && event.subjectCardInstanceId === targetUid && event.cardInstanceId === targetUid &&
       (event.targetCardInstanceIds || []).length === 1 && event.targetCardInstanceIds[0] === targetUid &&
@@ -732,12 +732,12 @@
   }
 
   function vanguardHitClanStandEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
-    const attack = state?.pendingAttack, player = located && state.players?.[located.side];
+    const attack = authoritativeBattleForEvent(state, event, engine), player = located && state.players?.[located.side];
     const targetUid = attack?.targetUid;
     const target = targetUid ? engine.locateCardInstance(state, targetUid) : null;
     const checks = [isExactVanguardHitClanStandAbility(ability), event?.type === "attack.hit", Boolean(event.eventId && event.battleId),
       event.battleId === attack?.battleId && event.phase === "battle" && event.timingWindow === "attack-hit" &&
-      event.sourceCardInstanceId === source?.uid && event.attackingUnitInstanceId === source?.uid &&
+      event.sourceCardInstanceId === source?.uid && attackingInstanceUidFromEvent(event) === source?.uid &&
       event.sourceOwnerPlayerId === located?.ownerPlayerId && event.sourceControllerPlayerId === actorPlayerId &&
       event.actingPlayerId === actorPlayerId && event.turnPlayerId === actorPlayerId &&
       event.targetLocation === "vanguard" && event.subjectCardInstanceId === targetUid && event.cardInstanceId === targetUid &&
@@ -769,11 +769,11 @@
       Object.keys(filter).sort().join(",") === "cardType,clan,controller,maxGrade,zone");
   }
   function rcAttackHitClanLowGradeStandEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
-    const attack = state?.pendingAttack, player = located && state.players?.[located.side], targetUid = attack?.targetUid;
+    const attack = authoritativeBattleForEvent(state, event, engine), player = located && state.players?.[located.side], targetUid = attack?.targetUid;
     const target = targetUid ? engine.locateCardInstance(state, targetUid) : null;
     return isExactRcAttackHitClanLowGradeStandAbility(ability) && event?.type === "attack.hit" && Boolean(event.eventId && event.battleId) &&
       event.battleId === attack?.battleId && event.phase === "battle" && event.timingWindow === "attack-hit" &&
-      event.sourceCardInstanceId === source?.uid && event.attackingUnitInstanceId === source?.uid && event.sourceOwnerPlayerId === located?.ownerPlayerId &&
+      event.sourceCardInstanceId === source?.uid && attackingInstanceUidFromEvent(event) === source?.uid && event.sourceOwnerPlayerId === located?.ownerPlayerId &&
       event.sourceControllerPlayerId === actorPlayerId && event.actingPlayerId === actorPlayerId && event.turnPlayerId === actorPlayerId &&
       event.targetLocation === "vanguard" && event.subjectCardInstanceId === targetUid && event.cardInstanceId === targetUid &&
       (event.targetCardInstanceIds || []).length === 1 && event.targetCardInstanceIds[0] === targetUid &&
@@ -2402,13 +2402,13 @@
       definition.effects?.length===1&&effect?.op==="soul-charge-and-return-source-to-deck"&&effect.target==="source"&&effect.count===1&&effect.shuffle===true;
   }
   function boostedHitSoulChargeReturnEventMatches(state,ability,source,located,event,actorPlayerId,engine) {
-    const controller=located?.controllerPlayerId,player=located&&state?.players?.[located.side],attack=state?.pendingAttack,attackerUid=event?.attackingUnitInstanceId;
+    const controller=located?.controllerPlayerId,player=located&&state?.players?.[located.side],attack=authoritativeBattleForEvent(state,event,engine),attackerUid=attackingInstanceUidFromEvent(event);
     const current=source?.uid&&engine?.locateCardInstance?.(state,source.uid),attacker=attackerUid&&engine?.locateCardInstance?.(state,attackerUid),targetUid=attack?.targetUid,target=targetUid&&engine?.locateCardInstance?.(state,targetUid);
     return Boolean(isExactBoostedHitSoulChargeReturnAbility(ability)&&source?.uid&&controller===actorPlayerId&&located?.side===state?.side&&located?.zone==="rear-guard"&&
       player?.playerId===actorPlayerId&&Number(state.phase)===5&&source.controllerPlayerId===actorPlayerId&&source.ownerPlayerId===located.ownerPlayerId&&
       !source.locked&&source.isLocked!==true&&source.faceUp!==false&&player.rear?.some(card=>card?.uid===source.uid)&&current&&!current.ambiguous&&current.instance===source&&current.zone==="rear-guard"&&current.circle===located.circle&&
       event?.eventId&&event.type==="attack.hit"&&event.didNotHit!==true&&event.phase==="battle"&&event.timingWindow==="attack-hit"&&event.battleId&&
-      event.sourceCardInstanceId===attackerUid&&event.attackingUnitInstanceId===attackerUid&&event.boosterCardInstanceId===source.uid&&event.boostedCardInstanceId===source.uid&&attackerUid!==source.uid&&
+      event.sourceCardInstanceId===attackerUid&&attackingInstanceUidFromEvent(event)===attackerUid&&event.boosterCardInstanceId===source.uid&&event.boostedCardInstanceId===source.uid&&attackerUid!==source.uid&&
       event.sourceControllerPlayerId===actorPlayerId&&event.sourceOwnerPlayerId===attacker?.ownerPlayerId&&event.actingPlayerId===actorPlayerId&&event.turnPlayerId===actorPlayerId&&
       event.battleId===attack?.battleId&&attack?.attackerUid===attackerUid&&attack.boostUid===source.uid&&attack.attackerPlayerId===actorPlayerId&&attack.attackerSide===located.side&&attack.attackerZone&&
       isUnitAttackCircle(attack.attackerZone)&&attack.targetZone===event.targetLocation&&isUnitAttackCircle(attack.targetZone)&&
@@ -2418,13 +2418,13 @@
       (attack.targetZone==="vanguard"?target.instance?.uid===state.players?.[target.side]?.vanguard?.uid:target.circle===attack.targetZone));
   }
   function boostedHitDiscardDrawEventMatches(state,ability,source,located,event,actorPlayerId,engine) {
-    const controller=located?.controllerPlayerId,player=located&&state?.players?.[located.side],attackUid=event?.attackingUnitInstanceId;
+    const controller=located?.controllerPlayerId,player=located&&state?.players?.[located.side],attack=authoritativeBattleForEvent(state,event,engine),attackUid=attackingInstanceUidFromEvent(event);
     if(!isExactBoostedHitDiscardDrawAbility(ability)||!controller||controller!==actorPlayerId||located.zone!=="rear-guard"||located.side!==state?.side||!player||
       !(player.rear||[]).some(card=>card?.uid===source?.uid&&card.locked!==true&&card.isLocked!==true&&card.faceUp!==false)||
-      event?.type!=="attack.hit"||!event.eventId||!event.battleId||event.phase!=="battle"||event.timingWindow!=="attack-hit"||event.boosterCardInstanceId!==source.uid||event.sourceCardInstanceId!==attackUid||
+      event?.type!=="attack.hit"||!event.eventId||!event.battleId||event.phase!=="battle"||event.timingWindow!=="attack-hit"||event.boosterCardInstanceId!==source.uid||event.sourceCardInstanceId!==attackUid||!attack||attack.battleId!==event.battleId||attack.attackerUid!==attackUid||attack.boostUid!==source.uid||
       event.boostedCardInstanceId!==source.uid||attackUid===source.uid||event.actingPlayerId!==controller||event.turnPlayerId!==controller)return false;
-    const attacker=engine.locateCardInstance(state,attackUid);
-    return Boolean(attacker&&!attacker.ambiguous&&attacker.controllerPlayerId===controller&&["rear-guard","vanguard"].includes(attacker.zone)&&
+    const attacker=engine.locateCardInstance(state,attackUid),identity=attack.identities?.[attackUid];
+    return Boolean((attacker&&!attacker.ambiguous&&attacker.controllerPlayerId===controller||!attacker&&identity?.controllerPlayerId===controller)&&["rear-guard","vanguard"].includes(identity?.zone||attacker?.zone)&&
       (event.targetLocation==="vanguard"||event.targetLocation==="rear-guard")&&Array.isArray(player.hand)&&player.hand.length>0);
   }
   function isExactCenterColumnVanguardAttackAbility(ability) {
@@ -4375,7 +4375,175 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
     "battle.close-step", "drive.checked", "damage.checked"
   ]);
 
-  function locateEventCardReference(state, event, engine, uidField, ownerField = null, controllerField = null) {
+  function attackingInstanceUidFromEvent(event) {
+    const sourceUid = event?.sourceCardInstanceId || null;
+    const explicitUid = event?.attackingUnitInstanceId || null;
+    if (sourceUid && explicitUid && sourceUid !== explicitUid) return null;
+    return explicitUid || sourceUid;
+  }
+
+  const MOVEMENT_SNAPSHOT_EVENT_TYPES = new Set([
+    "card.moved", "card.damage_moved", "card.retired", "card.bound", "card.discarded",
+    "card.called", "card.placed", "card.ridden"
+  ]);
+
+  function freezeSnapshot(value) {
+    if (!value || typeof value !== "object" || Object.isFrozen(value)) return value;
+    for (const child of Object.values(value)) freezeSnapshot(child);
+    return Object.freeze(value);
+  }
+
+  function battleCardSnapshot(state, uid, side, expectedLocation, engine) {
+    const located = uid && engine?.locateCardInstance?.(state, uid);
+    if (!located || located.ambiguous || located.instance?.uid !== uid || !located.ownerPlayerId || !located.controllerPlayerId) return null;
+    return {
+      uid,
+      ownerPlayerId: located.ownerPlayerId,
+      controllerPlayerId: located.controllerPlayerId,
+      side: side || located.side,
+      zone: located.zone,
+      circle: located.circle || null,
+      location: expectedLocation || located.circle || located.zone
+    };
+  }
+
+  function createBattleContextSnapshot(state, attack, engine) {
+    if (!state || !attack?.battleId || !attack.attackerUid || !attack.targetUid) return null;
+    const attacker = battleCardSnapshot(state, attack.attackerUid, attack.attackerSide, attack.attackerZone, engine);
+    const target = battleCardSnapshot(state, attack.targetUid, attack.defenderSide, attack.targetZone, engine);
+    const attackerSide = attack.attackerSide || attacker?.side;
+    const defenderSide = attack.defenderSide || target?.side;
+    const attackerPlayerId = attack.attackerPlayerId || state.players?.[attackerSide]?.playerId || attacker?.controllerPlayerId;
+    const defenderPlayerId = attack.defenderPlayerId || state.players?.[defenderSide]?.playerId || target?.controllerPlayerId;
+    const turnPlayerId = state.players?.[state.side]?.playerId;
+    if (!attacker || !target || !attackerSide || !defenderSide || attackerSide === defenderSide ||
+        attacker.side !== attackerSide || target.side !== defenderSide || !attackerPlayerId || !defenderPlayerId ||
+        state.players?.[attackerSide]?.playerId !== attackerPlayerId || state.players?.[defenderSide]?.playerId !== defenderPlayerId ||
+        attacker.controllerPlayerId !== attackerPlayerId || target.controllerPlayerId !== defenderPlayerId || turnPlayerId !== attackerPlayerId) return null;
+
+    const attackingCardInstanceIds = Array.isArray(attack.attackingCardInstanceIds) && attack.attackingCardInstanceIds.length
+      ? [...attack.attackingCardInstanceIds]
+      : [attack.attackerUid];
+    if (!attackingCardInstanceIds.includes(attack.attackerUid) || new Set(attackingCardInstanceIds).size !== attackingCardInstanceIds.length) return null;
+    const identities = Object.create(null);
+    for (const uid of new Set([attack.attackerUid, attack.targetUid, attack.boostUid, ...attackingCardInstanceIds].filter(Boolean))) {
+      const expectedSide = uid === attack.targetUid ? defenderSide : attackerSide;
+      const expectedLocation = uid === attack.targetUid ? attack.targetZone : uid === attack.boostUid ? attack.boostZone : undefined;
+      const snapshot = battleCardSnapshot(state, uid, expectedSide, expectedLocation, engine);
+      if (!snapshot || snapshot.side !== expectedSide) return null;
+      identities[uid] = snapshot;
+    }
+    const attackAtStart = Object.create(null);
+    for (const [key, value] of Object.entries(attack)) {
+      if (value == null || ["string", "number", "boolean"].includes(typeof value)) attackAtStart[key] = value;
+      else if (Array.isArray(value) && value.every(item => item == null || ["string", "number", "boolean"].includes(typeof item))) attackAtStart[key] = [...value];
+    }
+    return freezeSnapshot({
+      battleId: String(attack.battleId),
+      turn: Number(state.turn),
+      turnPlayerId,
+      attackerUid: attack.attackerUid,
+      attackerSide,
+      attackerPlayerId,
+      attackerZone: attack.attackerZone || attacker.location,
+      defenderSide,
+      defenderPlayerId,
+      targetUid: attack.targetUid,
+      targetZone: attack.targetZone || target.location,
+      boostUid: attack.boostUid || null,
+      attackingCardInstanceIds,
+      identities,
+      attackAtStart
+    });
+  }
+
+  function snapshotBattleAtClose(state, attack, engine) {
+    const context = state?.authoritativeBattleContexts?.[attack?.battleId] || rememberBattleContext(state, attack, engine);
+    if (!context) return null;
+    const attackAtClose = Object.create(null);
+    for (const [key, value] of Object.entries(attack || {})) {
+      if (value == null || ["string", "number", "boolean"].includes(typeof value)) attackAtClose[key] = value;
+      else if (Array.isArray(value) && value.every(item => item == null || ["string", "number", "boolean"].includes(typeof item))) attackAtClose[key] = [...value];
+      else if (key === "guardCards" && Array.isArray(value)) attackAtClose.guardCards = value.filter(card => card?.uid).map(card => ({ uid: card.uid, ownerPlayerId: card.ownerPlayerId || null, controllerPlayerId: card.controllerPlayerId || null }));
+    }
+    state.closedBattleContexts ||= Object.create(null);
+    state.closedBattleContexts[context.battleId] = freezeSnapshot({ battleId: context.battleId, turn: context.turn, attackAtClose });
+    return state.closedBattleContexts[context.battleId];
+  }
+
+  function sameBattleIdentity(left, right) {
+    if (!left || !right) return false;
+    for (const key of ["battleId", "turn", "turnPlayerId", "attackerUid", "attackerSide", "attackerPlayerId", "attackerZone", "defenderSide", "defenderPlayerId", "targetUid", "targetZone", "boostUid"]) {
+      if ((left[key] ?? null) !== (right[key] ?? null)) return false;
+    }
+    if (JSON.stringify(left.attackingCardInstanceIds || []) !== JSON.stringify(right.attackingCardInstanceIds || [])) return false;
+    for (const uid of new Set([...Object.keys(left.identities || {}), ...Object.keys(right.identities || {})])) {
+      const a = left.identities?.[uid], b = right.identities?.[uid];
+      if (!a || !b || a.uid !== b.uid || a.ownerPlayerId !== b.ownerPlayerId || a.controllerPlayerId !== b.controllerPlayerId || a.side !== b.side || a.location !== b.location) return false;
+    }
+    return true;
+  }
+
+  function rememberBattleContext(state, attack, engine) {
+    if (!state || !attack?.battleId) return null;
+    state.authoritativeBattleContexts ||= Object.create(null);
+    const existing = state.authoritativeBattleContexts[attack.battleId];
+    const candidate = createBattleContextSnapshot(state, attack, engine);
+    if (!candidate) return existing || null;
+    if (existing) return sameBattleIdentity(existing, candidate) ? existing : null;
+    state.authoritativeBattleContexts[attack.battleId] = candidate;
+    return candidate;
+  }
+
+  function authoritativeBattleContextForEvent(state, event, engine) {
+    if (!event?.battleId) return null;
+    const active = state?.pendingAttack;
+    // Do not let an old event resolve against its stored snapshot while a
+    // different battle is currently active. Once pendingAttack is cleared,
+    // the closed immutable snapshot remains sufficient for resolution.
+    if (active && active.battleId !== event.battleId) return null;
+    let context = state?.authoritativeBattleContexts?.[event.battleId] || null;
+    if (active?.battleId === event.battleId) {
+      const activeSnapshot = rememberBattleContext(state, active, engine);
+      if (!activeSnapshot || (context && !sameBattleIdentity(context, activeSnapshot))) return null;
+      context = activeSnapshot;
+    }
+    if (!context || context.turn !== Number(state?.turn) || context.turnPlayerId !== state?.players?.[state?.side]?.playerId || context.attackerSide !== state?.side) return null;
+    return context;
+  }
+
+  function authoritativeBattleForEvent(state, event, engine) {
+    const context = authoritativeBattleContextForEvent(state, event, engine);
+    if (!context) return null;
+    const active = state?.pendingAttack?.battleId === context.battleId ? state.pendingAttack : null;
+    const closed = state?.closedBattleContexts?.[context.battleId] || null;
+    return { ...context.attackAtStart, ...(closed?.attackAtClose || {}), ...(active || {}), ...context, identities: context.identities };
+  }
+
+  function movementOrCheckIdentitySnapshot(event, uid) {
+    if (["drive.checked", "damage.checked"].includes(event?.type)) {
+      const expectedKind = event.type === "drive.checked" ? "drive" : "damage";
+      if (uid !== event.checkedCardInstanceId || uid !== event.cardInstanceId || uid !== event.subjectCardInstanceId ||
+          event.checkKind !== expectedKind || event.previousLocation !== "deck" || event.currentLocation !== "trigger") return null;
+      const ownerPlayerId = event.checkedCardOwnerPlayerId ?? event.subjectOwnerPlayerId;
+      const controllerPlayerId = event.checkedCardControllerPlayerId ?? event.subjectControllerPlayerId;
+      if (!ownerPlayerId || !controllerPlayerId ||
+          (event.checkedCardOwnerPlayerId != null && event.subjectOwnerPlayerId != null && event.checkedCardOwnerPlayerId !== event.subjectOwnerPlayerId) ||
+          (event.checkedCardControllerPlayerId != null && event.subjectControllerPlayerId != null && event.checkedCardControllerPlayerId !== event.subjectControllerPlayerId)) return null;
+      return { uid, ownerPlayerId, controllerPlayerId };
+    }
+    if (!MOVEMENT_SNAPSHOT_EVENT_TYPES.has(event?.type)) return null;
+    if (!event.previousLocation || !event.currentLocation || event.previousLocation === event.currentLocation) return null;
+    if (event.subjectCardInstanceId !== uid || (event.cardInstanceId != null && event.cardInstanceId !== uid)) return null;
+    const ownerPlayerId = event.subjectOwnerPlayerId;
+    const controllerPlayerId = event.subjectControllerPlayerId;
+    if (!ownerPlayerId || !controllerPlayerId) return null;
+    if (event.sourceCardInstanceId === uid &&
+        (event.sourceOwnerPlayerId !== ownerPlayerId || event.sourceControllerPlayerId !== controllerPlayerId)) return null;
+    return { uid, ownerPlayerId, controllerPlayerId };
+  }
+
+  function locateEventCardReference(state, event, engine, uidField, ownerField = null, controllerField = null, battleContext = null, allowTypedSnapshot = false) {
     const uid = event?.[uidField];
     const ownerId = ownerField ? event?.[ownerField] : null;
     const controllerId = controllerField ? event?.[controllerField] : null;
@@ -4387,13 +4555,26 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
     if (typeof uid !== "string" || !uid) return { ok: false, reason: "event-provenance-id-invalid" };
     const located = engine?.locateCardInstance?.(state, uid);
     if (!located || located.ambiguous || located.instance?.uid !== uid) {
-      return { ok: false, reason: "event-provenance-card-not-found" };
+      const participant = battleContext?.identities?.[uid];
+      const movementSnapshot = allowTypedSnapshot ? movementOrCheckIdentitySnapshot(event, uid) : null;
+      const snapshot = participant || movementSnapshot;
+      if (!snapshot) return { ok: false, reason: "event-provenance-card-not-found" };
+      if ((ownerId != null && ownerId !== snapshot.ownerPlayerId) || (controllerId != null && controllerId !== snapshot.controllerPlayerId)) {
+        return { ok: false, reason: ownerId != null && ownerId !== snapshot.ownerPlayerId ? "event-provenance-owner-mismatch" : "event-provenance-controller-mismatch" };
+      }
+      const seatedIds = new Set(Object.values(state?.players || {}).map(player => player?.playerId).filter(Boolean));
+      if (!seatedIds.has(snapshot.ownerPlayerId) || !seatedIds.has(snapshot.controllerPlayerId)) return { ok: false, reason: "event-provenance-snapshot-player-invalid" };
+      return { ok: true, snapshot };
     }
     if (ownerId != null && ownerId !== located.ownerPlayerId) {
       return { ok: false, reason: "event-provenance-owner-mismatch" };
     }
     if (controllerId != null && controllerId !== located.controllerPlayerId) {
       return { ok: false, reason: "event-provenance-controller-mismatch" };
+    }
+    const participant = battleContext?.identities?.[uid];
+    if (participant && (participant.ownerPlayerId !== located.ownerPlayerId || participant.controllerPlayerId !== located.controllerPlayerId || participant.side !== located.side)) {
+      return { ok: false, reason: "event-provenance-battle-participant-identity-mismatch" };
     }
     return { ok: true, located };
   }
@@ -4402,6 +4583,10 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
     if (!event || typeof event !== "object" || !event.eventId || !event.type) {
       return { ok: false, reason: "event-provenance-event-invalid" };
     }
+    const battleScoped = BATTLE_SCOPED_EVENT_TYPES.has(event.type) ||
+      (event.phase === "battle" && Boolean(event.battleId));
+    const battleContext = battleScoped ? authoritativeBattleContextForEvent(state, event, engine) : null;
+    if (battleScoped && !battleContext) return { ok: false, reason: "event-provenance-battle-id-mismatch" };
     const references = [
       ["sourceCardInstanceId", "sourceOwnerPlayerId", "sourceControllerPlayerId"],
       ["subjectCardInstanceId", "subjectOwnerPlayerId", "subjectControllerPlayerId"],
@@ -4414,14 +4599,14 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
       ["eventSubjectUid", null, null]
     ];
     for (const [uidField, ownerField, controllerField] of references) {
-      const result = locateEventCardReference(state, event, engine, uidField, ownerField, controllerField);
+      const result = locateEventCardReference(state, event, engine, uidField, ownerField, controllerField, battleContext, true);
       if (!result.ok) return result;
     }
     for (const field of ["targetCardInstanceIds", "attackingCardInstanceIds"]) {
       if (event[field] == null) continue;
       if (!Array.isArray(event[field])) return { ok: false, reason: "event-provenance-card-list-invalid" };
       for (const uid of event[field]) {
-        const result = locateEventCardReference(state, { cardUid: uid }, engine, "cardUid");
+        const result = locateEventCardReference(state, { cardUid: uid }, engine, "cardUid", null, null, battleContext, false);
         if (!result.ok) return result;
       }
     }
@@ -4431,38 +4616,41 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
       return { ok: false, reason: "event-provenance-attack-identity-missing" };
     }
 
-    const battleScoped = BATTLE_SCOPED_EVENT_TYPES.has(event.type) ||
-      (event.phase === "battle" && Boolean(event.battleId));
     if (!battleScoped) return { ok: true };
 
-    const attack = state?.pendingAttack;
-    if (!event.battleId || !attack?.battleId || event.battleId !== attack.battleId) {
-      return { ok: false, reason: "event-provenance-battle-id-mismatch" };
-    }
+    const activeAttack = state?.pendingAttack?.battleId === battleContext.battleId ? state.pendingAttack : null;
+    const closed = state?.closedBattleContexts?.[battleContext.battleId] || null;
+    const attack = { ...battleContext, ...(closed?.attackAtClose || {}), ...(activeAttack || {}), identities: battleContext.identities };
     const attackerUid = attack.attackerUid;
     const targetUid = attack.targetUid;
-    const attacker = attackerUid && engine?.locateCardInstance?.(state, attackerUid);
-    const target = targetUid && engine?.locateCardInstance?.(state, targetUid);
-    if (!attackerUid || !targetUid || !attacker || attacker.ambiguous || attacker.instance?.uid !== attackerUid ||
-        !target || target.ambiguous || target.instance?.uid !== targetUid) {
+    const attackerIdentity = battleContext.identities?.[attackerUid];
+    const targetIdentity = battleContext.identities?.[targetUid];
+    if (!attackerUid || !targetUid || !attackerIdentity || !targetIdentity) {
       return { ok: false, reason: "event-provenance-battle-participant-missing" };
     }
-    const attackerSide = attack.attackerSide || attacker.side;
-    const defenderSide = attack.defenderSide || target.side;
-    const attackerPlayerId = attack.attackerPlayerId || state.players?.[attackerSide]?.playerId || attacker.controllerPlayerId;
-    const defenderPlayerId = state.players?.[defenderSide]?.playerId || target.controllerPlayerId;
+    const attacker = engine?.locateCardInstance?.(state, attackerUid);
+    const target = engine?.locateCardInstance?.(state, targetUid);
+    if ((attacker && (attacker.ambiguous || attacker.instance?.uid !== attackerUid || attacker.ownerPlayerId !== attackerIdentity.ownerPlayerId || attacker.controllerPlayerId !== attackerIdentity.controllerPlayerId || attacker.side !== attackerIdentity.side)) ||
+        (target && (target.ambiguous || target.instance?.uid !== targetUid || target.ownerPlayerId !== targetIdentity.ownerPlayerId || target.controllerPlayerId !== targetIdentity.controllerPlayerId || target.side !== targetIdentity.side))) {
+      return { ok: false, reason: "event-provenance-battle-participant-identity-mismatch" };
+    }
+    const attackerSide = attack.attackerSide || attackerIdentity.side;
+    const defenderSide = attack.defenderSide || targetIdentity.side;
+    const attackerPlayerId = attack.attackerPlayerId || attackerIdentity.controllerPlayerId;
+    const defenderPlayerId = attack.defenderPlayerId || targetIdentity.controllerPlayerId;
     const activeTurnPlayerId = state.players?.[state.side]?.playerId;
-    if (!attackerSide || !defenderSide || attackerSide === defenderSide || attacker.side !== attackerSide ||
-        target.side !== defenderSide || !attackerPlayerId || !defenderPlayerId ||
+    if (!attackerSide || !defenderSide || attackerSide === defenderSide || attackerIdentity.side !== attackerSide ||
+        targetIdentity.side !== defenderSide || !attackerPlayerId || !defenderPlayerId ||
         state.players?.[attackerSide]?.playerId !== attackerPlayerId ||
         (attack.attackerPlayerId != null && attack.attackerPlayerId !== attackerPlayerId) ||
-        (attacker.controllerPlayerId && attacker.controllerPlayerId !== attackerPlayerId) ||
-        (target.controllerPlayerId && target.controllerPlayerId !== defenderPlayerId) ||
+        (attackerIdentity.controllerPlayerId && attackerIdentity.controllerPlayerId !== attackerPlayerId) ||
+        (targetIdentity.controllerPlayerId && targetIdentity.controllerPlayerId !== defenderPlayerId) ||
         activeTurnPlayerId !== attackerPlayerId ||
+        Number(state.turn) !== battleContext.turn ||
         (event.turnPlayerId != null && event.turnPlayerId !== attackerPlayerId)) {
       return { ok: false, reason: "event-provenance-battle-controller-mismatch" };
     }
-    if (attack.attackerZone && attacker.zone !== "vanguard" && attacker.zone !== "rear-guard" && attacker.zone !== "soul") {
+    if (attack.attackerZone && !["vanguard", "rear-guard", "soul", "front-left", "front-center", "front-right", "rear-left", "rear-center", "rear-right"].includes(attack.attackerZone)) {
       return { ok: false, reason: "event-provenance-battle-attacker-location-invalid" };
     }
     if (event.attackingUnitInstanceId != null && event.attackingUnitInstanceId !== attackerUid) {
@@ -4483,7 +4671,7 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
          (event.previousLocation != null && event.previousLocation !== attack.attackerZone))) {
       return { ok: false, reason: "event-provenance-battle-attacker-location-mismatch" };
     }
-    if (attack.attackingCardInstanceIds && event.attackingCardInstanceIds &&
+    if (attack.attackingCardInstanceIds && Array.isArray(event.attackingCardInstanceIds) && event.attackingCardInstanceIds.length &&
         JSON.stringify(attack.attackingCardInstanceIds) !== JSON.stringify(event.attackingCardInstanceIds)) {
       return { ok: false, reason: "event-provenance-battle-attacker-list-mismatch" };
     }
@@ -4508,8 +4696,10 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
          !(event.targetCardInstanceIds || []).includes(targetUid))) {
       return { ok: false, reason: "event-provenance-battle-target-mismatch" };
     }
+    const eventAttackerUid = event.attackingUnitInstanceId ?? event.sourceCardInstanceId;
     if (event.type === "attack.hit" &&
-        (!event.attackingUnitInstanceId || event.attackingUnitInstanceId !== attackerUid ||
+        ((event.attackingUnitInstanceId != null && event.sourceCardInstanceId != null && event.attackingUnitInstanceId !== event.sourceCardInstanceId) ||
+         eventAttackerUid !== attackerUid ||
          !(event.targetCardInstanceIds || []).includes(targetUid) ||
          (event.attackHitOverride === true ? event.subjectCardInstanceId !== attackerUid : event.subjectCardInstanceId !== targetUid))) {
       return { ok: false, reason: "event-provenance-battle-hit-mismatch" };
@@ -4574,7 +4764,7 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
             const ability = { ...parsed, ...(isExactBoostSetOrderCounterChargeAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactHollowPlacementAbility(familyCandidate) || isExactClanPlacementDamageReturnAbility(familyCandidate) || isExactOtherHandDiscardReturnAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactAttackedUnboostedProtectAbility(familyCandidate) || isExactPersonaShieldTicketAbility(familyCandidate) || definition.source?.patternId === "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1" ? { canDecline: false } : {}), id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsed.requiredLocation, requiredCircle: definition.requiredCircle || parsed.requiredCircle || [], trigger: definition.trigger ? { ...parsed.trigger, ...definition.trigger, circles: definition.trigger.circles || parsed.trigger?.circles || [] } : parsed.trigger, conditions: definition.conditions || parsed.conditions, conditionStatus: definition.conditions?.length ? "modeled" : definition.conditionsReviewed === true ? "no-explicit-condition-detected" : parsed.conditionStatus, costs: definition.costs || parsed.costs, costAlternatives: definition.costAlternatives || parsed.costAlternatives, costStatus: definition.costAlternatives?.length ? "supported-cost" : definition.costs?.length ? "supported-cost" : definition.costsReviewed === true ? "no-cost" : definition.costs ? "supported-cost" : parsed.costStatus, choiceStatus: definition.choicesReviewed === true ? "modeled" : parsed.choiceStatus, effects: definition.effects, once: definition.once === true || parsed.once, usageRestriction: resolveUsageRestriction(definition, parsed) };
             if(definition.source?.patternId==="auto-dragontree-gc-granted-retire-to-soul-v1"){ability.canDecline=true;if(!dragontreeGcGrantedRetireEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,side,engine))continue;}
             if (event.attackHitOverride === true && (ability.trigger?.eventType !== "attack.hit" || ability.trigger?.subject !== "source" ||
-                instance.uid !== event.attackingUnitInstanceId || located.zone !== "vanguard" || !hasActiveMissedAttackHitCONT(state, instance, located, engine))) continue;
+                instance.uid !== attackingInstanceUidFromEvent(event) || located.zone !== "vanguard" || !hasActiveMissedAttackHitCONT(state, instance, located, engine))) continue;
             if (definition.source?.patternId === "auto-soul-blast-named-boost-power-battle-v1" && String(definition.cardId) === "cfa-513") {
               ability.trigger = { ...ability.trigger, boostedUnitName: undefined, boostedUnitNameContains: "Overlord" };
             }
@@ -4791,7 +4981,7 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
             if (ability.definition?.source?.patternId === "auto-vanguard-own-attack-hit-draw-v1" &&
                 !vanguardOwnAttackHitDrawEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (ability.definition?.source?.patternId === "auto-own-attack-hit-place-treasures-marker-v1") {
-              if (!treasuresOwnAttackHitEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId)) continue;
+              if (!treasuresOwnAttackHitEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
               if (!treasureMarkerZones(state.players?.[side]).length) {
                 if (engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) skipped.push({ eventId: event.eventId, cardInstanceId: instance.uid, abilityId: ability.id, reason: "no-legal-marker-circle" });
                 continue;
@@ -5209,9 +5399,10 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
     return true;
   }
 
-  function finalizeClosedBattle(state) {
+  function finalizeClosedBattle(state, engine) {
     if (!state.pendingAttack?.closing || state.pendingTrigger || state.pendingAbility || (state.pendingAbilities || []).length) return false;
     const battleId=state.pendingAttack.battleId;
+    if (!snapshotBattleAtClose(state, state.pendingAttack, engine)) return false;
     for(const player of Object.values(state.players||{}))for(const zone of [player?.vanguard?[player.vanguard]:[],player?.rear,player?.guardCircle,player?.drop,player?.soul,player?.hand,player?.bind,player?.damage,player?.orders,player?.triggerZone])for(const instance of zone||[]){if(instance?.gcDragontreeRetireToSoulBattleId===battleId)delete instance.gcDragontreeRetireToSoulBattleId;if(instance?.battleShieldExpiryBattleId===battleId){delete instance.battleShieldBoost;delete instance.battleShieldExpiryBattleId;}}
     state.pendingAttack = null;
     return true;
@@ -5799,6 +5990,7 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
         driveChecksRemaining: 0, driveChecksPerformed: 0, maxDriveChecks: isVanguardAttack ? 10 : 0,
         driveCountPrompt: false, driveCountChosen: !isVanguardAttack, awaitingDrive: false
       };
+      if (!rememberBattleContext(state, state.pendingAttack, engine)) return reject("battle-context-snapshot-failed");
       events.push(engine.createGameEvent(state, {
         type: "attack.step-started", actingPlayerId: actorPlayerId, turnPlayerId: actorPlayerId,
         sourceCardInstanceId: attacker.uid, sourceOwnerPlayerId: attacker.ownerPlayerId,
@@ -6225,7 +6417,7 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
     if (completedCheck) { events.push(...completedCheck); queueFollowupTriggers(state, completedCheck, engine); }
     const damageLoss = finalizePendingDamageLoss(state, actorPlayerId, engine);
     if (damageLoss) events.push(damageLoss);
-    finalizeClosedBattle(state);
+    finalizeClosedBattle(state, engine);
     state.processedActionIds ||= [];
     state.processedActionIds.push(command.actionId);
     state.stateVersion = Number(state.stateVersion || 0) + 1;
@@ -6348,7 +6540,7 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
       if (completedCheck) { events.push(...completedCheck); queueFollowupTriggers(state, completedCheck, engine); }
       const damageLoss = finalizePendingDamageLoss(state, actorPlayerId, engine);
       if (damageLoss) events.push(damageLoss);
-      finalizeClosedBattle(state);
+      finalizeClosedBattle(state, engine);
     }
     return { ok: true, state, events, resolvedAbilityId: ability.id };
   }
@@ -6511,9 +6703,9 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
     if (ability?.definition?.source?.patternId === "auto-vc-end-turn-revoldress-ride-from-soul-rest-v1" &&
         !revoldressEndTurnRideEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,side)) return reject("revoldress-end-turn-ride-event-invalid");
     if (triggerEvent.attackHitOverride === true) {
-      const attack = state.pendingAttack;
+      const attack = authoritativeBattleForEvent(state, triggerEvent, engine);
       if (triggerEvent.didNotHit !== true || triggerEvent.type !== "attack.hit" || triggerEvent.timingWindow !== "attack-hit" ||
-          triggerEvent.subjectCardInstanceId !== located.instance.uid || triggerEvent.attackingUnitInstanceId !== located.instance.uid ||
+          triggerEvent.subjectCardInstanceId !== located.instance.uid || attackingInstanceUidFromEvent(triggerEvent) !== located.instance.uid ||
           attack?.battleId !== triggerEvent.battleId || attack?.attackerUid !== located.instance.uid || attack.attackerSide !== side ||
           attack.attackerZone !== "vanguard" || attack.targetZone !== "vanguard" || attack.blocked !== true && Number(attack.power) >= Number(attack.targetPower) ||
           !hasActiveMissedAttackHitCONT(state, located.instance, located, engine)) return reject("missed-attack-hit-override-invalid");
@@ -6549,7 +6741,7 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
     if (ability.definition?.source?.patternId === "auto-vanguard-own-attack-hit-draw-v1" &&
         !vanguardOwnAttackHitDrawEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("vanguard-own-attack-hit-context-invalid");
     if (ability.definition?.source?.patternId === "auto-own-attack-hit-place-treasures-marker-v1" &&
-        !treasuresOwnAttackHitEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId)) return reject("treasures-marker-attack-hit-context-invalid");
+        !treasuresOwnAttackHitEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,engine)) return reject("treasures-marker-attack-hit-context-invalid");
     if (ability?.definition?.source?.patternId === "auto-rc-placement-counter-blast-place-dragontree-marker-v1") {
       if (!dragontreePlacementEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId)) return reject("dragontree-marker-placement-context-invalid");
       if (command.payload.accept && (!engine.canPayAbilityCosts(ability,{faceUpDamage:(state.players?.[side]?.damage||[]).filter(card=>!card.faceDown).length}) || !dragontreeMarkerZones(state.players?.[side]).includes(selection.circleZone))) return reject("dragontree-marker-cost-or-target-unavailable");
@@ -6952,7 +7144,7 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
       if (completedCheck) { events.push(...completedCheck); queueFollowupTriggers(state, completedCheck, engine); }
       const damageLoss = finalizePendingDamageLoss(state, actorPlayerId, engine);
       if (damageLoss) events.push(damageLoss);
-      finalizeClosedBattle(state);
+      finalizeClosedBattle(state, engine);
       if (state.pendingTurnEnd && !state.pendingAbility && !(state.pendingAbilities || []).length) events.push(...continueTurnEnd(state, engine));
     }
     return { ok: true, state, events, resolvedAbilityId: ability.id, ...(quintupletMemoryRequirementMet?{}:{resolution:"requirement-not-met-no-op"}) };
