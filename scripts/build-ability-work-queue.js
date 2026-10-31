@@ -56,7 +56,8 @@ function buildAbilityWorkQueue(cards, manifest, root = path.resolve(__dirname, "
       if (fullyVerifiedCards.has(cardId)) continue;
       const definition = ability.definition || null;
       const record = evidence.get(ability.id) || null;
-      const missingTrustedDefinition = Boolean(definition && ["AUTO", "ACT"].includes(ability.kind) && !trustedByCard.get(cardId)?.has(ability.id));
+      const missingTrustedDefinition = Boolean(definition && ["AUTO", "ACT"].includes(ability.kind) &&
+        !trustedByCard.get(cardId)?.has(ability.id) && !serverReducer.hasTrustedServerAbilityDefinition?.(ability, engine));
       const badDefinitionReasons = invalid.get(ability.id) || [];
       const missingHandlers = [...new Set((definition?.effects || []).map(step => step?.op).filter(op => !op || !(engine.EFFECT_HANDLERS?.[op]) && !(ability.kind === "CONT" && CONTINUOUS_EFFECT_OPS.has(op))))];
       const serverAbilitySupported = ability.kind === "CONT" || Boolean(serverReducer.supportsServerAbilityEffects?.(ability));

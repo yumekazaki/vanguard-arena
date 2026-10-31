@@ -936,14 +936,21 @@
     PAID_OWN_ATTACK_CATALOG_CACHE.set(id, abilities);
     return abilities;
   }
-  function isExactPaidOwnVanguardAttackPowerAbility(ability) {
+  function isExactPaidOwnVanguardAttackPowerAbility(ability, engine = globalThis.VanguardAbilityEngine) {
     const cardId = String(ability?.cardId || "");
-    const trusted = authoritativePaidOwnAttackAbilities(cardId, globalThis.VanguardAbilityEngine).find(item => item.id === ability?.id);
+    const trusted = authoritativePaidOwnAttackAbilities(cardId, engine).find(item => item.id === ability?.id);
     if (!trusted) return false;
     const fields = item => ({ id: item.id, cardId: item.cardId, kind: item.kind, printedText: item.printedText,
       requiredLocation: item.requiredLocation, trigger: item.trigger, conditions: item.conditions, costs: item.costs, gb: item.gb,
       canDecline: item.canDecline, effects: item.effects, definition: item.definition });
     return JSON.stringify(fields(ability)) === JSON.stringify(fields(trusted));
+  }
+  function hasTrustedServerAbilityDefinition(ability, engine = globalThis.VanguardAbilityEngine) {
+    const cardId = String(ability?.cardId || "");
+    const abilityId = String(ability?.id || "");
+    if (!cardId || !abilityId || !engine) return false;
+    if ((engine.getReviewedAbilityDefinitionsForCard?.(cardId) || []).some(definition => definition?.id === abilityId)) return true;
+    return isExactPaidOwnVanguardAttackPowerAbility(ability, engine);
   }
   function paidOwnVanguardAttackPowerEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
     const attack = state?.pendingAttack, side = located?.side, player = side && state.players?.[side];
@@ -6027,5 +6034,5 @@
     return { ok: true, state, events, resolvedAbilityId: ability.id };
   }
 
-  return Object.freeze({ playerSideForSeat, buildConditionContext, discoverAutoTriggers, returnStriddenVanguard, continueTurnEnd, applyGameAction, applyAbilityDecision, applyManualAbilityActivation, applyEngorgeDecision: applyAbilityDecision, supportsServerEffectOperation, supportsServerAbilityEffects });
+  return Object.freeze({ playerSideForSeat, buildConditionContext, discoverAutoTriggers, returnStriddenVanguard, continueTurnEnd, applyGameAction, applyAbilityDecision, applyManualAbilityActivation, applyEngorgeDecision: applyAbilityDecision, supportsServerEffectOperation, supportsServerAbilityEffects, hasTrustedServerAbilityDefinition });
 });

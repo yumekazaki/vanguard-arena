@@ -39,6 +39,11 @@ test("central work queue covers unverified abilities and separates reviewed mech
   assert.ok(candidate.dependencies.some(dependency => dependency.id === `whole-card-evidence:${candidate.cardId}`));
   assert.equal(result.counts.missingTrustedServerDefinitions, 0, "every compiled definition in the current registry must be registered for trusted server resolution");
   assert.deepEqual(result.items.filter(item => item.missingTrustedDefinition), []);
+  for (const abilityId of ["cfa-2637:0", "cfa-3079:0", "cfa-4210:0", "cfa-4216:1", "cfa-4456:0", "cfa-4752:0"]) {
+    const dynamicallyTrusted = result.items.find(item => item.abilityId === abilityId);
+    assert.ok(dynamicallyTrusted, `expected the catalog-compiled paid Vanguard-attack ability ${abilityId}`);
+    assert.equal(dynamicallyTrusted.missingTrustedDefinition, false, `${abilityId} must use the same exact catalog-backed server trust path as live resolution`);
+  }
   const highestImpactBlocker = result.dependencySummary[0];
   assert.ok(highestImpactBlocker.blockedAbilityCount >= 1);
   assert.ok(result.dependencyEdges.some(edge => edge.from === `ability:${candidate.abilityId}` && edge.to === `whole-card-evidence:${candidate.cardId}`));

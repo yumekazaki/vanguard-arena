@@ -74100,8 +74100,110 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2637",
+      "abilityId": "cfa-2637:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-paid-vanguard-attack-power-server.test.js"
+      ],
+      "testCases": [
+        "the shared text parser derives all six real cost-paid Vanguard attack abilities",
+        "host and joining player resolve only their own exact eligible Vanguard attack ability",
+        "another source, wrong attack target, and unmet Shinken Hissatsu, GB1, or Brave conditions do not queue",
+        "unpayable costs suppress prompts and revalidation rejects atomically if a condition or resource changes",
+        "duplicate event delivery and repeated action IDs cannot pay or apply a cost twice"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-3079",
+      "abilityId": "cfa-3079:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-paid-vanguard-attack-power-server.test.js"
+      ],
+      "testCases": [
+        "the shared text parser derives all six real cost-paid Vanguard attack abilities",
+        "host and joining player resolve only their own exact eligible Vanguard attack ability",
+        "another source, wrong attack target, and unmet Shinken Hissatsu, GB1, or Brave conditions do not queue",
+        "unpayable costs suppress prompts and revalidation rejects atomically if a condition or resource changes",
+        "duplicate event delivery and repeated action IDs cannot pay or apply a cost twice"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4210",
+      "abilityId": "cfa-4210:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-paid-vanguard-attack-power-server.test.js"
+      ],
+      "testCases": [
+        "the shared text parser derives all six real cost-paid Vanguard attack abilities",
+        "host and joining player resolve only their own exact eligible Vanguard attack ability",
+        "another source, wrong attack target, and unmet Shinken Hissatsu, GB1, or Brave conditions do not queue",
+        "unpayable costs suppress prompts and revalidation rejects atomically if a condition or resource changes",
+        "duplicate event delivery and repeated action IDs cannot pay or apply a cost twice"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4216",
+      "abilityId": "cfa-4216:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-paid-vanguard-attack-power-server.test.js"
+      ],
+      "testCases": [
+        "the shared text parser derives all six real cost-paid Vanguard attack abilities",
+        "host and joining player resolve only their own exact eligible Vanguard attack ability",
+        "another source, wrong attack target, and unmet Shinken Hissatsu, GB1, or Brave conditions do not queue",
+        "unpayable costs suppress prompts and revalidation rejects atomically if a condition or resource changes",
+        "duplicate event delivery and repeated action IDs cannot pay or apply a cost twice"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4456",
+      "abilityId": "cfa-4456:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-paid-vanguard-attack-power-server.test.js"
+      ],
+      "testCases": [
+        "the shared text parser derives all six real cost-paid Vanguard attack abilities",
+        "host and joining player resolve only their own exact eligible Vanguard attack ability",
+        "another source, wrong attack target, and unmet Shinken Hissatsu, GB1, or Brave conditions do not queue",
+        "unpayable costs suppress prompts and revalidation rejects atomically if a condition or resource changes",
+        "duplicate event delivery and repeated action IDs cannot pay or apply a cost twice"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4752",
+      "abilityId": "cfa-4752:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-paid-vanguard-attack-power-server.test.js"
+      ],
+      "testCases": [
+        "the shared text parser derives all six real cost-paid Vanguard attack abilities",
+        "host and joining player resolve only their own exact eligible Vanguard attack ability",
+        "another source, wrong attack target, and unmet Shinken Hissatsu, GB1, or Brave conditions do not queue",
+        "unpayable costs suppress prompts and revalidation rejects atomically if a condition or resource changes",
+        "duplicate event delivery and repeated action IDs cannot pay or apply a cost twice"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T00:16:09.314Z"
+  "evidenceUpdatedAt": "2026-10-31T00:47:29.596Z"
 }
