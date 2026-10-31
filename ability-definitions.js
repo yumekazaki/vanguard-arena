@@ -111871,6 +111871,26 @@
       source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1", review: "Exact AUTO family on Thousand Ray Pegasus, Million Ray Pegasus, and The Phoenix, Calamity Flame. Only a card entering this controller's Damage Zone triggers the exact VC/RC source instance; its controller must have an Angel Feather Vanguard, and the +2000 expires at the active turn's end even when this trigger occurs during the opponent's turn." },
       effects: [{ op: "modify-power", target: "source", amount: 2000, duration: "turn", expiry: "active-turn" }]
     },
+    ...[
+      ["cfa-3801", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
+      ["cfa-4229", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
+      ["cfa-4314", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
+      ["cfa-4540", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
+      ["cfa-3870", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
+      ["cfa-4060", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
+      ["cfa-4074", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
+      ["cfa-4097", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."]
+    ].map(([cardId, printedText]) => ({
+      id: `${cardId}:1`, cardId, kind: "ACT", printedText, requiredLocation: ["rear-guard"],
+      costsReviewed: true, conditionsReviewed: true, choicesReviewed: true,
+      costs: [{ type: "source-to-soul", count: 1 }, { type: "discard", count: 1, filter: { cardType: "normal-unit" } }],
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", officialReference: "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf", patternId: "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1", review: "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit." },
+      effects: [
+        { op: "reorder-deck-card", target: "chosen", destination: "player-choice", requireTopCard: true, allowEmptyDeck: true },
+        { op: "draw", count: 1 },
+        { op: "modify-power-target", target: "chosen", amount: 5000, duration: "turn", targetFilter: { controller: "source-controller", cardType: "unit" }, condition: { op: "controller-face-up-g-zone-count-at-least", count: 1 } }
+      ]
+    })),
   ];
   const quintupletMemoryAutoIds = ["cfa-11526", "cfa-11545", "cfa-11558", "cfa-11607", "cfa-11671"];
   const quintupletMemoryAutoText = "AUTO: When this unit is placed on RC during your main phase, if you have a <Quintuplet> vanguard, look at the top three cards of your deck, choose up to one <Quintuplet> from among them, put it into memory, and shuffle the deck.";

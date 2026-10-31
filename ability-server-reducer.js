@@ -399,6 +399,26 @@
       definition.effects[0].target === "chosen" && definition.effects[0].destination === "player-choice";
   }
 
+  function isExactActRcSourceSoulNormalDiscardLookDrawGZonePowerAbility(ability) {
+    const variantAIds = new Set(["cfa-3801", "cfa-4229", "cfa-4314", "cfa-4540"]);
+    const variantBIds = new Set(["cfa-3870", "cfa-4060", "cfa-4074", "cfa-4097"]);
+    const definition = ability?.definition, cardId = String(ability?.cardId || ""), printed = String(definition?.printedText || ability?.printedText || "").replace(/\s+/g, " ").trim();
+    const variantA = "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.";
+    const variantB = "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.";
+    const expectedCosts = [{ type: "source-to-soul", count: 1 }, { type: "discard", count: 1, filter: { cardType: "normal-unit" } }];
+    const expectedEffects = [
+      { op: "reorder-deck-card", target: "chosen", destination: "player-choice", requireTopCard: true, allowEmptyDeck: true },
+      { op: "draw", count: 1 },
+      { op: "modify-power-target", target: "chosen", amount: 5000, duration: "turn", targetFilter: { controller: "source-controller", cardType: "unit" }, condition: { op: "controller-face-up-g-zone-count-at-least", count: 1 } }
+    ];
+    return (variantAIds.has(cardId) || variantBIds.has(cardId)) && ability?.id === `${cardId}:1` && ability?.kind === "ACT" && definition?.kind === "ACT" &&
+      definition?.source?.patternId === "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1" &&
+      (variantAIds.has(cardId) ? printed === variantA : printed === variantB) && JSON.stringify(definition?.requiredLocation) === JSON.stringify(["rear-guard"]) &&
+      definition?.costsReviewed === true && definition?.conditionsReviewed === true && definition?.choicesReviewed === true &&
+      JSON.stringify(ability?.costs || definition?.costs) === JSON.stringify(expectedCosts) &&
+      JSON.stringify(definition?.effects) === JSON.stringify(expectedEffects);
+  }
+
   function isExactClanPlacementDamageReturnAbility(ability) {
     const definition=ability?.definition,cardId=String(ability?.cardId||""),clan=definition?.conditions?.[0]?.value,printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim(),effect=definition?.effects;
     if(!CLAN_PLACEMENT_DAMAGE_RETURN.includes(cardId)||ability?.id!==`${cardId}:0`||ability.kind!=="AUTO"||definition?.kind!=="AUTO"||definition.source?.patternId!=="auto-vc-rc-clan-placement-delayed-damage-return-v1"||typeof clan!=="string"||!clan.trim())return false;
@@ -3226,6 +3246,7 @@
     if (ability?.definition?.source?.patternId === "act-source-to-soul-counter-charge-v1" && !isExactActSourceToSoulCounterChargeAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "act-source-to-soul-clan-counter-charge-v1" && !isExactActSourceToSoulClanCounterChargeAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "act-source-to-soul-draw-v1" && !isExactActSourceToSoulDrawAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1" && !isExactActRcSourceSoulNormalDiscardLookDrawGZonePowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-order-zone-placement-draw-v1" && !isExactAutoOrderZonePlacementDrawAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-vanguard-placement-discard-draw-v1" && !isExactVanguardPlacementDiscardDrawAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-vanguard-own-attack-hit-draw-v1" && !isExactVanguardOwnAttackHitDrawAbility(ability)) return false;
@@ -3369,7 +3390,7 @@
     if (hasRidePhaseDiscardCall && !(isExactRidePhaseDiscardCallAbility(ability) || isExactDiscardGradeCallAbility(ability))) return false;
     if (hasUnlockTarget && !isExactVanguardUnlockAbility(ability)) return false;
     if (hasAttackedUnboostedProtect && !isExactAttackedUnboostedProtectAbility(ability)) return false;
-    if (hasReorderDeckCard && !isExactOracleTopDeckOrderAbility(ability)) return false;
+    if (hasReorderDeckCard && !(isExactOracleTopDeckOrderAbility(ability) || isExactActRcSourceSoulNormalDiscardLookDrawGZonePowerAbility(ability))) return false;
     if (hasModifyDriveTarget && !isExactGodHandDriveAbility(ability)) return false;
     if (hasCallCheckedCardLocked && !isExactDauntlessDriveAbility(ability)) return false;
     if (hasModifyDrive && !isExactDauntlessDriveAbility(ability)) return false;
@@ -3402,7 +3423,7 @@
       (hasRidePhaseDiscardCall && step?.op === "call-source-from-drop-rested" && (isExactRidePhaseDiscardCallAbility(ability) || isExactDiscardGradeCallAbility(ability))) ||
       (hasUnlockTarget && step?.op === "unlock-target" && isExactVanguardUnlockAbility(ability)) ||
       (hasAttackedUnboostedProtect && step?.op === "protect-attacked-source" && isExactAttackedUnboostedProtectAbility(ability)) ||
-      (hasReorderDeckCard && step?.op === "reorder-deck-card" && isExactOracleTopDeckOrderAbility(ability)) ||
+      (hasReorderDeckCard && step?.op === "reorder-deck-card" && (isExactOracleTopDeckOrderAbility(ability) || isExactActRcSourceSoulNormalDiscardLookDrawGZonePowerAbility(ability))) ||
       (hasModifyDriveTarget && step?.op === "modify-drive-target" && isExactGodHandDriveAbility(ability)) ||
       (hasCallCheckedCardLocked && step?.op === "call-checked-card-locked" && isExactDauntlessDriveAbility(ability)) ||
       (hasModifyDrive && step?.op === "modify-drive" && isExactDauntlessDriveAbility(ability)));
@@ -3645,10 +3666,13 @@
     }
     const markerStep=(pending?.ability?.definition?.effects||[]).find(effect=>effect?.op==="place-circle-marker");
     if(markerStep){const actor=Object.values(state.players||{}).find(player=>player?.playerId===actorPlayerId),zone=selection?.circleZone,rearIndex=({"rear-left":0,"rear-right":1,"rear-back-left":2,"rear-back-center":3,"rear-back-right":4})[zone],accel=typeof zone==="string"?zone.match(/^accel-(\d+)$/):null,zoneType=zone==="vanguard"?"vanguard":rearIndex!=null||accel?"rear-guard":null,configuration=markerStep.markerType==="Treasures"&&JSON.stringify(markerStep.circleTypes)===JSON.stringify(["vanguard","rear-guard"])||markerStep.markerType==="Dragontree"&&JSON.stringify(markerStep.circleTypes)===JSON.stringify(["rear-guard"]),zoneExists=zone==="vanguard"?Boolean(actor?.vanguard):rearIndex!=null?rearIndex<(actor?.rear||[]).length:Boolean(accel&&Number(accel[1])<=Number(actor?.accelZones||0));if(!actor||!configuration||!markerStep.circleTypes.includes(zoneType)||!zoneExists)return{ok:false,reason:"invalid-marker-circle"};if((actor.giftZones||[]).some(marker=>marker?.zone===zone&&marker?.type===markerStep.markerType))return{ok:false,reason:"marker-already-present"};return{ok:true,context:{circleZone:zone,sourceControllerPlayerId:actorPlayerId}};}
+    const effectController = Object.values(state.players || {}).find(player => player?.playerId === actorPlayerId);
+    const controllerFaceUpGZoneCount = (effectController?.gZone || []).filter(card => card?.faceUp === true).length;
     const step = (pending?.ability?.definition?.effects || []).find(effect =>
-      (effect?.op === "modify-power-target" && ["chosen", "boosted-unit"].includes(effect.target)) ||
+      ((effect?.op === "modify-power-target" && ["chosen", "boosted-unit"].includes(effect.target)) ||
       (["retire-target", "rest-target", "stand-target", "unlock-target", "protect-target"].includes(effect?.op) && effect.target === "chosen") ||
-      effect?.op === "g-guardian-grade-three-replacement-choice");
+      effect?.op === "g-guardian-grade-three-replacement-choice") &&
+      engine.evaluateEffectCondition?.(effect.condition, { controllerFaceUpGZoneCount }) !== false);
     if (!step) return { ok: true, context: { target: source, targetInPlay: true } };
     if (step.optionalTarget === true && selection?.optionalNoTarget === true) return { ok: true, context: { target: null, targetInPlay: false, optionalNoTarget: true } };
     if (step.optionalTarget === true && typeof selection?.targetUid !== "string" && !hasLegalReviewedTarget(state, source, actorPlayerId, step, engine)) return { ok: true, context: { target: null, targetInPlay: false, optionalNoTarget: true } };
@@ -5570,7 +5594,7 @@
     const parsed = engine.parseCardAbilities({ id: String(located.instance.cardId), text: definition.printedText });
     const parsedAbility = parsed.find(item => item.kind === "ACT");
     if (!parsedAbility) return reject("invalid-reviewed-ability-text");
-    const ability = { ...parsedAbility, id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsedAbility.requiredLocation, requiredCircle: definition.requiredCircle || parsedAbility.requiredCircle || [], conditions: definition.conditions || parsedAbility.conditions, conditionStatus: definition.conditions?.length ? "modeled" : parsedAbility.conditionStatus, costs: definition.costs || parsedAbility.costs, costAlternatives: definition.costAlternatives || parsedAbility.costAlternatives, costStatus: definition.costAlternatives?.length ? "supported-cost" : definition.costs ? "supported-cost" : parsedAbility.costStatus, choiceStatus: definition.choicesReviewed === true ? "modeled" : parsedAbility.choiceStatus, effects: definition.effects, once: definition.once === true || parsedAbility.once, usageRestriction: resolveUsageRestriction(definition, parsedAbility) };
+    const ability = { ...parsedAbility, id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsedAbility.requiredLocation, requiredCircle: definition.requiredCircle || parsedAbility.requiredCircle || [], conditions: definition.conditions || parsedAbility.conditions, conditionStatus: definition.conditionsReviewed === true || definition.conditions?.length ? "modeled" : parsedAbility.conditionStatus, costs: definition.costs || parsedAbility.costs, costAlternatives: definition.costAlternatives || parsedAbility.costAlternatives, costStatus: definition.costAlternatives?.length ? "supported-cost" : definition.costs ? "supported-cost" : parsedAbility.costStatus, choiceStatus: definition.choicesReviewed === true ? "modeled" : parsedAbility.choiceStatus, effects: definition.effects, once: definition.once === true || parsedAbility.once, usageRestriction: resolveUsageRestriction(definition, parsedAbility) };
     if (!supportsServerAbilityEffects(ability)) return reject("unsupported-server-ability");
     if (ability.conditionStatus === "needs-review" || ability.costStatus === "needs-review" || ability.choiceStatus === "needs-review" || ability.conditions?.some(condition => !SUPPORTED_CONDITION_TYPES.has(condition?.type))) return reject("unmodeled-activation-requirement");
     const sourceZone = located.circle || located.zone;
@@ -5595,6 +5619,7 @@
         cardDefinitionForInstance: serverCardDefinition,
         soulCount: (player.soul || []).length,
         discardableHand: (player.hand || []).filter(card => card.uid !== sourceUid).length,
+        discardableHandCards: (player.hand || []).filter(card => card.uid !== sourceUid),
         sourceRested: Boolean(located.instance.rested),
         sourceCanMoveToSoul: located.side === side,
         sourceCanRetire: located.side === side && located.zone === "rear-guard",
@@ -5607,13 +5632,18 @@
 
     const targetResolution = locateReviewedEffectTarget(state, { ability, eventContext: {} }, located.instance, actorPlayerId, selection, engine);
     if (!targetResolution.ok) return reject(targetResolution.reason);
+    const reorderStep = ability.definition.effects.find(step => step.op === "reorder-deck-card");
+    const deckTop = player.deck?.at(-1) || null;
+    if (reorderStep && (deckTop ? selection.effectUid !== deckTop.uid : selection.effectUid != null)) return reject("invalid-deck-top-selection");
     const eventLog = [];
     const context = {
       source: located.instance, sourceInPlay: true, sourceZone, sourceCircle: located.circle,
       side, player, match: state, turnId: state.turn, actorPlayerId,
       costSelections: costs, target: located.instance, targetInPlay: true,
       selectedDamageUids: Array.isArray(selection.damageUids) ? selection.damageUids : [],
-      effectUid: selection.effectUid || null, effectSourceZone: selection.effectSourceZone || null, legionDropUids: selection.legionDropUids || [],
+      effectUid: selection.effectUid || null, effectSourceZone: selection.effectSourceZone || null, deckDestination: selection.deckDestination || null, legionDropUids: selection.legionDropUids || [],
+      selectedCard: deckTop,
+      controllerFaceUpGZoneCount: (player.gZone || []).filter(card => card?.faceUp === true).length,
       deckBottomUids: Array.isArray(selection.deckBottomUids) ? selection.deckBottomUids : [],
       opponentVanguardGrade: Number(Object.values(state.players).find(candidate => candidate !== player)?.vanguard?.grade ?? -1),
       cardDefinitionForInstance: serverCardDefinition,
@@ -5631,7 +5661,7 @@
       }, { cb: costs.cb || [], sb: costs.sb || [], discard: costs.discard || [], reveal: costs.reveal || [], retireRearGuard: costs.retireRearGuard || [] });
       return paid.ok;
     });
-    if (!result.ok) return reject(result.reason || "effect-resolution-rejected");
+      if (!result.ok) return reject(result.reason || "effect-resolution-rejected");
     state.processedActionIds ||= [];
     state.processedActionIds.push(command.actionId);
     state.stateVersion = Number(state.stateVersion || 0) + 1;

@@ -93,6 +93,16 @@
   effectOperations.add("call-drop-trigger-to-guardian");
   effectOperations.add("put-chosen-normal-drop-to-deck-bottom");
   const positiveInteger = value => Number.isInteger(Number(value)) && Number(value) > 0;
+  function isSupportedEffectCondition(condition) {
+    if (!condition || typeof condition !== "object" || Array.isArray(condition)) return false;
+    return Object.keys(condition).sort().join(",") === "count,op" &&
+      condition.op === "controller-face-up-g-zone-count-at-least" && positiveInteger(condition.count);
+  }
+  function evaluateEffectCondition(condition, context = {}) {
+    if (condition == null) return true;
+    if (!isSupportedEffectCondition(condition)) return false;
+    return Number(context.controllerFaceUpGZoneCount || 0) >= Number(condition.count);
+  }
   const isTriggerUnit = (instance, cardDefinitionForInstance) => {
     const definition=typeof cardDefinitionForInstance==="function"?cardDefinitionForInstance(instance):null;
     const trigger=String(definition?.trigger||instance?.triggerType||instance?.trigger||"").trim().toLocaleLowerCase().replace(/\s+trigger$/i,"");
@@ -307,8 +317,17 @@
       }
     }),
     "reorder-deck-card": Object.freeze({
-      validate(step, context) { return step.target === "chosen" && step.destination === "player-choice" && Boolean(context.selectedCard) && context.player?.deck?.some(card => card.uid === context.selectedCard.uid) && ["top", "bottom"].includes(context.deckDestination); },
-      apply(_step, context) { const index=context.player.deck.findIndex(card=>card.uid===context.selectedCard.uid);if(index<0)return false;const [card]=context.player.deck.splice(index,1);if(context.deckDestination==="top")context.player.deck.push(card);else context.player.deck.unshift(card);context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,previousLocation:"deck",currentLocation:"deck"});return true; }
+      validate(step, context) {
+        const deck = context.player?.deck;
+        if (step.target !== "chosen" || step.destination !== "player-choice" || !Array.isArray(deck)) return false;
+        if (!deck.length) return step.allowEmptyDeck === true && context.selectedCard == null && context.deckDestination == null;
+        if (!context.selectedCard || !deck.some(card => card.uid === context.selectedCard.uid) || !["top", "bottom"].includes(context.deckDestination)) return false;
+        return step.requireTopCard !== true || deck.at(-1)?.uid === context.selectedCard.uid;
+      },
+      apply(step, context) {
+        if (!context.player?.deck?.length && step.allowEmptyDeck === true) return 0;
+        const index=context.player.deck.findIndex(card=>card.uid===context.selectedCard?.uid);if(index<0)return false;const [card]=context.player.deck.splice(index,1);if(context.deckDestination==="top")context.player.deck.push(card);else context.player.deck.unshift(card);context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,previousLocation:"deck",currentLocation:"deck"});return true;
+      }
     }),
     "put-chosen-normal-drop-to-deck-bottom": Object.freeze({
       validate(step, context) {
@@ -544,6 +563,7 @@
     if (filter.locked === true && context.target?.locked !== true) return false;
     if (filter.locked === false && context.target?.locked === true) return false;
     if (filter.cardType === "unit" && !/\b(?:unit|trigger)\b/i.test(String(context.targetCard?.type||""))) return false;
+    if (filter.cardType === "normal-unit" && (String(context.targetCard?.type||"").toLowerCase() !== "unit" || String(context.targetCard?.trigger||context.target?.triggerType||context.target?.trigger||"").trim())) return false;
     if (filter.trigger && String(context.targetCard?.trigger||"").toLowerCase() !== String(filter.trigger).toLowerCase()) return false;
     if (filter.controller === "opponent" && (!context.targetControllerPlayerId || !context.opponentPlayerId || context.targetControllerPlayerId !== context.opponentPlayerId)) return false;
     if (filter.maxGrade !== undefined && (!Number.isFinite(Number(context.targetCard?.grade)) || Number(context.targetCard.grade) > Number(filter.maxGrade))) return false;
@@ -661,6 +681,7 @@
       if (!definition?.id || !definition.cardId || !definition.kind || !definition.printedText || ((!Array.isArray(definition.effects) || !definition.effects.length) && !keywordOnly)) throw new TypeError("A reviewed ability definition is incomplete.");
       if ((definition.effects||[]).some(effect => {
         if (!effectOperations.has(effect.op)) return true;
+        if (effect.op === "modify-power-target" && effect.condition !== undefined && !isSupportedEffectCondition(effect.condition)) return true;
         if (effect.op === "continuous-power") return !["source","all-controller-units"].includes(effect.target) || !positiveInteger(effect.amount) || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition) || (effect.target==="all-controller-units"&&(effect.condition?.op!=="controller-turn"||effect.condition.sourceFaceUp!==true||effect.condition.targetHasNoAbilities!==true));
         if (effect.op === "continuous-power-adjustment") return effect.target !== "source" || !Number.isSafeInteger(Number(effect.amount)) || Number(effect.amount) === 0 || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition);
         if (effect.op === "continuous-power-per-soul-card") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "continuous" || !continuousConditionSupported(effect.condition) || effect.cardNameContains != null && (typeof effect.cardNameContains !== "string" || !effect.cardNameContains.trim());
@@ -695,7 +716,7 @@
         if (effect.op === "schedule-damage-return-at-turn-end") return effect.target !== "controller" || effect.due !== "end-phase-start";
         if (effect.op === "schedule-source-return-to-deck-at-turn-end") return effect.target !== "source" || effect.due !== "end-phase-start" || effect.shuffle !== true;
         if (effect.op === "return-chosen-damage-to-deck") return effect.target !== "controller" || effect.shuffle !== true;
-        if (effect.op === "reorder-deck-card") return effect.target !== "chosen" || effect.destination !== "player-choice";
+        if (effect.op === "reorder-deck-card") return effect.target !== "chosen" || effect.destination !== "player-choice" || effect.requireTopCard === true && effect.allowEmptyDeck !== true;
         if (effect.op === "seek-mate") return effect.target !== "controller" || !positiveInteger(effect.power) || Number(effect.dropCount) !== 4 || typeof effect.mateName !== "string" || !effect.mateName.trim();
         if (effect.op === "retire-target") return effect.target !== "chosen" || effect.targetFilter?.controller !== "opponent" || effect.targetFilter?.zone !== "rear-guard";
         if (effect.op === "revelation-choice") return effect.target !== "controller";
@@ -833,6 +854,26 @@
       requiredLocation: ["rear-guard"],choicesReviewed: true,
       source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "act-source-to-soul-optional-up-to-one-friendly-power-v1", review: "Exact ACT family: pay by moving this Rear-Guard into Soul, then optionally choose zero or one legal friendly field unit matching the printed clan filter and give it the printed turn power." },
       effects: [{ op: "modify-power-target", target: "chosen", amount: Number(match[2]), duration: "turn", optionalTarget: true, targetFilter: { controller: "source-controller", cardType: "unit", excludeSource: true, ...(clan ? { clan } : {}) } }] };
+  }
+  function compileActRcSourceSoulNormalDiscardLookDrawGZonePowerDefinition(cardId, abilityId, kind, printedText) {
+    const variantAIds = new Set(["cfa-3801", "cfa-4229", "cfa-4314", "cfa-4540"]);
+    const variantBIds = new Set(["cfa-3870", "cfa-4060", "cfa-4074", "cfa-4097"]);
+    if (kind !== "ACT" || !(variantAIds.has(String(cardId)) || variantBIds.has(String(cardId))) || abilityId !== `${cardId}:1`) return null;
+    const text = normalizePrintedText(printedText).replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, " ").trim();
+    const variantA = "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.";
+    const variantB = "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.";
+    if (variantAIds.has(String(cardId)) ? text !== variantA : text !== variantB) return null;
+    return {
+      id: abilityId, cardId, kind, printedText, requiredLocation: ["rear-guard"],
+      costsReviewed: true, conditionsReviewed: true, choicesReviewed: true,
+      costs: [{ type: "source-to-soul", count: 1 }, { type: "discard", count: 1, filter: { cardType: "normal-unit" } }],
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", officialReference: "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf", patternId: "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1", review: "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit." },
+      effects: [
+        { op: "reorder-deck-card", target: "chosen", destination: "player-choice", requireTopCard: true, allowEmptyDeck: true },
+        { op: "draw", count: 1 },
+        { op: "modify-power-target", target: "chosen", amount: 5000, duration: "turn", targetFilter: { controller: "source-controller", cardType: "unit" }, condition: { op: "controller-face-up-g-zone-count-at-least", count: 1 } }
+      ]
+    };
   }
   function compileRevoldressEndTurnRideDefinition(cardId,abilityId,kind,printedText) {
     const exact="AUTO [VC]: At the end of your turn, choose a card with the RevolDress ability from your soul, and ride it as rest.";
@@ -2248,6 +2289,8 @@
       if (!step || !effectOperations.has(step.op) || !handler || typeof handler.validate !== "function" || typeof handler.apply !== "function") return { ok: false, reason: "unsupported-effect", index };
       if (step.ifPreviousEffectSucceeded !== undefined && (!Number.isInteger(step.ifPreviousEffectSucceeded) || step.ifPreviousEffectSucceeded < 0 || step.ifPreviousEffectSucceeded >= index)) return { ok: false, reason: "invalid-effect-dependency", index };
       if (step.ifPreviousEffectSucceeded !== undefined && (!Number.isInteger(step.ifPreviousEffectSucceeded) || step.ifPreviousEffectSucceeded < 0 || step.ifPreviousEffectSucceeded >= index)) return { ok: false, reason: "invalid-effect-dependency", index };
+      if (step.op === "modify-power-target" && step.condition !== undefined && !isSupportedEffectCondition(step.condition)) return { ok: false, reason: "unsupported-effect-condition", index };
+      if (step.op === "modify-power-target" && step.condition && !evaluateEffectCondition(step.condition, context)) continue;
       let valid = false;
       try { valid = handler.validate(step, context) === true; } catch { valid = false; }
       if (!valid) return { ok: false, reason: "invalid-effect", index };
@@ -2298,6 +2341,7 @@
       for (const step of program) {
         if (step.ifPreviousEffectSucceeded !== undefined && !results[step.ifPreviousEffectSucceeded]) { results.push(null); continue; }
         if (step.ifPreviousEffectSucceeded !== undefined && !results[step.ifPreviousEffectSucceeded]) { results.push(null); continue; }
+        if (step.op === "modify-power-target" && step.condition && !evaluateEffectCondition(step.condition, draft)) { results.push(null); continue; }
         const result = handlers[step.op].apply(step, draft);
         if (result === false) return { ok: false, reason: "effect-handler-rejected", applied: 0, results };
         results.push(result);
@@ -2822,6 +2866,7 @@
     compileActSoulCostBuffDefinition,
     compileActSourceToSoulDiscardDrawClanDefinition,
     compileActSourceToSoulOptionalFriendlyPowerDefinition,
+    compileActRcSourceSoulNormalDiscardLookDrawGZonePowerDefinition,
     compileRevoldressEndTurnRideDefinition,
     compileOwnAttackHitCounterBlastDrawWithClanDefinition,
     compileAutoLegionOwnAttackHitDrawDefinition,
@@ -3629,5 +3674,5 @@
     if (subject === "any") return true;
     return false;
   }
-  return Object.freeze({ createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, countGenerationBreakUnits, parseCardAbilities, parseCardAbilitiesCached, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, canPayAbilityCosts, evaluateAutoCostPayment, registerAbilityDefinitions, getReviewedAbilityDefinitionsForCard, registerCardAbilityKeywordIndex, getCardAbilityKeywords, compileVanguardTopFiveKeywordSearchDefinition, compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition, compileActRcSoulBlastThreeDrawDefinition, compileAutoRcPlacementChooseFriendlyPowerDefinition, compileRearGuardVanguardAttackSacrificeDrawPowerDefinition, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, evaluateContinuousGrade, expireTurnModifiers, compileAutoTrigger, isManuallyActivatable, autoAbilityReadiness, canActivateManualAbility, abilityUsageKey, validateAbilityChoices, canDeclineAbility, matchesTargetFilter, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, createRideGameEvent, claimGameEvent, claimAbilityTrigger, validateRemoteRequest, validateRemoteActionRequest, canResolveAbilitySource, abilitySourceZoneAtResolution, payAbilityCosts, validateAbilityDecision, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, claimRemoteRequest, eventSubjectMatches, recordAttackCount, getAttackCount, getPlayerAttackCount, retireHollowedUnitsAtTurnEnd, retireChargingUnitsAtBattleEnd, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, canCallCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance, prunePendingAbilitiesWithConsumedUsage });
+  return Object.freeze({ createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, countGenerationBreakUnits, parseCardAbilities, parseCardAbilitiesCached, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, evaluateEffectCondition, canPayAbilityCosts, evaluateAutoCostPayment, registerAbilityDefinitions, getReviewedAbilityDefinitionsForCard, registerCardAbilityKeywordIndex, getCardAbilityKeywords, compileVanguardTopFiveKeywordSearchDefinition, compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition, compileActRcSoulBlastThreeDrawDefinition, compileAutoRcPlacementChooseFriendlyPowerDefinition, compileRearGuardVanguardAttackSacrificeDrawPowerDefinition, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, evaluateContinuousGrade, expireTurnModifiers, compileAutoTrigger, isManuallyActivatable, autoAbilityReadiness, canActivateManualAbility, abilityUsageKey, validateAbilityChoices, canDeclineAbility, matchesTargetFilter, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, createRideGameEvent, claimGameEvent, claimAbilityTrigger, validateRemoteRequest, validateRemoteActionRequest, canResolveAbilitySource, abilitySourceZoneAtResolution, payAbilityCosts, validateAbilityDecision, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, claimRemoteRequest, eventSubjectMatches, recordAttackCount, getAttackCount, getPlayerAttackCount, retireHollowedUnitsAtTurnEnd, retireChargingUnitsAtBattleEnd, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, canCallCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance, prunePendingAbilitiesWithConsumedUsage });
 });
