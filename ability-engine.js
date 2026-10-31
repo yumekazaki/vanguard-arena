@@ -1384,10 +1384,10 @@
   function compileClanCounterBlastAttackPowerDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
     const text = normalizePrintedText(printedText);
-    const match = text.match(/^AUTO\s*\[VC\/RC\]:\s*\[Counter Blast (\d+)-«([^»]+)»\]\s*When this unit attacks, if you have an? «([^»]+)» vanguard, you may pay the cost\. If you do, this unit gets power \+(\d+) until (?:the )?end of that battle\.$/i);
+    const match = text.match(/^AUTO\s*\[VC\/RC\]:\s*\[Counter Blast (\d+)\s*-\s*«([^»]+)»\]\s*When this unit attacks, if you have an? «([^»]+)» vanguard, you may pay the cost\. If you do, this unit gets power \+(\d+) until (?:the )?end of that battle\.$/i);
     if (!match || match[2].trim().toLowerCase() !== match[3].trim().toLowerCase()) return null;
     const clan = match[2].trim();
-    return { id: abilityId, cardId, kind, printedText, optional: true, choicesReviewed: true,
+    return { id: abilityId, cardId, kind, printedText, optional: true, conditionsReviewed: true, costsReviewed: true, choicesReviewed: true,
       requiredLocation: ["vanguard", "rear-guard"],
       trigger: { status: "recognized-trigger", eventType: "unit.attacked", subject: "source", turnRelation: "any", circles: ["vanguard", "rear-guard"] },
       conditions: [{ type: "controller-vanguard-has-clan", value: clan }],

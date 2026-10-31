@@ -112319,6 +112319,22 @@
     source: { dataset: "Bushiroad official card list", snapshotDate: "2026-10-30", officialReference: "https://en.cf-vanguard.com/cardlist/", rulesReference: "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf", patternId: "auto-rc-main-phase-race-top-three-memory-v1", review: "Exact shared AUTO on five Quintuplet units. It triggers only when this exact card enters an RC during its controller's Main Phase while that controller has a Vanguard with race Quintuplet. The controller privately chooses zero or one matching card among the top three; a chosen card enters the existing Order Zone, which Comprehensive Rules 4.52 §17.14.1 identifies as memory for effects, then the remaining looked cards are shuffled back. Only this AUTO is represented; each card's separate CONT ability is reviewed independently." },
     effects: [{ op: "put-top-up-to-one-filtered-in-order-zone", target: "controller", lookCount: 3, maximum: 1, filter: { race: "Quintuplet" }, destination: "memory", shuffle: true }]
   });
+  const clanCounterBlastAttackPowerCards = [
+    ["cfa-1140", "Genesis"], ["cfa-1159", "Royal Paladin"],
+    ["cfa-1170", "Narukami"], ["cfa-1187", "Spike Brothers"]
+  ];
+  for (const [cardId, clan] of clanCounterBlastAttackPowerCards) definitions.push({
+    id: `${cardId}:0`, cardId, kind: "AUTO",
+    printedText: `AUTO [VC/RC]: [Counter Blast 1 - «${clan}»] When this unit attacks, if you have a «${clan}» vanguard, you may pay the cost. If you do, this unit gets power +4000 until the end of that battle.`,
+    optional: true, requiredLocation: ["vanguard", "rear-guard"],
+    trigger: { status: "recognized-trigger", eventType: "unit.attacked", subject: "source", turnRelation: "any", circles: ["vanguard", "rear-guard"] },
+    conditions: [{ type: "controller-vanguard-has-clan", value: clan }],
+    conditionsReviewed: true,
+    costs: [{ type: "counter-blast", count: 1, filter: { clan } }],
+    costsReviewed: true, choicesReviewed: true,
+    source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-own-attack-clan-counter-blast-power-battle-v1", review: "Exact AUTO. This exact source attacks from VC or RC, its controller has the printed-clan Vanguard, may pay one Counter Blast using a face-up damage card of the printed clan, and gives only this source +4000 for that battle." },
+    effects: [{ op: "modify-power", target: "source", amount: 4000, duration: "battle" }]
+  });
   const dragontreeGcShieldIds = ["cfa-13498", "cfa-13566", "cfa-13607", "cfa-13609", "cfa-13638"];
   const dragontreeGcShieldText = 'AUTO: When this unit is put on GC, if your RC has a Dragontree marker, until end of that battle, this unit gets "AUTO: When this unit is retired from GC, you may put this card into soul." and shield +5000.';
   for (const cardId of dragontreeGcShieldIds) {

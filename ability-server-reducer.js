@@ -492,21 +492,42 @@
   }
 
   function isExactClanCounterBlastAttackPowerAbility(ability) {
-    const expected = new Map([["cfa-1123", "Gold Paladin"], ["cfa-1234", "Bermuda Triangle"], ["cfa-1301", "Angel Feather"], ["cfa-1409", "Shadow Paladin"], ["cfa-1429", "Pale Moon"], ["cfa-1509", "Link Joker"], ["cfa-1521", "Dark Irregulars"], ["cfa-1604", "Nova Grappler"], ["cfa-1642", "Great Nature"], ["cfa-1669", "Kagero"], ["cfa-1758", "Neo Nectar"]]);
+    const expected = new Map([["cfa-1123", "Gold Paladin"], ["cfa-1234", "Bermuda Triangle"], ["cfa-1301", "Angel Feather"], ["cfa-1409", "Shadow Paladin"], ["cfa-1429", "Pale Moon"], ["cfa-1509", "Link Joker"], ["cfa-1521", "Dark Irregulars"], ["cfa-1604", "Nova Grappler"], ["cfa-1642", "Great Nature"], ["cfa-1669", "Kagero"], ["cfa-1758", "Neo Nectar"], ["cfa-1140", "Genesis"], ["cfa-1159", "Royal Paladin"], ["cfa-1170", "Narukami"], ["cfa-1187", "Spike Brothers"]]);
     const definition = ability?.definition, cardId = String(ability?.cardId || ""), clan = expected.get(cardId);
-    const printed = String(definition?.printedText || ability?.printedText || "").replace(/[’]/g, "'").replace(/\s+/g, " ").trim();
-    const ending = cardId === "cfa-1123" ? "the end of that battle" : "end of that battle";
+    const printed = String(definition?.printedText || ability?.printedText || "").replace(/[’]/g, "'").replace(/\s+/g, " ").replace(/(Counter Blast\s+\d+)\s*-\s*«/i, "$1-«").trim();
+    const ending = ["cfa-1123", "cfa-1140", "cfa-1159", "cfa-1170", "cfa-1187"].includes(cardId) ? "the end of that battle" : "end of that battle";
     const article = /^[aeiou]/i.test(clan || "") ? "an" : "a";
     const expectedText = `AUTO [VC/RC]: [Counter Blast 1-«${clan || ""}»] When this unit attacks, if you have ${article} «${clan || ""}» vanguard, you may pay the cost. If you do, this unit gets power +4000 until ${ending}.`;
     return Boolean(clan && ability?.kind === "AUTO" && definition?.kind === "AUTO" && ability.id === `${cardId}:0` &&
+      definition.id === ability.id && String(definition.cardId) === cardId &&
       definition?.source?.patternId === "auto-own-attack-clan-counter-blast-power-battle-v1" && printed === expectedText &&
-      ability.trigger?.eventType === "unit.attacked" && ability.trigger?.subject === "source" &&
+      ability.trigger?.status === "recognized-trigger" && ability.trigger?.eventType === "unit.attacked" && ability.trigger?.subject === "source" && ability.trigger?.turnRelation === "any" &&
+      JSON.stringify(ability.trigger?.circles || []) === JSON.stringify(["vanguard", "rear-guard"]) &&
       JSON.stringify(ability.requiredLocation || []) === JSON.stringify(["vanguard", "rear-guard"]) &&
       JSON.stringify(ability.conditions || []) === JSON.stringify([{ type: "controller-vanguard-has-clan", value: clan }]) &&
       JSON.stringify(ability.costs || []) === JSON.stringify([{ type: "counter-blast", count: 1, filter: { clan } }]) &&
       definition?.optional === true && definition?.choicesReviewed === true && definition.effects?.length === 1 &&
       definition.effects[0]?.op === "modify-power" && definition.effects[0]?.target === "source" &&
       Number(definition.effects[0]?.amount) === 4000 && definition.effects[0]?.duration === "battle");
+  }
+
+  function clanCounterBlastAttackPowerEventMatches(state, ability, source, located, event, actorPlayerId, side, engine, revalidateCondition = true) {
+    if (!isExactClanCounterBlastAttackPowerAbility(ability) || !source || !located || !event) return false;
+    const attack = state?.pendingAttack;
+    if (event.type !== "unit.attacked" || event.phase !== "battle" || event.timingWindow !== "attack-declared" ||
+        event.turnPlayerId !== actorPlayerId || event.sourceOwnerPlayerId !== located.ownerPlayerId || event.sourceCardInstanceId !== source.uid ||
+        event.subjectCardInstanceId !== source.uid || event.sourceControllerPlayerId !== actorPlayerId ||
+        event.subjectControllerPlayerId !== actorPlayerId || event.actingPlayerId !== actorPlayerId ||
+        !Array.isArray(event.attackingCardInstanceIds) || !event.attackingCardInstanceIds.includes(source.uid) ||
+        event.battleId == null || attack?.battleId !== event.battleId || attack?.attackerUid !== source.uid ||
+        attack?.attackerSide !== side || attack?.attackerPlayerId !== actorPlayerId ||
+        attack?.attackerZone !== (event.currentLocation || event.circle || located.circle || located.zone) ||
+        attack?.targetUid == null || !Array.isArray(event.targetCardInstanceIds) || !event.targetCardInstanceIds.includes(attack.targetUid) ||
+        event.targetLocation !== attack.targetZone ||
+        !["vanguard", "rear-guard"].includes(located.zone) || located.controllerPlayerId !== actorPlayerId) return false;
+    if (!revalidateCondition) return true;
+    const conditionContext = buildConditionContext(state, event, located, engine);
+    return Boolean(conditionContext && engine.evaluateAbilityConditions(ability, conditionContext));
   }
 
   function isExactClanDiscardOwnAttackPowerAbility(ability) {
@@ -5974,6 +5995,17 @@
       : pending.field || sourceZone;
     const authoritativeTriggerEvent = authoritativeSoulBlastBoostEvent(state, ability, triggerEvent, engine);
     if (!engine.eventMatchesAbilityTrigger(ability, triggerContext.event, authoritativeTriggerEvent, located.instance.uid, eventSourceZone, triggerContext.subjectZone || triggerEvent.currentLocation, actorPlayerId)) return reject("trigger-event-mismatch");
+    if (isExactClanCounterBlastAttackPowerAbility(ability)) {
+      if (!clanCounterBlastAttackPowerEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, side, engine, command.payload.accept === true)) return reject("clan-counter-blast-attack-context-invalid");
+      if (command.payload.accept) {
+        const controller = state.players?.[side];
+        if (!engine.canPayAbilityCosts(ability, {
+          faceUpDamage: (controller?.damage || []).filter(card => !card.faceDown).length,
+          faceUpDamageCards: (controller?.damage || []).filter(card => !card.faceDown),
+          cardDefinitionForInstance: serverCardDefinition
+        })) return reject("unpayable-cost");
+      }
+    }
     if (ability.definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN &&
         !personaShieldAutoEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, side, engine)) return reject("persona-shield-trigger-context-invalid");
     if(ability.definition?.source?.patternId==="auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1"){
