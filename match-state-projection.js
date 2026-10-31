@@ -10,12 +10,13 @@
 
   function hidePrivateZones(match, sides, zones = PRIVATE_ZONES) {
     if (!match || !match.players || !Array.isArray(sides) || !Array.isArray(zones)) return match;
+    if (match.revealed?.private && sides.includes(match.revealed.owner)) match.revealed = null;
     for (const side of sides) {
       const player = match.players[side];
       if (!player) continue;
       for (const zone of zones) {
         if (!PRIVATE_ZONES.includes(zone) || !Array.isArray(player[zone])) continue;
-        player[zone] = player[zone].map((_, index) => ({
+        player[zone] = player[zone].map((card, index) => zone === "gDeck" && card?.faceUp === true ? card : ({
           uid: `hidden-${side}-${zone}-${index}`,
           cardId: null,
           faceDown: true
