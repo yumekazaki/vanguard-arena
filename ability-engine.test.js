@@ -395,7 +395,7 @@ test("ability cost payment validates atomically, records usage, and emits exact 
   const player={playerId:"p1",vanguard:{uid:"vg"},rear:[source],hand:[discard],soul:[soulBlast],damage:[damage],drop:[],usedAbilities:[]};
   const ability={id:"paid-skill",once:true,costs:[{type:"counter-blast",count:1},{type:"soul-blast",count:1},{type:"discard",count:1},{type:"source-to-soul",count:1},{type:"rest-source",count:1}]};
   const events=[],selection={cb:["damage"],sb:["soul-blast"],discard:["discard"]};
-  assert.deepEqual(payAbilityCosts(ability,{player,source,sourceZone:"rear-left",turnId:3,actorPlayerId:"p1",side:"human",emitEvent:event=>events.push(event)},selection),{ok:true,usageKey:"3:p1:source:paid-skill",paid:{counterBlast:1,soulBlast:1,discard:1,sourceToSoul:1,sourceToBottomDeck:0,restSource:1,sourceBind:0,bindHealFromDrop:0}});
+  assert.deepEqual(payAbilityCosts(ability,{player,source,sourceZone:"rear-left",turnId:3,actorPlayerId:"p1",side:"human",emitEvent:event=>events.push(event)},selection),{ok:true,usageKey:"3:p1:source:paid-skill",paid:{counterBlast:1,soulBlast:1,discard:1,retiredRearGuard:0,sourceToSoul:1,sourceToBottomDeck:0,restSource:1,sourceBind:0,bindHealFromDrop:0}});
   assert.equal(damage.faceDown,true);
   assert.deepEqual(player.soul.map(card=>card.uid),["source"]);
   assert.deepEqual(player.drop.map(card=>card.uid),["soul-blast","discard"]);
@@ -666,7 +666,7 @@ test("legacy Limit Break text with conflicting thresholds stays unsupported", ()
   const restDiscard = parseCardAbilities({ id: "cfa-19", name: "Witch of Nostrum, Arianrhod", text: "ACT [VC/RC]: [Rest this unit & Choose a card from your hand, and discard it] Draw a card." })[0];
   assert.equal(restDiscard.definition.source.patternId, "act-rest-discard-draw-v1");
   assert.equal(restDiscard.costStatus, "supported-cost");
-  assert.deepEqual(restDiscard.costs, [{ type: "discard", count: 1 }, { type: "rest-source", count: 1 }]);
+  assert.deepEqual(restDiscard.costs, [{ type: "rest-source", count: 1 }, { type: "discard", count: 1 }]);
   assert.deepEqual(restDiscard.definition.effects, [{ op: "draw", count: 1 }]);
   assert.deepEqual(restDiscard.requiredLocation, ["vanguard", "rear-guard"]);
 
