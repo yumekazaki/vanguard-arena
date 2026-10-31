@@ -1501,6 +1501,7 @@
   SERVER_EFFECT_OPS.add("soul-charge-and-return-source-to-deck");
   SERVER_EFFECT_OPS.add("put-top-up-to-one-filtered-in-order-zone");
   SERVER_EFFECT_OPS.add("grant-battle-gc-retire-to-soul");
+  SERVER_EFFECT_OPS.add("continuous-power-per-face-up-g-zone-card");
   const CLAN_PLACEMENT_DAMAGE_RETURN = Object.freeze(["cfa-187","cfa-208","cfa-279","cfa-295","cfa-458","cfa-466","cfa-712","cfa-719","cfa-749","cfa-762","cfa-798","cfa-816","cfa-841","cfa-858","cfa-938","cfa-943","cfa-959","cfa-965","cfa-978","cfa-980","cfa-995","cfa-999","cfa-1057","cfa-1332","cfa-1333","cfa-1378","cfa-1379","cfa-1383","cfa-1384","cfa-1445","cfa-1570","cfa-1722","cfa-1723","cfa-1891","cfa-1892","cfa-1903"]);
   const QUICK_SHIELD_RIDE_TEXT = "AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.";
   const RODE_UPON_NAMED_VANGUARD_CRESTS = Object.freeze({
@@ -3871,8 +3872,11 @@
   }
 
   function serverReviewedAbilities(instance, engine) {
-    const definitions = engine.getReviewedAbilityDefinitionsForCard?.(instance?.cardId) || [];
-    const reviewed = definitions.map(definition => parseReviewedDefinition(instance, definition, engine)).filter(Boolean);
+    const resolvedCrestCardId = engine.resolveCrestAbilityCardId?.(instance);
+    const definitionCardId = resolvedCrestCardId || instance?.cardId;
+    const definitionInstance = resolvedCrestCardId && resolvedCrestCardId !== instance?.cardId ? { ...instance, cardId: resolvedCrestCardId } : instance;
+    const definitions = engine.getReviewedAbilityDefinitionsForCard?.(definitionCardId) || [];
+    const reviewed = definitions.map(definition => parseReviewedDefinition(definitionInstance, definition, engine)).filter(Boolean);
     const byId = new Map(reviewed.map(ability => [ability.id, ability]));
     for (const ability of authoritativePaidOwnAttackAbilities(instance?.cardId, engine)) if (!byId.has(ability.id)) byId.set(ability.id, ability);
     for (const ability of authoritativeRetireRearGuardAttackAbilities(instance?.cardId, engine)) if (!byId.has(ability.id)) byId.set(ability.id, ability);
@@ -3933,10 +3937,10 @@
       opponentGZoneCardCount: (opponent?.gZone || []).length,
       opponentFaceUpGZoneCardCount: (opponent?.gZone || []).filter(card => card?.faceUp === true).length,
       controllerVanguardGrade: Number(player.vanguard?.grade ?? -1),
-      controllerVanguardCardNames: engine.getCardNames?.({id:String(player.vanguard?.cardId||""),name:String(player.vanguard?.cardName||"")},{location:"vanguard"}) || [],
+      controllerVanguardCardNames: [...new Set([...(engine.getCardNames?.({id:String(player.vanguard?.cardId||""),name:String(player.vanguard?.cardName||"")},{location:"vanguard"}) || []), ...(player.vanguard?.strideHeart ? (engine.getCardNames?.({id:String(player.vanguard.strideHeart.cardId||""),name:String(player.vanguard.strideHeart.cardName||player.vanguard.strideHeart.name||"")},{location:"vanguard"}) || [player.vanguard.strideHeart.cardName||player.vanguard.strideHeart.name].filter(Boolean)) : [])])],
       controllerVanguardClans: engine.getCardClans?.(serverCardDefinition(player.vanguard)) || [],
       cardDefinitionForInstance: serverCardDefinition,
-      normalOrderPlayedThisTurn: state.side === side && Number(state.ordersPlayedThisTurn || 0) > 0,
+      controllerGZoneCards: (player.gZone || []).filter(card => card && typeof card.uid === "string").map(card => ({ uid: card.uid, faceUp: card.faceUp === true })),      normalOrderPlayedThisTurn: state.side === side && Number(state.ordersPlayedThisTurn || 0) > 0,
       orderPlayedThisTurn: state.side === side && Number(state.ordersPlayedThisTurn || 0) > 0,
       controllerDamageCount: (player.damage || []).length,
       opponentTriggerRevealedThisTurn: player.opponentTriggerRevealedThisTurn === true,
@@ -3948,6 +3952,19 @@
     };
     const ownAbilities = serverReviewedAbilities(instance, engine);
     let power = engine.evaluateContinuousEffects(ownAbilities, { ...common, location, sourceInstanceId: instance.uid, targetInstanceId: instance.uid }).power;
+    const targetLocation = engine.locateCardInstance(state, instance.uid);
+    const targetCircle = targetLocation?.circle || instance.circle || (location === "vanguard" ? "vanguard" : null);
+    if (targetLocation && !targetLocation.ambiguous && targetLocation.side === side && targetLocation.controllerPlayerId === player.playerId) for (const crest of player.crests || []) {
+      if (!crest?.uid || crest.controllerPlayerId && crest.controllerPlayerId !== player.playerId) continue;
+      const crestLocation = engine.locateCardInstance(state, crest.uid);
+      if (!crestLocation || crestLocation.ambiguous || crestLocation.zone !== "crest" || crestLocation.side !== side || crestLocation.instance !== crest) continue;
+      const crestAbilities = serverReviewedAbilities(crest, engine);
+      if (!crestAbilities.length) continue;
+      power += engine.evaluateContinuousEffects(crestAbilities, {
+        ...common, sourceLocation: "crest", sourceCardId: engine.resolveCrestAbilityCardId?.(crest) || String(crest.cardId), targetCircle,
+        sourceInstanceId: crest.uid, targetInstanceId: instance.uid
+      }).power;
+    }
     if (instance.hasAbilities !== false) return power;
     const sources = [
       ...(player.vanguard ? [{ instance: player.vanguard, location: "vanguard", faceUp: player.vanguard.faceUp !== false }] : []),

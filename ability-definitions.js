@@ -112407,6 +112407,16 @@
     const definition = root?.VanguardAbilityEngine?.compileRideSourceTopSevenTwoNameSearchDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
     if (definition) definitions.push(definition);
   }
+  const crestFrontRowGZonePowerTexts = [
+    ["cfa-10476", 'CONT: During your turn, if you have a grade 3 or greater vanguard with "Chronojet" in its card name, all of your front row units get power +5000 for each face up card in your G Zone.'],
+    ["cfa-10668", 'CONT: During your turn, if you have a grade 3 or greater vanguard with "Messiah" in its card name, all of your front row units get power +5000 for each face up card in your G zone.'],
+    ["cfa-12183", 'CONT: During your turn, if you have a grade 3 or greater vanguard with "Luard" in its card name, all of your front row units get power +5000 for each face up card in your G zone.'],
+    ["cfa-13177", 'CONT: During your turn, if you have a grade 3 or greater vanguard with "Nightrose" in its card name, all of your front row units get power +5000 for each face up card in your G zone.'],
+    ["cfa-13186", 'CONT: During your turn, if you have a grade 3 or greater vanguard with "Harri" in its card name, all of your front row units get power +5000 for each face up card in your G zone.']
+  ];
+  for (const [cardId, printedText] of crestFrontRowGZonePowerTexts) {
+    const definition = root?.VanguardAbilityEngine?.compileCrestFrontRowFaceUpGZonePowerDefinition?.(cardId, `${cardId}:2`, "CONT", printedText);    if (definition) definitions.push(definition);
+  }
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
 })(typeof globalThis === "undefined" ? this : globalThis);
