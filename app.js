@@ -29,7 +29,7 @@
   const importedCardIds = new Set(importedCatalog.map(card => card.id));
   const cardList = importedCatalog.length ? [...importedCatalog, ...userCards] : [...sampleCards, ...userCards];
   const cardMap = new Map(cardList.map((c) => [c.id, c]));
-  window.ArenaInspector?.setCatalog(cardList);
+
   const cardArtByDatabaseId = new Map(cardList.filter((c) => Number.isFinite(Number(c.dbId))).map((c) => [Number(c.dbId), c.image]));
   const upstreamCardArtBase = "https://raw.githubusercontent.com/justkidding047356/cardfight-area/c2a5aad1f1e348500f1942a890c7e39a95953719";
   function artThumbnailUrl(id) {
@@ -42,9 +42,10 @@
     if (image) return image;
     return Number(id) > 10504 ? `${upstreamCardArtBase}/CardSprite/n${id}.jpg` : `assets/cards/full/n${id}.jpg`;
   }
-  cardMap.set("token-quick-shield", { id: "token-quick-shield", name: "Quick Shield", grade: 0, nation: "Token", power: 0, shield: 5000, type: "Quick Shield Token", text: "Provides 5,000 shield when used to guard.", color: "#a39bff", glyph: "◇", source: "Vanguard Arena token" });
-  cardMap.set("token-guardian-shield", { id: "token-guardian-shield", name: "Guardian Shield", grade: 0, nation: "Token", power: 0, shield: 2000, type: "Guardian Shield Token", text: "Provides 2,000 shield when used to guard.", color: "#89d4ee", glyph: "◇", source: "Vanguard Arena token" });
-  cardMap.set("token-protect", { id: "token-protect", name: "Protect Marker", grade: 0, nation: "Token", power: 0, shield: 0, type: "Protect Marker", text: "When used to guard, discard one other card from your hand to completely stop the attack.", color: "#81d9ee", glyph: "◇", source: "Vanguard Arena token" });
+  cardMap.set("token-quick-shield", { id: "token-quick-shield", image: "assets/ui/tokens/quick-shield.jpg", name: "Quick Shield", grade: 0, nation: "Token", power: 0, shield: 5000, type: "Quick Shield Token", text: "Provides 5,000 shield when used to guard.", color: "#a39bff", glyph: "◇", source: "Vanguard Arena token" });
+  cardMap.set("token-guardian-shield", { id: "token-guardian-shield", image: "assets/ui/tokens/guardian-shield.webp", name: "Guardian Shield", grade: 0, nation: "Token", power: 0, shield: 2000, type: "Guardian Shield Token", text: "Provides 2,000 shield when used to guard.", color: "#89d4ee", glyph: "◇", source: "Vanguard Arena token" });
+  cardMap.set("token-protect", { id: "token-protect", image: "assets/ui/tokens/protect.webp", name: "Protect Marker", grade: 0, nation: "Token", power: 0, shield: 0, type: "Protect Marker", text: "When used to guard, discard one other card from your hand to completely stop the attack.", color: "#81d9ee", glyph: "◇", source: "Vanguard Arena token" });
+  window.ArenaInspector?.setCatalog([...cardMap.values()]);
   const artIds = Array.isArray(window.CARD_ART_IDS) ? window.CARD_ART_IDS : [];
   const isUnitCard = (card) => /\b(?:unit|trigger)\b/i.test(card?.type || "");
   const gradeOf = (card, fallback = -1) => card?.grade !== null && card?.grade !== undefined && Number.isFinite(Number(card.grade)) ? Number(card.grade) : fallback;
@@ -691,7 +692,7 @@
   }
   function addLog(message) { if (!match) return; match.log.unshift({ time: new Date(), message }); match.log = match.log.slice(0, 15); renderLog(); }
   function renderLog() { if (!match) return; $("#match-log").innerHTML = match.log.map((entry) => `<div class="log-entry"><time>${entry.time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</time><span>${escapeHtml(entry.message)}</span></div>`).join(""); }
-  function setMessage(message) { $("#table-message").textContent = message; }
+  function setMessage(message) { $("#table-message").textContent = message; $("#table-message").hidden = Boolean(match && message === phases[match.phase] + " phase."); }
   function updateOnlineChat() {
     window.VanguardTableChat?.controller?.setSession({
       role: online.role, sessionId: online.publicRoomCode || online.roomId || "",
@@ -930,6 +931,9 @@
     const driveButton=$("[data-manual-action='drive-check']");if(driveButton){driveButton.disabled=true;driveButton.hidden=true;}
     $("#end-turn").disabled = !canAct;
     $("#advance-phase").disabled = !canAct;
+    $("#center-phase-label").textContent = phases[match.phase] + " phase";
+    $("#center-next-phase").disabled = !canUseCenterPhase();
+    window.VanguardHand?.syncDefense(handDefenseState());
     $$(".manual-actions [data-manual-action]").forEach((button) => { button.disabled = !canAct; });
     $$(".quick-control-row [data-manual-action]").forEach((button) => { button.disabled = !canAct; });
     const gAssistButton = $("[data-manual-action='g-assist']"); if (gAssistButton) gAssistButton.hidden = !(canAct && match.side === "human" && match.phase === 1 && canGAssist(match.players.human));
@@ -1646,6 +1650,25 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       checkDamageEnd(side);
     }
     if(match&&!match.pendingTrigger&&!match.pendingDamageQueue?.length&&match.pendingHitResolution){const hit=match.pendingHitResolution;match.pendingHitResolution=null;queueAbilityPrompts("hit",hit.attackerSide,hit.attackerUid,{targetZone:hit.targetZone,targetUid:hit.targetUid,boostUid:hit.boostUid,battleId:hit.battleId,timingWindow:"vanguard-hit-after-damage-checks"});resolvePendingBattleEnd();resumeAbilityQueue();}
+  }
+  function canUseCenterPhase() {
+    return Boolean(match && !match.ended && online.role !== "watcher" && !match.practiceOpeningChoicePending && match.side === "human" && !match.preMatch && !match.pendingAttack && !match.pendingTurnEnd && !match.pendingAbility && !match.pendingAbilities?.length && !match.pendingTrigger && !online.remoteRequestPending);
+  }
+  function handDefenseState() {
+    const attack = match?.pendingAttack;
+    const active = Boolean(match && !match.ended && online.role !== "watcher" && attack?.defenderSide === "human" && !attack.defenderDone && !attack.driveCountPrompt);
+    return { active, canFinish: active && !match.pendingAbility && !match.pendingAbilities?.length && !match.pendingTrigger && !match.pendingProtectGuard && !online.remoteRequestPending };
+  }
+  function openGuardHand() {
+    if (!handDefenseState().active) return;
+    window.VanguardHand?.syncDefense(handDefenseState());
+    window.VanguardHand?.open({ guarding: true });
+  }
+  function guardFromHand(uid) {
+    if (!handDefenseState().canFinish || !match.players.human.hand.some(card => card.uid === uid)) return;
+    match.selected = uid;
+    performOnlineAction("guard");
+    window.VanguardHand?.syncDefense(handDefenseState());
   }
   function humanGuard() {
     if (!match?.pendingAttack) return;
@@ -2810,7 +2833,10 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#copy-spectate").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("#spectate-link").value); toast("Spectator link copied."); } catch { $("#spectate-link").select(); document.execCommand("copy"); toast("Spectator link copied."); } });
   $("#new-match").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#empty-start").addEventListener("click", () => { endOnlineSession(); openPracticeSetup(); }); $("#practice-start-confirm").addEventListener("click", () => { const firstSide = $("#practice-first-player").value; $("#practice-setup-dialog").close(); startMatch(null, firstSide); }); $("#reset-match").addEventListener("click", newMatchButton);
   $("#reconnect-match")?.addEventListener("click", reconnectOnlineMatch);
-  $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", () => performOnlineAction("guard")); $("#finish-attack").addEventListener("click", () => performOnlineAction("finishAttack")); $("#intercept-card").addEventListener("click", () => performManualAction("intercept")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
+  $("#center-next-phase").addEventListener("click", () => { if (canUseCenterPhase()) performOnlineAction("advance"); });
+  document.addEventListener("arena:guard-card", event => guardFromHand(event.detail?.uid));
+  document.addEventListener("arena:done-guarding", () => { if (handDefenseState().canFinish) performOnlineAction("noGuard"); });
+  $("#draw-card").addEventListener("click", () => performOnlineAction("draw")); $("#ride-card").addEventListener("click", () => performOnlineAction("ride")); $("#call-card").addEventListener("click", () => performOnlineAction("call")); $("#attack-card").addEventListener("click", () => performOnlineAction("attack")); $("#guard-card").addEventListener("click", openGuardHand); $("#finish-attack").addEventListener("click", () => performOnlineAction("finishAttack")); $("#intercept-card").addEventListener("click", () => performManualAction("intercept")); $("#play-order").addEventListener("click", () => performManualAction("play-order")); $("#end-turn").addEventListener("click", () => performOnlineAction("endTurn")); $("#advance-phase").addEventListener("click", () => performOnlineAction("advance"));
   $$("[data-manual-action]").forEach((button) => button.addEventListener("click", () => performManualAction(button.dataset.manualAction)));
   $("#power-change-apply").addEventListener("click", () => { const value = Number($("#power-change-value").value); if (!Number.isFinite(value)) { toast("Enter a valid power amount."); return; } $("#power-input-dialog").close(); performManualAction(`set-power:${value}`); });
   $("#public-reveal-close").addEventListener("click", () => performManualAction("public-reveal-close"));
@@ -2886,7 +2912,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#stride-cost-confirm").addEventListener("click",()=>performManualAction("stride-confirm"));
   ["#stride-cost-cancel","#stride-cost-cancel-button"].forEach((selector)=>$(selector).addEventListener("click",()=>performManualAction("stride-cancel")));
   $("#attack-choice-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
-  $("#battle-action-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-battle-action]");if(!button)return;const action=button.dataset.battleAction;if(action==="g-guard"||action==="intercept")performManualAction(action);else performOnlineAction(action);});
+  $("#battle-action-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-battle-action]");if(!button)return;const action=button.dataset.battleAction;if(action==="guard")openGuardHand();else if(action==="g-guard"||action==="intercept")performManualAction(action);else performOnlineAction(action);});
   window.addEventListener("resize",renderAttackArrow);
   $("#protect-discard-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-protect-cost]");if(!button)return;const marker=$("#protect-discard-dialog").dataset.markerUid;$("#protect-discard-dialog").close();performManualAction(`guard-perfect:${marker}:${button.dataset.protectCost}`);});
   $("#intercept-card-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-intercept-uid]");if(!button)return;$("#intercept-dialog").close();performManualAction(`intercept:${button.dataset.interceptUid}`);});

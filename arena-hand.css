@@ -40,3 +40,16 @@ body.hand-menu-open { overflow:hidden; }
 @media(max-width:600px) { body #hand-drawer { width:calc(100vw - 16px); top:auto; bottom:8px; padding:18px 12px 12px; border-radius:20px; } #hand-drawer .hand-heading { gap:10px; } .hand-drawer-tools { gap:10px; } #hand-drawer .text-button { font-size:9px; } .hand-fan-hint { font-size:11px; line-height:1.6; } #hand-drawer #hand-cards { height:290px; min-height:290px; } #hand-drawer #hand-cards>.game-card-wrap { top:42px; } #hand-drawer .hand-management>.muted-text { display:none; } #hand-drawer .hand-management .button { font-size:10px; min-height:38px; } .hand-launcher { margin:10px 0 14px; } }
 @media(hover:none) { #hand-drawer #hand-cards .card-zoom { opacity:1; } }
 @media(prefers-reduced-motion:reduce) { #hand-drawer,#hand-drawer *, .hand-scrim,.hand-open-button { animation:none!important; transition:none!important; } }
+/* Local phase shortcut and defense-only hand controls. */
+#match-layout .center-divider { min-height:44px; height:auto; gap:12px; padding:6px 12px; }
+#match-layout .center-phase-controls { display:flex; align-items:center; gap:10px; flex:none; }
+#center-phase-label { font:600 10px var(--mono); color:#e0edff; white-space:nowrap; }
+#match-layout #center-next-phase { min-height:29px; padding:5px 10px; border:1px solid #a2d0ff70; border-radius:7px; background:linear-gradient(120deg,#224e74,#383369); color:#eff8ff; font-size:10px; white-space:nowrap; }
+#match-layout #center-next-phase:disabled { opacity:.38; }
+#match-layout #table-message { min-width:0; flex:1; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; color:#aabdd8; font-size:9px; }
+#match-layout .center-turn-label { flex:none; white-space:nowrap; }
+#hand-done-guarding[hidden] { display:none!important; }
+#hand-done-guarding { min-height:38px; font-size:12px; }
+@media(max-width:600px) { #match-layout #table-message { display:none; } #match-layout .center-divider { gap:6px; padding:6px; } #match-layout .center-phase-controls { gap:6px; } #center-phase-label { font-size:9px; } .hand-drawer-tools { flex-wrap:wrap; } }
+
+body.hand-menu-open #attack-arrow-layer { visibility:hidden!important; opacity:0!important; pointer-events:none!important; }
