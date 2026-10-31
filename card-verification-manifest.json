@@ -74369,8 +74369,152 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-3801",
+      "abilityId": "cfa-3801:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-rc-source-soul-discard-look-draw-gzone-power-server.test.js"
+      ],
+      "testCases": [
+        "all eight cards retain their exact two printed ACT variants and share one reviewed definition",
+        "host and joiner each pay their own costs, choose deck order, draw, and apply the gated power",
+        "without a face-up G-zone card, target choice is skipped while source cost, reorder, and draw still resolve",
+        "trigger cards cannot pay the normal-unit discard cost and invalid targets are rejected atomically",
+        "a stale or non-top deck selection, wrong phase, or forged host action is rejected without payment",
+        "server rejects modified text, cost filters, and conditional effects"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4229",
+      "abilityId": "cfa-4229:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-rc-source-soul-discard-look-draw-gzone-power-server.test.js"
+      ],
+      "testCases": [
+        "all eight cards retain their exact two printed ACT variants and share one reviewed definition",
+        "host and joiner each pay their own costs, choose deck order, draw, and apply the gated power",
+        "without a face-up G-zone card, target choice is skipped while source cost, reorder, and draw still resolve",
+        "trigger cards cannot pay the normal-unit discard cost and invalid targets are rejected atomically",
+        "a stale or non-top deck selection, wrong phase, or forged host action is rejected without payment",
+        "server rejects modified text, cost filters, and conditional effects"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4314",
+      "abilityId": "cfa-4314:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-rc-source-soul-discard-look-draw-gzone-power-server.test.js"
+      ],
+      "testCases": [
+        "all eight cards retain their exact two printed ACT variants and share one reviewed definition",
+        "host and joiner each pay their own costs, choose deck order, draw, and apply the gated power",
+        "without a face-up G-zone card, target choice is skipped while source cost, reorder, and draw still resolve",
+        "trigger cards cannot pay the normal-unit discard cost and invalid targets are rejected atomically",
+        "a stale or non-top deck selection, wrong phase, or forged host action is rejected without payment",
+        "server rejects modified text, cost filters, and conditional effects"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4540",
+      "abilityId": "cfa-4540:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-rc-source-soul-discard-look-draw-gzone-power-server.test.js"
+      ],
+      "testCases": [
+        "all eight cards retain their exact two printed ACT variants and share one reviewed definition",
+        "host and joiner each pay their own costs, choose deck order, draw, and apply the gated power",
+        "without a face-up G-zone card, target choice is skipped while source cost, reorder, and draw still resolve",
+        "trigger cards cannot pay the normal-unit discard cost and invalid targets are rejected atomically",
+        "a stale or non-top deck selection, wrong phase, or forged host action is rejected without payment",
+        "server rejects modified text, cost filters, and conditional effects"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-3870",
+      "abilityId": "cfa-3870:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-rc-source-soul-discard-look-draw-gzone-power-server.test.js"
+      ],
+      "testCases": [
+        "all eight cards retain their exact two printed ACT variants and share one reviewed definition",
+        "host and joiner each pay their own costs, choose deck order, draw, and apply the gated power",
+        "without a face-up G-zone card, target choice is skipped while source cost, reorder, and draw still resolve",
+        "trigger cards cannot pay the normal-unit discard cost and invalid targets are rejected atomically",
+        "a stale or non-top deck selection, wrong phase, or forged host action is rejected without payment",
+        "server rejects modified text, cost filters, and conditional effects"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4060",
+      "abilityId": "cfa-4060:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-rc-source-soul-discard-look-draw-gzone-power-server.test.js"
+      ],
+      "testCases": [
+        "all eight cards retain their exact two printed ACT variants and share one reviewed definition",
+        "host and joiner each pay their own costs, choose deck order, draw, and apply the gated power",
+        "without a face-up G-zone card, target choice is skipped while source cost, reorder, and draw still resolve",
+        "trigger cards cannot pay the normal-unit discard cost and invalid targets are rejected atomically",
+        "a stale or non-top deck selection, wrong phase, or forged host action is rejected without payment",
+        "server rejects modified text, cost filters, and conditional effects"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4074",
+      "abilityId": "cfa-4074:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-rc-source-soul-discard-look-draw-gzone-power-server.test.js"
+      ],
+      "testCases": [
+        "all eight cards retain their exact two printed ACT variants and share one reviewed definition",
+        "host and joiner each pay their own costs, choose deck order, draw, and apply the gated power",
+        "without a face-up G-zone card, target choice is skipped while source cost, reorder, and draw still resolve",
+        "trigger cards cannot pay the normal-unit discard cost and invalid targets are rejected atomically",
+        "a stale or non-top deck selection, wrong phase, or forged host action is rejected without payment",
+        "server rejects modified text, cost filters, and conditional effects"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4097",
+      "abilityId": "cfa-4097:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-act-rc-source-soul-discard-look-draw-gzone-power-server.test.js"
+      ],
+      "testCases": [
+        "all eight cards retain their exact two printed ACT variants and share one reviewed definition",
+        "host and joiner each pay their own costs, choose deck order, draw, and apply the gated power",
+        "without a face-up G-zone card, target choice is skipped while source cost, reorder, and draw still resolve",
+        "trigger cards cannot pay the normal-unit discard cost and invalid targets are rejected atomically",
+        "a stale or non-top deck selection, wrong phase, or forged host action is rejected without payment",
+        "server rejects modified text, cost filters, and conditional effects"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T01:46:53.663Z"
+  "evidenceUpdatedAt": "2026-10-31T02:38:03.066Z"
 }
