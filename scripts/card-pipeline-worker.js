@@ -32,7 +32,7 @@ parentPort.on("message", ({ shardId, cards, stageDirectory, evidence }) => {
         if (definition && ability.conditionStatus === "needs-review") errors.push("unmodeled-condition");
         if (definition && ability.costStatus === "needs-review") errors.push("unmodeled-cost");
         if (definition && ["AUTO", "ACT"].includes(ability.kind) && ability.choiceStatus === "needs-review") errors.push("unmodeled-choice");
-        const structuredContinuous = ability.kind === "CONT" && (definition?.keywords?.length || definition?.continuousRestrictions?.length || definition?.continuousEffects?.length);
+        const structuredContinuous = ability.kind === "CONT" && (definition?.keywords?.length || definition?.continuousRestrictions?.length || definition?.continuousEffects?.length || definition?.clanIdentityEffects?.length);
         if (definition && !definition.effects?.length && !structuredContinuous) errors.push("missing-effect-program");
         const compiled = Boolean(definition);
         const fullyVerified = record?.status === "fully-verified" && record.fullyVerified === true;

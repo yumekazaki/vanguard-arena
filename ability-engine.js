@@ -4129,7 +4129,14 @@
     if (subject === "source") return event.sourceCardInstanceId === abilitySourceInstanceId || (event.type === "unit.attacked" && (event.attackingCardInstanceIds || []).includes(abilitySourceInstanceId));
     if (subject === "event-subject") return event.subjectCardInstanceId === abilitySourceInstanceId;
     if (subject === "event-target") return (event.targetCardInstanceIds || []).includes(abilitySourceInstanceId);
-    if (subject === "ridden-unit") return (event.targetCardInstanceIds || []).includes(abilitySourceInstanceId);
+    if (subject === "ridden-unit") {
+      // Structured ride events identify the old Vanguard as the target and the new
+      // Vanguard as the event subject. Never let the rider satisfy a ridden-upon
+      // trigger when the event includes its authoritative target IDs. Keep the
+      // subject fallback for older event producers that did not record targets.
+      const riddenTargets = Array.isArray(event.targetCardInstanceIds) ? event.targetCardInstanceIds : [];
+      return riddenTargets.length ? riddenTargets.includes(abilitySourceInstanceId) : event.subjectCardInstanceId === abilitySourceInstanceId;
+    }
     if (subject === "booster") return event.boosterCardInstanceId === abilitySourceInstanceId;
     if (subject === "boosted-unit") return event.boostedCardInstanceId === abilitySourceInstanceId;
     if (subject === "any") return true;

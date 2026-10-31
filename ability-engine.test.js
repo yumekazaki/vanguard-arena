@@ -2669,6 +2669,7 @@ test("normal ride events identify the rider and exact previous Vanguard for rode
   assert.equal(event.timingWindow,"normal-ride");
   assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,ridden.uid,"vanguard",event.targetLocation,"p1"),true);
   assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,"another-copy","vanguard",event.targetLocation,"p1"),false);
+  assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,rider.uid,"vanguard",event.targetLocation,"p1"),false,"the rider is the event subject, not the ridden-upon source");
 });
 
 
