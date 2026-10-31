@@ -112367,6 +112367,17 @@
     const definition = root?.VanguardAbilityEngine?.compileOwnAttackStepPowerCriticalDefinition?.(cardId, abilityId, "AUTO", printedText);
     if (definition) definitions.push(definition);
   }
+  const rodeUponNamedVanguardCrestTexts = [
+    ["cfa-10475", 'AUTO: When this unit is placed by riding from "Chrono Dran", draw a card, and you get a "Chronojet Dragon" crest.\n\n(You will be prompted to get the crest upon ride.)'],
+    ["cfa-10764", 'AUTO: When this unit is placed by riding from "Neon Messiah", draw a card, and you get a "Alter Ego Messiah" crest.\n\n(You will be prompted to get the crest upon ride.)'],
+    ["cfa-12185", 'AUTO: When this unit is placed by riding from "Dragprince, Rute", draw a card, and you get a "Dragheart, Luard" crest.\n\n(You will be prompted to get the crest upon ride.)'],
+    ["cfa-13174", 'AUTO: When this unit is placed by riding from "Undying Departed, Grenache", draw a card, and you get a "Vampire Princess of Night Fog, Nightrose" crest.\n\n(You will be prompted to get the crest upon ride.)'],
+    ["cfa-13188", 'AUTO: When this unit is placed by riding from "Happiness Collector", draw a card, and you get a "Masked Magician, Harri" crest.\n\n(You will be prompted to get the crest upon ride.)']
+  ];
+  for (const [cardId, printedText] of rodeUponNamedVanguardCrestTexts) {
+    const definition = root?.VanguardAbilityEngine?.compileRodeUponNamedVanguardDrawCrestDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
+    if (definition) definitions.push(definition);
+  }
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
 })(typeof globalThis === "undefined" ? this : globalThis);

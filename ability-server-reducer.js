@@ -1492,7 +1492,7 @@
   }
 
   const SERVER_EFFECT_OPS = new Set([
-    "draw", "modify-power", "modify-power-target", "retire-target", "rest-target", "stand-target", "protect-target", "revelation-choice", "modify-critical", "rest-source", "stand-source", "set-charging", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "g-guardian-discard-charge-choice", "persona-shield-ticket",
+    "draw", "modify-power", "modify-power-target", "retire-target", "rest-target", "stand-target", "protect-target", "revelation-choice", "modify-critical", "rest-source", "stand-source", "set-charging", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "g-guardian-discard-charge-choice", "persona-shield-ticket", "create-crest",
     "counter-charge", "soul-charge", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "call-source-from-soul", "engorge", "seek-mate", "modify-defending-source-power", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-source-from-drop-rested", "unlock-target", "protect-attacked-source", "set-successful", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "place-circle-marker"
   ]);
   SERVER_EFFECT_OPS.add("call-named-drop-card-to-rearguard");
@@ -1503,6 +1503,13 @@
   SERVER_EFFECT_OPS.add("grant-battle-gc-retire-to-soul");
   const CLAN_PLACEMENT_DAMAGE_RETURN = Object.freeze(["cfa-187","cfa-208","cfa-279","cfa-295","cfa-458","cfa-466","cfa-712","cfa-719","cfa-749","cfa-762","cfa-798","cfa-816","cfa-841","cfa-858","cfa-938","cfa-943","cfa-959","cfa-965","cfa-978","cfa-980","cfa-995","cfa-999","cfa-1057","cfa-1332","cfa-1333","cfa-1378","cfa-1379","cfa-1383","cfa-1384","cfa-1445","cfa-1570","cfa-1722","cfa-1723","cfa-1891","cfa-1892","cfa-1903"]);
   const QUICK_SHIELD_RIDE_TEXT = "AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.";
+  const RODE_UPON_NAMED_VANGUARD_CRESTS = Object.freeze({
+    "cfa-10475": Object.freeze({ riderName: "Chrono Dran", crestName: "Chronojet Dragon", crestCardId: "cfa-10476" }),
+    "cfa-10764": Object.freeze({ riderName: "Neon Messiah", crestName: "Alter Ego Messiah", crestCardId: "cfa-10668" }),
+    "cfa-12185": Object.freeze({ riderName: "Dragprince, Rute", crestName: "Dragheart, Luard", crestCardId: "cfa-12183" }),
+    "cfa-13174": Object.freeze({ riderName: "Undying Departed, Grenache", crestName: "Vampire Princess of Night Fog, Nightrose", crestCardId: "cfa-13177" }),
+    "cfa-13188": Object.freeze({ riderName: "Happiness Collector", crestName: "Masked Magician, Harri", crestCardId: "cfa-13186" })
+  });
   const CHARGE_CARD_IDS = new Set(["cfa-3429", "cfa-3474", "cfa-3490", "cfa-3492", "cfa-3495", "cfa-3500", "cfa-3501", "cfa-3506", "cfa-4142", "cfa-4232", "cfa-4269", "cfa-4275", "cfa-4312", "cfa-4327", "cfa-5203", "cfa-5204", "cfa-5206", "cfa-5207", "cfa-5208", "cfa-5215", "cfa-5226", "cfa-5313", "cfa-5316"]);
   const NAMED_GRADE_RIDE_CALL = Object.freeze({"cfa-11178":{grade:2,name:"Mythiarq"},"cfa-11179":{grade:3,name:"Mythiarq"},"cfa-12502":{grade:3,name:"Direful Doll"},"cfa-12545":{grade:3,name:"Varga"},"cfa-12812":{grade:3,name:"Daiyusha"},"cfa-10068":{rider:"Demonic Stone Dragon, Jewelneel"},"cfa-9098":{rider:"Ascendance Assault"},"cfa-9559":{rider:"MiMish, Rikashenna"},"cfa-9863":{rider:"Tyrant of the Oceans, Poseidon"}});
   const NAMED_RIDE_DECK_SEARCH = Object.freeze({"cfa-7":{rider:"Blaster Javelin",target:"Blaster Dark"},"cfa-40":{rider:"Pupa Mutant, Giraffa",target:"Elite Mutant, Giraffa"},"cfa-106":{rider:"Blaupanzer",target:"Blaukluger"},"cfa-231":{rider:"Enigman Ripple",target:"Enigman Wave"},"cfa-491":{rider:"Amber Dragon, Daylight",target:"Amber Dragon, Dusk"}});
@@ -1780,6 +1787,54 @@
       effects[1].condition?.op === "opponent-vanguard-grade-at-least" && effects[1].condition.grade === 1;
   }
 
+  function rideFromNamedVanguardCrestText(spec) {
+    return `AUTO: When this unit is placed by riding from "${spec.riderName}", draw a card, and you get a "${spec.crestName}" crest.`;
+  }
+
+  function isExactRodeUponNamedVanguardCrestAbility(ability) {
+    const definition = ability?.definition, cardId = String(ability?.cardId || definition?.cardId || ""), spec = RODE_UPON_NAMED_VANGUARD_CRESTS[cardId];
+    const trigger = definition?.trigger, effects = definition?.effects || [];
+    const printedText = String(definition?.printedText || ability?.printedText || "").replace(/\s+/g, " ").trim();
+    const baseText = spec ? rideFromNamedVanguardCrestText(spec) : "";
+    if (!spec || ability?.id !== `${cardId}:0` || definition?.id !== ability.id || definition?.cardId !== cardId ||
+        ability?.kind !== "AUTO" || definition?.kind !== "AUTO" || definition?.optional !== false || ability?.canDecline !== false ||
+        definition?.source?.patternId !== "auto-ride-from-named-vanguard-draw-get-crest-v1" ||
+        (printedText !== baseText && printedText !== `${baseText} (You will be prompted to get the crest upon ride.)`) ||
+        JSON.stringify(definition.requiredLocation || []) !== JSON.stringify(["vanguard"]) ||
+        trigger?.status !== "recognized-trigger" || trigger.eventType !== "card.ridden" || trigger.subject !== "source" ||
+        JSON.stringify(trigger.circles || []) !== JSON.stringify(["vanguard"]) || trigger.targetCardNameEquals !== spec.riderName ||
+        (ability.costs || []).length !== 0 || (ability.conditions || []).length !== 0 || effects.length !== 2 ||
+        effects[0]?.op !== "draw" || effects[0]?.count !== 1 || effects[1]?.op !== "create-crest" || effects[1]?.target !== "controller" ||
+        effects[1]?.cardId !== spec.crestCardId || effects[1]?.cardName !== spec.crestName) return false;
+    return true;
+  }
+
+  function rodeUponNamedVanguardCrestEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
+    if (!isExactRodeUponNamedVanguardCrestAbility(ability) || !state || !source?.uid || !located || located.ambiguous ||
+        !event?.eventId || event.type !== "card.ridden" || event.phase !== "ride" ||
+        !["normal-ride", "ride-deck", "ability-ride", "superior-ride"].includes(String(event.timingWindow)) ||
+        !["hand", "ride-deck", "soul", "deck", "drop", "damage"].includes(String(event.previousLocation)) ||
+        event.currentLocation !== "vanguard" || event.targetLocation !== "vanguard" ||
+        event.targetPreviousLocation !== "vanguard" || event.targetCurrentLocation !== "soul" ||
+        event.sourceCardInstanceId !== source.uid || event.cardInstanceId !== source.uid || event.subjectCardInstanceId !== source.uid ||
+        event.actingPlayerId !== actorPlayerId || event.sourceControllerPlayerId !== actorPlayerId ||
+        event.subjectControllerPlayerId !== actorPlayerId || event.sourceOwnerPlayerId !== located.ownerPlayerId ||
+        event.subjectOwnerPlayerId !== located.ownerPlayerId || !located.ownerPlayerId || located.controllerPlayerId !== actorPlayerId ||
+        located.zone !== "vanguard") return false;
+    const side = located.side, player = state.players?.[side], spec = RODE_UPON_NAMED_VANGUARD_CRESTS[String(ability.cardId)];
+    if (!player || player.playerId !== actorPlayerId || player.vanguard?.uid !== source.uid ||
+        String(serverCardDefinition(source)?.name || "") !== String(event.sourceCardName || "") ||
+        event.sourceCardName !== serverCardDefinition(source)?.name ||
+        !Array.isArray(event.targetCardInstanceIds) || event.targetCardInstanceIds.length !== 1) return false;
+    const previousUid = event.targetCardInstanceIds[0], previous = (player.soul || []).find(card => card?.uid === previousUid);
+    if (!previous || previous.uid === source.uid || event.targetOwnerPlayerId !== previous.ownerPlayerId ||
+        event.targetControllerPlayerId !== previous.controllerPlayerId || !previous.ownerPlayerId ||
+        previous.controllerPlayerId !== actorPlayerId || serverCardDefinition(previous)?.name !== spec.riderName ||
+        event.targetCardName !== spec.riderName) return false;
+    const actualPrevious = engine?.locateCardInstance?.(state, previousUid);
+    return Boolean(actualPrevious && !actualPrevious.ambiguous && actualPrevious.side === side && actualPrevious.zone === "soul" && actualPrevious.controllerPlayerId === actorPlayerId);
+  }
+
   function isExactSecondPlayerRideDrawAbility(ability) {
     const definition = ability?.definition, effects = definition?.effects || [], trigger = ability?.trigger;
     const printed = String(definition?.printedText || ability?.printedText || "").replace(/\s+/g, " ").trim();
@@ -1819,6 +1874,16 @@
       hash = BigInt.asUintN(64, hash * 0x100000001b3n);
     }
     return `token-quick-shield-${hash.toString(16).padStart(16, "0")}`;
+  }
+
+  function stableRideCrestUid(matchId, actionId, eventId, sourceUid, crestCardId) {
+    const value = `${String(matchId || "match")}\u0000${String(actionId || "")}\u0000${String(eventId || "")}\u0000${String(sourceUid || "")}\u0000${String(crestCardId || "")}`;
+    let hash = 0xcbf29ce484222325n;
+    for (let index = 0; index < value.length; index++) {
+      hash ^= BigInt(value.charCodeAt(index));
+      hash = BigInt.asUintN(64, hash * 0x100000001b3n);
+    }
+    return `crest-${hash.toString(16).padStart(16, "0")}`;
   }
 
   function stablePersonaShieldTicketUid(matchId, actionId, eventId, sourceUid) {
@@ -3441,6 +3506,7 @@
     if (isGuardianSentinelProtection && !isExactGuardianSentinelProtectionAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-gc-sentinel-protect-friendly-unit-name-filter-v1" && !isExactGuardianSentinelNameFilterAbility(ability)) return false;
     const hasTokenCreation = effects.some(step => step?.op === "create-token");
+    const hasCrestCreation = effects.some(step => step?.op === "create-crest");
     const hasSecondPlayerRideDraw = ability?.definition?.source?.patternId === "auto-rode-upon-second-player-draw-v1";
     const hasHarmonyAssociation = effects.some(step => step?.op === "associate-harmony-units");
     const hasHollow = effects.some(step => step?.op === "set-hollowed");
@@ -3518,6 +3584,8 @@
     if (hasConditionalCharge && !isExactNamedDropGuardianAbility(ability)) return false;
     if (hasConditionalGuardianDiscard && !isExactConditionalDiscardGuardianAbility(ability)) return false;
     if (hasTokenCreation && !isExactQuickShieldRideAbility(ability)) return false;
+    if (hasCrestCreation && !isExactRodeUponNamedVanguardCrestAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-ride-from-named-vanguard-draw-get-crest-v1" && !isExactRodeUponNamedVanguardCrestAbility(ability)) return false;
     if (hasSecondPlayerRideDraw && !isExactSecondPlayerRideDrawAbility(ability)) return false;
     if (hasHarmonyAssociation && !isExactHarmonyAssociationAbility(ability)) return false;
     if (hasHollow && !isExactHollowPlacementAbility(ability)) return false;
@@ -4327,6 +4395,8 @@
               !boostedPowerThresholdCriticalEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,engine))continue;
             if (isExactAttackedUnboostedProtectAbility(ability) && !attackedUnboostedProtectEventMatches(state, ability, located.instance, located, event)) continue;
             if (isExactSecondPlayerRideDrawAbility(ability) && !secondPlayerRideDrawTriggerMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
+            if (ability.definition?.source?.patternId === "auto-ride-from-named-vanguard-draw-get-crest-v1" &&
+                !rodeUponNamedVanguardCrestEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if ((isExactGodHandDriveAbility(ability) || isExactDauntlessDriveAbility(ability)) &&
                 !exactNormalDriveCheckContext(state, ability, located.instance, located, event, located.controllerPlayerId)) continue;
             if (isExactTriggerUnitDrivePowerAbility(ability) && !exactTriggerUnitDriveCheckContext(state, ability, located.instance, located, event, located.controllerPlayerId)) continue;
@@ -5595,6 +5665,9 @@
         cardInstanceId: rider.uid, subjectCardInstanceId: rider.uid,
         subjectOwnerPlayerId: rider.ownerPlayerId, subjectControllerPlayerId: rider.controllerPlayerId,
         previousLocation: "hand", currentLocation: "vanguard", targetCardInstanceIds: [previousVanguard.uid],
+        targetCardName: serverCardDefinition(previousVanguard)?.name || null,
+        targetOwnerPlayerId: previousVanguard.ownerPlayerId || actorPlayerId,
+        targetControllerPlayerId: previousVanguard.controllerPlayerId || actorPlayerId,
         targetPreviousLocation: "vanguard", targetCurrentLocation: "soul", targetLocation: "vanguard",
         phase: "ride", timingWindow: "normal-ride"
       }));
@@ -5663,6 +5736,9 @@
         sourceCardClans: rider.clans || [], cardInstanceId: rider.uid, subjectCardInstanceId: rider.uid,
         subjectOwnerPlayerId: rider.ownerPlayerId, subjectControllerPlayerId: rider.controllerPlayerId,
         previousLocation: "ride-deck", currentLocation: "vanguard", targetCardInstanceIds: [previousVanguard.uid],
+        targetCardName: serverCardDefinition(previousVanguard)?.name || null,
+        targetOwnerPlayerId: previousVanguard.ownerPlayerId || actorPlayerId,
+        targetControllerPlayerId: previousVanguard.controllerPlayerId || actorPlayerId,
         targetPreviousLocation: "vanguard", targetCurrentLocation: "soul", targetLocation: "vanguard",
         phase: "ride", timingWindow: "ride-deck"
       }));
@@ -6374,6 +6450,8 @@
       const currentConditions = buildConditionContext(state, triggerEvent, located, engine);
       if (!currentConditions || !engine.evaluateAbilityConditions(ability, currentConditions)) return reject("ride-draw-condition-no-longer-met");
     }
+    if (ability.definition?.source?.patternId === "auto-ride-from-named-vanguard-draw-get-crest-v1" &&
+        !rodeUponNamedVanguardCrestEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("ride-draw-crest-event-context-invalid");
     if (isExactHandRidePhaseSearchAbility(ability)) {
       const controller = state.players?.[side];
       if (located.zone !== "hand" || !controller?.hand?.some(card => card?.uid === located.instance.uid) ||
@@ -6440,6 +6518,12 @@
     if (createQuickShield) {
       if (!Array.isArray(player.hand) || !actorPlayerId || engine.locateCardInstance(state, quickShieldUid)) return reject("quick-shield-token-state-invalid");
     }
+    const exactRideCrestAbility = isExactRodeUponNamedVanguardCrestAbility(ability);
+    const rideCrestSpec = exactRideCrestAbility ? RODE_UPON_NAMED_VANGUARD_CRESTS[String(ability.cardId)] : null;
+    const rideCrestUid = exactRideCrestAbility
+      ? stableRideCrestUid(state.matchId, command.actionId, triggerContext.eventId, located.instance.uid, rideCrestSpec.crestCardId)
+      : null;
+    if (exactRideCrestAbility && (!Array.isArray(player.crests) || stateHasInstanceUid(state, rideCrestUid))) return reject("ride-crest-state-invalid");
     const personaShieldAbility = isExactPersonaShieldTicketAbility(ability);
     const personaShieldTicketUid = personaShieldAbility
       ? stablePersonaShieldTicketUid(state.matchId, command.actionId, triggerContext.eventId, located.instance.uid)
@@ -6510,6 +6594,23 @@
           ? engine.createCardInstance("token-quick-shield", ownerPlayerId, uid, { zone: "hand", cardName: "Quick Shield", type: "Quick Shield Token", nation: "Token", grade: 0, power: 0, shield: 5000 })
           : null,
         onTokenCreated: (_token, _step, resolutionContext) => { resolutionContext.player.quickShields = Number(resolutionContext.player.quickShields || 0) + 1; }
+      } : {}),
+      ...(exactRideCrestAbility ? {
+        cardDefinitionForId: id => id === rideCrestSpec.crestCardId ? {
+          id: rideCrestSpec.crestCardId, name: rideCrestSpec.crestName,
+          type: AUTHORITATIVE_CARD_RULES[rideCrestSpec.crestCardId]?.type || "Unit", text: "Crest"
+        } : null,
+        createCrestUid: step => step?.cardId === rideCrestSpec.crestCardId ? rideCrestUid : null,
+        createCrestInstance: (step, uid, ownerPlayerId) => {
+          if (step?.cardId !== rideCrestSpec.crestCardId || step?.cardName !== rideCrestSpec.crestName || uid !== rideCrestUid || ownerPlayerId !== actorPlayerId) return null;
+          const crest = engine.createCardInstance(rideCrestSpec.crestCardId, ownerPlayerId, uid, {
+            cardName: rideCrestSpec.crestName, type: AUTHORITATIVE_CARD_RULES[rideCrestSpec.crestCardId]?.type || "Unit",
+            grade: 0, power: 0, shield: 0
+          });
+          if (crest) { crest.crestName = rideCrestSpec.crestName; crest.isCrest = true; }
+          return crest;
+        },
+        locateCardInstance: engine.locateCardInstance
       } : {}),
       emitEvent: event => eventLog.push(event)
     };
