@@ -230,6 +230,21 @@
   const TREASURES_HIT_TEXT = "AUTO [VC/RC]: When its attack hits, choose one of your VC or RC without any Treasures markers, and put a Treasures marker.";
   const DRAGONTREE_PLACEMENT_CARD_IDS = new Set(["cfa-10622", "cfa-10639", "cfa-10662", "cfa-10717", "cfa-10730"]);
   const DRAGONTREE_PLACEMENT_TEXT = "AUTO: When this unit is placed on RC, COST [Counter Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker.";
+  const SAME_NAME_DROP_CALL_TARGETS=Object.freeze({"cfa-8541":"Honebami Toushirou","cfa-8571":"Chiganemaru","cfa-8577":"Chiyoganemaru","cfa-8585":"Namazuo Toushirou"});
+  function isExactSameNameDropCallAbility(ability){
+    const cardId=String(ability?.cardId||ability?.definition?.cardId||""),targetName=SAME_NAME_DROP_CALL_TARGETS[cardId],definition=ability?.definition,effect=definition?.effects?.[0],printed=String(definition?.printedText||ability?.printedText||"").replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/\s+/g," ").trim();
+    return Boolean(targetName&&ability?.id===`${cardId}:0`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&String(definition.cardId)===cardId&&definition.id===ability.id&&definition.source?.patternId==="auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1"&&printed===`AUTO: When this unit is placed on RC from hand, COST [Counter Blast 1], choose a "${targetName}" from your drop, and call it to an open RC.`&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="card.placed"&&ability.trigger.subject==="source"&&JSON.stringify(ability.trigger.circles||[])===JSON.stringify(["rear-guard"])&&ability.trigger.sourceLocation==="hand"&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"counter-blast",count:1}])&&definition.optional===false&&definition.conditionsReviewed===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&ability.canDecline===false&&!(ability.conditions||[]).length&&Array.isArray(definition.effects)&&definition.effects.length===1&&effect?.op==="call-named-drop-card-to-rearguard"&&effect.target==="controller"&&effect.cardName===targetName&&effect.destination==="rear-guard"&&effect.position==="stand"&&effect.requireOpenCircle===true);
+  }
+  function sameNameDropCallOpenZones(player){
+    if(!player||!Array.isArray(player.rear))return[];const zones=["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:Number(player.accelZones||0)},(_,i)=>`accel-${i+1}`)];return zones.filter((_,index)=>index<player.rear.length&&player.rear[index]==null);
+  }
+  function sameNameDropCallTargets(player,targetName,actorPlayerId){
+    return (player?.drop||[]).filter(card=>{const definition=serverCardDefinition(card);return Boolean(card?.uid&&card.ownerPlayerId===actorPlayerId&&(!card.controllerPlayerId||card.controllerPlayerId===actorPlayerId)&&/\bunit\b/i.test(String(definition?.type||""))&&String(definition?.name||"").trim().toLocaleLowerCase()===String(targetName||"").trim().toLocaleLowerCase())});
+  }
+  function sameNameDropCallPlacementEventMatches(state,ability,source,located,event,actorPlayerId){
+    const player=located&&state?.players?.[located.side],circle=String(event?.circle||""),zone=/^(?:rear-(?:left|right|back-(?:left|center|right))|accel-\d+)$/.test(circle);
+    return isExactSameNameDropCallAbility(ability)&&Boolean(source?.uid)&&event?.type==="card.placed"&&Boolean(event.eventId)&&event.sourceCardInstanceId===source.uid&&event.cardInstanceId===source.uid&&event.subjectCardInstanceId===source.uid&&event.previousLocation==="hand"&&event.currentLocation===circle&&zone&&located?.zone==="rear-guard"&&located.circle===circle&&player?.playerId===actorPlayerId&&player.rear?.some(card=>card?.uid===source.uid)&&located.controllerPlayerId===actorPlayerId&&located.ownerPlayerId===actorPlayerId&&event.sourceOwnerPlayerId===actorPlayerId&&event.subjectOwnerPlayerId===actorPlayerId&&event.sourceControllerPlayerId===actorPlayerId&&event.subjectControllerPlayerId===actorPlayerId&&event.actingPlayerId===actorPlayerId;
+  }
   function isExactTreasuresHitAbility(ability) {
     const cardId=String(ability?.cardId||""),definition=ability?.definition,printed=String(definition?.printedText||ability?.printedText||"").replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/\s+/g," ").trim();
     return TREASURES_HIT_CARD_IDS.has(cardId)&&ability?.id===`${cardId}:0`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&String(definition.cardId)===cardId&&definition.id===ability.id&&definition.source?.patternId==="auto-own-attack-hit-place-treasures-marker-v1"&&printed===TREASURES_HIT_TEXT&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["vanguard","rear-guard"])&&ability.trigger?.eventType==="attack.hit"&&ability.trigger.subject==="source"&&definition.choicesReviewed===true&&ability.choiceStatus!=="needs-review";
@@ -1480,6 +1495,7 @@
     "draw", "modify-power", "modify-power-target", "retire-target", "rest-target", "stand-target", "protect-target", "revelation-choice", "modify-critical", "rest-source", "stand-source", "set-charging", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "g-guardian-discard-charge-choice", "persona-shield-ticket",
     "counter-charge", "soul-charge", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "call-source-from-soul", "engorge", "seek-mate", "modify-defending-source-power", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-source-from-drop-rested", "unlock-target", "protect-attacked-source", "set-successful", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "place-circle-marker"
   ]);
+  SERVER_EFFECT_OPS.add("call-named-drop-card-to-rearguard");
   SERVER_EFFECT_OPS.add("call-drop-trigger-to-guardian");
   SERVER_EFFECT_OPS.add("put-chosen-normal-drop-to-deck-bottom");
   SERVER_EFFECT_OPS.add("soul-charge-and-return-source-to-deck");
@@ -3342,6 +3358,7 @@
     if (ability?.definition?.source?.patternId === "auto-dragontree-gc-granted-retire-to-soul-v1" && !isExactDragontreeGcGrantedRetireAbility(ability)) return false;
     if (effects.some(step => step?.op === "grant-battle-gc-retire-to-soul") && !isExactDragontreeGcShieldAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1" && !isExactPaidOwnVanguardAttackPowerAbility(ability)) return false;
+    if ((ability?.definition?.source?.patternId === "auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1" || effects.some(step => step?.op === "call-named-drop-card-to-rearguard")) && !isExactSameNameDropCallAbility(ability)) return false;
     if(effects.some(step=>step?.op==="put-top-up-to-one-filtered-in-order-zone")&&!isExactAutoRcMainPhaseRaceTopThreeMemoryAbility(ability))return false;
     if (ability?.definition?.source?.patternId === "auto-vanguard-attack-retire-friendly-rearguard-cost-battle-modifier-v1" && !isExactRetireRearGuardAttackAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-own-attack-hit-place-treasures-marker-v1" && (!isExactTreasuresHitAbility(ability) || effects.length !== 1 || effects[0]?.op !== "place-circle-marker" || effects[0]?.markerType !== "Treasures")) return false;
@@ -3893,6 +3910,15 @@
       if(!selectedCard)return{ok:false,reason:"invalid-guardian-trigger-choice"};
       return{ok:true,context:{selectedCard}};
     }
+    const namedDropCall=(pending?.ability?.definition?.effects||[]).find(effect=>effect?.op==="call-named-drop-card-to-rearguard");
+    if(namedDropCall){
+      if(!isExactSameNameDropCallAbility(pending?.ability))return{ok:false,reason:"unsupported-named-drop-call"};
+      const player=Object.values(state.players||{}).find(candidate=>candidate?.playerId===actorPlayerId),legal=sameNameDropCallTargets(player,namedDropCall.cardName,actorPlayerId);
+      if(typeof selection?.effectUid!=="string"||!legal.length)return{ok:false,reason:"named-drop-call-card-choice-required"};
+      const selectedCard=legal.find(card=>card?.uid===selection.effectUid);if(!selectedCard)return{ok:false,reason:"invalid-named-drop-call-card"};
+      if(!sameNameDropCallOpenZones(player).includes(selection?.callZone))return{ok:false,reason:"named-drop-call-circle-not-open"};
+      return{ok:true,context:{selectedCard,effectUid:selectedCard.uid,callZone:selection.callZone}};
+    }
     const markerStep=(pending?.ability?.definition?.effects||[]).find(effect=>effect?.op==="place-circle-marker");
     if(markerStep){const actor=Object.values(state.players||{}).find(player=>player?.playerId===actorPlayerId),zone=selection?.circleZone,rearIndex=({"rear-left":0,"rear-right":1,"rear-back-left":2,"rear-back-center":3,"rear-back-right":4})[zone],accel=typeof zone==="string"?zone.match(/^accel-(\d+)$/):null,zoneType=zone==="vanguard"?"vanguard":rearIndex!=null||accel?"rear-guard":null,configuration=markerStep.markerType==="Treasures"&&JSON.stringify(markerStep.circleTypes)===JSON.stringify(["vanguard","rear-guard"])||markerStep.markerType==="Dragontree"&&JSON.stringify(markerStep.circleTypes)===JSON.stringify(["rear-guard"]),zoneExists=zone==="vanguard"?Boolean(actor?.vanguard):rearIndex!=null?rearIndex<(actor?.rear||[]).length:Boolean(accel&&Number(accel[1])<=Number(actor?.accelZones||0));if(!actor||!configuration||!markerStep.circleTypes.includes(zoneType)||!zoneExists)return{ok:false,reason:"invalid-marker-circle"};if((actor.giftZones||[]).some(marker=>marker?.zone===zone&&marker?.type===markerStep.markerType))return{ok:false,reason:"marker-already-present"};return{ok:true,context:{circleZone:zone,sourceControllerPlayerId:actorPlayerId}};}
     const effectController = Object.values(state.players || {}).find(player => player?.playerId === actorPlayerId);
@@ -4316,6 +4342,13 @@
             const eventForMatch = authoritativeSoulBlastBoostEvent(state, ability, event, engine);
             const eventMatch = engine.eventMatchesAbilityTrigger(ability, eventName, eventForMatch, instance.uid, triggerSourceZone, subjectZone, located.controllerPlayerId);
             if (!eventMatch) continue;
+            if(ability.definition?.source?.patternId==="auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1"){
+              if(!sameNameDropCallPlacementEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId))continue;
+              const controller=state.players?.[side],effect=ability.definition.effects[0],claimUnavailable=(reason)=>{if(engine.claimAbilityTrigger(state,event.eventId,instance.uid,ability.id))skipped.push({eventId:event.eventId,cardInstanceId:instance.uid,abilityId:ability.id,reason});};
+              if(!engine.canPayAbilityCosts(ability,{faceUpDamage:(controller?.damage||[]).filter(card=>!card.faceDown).length})){claimUnavailable("unpayable-cost");continue;}
+              if(!sameNameDropCallTargets(controller,effect.cardName,located.controllerPlayerId).length){claimUnavailable("no-named-drop-target");continue;}
+              if(!sameNameDropCallOpenZones(controller).length){claimUnavailable("no-open-rearguard-circle");continue;}
+            }
             if (ability.definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN &&
                 !personaShieldAutoEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, side, engine)) continue;
             if(ability.definition?.source?.patternId==="auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1"&&!dragontreeGcShieldPlacementEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,side))continue;
@@ -6016,6 +6049,10 @@
           cardDefinitionForInstance: serverCardDefinition
         })) return reject("unpayable-cost");
       }
+    }
+    if(ability.definition?.source?.patternId==="auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1"){
+      if(!sameNameDropCallPlacementEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId))return reject("named-drop-call-placement-event-invalid");
+      if(command.payload.accept){const controller=state.players?.[side],effect=ability.definition.effects[0];if(!engine.canPayAbilityCosts(ability,{faceUpDamage:(controller?.damage||[]).filter(card=>!card.faceDown).length}))return reject("unpayable-cost");if(!sameNameDropCallTargets(controller,effect.cardName,actorPlayerId).length)return reject("named-drop-call-target-unavailable");if(!sameNameDropCallOpenZones(controller).length)return reject("no-open-rearguard-circle");}
     }
     if (ability.definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN &&
         !personaShieldAutoEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, side, engine)) return reject("persona-shield-trigger-context-invalid");

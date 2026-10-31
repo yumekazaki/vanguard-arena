@@ -112351,6 +112351,12 @@
     const definition = root?.VanguardAbilityEngine?.compileDragontreeGcRetireToSoulShieldDefinition?.(cardId, `${cardId}:0`, "AUTO", dragontreeGcShieldText);
     if (definition) definitions.push(definition);
   }
+  const sameNameDropCallTargets = [["cfa-8541", "Honebami Toushirou"], ["cfa-8571", "Chiganemaru"], ["cfa-8577", "Chiyoganemaru"], ["cfa-8585", "Namazuo Toushirou"]];
+  for (const [cardId, targetName] of sameNameDropCallTargets) {
+    const printedText = `AUTO: When this unit is placed on RC from hand, COST [Counter Blast 1], choose a "${targetName}" from your drop, and call it to an open RC.`;
+    const definition = root?.VanguardAbilityEngine?.compileAutoRcPlacementNamedDropCallDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
+    if (definition) definitions.push(definition);
+  }
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
 })(typeof globalThis === "undefined" ? this : globalThis);
