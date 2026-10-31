@@ -60,9 +60,9 @@
     },
     {
       "batchId": "PRIMARY-WORKER-CONT-CONDITIONAL-CARD-NAME-6",
-      "status": "in-progress",
-      "workerOwner": "worker-conditional-name",
-      "reason": "Independent six-card CONT batch for conditional name grants. Review every exact source text, required location and Vanguard-name condition; add host/joiner and false-condition coverage. Do not promote whole cards until every printed ability and live-game gap is cleared.",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "The four exact conditional Boost CONT abilities are integrated and have focused plus full-suite evidence. Keep all six assigned abilities reserved to primary review: cfa-5264:0 and cfa-5349:1 remain unsupported, whole-card coverage is incomplete, and live browser online resolution is not yet authoritative.",
       "abilityIds": [
         "cfa-12062:1",
         "cfa-12719:1",
@@ -74,9 +74,9 @@
     },
     {
       "batchId": "PRIMARY-WORKER-AUTO-CLAN-CB-ATTACK-POWER-4",
-      "status": "in-progress",
-      "workerOwner": "worker-clan-counterblast",
-      "reason": "Independent four-card AUTO batch for exact clan-filtered Counter-Blast costs and own-attack battle power. Verify attack source, controller Vanguard clan, legal clan damage, optional payment and end-of-battle expiry; do not reuse unless every printed rule matches.",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "The four exact clan Counter-Blast own-attack power abilities are integrated; source, printed clan, legal payment, both seats, replay and battle expiry pass focused tests and the 1602-test suite. Keep cards reserved pending full-card and live browser verification.",
       "abilityIds": [
         "cfa-1140:0",
         "cfa-1159:0",
@@ -86,9 +86,9 @@
     },
     {
       "batchId": "PRIMARY-WORKER-AUTO-SAME-NAME-DROP-CALL-4",
-      "status": "in-progress",
-      "workerOwner": "worker-same-name-drop-call",
-      "reason": "Independent four-card AUTO batch. Worker has begun the exact hand-to-RC, Counter Blast 1, named Unit from own Drop, empty unlocked Rear-Guard implementation in an isolated worktree; focused trigger and invalid-cost/target/occupied-circle checks are in progress.",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "The four exact hand-to-RC named Drop-call AUTOs are integrated; source/event identity, Counter Blast, target, open circle including Accel, both seats, and duplicate rejection pass focused tests and the 1602-test suite. Keep cards reserved pending full-card and live browser verification.",
       "abilityIds": [
         "cfa-8541:0",
         "cfa-8571:0",

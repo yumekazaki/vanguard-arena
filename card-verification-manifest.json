@@ -5,14 +5,14 @@
     "command": "node --test --test-concurrency=4",
     "testCommand": "node --test --test-concurrency=4",
     "status": "passed",
-    "tests": 1586,
-    "testCount": 1586,
-    "passed": 1586,
+    "tests": 1602,
+    "testCount": 1602,
+    "passed": 1602,
     "failed": 0,
-    "durationMilliseconds": 361802,
-    "completedAt": "2026-10-31T07:06:15.676Z",
+    "durationMilliseconds": 393332,
+    "completedAt": "2026-10-31T07:39:53.355Z",
     "runDate": "2026-10-31",
-    "validationInputDigest": "4ee789a69b161bf53bffd2cf3214c76dd8e7284fd27ec8a892344edf5c8fb783"
+    "validationInputDigest": "0894752301c3b12eb34f5450628fe7e83135e054d3001f3d1a7af7b46b87acb4"
   },
   "records": [
     {
@@ -75648,8 +75648,236 @@
       ],
       "fullyVerified": false,
       "remaining": "Live match verification is still outstanding because the website does not yet submit online ability decisions through the authoritative match worker; these tests validate the reducer for both seats only."
+    },
+    {
+      "cardId": "cfa-1140",
+      "abilityId": "cfa-1140:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-clan-counterblast-attack-power-server.test.js"
+      ],
+      "testCases": [
+        "the exact family compiles only each printed clan, own-attack trigger, circle, cost, and battle duration",
+        "the source controller alone receives the trigger and pays their clan-matching Damage",
+        "the four assigned cards prompt and resolve independently from VC and RC for both seats",
+        "wrong-clan Damage cannot satisfy the cost and does not produce a prompt",
+        "the exact source must attack and its controller must still have the printed-clan Vanguard",
+        "wrong-clan payment selections are rejected without paying or applying the effect",
+        "declining leaves damage and power untouched, while replays and stale versions cannot repeat a paid trigger",
+        "acceptance revalidates the current clan Vanguard and exact battle before paying",
+        "the attack modifier expires when its battle closes"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-1159",
+      "abilityId": "cfa-1159:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-clan-counterblast-attack-power-server.test.js"
+      ],
+      "testCases": [
+        "the exact family compiles only each printed clan, own-attack trigger, circle, cost, and battle duration",
+        "the source controller alone receives the trigger and pays their clan-matching Damage",
+        "the four assigned cards prompt and resolve independently from VC and RC for both seats",
+        "wrong-clan Damage cannot satisfy the cost and does not produce a prompt",
+        "the exact source must attack and its controller must still have the printed-clan Vanguard",
+        "wrong-clan payment selections are rejected without paying or applying the effect",
+        "declining leaves damage and power untouched, while replays and stale versions cannot repeat a paid trigger",
+        "acceptance revalidates the current clan Vanguard and exact battle before paying",
+        "the attack modifier expires when its battle closes"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-1170",
+      "abilityId": "cfa-1170:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-clan-counterblast-attack-power-server.test.js"
+      ],
+      "testCases": [
+        "the exact family compiles only each printed clan, own-attack trigger, circle, cost, and battle duration",
+        "the source controller alone receives the trigger and pays their clan-matching Damage",
+        "the four assigned cards prompt and resolve independently from VC and RC for both seats",
+        "wrong-clan Damage cannot satisfy the cost and does not produce a prompt",
+        "the exact source must attack and its controller must still have the printed-clan Vanguard",
+        "wrong-clan payment selections are rejected without paying or applying the effect",
+        "declining leaves damage and power untouched, while replays and stale versions cannot repeat a paid trigger",
+        "acceptance revalidates the current clan Vanguard and exact battle before paying",
+        "the attack modifier expires when its battle closes"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-1187",
+      "abilityId": "cfa-1187:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-clan-counterblast-attack-power-server.test.js"
+      ],
+      "testCases": [
+        "the exact family compiles only each printed clan, own-attack trigger, circle, cost, and battle duration",
+        "the source controller alone receives the trigger and pays their clan-matching Damage",
+        "the four assigned cards prompt and resolve independently from VC and RC for both seats",
+        "wrong-clan Damage cannot satisfy the cost and does not produce a prompt",
+        "the exact source must attack and its controller must still have the printed-clan Vanguard",
+        "wrong-clan payment selections are rejected without paying or applying the effect",
+        "declining leaves damage and power untouched, while replays and stale versions cannot repeat a paid trigger",
+        "acceptance revalidates the current clan Vanguard and exact battle before paying",
+        "the attack modifier expires when its battle closes"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-12062",
+      "abilityId": "cfa-12062:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-named-vanguard-grants-boost.test.js"
+      ],
+      "testCases": [
+        "the exact catalog batch compiles only four named-Vanguard Boost CONT abilities",
+        "conditional Boost is source-bound, seat-independent, RC-only, and expires as soon as its condition ends",
+        "server permits a conditional grade-two booster only for the correct controller Vanguard, for either seat",
+        "different conditional grants remain unresolved instead of being treated as Boost"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-12719",
+      "abilityId": "cfa-12719:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-named-vanguard-grants-boost.test.js"
+      ],
+      "testCases": [
+        "the exact catalog batch compiles only four named-Vanguard Boost CONT abilities",
+        "conditional Boost is source-bound, seat-independent, RC-only, and expires as soon as its condition ends",
+        "server permits a conditional grade-two booster only for the correct controller Vanguard, for either seat",
+        "different conditional grants remain unresolved instead of being treated as Boost"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-13689",
+      "abilityId": "cfa-13689:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-named-vanguard-grants-boost.test.js"
+      ],
+      "testCases": [
+        "the exact catalog batch compiles only four named-Vanguard Boost CONT abilities",
+        "conditional Boost is source-bound, seat-independent, RC-only, and expires as soon as its condition ends",
+        "server permits a conditional grade-two booster only for the correct controller Vanguard, for either seat",
+        "different conditional grants remain unresolved instead of being treated as Boost"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-7528",
+      "abilityId": "cfa-7528:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-named-vanguard-grants-boost.test.js"
+      ],
+      "testCases": [
+        "the exact catalog batch compiles only four named-Vanguard Boost CONT abilities",
+        "conditional Boost is source-bound, seat-independent, RC-only, and expires as soon as its condition ends",
+        "server permits a conditional grade-two booster only for the correct controller Vanguard, for either seat",
+        "different conditional grants remain unresolved instead of being treated as Boost"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-8541",
+      "abilityId": "cfa-8541:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-counter-blast-same-name-drop-call-server.test.js"
+      ],
+      "testCases": [
+        "exact four-card AUTO records preserve their printed target names, source-from-hand RC trigger, and Counter Blast cost",
+        "host and joining player resolve the exact Drop card to their own open Rear-Guard circle",
+        "does not offer the AUTO for a different source, non-RC circle, or mismatched actor/controller",
+        "an empty Accel Circle is a legal open RC destination and preserves the called instance",
+        "missing Counter Blast, named Drop target, or open circle prevents eligibility and claims the event once",
+        "stale and duplicate placement events cannot create duplicate pending resolutions",
+        "rejects wrong named target, occupied circle, and an unpaid Counter Blast without partial state changes",
+        "rejects a request by the opponent for the source controller’s pending ability"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-8571",
+      "abilityId": "cfa-8571:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-counter-blast-same-name-drop-call-server.test.js"
+      ],
+      "testCases": [
+        "exact four-card AUTO records preserve their printed target names, source-from-hand RC trigger, and Counter Blast cost",
+        "host and joining player resolve the exact Drop card to their own open Rear-Guard circle",
+        "does not offer the AUTO for a different source, non-RC circle, or mismatched actor/controller",
+        "an empty Accel Circle is a legal open RC destination and preserves the called instance",
+        "missing Counter Blast, named Drop target, or open circle prevents eligibility and claims the event once",
+        "stale and duplicate placement events cannot create duplicate pending resolutions",
+        "rejects wrong named target, occupied circle, and an unpaid Counter Blast without partial state changes",
+        "rejects a request by the opponent for the source controller’s pending ability"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-8577",
+      "abilityId": "cfa-8577:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-counter-blast-same-name-drop-call-server.test.js"
+      ],
+      "testCases": [
+        "exact four-card AUTO records preserve their printed target names, source-from-hand RC trigger, and Counter Blast cost",
+        "host and joining player resolve the exact Drop card to their own open Rear-Guard circle",
+        "does not offer the AUTO for a different source, non-RC circle, or mismatched actor/controller",
+        "an empty Accel Circle is a legal open RC destination and preserves the called instance",
+        "missing Counter Blast, named Drop target, or open circle prevents eligibility and claims the event once",
+        "stale and duplicate placement events cannot create duplicate pending resolutions",
+        "rejects wrong named target, occupied circle, and an unpaid Counter Blast without partial state changes",
+        "rejects a request by the opponent for the source controller’s pending ability"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-8585",
+      "abilityId": "cfa-8585:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-counter-blast-same-name-drop-call-server.test.js"
+      ],
+      "testCases": [
+        "exact four-card AUTO records preserve their printed target names, source-from-hand RC trigger, and Counter Blast cost",
+        "host and joining player resolve the exact Drop card to their own open Rear-Guard circle",
+        "does not offer the AUTO for a different source, non-RC circle, or mismatched actor/controller",
+        "an empty Accel Circle is a legal open RC destination and preserves the called instance",
+        "missing Counter Blast, named Drop target, or open circle prevents eligibility and claims the event once",
+        "stale and duplicate placement events cannot create duplicate pending resolutions",
+        "rejects wrong named target, occupied circle, and an unpaid Counter Blast without partial state changes",
+        "rejects a request by the opponent for the source controller’s pending ability"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T06:08:03.149Z"
+  "evidenceUpdatedAt": "2026-10-31T07:39:53.355Z"
 }
