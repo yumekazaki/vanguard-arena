@@ -112,6 +112,8 @@ test('the six exact :0 AUTO records and Persona Shield CONT compile as narrow tr
   const shield = Engine.parseCardAbilitiesCached(CATALOG.get('cfa-13708')).find(item => item.id === 'cfa-13708:0');
   assert.equal(shield.printedText, CONT_TEXT);
   assert.equal(shield.definition?.source?.patternId, 'cont-persona-shield-ticket-hand-protection-v1');
+  assert.deepEqual(shield.costs, []);
+  assert.equal(shield.costStatus, 'no-cost');
   assert.deepEqual(shield.definition?.continuousRestrictions, [{ type: 'persona-shield-hand-protection', ownTurnOnly: true, protectRideDeckDiscard: true, protectCardAbilityChoices: true }]);
   for (const id of IDS) assert.deepEqual(Engine.getReviewedAbilityDefinitionsForCard(id).map(item => item.id).sort(), [`${id}:0`, `${id}:1`].sort());
 });

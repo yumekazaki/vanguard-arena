@@ -101060,6 +101060,8 @@
       "printedText": "CONT [Hand]: During your turn, when you would discard a card while riding from ride deck or choose a card from hand by your card’s ability, this card cannot be chosen or discarded.",
       "requiredLocation": ["hand"],
       "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
       "choicesReviewed": true,
       "continuousRestrictions": [{ "type": "persona-shield-hand-protection", "ownTurnOnly": true, "protectRideDeckDiscard": true, "protectCardAbilityChoices": true }],
       "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13708", "patternId": "cont-persona-shield-ticket-hand-protection-v1", "review": "Exact Hand CONT on the Persona Shield ticket. During its owner's turn, it cannot be discarded for a Ride Deck ride or selected from that owner's hand by that owner's card ability." }
