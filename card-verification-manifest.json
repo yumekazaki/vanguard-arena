@@ -75285,8 +75285,246 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13707",
+      "abilityId": "cfa-13707:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-persona-shield-ticket-server.test.js"
+      ],
+      "testCases": [
+        "the six exact :0 AUTO records and Persona Shield CONT compile as narrow trusted definitions",
+        "each of the six exact source instances recognizes both the hand-to-RC and Ride Deck discard branch",
+        "normal hand placement and Ride Deck cost discard resolve for either seat with that controller’s reveal and Soul Blast",
+        "placement from a non-Unit card ability qualifies while placement from a Unit ability does not",
+        "a Persona Ride Vanguard permits ticket generation without revealing; no qualifying condition has no cost or ticket",
+        "rejects Unit ability placement, stale or wrong-zone events, and a non-Persona-Ride reveal without cost loss",
+        "Persona Shield is protected from Ride Deck discard and the owner’s ability choices during that owner’s turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13709",
+      "abilityId": "cfa-13709:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-persona-shield-ticket-server.test.js"
+      ],
+      "testCases": [
+        "the six exact :0 AUTO records and Persona Shield CONT compile as narrow trusted definitions",
+        "each of the six exact source instances recognizes both the hand-to-RC and Ride Deck discard branch",
+        "normal hand placement and Ride Deck cost discard resolve for either seat with that controller’s reveal and Soul Blast",
+        "placement from a non-Unit card ability qualifies while placement from a Unit ability does not",
+        "a Persona Ride Vanguard permits ticket generation without revealing; no qualifying condition has no cost or ticket",
+        "rejects Unit ability placement, stale or wrong-zone events, and a non-Persona-Ride reveal without cost loss",
+        "Persona Shield is protected from Ride Deck discard and the owner’s ability choices during that owner’s turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13710",
+      "abilityId": "cfa-13710:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-persona-shield-ticket-server.test.js"
+      ],
+      "testCases": [
+        "the six exact :0 AUTO records and Persona Shield CONT compile as narrow trusted definitions",
+        "each of the six exact source instances recognizes both the hand-to-RC and Ride Deck discard branch",
+        "normal hand placement and Ride Deck cost discard resolve for either seat with that controller’s reveal and Soul Blast",
+        "placement from a non-Unit card ability qualifies while placement from a Unit ability does not",
+        "a Persona Ride Vanguard permits ticket generation without revealing; no qualifying condition has no cost or ticket",
+        "rejects Unit ability placement, stale or wrong-zone events, and a non-Persona-Ride reveal without cost loss",
+        "Persona Shield is protected from Ride Deck discard and the owner’s ability choices during that owner’s turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13711",
+      "abilityId": "cfa-13711:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-persona-shield-ticket-server.test.js"
+      ],
+      "testCases": [
+        "the six exact :0 AUTO records and Persona Shield CONT compile as narrow trusted definitions",
+        "each of the six exact source instances recognizes both the hand-to-RC and Ride Deck discard branch",
+        "normal hand placement and Ride Deck cost discard resolve for either seat with that controller’s reveal and Soul Blast",
+        "placement from a non-Unit card ability qualifies while placement from a Unit ability does not",
+        "a Persona Ride Vanguard permits ticket generation without revealing; no qualifying condition has no cost or ticket",
+        "rejects Unit ability placement, stale or wrong-zone events, and a non-Persona-Ride reveal without cost loss",
+        "Persona Shield is protected from Ride Deck discard and the owner’s ability choices during that owner’s turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13712",
+      "abilityId": "cfa-13712:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-persona-shield-ticket-server.test.js"
+      ],
+      "testCases": [
+        "the six exact :0 AUTO records and Persona Shield CONT compile as narrow trusted definitions",
+        "each of the six exact source instances recognizes both the hand-to-RC and Ride Deck discard branch",
+        "normal hand placement and Ride Deck cost discard resolve for either seat with that controller’s reveal and Soul Blast",
+        "placement from a non-Unit card ability qualifies while placement from a Unit ability does not",
+        "a Persona Ride Vanguard permits ticket generation without revealing; no qualifying condition has no cost or ticket",
+        "rejects Unit ability placement, stale or wrong-zone events, and a non-Persona-Ride reveal without cost loss",
+        "Persona Shield is protected from Ride Deck discard and the owner’s ability choices during that owner’s turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13713",
+      "abilityId": "cfa-13713:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-persona-shield-ticket-server.test.js"
+      ],
+      "testCases": [
+        "the six exact :0 AUTO records and Persona Shield CONT compile as narrow trusted definitions",
+        "each of the six exact source instances recognizes both the hand-to-RC and Ride Deck discard branch",
+        "normal hand placement and Ride Deck cost discard resolve for either seat with that controller’s reveal and Soul Blast",
+        "placement from a non-Unit card ability qualifies while placement from a Unit ability does not",
+        "a Persona Ride Vanguard permits ticket generation without revealing; no qualifying condition has no cost or ticket",
+        "rejects Unit ability placement, stale or wrong-zone events, and a non-Persona-Ride reveal without cost loss",
+        "Persona Shield is protected from Ride Deck discard and the owner’s ability choices during that owner’s turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13708",
+      "abilityId": "cfa-13708:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-persona-shield-ticket-server.test.js"
+      ],
+      "testCases": [
+        "the six exact :0 AUTO records and Persona Shield CONT compile as narrow trusted definitions",
+        "each of the six exact source instances recognizes both the hand-to-RC and Ride Deck discard branch",
+        "normal hand placement and Ride Deck cost discard resolve for either seat with that controller’s reveal and Soul Blast",
+        "placement from a non-Unit card ability qualifies while placement from a Unit ability does not",
+        "a Persona Ride Vanguard permits ticket generation without revealing; no qualifying condition has no cost or ticket",
+        "rejects Unit ability placement, stale or wrong-zone events, and a non-Persona-Ride reveal without cost loss",
+        "Persona Shield is protected from Ride Deck discard and the owner’s ability choices during that owner’s turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13498",
+      "abilityId": "cfa-13498:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-dragontree-gc-shield-server.test.js"
+      ],
+      "testCases": [
+        "all five exact printed abilities have a trusted, mandatory +5000 shield definition",
+        "the guard controller alone gets and resolves the effect on host or joining seat",
+        "a granted AUTO follows the exact guard instance through retirement and only its controller may move it to Soul",
+        "the granted retirement AUTO is optional and host cannot decide for the joining player",
+        "the AUTO rejects missing, opponent-owned, or Vanguard-only markers and other GC entrants",
+        "wrong-battle and duplicate entry events cannot create a second or invalid prompt",
+        "the temporary ability and shield expire when that exact battle closes",
+        "invalid response, lost source, or lost marker causes no partial shield or granted ability",
+        "retiring a different source, from the wrong destination, or in another battle cannot resolve the temporary AUTO"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13566",
+      "abilityId": "cfa-13566:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-dragontree-gc-shield-server.test.js"
+      ],
+      "testCases": [
+        "all five exact printed abilities have a trusted, mandatory +5000 shield definition",
+        "the guard controller alone gets and resolves the effect on host or joining seat",
+        "a granted AUTO follows the exact guard instance through retirement and only its controller may move it to Soul",
+        "the granted retirement AUTO is optional and host cannot decide for the joining player",
+        "the AUTO rejects missing, opponent-owned, or Vanguard-only markers and other GC entrants",
+        "wrong-battle and duplicate entry events cannot create a second or invalid prompt",
+        "the temporary ability and shield expire when that exact battle closes",
+        "invalid response, lost source, or lost marker causes no partial shield or granted ability",
+        "retiring a different source, from the wrong destination, or in another battle cannot resolve the temporary AUTO"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13607",
+      "abilityId": "cfa-13607:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-dragontree-gc-shield-server.test.js"
+      ],
+      "testCases": [
+        "all five exact printed abilities have a trusted, mandatory +5000 shield definition",
+        "the guard controller alone gets and resolves the effect on host or joining seat",
+        "a granted AUTO follows the exact guard instance through retirement and only its controller may move it to Soul",
+        "the granted retirement AUTO is optional and host cannot decide for the joining player",
+        "the AUTO rejects missing, opponent-owned, or Vanguard-only markers and other GC entrants",
+        "wrong-battle and duplicate entry events cannot create a second or invalid prompt",
+        "the temporary ability and shield expire when that exact battle closes",
+        "invalid response, lost source, or lost marker causes no partial shield or granted ability",
+        "retiring a different source, from the wrong destination, or in another battle cannot resolve the temporary AUTO"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13609",
+      "abilityId": "cfa-13609:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-dragontree-gc-shield-server.test.js"
+      ],
+      "testCases": [
+        "all five exact printed abilities have a trusted, mandatory +5000 shield definition",
+        "the guard controller alone gets and resolves the effect on host or joining seat",
+        "a granted AUTO follows the exact guard instance through retirement and only its controller may move it to Soul",
+        "the granted retirement AUTO is optional and host cannot decide for the joining player",
+        "the AUTO rejects missing, opponent-owned, or Vanguard-only markers and other GC entrants",
+        "wrong-battle and duplicate entry events cannot create a second or invalid prompt",
+        "the temporary ability and shield expire when that exact battle closes",
+        "invalid response, lost source, or lost marker causes no partial shield or granted ability",
+        "retiring a different source, from the wrong destination, or in another battle cannot resolve the temporary AUTO"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13638",
+      "abilityId": "cfa-13638:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-dragontree-gc-shield-server.test.js"
+      ],
+      "testCases": [
+        "all five exact printed abilities have a trusted, mandatory +5000 shield definition",
+        "the guard controller alone gets and resolves the effect on host or joining seat",
+        "a granted AUTO follows the exact guard instance through retirement and only its controller may move it to Soul",
+        "the granted retirement AUTO is optional and host cannot decide for the joining player",
+        "the AUTO rejects missing, opponent-owned, or Vanguard-only markers and other GC entrants",
+        "wrong-battle and duplicate entry events cannot create a second or invalid prompt",
+        "the temporary ability and shield expire when that exact battle closes",
+        "invalid response, lost source, or lost marker causes no partial shield or granted ability",
+        "retiring a different source, from the wrong destination, or in another battle cannot resolve the temporary AUTO"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T03:23:39.105Z"
+  "evidenceUpdatedAt": "2026-10-31T03:39:07.706Z"
 }

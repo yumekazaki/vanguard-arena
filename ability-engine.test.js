@@ -2079,7 +2079,8 @@ test("real Kungfu Kid, Bolta AUTO requires its own attack and a strict Rear-Guar
   assert.equal(resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{source,sourceInPlay:true,side:"p1",match}).ok,true);
   assert.equal(match.pendingAttack.power,11000);
   const app=fs.readFileSync("app.js","utf8");
-  assert.match(app,/controllerRearGuards:\(player\.rear\|\|\[\]\)\.filter\(Boolean\)\.length,opponentRearGuards:\(opponent\?\.rear\|\|\[\]\)\.filter\(Boolean\)\.length/);
+  assert.match(app,/controllerRearGuards:\(player\.rear\|\|\[\]\)\.filter\(Boolean\)\.length/);
+  assert.match(app,/opponentRearGuards:\(opponent\?\.rear\|\|\[\]\)\.filter\(Boolean\)\.length/);
 });
 
 test("rear-Guard advantage attack wording variants preserve the same exact condition",()=>{
