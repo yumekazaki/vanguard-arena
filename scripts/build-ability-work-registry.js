@@ -87,7 +87,7 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, assignments 
     const cardIds = normalCards.slice(index, index + cardsPerBatch);
     const rows = cardIds.flatMap(cardId => byCard.get(cardId));
     batches.push({
-      batchId: `ABILITY-${String(Math.floor(index / cardsPerBatch) + 1).padStart(4, "0")}`,
+      batchId: `ABILITY-${baselineCommit.slice(0, 8).toUpperCase()}-${String(Math.floor(index / cardsPerBatch) + 1).padStart(4, "0")}`,
       status: "available",
       workerOwner: null,
       cardIds,

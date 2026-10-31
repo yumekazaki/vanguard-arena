@@ -24,7 +24,8 @@ test("registry assigns every ability once, preserves dependencies/evidence, and 
   assert.equal(result.registry.counts.reservedAbilities, 2);
   assert.equal(new Set(result.records.map(record => record.abilityId)).size, 3);
   assert.ok(result.records.filter(record => record.cardId === "cfa-11110").every(record => record.assignmentStatus === "reserved" && record.workerOwner === "primary-session"));
-  assert.equal(result.records.find(record => record.abilityId === "cfa-2000:0").batchId, "ABILITY-0001");
+  assert.equal(result.records.find(record => record.abilityId === "cfa-2000:0").batchId, `ABILITY-${BASELINE.slice(0, 8).toUpperCase()}-0001`);
+  assert.notEqual(result.records.find(record => record.abilityId === "cfa-2000:0").batchId, "ABILITY-0001", "new registry generations do not collide with legacy claim refs");
   assert.deepEqual(result.records.find(record => record.abilityId === "cfa-11110:1").dependencies, ["continuous-test"]);
   assert.equal(result.records.find(record => record.abilityId === "cfa-11110:1").verification.evidenceStatus, "tests-passing");
   assert.throws(() => buildRegistry({ ...queue, items: [...queue.items, queue.items[0]] }, { baselineCommit: BASELINE }), /duplicate ability ID/);
