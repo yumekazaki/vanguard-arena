@@ -5,14 +5,14 @@
     "command": "node --test",
     "testCommand": "node --test",
     "status": "passed",
-    "tests": 1640,
-    "testCount": 1640,
-    "passed": 1640,
+    "tests": 1642,
+    "testCount": 1642,
+    "passed": 1642,
     "failed": 0,
-    "durationMilliseconds": 328283.7732,
-    "completedAt": "2026-10-31T12:38:00.580Z",
+    "durationMilliseconds": 350391.8921,
+    "completedAt": "2026-10-31T13:54:06.660Z",
     "runDate": "2026-10-31",
-    "validationInputDigest": "44378f0060e367b4e9b211a756d08266f6cd5e4c7cc4add3b3324517fcf9e010"
+    "validationInputDigest": "2201ec3d78217720602d24a439a1ee935934f75e7d0133b9e3b78de534897b2e"
   },
   "records": [
     {
@@ -57281,7 +57281,7 @@
     {
       "cardId": "cfa-6456",
       "abilityId": "cfa-6456:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-cont-rc-exact-vanguard-power.test.js"
       ],
@@ -57290,7 +57290,19 @@
         "exact Vanguard-name power rejects substring matches and applies only on RC for either seat",
         "trusted battle power applies exact-name CONT only when the controller's Vanguard matches"
       ],
-      "fullyVerified": false
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-10-31T13:07:03.622Z",
+        "validationInputDigest": "44378f0060e367b4e9b211a756d08266f6cd5e4c7cc4add3b3324517fcf9e010",
+        "printedAbilityIds": [
+          "cfa-6456:0"
+        ],
+        "testFiles": [
+          "ability-cont-rc-exact-vanguard-power.test.js"
+        ]
+      }
     },
     {
       "cardId": "cfa-646",
@@ -66040,7 +66052,7 @@
     {
       "cardId": "cfa-8659",
       "abilityId": "cfa-8659:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-cont-rc-exact-vanguard-power.test.js"
       ],
@@ -66049,7 +66061,19 @@
         "exact Vanguard-name power rejects substring matches and applies only on RC for either seat",
         "trusted battle power applies exact-name CONT only when the controller's Vanguard matches"
       ],
-      "fullyVerified": false
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-10-31T13:07:03.622Z",
+        "validationInputDigest": "44378f0060e367b4e9b211a756d08266f6cd5e4c7cc4add3b3324517fcf9e010",
+        "printedAbilityIds": [
+          "cfa-8659:0"
+        ],
+        "testFiles": [
+          "ability-cont-rc-exact-vanguard-power.test.js"
+        ]
+      }
     },
     {
       "cardId": "cfa-866",
@@ -76236,5 +76260,5 @@
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T10:05:37.550Z"
+  "evidenceUpdatedAt": "2026-10-31T13:54:06.660Z"
 }

@@ -83,6 +83,31 @@ test("candidate mechanic families group intact cards for triage without treating
   assert.equal(new Set(assignedCards).size, assignedCards.length, "a card must not be placed into more than one work batch");
 });
 
+test("generated candidate and normal batch IDs skip IDs already reserved by atomic claims", () => {
+  const queue = { validationEvidenceFresh: false, items: [
+    ...["cfa-3000", "cfa-3001", "cfa-3002"].map(cardId => ({
+      abilityId: `${cardId}:0`, cardId, kind: "AUTO", printedText: "AUTO candidate", effects: [], dependencies: [],
+      workFlags: ["unsupported-or-unreviewed"], mechanicGroup: "candidate-call-from-drop", mechanicGroupType: "unreviewed-similarity-candidate"
+    }))
+  ] };
+  const claimed = buildRegistry(queue, {
+    baselineCommit: BASELINE, cardsPerBatch: 1, minMechanicGroupCards: 2,
+    assignments: [{ batchId: "CANDIDATE-01234567-0001", status: "in-progress", workerOwner: "worker-a", abilityIds: ["cfa-3000:0"] }]
+  });
+  assert.equal(claimed.batches.filter(batch => batch.batchId === "CANDIDATE-01234567-0001").length, 1);
+  assert.ok(claimed.batches.some(batch => batch.batchId === "CANDIDATE-01234567-0002" && batch.status === "available"));
+
+  const normal = buildRegistry({ validationEvidenceFresh: false, items: [
+    { abilityId: "cfa-4000:0", cardId: "cfa-4000", kind: "AUTO", printedText: "AUTO", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] },
+    { abilityId: "cfa-4001:0", cardId: "cfa-4001", kind: "AUTO", printedText: "AUTO", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] }
+  ] }, {
+    baselineCommit: BASELINE, cardsPerBatch: 1,
+    assignments: [{ batchId: "ABILITY-01234567-0001", status: "in-progress", workerOwner: "worker-b", abilityIds: ["cfa-4000:0"] }]
+  });
+  assert.equal(normal.batches.filter(batch => batch.batchId === "ABILITY-01234567-0001").length, 1);
+  assert.ok(normal.batches.some(batch => batch.batchId === "ABILITY-01234567-0002" && batch.status === "available"));
+});
+
 test("candidate-family IDs cannot collide with active worker assignments or create ambiguous claims", () => {
   const mechanicGroup = "candidate-auto-test-family";
   const queue = { validationEvidenceFresh: false, items: [

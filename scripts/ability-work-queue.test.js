@@ -2,9 +2,31 @@
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
 const path = require("node:path");
 const { loadCatalog } = require("./audit-ability-catalog.js");
-const { buildAbilityWorkQueue } = require("./build-ability-work-queue.js");
+const { buildAbilityWorkQueue, writeQueueFile } = require("./build-ability-work-queue.js");
+const { readQueueFile } = require("./build-ability-work-registry.js");
+
+test("work queue can be atomically stored compressed and read by the registry builder", () => {
+  const directory = fs.mkdtempSync(path.join(__dirname, ".ability-queue-test-"));
+  const destination = path.join(directory, "ability-work-queue.json.gz");
+  const queue = {
+    schemaVersion: 1,
+    validationEvidenceFresh: true,
+    counts: { remainingAbilities: 200 },
+    items: Array.from({ length: 200 }, (_, index) => ({ abilityId: `cfa-${index}:0`, printedText: "AUTO: When this unit is placed on RC, choose one of your units, and it gets power +5000 until end of turn." }))
+  };
+  try {
+    writeQueueFile(queue, destination);
+    assert.deepEqual(readQueueFile(destination), queue);
+    assert.ok(fs.statSync(destination).size < Buffer.byteLength(JSON.stringify(queue)), "gzip output should reduce generated queue storage");
+    assert.ok(fs.existsSync(destination));
+    assert.equal(fs.readdirSync(directory).filter(name => name.endsWith(".tmp")).length, 0, "atomic writer should leave no temporary file");
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
 
 test("central work queue covers unverified abilities and separates reviewed mechanics from similarity candidates", () => {
   const cards = loadCatalog();

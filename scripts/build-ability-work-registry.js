@@ -2,6 +2,7 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const zlib = require("node:zlib");
 
 const RESERVED_ABILITIES = new Set([
   "cfa-10780:0", "cfa-11102:0", "cfa-11104:0", "cfa-11106:0", "cfa-11108:0",
@@ -17,6 +18,12 @@ function atomicWrite(file, contents) {
   const temporary = `${file}.${process.pid}.tmp`;
   fs.writeFileSync(temporary, contents, { flag: "wx" });
   fs.renameSync(temporary, file);
+}
+
+function readQueueFile(queueFile) {
+  const contents = fs.readFileSync(queueFile);
+  const text = queueFile.toLowerCase().endsWith(".gz") ? zlib.gunzipSync(contents).toString("utf8") : contents.toString("utf8");
+  return JSON.parse(text);
 }
 
 function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicGroupCards = 4, assignments = [] } = {}) {
@@ -101,7 +108,15 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
     .filter(([, cardSet]) => cardSet.size >= minMechanicGroupCards)
     .sort((a, b) => b[1].size - a[1].size || a[0].localeCompare(b[0]));
   const familyAssignedCards = new Set();
+  const usedBatchIds = new Set(batches.map(batch => batch.batchId));
   let familyBatchSequence = 1;
+  const nextFamilyBatchId = () => {
+    let batchId;
+    do { batchId = `CANDIDATE-${baselineCommit.slice(0, 8).toUpperCase()}-${String(familyBatchSequence++).padStart(4, "0")}`; }
+    while (usedBatchIds.has(batchId));
+    usedBatchIds.add(batchId);
+    return batchId;
+  };
   for (const [mechanicGroup, cardSet] of rankedCandidateGroups) {
     const eligibleCards = [...cardSet].filter(cardId => !familyAssignedCards.has(cardId)).sort((a, b) => a.localeCompare(b));
     for (let offset = 0; offset < eligibleCards.length; offset += cardsPerBatch) {
@@ -111,7 +126,7 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
       const rows = cardIds.flatMap(cardId => byCard.get(cardId));
       const focusedAbilityIds = rows.filter(item => item.mechanicGroup === mechanicGroup).map(item => item.abilityId).sort();
       batches.push({
-        batchId: `CANDIDATE-${baselineCommit.slice(0, 8).toUpperCase()}-${String(familyBatchSequence++).padStart(4, "0")}`,
+        batchId: nextFamilyBatchId(),
         status: "available",
         workerOwner: null,
         cardIds,
@@ -125,11 +140,16 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
   }
 
   const normalCards = [...byCard.keys()].filter(cardId => !reservedCards.has(cardId) && !familyAssignedCards.has(cardId)).sort((a, b) => a.localeCompare(b));
+  let normalBatchSequence = 1;
   for (let index = 0; index < normalCards.length; index += cardsPerBatch) {
     const cardIds = normalCards.slice(index, index + cardsPerBatch);
     const rows = cardIds.flatMap(cardId => byCard.get(cardId));
+    let batchId;
+    do { batchId = `ABILITY-${baselineCommit.slice(0, 8).toUpperCase()}-${String(normalBatchSequence++).padStart(4, "0")}`; }
+    while (usedBatchIds.has(batchId));
+    usedBatchIds.add(batchId);
     batches.push({
-      batchId: `ABILITY-${baselineCommit.slice(0, 8).toUpperCase()}-${String(Math.floor(index / cardsPerBatch) + 1).padStart(4, "0")}`,
+      batchId,
       status: "available",
       workerOwner: null,
       cardIds,
@@ -206,7 +226,7 @@ function writeRegistry(root, { baselineCommit, cardsPerBatch = 25, queuePath } =
   const queueFile = queuePath || path.join(root, ".card-pipeline", "ability-work-queue.json");
   const assignmentsPath = path.join(root, "ability-work-assignments.json");
   const assignments = fs.existsSync(assignmentsPath) ? JSON.parse(fs.readFileSync(assignmentsPath, "utf8")).assignments : [];
-  const built = buildRegistry(JSON.parse(fs.readFileSync(queueFile, "utf8")), { baselineCommit, cardsPerBatch, assignments });
+  const built = buildRegistry(readQueueFile(queueFile), { baselineCommit, cardsPerBatch, assignments });
   const manifest = { ...built.registry, generatedAt: new Date().toISOString() };
   atomicWrite(path.join(root, "ability-work-registry.jsonl"), built.records.map(record => JSON.stringify(record)).join("\n") + "\n");
   atomicWrite(path.join(root, "ability-work-batches.json"), JSON.stringify({ ...manifest, batches: built.batches }, null, 2) + "\n");
@@ -223,4 +243,4 @@ if (require.main === module) {
   process.stdout.write(JSON.stringify(writeRegistry(root, { baselineCommit, cardsPerBatch, queuePath: option("--queue") || undefined }), null, 2) + "\n");
 }
 
-module.exports = { RESERVED_ABILITIES, buildRegistry, writeRegistry };
+module.exports = { RESERVED_ABILITIES, buildRegistry, writeRegistry, readQueueFile };
