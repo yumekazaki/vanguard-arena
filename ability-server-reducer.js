@@ -917,6 +917,51 @@
         Number(definition.effects[0]?.amount) !== Number(match[3])) return false;
     return definition.effects[0].duration === (match[4].toLowerCase() === "this turn" ? "turn" : "battle");
   }
+  const PAID_OWN_ATTACK_CATALOG_CACHE = new Map();
+  function authoritativeCatalogCard(cardId) {
+    const id = String(cardId || "");
+    const catalogs = [globalThis.VanguardCardCatalog?.cards, globalThis.CARD_CATALOG, globalThis.window?.CARD_CATALOG];
+    for (const catalog of catalogs) if (Array.isArray(catalog)) { const card = catalog.find(item => String(item?.id || "") === id); if (card?.text) return card; }
+    if (typeof require === "function") {
+      try { const catalog = require("./scripts/audit-ability-catalog.js").loadCatalog(); return catalog.find(item => String(item?.id || "") === id) || null; } catch { /* catalog unavailable in this runtime */ }
+    }
+    return null;
+  }
+  function authoritativePaidOwnAttackAbilities(cardId, engine) {
+    const id = String(cardId || "");
+    if (PAID_OWN_ATTACK_CATALOG_CACHE.has(id)) return PAID_OWN_ATTACK_CATALOG_CACHE.get(id);
+    const card = authoritativeCatalogCard(id);
+    if (!card || !engine?.parseCardAbilities) return [];
+    const abilities = engine.parseCardAbilities(card).filter(ability => ability?.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1");
+    PAID_OWN_ATTACK_CATALOG_CACHE.set(id, abilities);
+    return abilities;
+  }
+  function isExactPaidOwnVanguardAttackPowerAbility(ability) {
+    const cardId = String(ability?.cardId || "");
+    const trusted = authoritativePaidOwnAttackAbilities(cardId, globalThis.VanguardAbilityEngine).find(item => item.id === ability?.id);
+    if (!trusted) return false;
+    const fields = item => ({ id: item.id, cardId: item.cardId, kind: item.kind, printedText: item.printedText,
+      requiredLocation: item.requiredLocation, trigger: item.trigger, conditions: item.conditions, costs: item.costs, gb: item.gb,
+      canDecline: item.canDecline, effects: item.effects, definition: item.definition });
+    return JSON.stringify(fields(ability)) === JSON.stringify(fields(trusted));
+  }
+  function paidOwnVanguardAttackPowerEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
+    const attack = state?.pendingAttack, side = located?.side, player = side && state.players?.[side];
+    const location = located?.zone === "vanguard" ? "vanguard" : located?.circle || located?.zone;
+    const targetUid = attack?.targetUid, target = targetUid && engine.locateCardInstance(state, targetUid);
+    const current = source?.uid && engine.locateCardInstance(state, source.uid);
+    return Boolean(isExactPaidOwnVanguardAttackPowerAbility(ability) && event?.type === "unit.attacked" && event?.eventId && event.battleId &&
+      event.battleId === attack?.battleId && event.sourceCardInstanceId === source?.uid && event.cardInstanceId === source?.uid && event.subjectCardInstanceId === source?.uid &&
+      (event.attackingCardInstanceIds || []).includes(source?.uid) && event.sourceOwnerPlayerId === located?.ownerPlayerId && event.subjectOwnerPlayerId === located?.ownerPlayerId &&
+      event.sourceControllerPlayerId === actorPlayerId && event.subjectControllerPlayerId === actorPlayerId && event.actingPlayerId === actorPlayerId && event.turnPlayerId === actorPlayerId &&
+      event.phase === "battle" && event.timingWindow === "attack-declared" && event.currentLocation === location && event.targetLocation === "vanguard" &&
+      targetUid && (event.targetCardInstanceIds || []).includes(targetUid) && attack.attackerUid === source.uid && attack.attackerSide === side &&
+      attack.attackerPlayerId === actorPlayerId && attack.attackerZone === location && attack.targetZone === "vanguard" && attack.defenderSide !== side && attack.closing !== true &&
+      target && !target.ambiguous && target.zone === "vanguard" && target.side === attack.defenderSide && target.controllerPlayerId !== actorPlayerId &&
+      state.players?.[attack.defenderSide]?.vanguard?.uid === targetUid && located.controllerPlayerId === actorPlayerId && player?.playerId === actorPlayerId &&
+      (located.zone === "vanguard" ? player.vanguard?.uid === source.uid : located.zone === "rear-guard" && player.rear?.some(card => card?.uid === source.uid)) &&
+      current && !current.ambiguous && current.instance === source && state.players?.[state.side]?.playerId === actorPlayerId);
+  }
   function isExactOwnAttackMandatoryCounterBlastPowerAbility(ability) {
     const definition = ability?.definition, cardId = String(ability?.cardId || "");
     const ids = new Set(["cfa-11682", "cfa-11687", "cfa-11690", "cfa-11731"]);
@@ -3079,6 +3124,7 @@
   function supportsServerAbilityEffects(ability) {
     const effects = ability?.definition?.effects;
     if (!Array.isArray(effects) || !effects.length) return false;
+    if (ability?.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1" && !isExactPaidOwnVanguardAttackPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-own-attack-hit-place-treasures-marker-v1" && (!isExactTreasuresHitAbility(ability) || effects.length !== 1 || effects[0]?.op !== "place-circle-marker" || effects[0]?.markerType !== "Treasures")) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-placement-counter-blast-place-dragontree-marker-v1" && !isExactDragontreePlacementAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-other-hand-discard-energy-blast-remove-source-return-discard-v1" && !isExactOtherHandDiscardReturnAbility(ability)) return false;
@@ -3356,7 +3402,10 @@
 
   function serverReviewedAbilities(instance, engine) {
     const definitions = engine.getReviewedAbilityDefinitionsForCard?.(instance?.cardId) || [];
-    return definitions.map(definition => parseReviewedDefinition(instance, definition, engine)).filter(Boolean);
+    const reviewed = definitions.map(definition => parseReviewedDefinition(instance, definition, engine)).filter(Boolean);
+    const byId = new Map(reviewed.map(ability => [ability.id, ability]));
+    for (const ability of authoritativePaidOwnAttackAbilities(instance?.cardId, engine)) if (!byId.has(ability.id)) byId.set(ability.id, ability);
+    return [...byId.values()];
   }
   function serverEffectiveTriggerZoneGrade(state,player,instance,engine){
     const definition=serverCardDefinition(instance),baseGrade=Number(instance?.grade??definition?.grade),located=instance?.uid?engine.locateCardInstance(state,instance.uid):null;
@@ -3690,7 +3739,7 @@
     // Optionality does not make its costs payable. Keep existing reviewed
     // prompt flows intact while enforcing filtered discard availability for
     // the exact clan-discard attack family.
-    if (ability.canDecline === true && ability.definition?.source?.patternId !== "auto-own-attack-clan-discard-power-battle-v1" && !ability.costs.some(cost => cost?.type === "bind-heal-from-drop")) return true;
+    if (ability.canDecline === true && ability.definition?.source?.patternId !== "auto-own-attack-clan-discard-power-battle-v1" && ability.definition?.source?.patternId !== "auto-own-vanguard-attack-paid-power-battle-v1" && !ability.costs.some(cost => cost?.type === "bind-heal-from-drop")) return true;
     if (!controller || typeof engine?.canPayAbilityCosts !== "function") return false;
     const supportedCostTypes = new Set(["counter-blast", "soul-blast", "energy-blast", "discard", "reveal-grade-from-hand", "source-discard", "rest-source", "source-to-soul", "source-to-bottom-deck", "source-retire", "source-bind", "source-bind-from-field-or-drop", "bind-heal-from-drop"]);
     if (ability.costs.some(cost => !supportedCostTypes.has(cost?.type))) return false;
@@ -3759,7 +3808,10 @@
         for (const instance of instances) {
           const located = engine.locateCardInstance(state, instance.uid);
           if (!located || located.ambiguous) continue;
-          const definitions = engine.getReviewedAbilityDefinitionsForCard(instance.cardId);
+          const definitions = [...engine.getReviewedAbilityDefinitionsForCard(instance.cardId)];
+          for (const compiled of authoritativePaidOwnAttackAbilities(instance.cardId, engine)) {
+            if (!definitions.some(definition => definition.id === compiled.id)) definitions.push(compiled.definition);
+          }
           for (const definition of definitions) {
             if (definition.kind !== "AUTO") continue;
             const parsed = engine.parseCardAbilities({ id: String(instance.cardId), text: definition.printedText }).find(item => item.kind === "AUTO");
@@ -3900,6 +3952,8 @@
             const eventForMatch = authoritativeSoulBlastBoostEvent(state, ability, event, engine);
             const eventMatch = engine.eventMatchesAbilityTrigger(ability, eventName, eventForMatch, instance.uid, triggerSourceZone, subjectZone, located.controllerPlayerId);
             if (!eventMatch) continue;
+            if (ability.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1" &&
+                !paidOwnVanguardAttackPowerEventMatches(state, ability, located.instance, located, eventForMatch, located.controllerPlayerId, engine)) continue;
             if(ability.definition?.source?.patternId==="auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1"&&
               !damageZoneClanPowerEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,engine))continue;
             if(isExactGuardianDropTriggerCallAbility(ability)&&!engine.canPayAbilityCosts(ability,{faceUpDamage:(state.players?.[side]?.damage||[]).filter(card=>!card.faceDown).length})){
@@ -5546,6 +5600,15 @@
       : pending.field || sourceZone;
     const authoritativeTriggerEvent = authoritativeSoulBlastBoostEvent(state, ability, triggerEvent, engine);
     if (!engine.eventMatchesAbilityTrigger(ability, triggerContext.event, authoritativeTriggerEvent, located.instance.uid, eventSourceZone, triggerContext.subjectZone || triggerEvent.currentLocation, actorPlayerId)) return reject("trigger-event-mismatch");
+    if (ability.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1") {
+      if (!paidOwnVanguardAttackPowerEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("paid-vanguard-attack-power-event-invalid");
+      if (command.payload.accept) {
+        const currentConditions = buildConditionContext(state, triggerEvent, located, engine);
+        if (!currentConditions || !engine.evaluateAbilityConditions(ability, currentConditions)) return reject("paid-vanguard-attack-power-condition-no-longer-met");
+        const controller = state.players?.[side];
+        if (!engine.canPayAbilityCosts(ability, { faceUpDamage: (controller?.damage || []).filter(card => !card.faceDown).length, soulCount: (controller?.soul || []).length })) return reject("unpayable-cost");
+      }
+    }
     if(ability.definition?.source?.patternId==="auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1"){
       if(!damageZoneClanPowerEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,engine,{requireSubjectInDamage:false}))return reject("damage-zone-power-trigger-context-invalid");
       const currentConditions=buildConditionContext(state,triggerEvent,located,engine);

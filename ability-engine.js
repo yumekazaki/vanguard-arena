@@ -1222,6 +1222,27 @@
       source: { dataset: "Cardfight Area snapshot", patternId: "auto-own-attack-counter-blast-power-battle-v1", review: "Exact AUTO template: source circle, Counter Blast amount, optional payment, exact attacking source, and battle power modifier are parsed from printed text." },
       effects: [{ op: "modify-power", target: "source", amount: Number(match[3]), duration: match[4].toLowerCase() === "this turn" ? "turn" : "battle" }] };
   }
+  function compilePaidOwnVanguardAttackPowerDefinition(cardId, abilityId, kind, printedText) {
+    if (kind !== "AUTO") return null;
+    const text = normalizePrintedText(printedText);
+    const match = text.match(/^AUTO \[(VC\/RC|VC|RC)\](?:(?: (Shinken Hissatsu)(?: \(This ability is active if you have (\d+|one|two|three|four|five|six|seven|eight|nine|ten) or more damage\))?)|(?: (Generation Break) (\d+))|(?: (Brave)))?: \[Counter Blast (\d+)(?: & Soul Blast (\d+))?\] When this unit attacks a vanguard, you may pay the cost\. If you do, this unit gets power \+(\d+) until end of that battle\.$/i);
+    if (!match) return null;
+    const number = value => { if (value == null) return 0; if (/^\d+$/.test(value)) return Number(value); const names = {one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10}; return names[String(value).toLowerCase()] || 0; };
+    const circle = match[1].toUpperCase(), keyword = match[2] ? "Shinken Hissatsu" : match[4] ? "Generation Break" : match[6] ? "Brave" : null;
+    const damage = match[2] ? (match[3] ? number(match[3]) : 3) : 0;
+    const generationBreak = match[4] ? number(match[5]) : 0;
+    const counterBlast = number(match[7]), soulBlast = number(match[8]), power = number(match[9]);
+    if (!counterBlast || !power || keyword === "Shinken Hissatsu" && damage !== 3 || keyword === "Generation Break" && !generationBreak || keyword !== "Generation Break" && generationBreak) return null;
+    const requiredLocation = circle === "VC" ? ["vanguard"] : circle === "RC" ? ["rear-guard"] : ["vanguard", "rear-guard"];
+    const conditions = keyword === "Shinken Hissatsu" ? [{ type: "damage-at-least", count: 3 }] : keyword === "Brave" ? [{ type: "controller-hand-size-at-most", count: 3 }] : [];
+    const costs = [{ type: "counter-blast", count: counterBlast }];
+    if (soulBlast) costs.push({ type: "soul-blast", count: soulBlast });
+    return { id: abilityId, cardId: String(cardId), kind, printedText, optional: true, requiredLocation,
+      trigger: { status: "recognized-trigger", eventType: "unit.attacked", subject: "source", circles: requiredLocation, targetLocation: "vanguard" },
+      conditions, conditionsReviewed: true, costs, costsReviewed: true, choicesReviewed: true,
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-own-vanguard-attack-paid-power-battle-v1", review: "Reusable exact grammar for optional cost-paid power when this exact VC/RC unit attacks a Vanguard. Shinken Hissatsu uses the live three-Damage condition, Generation Break uses the printed face-up G-unit count, and Brave uses the live three-or-fewer-card hand condition." },
+      generationBreak, effects: [{ op: "modify-power", target: "source", amount: power, duration: "battle" }] };
+  }
   function compileClanCounterBlastAttackPowerDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
     const text = normalizePrintedText(printedText);
@@ -2767,6 +2788,7 @@
     compileExactTemplateDefinition,
     compileVanguardAttackPowerTemplateDefinition,
     compileClanVanguardAttackPowerTemplateDefinition,
+    compilePaidOwnVanguardAttackPowerDefinition,
     compileRcNarukamiVanguardOwnAttackPowerDefinition,
     compileOwnAttackAgainstVanguardNamedVanguardPowerDefinition,
     compileAutoRcGradeNamedVanguardAttackPowerDefinition,
