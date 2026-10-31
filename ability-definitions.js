@@ -112476,6 +112476,12 @@
     const definition = root?.VanguardAbilityEngine?.compileDragontreeGcRetireToSoulShieldDefinition?.(cardId, `${cardId}:0`, "AUTO", dragontreeGcShieldText);
     if (definition) definitions.push(definition);
   }
+  const gcOpponentGradeShieldIds = ["cfa-11079", "cfa-11080", "cfa-11082", "cfa-11083", "cfa-11085", "cfa-11086", "cfa-11088", "cfa-11089", "cfa-11091", "cfa-11092"];
+  const gcOpponentGradeShieldText = "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.";
+  for (const cardId of gcOpponentGradeShieldIds) {
+    const definition = root?.VanguardAbilityEngine?.compileGuardianCircleOpponentGradeShieldDefinition?.(cardId, `${cardId}:1`, "CONT", gcOpponentGradeShieldText);
+    if (definition) definitions.push(definition);
+  }
   const sameNameDropCallTargets = [["cfa-8541", "Honebami Toushirou"], ["cfa-8571", "Chiganemaru"], ["cfa-8577", "Chiyoganemaru"], ["cfa-8585", "Namazuo Toushirou"]];
   const endPhaseRcNamedSearchTargets = [["cfa-273", "Ruler Chameleon"], ["cfa-284", "Pencil Squire, Hammsuke"], ["cfa-301", "Pencil Knight, Hammsuke"], ["cfa-309", "Pencil Hero, Hammsuke"]];
   for (const [cardId, targetName] of endPhaseRcNamedSearchTargets) {
