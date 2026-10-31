@@ -112012,7 +112012,302 @@
         { op: "modify-power-target", target: "chosen", amount: 5000, duration: "turn", targetFilter: { controller: "source-controller", cardType: "unit" }, condition: { op: "controller-face-up-g-zone-count-at-least", count: 1 } }
       ]
     })),
-  ];
+
+    {
+      "id": "cfa-13520:0",
+      "cardId": "cfa-13520",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, if your vanguard is a Glitter, look at the top five cards of your deck, choose up to one Glitter from among them, reveal it and put it into hand, and shuffle the deck. If you revealed a card, put this unit into soul.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand",
+        "destinationLocation": "rear-guard",
+        "subjectControllerRelation": "source-controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-ability-keyword",
+          "value": "Glitter"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13520",
+        "patternId": "auto-rc-hand-placement-glitter-top-five-to-hand-return-source-to-soul-v1",
+        "review": "Exact five-card AUTO family. This exact Rear-Guard source must be placed on RC from hand while its controller's Vanguard has the printed Glitter trait. The controller looks at up to the top five, may reveal and add up to one printed Glitter card to hand, and shuffles; only a nonempty revealedCardUid result moves this exact source from RC to Soul."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-one-filtered-to-hand",
+          "target": "controller",
+          "lookCount": 5,
+          "maximum": 1,
+          "filter": {
+            "abilityKeyword": "Glitter"
+          }
+        },
+        {
+          "op": "move-source-to-soul",
+          "target": "source",
+          "from": "rear-guard",
+          "ifPreviousEffectResult": {
+            "effectIndex": 0,
+            "property": "revealedCardUid",
+            "predicate": "nonempty-string"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13542:0",
+      "cardId": "cfa-13542",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, if your vanguard is a Glitter, look at the top five cards of your deck, choose up to one Glitter from among them, reveal it and put it into hand, and shuffle the deck. If you revealed a card, put this unit into soul.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand",
+        "destinationLocation": "rear-guard",
+        "subjectControllerRelation": "source-controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-ability-keyword",
+          "value": "Glitter"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13542",
+        "patternId": "auto-rc-hand-placement-glitter-top-five-to-hand-return-source-to-soul-v1",
+        "review": "Exact five-card AUTO family. This exact Rear-Guard source must be placed on RC from hand while its controller's Vanguard has the printed Glitter trait. The controller looks at up to the top five, may reveal and add up to one printed Glitter card to hand, and shuffles; only a nonempty revealedCardUid result moves this exact source from RC to Soul."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-one-filtered-to-hand",
+          "target": "controller",
+          "lookCount": 5,
+          "maximum": 1,
+          "filter": {
+            "abilityKeyword": "Glitter"
+          }
+        },
+        {
+          "op": "move-source-to-soul",
+          "target": "source",
+          "from": "rear-guard",
+          "ifPreviousEffectResult": {
+            "effectIndex": 0,
+            "property": "revealedCardUid",
+            "predicate": "nonempty-string"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13584:0",
+      "cardId": "cfa-13584",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, if your vanguard is a Glitter, look at the top five cards of your deck, choose up to one Glitter from among them, reveal it and put it into hand, and shuffle the deck. If you revealed a card, put this unit into soul.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand",
+        "destinationLocation": "rear-guard",
+        "subjectControllerRelation": "source-controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-ability-keyword",
+          "value": "Glitter"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13584",
+        "patternId": "auto-rc-hand-placement-glitter-top-five-to-hand-return-source-to-soul-v1",
+        "review": "Exact five-card AUTO family. This exact Rear-Guard source must be placed on RC from hand while its controller's Vanguard has the printed Glitter trait. The controller looks at up to the top five, may reveal and add up to one printed Glitter card to hand, and shuffles; only a nonempty revealedCardUid result moves this exact source from RC to Soul."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-one-filtered-to-hand",
+          "target": "controller",
+          "lookCount": 5,
+          "maximum": 1,
+          "filter": {
+            "abilityKeyword": "Glitter"
+          }
+        },
+        {
+          "op": "move-source-to-soul",
+          "target": "source",
+          "from": "rear-guard",
+          "ifPreviousEffectResult": {
+            "effectIndex": 0,
+            "property": "revealedCardUid",
+            "predicate": "nonempty-string"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13608:0",
+      "cardId": "cfa-13608",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, if your vanguard is a Glitter, look at the top five cards of your deck, choose up to one Glitter from among them, reveal it and put it into hand, and shuffle the deck. If you revealed a card, put this unit into soul.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand",
+        "destinationLocation": "rear-guard",
+        "subjectControllerRelation": "source-controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-ability-keyword",
+          "value": "Glitter"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13608",
+        "patternId": "auto-rc-hand-placement-glitter-top-five-to-hand-return-source-to-soul-v1",
+        "review": "Exact five-card AUTO family. This exact Rear-Guard source must be placed on RC from hand while its controller's Vanguard has the printed Glitter trait. The controller looks at up to the top five, may reveal and add up to one printed Glitter card to hand, and shuffles; only a nonempty revealedCardUid result moves this exact source from RC to Soul."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-one-filtered-to-hand",
+          "target": "controller",
+          "lookCount": 5,
+          "maximum": 1,
+          "filter": {
+            "abilityKeyword": "Glitter"
+          }
+        },
+        {
+          "op": "move-source-to-soul",
+          "target": "source",
+          "from": "rear-guard",
+          "ifPreviousEffectResult": {
+            "effectIndex": 0,
+            "property": "revealedCardUid",
+            "predicate": "nonempty-string"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13621:0",
+      "cardId": "cfa-13621",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, if your vanguard is a Glitter, look at the top five cards of your deck, chooose up to one Glitter from among them, reveal it and put it into hand, and shuffle the deck. If you revealed a card, put this unit into soul.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand",
+        "destinationLocation": "rear-guard",
+        "subjectControllerRelation": "source-controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-ability-keyword",
+          "value": "Glitter"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13621",
+        "patternId": "auto-rc-hand-placement-glitter-top-five-to-hand-return-source-to-soul-v1",
+        "review": "Exact five-card AUTO family. This exact Rear-Guard source must be placed on RC from hand while its controller's Vanguard has the printed Glitter trait. The controller looks at up to the top five, may reveal and add up to one printed Glitter card to hand, and shuffles; only a nonempty revealedCardUid result moves this exact source from RC to Soul."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-one-filtered-to-hand",
+          "target": "controller",
+          "lookCount": 5,
+          "maximum": 1,
+          "filter": {
+            "abilityKeyword": "Glitter"
+          }
+        },
+        {
+          "op": "move-source-to-soul",
+          "target": "source",
+          "from": "rear-guard",
+          "ifPreviousEffectResult": {
+            "effectIndex": 0,
+            "property": "revealedCardUid",
+            "predicate": "nonempty-string"
+          }
+        }
+      ]
+    }  ];
   const quintupletMemoryAutoIds = ["cfa-11526", "cfa-11545", "cfa-11558", "cfa-11607", "cfa-11671"];
   const quintupletMemoryAutoText = "AUTO: When this unit is placed on RC during your main phase, if you have a <Quintuplet> vanguard, look at the top three cards of your deck, choose up to one <Quintuplet> from among them, put it into memory, and shuffle the deck.";
   for (const cardId of quintupletMemoryAutoIds) definitions.push({

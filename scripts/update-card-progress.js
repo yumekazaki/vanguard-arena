@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { performance } = require("node:perf_hooks");
 const { auditCatalog, loadCatalog } = require("./audit-ability-catalog.js");
+const { sourceValidationDigest } = require("./source-validation-digest.js");
 
 const root = path.resolve(__dirname, "..");
 const startedAt = performance.now();
@@ -13,6 +14,9 @@ const audit = auditCatalog(cards);
 const auditedAt = performance.now();
 const manifestPath = path.join(root, "card-verification-manifest.json");
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+const latestFullSuite = manifest.latestFullSuite || null;
+const validationEvidenceFresh = Boolean(latestFullSuite?.status === "passed" && latestFullSuite.failed === 0 &&
+  latestFullSuite.passed === latestFullSuite.tests && latestFullSuite.validationInputDigest === sourceValidationDigest(root));
 const catalogIds = new Set(cards.map(card => String(card.id || "")));
 const evidence = manifest.records.filter(record => catalogIds.has(String(record.cardId)));
 const cardIdsPassingTests = new Set(evidence.filter(record => record.status === "tests-passing").map(record => String(record.cardId)));
@@ -44,7 +48,8 @@ const report = {
     manifest: path.basename(manifestPath),
     manifestRecords: evidence.length,
     passingTestCases: evidence.filter(record => record.status === "tests-passing").reduce((count, record) => count + (record.testCases || []).length, 0),
-    latestFullSuite: manifest.latestFullSuite || null,
+    latestFullSuite,
+    validationEvidenceFresh,
     fullyVerifiedRequiresAllPrintedAbilitiesAndRulesEvidence: true,
     note: "Aggregate parsing or a passing pattern test does not make a whole card fully verified. Only explicit manifest records count as regression evidence; zero fully verified cards is reported when no complete card-level evidence exists."
   },

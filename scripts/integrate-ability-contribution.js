@@ -37,16 +37,16 @@ function integrateContribution(root, batchId) {
 
   const definitionsPath = path.join(root, "ability-definitions.js");
   const source = fs.readFileSync(definitionsPath, "utf8");
-  const closing = /\r?\n  \];\r?\n  if \(root\?\.VanguardAbilityEngine\)/g;
-  const match = closing.exec(source);
-  if (!match || closing.exec(source)) throw new Error("Could not find exactly one trusted definition-array insertion point.");
+  const declaration = /\bconst\s+definitions\s*=\s*\[/g.exec(source);
+  if (!declaration) throw new Error("Could not locate the curated definition array.");
+  const arrayOpen = declaration.index + declaration[0].lastIndexOf("[");
+  const closingMatches = [...source.matchAll(/^  \];\s*$/gm)].filter(match => match.index > arrayOpen);
+  if (closingMatches.length !== 1) throw new Error("Could not find exactly one trusted definition-array insertion point.");
   const newline = source.includes("\r\n") ? "\r\n" : "\n";
   const formatted = contribution.map(definition => JSON.stringify(definition, null, 2).split("\n").map(line => `    ${line}`).join(newline)).join(`,${newline}`);
-  const insertAt = match.index;
-  const arrayStart = source.indexOf("const definitions = [");
-  if (arrayStart < 0) throw new Error("Could not locate the curated definition array.");
-  const arrayOpen = source.indexOf("[", arrayStart) + 1;
-  const separator = source.slice(arrayOpen, insertAt).trim() ? `,${newline}` : newline;
+  const insertAt = closingMatches[0].index;
+  const arrayBody = source.slice(arrayOpen + 1, insertAt).trimEnd();
+  const separator = arrayBody && !arrayBody.endsWith(",") ? `,${newline}` : newline;
   const updated = `${source.slice(0, insertAt)}${separator}${formatted}${source.slice(insertAt)}`;
   const temporary = `${definitionsPath}.${process.pid}.tmp`;
   fs.writeFileSync(temporary, updated, { flag: "wx" });

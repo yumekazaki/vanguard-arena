@@ -19,9 +19,9 @@
     },
     {
       "batchId": "PRIMARY-ORDER-SEARCH-NAME-AUTO",
-      "status": "in-progress",
-      "workerOwner": "primary-session/order_search_auto_family",
-      "reason": "Verifying and implementing the exact Order-search AUTO family, with source-identity, no-Order-played, discard-cost, Regalis Piece, and temporary name checks.",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Reserved after backend effect work found that live online games still use host-relayed browser state. Do not integrate a separate server-only Order action until the authoritative match path is connected; preserve exact source-identity, no-Order-played, discard-cost, Regalis Piece, and temporary-name checks.",
       "abilityIds": [
         "cfa-12653:0",
         "cfa-12654:0",
@@ -33,9 +33,9 @@
     },
     {
       "batchId": "PRIMARY-GC-INTERCEPT-ABILITY-NEGATION-CONT",
-      "status": "in-progress",
-      "workerOwner": "primary-session/gc_ability_negation_family",
-      "reason": "Review the exact six front-row RC CONT abilities that suppress opponent GC intercept AUTO activation and remove opponent CONT/AUTO abilities from units moved RC to GC; preserve exact turn, controller, and source instance scope.",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Reserved while the authoritative online action path is addressed. Exact six front-row RC CONT abilities must suppress opponent GC intercept AUTO activation and remove opponent CONT/AUTO abilities only from units moved RC to GC; preserve turn, controller, and source-instance scope. The current reducer has no authoritative Intercept action.",
       "abilityIds": [
         "cfa-13119:0",
         "cfa-13120:0",
@@ -48,14 +48,40 @@
     {
       "batchId": "PRIMARY-AUTO-GLITTER-PLACEMENT-TOP-FIVE",
       "status": "in-progress",
-      "workerOwner": "primary-session/auto_glitter_top_five",
-      "reason": "Implement and validate the exact five-card hand-to-RC Glitter search AUTO. Preserve the exact source-placement event, Glitter eligibility, optional search, shuffle, and source-to-Soul only when a card is revealed; do not mark whole cards verified.",
+      "workerOwner": "primary-session",
+      "reason": "Integrated the exact five-card hand-to-RC Glitter AUTO and authoritative reducer support; 13 focused tests cover exact text, trigger identity, Glitter checks, both seats, legal choices, and conditional source-to-Soul. Keep each card unverified until fresh full-suite evidence and live online authority-path verification pass.",
       "abilityIds": [
         "cfa-13520:0",
         "cfa-13542:0",
         "cfa-13584:0",
         "cfa-13608:0",
         "cfa-13621:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-CONT-CONDITIONAL-CARD-NAME-6",
+      "status": "reserved",
+      "workerOwner": "worker-conditional-name",
+      "reason": "Independent six-card CONT batch for conditional name grants. Review every exact source text, required location and Vanguard-name condition; add host/joiner and false-condition coverage. Do not promote whole cards until every printed ability and live-game gap is cleared.",
+      "abilityIds": [
+        "cfa-12062:1",
+        "cfa-12719:1",
+        "cfa-13689:1",
+        "cfa-5264:0",
+        "cfa-5349:1",
+        "cfa-7528:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-AUTO-CLAN-CB-ATTACK-POWER-4",
+      "status": "reserved",
+      "workerOwner": "worker-clan-counterblast",
+      "reason": "Independent four-card AUTO batch for exact clan-filtered Counter-Blast costs and own-attack battle power. Verify attack source, controller Vanguard clan, legal clan damage, optional payment and end-of-battle expiry; do not reuse unless every printed rule matches.",
+      "abilityIds": [
+        "cfa-1140:0",
+        "cfa-1159:0",
+        "cfa-1170:0",
+        "cfa-1187:0"
       ]
     }
   ],

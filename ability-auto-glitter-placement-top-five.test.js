@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const Engine = require('./ability-engine.js');
-require('./card-ability-keywords.js');
+Engine.registerCardAbilityKeywordIndex(require('./card-ability-keywords.js'));
 const Reducer = require('./ability-server-reducer.js');
 const { loadCatalog } = require('./scripts/audit-ability-catalog.js');
 const DEFINITIONS = require('./ability-contributions/batch-PRIMARY-AUTO-GLITTER-PLACEMENT-TOP-FIVE.js');
@@ -63,6 +63,36 @@ function ability(cardId = IDS[0]) {
 function run(f, selectedUid = null, program = ability().definition.effects, beforeEffects = null) {
   f.context.effectUid = selectedUid;
   return Engine.resolveEffectProgram(program, Engine.EFFECT_HANDLERS, f.context, beforeEffects);
+}
+
+const seats = { hostAuthUid: 'auth-host', guestAuthUid: 'auth-guest', hostSide: 'human', guestSide: 'bot' };
+let serverSequence = 0;
+function serverFixture(side = 'human', { vanguardCardId = 'cfa-9728', topIds = ['cfa-10590', 'cfa-9728'] } = {}) {
+  const ownerId = side === 'human' ? 'host-player' : 'guest-player';
+  const opponentId = side === 'human' ? 'guest-player' : 'host-player';
+  const source = instance('cfa-13520', `server-glitter-source-${++serverSequence}`, ownerId, { circle: 'rear-left' });
+  const makePlayer = playerId => ({ playerId, vanguard: null, rear: Array(5).fill(null), hand: [], deck: [], soul: [], drop: [], damage: [], bind: [], orders: [], guardCircle: [], triggerZone: [], gDeck: [], gZone: [] });
+  const players = { human: makePlayer('host-player'), bot: makePlayer('guest-player') };
+  const own = players[side], enemy = players[side === 'human' ? 'bot' : 'human'];
+  own.vanguard = instance(vanguardCardId, `server-glitter-vanguard-${serverSequence}`, ownerId);
+  own.rear[0] = source;
+  own.deck = topIds.map((cardId, index) => instance(cardId, `server-glitter-top-${serverSequence}-${index}`, ownerId));
+  enemy.vanguard = instance('cfa-3', `server-glitter-opponent-${serverSequence}`, opponentId);
+  const state = { matchId: 'glitter-placement', stateVersion: 1, eventSequence: 0, turn: 3, phase: 'main', side, processedEventIds: [], processedActionIds: [], processedAbilityTriggers: [], pendingAbilities: [], pendingAbility: null, pendingTrigger: null, players };
+  const event = Engine.createGameEvent(state, {
+    type: 'card.placed', actingPlayerId: ownerId, turnPlayerId: ownerId,
+    sourceCardInstanceId: source.uid, sourceOwnerPlayerId: ownerId, sourceControllerPlayerId: ownerId,
+    cardInstanceId: source.uid, subjectCardInstanceId: source.uid, subjectOwnerPlayerId: ownerId, subjectControllerPlayerId: ownerId,
+    previousLocation: 'hand', currentLocation: 'rear-left', circle: 'rear-left', phase: 'main', timingWindow: 'call'
+  });
+  return { state, side, ownerId, source, event, own, enemy };
+}
+function discoverServer(f) { return Reducer.discoverAutoTriggers(f.state, [f.event], Engine); }
+function respondServer(f, { accept = true, effectUid = null, actorAuthUid = f.side === 'human' ? seats.hostAuthUid : seats.guestAuthUid } = {}) {
+  return Reducer.applyAbilityDecision(f.state, {
+    actorAuthUid, actionId: `resolve-glitter-${f.side}-${f.source.uid}`, expectedStateVersion: f.state.stateVersion,
+    payload: { type: 'ability-response', accept, selection: { instanceUid: f.source.uid, abilityId: `${f.source.cardId}:0`, ...(effectUid ? { effectUid } : {}) } }
+  }, seats, Engine);
 }
 
 test('the five catalog texts compile into exact source-bound hand-to-RC Glitter searches', () => {
@@ -210,6 +240,69 @@ test('the return-to-Soul step rejects a Vanguard, opponent-zone, or opponent-con
   }
 });
 
-test('the authoritative reducer still refuses this unintegrated family', () => {
-  for (const cardId of IDS) assert.equal(Reducer.supportsServerAbilityEffects(ability(cardId)), false);
+test('all five exact definitions are accepted by the authoritative reducer; forged fields fail closed', () => {
+  for (const cardId of IDS) {
+    const parsed = ability(cardId);
+    assert.equal(Reducer.hasTrustedServerAbilityDefinition(parsed, Engine), true, cardId);
+    assert.equal(Reducer.supportsServerAbilityEffects(parsed), true, cardId);
+  }
+  const forged = structuredClone(ability());
+  forged.definition.effects[1].from = 'drop';
+  assert.equal(Reducer.supportsServerAbilityEffects(forged), false);
+  const wrongText = structuredClone(ability('cfa-13621'));
+  wrongText.definition.printedText = wrongText.definition.printedText.replace('chooose', 'choose');
+  wrongText.printedText = wrongText.definition.printedText;
+  assert.equal(Reducer.supportsServerAbilityEffects(wrongText), false, 'catalog typo is intentionally preserved as the exact source text');
+});
+
+test('the server prompts the controller of the exact hand-to-RC source on either seat, only with a Glitter Vanguard', () => {
+  for (const side of ['human', 'bot']) {
+    const f = serverFixture(side);
+    const result = discoverServer(f);
+    assert.equal(result.queued.length, 1, JSON.stringify(result));
+    assert.equal(f.state.pendingAbility.side, side);
+    assert.equal(f.state.pendingAbility.triggerControllerPlayerId, f.ownerId);
+    assert.equal(f.state.pendingAbility.instance.uid, f.source.uid);
+    assert.equal(discoverServer(f).queued.length, 0, 'same event cannot queue the AUTO twice');
+
+    const noGlitter = serverFixture(side, { vanguardCardId: 'cfa-10590' });
+    assert.equal(discoverServer(noGlitter).queued.length, 0, 'a card name or other effect mentioning Glitter is not the printed Glitter ability');
+    noGlitter.own.vanguard.abilityKeywords = ['Glitter'];
+    assert.equal(discoverServer(noGlitter).queued.length, 0, 'client-provided keyword flags cannot forge the vanguard condition');
+
+    const wrongCircle = serverFixture(side);
+    wrongCircle.event = Engine.createGameEvent(wrongCircle.state, { ...wrongCircle.event, eventId: undefined, currentLocation: 'vanguard', circle: 'vanguard' });
+    assert.equal(discoverServer(wrongCircle).queued.length, 0, 'the source must be placed on a Rear-Guard Circle');
+  }
+});
+
+test('the correct player resolves the top-five choice and conditional source-to-Soul effect', () => {
+  for (const side of ['human', 'bot']) {
+    const f = serverFixture(side, { topIds: ['cfa-10590', 'cfa-9728'] });
+    assert.equal(discoverServer(f).queued.length, 1);
+    const glitter = f.own.deck.find(card => card.cardId === 'cfa-9728');
+    const result = respondServer(f, { effectUid: glitter.uid });
+    assert.equal(result.ok, true, result.reason || JSON.stringify(result));
+    assert.equal(f.own.hand.some(card => card.uid === glitter.uid), true);
+    assert.equal(f.own.soul.some(card => card.uid === f.source.uid), true);
+    assert.equal(f.own.rear.some(card => card?.uid === f.source.uid), false);
+    assert.equal(f.enemy.hand.length, 0);
+    assert.equal(f.enemy.soul.length, 0);
+
+    const forged = serverFixture(side, { topIds: ['cfa-10590', 'cfa-9728'] });
+    assert.equal(discoverServer(forged).queued.length, 1);
+    const invalidChoice = forged.own.deck.find(card => card.cardId === 'cfa-10590');
+    const rejected = respondServer(forged, { effectUid: invalidChoice.uid, actorAuthUid: side === 'human' ? seats.guestAuthUid : seats.hostAuthUid });
+    assert.equal(rejected.ok, false);
+    assert.equal(forged.own.soul.length, 0);
+    assert.equal(forged.own.rear[0].uid, forged.source.uid);
+  }
+});
+
+test('declining is rejected because the printed AUTO is mandatory', () => {
+  const f = serverFixture('bot');
+  assert.equal(discoverServer(f).queued.length, 1);
+  const declined = respondServer(f, { accept: false });
+  assert.equal(declined.ok, false);
+  assert.equal(f.state.pendingAbility?.instance?.uid, f.source.uid);
 });

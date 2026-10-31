@@ -42,6 +42,14 @@
   const PERSONA_SHIELD_CONT_TEXT = "CONT [Hand]: During your turn, when you would discard a card while riding from ride deck or choose a card from hand by your card's ability, this card cannot be chosen or discarded.";
   const PERSONA_SHIELD_AUTO_PATTERN = "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1";
   const PERSONA_SHIELD_CONT_PATTERN = "cont-persona-shield-ticket-hand-protection-v1";
+  const GLITTER_PLACEMENT_AUTO_TEXT = Object.freeze({
+    "cfa-13520": "AUTO: When this unit is placed on RC from hand, if your vanguard is a Glitter, look at the top five cards of your deck, choose up to one Glitter from among them, reveal it and put it into hand, and shuffle the deck. If you revealed a card, put this unit into soul.",
+    "cfa-13542": "AUTO: When this unit is placed on RC from hand, if your vanguard is a Glitter, look at the top five cards of your deck, choose up to one Glitter from among them, reveal it and put it into hand, and shuffle the deck. If you revealed a card, put this unit into soul.",
+    "cfa-13584": "AUTO: When this unit is placed on RC from hand, if your vanguard is a Glitter, look at the top five cards of your deck, choose up to one Glitter from among them, reveal it and put it into hand, and shuffle the deck. If you revealed a card, put this unit into soul.",
+    "cfa-13608": "AUTO: When this unit is placed on RC from hand, if your vanguard is a Glitter, look at the top five cards of your deck, choose up to one Glitter from among them, reveal it and put it into hand, and shuffle the deck. If you revealed a card, put this unit into soul.",
+    "cfa-13621": "AUTO: When this unit is placed on RC from hand, if your vanguard is a Glitter, look at the top five cards of your deck, chooose up to one Glitter from among them, reveal it and put it into hand, and shuffle the deck. If you revealed a card, put this unit into soul."
+  });
+  const GLITTER_PLACEMENT_AUTO_PATTERN = "auto-rc-hand-placement-glitter-top-five-to-hand-return-source-to-soul-v1";
   const DAMAGE_ZONE_CLAN_POWER_IDS = new Set(["cfa-717", "cfa-725", "cfa-732"]);
   const DAMAGE_ZONE_CLAN_POWER_TEXT = "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.";
   function reject(reason) { return { ok: false, reason }; }
@@ -1011,7 +1019,7 @@
     const abilityId = String(ability?.id || "");
     if (!cardId || !abilityId || !engine) return false;
     if ((engine.getReviewedAbilityDefinitionsForCard?.(cardId) || []).some(definition => definition?.id === abilityId)) return true;
-    return isExactPaidOwnVanguardAttackPowerAbility(ability, engine) || isExactRetireRearGuardAttackAbility(ability) || isExactDragontreeGcShieldAbility(ability) || isExactDragontreeGcGrantedRetireAbility(ability);
+    return isExactPaidOwnVanguardAttackPowerAbility(ability, engine) || isExactRetireRearGuardAttackAbility(ability) || isExactDragontreeGcShieldAbility(ability) || isExactDragontreeGcGrantedRetireAbility(ability) || isExactGlitterPlacementAbility(ability);
   }
   function paidOwnVanguardAttackPowerEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
     const attack = state?.pendingAttack, side = located?.side, player = side && state.players?.[side];
@@ -1556,6 +1564,32 @@
     if(!entry||ability?.id!==`${cardId}:0`||ability?.kind!=="AUTO"||definition?.kind!=="AUTO"||definition?.cardId!==cardId||definition?.source?.patternId!=="auto-named-rider-ride-source-search-v1")return false;
     const text=`AUTO: When a card named "${entry.rider}" rides this unit, search your deck for up to one card named "${entry.target}", reveal it to your opponent, put it into your hand, and shuffle your deck.`;
     return definition.printedText===text&&trigger?.status==="recognized-trigger"&&trigger.eventType==="card.ridden"&&trigger.subject==="ridden-unit"&&JSON.stringify(trigger.circles||[])===JSON.stringify(["vanguard"])&&trigger.riderCardNameEquals===entry.rider&&ability.canDecline===false&&definition.optional!==true&&definition.choicesReviewed===true&&!(ability.costs||[]).length&&!(ability.conditions||[]).length&&effect?.op==="search-deck-same-name-to-hand"&&effect.target==="controller"&&effect.maximum===1&&effect.cardName===entry.target;
+  }
+  function isExactGlitterPlacementAbility(ability) {
+    const cardId = String(ability?.cardId || ""), definition = ability?.definition;
+    const printedText = GLITTER_PLACEMENT_AUTO_TEXT[cardId];
+    if (!printedText || ability?.id !== `${cardId}:0` || ability.kind !== "AUTO" || definition?.kind !== "AUTO" ||
+        String(definition.cardId) !== cardId || definition.id !== ability.id || definition.printedText !== printedText ||
+        ability.printedText !== printedText || definition.source?.patternId !== GLITTER_PLACEMENT_AUTO_PATTERN ||
+        JSON.stringify(ability.requiredLocation || []) !== JSON.stringify(["rear-guard"]) ||
+        JSON.stringify(definition.requiredLocation || []) !== JSON.stringify(["rear-guard"]) ||
+        JSON.stringify(definition.trigger || {}) !== JSON.stringify({
+          status: "recognized-trigger", eventType: "card.placed", subject: "source", circles: ["rear-guard"],
+          sourceLocation: "hand", destinationLocation: "rear-guard", subjectControllerRelation: "source-controller"
+        }) ||
+        ability.trigger?.status !== "recognized-trigger" || ability.trigger?.eventType !== "card.placed" || ability.trigger?.subject !== "source" ||
+        JSON.stringify(ability.trigger?.circles || []) !== JSON.stringify(["rear-guard"]) || ability.trigger?.sourceLocation !== "hand" ||
+        ability.trigger?.destinationLocation !== "rear-guard" || ability.trigger?.subjectControllerRelation !== "source-controller" ||
+        ability.trigger?.sameSourceCircle !== false || ability.trigger?.excludeSourceAsSubject !== false ||
+        JSON.stringify(ability.conditions || []) !== JSON.stringify([{ type: "controller-vanguard-has-ability-keyword", value: "Glitter" }]) ||
+        JSON.stringify(ability.costs || []) !== "[]" || definition.optional !== false || ability.canDecline !== false ||
+        ability.once === true || ability.usageRestriction || definition.conditionsReviewed !== true ||
+        definition.costsReviewed !== true || definition.choicesReviewed !== true) return false;
+    const expectedEffects = [
+      { op: "search-top-up-to-one-filtered-to-hand", target: "controller", lookCount: 5, maximum: 1, filter: { abilityKeyword: "Glitter" } },
+      { op: "move-source-to-soul", target: "source", from: "rear-guard", ifPreviousEffectResult: { effectIndex: 0, property: "revealedCardUid", predicate: "nonempty-string" } }
+    ];
+    return JSON.stringify(definition.effects || []) === JSON.stringify(expectedEffects);
   }
   function namedRideDeckSearchMatches(state,ability,source,located,event,actorPlayerId,engine){
     const entry=NAMED_RIDE_DECK_SEARCH[String(ability?.cardId||"")],player=located&&state?.players?.[located.side];
@@ -3431,7 +3465,7 @@
     if (hasPlacementTopFiveSearchDiscard && !isExactPlacementTopFiveSearchDiscardAbility(ability)) return false;
     if (hasRcGradeThreeNameSearch && !isExactRcGradeThreeNameSearchAbility(ability)) return false;
     if (hasInterceptShield && !isAnyInterceptShieldAbility(ability) && !isExactDragontreeGcShieldAbility(ability)) return false;
-    if (hasActRcGradeThreeSearch && !isExactActRcGradeThreeSearchAbility(ability) && !isExactAutoVanguardTopFiveSearchAbility(ability) && !isExactRideSourceTopSevenSearchAbility(ability) && !isExactAutoVanguardTopSevenTwoNameSearchAbility(ability)) return false;
+    if (hasActRcGradeThreeSearch && !isExactActRcGradeThreeSearchAbility(ability) && !isExactAutoVanguardTopFiveSearchAbility(ability) && !isExactRideSourceTopSevenSearchAbility(ability) && !isExactAutoVanguardTopSevenTwoNameSearchAbility(ability) && !isExactGlitterPlacementAbility(ability)) return false;
     if (hasHandRidePhaseSearch && !isExactHandRidePhaseSearchAbility(ability)) return false;
     if (hasSameNameDeckSearch && !isExactActSameNameSearchPowerAbility(ability) && !isExactAutoNamedVanguardSearchAbility(ability) && !isExactNamedRideDeckSearchAbility(ability) && !isExactRcGradeThreeClanNamedSearchAbility(ability)) return false;
     if (hasDeckOrDropNamedSearch && !isExactRcDeckOrDropNamedSearchAbility(ability)) return false;
@@ -3466,7 +3500,7 @@
       (hasPlacementTopFiveSearchDiscard && step?.op === "search-top-grade-three-to-hand-then-discard") ||
       (hasRcGradeThreeNameSearch && step?.op === "search-deck-named-grade-three-then-discard") ||
       (hasInterceptShield && step?.op === "modify-shield-source" && (isAnyInterceptShieldAbility(ability) || isExactDragontreeGcShieldAbility(ability))) ||
-      (hasActRcGradeThreeSearch && step?.op === "search-top-up-to-one-filtered-to-hand" && (isExactActRcGradeThreeSearchAbility(ability) || isExactAutoVanguardTopFiveSearchAbility(ability) || isExactRideSourceTopSevenSearchAbility(ability) || isExactAutoVanguardTopSevenTwoNameSearchAbility(ability))) ||
+      (hasActRcGradeThreeSearch && step?.op === "search-top-up-to-one-filtered-to-hand" && (isExactActRcGradeThreeSearchAbility(ability) || isExactAutoVanguardTopFiveSearchAbility(ability) || isExactRideSourceTopSevenSearchAbility(ability) || isExactAutoVanguardTopSevenTwoNameSearchAbility(ability) || isExactGlitterPlacementAbility(ability))) ||
       (hasHandRidePhaseSearch && step?.op === "search-top-up-to-one-grade-to-hand") ||
       (hasSameNameDeckSearch && step?.op === "search-deck-same-name-to-hand" && (isExactActSameNameSearchPowerAbility(ability) || isExactAutoNamedVanguardSearchAbility(ability) || isExactNamedRideDeckSearchAbility(ability) || isExactRcGradeThreeClanNamedSearchAbility(ability))) ||
       (hasDeckOrDropNamedSearch && step?.op === "search-deck-or-drop-named-to-hand" && isExactRcDeckOrDropNamedSearchAbility(ability)) ||
@@ -3926,7 +3960,7 @@
     "controller-has-fewer-cards-in-hand-than-opponent", "controller-hand-size-at-least", "controller-hand-size-at-most",
     "opponent-rear-guards-at-most", "attack-target-grade-at-least", "controller-vanguard-name-contains",
     "controller-soul-has-card-name", "controller-vanguard-has-clan", "controller-vanguard-has-race", "source-was-boosted", "source-is-legion", "attack-target-location",
-    "event-subject-grade-equals", "event-subject-has-clan", "controller-has-dragontree-marker-on-rear-guard"
+    "event-subject-grade-equals", "event-subject-has-clan", "controller-has-dragontree-marker-on-rear-guard", "controller-vanguard-has-ability-keyword"
   ]);
 
   function buildConditionContext(state, event, located, engine) {
@@ -3998,6 +4032,7 @@
       vanguardClans: vanguardRules?.clans || [],
       vanguardRace: vanguardRules?.race,
       vanguardRaces: vanguardRules?.races || [],
+      controllerVanguardCard: vanguardRules,
       vanguardText: vanguardRules?.text || vanguard?.text,
       controllerSoulCardNames: (controller.soul || []).map(card => card?.cardName || card?.name).filter(Boolean),
       attackTargetGrade: Number.isInteger(Number(targetDefinition ? serverCardDefinition(targetDefinition)?.grade : undefined)) ? Number(serverCardDefinition(targetDefinition)?.grade) : undefined,

@@ -5,14 +5,14 @@
     "command": "node --test --test-concurrency=4",
     "testCommand": "node --test --test-concurrency=4",
     "status": "passed",
-    "tests": 1565,
-    "testCount": 1565,
-    "passed": 1565,
+    "tests": 1584,
+    "testCount": 1584,
+    "passed": 1584,
     "failed": 0,
-    "durationMilliseconds": 318031,
-    "completedAt": "2026-10-31T05:07:53Z",
+    "durationMilliseconds": 384291,
+    "completedAt": "2026-10-31T06:20:34Z",
     "runDate": "2026-10-31",
-    "validationInputDigest": "4b825beade973d5ea49d7e4424150dbdda731c18e4771018174b320913c06fcc"
+    "validationInputDigest": "684429b51edf0adef7915be294b7d7b66f9f39b1a34b1c6e46617c9fe3cd4d62"
   },
   "records": [
     {
@@ -75523,8 +75523,133 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13520",
+      "abilityId": "cfa-13520:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-glitter-placement-top-five.test.js"
+      ],
+      "testCases": [
+        "the five catalog texts compile into exact source-bound hand-to-RC Glitter searches",
+        "the controller Vanguard condition and top-five filter recognize only printed Glitter traits",
+        "only the exact source placement from hand onto RC matches this AUTO trigger",
+        "the controller may reveal zero cards; without a reveal the exact source stays on RC",
+        "each player seat resolves the search through its own deck, hand, Rear-Guard, and Soul",
+        "one selected top-five Glitter is revealed and added to hand, shuffles, then moves only the source to Soul",
+        "an invalid selected card and a malformed result dependency are rejected before any state changes",
+        "a stale source fails after a valid reveal without committing search, shuffle, movement, or events",
+        "the return-to-Soul step rejects a Vanguard, opponent-zone, or opponent-controlled source",
+        "all five exact definitions are accepted by the authoritative reducer; forged fields fail closed",
+        "the server prompts the controller of the exact hand-to-RC source on either seat, only with a Glitter Vanguard",
+        "the correct player resolves the top-five choice and conditional source-to-Soul effect",
+        "declining is rejected because the printed AUTO is mandatory"
+      ],
+      "fullyVerified": false,
+      "remaining": "Live match verification is still outstanding because the website does not yet submit online ability decisions through the authoritative match worker; these tests validate the reducer for both seats only."
+    },
+    {
+      "cardId": "cfa-13542",
+      "abilityId": "cfa-13542:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-glitter-placement-top-five.test.js"
+      ],
+      "testCases": [
+        "the five catalog texts compile into exact source-bound hand-to-RC Glitter searches",
+        "the controller Vanguard condition and top-five filter recognize only printed Glitter traits",
+        "only the exact source placement from hand onto RC matches this AUTO trigger",
+        "the controller may reveal zero cards; without a reveal the exact source stays on RC",
+        "each player seat resolves the search through its own deck, hand, Rear-Guard, and Soul",
+        "one selected top-five Glitter is revealed and added to hand, shuffles, then moves only the source to Soul",
+        "an invalid selected card and a malformed result dependency are rejected before any state changes",
+        "a stale source fails after a valid reveal without committing search, shuffle, movement, or events",
+        "the return-to-Soul step rejects a Vanguard, opponent-zone, or opponent-controlled source",
+        "all five exact definitions are accepted by the authoritative reducer; forged fields fail closed",
+        "the server prompts the controller of the exact hand-to-RC source on either seat, only with a Glitter Vanguard",
+        "the correct player resolves the top-five choice and conditional source-to-Soul effect",
+        "declining is rejected because the printed AUTO is mandatory"
+      ],
+      "fullyVerified": false,
+      "remaining": "Live match verification is still outstanding because the website does not yet submit online ability decisions through the authoritative match worker; these tests validate the reducer for both seats only."
+    },
+    {
+      "cardId": "cfa-13584",
+      "abilityId": "cfa-13584:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-glitter-placement-top-five.test.js"
+      ],
+      "testCases": [
+        "the five catalog texts compile into exact source-bound hand-to-RC Glitter searches",
+        "the controller Vanguard condition and top-five filter recognize only printed Glitter traits",
+        "only the exact source placement from hand onto RC matches this AUTO trigger",
+        "the controller may reveal zero cards; without a reveal the exact source stays on RC",
+        "each player seat resolves the search through its own deck, hand, Rear-Guard, and Soul",
+        "one selected top-five Glitter is revealed and added to hand, shuffles, then moves only the source to Soul",
+        "an invalid selected card and a malformed result dependency are rejected before any state changes",
+        "a stale source fails after a valid reveal without committing search, shuffle, movement, or events",
+        "the return-to-Soul step rejects a Vanguard, opponent-zone, or opponent-controlled source",
+        "all five exact definitions are accepted by the authoritative reducer; forged fields fail closed",
+        "the server prompts the controller of the exact hand-to-RC source on either seat, only with a Glitter Vanguard",
+        "the correct player resolves the top-five choice and conditional source-to-Soul effect",
+        "declining is rejected because the printed AUTO is mandatory"
+      ],
+      "fullyVerified": false,
+      "remaining": "Live match verification is still outstanding because the website does not yet submit online ability decisions through the authoritative match worker; these tests validate the reducer for both seats only."
+    },
+    {
+      "cardId": "cfa-13608",
+      "abilityId": "cfa-13608:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-glitter-placement-top-five.test.js"
+      ],
+      "testCases": [
+        "the five catalog texts compile into exact source-bound hand-to-RC Glitter searches",
+        "the controller Vanguard condition and top-five filter recognize only printed Glitter traits",
+        "only the exact source placement from hand onto RC matches this AUTO trigger",
+        "the controller may reveal zero cards; without a reveal the exact source stays on RC",
+        "each player seat resolves the search through its own deck, hand, Rear-Guard, and Soul",
+        "one selected top-five Glitter is revealed and added to hand, shuffles, then moves only the source to Soul",
+        "an invalid selected card and a malformed result dependency are rejected before any state changes",
+        "a stale source fails after a valid reveal without committing search, shuffle, movement, or events",
+        "the return-to-Soul step rejects a Vanguard, opponent-zone, or opponent-controlled source",
+        "all five exact definitions are accepted by the authoritative reducer; forged fields fail closed",
+        "the server prompts the controller of the exact hand-to-RC source on either seat, only with a Glitter Vanguard",
+        "the correct player resolves the top-five choice and conditional source-to-Soul effect",
+        "declining is rejected because the printed AUTO is mandatory"
+      ],
+      "fullyVerified": false,
+      "remaining": "Live match verification is still outstanding because the website does not yet submit online ability decisions through the authoritative match worker; these tests validate the reducer for both seats only."
+    },
+    {
+      "cardId": "cfa-13621",
+      "abilityId": "cfa-13621:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-glitter-placement-top-five.test.js"
+      ],
+      "testCases": [
+        "the five catalog texts compile into exact source-bound hand-to-RC Glitter searches",
+        "the controller Vanguard condition and top-five filter recognize only printed Glitter traits",
+        "only the exact source placement from hand onto RC matches this AUTO trigger",
+        "the controller may reveal zero cards; without a reveal the exact source stays on RC",
+        "each player seat resolves the search through its own deck, hand, Rear-Guard, and Soul",
+        "one selected top-five Glitter is revealed and added to hand, shuffles, then moves only the source to Soul",
+        "an invalid selected card and a malformed result dependency are rejected before any state changes",
+        "a stale source fails after a valid reveal without committing search, shuffle, movement, or events",
+        "the return-to-Soul step rejects a Vanguard, opponent-zone, or opponent-controlled source",
+        "all five exact definitions are accepted by the authoritative reducer; forged fields fail closed",
+        "the server prompts the controller of the exact hand-to-RC source on either seat, only with a Glitter Vanguard",
+        "the correct player resolves the top-five choice and conditional source-to-Soul effect",
+        "declining is rejected because the printed AUTO is mandatory"
+      ],
+      "fullyVerified": false,
+      "remaining": "Live match verification is still outstanding because the website does not yet submit online ability decisions through the authoritative match worker; these tests validate the reducer for both seats only."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T03:54:21.719Z"
+  "evidenceUpdatedAt": "2026-10-31T06:08:03.149Z"
 }

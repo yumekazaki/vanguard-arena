@@ -40,7 +40,9 @@ test("integrator accepts a generated registry work-unit ID and preserves exact c
     fs.writeFileSync(path.join(root, "ability-definitions.js"), [
       "(function registerCuratedAbilityBatch(root) {",
       "  const definitions = [",
+      `    ${JSON.stringify({ id: "existing:0", cardId: "existing", kind: "CONT", printedText: "CONT: existing.", keywords: [{ name: "test-keyword" }] })},`,
       "  ];",
+      `  definitions.push(${JSON.stringify({ id: "dynamic:0", cardId: "dynamic", kind: "CONT", printedText: "CONT: dynamic.", keywords: [{ name: "test-keyword" }] })});`,
       "  if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);",
       "  if (typeof module === \"object\" && module.exports) module.exports = definitions;",
       "})(globalThis);",
@@ -50,7 +52,9 @@ test("integrator accepts a generated registry work-unit ID and preserves exact c
     const result = integrateContribution(root, workUnitId);
     assert.deepEqual(result.integratedAbilityIds, [definition.id]);
     delete require.cache[require.resolve(path.join(root, "ability-definitions.js"))];
-    assert.equal(require(path.join(root, "ability-definitions.js")).length, 1);
+    const integrated = require(path.join(root, "ability-definitions.js"));
+    assert.equal(integrated.length, 3, "static, dynamically appended, and contributed definitions all remain present");
+    assert.deepEqual(integrated.map(item => item.id), ["existing:0", "cfa-10003:0", "dynamic:0"]);
     assert.match(fs.readFileSync(path.join(root, "ability-definitions.js"), "utf8"), /test-exact-contribution-v1/);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
