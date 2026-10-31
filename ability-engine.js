@@ -3630,17 +3630,19 @@
     const subjectUid = input.subjectCardInstanceId || input.cardInstanceId;
     const subjectLocation = subjectUid ? locateCardInstance(state, subjectUid) : null;
     const subjectInstance = subjectLocation && !subjectLocation.ambiguous ? subjectLocation.instance : null;
+    const sourceUid = input.sourceCardInstanceId || null;
+    const sourceLocation = sourceUid ? locateCardInstance(state, sourceUid) : null;
     const subjectClans = Array.isArray(subjectInstance?.clans) && subjectInstance.clans.length ? subjectInstance.clans : subjectInstance?.clan ? [subjectInstance.clan] : [];
     return Object.freeze({
       eventId,
       type: String(input.type),
       actingPlayerId: String(input.actingPlayerId),
       turnPlayerId: String(input.turnPlayerId || ""),
-      sourceCardInstanceId: input.sourceCardInstanceId || null,
+      sourceCardInstanceId: sourceUid,
       sourceCardName: input.sourceCardName || null,
       sourceCardGrade: input.sourceCardGrade != null && Number.isInteger(Number(input.sourceCardGrade)) ? Number(input.sourceCardGrade) : null,
-      sourceOwnerPlayerId: input.sourceOwnerPlayerId || null,
-      sourceControllerPlayerId: input.sourceControllerPlayerId || null,
+      sourceOwnerPlayerId: input.sourceOwnerPlayerId ?? sourceLocation?.ownerPlayerId ?? null,
+      sourceControllerPlayerId: input.sourceControllerPlayerId ?? sourceLocation?.controllerPlayerId ?? null,
       sourceCardClan: input.sourceCardClan || null,
       sourceCardClans: Object.freeze(Array.isArray(input.sourceCardClans) ? [...input.sourceCardClans] : []),
       cardInstanceId: input.cardInstanceId || null,
@@ -3655,9 +3657,9 @@
       powerIncludesContinuous: input.powerIncludesContinuous === true,
       sourcePowerByCardInstanceId: Object.freeze(Object.fromEntries(Object.entries(input.sourcePowerByCardInstanceId || {}).filter(([uid, power]) => typeof uid === "string" && uid.length > 0 && Number.isFinite(Number(power))).map(([uid, power]) => [uid, Number(power)]))),
       position: input.position || null,
-      subjectCardInstanceId: input.subjectCardInstanceId || null,
-      subjectOwnerPlayerId: input.subjectOwnerPlayerId || null,
-      subjectControllerPlayerId: input.subjectControllerPlayerId || null,
+      subjectCardInstanceId: subjectUid || null,
+      subjectOwnerPlayerId: input.subjectOwnerPlayerId ?? subjectLocation?.ownerPlayerId ?? null,
+      subjectControllerPlayerId: input.subjectControllerPlayerId ?? subjectLocation?.controllerPlayerId ?? null,
       subjectCardName: input.subjectCardName || subjectInstance?.cardName || subjectInstance?.name || null,
       subjectCardGrade: Number.isInteger(Number(input.subjectCardGrade ?? subjectInstance?.grade)) ? Number(input.subjectCardGrade ?? subjectInstance?.grade) : null,
       subjectCardClan: input.subjectCardClan || subjectInstance?.clan || null,
