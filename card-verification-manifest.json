@@ -2,17 +2,17 @@
   "schemaVersion": 1,
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "latestFullSuite": {
-    "command": "node --test --test-concurrency=4",
-    "testCommand": "node --test --test-concurrency=4",
+    "command": "node --test",
+    "testCommand": "node --test",
     "status": "passed",
-    "tests": 1602,
-    "testCount": 1602,
-    "passed": 1602,
+    "tests": 1640,
+    "testCount": 1640,
+    "passed": 1640,
     "failed": 0,
-    "durationMilliseconds": 393332,
-    "completedAt": "2026-10-31T07:39:53.355Z",
+    "durationMilliseconds": 328283.7732,
+    "completedAt": "2026-10-31T12:38:00.580Z",
     "runDate": "2026-10-31",
-    "validationInputDigest": "0894752301c3b12eb34f5450628fe7e83135e054d3001f3d1a7af7b46b87acb4"
+    "validationInputDigest": "44378f0060e367b4e9b211a756d08266f6cd5e4c7cc4add3b3324517fcf9e010"
   },
   "records": [
     {
@@ -35050,13 +35050,24 @@
       "abilityId": "cfa-274:1",
       "status": "tests-passing",
       "testFiles": [
-        "ability-rider-name-exclusion.test.js"
+        "ability-rider-name-exclusion.test.js",
+        "ability-auto-ridden-source-top-seven-two-name-search-server.test.js"
       ],
       "testCases": [
-        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+        "nine real ride triggers preserve the named rider exclusion and exact source identity",
+        "nine catalog abilities compile as exact named-rider top-seven searches",
+        "each assigned card's sibling AUTO retains its exact clan and excluded-rider call condition",
+        "host and joining player resolve only the eligible target among the top seven",
+        "wrong rider, wrong prior Vanguard, and out-of-top-seven targets are rejected",
+        "the opponent cannot resolve the source controller's private ride search",
+        "up-to-one permits choosing no card while preserving the Deck",
+        "a source that leaves Soul after triggering cannot resolve the stale search",
+        "ride trigger rejects the excluded card, wrong clan, missing name, and a different ridden instance",
+        "the joining player's legal ride prompt and optional Soul call stay with that player",
+        "the named excluded rider does not offer the optional source call"
       ],
       "fullyVerified": false,
-      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-2740",
@@ -61135,13 +61146,24 @@
       "abilityId": "cfa-743:1",
       "status": "tests-passing",
       "testFiles": [
-        "ability-rider-name-exclusion.test.js"
+        "ability-rider-name-exclusion.test.js",
+        "ability-auto-ridden-source-top-seven-two-name-search-server.test.js"
       ],
       "testCases": [
-        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+        "nine real ride triggers preserve the named rider exclusion and exact source identity",
+        "nine catalog abilities compile as exact named-rider top-seven searches",
+        "each assigned card's sibling AUTO retains its exact clan and excluded-rider call condition",
+        "host and joining player resolve only the eligible target among the top seven",
+        "wrong rider, wrong prior Vanguard, and out-of-top-seven targets are rejected",
+        "the opponent cannot resolve the source controller's private ride search",
+        "up-to-one permits choosing no card while preserving the Deck",
+        "a source that leaves Soul after triggering cannot resolve the stale search",
+        "ride trigger rejects the excluded card, wrong clan, missing name, and a different ridden instance",
+        "the joining player's legal ride prompt and optional Soul call stay with that player",
+        "the named excluded rider does not offer the optional source call"
       ],
       "fullyVerified": false,
-      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-7431",
@@ -68717,13 +68739,24 @@
       "abilityId": "cfa-948:1",
       "status": "tests-passing",
       "testFiles": [
-        "ability-rider-name-exclusion.test.js"
+        "ability-rider-name-exclusion.test.js",
+        "ability-auto-ridden-source-top-seven-two-name-search-server.test.js"
       ],
       "testCases": [
-        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+        "nine real ride triggers preserve the named rider exclusion and exact source identity",
+        "nine catalog abilities compile as exact named-rider top-seven searches",
+        "each assigned card's sibling AUTO retains its exact clan and excluded-rider call condition",
+        "host and joining player resolve only the eligible target among the top seven",
+        "wrong rider, wrong prior Vanguard, and out-of-top-seven targets are rejected",
+        "the opponent cannot resolve the source controller's private ride search",
+        "up-to-one permits choosing no card while preserving the Deck",
+        "a source that leaves Soul after triggering cannot resolve the stale search",
+        "ride trigger rejects the excluded card, wrong clan, missing name, and a different ridden instance",
+        "the joining player's legal ride prompt and optional Soul call stay with that player",
+        "the named excluded rider does not offer the optional source call"
       ],
       "fullyVerified": false,
-      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-9491",
@@ -69493,13 +69526,24 @@
       "abilityId": "cfa-974:1",
       "status": "tests-passing",
       "testFiles": [
-        "ability-rider-name-exclusion.test.js"
+        "ability-rider-name-exclusion.test.js",
+        "ability-auto-ridden-source-top-seven-two-name-search-server.test.js"
       ],
       "testCases": [
-        "nine real ride triggers preserve the named rider exclusion and exact source identity"
+        "nine real ride triggers preserve the named rider exclusion and exact source identity",
+        "nine catalog abilities compile as exact named-rider top-seven searches",
+        "each assigned card's sibling AUTO retains its exact clan and excluded-rider call condition",
+        "host and joining player resolve only the eligible target among the top seven",
+        "wrong rider, wrong prior Vanguard, and out-of-top-seven targets are rejected",
+        "the opponent cannot resolve the source controller's private ride search",
+        "up-to-one permits choosing no card while preserving the Deck",
+        "a source that leaves Soul after triggering cannot resolve the stale search",
+        "ride trigger rejects the excluded card, wrong clan, missing name, and a different ridden instance",
+        "the joining player's legal ride prompt and optional Soul call stay with that player",
+        "the named excluded rider does not offer the optional source call"
       ],
       "fullyVerified": false,
-      "remaining": "The other printed ability on this card and whole-card rules coverage have not been completed."
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     },
     {
       "cardId": "cfa-9750",
@@ -75876,8 +75920,321 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level reducer and full-suite evidence is recorded. The whole card remains unverified until every printed ability is supported and live browser multiplayer resolution is verified; online games still use the host-relay path."
+    },
+    {
+      "cardId": "cfa-2007",
+      "abilityId": "cfa-2007:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-step-power-critical-server.test.js"
+      ],
+      "testCases": [
+        "the shared compiler preserves the four verified source-power thresholds and VC restriction",
+        "the source's power snapshot, not the attack total or another unit's power, gates the trigger",
+        "host and joining player independently resolve their own attack-step critical",
+        "a Vanguard's own AUTO triggers at its controller's attack step even when a Rear-Guard is attacking",
+        "battle-duration critical can resolve during the local attack setup window"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-254",
+      "abilityId": "cfa-254:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-step-power-critical-server.test.js"
+      ],
+      "testCases": [
+        "the shared compiler preserves the four verified source-power thresholds and VC restriction",
+        "the source's power snapshot, not the attack total or another unit's power, gates the trigger",
+        "host and joining player independently resolve their own attack-step critical",
+        "a Vanguard's own AUTO triggers at its controller's attack step even when a Rear-Guard is attacking",
+        "battle-duration critical can resolve during the local attack setup window"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-260",
+      "abilityId": "cfa-260:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-step-power-critical-server.test.js"
+      ],
+      "testCases": [
+        "the shared compiler preserves the four verified source-power thresholds and VC restriction",
+        "the source's power snapshot, not the attack total or another unit's power, gates the trigger",
+        "host and joining player independently resolve their own attack-step critical",
+        "a Vanguard's own AUTO triggers at its controller's attack step even when a Rear-Guard is attacking",
+        "battle-duration critical can resolve during the local attack setup window"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-263",
+      "abilityId": "cfa-263:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-attack-step-power-critical-server.test.js"
+      ],
+      "testCases": [
+        "the shared compiler preserves the four verified source-power thresholds and VC restriction",
+        "the source's power snapshot, not the attack total or another unit's power, gates the trigger",
+        "host and joining player independently resolve their own attack-step critical",
+        "a Vanguard's own AUTO triggers at its controller's attack step even when a Rear-Guard is attacking",
+        "battle-duration critical can resolve during the local attack setup window"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10475",
+      "abilityId": "cfa-10475:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-ride-draw-crest-server.test.js"
+      ],
+      "testCases": [
+        "the five exact catalog cards have one mandatory, independently represented AUTO",
+        "host and joining player independently draw and receive the actual named Crest from their own ride",
+        "a different prior Vanguard, unrelated placement, wrong target instance, wrong rider, or wrong timing cannot trigger",
+        "the joining player alone resolves the prompt, and stale ride state rejects atomically",
+        "a crest with mismatched card identity is rejected and duplicate actions cannot replay the effect"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10764",
+      "abilityId": "cfa-10764:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-ride-draw-crest-server.test.js"
+      ],
+      "testCases": [
+        "the five exact catalog cards have one mandatory, independently represented AUTO",
+        "host and joining player independently draw and receive the actual named Crest from their own ride",
+        "a different prior Vanguard, unrelated placement, wrong target instance, wrong rider, or wrong timing cannot trigger",
+        "the joining player alone resolves the prompt, and stale ride state rejects atomically",
+        "a crest with mismatched card identity is rejected and duplicate actions cannot replay the effect"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12185",
+      "abilityId": "cfa-12185:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-ride-draw-crest-server.test.js"
+      ],
+      "testCases": [
+        "the five exact catalog cards have one mandatory, independently represented AUTO",
+        "host and joining player independently draw and receive the actual named Crest from their own ride",
+        "a different prior Vanguard, unrelated placement, wrong target instance, wrong rider, or wrong timing cannot trigger",
+        "the joining player alone resolves the prompt, and stale ride state rejects atomically",
+        "a crest with mismatched card identity is rejected and duplicate actions cannot replay the effect"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13174",
+      "abilityId": "cfa-13174:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-ride-draw-crest-server.test.js"
+      ],
+      "testCases": [
+        "the five exact catalog cards have one mandatory, independently represented AUTO",
+        "host and joining player independently draw and receive the actual named Crest from their own ride",
+        "a different prior Vanguard, unrelated placement, wrong target instance, wrong rider, or wrong timing cannot trigger",
+        "the joining player alone resolves the prompt, and stale ride state rejects atomically",
+        "a crest with mismatched card identity is rejected and duplicate actions cannot replay the effect"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13188",
+      "abilityId": "cfa-13188:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-ride-draw-crest-server.test.js"
+      ],
+      "testCases": [
+        "the five exact catalog cards have one mandatory, independently represented AUTO",
+        "host and joining player independently draw and receive the actual named Crest from their own ride",
+        "a different prior Vanguard, unrelated placement, wrong target instance, wrong rider, or wrong timing cannot trigger",
+        "the joining player alone resolves the prompt, and stale ride state rejects atomically",
+        "a crest with mismatched card identity is rejected and duplicate actions cannot replay the effect"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-274",
+      "abilityId": "cfa-274:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-ridden-source-top-seven-two-name-search-server.test.js",
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine catalog abilities compile as exact named-rider top-seven searches",
+        "each assigned card's sibling AUTO retains its exact clan and excluded-rider call condition",
+        "host and joining player resolve only the eligible target among the top seven",
+        "wrong rider, wrong prior Vanguard, and out-of-top-seven targets are rejected",
+        "the opponent cannot resolve the source controller's private ride search",
+        "up-to-one permits choosing no card while preserving the Deck",
+        "a source that leaves Soul after triggering cannot resolve the stale search",
+        "nine real ride triggers preserve the named rider exclusion and exact source identity",
+        "ride trigger rejects the excluded card, wrong clan, missing name, and a different ridden instance",
+        "the joining player's legal ride prompt and optional Soul call stay with that player",
+        "the named excluded rider does not offer the optional source call"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-743",
+      "abilityId": "cfa-743:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-ridden-source-top-seven-two-name-search-server.test.js",
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine catalog abilities compile as exact named-rider top-seven searches",
+        "each assigned card's sibling AUTO retains its exact clan and excluded-rider call condition",
+        "host and joining player resolve only the eligible target among the top seven",
+        "wrong rider, wrong prior Vanguard, and out-of-top-seven targets are rejected",
+        "the opponent cannot resolve the source controller's private ride search",
+        "up-to-one permits choosing no card while preserving the Deck",
+        "a source that leaves Soul after triggering cannot resolve the stale search",
+        "nine real ride triggers preserve the named rider exclusion and exact source identity",
+        "ride trigger rejects the excluded card, wrong clan, missing name, and a different ridden instance",
+        "the joining player's legal ride prompt and optional Soul call stay with that player",
+        "the named excluded rider does not offer the optional source call"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-948",
+      "abilityId": "cfa-948:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-ridden-source-top-seven-two-name-search-server.test.js",
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine catalog abilities compile as exact named-rider top-seven searches",
+        "each assigned card's sibling AUTO retains its exact clan and excluded-rider call condition",
+        "host and joining player resolve only the eligible target among the top seven",
+        "wrong rider, wrong prior Vanguard, and out-of-top-seven targets are rejected",
+        "the opponent cannot resolve the source controller's private ride search",
+        "up-to-one permits choosing no card while preserving the Deck",
+        "a source that leaves Soul after triggering cannot resolve the stale search",
+        "nine real ride triggers preserve the named rider exclusion and exact source identity",
+        "ride trigger rejects the excluded card, wrong clan, missing name, and a different ridden instance",
+        "the joining player's legal ride prompt and optional Soul call stay with that player",
+        "the named excluded rider does not offer the optional source call"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-974",
+      "abilityId": "cfa-974:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-ridden-source-top-seven-two-name-search-server.test.js",
+        "ability-rider-name-exclusion.test.js"
+      ],
+      "testCases": [
+        "nine catalog abilities compile as exact named-rider top-seven searches",
+        "each assigned card's sibling AUTO retains its exact clan and excluded-rider call condition",
+        "host and joining player resolve only the eligible target among the top seven",
+        "wrong rider, wrong prior Vanguard, and out-of-top-seven targets are rejected",
+        "the opponent cannot resolve the source controller's private ride search",
+        "up-to-one permits choosing no card while preserving the Deck",
+        "a source that leaves Soul after triggering cannot resolve the stale search",
+        "nine real ride triggers preserve the named rider exclusion and exact source identity",
+        "ride trigger rejects the excluded card, wrong clan, missing name, and a different ridden instance",
+        "the joining player's legal ride prompt and optional Soul call stay with that player",
+        "the named excluded rider does not offer the optional source call"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-273",
+      "abilityId": "cfa-273:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-end-phase-rc-drop-named-search-server.test.js"
+      ],
+      "testCases": [
+        "all four exact End Phase RC-drop searches are supported and resolve for both players",
+        "the AUTO is not offered outside its exact move, circle, End Phase, controller turn, or clan condition",
+        "resolution revalidates the condition, exact target, and Counter Blast atomically",
+        "a forged card text, card ID, or effect cannot use this server-trusted search"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-284",
+      "abilityId": "cfa-284:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-end-phase-rc-drop-named-search-server.test.js"
+      ],
+      "testCases": [
+        "all four exact End Phase RC-drop searches are supported and resolve for both players",
+        "the AUTO is not offered outside its exact move, circle, End Phase, controller turn, or clan condition",
+        "resolution revalidates the condition, exact target, and Counter Blast atomically",
+        "a forged card text, card ID, or effect cannot use this server-trusted search"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-301",
+      "abilityId": "cfa-301:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-end-phase-rc-drop-named-search-server.test.js"
+      ],
+      "testCases": [
+        "all four exact End Phase RC-drop searches are supported and resolve for both players",
+        "the AUTO is not offered outside its exact move, circle, End Phase, controller turn, or clan condition",
+        "resolution revalidates the condition, exact target, and Counter Blast atomically",
+        "a forged card text, card ID, or effect cannot use this server-trusted search"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-309",
+      "abilityId": "cfa-309:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-end-phase-rc-drop-named-search-server.test.js"
+      ],
+      "testCases": [
+        "all four exact End Phase RC-drop searches are supported and resolve for both players",
+        "the AUTO is not offered outside its exact move, circle, End Phase, controller turn, or clan condition",
+        "resolution revalidates the condition, exact target, and Counter Blast atomically",
+        "a forged card text, card ID, or effect cannot use this server-trusted search"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T07:39:53.355Z"
+  "evidenceUpdatedAt": "2026-10-31T10:05:37.550Z"
 }

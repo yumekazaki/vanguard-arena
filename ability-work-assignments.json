@@ -47,9 +47,9 @@
     },
     {
       "batchId": "PRIMARY-AUTO-GLITTER-PLACEMENT-TOP-FIVE",
-      "status": "in-progress",
+      "status": "reserved",
       "workerOwner": "primary-session",
-      "reason": "Integrated the exact five-card hand-to-RC Glitter AUTO and authoritative reducer support; 13 focused tests cover exact text, trigger identity, Glitter checks, both seats, legal choices, and conditional source-to-Soul. Keep each card unverified until fresh full-suite evidence and live online authority-path verification pass.",
+      "reason": "Implementation integrated locally; the 1640/1640 full regression suite passes. Keep all cards reserved for ability-level review, fresh evidence, and live online verification; this does not mark whole cards complete.",
       "abilityIds": [
         "cfa-13520:0",
         "cfa-13542:0",
@@ -98,9 +98,9 @@
     },
     {
       "batchId": "PRIMARY-WORKER-AUTO-RIDE-DRAW-CREST-5",
-      "status": "in-progress",
-      "workerOwner": "worker-ride-draw-crest",
-      "reason": "Exact five-card ride-triggered draw plus crest batch. Implement reusable ride-source identity, controller-specific draw, crest choice/state, timing, and replay-safe resolution; audit every ability on each card and leave whole-card verification pending.",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Implementation integrated locally; the 1640/1640 full regression suite passes. Keep all cards reserved for ability-level review, fresh evidence, and live online verification; this does not mark whole cards complete.",
       "sourceBatchId": "FAMILY-48B551B6-0005",
       "abilityIds": [
         "cfa-10475:0",
@@ -112,9 +112,9 @@
     },
     {
       "batchId": "PRIMARY-WORKER-AUTO-END-PHASE-NAMED-SEARCH-4",
-      "status": "in-progress",
-      "workerOwner": "worker-end-phase-named-search",
-      "reason": "Exact four-card Great Nature end-phase AUTO batch. Require this exact source to leave RC for Drop during its controller End Phase, matching Great Nature Vanguard, optional Counter Blast, exact named deck search/reveal/hand/shuffle; audit each full card and both seats.",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Implementation integrated locally; the 1640/1640 full regression suite passes. Keep all cards reserved for ability-level review, fresh evidence, and live online verification; this does not mark whole cards complete.",
       "sourceBatchId": "FAMILY-48B551B6-0012",
       "abilityIds": [
         "cfa-273:0",
@@ -125,9 +125,9 @@
     },
     {
       "batchId": "PRIMARY-WORKER-AUTO-NAMED-RIDER-TOP-SEVEN-4",
-      "status": "in-progress",
-      "workerOwner": "worker-named-rider-top-seven",
-      "reason": "Exact four-card named-rider top-seven search batch. Bind each trigger to the exact named ridden card and prior Vanguard instance; resolve private top-seven selection/reveal/hand/shuffle for the controller; audit the sibling ride-call AUTO on every card.",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Implementation integrated locally; the 1640/1640 full regression suite passes. Keep all cards reserved for ability-level review, fresh evidence, and live online verification; this does not mark whole cards complete.",
       "sourceBatchId": "FAMILY-48B551B6-0015",
       "abilityIds": [
         "cfa-274:0",
@@ -138,6 +138,148 @@
         "cfa-948:1",
         "cfa-974:0",
         "cfa-974:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-ATTACK-STEP-VANGUARD-CRITICAL-4",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Implementation integrated locally; the 1640/1640 full regression suite passes. Keep all cards reserved for ability-level review, fresh evidence, and live online verification; this does not mark whole cards complete.",
+      "sourceBatchId": "FAMILY-48B551B6-0012",
+      "abilityIds": [
+        "cfa-2007:0",
+        "cfa-2007:1",
+        "cfa-254:0",
+        "cfa-260:0",
+        "cfa-260:1",
+        "cfa-263:0"
+      ]
+    },
+    {
+      "batchId": "FAMILY-CBF8AB56-0001",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Implementation integrated locally; the 1640/1640 full regression suite passes. Keep all cards reserved for ability-level review, fresh evidence, and live online verification; this does not mark whole cards complete.",
+      "abilityIds": [
+        "cfa-12845:0",
+        "cfa-12845:1",
+        "cfa-12914:0",
+        "cfa-12914:1",
+        "cfa-12914:2",
+        "cfa-12924:0",
+        "cfa-12924:1",
+        "cfa-12924:2",
+        "cfa-12926:0",
+        "cfa-12926:1",
+        "cfa-13603:0",
+        "cfa-13603:1",
+        "cfa-13603:2",
+        "cfa-13634:0",
+        "cfa-13634:1",
+        "cfa-13634:2"
+      ]
+    },
+    {
+      "batchId": "FAMILY-CBF8AB56-0004",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Implementation integrated locally; the 1640/1640 full regression suite passes. Keep all cards reserved for ability-level review, fresh evidence, and live online verification; this does not mark whole cards complete.",
+      "abilityIds": [
+        "cfa-1251:0",
+        "cfa-1251:1",
+        "cfa-1251:2",
+        "cfa-1671:0",
+        "cfa-1671:1",
+        "cfa-1671:2",
+        "cfa-1879:0",
+        "cfa-1879:1",
+        "cfa-1879:2",
+        "cfa-1945:0",
+        "cfa-1945:1",
+        "cfa-1945:2",
+        "cfa-1954:0",
+        "cfa-1954:1",
+        "cfa-1954:2"
+      ]
+    },
+    {
+      "batchId": "FAMILY-CBF8AB56-0008",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Implementation integrated locally; the 1640/1640 full regression suite passes. Keep all cards reserved for ability-level review, fresh evidence, and live online verification; this does not mark whole cards complete.",
+      "abilityIds": [
+        "cfa-10476:0",
+        "cfa-10476:1",
+        "cfa-10476:2",
+        "cfa-10476:3",
+        "cfa-10668:0",
+        "cfa-10668:1",
+        "cfa-10668:2",
+        "cfa-10668:3",
+        "cfa-12183:0",
+        "cfa-12183:1",
+        "cfa-12183:2",
+        "cfa-12183:3",
+        "cfa-13177:0",
+        "cfa-13177:1",
+        "cfa-13177:2",
+        "cfa-13177:3",
+        "cfa-13186:0",
+        "cfa-13186:1",
+        "cfa-13186:2",
+        "cfa-13186:3"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-CONT-DIVINE-SKILL-ATTACK-LOCK-6",
+      "status": "in-progress",
+      "workerOwner": "worker-divine-skill-attack-lock",
+      "reason": "Implement the exact six-card Divine Skill and ride restriction CONT mechanic and audit all 12 abilities across these six cards, retaining each distinct own-attack power AUTO. Verify legal ride and attack actions for both seats and add rejection tests.",
+      "abilityIds": [
+        "cfa-13113:1",
+        "cfa-13071:1",
+        "cfa-13049:1",
+        "cfa-13083:1",
+        "cfa-13057:1",
+        "cfa-13060:1",
+        "cfa-13049:0",
+        "cfa-13057:0",
+        "cfa-13060:0",
+        "cfa-13071:0",
+        "cfa-13083:0",
+        "cfa-13113:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-CONT-SOUL-CLAN-COUNT-6-4",
+      "status": "in-progress",
+      "workerOwner": "worker-soul-clan-count",
+      "reason": "Implement the exact four-card CONT threshold: during the controller turn, this exact VC/RC unit gets printed power if the count of the printed clan in that controller Soul is at least six. Test exact clan, threshold, circle, turn, and both players.",
+      "abilityIds": [
+        "cfa-459:0",
+        "cfa-470:0",
+        "cfa-643:0",
+        "cfa-668:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-WORKER-CONT-SAME-COLUMN-KEYWORD-4",
+      "status": "in-progress",
+      "workerOwner": "worker-same-column-keyword",
+      "reason": "Implement the exact same-column CONT keyword grant and audit all 12 abilities across four cards, including existing Forerunner and ACT siblings. Preserve source instance, same controller, column, circle, and target identity; test both seats and illegal targets.",
+      "abilityIds": [
+        "cfa-4023:1",
+        "cfa-4101:1",
+        "cfa-4614:1",
+        "cfa-5080:1",
+        "cfa-4023:2",
+        "cfa-4101:2",
+        "cfa-4614:2",
+        "cfa-5080:2",
+        "cfa-4023:0",
+        "cfa-4101:0",
+        "cfa-4614:0",
+        "cfa-5080:0"
       ]
     }
   ],
