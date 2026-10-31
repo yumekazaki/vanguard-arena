@@ -112022,6 +112022,12 @@
     source: { dataset: "Bushiroad official card list", snapshotDate: "2026-10-30", officialReference: "https://en.cf-vanguard.com/cardlist/", rulesReference: "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf", patternId: "auto-rc-main-phase-race-top-three-memory-v1", review: "Exact shared AUTO on five Quintuplet units. It triggers only when this exact card enters an RC during its controller's Main Phase while that controller has a Vanguard with race Quintuplet. The controller privately chooses zero or one matching card among the top three; a chosen card enters the existing Order Zone, which Comprehensive Rules 4.52 §17.14.1 identifies as memory for effects, then the remaining looked cards are shuffled back. Only this AUTO is represented; each card's separate CONT ability is reviewed independently." },
     effects: [{ op: "put-top-up-to-one-filtered-in-order-zone", target: "controller", lookCount: 3, maximum: 1, filter: { race: "Quintuplet" }, destination: "memory", shuffle: true }]
   });
+  const dragontreeGcShieldIds = ["cfa-13498", "cfa-13566", "cfa-13607", "cfa-13609", "cfa-13638"];
+  const dragontreeGcShieldText = 'AUTO: When this unit is put on GC, if your RC has a Dragontree marker, until end of that battle, this unit gets "AUTO: When this unit is retired from GC, you may put this card into soul." and shield +5000.';
+  for (const cardId of dragontreeGcShieldIds) {
+    const definition = root?.VanguardAbilityEngine?.compileDragontreeGcRetireToSoulShieldDefinition?.(cardId, `${cardId}:0`, "AUTO", dragontreeGcShieldText);
+    if (definition) definitions.push(definition);
+  }
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
 })(typeof globalThis === "undefined" ? this : globalThis);

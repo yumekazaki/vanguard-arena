@@ -137,6 +137,32 @@
   }
   const GC_DROP_SELF_TO_SOUL_IDS = new Set(["cfa-1194", "cfa-1195", "cfa-3690", "cfa-3691", "cfa-3692", "cfa-449", "cfa-599"]);
   const GC_DROP_SELF_TO_SOUL_TEXT = "AUTO: When this unit is put into the drop zone from GC, put this card into your soul.";
+  const DRAGONTREE_GC_SHIELD_IDS=new Set(["cfa-13498","cfa-13566","cfa-13607","cfa-13609","cfa-13638"]);
+  const DRAGONTREE_GC_SHIELD_TEXT='AUTO: When this unit is put on GC, if your RC has a Dragontree marker, until end of that battle, this unit gets "AUTO: When this unit is retired from GC, you may put this card into soul." and shield +5000.';
+  function isExactDragontreeGcShieldAbility(ability){
+    const cardId=String(ability?.cardId||""),definition=ability?.definition,effects=definition?.effects||[];
+    return DRAGONTREE_GC_SHIELD_IDS.has(cardId)&&ability?.id===`${cardId}:0`&&ability?.kind==="AUTO"&&ability.canDecline===false&&definition?.kind==="AUTO"&&String(definition.cardId)===cardId&&definition.id===ability.id&&definition.source?.patternId==="auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1"&&String(definition.printedText||"").replace(/\s+/g," ").trim()===DRAGONTREE_GC_SHIELD_TEXT&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["guardian"])&&ability.trigger?.eventType==="card.placed"&&ability.trigger?.subject==="source"&&JSON.stringify(ability.trigger?.circles||[])===JSON.stringify(["guardian"])&&JSON.stringify(ability.conditions||[])===JSON.stringify([{type:"controller-has-dragontree-marker-on-rear-guard"}])&&!(ability.costs||[]).length&&definition.optional===false&&definition.conditionsReviewed===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&effects.length===2&&effects[0]?.op==="modify-shield-source"&&effects[0].target==="source"&&Number(effects[0].amount)===5000&&effects[0].duration==="battle"&&effects[1]?.op==="grant-battle-gc-retire-to-soul"&&effects[1].target==="source"&&effects[1].duration==="battle"&&effects[1].abilityText==="AUTO: When this unit is retired from GC, you may put this card into soul.";
+  }
+  function isExactDragontreeGcGrantedRetireAbility(ability){
+    const cardId=String(ability?.cardId||""),definition=ability?.definition,effect=definition?.effects?.[0],trigger=ability?.trigger;
+    return DRAGONTREE_GC_SHIELD_IDS.has(cardId)&&ability?.kind==="AUTO"&&definition?.kind==="AUTO"&&String(definition.cardId)===cardId&&definition.id===ability.id&&definition.source?.patternId==="auto-dragontree-gc-granted-retire-to-soul-v1"&&definition.printedText==="AUTO: When this unit is retired from GC, you may put this card into soul."&&definition.optional===true&&typeof definition.grantBattleId==="string"&&Boolean(definition.grantBattleId)&&trigger?.eventType==="card.retired"&&trigger?.subject==="source"&&trigger.sourceLocation==="guardian"&&trigger.destinationLocation==="drop"&&JSON.stringify(trigger.circles||[])===JSON.stringify([])&&!(ability.costs||[]).length&&effect?.op==="move-source-to-soul"&&effect.target==="source"&&effect.from==="drop";
+  }
+  function dragontreeGcGrantedRetireEventMatches(state,ability,source,located,event,actorPlayerId,side,engine){
+    const player=state?.players?.[side];
+    return Boolean(isExactDragontreeGcGrantedRetireAbility(ability)&&source?.uid&&located?.zone==="drop"&&located.side===side&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&event?.eventId&&event.type==="card.retired"&&event.sourceCardInstanceId===source.uid&&event.cardInstanceId===source.uid&&event.subjectCardInstanceId===source.uid&&event.sourceOwnerPlayerId===located.ownerPlayerId&&event.subjectOwnerPlayerId===located.ownerPlayerId&&event.sourceControllerPlayerId===actorPlayerId&&event.subjectControllerPlayerId===actorPlayerId&&event.previousLocation==="guardian"&&event.currentLocation==="drop"&&event.circle==="guardian"&&event.battleId===ability.definition.grantBattleId&&event.battleId===source.gcDragontreeRetireToSoulBattleId&&player.drop?.filter(card=>card?.uid===source.uid).length===1&&!player.soul?.some(card=>card?.uid===source.uid)&&engine?.locateCardInstance?.(state,source.uid)?.instance?.uid===source.uid);
+  }
+  function dragontreeGcShieldPlacementEventMatches(state,ability,source,located,event,actorPlayerId,side){
+    const attack=state?.pendingAttack,player=state?.players?.[side],actorIds=new Set(Object.values(state?.players||{}).map(item=>item?.playerId).filter(Boolean));
+    const validTiming=event?.timingWindow==="guard-placement"||String(event?.timingWindow||"").startsWith("effect-");
+    return Boolean(isExactDragontreeGcShieldAbility(ability)&&event?.type==="card.placed"&&event?.eventId&&event?.battleId&&
+      Number(state?.phase)===5&&attack?.closing!==true&&event.battleId===attack?.battleId&&event.phase==="battle"&&validTiming&&
+      event.sourceCardInstanceId===source?.uid&&event.cardInstanceId===source?.uid&&event.subjectCardInstanceId===source?.uid&&
+      event.sourceOwnerPlayerId===located?.ownerPlayerId&&event.subjectOwnerPlayerId===located?.ownerPlayerId&&
+      event.sourceControllerPlayerId===actorPlayerId&&event.subjectControllerPlayerId===actorPlayerId&&actorIds.has(event.actingPlayerId)&&
+      event.currentLocation==="guardian"&&event.circle==="guardian"&&event.previousLocation!=="guardian"&&
+      located?.zone==="guardian"&&located.side===side&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&
+      player.guardCircle?.some(card=>card?.uid===source.uid)&&attack.defenderSide===side&&attack.guardCards?.some(card=>card?.uid===source.uid));
+  }
   function isExactGcDropSelfToSoulAbility(ability) {
     const cardId = String(ability?.cardId || ""), definition = ability?.definition;
     const printed = String(definition?.printedText || ability?.printedText || "").replace(/\s+/g, " ").trim();
@@ -984,7 +1010,7 @@
     const abilityId = String(ability?.id || "");
     if (!cardId || !abilityId || !engine) return false;
     if ((engine.getReviewedAbilityDefinitionsForCard?.(cardId) || []).some(definition => definition?.id === abilityId)) return true;
-    return isExactPaidOwnVanguardAttackPowerAbility(ability, engine) || isExactRetireRearGuardAttackAbility(ability);
+    return isExactPaidOwnVanguardAttackPowerAbility(ability, engine) || isExactRetireRearGuardAttackAbility(ability) || isExactDragontreeGcShieldAbility(ability) || isExactDragontreeGcGrantedRetireAbility(ability);
   }
   function paidOwnVanguardAttackPowerEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
     const attack = state?.pendingAttack, side = located?.side, player = side && state.players?.[side];
@@ -1428,6 +1454,7 @@
   SERVER_EFFECT_OPS.add("put-chosen-normal-drop-to-deck-bottom");
   SERVER_EFFECT_OPS.add("soul-charge-and-return-source-to-deck");
   SERVER_EFFECT_OPS.add("put-top-up-to-one-filtered-in-order-zone");
+  SERVER_EFFECT_OPS.add("grant-battle-gc-retire-to-soul");
   const CLAN_PLACEMENT_DAMAGE_RETURN = Object.freeze(["cfa-187","cfa-208","cfa-279","cfa-295","cfa-458","cfa-466","cfa-712","cfa-719","cfa-749","cfa-762","cfa-798","cfa-816","cfa-841","cfa-858","cfa-938","cfa-943","cfa-959","cfa-965","cfa-978","cfa-980","cfa-995","cfa-999","cfa-1057","cfa-1332","cfa-1333","cfa-1378","cfa-1379","cfa-1383","cfa-1384","cfa-1445","cfa-1570","cfa-1722","cfa-1723","cfa-1891","cfa-1892","cfa-1903"]);
   const QUICK_SHIELD_RIDE_TEXT = "AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.";
   const CHARGE_CARD_IDS = new Set(["cfa-3429", "cfa-3474", "cfa-3490", "cfa-3492", "cfa-3495", "cfa-3500", "cfa-3501", "cfa-3506", "cfa-4142", "cfa-4232", "cfa-4269", "cfa-4275", "cfa-4312", "cfa-4327", "cfa-5203", "cfa-5204", "cfa-5206", "cfa-5207", "cfa-5208", "cfa-5215", "cfa-5226", "cfa-5313", "cfa-5316"]);
@@ -3255,6 +3282,9 @@
     const effects = ability?.definition?.effects;
     if (!Array.isArray(effects) || !effects.length) return false;
     if (ability?.definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN && !isExactPersonaShieldTicketAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1" && !isExactDragontreeGcShieldAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-dragontree-gc-granted-retire-to-soul-v1" && !isExactDragontreeGcGrantedRetireAbility(ability)) return false;
+    if (effects.some(step => step?.op === "grant-battle-gc-retire-to-soul") && !isExactDragontreeGcShieldAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1" && !isExactPaidOwnVanguardAttackPowerAbility(ability)) return false;
     if(effects.some(step=>step?.op==="put-top-up-to-one-filtered-in-order-zone")&&!isExactAutoRcMainPhaseRaceTopThreeMemoryAbility(ability))return false;
     if (ability?.definition?.source?.patternId === "auto-vanguard-attack-retire-friendly-rearguard-cost-battle-modifier-v1" && !isExactRetireRearGuardAttackAbility(ability)) return false;
@@ -3399,7 +3429,7 @@
     if (hasDelayedDamageReturn && !isExactClanPlacementDamageReturnAbility(ability) && !ability?.scheduledEffectId) return false;
     if (hasPlacementTopFiveSearchDiscard && !isExactPlacementTopFiveSearchDiscardAbility(ability)) return false;
     if (hasRcGradeThreeNameSearch && !isExactRcGradeThreeNameSearchAbility(ability)) return false;
-    if (hasInterceptShield && !isAnyInterceptShieldAbility(ability)) return false;
+    if (hasInterceptShield && !isAnyInterceptShieldAbility(ability) && !isExactDragontreeGcShieldAbility(ability)) return false;
     if (hasActRcGradeThreeSearch && !isExactActRcGradeThreeSearchAbility(ability) && !isExactAutoVanguardTopFiveSearchAbility(ability) && !isExactRideSourceTopSevenSearchAbility(ability) && !isExactAutoVanguardTopSevenTwoNameSearchAbility(ability)) return false;
     if (hasHandRidePhaseSearch && !isExactHandRidePhaseSearchAbility(ability)) return false;
     if (hasSameNameDeckSearch && !isExactActSameNameSearchPowerAbility(ability) && !isExactAutoNamedVanguardSearchAbility(ability) && !isExactNamedRideDeckSearchAbility(ability) && !isExactRcGradeThreeClanNamedSearchAbility(ability)) return false;
@@ -3434,7 +3464,7 @@
       (hasDelayedDamageReturn && step?.op === "return-chosen-damage-to-deck" && (isExactClanPlacementDamageReturnAbility(ability) || Boolean(ability?.scheduledEffectId))) ||
       (hasPlacementTopFiveSearchDiscard && step?.op === "search-top-grade-three-to-hand-then-discard") ||
       (hasRcGradeThreeNameSearch && step?.op === "search-deck-named-grade-three-then-discard") ||
-      (hasInterceptShield && step?.op === "modify-shield-source" && isAnyInterceptShieldAbility(ability)) ||
+      (hasInterceptShield && step?.op === "modify-shield-source" && (isAnyInterceptShieldAbility(ability) || isExactDragontreeGcShieldAbility(ability))) ||
       (hasActRcGradeThreeSearch && step?.op === "search-top-up-to-one-filtered-to-hand" && (isExactActRcGradeThreeSearchAbility(ability) || isExactAutoVanguardTopFiveSearchAbility(ability) || isExactRideSourceTopSevenSearchAbility(ability) || isExactAutoVanguardTopSevenTwoNameSearchAbility(ability))) ||
       (hasHandRidePhaseSearch && step?.op === "search-top-up-to-one-grade-to-hand") ||
       (hasSameNameDeckSearch && step?.op === "search-deck-same-name-to-hand" && (isExactActSameNameSearchPowerAbility(ability) || isExactAutoNamedVanguardSearchAbility(ability) || isExactNamedRideDeckSearchAbility(ability) || isExactRcGradeThreeClanNamedSearchAbility(ability))) ||
@@ -3895,7 +3925,7 @@
     "controller-has-fewer-cards-in-hand-than-opponent", "controller-hand-size-at-least", "controller-hand-size-at-most",
     "opponent-rear-guards-at-most", "attack-target-grade-at-least", "controller-vanguard-name-contains",
     "controller-soul-has-card-name", "controller-vanguard-has-clan", "controller-vanguard-has-race", "source-was-boosted", "source-is-legion", "attack-target-location",
-    "event-subject-grade-equals", "event-subject-has-clan"
+    "event-subject-grade-equals", "event-subject-has-clan", "controller-has-dragontree-marker-on-rear-guard"
   ]);
 
   function buildConditionContext(state, event, located, engine) {
@@ -3944,6 +3974,7 @@
       controllerSoulCount: (controller.soul || []).length,
       allOrderZonesCount: (controller.orders || []).length + (opponent.orders || []).length,
       controllerHasSetOrder: (controller.orders || []).some(card => { const rules=serverCardDefinition(card); const type=String(rules?.type||card?.type||card?.cardType||card?.orderType||""); return /\bset order\b/i.test(type) && (!card?.controllerPlayerId || card.controllerPlayerId===controller.playerId); }),
+      controllerHasDragontreeMarkerOnRearGuard: (controller.giftZones || []).some(marker => marker?.type === "Dragontree" && /^(?:rear-|accel-)/.test(String(marker.zone || ""))),
       anyFieldCardIsLocked: [...rear(controller), ...rear(opponent)].some(card => card.locked === true),
       controllerCenterColumnRearGuard: Boolean(center),
       controllerWentSecond: Boolean(state.firstSide && state.firstSide !== controllerSide),
@@ -4066,6 +4097,11 @@
           const located = engine.locateCardInstance(state, instance.uid);
           if (!located || located.ambiguous) continue;
           const definitions = [...engine.getReviewedAbilityDefinitionsForCard(instance.cardId)];
+          const grantedBattle=instance.gcDragontreeRetireToSoulBattleId;
+          if(event.type==="card.retired"&&event.eventId&&event.sourceCardInstanceId===instance.uid&&event.cardInstanceId===instance.uid&&event.subjectCardInstanceId===instance.uid&&event.previousLocation==="guardian"&&event.currentLocation==="drop"&&event.circle==="guardian"&&event.battleId===grantedBattle&&DRAGONTREE_GC_SHIELD_IDS.has(String(instance.cardId))){
+            const granted=engine.createDragontreeGcGrantedRetireToSoulAbility?.(instance.cardId,grantedBattle);
+            if(granted?.definition&&!definitions.some(definition=>definition.id===granted.id))definitions.push(granted.definition);
+          }
           for (const compiled of authoritativePaidOwnAttackAbilities(instance.cardId, engine)) {
             if (!definitions.some(definition => definition.id === compiled.id)) definitions.push(compiled.definition);
           }
@@ -4077,7 +4113,8 @@
             const parsed = engine.parseCardAbilities({ id: String(instance.cardId), text: definition.printedText }).find(item => item.kind === "AUTO");
             if (!parsed) continue;
             const familyCandidate = { ...parsed, id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsed.requiredLocation, trigger: definition.trigger || parsed.trigger, conditions: definition.conditions || parsed.conditions, costs: definition.costs || parsed.costs, canDecline: definition.optional === true || parsed.canDecline };
-            const ability = { ...parsed, ...(isExactBoostSetOrderCounterChargeAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactHollowPlacementAbility(familyCandidate) || isExactClanPlacementDamageReturnAbility(familyCandidate) || isExactOtherHandDiscardReturnAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactAttackedUnboostedProtectAbility(familyCandidate) || isExactPersonaShieldTicketAbility(familyCandidate) ? { canDecline: false } : {}), id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsed.requiredLocation, requiredCircle: definition.requiredCircle || parsed.requiredCircle || [], trigger: definition.trigger ? { ...parsed.trigger, ...definition.trigger, circles: definition.trigger.circles || parsed.trigger?.circles || [] } : parsed.trigger, conditions: definition.conditions || parsed.conditions, conditionStatus: definition.conditions?.length ? "modeled" : definition.conditionsReviewed === true ? "no-explicit-condition-detected" : parsed.conditionStatus, costs: definition.costs || parsed.costs, costAlternatives: definition.costAlternatives || parsed.costAlternatives, costStatus: definition.costAlternatives?.length ? "supported-cost" : definition.costs?.length ? "supported-cost" : definition.costsReviewed === true ? "no-cost" : definition.costs ? "supported-cost" : parsed.costStatus, choiceStatus: definition.choicesReviewed === true ? "modeled" : parsed.choiceStatus, effects: definition.effects, once: definition.once === true || parsed.once, usageRestriction: resolveUsageRestriction(definition, parsed) };
+            const ability = { ...parsed, ...(isExactBoostSetOrderCounterChargeAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactHollowPlacementAbility(familyCandidate) || isExactClanPlacementDamageReturnAbility(familyCandidate) || isExactOtherHandDiscardReturnAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactAttackedUnboostedProtectAbility(familyCandidate) || isExactPersonaShieldTicketAbility(familyCandidate) || definition.source?.patternId === "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1" ? { canDecline: false } : {}), id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsed.requiredLocation, requiredCircle: definition.requiredCircle || parsed.requiredCircle || [], trigger: definition.trigger ? { ...parsed.trigger, ...definition.trigger, circles: definition.trigger.circles || parsed.trigger?.circles || [] } : parsed.trigger, conditions: definition.conditions || parsed.conditions, conditionStatus: definition.conditions?.length ? "modeled" : definition.conditionsReviewed === true ? "no-explicit-condition-detected" : parsed.conditionStatus, costs: definition.costs || parsed.costs, costAlternatives: definition.costAlternatives || parsed.costAlternatives, costStatus: definition.costAlternatives?.length ? "supported-cost" : definition.costs?.length ? "supported-cost" : definition.costsReviewed === true ? "no-cost" : definition.costs ? "supported-cost" : parsed.costStatus, choiceStatus: definition.choicesReviewed === true ? "modeled" : parsed.choiceStatus, effects: definition.effects, once: definition.once === true || parsed.once, usageRestriction: resolveUsageRestriction(definition, parsed) };
+            if(definition.source?.patternId==="auto-dragontree-gc-granted-retire-to-soul-v1"){ability.canDecline=true;if(!dragontreeGcGrantedRetireEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,side,engine))continue;}
             if (event.attackHitOverride === true && (ability.trigger?.eventType !== "attack.hit" || ability.trigger?.subject !== "source" ||
                 instance.uid !== event.attackingUnitInstanceId || located.zone !== "vanguard" || !hasActiveMissedAttackHitCONT(state, instance, located, engine))) continue;
             if (definition.source?.patternId === "auto-soul-blast-named-boost-power-battle-v1" && String(definition.cardId) === "cfa-513") {
@@ -4214,6 +4251,7 @@
             if (!eventMatch) continue;
             if (ability.definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN &&
                 !personaShieldAutoEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, side, engine)) continue;
+            if(ability.definition?.source?.patternId==="auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1"&&!dragontreeGcShieldPlacementEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,side))continue;
             if (ability.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1" &&
                 !paidOwnVanguardAttackPowerEventMatches(state, ability, located.instance, located, eventForMatch, located.controllerPlayerId, engine)) continue;
             const quintupletMemoryAuto=ability.definition?.source?.patternId==="auto-rc-main-phase-race-top-three-memory-v1";
@@ -4694,6 +4732,8 @@
 
   function finalizeClosedBattle(state) {
     if (!state.pendingAttack?.closing || state.pendingTrigger || state.pendingAbility || (state.pendingAbilities || []).length) return false;
+    const battleId=state.pendingAttack.battleId;
+    for(const player of Object.values(state.players||{}))for(const zone of [player?.vanguard?[player.vanguard]:[],player?.rear,player?.guardCircle,player?.drop,player?.soul,player?.hand,player?.bind,player?.damage,player?.orders,player?.triggerZone])for(const instance of zone||[]){if(instance?.gcDragontreeRetireToSoulBattleId===battleId)delete instance.gcDragontreeRetireToSoulBattleId;if(instance?.battleShieldExpiryBattleId===battleId){delete instance.battleShieldBoost;delete instance.battleShieldExpiryBattleId;}}
     state.pendingAttack = null;
     return true;
   }
@@ -5900,6 +5940,12 @@
     if (!engine.eventMatchesAbilityTrigger(ability, triggerContext.event, authoritativeTriggerEvent, located.instance.uid, eventSourceZone, triggerContext.subjectZone || triggerEvent.currentLocation, actorPlayerId)) return reject("trigger-event-mismatch");
     if (ability.definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN &&
         !personaShieldAutoEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, side, engine)) return reject("persona-shield-trigger-context-invalid");
+    if(ability.definition?.source?.patternId==="auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1"){
+      const currentConditions=buildConditionContext(state,triggerEvent,located,engine);
+      if(!dragontreeGcShieldPlacementEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,side))return reject("dragontree-gc-placement-context-invalid");
+      if(command.payload.accept&&(!currentConditions||!engine.evaluateAbilityConditions(ability,currentConditions)))return reject("dragontree-gc-marker-condition-no-longer-met");
+    }
+    if(ability.definition?.source?.patternId==="auto-dragontree-gc-granted-retire-to-soul-v1"&&!dragontreeGcGrantedRetireEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,side,engine))return reject("dragontree-gc-retire-context-invalid");
     if (ability.definition?.source?.patternId === "auto-vanguard-attack-retire-friendly-rearguard-cost-battle-modifier-v1" &&
         !retireRearGuardAttackEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("retire-rear-guard-attack-event-invalid");
     if (ability.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1") {
@@ -6328,6 +6374,7 @@
 
     state.processedActionIds ||= [];
     state.processedActionIds.push(command.actionId);
+    if(ability.definition?.source?.patternId==="auto-dragontree-gc-granted-retire-to-soul-v1")delete located.instance.gcDragontreeRetireToSoulBattleId;
     state.pendingAbility = null;
     state.stateVersion = Number(state.stateVersion || 0) + 1;
     const events = structureResolutionEvents(state, eventLog, located.instance, actorPlayerId, engine);
