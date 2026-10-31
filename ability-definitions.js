@@ -111872,6 +111872,17 @@
       effects: [{ op: "modify-power", target: "source", amount: 2000, duration: "turn", expiry: "active-turn" }]
     },
   ];
+  const quintupletMemoryAutoIds = ["cfa-11526", "cfa-11545", "cfa-11558", "cfa-11607", "cfa-11671"];
+  const quintupletMemoryAutoText = "AUTO: When this unit is placed on RC during your main phase, if you have a <Quintuplet> vanguard, look at the top three cards of your deck, choose up to one <Quintuplet> from among them, put it into memory, and shuffle the deck.";
+  for (const cardId of quintupletMemoryAutoIds) definitions.push({
+    id: `${cardId}:0`, cardId, kind: "AUTO", printedText: quintupletMemoryAutoText,
+    requiredLocation: [],
+    trigger: { status: "recognized-trigger", eventType: "card.placed", subject: "event-subject", circles: ["rear-guard"], requiredPhase: "main", turnRelation: "controller" },
+    conditions: [{ type: "controller-vanguard-has-race", value: "Quintuplet" }],
+    conditionsReviewed: true, costs: [], costsReviewed: true, optional: false, choicesReviewed: true,
+    source: { dataset: "Bushiroad official card list", snapshotDate: "2026-10-30", officialReference: "https://en.cf-vanguard.com/cardlist/", rulesReference: "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf", patternId: "auto-rc-main-phase-race-top-three-memory-v1", review: "Exact shared AUTO on five Quintuplet units. It triggers only when this exact card enters an RC during its controller's Main Phase while that controller has a Vanguard with race Quintuplet. The controller privately chooses zero or one matching card among the top three; a chosen card enters the existing Order Zone, which Comprehensive Rules 4.52 §17.14.1 identifies as memory for effects, then the remaining looked cards are shuffled back. Only this AUTO is represented; each card's separate CONT ability is reviewed independently." },
+    effects: [{ op: "put-top-up-to-one-filtered-in-order-zone", target: "controller", lookCount: 3, maximum: 1, filter: { race: "Quintuplet" }, destination: "memory", shuffle: true }]
+  });
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
 })(typeof globalThis === "undefined" ? this : globalThis);

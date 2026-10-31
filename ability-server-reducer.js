@@ -1356,6 +1356,7 @@
   SERVER_EFFECT_OPS.add("call-drop-trigger-to-guardian");
   SERVER_EFFECT_OPS.add("put-chosen-normal-drop-to-deck-bottom");
   SERVER_EFFECT_OPS.add("soul-charge-and-return-source-to-deck");
+  SERVER_EFFECT_OPS.add("put-top-up-to-one-filtered-in-order-zone");
   const CLAN_PLACEMENT_DAMAGE_RETURN = Object.freeze(["cfa-187","cfa-208","cfa-279","cfa-295","cfa-458","cfa-466","cfa-712","cfa-719","cfa-749","cfa-762","cfa-798","cfa-816","cfa-841","cfa-858","cfa-938","cfa-943","cfa-959","cfa-965","cfa-978","cfa-980","cfa-995","cfa-999","cfa-1057","cfa-1332","cfa-1333","cfa-1378","cfa-1379","cfa-1383","cfa-1384","cfa-1445","cfa-1570","cfa-1722","cfa-1723","cfa-1891","cfa-1892","cfa-1903"]);
   const QUICK_SHIELD_RIDE_TEXT = "AUTO: When rode upon, draw a card. Then, if your opponent’s vanguard is grade 1 or greater, put a Quick Shield ticket into your hand.";
   const CHARGE_CARD_IDS = new Set(["cfa-3429", "cfa-3474", "cfa-3490", "cfa-3492", "cfa-3495", "cfa-3500", "cfa-3501", "cfa-3506", "cfa-4142", "cfa-4232", "cfa-4269", "cfa-4275", "cfa-4312", "cfa-4327", "cfa-5203", "cfa-5204", "cfa-5206", "cfa-5207", "cfa-5208", "cfa-5215", "cfa-5226", "cfa-5313", "cfa-5316"]);
@@ -3128,10 +3129,52 @@
     const definition=ability?.definition,cardId=String(ability?.cardId||""),printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim();
     return RC_NORMAL_DROP_BOTTOM_POWER_IDS.has(cardId)&&ability?.id===`${cardId}:0`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&definition.cardId===cardId&&printed===RC_NORMAL_DROP_BOTTOM_POWER_TEXT&&definition.source?.patternId==="auto-rc-placement-hand-normal-drop-bottom-power-v1"&&ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="card.placed"&&ability.trigger.subject==="source"&&JSON.stringify(ability.trigger.circles||[])===JSON.stringify(["rear-guard"])&&ability.trigger.sourceLocation==="hand"&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.conditions||[])===JSON.stringify([{type:"controller-vanguard-grade-at-least",count:3}])&&!(ability.costs||[]).length&&ability.canDecline===false&&definition.conditionsReviewed===true&&definition.choicesReviewed===true&&definition.effects?.length===2&&JSON.stringify(definition.effects[0])===JSON.stringify({op:"put-chosen-normal-drop-to-deck-bottom",target:"chosen",destination:"deck-bottom",optionalTarget:true,filter:{cardType:"normal-unit",excludeSentinel:true}})&&definition.effects[1]?.op==="modify-power"&&definition.effects[1]?.target==="source"&&Number(definition.effects[1]?.amount)===2000&&definition.effects[1]?.duration==="turn"&&definition.effects[1]?.ifPreviousEffectSucceeded===0;
   }
+  function isExactAutoRcMainPhaseRaceTopThreeMemoryAbility(ability){
+    const definition=ability?.definition,cardId=String(ability?.cardId||""),printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim(),trigger=ability?.trigger,effect=definition?.effects?.[0];
+    const match=printed.match(/^AUTO:\s*When this unit is placed on RC during your main phase, if you have a <([^<>]+)> vanguard, look at the top three cards of your deck, choose up to one <([^<>]+)> from among them, put it into memory, and shuffle the deck\.$/i);
+    if(!match||match[1].trim().toLocaleLowerCase()!==match[2].trim().toLocaleLowerCase())return false;
+    const race=match[1].trim();
+    return ability?.kind==="AUTO"&&definition?.kind==="AUTO"&&definition.cardId===cardId&&ability.id===definition.id&&new RegExp(`^${cardId}:\\d+$`).test(ability.id)&&
+      definition.source?.patternId==="auto-rc-main-phase-race-top-three-memory-v1"&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify([])&&
+      trigger?.status==="recognized-trigger"&&trigger.eventType==="card.placed"&&trigger.subject==="event-subject"&&JSON.stringify(trigger.circles||[])===JSON.stringify(["rear-guard"])&&trigger.requiredPhase==="main"&&trigger.turnRelation==="controller"&&
+      definition.conditionsReviewed===true&&JSON.stringify(ability.conditions||[])===JSON.stringify([{type:"controller-vanguard-has-race",value:race}])&&
+      definition.costsReviewed===true&&!(ability.costs||[]).length&&definition.optional===false&&ability.canDecline===false&&definition.choicesReviewed===true&&
+      !definition.once&&!definition.usageRestriction&&!ability.usageRestriction&&definition.effects?.length===1&&effect?.op==="put-top-up-to-one-filtered-in-order-zone"&&
+      effect.target==="controller"&&effect.lookCount===3&&effect.maximum===1&&JSON.stringify(effect.filter)===JSON.stringify({race})&&effect.destination==="memory"&&effect.shuffle===true;
+  }
+  function autoRcMainPhaseRaceTopThreeMemoryEventMatches(state,ability,source,located,event,controllerPlayerId,side,engine,checkCurrentPlacement=false){
+    if(!isExactAutoRcMainPhaseRaceTopThreeMemoryAbility(ability)||!state||!source?.uid||!located||located.ambiguous||!event?.eventId||event.type!=="card.placed")return false;
+    const player=state.players?.[side],phaseName=value=>{const names=["stand","draw","ride","stride","main","battle","end"],number=Number(value);if(Number.isInteger(number)&&String(value).trim()!==""&&number>=0&&number<names.length)return names[number];return String(value||"").trim().toLowerCase()},normalize=value=>value==="vanguard"?"vanguard":/^(?:rear-|accel-|rear\d|rear-guard$)/i.test(String(value||""))?"rear-guard":null;
+    const actualCircle=String(event.circle||event.currentLocation||"");
+    const eventCircleIsSpecific=/^(?:rear-(?:left|right|back-left|back-center|back-right)|accel-\d+)$/i.test(actualCircle);
+    const eventIdentity=Boolean(player&&located.instance?.uid===source.uid&&located.controllerPlayerId===controllerPlayerId&&
+      event.turnPlayerId===controllerPlayerId&&phaseName(event.phase)==="main"&&
+      typeof event.previousLocation==="string"&&event.previousLocation.length>0&&
+      event.cardInstanceId===source.uid&&event.subjectCardInstanceId===source.uid&&
+      event.subjectOwnerPlayerId===located.ownerPlayerId&&event.subjectControllerPlayerId===controllerPlayerId&&
+      normalize(event.currentLocation||event.circle)==="rear-guard"&&normalize(event.previousLocation)!=="rear-guard"&&
+      (!eventCircleIsSpecific||!checkCurrentPlacement||actualCircle===located.circle));
+    return eventIdentity&&(!checkCurrentPlacement||Boolean(state.side===side&&located.zone==="rear-guard"&&located.side===side&&player.rear?.some(card=>card?.uid===source.uid)&&
+      controllerPlayerId===player.playerId&&state.players?.[state.side]?.playerId===controllerPlayerId&&phaseName(state.phase)==="main"));
+  }
+  function quintupletMemoryRequirementMet(state,pending,engine){
+    if(pending?.ability?.definition?.source?.patternId!=="auto-rc-main-phase-race-top-three-memory-v1")return true;
+    const source=pending.instance,located=source?.uid&&engine?.locateCardInstance?.(state,source.uid),event=pending.eventContext?.gameEvent;
+    if(!located||located.ambiguous)return false;
+    const context=buildConditionContext(state,event,located,engine);
+    return Boolean(context&&engine.evaluateAbilityConditions(pending.ability,context));
+  }
+  function refreshQuintupletMemoryPendingConditions(state,engine){
+    for(const pending of [state?.pendingAbility,...(state?.pendingAbilities||[])].filter(Boolean)){
+      if(pending?.ability?.definition?.source?.patternId!=="auto-rc-main-phase-race-top-three-memory-v1")continue;
+      pending.suppressPromptUntilRequirementMet=!quintupletMemoryRequirementMet(state,pending,engine);
+    }
+  }
   function supportsServerAbilityEffects(ability) {
     const effects = ability?.definition?.effects;
     if (!Array.isArray(effects) || !effects.length) return false;
     if (ability?.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1" && !isExactPaidOwnVanguardAttackPowerAbility(ability)) return false;
+    if(effects.some(step=>step?.op==="put-top-up-to-one-filtered-in-order-zone")&&!isExactAutoRcMainPhaseRaceTopThreeMemoryAbility(ability))return false;
     if (ability?.definition?.source?.patternId === "auto-own-attack-hit-place-treasures-marker-v1" && (!isExactTreasuresHitAbility(ability) || effects.length !== 1 || effects[0]?.op !== "place-circle-marker" || effects[0]?.markerType !== "Treasures")) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-placement-counter-blast-place-dragontree-marker-v1" && !isExactDragontreePlacementAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-other-hand-discard-energy-blast-remove-source-return-discard-v1" && !isExactOtherHandDiscardReturnAbility(ability)) return false;
@@ -3654,7 +3697,7 @@
     "controller-other-rear-guards-of-clan-at-least", "controller-field-has-clan-limit-break", "controller-has-more-rear-guards-than-opponent", "controller-has-more-cards-in-hand-than-opponent",
     "controller-has-fewer-cards-in-hand-than-opponent", "controller-hand-size-at-least", "controller-hand-size-at-most",
     "opponent-rear-guards-at-most", "attack-target-grade-at-least", "controller-vanguard-name-contains",
-    "controller-soul-has-card-name", "controller-vanguard-has-clan", "source-was-boosted", "source-is-legion", "attack-target-location",
+    "controller-soul-has-card-name", "controller-vanguard-has-clan", "controller-vanguard-has-race", "source-was-boosted", "source-is-legion", "attack-target-location",
     "event-subject-grade-equals", "event-subject-has-clan"
   ]);
 
@@ -3724,6 +3767,8 @@
       vanguardNames: engine.getCardNames?.(vanguard,{location:"vanguard"}) || [vanguard?.cardName, vanguard?.name].filter(Boolean),
       vanguardClan: vanguardRules?.clan,
       vanguardClans: vanguardRules?.clans || [],
+      vanguardRace: vanguardRules?.race,
+      vanguardRaces: vanguardRules?.races || [],
       vanguardText: vanguardRules?.text || vanguard?.text,
       controllerSoulCardNames: (controller.soul || []).map(card => card?.cardName || card?.name).filter(Boolean),
       attackTargetGrade: Number.isInteger(Number(targetDefinition ? serverCardDefinition(targetDefinition)?.grade : undefined)) ? Number(serverCardDefinition(targetDefinition)?.grade) : undefined,
@@ -3961,6 +4006,9 @@
             if (!eventMatch) continue;
             if (ability.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1" &&
                 !paidOwnVanguardAttackPowerEventMatches(state, ability, located.instance, located, eventForMatch, located.controllerPlayerId, engine)) continue;
+            const quintupletMemoryAuto=ability.definition?.source?.patternId==="auto-rc-main-phase-race-top-three-memory-v1";
+            if(quintupletMemoryAuto&&
+              !autoRcMainPhaseRaceTopThreeMemoryEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,side,engine,true))continue;
             if(ability.definition?.source?.patternId==="auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1"&&
               !damageZoneClanPowerEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,engine))continue;
             if(isExactGuardianDropTriggerCallAbility(ability)&&!engine.canPayAbilityCosts(ability,{faceUpDamage:(state.players?.[side]?.damage||[]).filter(card=>!card.faceDown).length})){
@@ -4109,7 +4157,7 @@
             }
             if (isExactSuccessAbility(ability) && !successThresholdEventMatches(state, ability, instance, located, event, engine)) continue;
             const conditionContext = buildConditionContext(state, event, located, engine);
-            if (!conditionContext || !engine.evaluateAbilityConditions(ability, conditionContext)) {
+            if (!conditionContext || !quintupletMemoryAuto&&!engine.evaluateAbilityConditions(ability, conditionContext)) {
               if ((exactHandRideSearch || isExactClanInterceptShieldAbility(ability) || isExactStructuredInterceptShieldAbility(ability) || isExactSecondAttackInterceptShieldAbility(ability) || isExactLowerVanguardGradeGuardianShieldAbility(ability) || isExactSecondPlayerRideDrawAbility(ability)) && engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) {
                 skipped.push({ eventId: event.eventId, cardInstanceId: instance.uid, abilityId: ability.id, reason: "condition-not-met" });
               }
@@ -4271,10 +4319,18 @@
         }
       }
     }
-    if (!state.pendingAbility && queue.length) {
+    refreshQuintupletMemoryPendingConditions(state,engine);
+    if(state.pendingAbility?.suppressPromptUntilRequirementMet){queue.unshift(state.pendingAbility);state.pendingAbility=null;}
+    const visiblePending=queue.some(item=>!item?.suppressPromptUntilRequirementMet);
+    if(!state.pendingAbility&&!visiblePending){
+      for(const item of queue.filter(candidate=>candidate?.suppressPromptUntilRequirementMet))skipped.push({eventId:item.eventContext?.eventId,cardInstanceId:item.instance?.uid,abilityId:item.ability?.id,reason:"quintuplet-vanguard-requirement-false-noop"});
+      queue.splice(0,queue.length,...queue.filter(item=>!item?.suppressPromptUntilRequirementMet));
+    }
+    if (!state.pendingAbility && queue.some(item=>!item?.suppressPromptUntilRequirementMet)) {
       const turnPlayerId = state.players?.[state.side]?.playerId;
-      const index = turnPlayerId ? queue.findIndex(item => item.triggerControllerPlayerId === turnPlayerId) : -1;
-      state.pendingAbility = queue.splice(index >= 0 ? index : 0, 1)[0];
+      const index = turnPlayerId ? queue.findIndex(item => !item?.suppressPromptUntilRequirementMet&&item.triggerControllerPlayerId === turnPlayerId) : -1;
+      const fallbackIndex=queue.findIndex(item=>!item?.suppressPromptUntilRequirementMet);
+      state.pendingAbility = queue.splice(index >= 0 ? index : fallbackIndex, 1)[0];
       state.pendingAbilityPriorityPlayerId = turnPlayerId || null;
     }
     return { queued, skipped };
@@ -5584,6 +5640,7 @@
     if (!legal.ok) return reject(legal.reason);
     if(pending?.scheduledEffectId)return resolveScheduledDamageReturnDecision(state,command,side,actorPlayerId,pending,engine);
     const ability = pending?.ability;
+    let quintupletMemoryRequirementMet=true;
     const program = ability?.definition?.effects;
     const ready = engine.autoAbilityReadiness(ability);
     if (!ready?.ok) return reject(`ability-not-ready:${ready?.reason || "unknown"}`);
@@ -5615,6 +5672,11 @@
         const controller = state.players?.[side];
         if (!engine.canPayAbilityCosts(ability, { faceUpDamage: (controller?.damage || []).filter(card => !card.faceDown).length, soulCount: (controller?.soul || []).length })) return reject("unpayable-cost");
       }
+    }
+    if(ability.definition?.source?.patternId==="auto-rc-main-phase-race-top-three-memory-v1"){
+      if(!autoRcMainPhaseRaceTopThreeMemoryEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,side,engine,false))return reject("quintuplet-memory-placement-event-invalid");
+      const currentConditions=buildConditionContext(state,triggerEvent,located,engine);
+      quintupletMemoryRequirementMet=Boolean(currentConditions&&engine.evaluateAbilityConditions(ability,currentConditions));
     }
     if(ability.definition?.source?.patternId==="auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1"){
       if(!damageZoneClanPowerEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,engine,{requireSubjectInDamage:false}))return reject("damage-zone-power-trigger-context-invalid");
@@ -5990,7 +6052,8 @@
     };
 
     let effectResult = null;
-    if (command.payload.accept && selection.payCost !== false) {
+    if(!quintupletMemoryRequirementMet)effectResult={ok:true,applied:0,results:[]};
+    else if (command.payload.accept && selection.payCost !== false) {
       const result = engine.resolveEffectProgram(program, engine.EFFECT_HANDLERS, context, draft => {
         const paymentContext = {
           ...draft,
@@ -6031,7 +6094,7 @@
       finalizeClosedBattle(state);
       if (state.pendingTurnEnd && !state.pendingAbility && !(state.pendingAbilities || []).length) events.push(...continueTurnEnd(state, engine));
     }
-    return { ok: true, state, events, resolvedAbilityId: ability.id };
+    return { ok: true, state, events, resolvedAbilityId: ability.id, ...(quintupletMemoryRequirementMet?{}:{resolution:"requirement-not-met-no-op"}) };
   }
 
   return Object.freeze({ playerSideForSeat, buildConditionContext, discoverAutoTriggers, returnStriddenVanguard, continueTurnEnd, applyGameAction, applyAbilityDecision, applyManualAbilityActivation, applyEngorgeDecision: applyAbilityDecision, supportsServerEffectOperation, supportsServerAbilityEffects, hasTrustedServerAbilityDefinition });

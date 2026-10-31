@@ -74202,8 +74202,103 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11526",
+      "abilityId": "cfa-11526:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-quintuplet-memory-server.test.js"
+      ],
+      "testCases": [
+        "the five printed AUTOs share one exact reusable definition without absorbing their CONT abilities",
+        "host and joining player privately receive and independently resolve their own placement AUTO",
+        "zero-card choice is legal, still shuffles, and leaves all looked cards in the deck",
+        "wrong circle, source instance, phase, or turn player cannot trigger; false Vanguard requirement is suppressed",
+        "mandatory AUTO requirement is rechecked at resolution and a false result consumes as a no-op",
+        "false-at-trigger AUTO waits silently behind a higher-priority pending ability and becomes resolvable if its condition turns true",
+        "invalid or stale choices are rejected without partially moving cards; duplicated events and replies resolve once"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11545",
+      "abilityId": "cfa-11545:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-quintuplet-memory-server.test.js"
+      ],
+      "testCases": [
+        "the five printed AUTOs share one exact reusable definition without absorbing their CONT abilities",
+        "host and joining player privately receive and independently resolve their own placement AUTO",
+        "zero-card choice is legal, still shuffles, and leaves all looked cards in the deck",
+        "wrong circle, source instance, phase, or turn player cannot trigger; false Vanguard requirement is suppressed",
+        "mandatory AUTO requirement is rechecked at resolution and a false result consumes as a no-op",
+        "false-at-trigger AUTO waits silently behind a higher-priority pending ability and becomes resolvable if its condition turns true",
+        "invalid or stale choices are rejected without partially moving cards; duplicated events and replies resolve once"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11558",
+      "abilityId": "cfa-11558:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-quintuplet-memory-server.test.js"
+      ],
+      "testCases": [
+        "the five printed AUTOs share one exact reusable definition without absorbing their CONT abilities",
+        "host and joining player privately receive and independently resolve their own placement AUTO",
+        "zero-card choice is legal, still shuffles, and leaves all looked cards in the deck",
+        "wrong circle, source instance, phase, or turn player cannot trigger; false Vanguard requirement is suppressed",
+        "mandatory AUTO requirement is rechecked at resolution and a false result consumes as a no-op",
+        "false-at-trigger AUTO waits silently behind a higher-priority pending ability and becomes resolvable if its condition turns true",
+        "invalid or stale choices are rejected without partially moving cards; duplicated events and replies resolve once"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11607",
+      "abilityId": "cfa-11607:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-quintuplet-memory-server.test.js"
+      ],
+      "testCases": [
+        "the five printed AUTOs share one exact reusable definition without absorbing their CONT abilities",
+        "host and joining player privately receive and independently resolve their own placement AUTO",
+        "zero-card choice is legal, still shuffles, and leaves all looked cards in the deck",
+        "wrong circle, source instance, phase, or turn player cannot trigger; false Vanguard requirement is suppressed",
+        "mandatory AUTO requirement is rechecked at resolution and a false result consumes as a no-op",
+        "false-at-trigger AUTO waits silently behind a higher-priority pending ability and becomes resolvable if its condition turns true",
+        "invalid or stale choices are rejected without partially moving cards; duplicated events and replies resolve once"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11671",
+      "abilityId": "cfa-11671:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-quintuplet-memory-server.test.js"
+      ],
+      "testCases": [
+        "the five printed AUTOs share one exact reusable definition without absorbing their CONT abilities",
+        "host and joining player privately receive and independently resolve their own placement AUTO",
+        "zero-card choice is legal, still shuffles, and leaves all looked cards in the deck",
+        "wrong circle, source instance, phase, or turn player cannot trigger; false Vanguard requirement is suppressed",
+        "mandatory AUTO requirement is rechecked at resolution and a false result consumes as a no-op",
+        "false-at-trigger AUTO waits silently behind a higher-priority pending ability and becomes resolvable if its condition turns true",
+        "invalid or stale choices are rejected without partially moving cards; duplicated events and replies resolve once"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T00:58:17.110Z"
+  "evidenceUpdatedAt": "2026-10-31T01:31:01.104Z"
 }
