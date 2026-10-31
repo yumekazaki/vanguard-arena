@@ -1,0 +1,31 @@
+/* Battlefield-only presentation; original game controls keep their handlers. */
+.battlefield-tool { position:absolute; top:10px; z-index:55; display:flex; align-items:center; gap:7px; min-height:34px; padding:6px 11px; border:1px solid #afd4ff80; border-radius:9px; color:#eff8ff; background:#101d3ded; box-shadow:0 4px 16px #0005; font:600 11px var(--display); cursor:pointer; }
+.battlefield-tool:hover { background:#304c77; border-color:#c5e7ff; }
+.battlefield-tool:focus-visible { outline:3px solid #a6dcff; outline-offset:3px; }
+.battlefield-tool>span[aria-hidden] { font-size:20px; line-height:1; }
+.battlefield-controls { left:12px; }
+.battlefield-fullscreen { right:12px; }
+.battlefield-bottom-controls { margin:12px 0; }
+.battlefield-controls-dialog { width:min(760px,calc(100vw - 24px)); max-height:85dvh; padding:22px; border:1px solid #a5caff77; border-radius:18px; color:#f1f6ff; background:linear-gradient(140deg,#172b48,#14152d); box-shadow:0 25px 100px #0009; overflow:auto; }
+.battlefield-controls-dialog::backdrop { background:#040817b8; backdrop-filter:blur(5px); }
+.battlefield-controls-dialog>header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.battlefield-controls-dialog h2 { margin:4px 0; font:700 23px var(--display); }
+.battlefield-controls-dialog>p { color:#abc0d9; font-size:12px; line-height:1.6; }
+.battlefield-controls-dialog .manual-actions { display:flex; margin-top:12px; }
+.battlefield-controls-dialog .quick-control-drawer { display:block; margin:12px 0; }
+.battlefield-controls-dialog .quick-control-row,.battlefield-controls-dialog .action-buttons { display:flex; flex-wrap:wrap; gap:8px; max-height:none; }
+.battlefield-controls-dialog .button { min-height:38px; }
+.battlefield-controls-dialog .manual-command-drawer { margin-top:8px; }
+body.battlefield-expanded { overflow:hidden; }
+body.battlefield-expanded .app-shell,body.battlefield-expanded #view-play,body.battlefield-expanded #match-layout { transform:none!important; translate:none!important; filter:none!important; animation:none!important; }
+body.battlefield-expanded .topbar,body.battlefield-expanded .app-footer,body.battlefield-expanded .match-rail,body.battlefield-expanded .card-inspector { visibility:hidden; }
+body.battlefield-expanded #match-layout .table-column { position:fixed; inset:0; z-index:76; width:100vw; height:100dvh; padding:0; margin:0; display:grid; grid-template-rows:minmax(0,1fr) auto auto; gap:0; background:#090f23; overflow:hidden; }
+body.battlefield-expanded .table-column>.battle-phase-toolbar,body.battlefield-expanded .table-column>.battlefield-bottom-controls { display:none; }
+body.battlefield-expanded #match-layout #game-table { width:100%; height:100%; min-height:0; margin:0; border-radius:0; }
+body.battlefield-expanded .hand-launcher { margin:0; padding:5px; background:#0c1730; }
+body.battlefield-expanded .hand-launcher>span { display:none; }
+body.battlefield-expanded .hand-open-button { min-height:37px; min-width:150px; padding:3px 18px; font-size:14px; border-radius:10px; }
+body.battlefield-expanded .table-column>.action-bar { position:static; margin:0; padding:5px 10px; border-radius:0; }
+body.battlefield-expanded .table-column>.action-bar .button { min-height:34px; padding:5px 8px; }
+body.battlefield-expanded .table-column>.action-bar .action-buttons { max-height:18dvh; overflow:auto; }
+@media(max-width:600px) { .battlefield-tool { top:7px; padding:5px 8px; font-size:10px; } .battlefield-controls { left:7px; } .battlefield-fullscreen { right:7px; } .battlefield-controls-dialog { padding:15px; } body.battlefield-expanded .table-column>.action-bar .selected-summary { display:none; } }
