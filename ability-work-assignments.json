@@ -44,6 +44,19 @@
         "cfa-13123:0",
         "cfa-13124:0"
       ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-GLITTER-PLACEMENT-TOP-FIVE",
+      "status": "in-progress",
+      "workerOwner": "primary-session/auto_glitter_top_five",
+      "reason": "Implement and validate the exact five-card hand-to-RC Glitter search AUTO. Preserve the exact source-placement event, Glitter eligibility, optional search, shuffle, and source-to-Soul only when a card is revealed; do not mark whole cards verified.",
+      "abilityIds": [
+        "cfa-13520:0",
+        "cfa-13542:0",
+        "cfa-13584:0",
+        "cfa-13608:0",
+        "cfa-13621:0"
+      ]
     }
   ],
   "completedAssignments": [

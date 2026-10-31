@@ -4,8 +4,12 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { loadCatalog } = require("./audit-ability-catalog.js");
 
+function isValidWorkUnitId(value) {
+  return /^[A-Z0-9][A-Z0-9-]{1,80}$/.test(String(value || ""));
+}
+
 function integrateContribution(root, batchId) {
-  if (!/^ABILITY-\d{4}$/.test(String(batchId || ""))) throw new TypeError("A registered ABILITY batch ID is required.");
+  if (!isValidWorkUnitId(batchId)) throw new TypeError("A registered ability work-unit ID is required.");
   const contributionPath = path.join(root, "ability-contributions", `batch-${batchId}.js`);
   if (!fs.existsSync(contributionPath)) throw new Error(`Missing contribution file for ${batchId}.`);
   delete require.cache[require.resolve(contributionPath)];
@@ -39,7 +43,11 @@ function integrateContribution(root, batchId) {
   const newline = source.includes("\r\n") ? "\r\n" : "\n";
   const formatted = contribution.map(definition => JSON.stringify(definition, null, 2).split("\n").map(line => `    ${line}`).join(newline)).join(`,${newline}`);
   const insertAt = match.index;
-  const updated = `${source.slice(0, insertAt)},${newline}${formatted}${source.slice(insertAt)}`;
+  const arrayStart = source.indexOf("const definitions = [");
+  if (arrayStart < 0) throw new Error("Could not locate the curated definition array.");
+  const arrayOpen = source.indexOf("[", arrayStart) + 1;
+  const separator = source.slice(arrayOpen, insertAt).trim() ? `,${newline}` : newline;
+  const updated = `${source.slice(0, insertAt)}${separator}${formatted}${source.slice(insertAt)}`;
   const temporary = `${definitionsPath}.${process.pid}.tmp`;
   fs.writeFileSync(temporary, updated, { flag: "wx" });
   try { fs.renameSync(temporary, definitionsPath); }
@@ -53,4 +61,4 @@ if (require.main === module) {
   catch (error) { process.stderr.write(`${error.message}\n`); process.exitCode = 1; }
 }
 
-module.exports = { integrateContribution };
+module.exports = { integrateContribution, isValidWorkUnitId };
