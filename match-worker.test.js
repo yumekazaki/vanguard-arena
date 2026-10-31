@@ -31,6 +31,26 @@ function claimedCommand(overrides = {}) {
   };
 }
 
+function setCompleteAttackContext(claim, side = "bot") {
+  const state = claim.state, attackerSide = side, defenderSide = side === "human" ? "bot" : "human";
+  const attackerPlayer = state.players[attackerSide], defenderPlayer = state.players[defenderSide], attacker = attackerPlayer.rear[0];
+  if (!attackerPlayer.vanguard) attackerPlayer.vanguard = { uid: `${attackerSide}-vanguard`, cardId: `${attackerSide}-vg`, type: "Unit", grade: 3, ownerPlayerId: attackerPlayer.playerId, controllerPlayerId: attackerPlayer.playerId };
+  if (!defenderPlayer.vanguard) defenderPlayer.vanguard = { uid: `${defenderSide}-vanguard`, cardId: `${defenderSide}-vg`, type: "Unit", grade: 3, ownerPlayerId: defenderPlayer.playerId, controllerPlayerId: defenderPlayer.playerId };
+  const target = defenderPlayer.vanguard, battleId = "attack-event-1";
+  state.turn = Number(state.turn || 1); state.side = attackerSide; state.phase = 5;
+  state.pendingAttack = { battleId, attackerUid: attacker.uid, attackerSide, attackerPlayerId: attackerPlayer.playerId, attackerZone: "rear-left", defenderSide, defenderPlayerId: defenderPlayer.playerId, targetUid: target.uid, targetZone: "vanguard", power: 10000, targetPower: 13000, critical: 1, boostUid: null };
+  state.pendingAbility.field = "rear-left";
+  const event = state.pendingAbility.eventContext.gameEvent;
+  Object.assign(event, {
+    eventId: battleId, type: "unit.attacked", actingPlayerId: attackerPlayer.playerId, turnPlayerId: attackerPlayer.playerId,
+    sourceCardInstanceId: attacker.uid, sourceOwnerPlayerId: attacker.ownerPlayerId, sourceControllerPlayerId: attacker.controllerPlayerId,
+    cardInstanceId: attacker.uid, subjectCardInstanceId: attacker.uid, subjectOwnerPlayerId: attacker.ownerPlayerId, subjectControllerPlayerId: attacker.controllerPlayerId,
+    attackingUnitInstanceId: attacker.uid, attackingCardInstanceIds: [attacker.uid], targetCardInstanceIds: [target.uid],
+    targetLocation: "vanguard", battleId, phase: "battle", timingWindow: "attack-declared"
+  });
+  return state.pendingAttack;
+}
+
 function rpcFor(claim, completeResult = { ok: true, accepted: true, stateVersion: 3 }) {
   const calls = [];
   const rpc = async (name, args) => {
@@ -44,6 +64,7 @@ function rpcFor(claim, completeResult = { ok: true, accepted: true, stateVersion
 
 test("worker claims a leased command, reduces with DB actor identity, and commits the result", async () => {
   const claim = claimedCommand();
+  setCompleteAttackContext(claim);
   const { calls, rpc } = rpcFor(claim);
   const result = await Worker.processRoomAction("0123456789ABCDEF", { rpc, engine: Engine, reducer: Reducer });
   assert.deepEqual(calls.map(call => call.name), ["claim_match_action", "complete_match_action"]);
@@ -58,6 +79,7 @@ test("worker claims a leased command, reduces with DB actor identity, and commit
 
 test("worker resolves an AUTO decision for the host-owned source without involving the joining player", async () => {
   const claim = claimedCommand();
+  setCompleteAttackContext(claim);
   claim.actorAuthUid = "auth-host";
   const hostSource = claim.state.players.bot.rear[0];
   const hostTarget = claim.state.players.bot.rear[1];
@@ -65,13 +87,9 @@ test("worker resolves an AUTO decision for the host-owned source without involvi
   claim.state.players.bot.rear = [];
   claim.state.players.human.rear = [hostSource, hostTarget];
   claim.state.side = "human";
-  claim.state.pendingAttack.attackerSide = "human";
   claim.state.pendingAbility.side = "human";
   claim.state.pendingAbility.triggerControllerPlayerId = "host-player";
-  Object.assign(claim.state.pendingAbility.eventContext.gameEvent, {
-    sourceOwnerPlayerId: "host-player", sourceControllerPlayerId: "host-player",
-    subjectOwnerPlayerId: "host-player", subjectControllerPlayerId: "host-player"
-  });
+  setCompleteAttackContext(claim, "human");
   claim.payload = { type: "ability-response", accept: true, selection: { instanceUid: hostSource.uid, abilityId: claim.state.pendingAbility.ability.id, engorgeTargetUids: [hostTarget.uid] } };
   const { calls, rpc } = rpcFor(claim);
   const result = await Worker.processRoomAction("0123456789ABCDEF", { rpc, engine: Engine, reducer: Reducer });
@@ -406,7 +424,8 @@ test("joining player privately resolves its reviewed clan-conditioned own-attack
   state.players.bot.vanguard={uid:"guest-vanguard",cardId:"shadow-vanguard",cardName:"Shadow Paladin Vanguard",clan:"Shadow Paladin",type:"Unit",grade:3,unitCard:true,ownerPlayerId:"guest-player",controllerPlayerId:"guest-player"};
   state.players.bot.rear=[attacker];state.players.bot.damage=[{uid:"damage-a",faceDown:false},{uid:"damage-b",faceDown:false}];state.players.bot.deck=[draw];
   state.players.human.vanguard={uid:"host-vanguard",cardId:"host-vg",type:"Unit",grade:3,unitCard:true,ownerPlayerId:"host-player",controllerPlayerId:"host-player"};
-  const event=Engine.createGameEvent(state,{type:"attack.hit",actingPlayerId:"guest-player",turnPlayerId:"guest-player",sourceCardInstanceId:attacker.uid,sourceOwnerPlayerId:"guest-player",sourceControllerPlayerId:"guest-player",subjectCardInstanceId:attacker.uid,subjectOwnerPlayerId:"guest-player",subjectControllerPlayerId:"guest-player",targetLocation:"vanguard",battleId:"vaha-battle"});
+  state.pendingAttack={battleId:"vaha-battle",attackerUid:attacker.uid,attackerSide:"bot",attackerPlayerId:"guest-player",attackerZone:"rear-left",defenderSide:"human",defenderPlayerId:"host-player",targetUid:state.players.human.vanguard.uid,targetZone:"vanguard",power:20000,targetPower:13000,critical:1,boostUid:null};
+  const event=Engine.createGameEvent(state,{type:"attack.hit",actingPlayerId:"guest-player",turnPlayerId:"guest-player",sourceCardInstanceId:attacker.uid,sourceOwnerPlayerId:"guest-player",sourceControllerPlayerId:"guest-player",cardInstanceId:state.players.human.vanguard.uid,subjectCardInstanceId:state.players.human.vanguard.uid,subjectOwnerPlayerId:"host-player",subjectControllerPlayerId:"host-player",attackingUnitInstanceId:attacker.uid,attackingCardInstanceIds:[attacker.uid],targetCardInstanceIds:[state.players.human.vanguard.uid],targetLocation:"vanguard",battleId:"vaha-battle",phase:"battle",timingWindow:"attack-hit"});
   const discovered=Reducer.discoverAutoTriggers(state,[event],Engine);
   assert.equal(discovered.queued.length,1);
   assert.equal(state.pendingAbility.side,"bot");
@@ -1304,13 +1323,14 @@ test("the Front Trigger effect resolves before its matching AUTO and the checked
   claim.state.side = "bot"; claim.state.phase = 5; claim.state.turn = 2;
   claim.state.pendingAbility = null; claim.state.pendingAbilities = []; claim.state.pendingTrigger = null;
   claim.state.players.bot.vanguard = { uid: "critical-checker-vanguard", cardId: "vg", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
+  claim.state.players.human.vanguard = { uid: "host-target", cardId: "host-vg", ownerPlayerId: "host-player", controllerPlayerId: "host-player", type: "Unit", grade: 3 };
   const source = { uid: "drive-auto-source", cardId, ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
   claim.state.players.bot.rear[2] = source;
   const reveal = { uid: "front-drive-card", cardId: "front", triggerType: "front", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
   claim.state.players.bot.deck.push(reveal);
   claim.state.pendingAttack = {
     battleId: "trigger-order-battle", attackerSide: "bot", attackerUid: "critical-checker-vanguard", attackerPlayerId: "guest-player",
-    attackerZone: "vanguard", defenderSide: "human", targetUid: "host-target", targetZone: "vanguard",
+    attackerZone: "vanguard", defenderSide: "human", defenderPlayerId: "host-player", targetUid: "host-target", targetZone: "vanguard",
     power: 10000, targetPower: 10000, critical: 1, driveChecksRemaining: 1, driveChecksPerformed: 0,
     awaitingDrive: true, driveChecksComplete: false, driveCountChosen: true
   };
