@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./arena-battle-cinematic.css?v=battle-cinematic-2" />
     <link rel="stylesheet" href="./arena-dear-days.css?v=dear-days-11" />
     <link rel="stylesheet" href="./arena-hand.css?v=hand-fan-1" />
+    <link rel="stylesheet" href="./arena-chat.css?v=online-chat-1" />
   </head>
   <body>
     <div class="app-shell">
@@ -67,6 +68,7 @@
             <aside class="match-rail">
           <div class="rail-card status-card"><div class="status-top"><span class="live-dot"></span><span id="match-status">PRACTICE MATCH</span><button id="reconnect-match" class="button button-quiet reconnect-button" type="button" hidden>Reconnect</button><button id="match-menu" class="dots-button" aria-label="Match options">•••</button></div><div class="status-names"><div><small>YOU</small><b id="human-name">Player</b></div><span class="versus">VS</span><div class="opponent-name"><small>OPPONENT</small><b id="opponent-name">Practice Bot</b></div></div><div id="online-invite" class="online-invite hidden"><small>Player invite link</small><input id="invite-link" readonly /><button class="button button-quiet" id="copy-invite">Copy</button><small>Spectator link</small><input id="spectate-link" readonly /><button class="button button-quiet" id="copy-spectate">Copy</button><small id="spectator-count">0 spectators</small></div><div class="rail-divider"></div><div class="turn-banner"><span class="turn-symbol">↻</span><div><small id="turn-label">YOUR TURN</small><b id="phase-label">Stand phase</b></div><span class="turn-number" id="turn-number">01</span></div></div>
               
+              <details class="rail-card table-chat" id="online-chat" open hidden><summary><span>TABLE CHAT</span></summary><p id="online-chat-status" class="table-chat-status" role="status"></p><ol id="online-chat-history" class="table-chat-history" role="log" aria-label="Messages between players" aria-live="polite" aria-relevant="additions text"></ol><form id="online-chat-form"><input class="text-input" id="online-chat-input" type="text" maxlength="500" aria-label="Message your opponent" placeholder="Type a message…" autocomplete="off" required disabled /><button class="button button-primary" id="online-chat-send" type="submit" disabled>Send</button></form></details>
               <div class="rail-card match-log-card"><div class="rail-heading"><span>MATCH LOG</span><button class="text-button" id="clear-log">CLEAR</button></div><div id="match-log" class="match-log"></div></div>
               <div class="prototype-note"><span>ⓘ</span><p>Online matches synchronize a simplified table. Card effects and full Premium rules still need manual handling.</p></div>
             </aside>
@@ -187,7 +189,8 @@
     <script src="arena-inspector.js?v=hover-gdeck-1" defer></script>
     <script src="practice-bot.js?v=20261028-ability-batch-v1" defer></script>
     <script src="arena-visual-effects.js?v=dear-days-1" defer></script>
-    <script src="app.js?v=20261030-face-crops-3" defer></script>
+    <script src="arena-chat.js?v=online-chat-1" defer></script>
+    <script src="app.js?v=20261030-online-chat-1" defer></script>
     <script src="arena-hand.js?v=hand-fan-1" defer></script>
   </body>
 </html>
