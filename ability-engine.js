@@ -487,8 +487,28 @@
       validate(step,context){const player=context.player,filter=step.filter;if(step.target!=="controller"||step.maximum!==1||!filter||Object.keys(filter).length!==1||typeof filter.clan!=="string"||!filter.clan.trim()||!Array.isArray(player?.hand)||!Array.isArray(player?.soul)||typeof context.cardDefinitionForInstance!=="function")return false;if(!context.effectUid)return true;const card=player.hand.find(item=>item?.uid===context.effectUid);return Boolean(card&&matchesTargetFilter(filter,{targetCard:context.cardDefinitionForInstance(card)}));},
       apply(_step,context){if(!context.effectUid)return true;const index=context.player.hand.findIndex(card=>card?.uid===context.effectUid);if(index<0)return false;const [card]=context.player.hand.splice(index,1);context.player.soul.push(card);context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"hand",currentLocation:"soul",reason:"ability"});return true;}
     }), "move-source-to-soul": Object.freeze({
-      validate(step, context) { return step.target === "source" && step.from === "drop" && Boolean(context?.source?.uid && context.player?.drop?.some(card=>card?.uid===context.source.uid) && Array.isArray(context.player.soul)); },
-      apply(_step, context) { const index=context.player.drop.findIndex(card=>card?.uid===context.source.uid);if(index<0)return false;const [card]=context.player.drop.splice(index,1);context.player.soul.push(card);context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"soul"});return true; }
+      validate(step, context) {
+        const player=context?.player,source=context?.source;
+        if(step.target!=="source"||!source?.uid||!Array.isArray(player?.soul))return false;
+        if(step.from==="drop")return Array.isArray(player.drop)&&player.drop.some(card=>card?.uid===source.uid);
+        return step.from==="rear-guard"&&context.sourceInPlay===true&&context.sourceZone!=="vanguard"&&
+          Array.isArray(player.rear)&&player.rear.some(card=>card?.uid===source.uid)&&
+          (!source.controllerPlayerId||source.controllerPlayerId===player.playerId);
+      },
+      apply(step, context) {
+        const player=context.player,source=context.source;
+        if(step.from==="drop"){
+          const index=player.drop.findIndex(card=>card?.uid===source.uid);if(index<0)return false;
+          const [card]=player.drop.splice(index,1);player.soul.push(card);
+          context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"soul"});
+          return true;
+        }
+        const index=player.rear.findIndex(card=>card?.uid===source.uid);if(index<0)return false;
+        const previousLocation=context.sourceCircle||context.sourceZone||"rear-guard";
+        const [card]=player.rear.splice(index,1,null);player.soul.push(card);
+        context.emitEvent?.({type:"card.moved",cardInstanceId:card.uid,controllerSide:context.side,previousLocation,currentLocation:"soul",reason:"ability"});
+        return true;
+      }
     }), "move-source-to-hand": Object.freeze({
       validate(step,context){return step.target==="source"&&step.from==="rear-guard"&&context.sourceInPlay===true&&context.sourceZone!=="vanguard"&&Boolean(context.source?.uid)&&Array.isArray(context.player?.rear)&&Array.isArray(context.player?.hand)&&context.player.rear.some(card=>card?.uid===context.source.uid);},
       apply(_step,context){const index=context.player.rear.findIndex(card=>card?.uid===context.source.uid);if(index<0)return false;const [card]=context.player.rear.splice(index,1,null);context.player.hand.push(card);const playerId=context.player.playerId||context.sidePlayerId||null,circle=context.sourceCircle||context.sourceZone,ownerPlayerId=card.ownerPlayerId||playerId,controllerPlayerId=card.controllerPlayerId||playerId;context.emitEvent?.({type:"card.moved",actingPlayerId:playerId,turnPlayerId:context.match?.players?.[context.match?.side]?.playerId||null,sourceCardInstanceId:card.uid,sourceOwnerPlayerId:ownerPlayerId,sourceControllerPlayerId:controllerPlayerId,cardInstanceId:card.uid,subjectCardInstanceId:card.uid,subjectOwnerPlayerId:ownerPlayerId,subjectControllerPlayerId:controllerPlayerId,controllerSide:context.side,previousLocation:context.sourceZone,currentLocation:"hand",circle,phase:context.phase,timingWindow:"effect-return-to-hand"});return true;}
@@ -715,6 +735,12 @@
   function cardsShareName(left,right,{leftLocation,rightLocation}={}){const names=new Set(getCardNames(right,{location:rightLocation}).map(name=>name.toLocaleLowerCase()));return getCardNames(left,{location:leftLocation}).some(name=>names.has(name.toLocaleLowerCase()))}
   function cardHasAbilityKeyword(card,keyword){
     const expected=String(keyword||"").trim().toLocaleLowerCase();if(!card||!expected)return false;
+    if(expected==="glitter"){
+      const cardId=typeof card==="string"||typeof card==="number"?String(card):String(card.id||card.cardId||"");
+      const authoritative=cardAbilityKeywordIndex.get(cardId);
+      if(authoritative)return authoritative.includes("glitter");
+      return Boolean(typeof card==="object"&&typeof card.text==="string"&&/^\s*glitter\s*\(\s*this card is a glitter\b/im.test(card.text));
+    }
     if (getCardAbilityKeywords(card).includes(expected)) return true;
     const direct=String(card.text||"").split(/\r?\n/).some(line=>line.trim().toLocaleLowerCase().startsWith(expected+" - ")&&/\b(?:AUTO|ACT|CONT)\b/i.test(line));if(direct)return true;
     return parseCardAbilities(card).some(ability=>{const raw=String(ability.raw||"").trim().replace(/^\s*\[[^\]]+\]\s*:?\s*/,""),prefix=raw.split(/:\s*/)[0].trim().toLocaleLowerCase(),normalized=prefix.replace(/[^a-z0-9]+/g," ").trim();return normalized===expected||normalized.startsWith(expected+" ")||(/^generation break\b/.test(normalized)&&(" "+normalized+" ").includes(" "+expected+" "));});
@@ -774,7 +800,7 @@
         if (effect.op === "grant-battle-gc-retire-to-soul") return effect.target !== "source" || effect.duration !== "battle" || effect.abilityText !== "AUTO: When this unit is retired from GC, you may put this card into soul.";
         if (effect.op === "protect-attacked-source") return effect.target !== "source" || effect.duration !== "battle";
         if (effect.op === "persona-shield-ticket") return effect.target !== "controller";
-        if (effect.op === "move-source-to-soul") return effect.target !== "source" || effect.from !== "drop";
+        if (effect.op === "move-source-to-soul") return effect.target !== "source" || !["drop", "rear-guard"].includes(effect.from);
         if (effect.op === "modify-defending-source-power") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "battle";
         if (effect.op === "modify-power-target") return !["chosen","boosted-unit"].includes(effect.target) || !positiveInteger(effect.amount) || !["turn","battle"].includes(effect.duration) || !effect.targetFilter || typeof effect.targetFilter !== "object" || effect.optionalTarget != null && (typeof effect.optionalTarget !== "boolean" || effect.target !== "chosen" || effect.duration !== "turn");
         if (effect.op.startsWith("modify-")) return effect.target !== "source" || !positiveInteger(effect.amount) || !["turn","battle"].includes(effect.duration);
@@ -2334,7 +2360,11 @@
       const step = program[index], handler = handlers?.[step?.op];
       if (!step || !effectOperations.has(step.op) || !handler || typeof handler.validate !== "function" || typeof handler.apply !== "function") return { ok: false, reason: "unsupported-effect", index };
       if (step.ifPreviousEffectSucceeded !== undefined && (!Number.isInteger(step.ifPreviousEffectSucceeded) || step.ifPreviousEffectSucceeded < 0 || step.ifPreviousEffectSucceeded >= index)) return { ok: false, reason: "invalid-effect-dependency", index };
-      if (step.ifPreviousEffectSucceeded !== undefined && (!Number.isInteger(step.ifPreviousEffectSucceeded) || step.ifPreviousEffectSucceeded < 0 || step.ifPreviousEffectSucceeded >= index)) return { ok: false, reason: "invalid-effect-dependency", index };
+      if (step.ifPreviousEffectResult !== undefined) {
+        const dependency=step.ifPreviousEffectResult,keys=dependency&&typeof dependency==="object"&&!Array.isArray(dependency)?Object.keys(dependency).sort().join(","):"";
+        const resultProducer=Number.isInteger(dependency?.effectIndex)?program[dependency.effectIndex]:null;
+        if(step.ifPreviousEffectSucceeded!==undefined||keys!=="effectIndex,predicate,property"||!Number.isInteger(dependency.effectIndex)||dependency.effectIndex<0||dependency.effectIndex>=index||dependency.property!=="revealedCardUid"||dependency.predicate!=="nonempty-string"||resultProducer?.op!=="search-top-up-to-one-filtered-to-hand")return{ok:false,reason:"invalid-effect-result-dependency",index};
+      }
       if (step.op === "modify-power-target" && step.condition !== undefined && !isSupportedEffectCondition(step.condition)) return { ok: false, reason: "unsupported-effect-condition", index };
       if (step.op === "modify-power-target" && step.condition && !evaluateEffectCondition(step.condition, context)) continue;
       let valid = false;
@@ -2384,9 +2414,15 @@
     }
     const results = [];
     try {
-      for (const step of program) {
+      for (let index=0;index<program.length;index++) {
+        const step=program[index];
         if (step.ifPreviousEffectSucceeded !== undefined && !results[step.ifPreviousEffectSucceeded]) { results.push(null); continue; }
-        if (step.ifPreviousEffectSucceeded !== undefined && !results[step.ifPreviousEffectSucceeded]) { results.push(null); continue; }
+        if(step.ifPreviousEffectResult!==undefined){
+          const dependency=step.ifPreviousEffectResult,value=results[dependency.effectIndex]?.[dependency.property];
+          if(!(dependency.predicate==="nonempty-string"&&typeof value==="string"&&value.length>0)){results.push(null);continue;}
+          let valid=false;try{valid=handlers[step.op].validate(step,draft)===true}catch{valid=false;}
+          if(!valid)return{ok:false,reason:"invalid-effect",index,applied:0,results};
+        }
         if (step.op === "modify-power-target" && step.condition && !evaluateEffectCondition(step.condition, draft)) { results.push(null); continue; }
         const result = handlers[step.op].apply(step, draft);
         if (result === false) return { ok: false, reason: "effect-handler-rejected", applied: 0, results };
@@ -2759,6 +2795,11 @@
       if (condition.type === "controller-hand-size-at-most" && Number(context.controllerHandCount ?? Infinity) > Number(condition.count)) return false;
       if (condition.type === "opponent-rear-guards-at-most" && Number(context.opponentRearGuards ?? Infinity) > condition.count) return false;
       if (condition.type === "attack-target-grade-at-least" && Number(context.attackTargetGrade ?? -1) < condition.count) return false;
+      if (condition.type === "controller-vanguard-has-ability-keyword") {
+        const keyword=String(condition.value||"").trim();
+        const vanguard=context.controllerVanguardCard||context.vanguardCard||context.controllerVanguardCardId||context.vanguardCardId;
+        if(!keyword||!cardHasAbilityKeyword(vanguard,keyword))return false;
+      }
       if (condition.type === "controller-vanguard-name-contains" && !(context.vanguardNames||[context.vanguardName]).filter(Boolean).some(name=>condition.exact?String(name).toLowerCase()===String(condition.value||"").toLowerCase():String(name).toLowerCase().includes(String(condition.value || ability.raw.match(/vanguard with ["“]([^"”]+)["”] in its card name/i)?.[1] || "").toLowerCase()))) return false;
       if (condition.type === "controller-soul-has-card-name" && !(context.controllerSoulCardNames||[]).some(name=>String(name).toLowerCase()===String(condition.value||"").toLowerCase())) return false;
       if (condition.type === "controller-vanguard-has-race") { const race=String(condition.value||"").trim().toLowerCase(),races=[context.vanguardRace,...(context.vanguardRaces||[])].filter(Boolean).map(value=>String(value).trim().toLowerCase());if(!race||!races.includes(race))return false; }
@@ -3720,6 +3761,7 @@
     if (Array.isArray(cardOrId?.abilityKeywords)) for (const keyword of cardOrId.abilityKeywords) if (typeof keyword === "string" && keyword.trim()) keywords.add(keyword.trim().toLowerCase());
     if (cardOrId && typeof cardOrId === "object" && typeof cardOrId.text === "string") {
       const cardText = cardOrId.text.toLowerCase();
+      if (/^\s*glitter\s*\(\s*this card is a glitter\b/im.test(cardOrId.text)) keywords.add("glitter");
       for (const keyword of searchableAbilityKeywords) {
         const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         if (new RegExp(`\\b${escaped}\\b\\s*(?:[-–—]\\s*(?:AUTO|ACT|CONT|\\d+(?:st|nd|rd|th)\\s+time\\s+only)|[:(])`, "i").test(cardText)) keywords.add(keyword);

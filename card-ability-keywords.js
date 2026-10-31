@@ -30,6 +30,15 @@
     "cfa-10206": [
       "sentinel"
     ],
+    "cfa-10284": [
+      "glitter"
+    ],
+    "cfa-10285": [
+      "glitter"
+    ],
+    "cfa-10286": [
+      "glitter"
+    ],
     "cfa-1029": [
       "restraint"
     ],
@@ -49,16 +58,19 @@
       "card-name-alias"
     ],
     "cfa-10533": [
-      "card-name-alias"
+      "card-name-alias",
+      "glitter"
     ],
     "cfa-10534": [
-      "card-name-alias"
+      "card-name-alias",
+      "glitter"
     ],
     "cfa-10535": [
       "card-name-alias"
     ],
     "cfa-10536": [
-      "card-name-alias"
+      "card-name-alias",
+      "glitter"
     ],
     "cfa-10543": [
       "sentinel"
@@ -96,11 +108,23 @@
     "cfa-1098": [
       "lord"
     ],
+    "cfa-10984": [
+      "glitter"
+    ],
     "cfa-10989": [
       "resist"
     ],
     "cfa-1099": [
       "lord"
+    ],
+    "cfa-11024": [
+      "glitter"
+    ],
+    "cfa-11056": [
+      "glitter"
+    ],
+    "cfa-11064": [
+      "glitter"
     ],
     "cfa-11078": [
       "card-name-alias"
@@ -146,6 +170,9 @@
     ],
     "cfa-11092": [
       "card-name-alias"
+    ],
+    "cfa-11101": [
+      "glitter"
     ],
     "cfa-11102": [
       "missed-attack-hit-effects"
@@ -543,6 +570,9 @@
     "cfa-12974": [
       "g-guardian-heal-cost-substitute"
     ],
+    "cfa-12976": [
+      "glitter"
+    ],
     "cfa-13037": [
       "sentinel"
     ],
@@ -756,6 +786,9 @@
     ],
     "cfa-13572": [
       "g-guardian-heal-cost-substitute"
+    ],
+    "cfa-13587": [
+      "glitter"
     ],
     "cfa-13590": [
       "card-name-alias"
@@ -3683,8 +3716,56 @@
     "cfa-934": [
       "lord"
     ],
+    "cfa-9579": [
+      "glitter"
+    ],
+    "cfa-9580": [
+      "glitter"
+    ],
+    "cfa-9581": [
+      "glitter"
+    ],
+    "cfa-9595": [
+      "glitter"
+    ],
+    "cfa-9596": [
+      "glitter"
+    ],
+    "cfa-9597": [
+      "glitter"
+    ],
+    "cfa-9644": [
+      "glitter"
+    ],
+    "cfa-9645": [
+      "glitter"
+    ],
+    "cfa-9646": [
+      "glitter"
+    ],
     "cfa-9675": [
       "sentinel"
+    ],
+    "cfa-9691": [
+      "glitter"
+    ],
+    "cfa-9692": [
+      "glitter"
+    ],
+    "cfa-9693": [
+      "glitter"
+    ],
+    "cfa-9694": [
+      "glitter"
+    ],
+    "cfa-9725": [
+      "glitter"
+    ],
+    "cfa-9727": [
+      "glitter"
+    ],
+    "cfa-9728": [
+      "glitter"
     ],
     "cfa-9797": [
       "burst"
