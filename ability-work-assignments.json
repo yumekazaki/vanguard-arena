@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "assignments": [
+    {
+      "batchId": "PRIMARY-RG-RETIRE-VG-ATTACK",
+      "status": "in-progress",
+      "workerOwner": "primary-session/third_exact_family",
+      "reason": "Implementing and validating the exact four-card AUTO family that retires a friendly Rear-Guard as cost during this Vanguard's attack.",
+      "abilityIds": [
+        "cfa-2000:1",
+        "cfa-2173:1",
+        "cfa-2239:2",
+        "cfa-2271:2"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-PERSONA-SHIELD",
+      "status": "in-progress",
+      "workerOwner": "primary-session/next_high_yield_family",
+      "reason": "Implementing and validating the exact six-card Persona Shield AUTO family for hand placement and Ride Deck ride-cost discard events.",
+      "abilityIds": [
+        "cfa-13707:0",
+        "cfa-13709:0",
+        "cfa-13710:0",
+        "cfa-13711:0",
+        "cfa-13712:0",
+        "cfa-13713:0"
+      ]
+    }
+  ]
+}

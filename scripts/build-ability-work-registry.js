@@ -19,9 +19,10 @@ function atomicWrite(file, contents) {
   fs.renameSync(temporary, file);
 }
 
-function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25 } = {}) {
+function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, assignments = [] } = {}) {
   if (!queue || !Array.isArray(queue.items) || !baselineCommit || !/^[0-9a-f]{40}$/i.test(baselineCommit)) throw new TypeError("A work queue and full baseline commit SHA are required.");
   if (!Number.isInteger(cardsPerBatch) || cardsPerBatch < 1 || cardsPerBatch > 100) throw new RangeError("cardsPerBatch must be between 1 and 100.");
+  if (!Array.isArray(assignments)) throw new TypeError("Assignments must be an array.");
 
   const byCard = new Map(), seen = new Set();
   for (const item of queue.items) {
@@ -33,10 +34,46 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25 } = {}) {
     byCard.get(cardId).push(item);
   }
 
-  const reservedCards = new Set([...RESERVED_ABILITIES].map(id => queue.items.find(item => item.abilityId === id)?.cardId).filter(Boolean).map(String));
+  const queueByAbility = new Map(queue.items.map(item => [item.abilityId, item]));
+  const assignedAbilityIds = new Set(), assignedCards = new Map(), assignmentBatches = [];
+  for (const assignment of assignments) {
+    if (!assignment || !/^[A-Z0-9][A-Z0-9-]{1,80}$/.test(String(assignment.batchId || "")) ||
+        !/^[A-Za-z0-9][A-Za-z0-9._/-]{0,119}$/.test(String(assignment.workerOwner || "")) ||
+        !["reserved", "in-progress"].includes(assignment.status) || !Array.isArray(assignment.abilityIds) || !assignment.abilityIds.length) {
+      throw new Error("Each active assignment needs a valid batch ID, status, worker owner, and ability ID list.");
+    }
+    const focusAbilityIds = [...new Set(assignment.abilityIds.map(String))];
+    if (focusAbilityIds.length !== assignment.abilityIds.length) throw new Error(`Assignment ${assignment.batchId} contains duplicate ability IDs.`);
+    const cardIds = [...new Set(focusAbilityIds.map(id => {
+      const item = queueByAbility.get(id);
+      if (!item) throw new Error(`Assignment ${assignment.batchId} references unknown ability ${id}.`);
+      if (assignedAbilityIds.has(id)) throw new Error(`Ability ${id} is assigned more than once.`);
+      assignedAbilityIds.add(id);
+      return String(item.cardId);
+    }))].sort((a, b) => a.localeCompare(b));
+    for (const cardId of cardIds) {
+      if (RESERVED_ABILITIES.has(queue.items.find(item => String(item.cardId) === cardId)?.abilityId)) throw new Error(`Assignment ${assignment.batchId} overlaps the primary reserved card ${cardId}.`);
+      if (assignedCards.has(cardId)) throw new Error(`Card ${cardId} is assigned to multiple active batches.`);
+      assignedCards.set(cardId, assignment);
+    }
+    const rows = queue.items.filter(item => cardIds.includes(String(item.cardId)));
+    assignmentBatches.push({
+      batchId: assignment.batchId,
+      status: assignment.status,
+      workerOwner: assignment.workerOwner,
+      reason: String(assignment.reason || "Active primary-session assignment."),
+      cardIds,
+      abilityIds: rows.map(item => item.abilityId).sort(),
+      focusAbilityIds: focusAbilityIds.sort(),
+      dependencies: [...new Set(rows.flatMap(item => (item.dependencies || []).map(dep => dep.id)))].sort()
+    });
+  }
+
+  const reservedCards = new Set([...RESERVED_ABILITIES].map(id => queueByAbility.get(id)?.cardId).filter(Boolean).map(String));
+  for (const cardId of assignedCards.keys()) reservedCards.add(cardId);
   const reservedRows = queue.items.filter(item => reservedCards.has(String(item.cardId)));
   const normalCards = [...byCard.keys()].filter(cardId => !reservedCards.has(cardId)).sort((a, b) => a.localeCompare(b));
-  const batches = [];
+  const batches = [...assignmentBatches];
   if (reservedCards.size) batches.push({
     batchId: "PRIMARY-GZONE-STRIDE",
     status: "reserved",
@@ -67,7 +104,9 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25 } = {}) {
       : verification?.status === "fully-verified" ? "fully-verified"
       : verification?.status === "tests-passing" ? "tests-passing"
       : item.effects?.length ? "compiled-unverified" : "unreviewed";
-    const reserved = batchForCard.get(String(item.cardId)) === "PRIMARY-GZONE-STRIDE";
+    const assignment = assignedCards.get(String(item.cardId));
+    const primaryReserved = reservedCards.has(String(item.cardId)) && !assignment;
+    const reserved = Boolean(assignment || primaryReserved);
     return {
       abilityId: item.abilityId,
       cardId: String(item.cardId),
@@ -75,9 +114,9 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25 } = {}) {
       printedText: item.printedText,
       mechanicGroup: item.mechanicGroup,
       implementationStatus,
-      assignmentStatus: reserved ? "reserved" : "available",
-      workerOwner: reserved ? "primary-session" : null,
-      batchId: batchForCard.get(String(item.cardId)),
+      assignmentStatus: assignment?.status || (primaryReserved ? "reserved" : "available"),
+      workerOwner: assignment?.workerOwner || (primaryReserved ? "primary-session" : null),
+      batchId: assignment?.batchId || batchForCard.get(String(item.cardId)),
       dependencies: [...new Set((item.dependencies || []).map(dep => dep.id))].sort(),
       verification: {
         evidenceStatus: verification?.status || "none",
@@ -103,6 +142,7 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25 } = {}) {
         reservedAbilities: reservedRows.length,
         availableAbilities: records.length - reservedRows.length,
         reservedCards: reservedCards.size,
+        activeAssignments: assignmentBatches.length,
         availableBatches: batches.filter(batch => batch.status === "available").length,
         validationEvidenceFresh: queue.validationEvidenceFresh === true
       },
@@ -116,7 +156,9 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25 } = {}) {
 
 function writeRegistry(root, { baselineCommit, cardsPerBatch = 25, queuePath } = {}) {
   const queueFile = queuePath || path.join(root, ".card-pipeline", "ability-work-queue.json");
-  const built = buildRegistry(JSON.parse(fs.readFileSync(queueFile, "utf8")), { baselineCommit, cardsPerBatch });
+  const assignmentsPath = path.join(root, "ability-work-assignments.json");
+  const assignments = fs.existsSync(assignmentsPath) ? JSON.parse(fs.readFileSync(assignmentsPath, "utf8")).assignments : [];
+  const built = buildRegistry(JSON.parse(fs.readFileSync(queueFile, "utf8")), { baselineCommit, cardsPerBatch, assignments });
   const manifest = { ...built.registry, generatedAt: new Date().toISOString() };
   atomicWrite(path.join(root, "ability-work-registry.jsonl"), built.records.map(record => JSON.stringify(record)).join("\n") + "\n");
   atomicWrite(path.join(root, "ability-work-batches.json"), JSON.stringify({ ...manifest, batches: built.batches }, null, 2) + "\n");

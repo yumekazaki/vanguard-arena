@@ -30,6 +30,37 @@ test("registry assigns every ability once, preserves dependencies/evidence, and 
   assert.throws(() => buildRegistry({ ...queue, items: [...queue.items, queue.items[0]] }, { baselineCommit: BASELINE }), /duplicate ability ID/);
 });
 
+test("active worker assignments reserve every ability on each assigned card and reject overlaps", () => {
+  const queue = {
+    validationEvidenceFresh: false,
+    items: [
+      { abilityId: "cfa-2000:0", cardId: "cfa-2000", kind: "CONT", printedText: "CONT example", effects: [{ op: "continuous-power" }], dependencies: [{ id: "continuous-power" }], workFlags: ["card-level-verification-incomplete"] },
+      { abilityId: "cfa-2000:1", cardId: "cfa-2000", kind: "AUTO", printedText: "AUTO example", effects: [], dependencies: [{ id: "attack-event" }], workFlags: ["unsupported-or-unreviewed"] },
+      { abilityId: "cfa-2001:0", cardId: "cfa-2001", kind: "ACT", printedText: "ACT example", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] }
+    ]
+  };
+  const assignments = [{
+    batchId: "PRIMARY-ACTIVE-ATTACK",
+    status: "in-progress",
+    workerOwner: "primary-session/third_exact_family",
+    reason: "Exact attack AUTO implementation and focused tests are in progress.",
+    abilityIds: ["cfa-2000:1"]
+  }];
+  const result = buildRegistry(queue, { baselineCommit: BASELINE, cardsPerBatch: 1, assignments });
+  assert.equal(result.registry.counts.activeAssignments, 1);
+  assert.equal(result.registry.counts.reservedAbilities, 2);
+  assert.ok(result.records.filter(record => record.cardId === "cfa-2000").every(record =>
+    record.assignmentStatus === "in-progress" && record.workerOwner === "primary-session/third_exact_family" && record.batchId === "PRIMARY-ACTIVE-ATTACK"));
+  assert.ok(!result.batches.find(batch => batch.status === "available")?.cardIds.includes("cfa-2000"));
+  assert.throws(() => buildRegistry(queue, { baselineCommit: BASELINE, assignments: [
+    ...assignments,
+    { ...assignments[0], batchId: "PRIMARY-SECOND", workerOwner: "another-worker" }
+  ] }), /assigned more than once|assigned to multiple active batches/);
+  assert.throws(() => buildRegistry(queue, { baselineCommit: BASELINE, assignments: [
+    { ...assignments[0], abilityIds: ["cfa-9999:0"] }
+  ] }), /unknown ability/);
+});
+
 function git(cwd, args, input, env = process.env) {
   return execFileSync("git", args, { cwd, encoding: "utf8", input, env, stdio: input === undefined ? ["ignore", "pipe", "pipe"] : ["pipe", "pipe", "pipe"] }).trim();
 }
