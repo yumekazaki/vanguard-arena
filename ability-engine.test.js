@@ -2357,7 +2357,7 @@ test("real Dark Shield, Mac Lir preserves its clan-filtered Sentinel discard and
   assert.equal(player.hand.length,2);assert.equal(player.drop.length,0);
   assert.equal(payAbilityCosts(ability,context,{discard:["shadow-paladin"]}).ok,true);
   assert.deepEqual(player.hand,[hand[0]]);assert.equal(player.drop[0].uid,"shadow-paladin");
-  const app=fs.readFileSync("app.js","utf8");assert.match(app,/function abilityDiscardCards[^{]+\{[\s\S]{0,450}matchesTargetFilter/);
+  const app=fs.readFileSync("app.js","utf8");assert.match(app,/function abilityDiscardCards[^{]+\{[\s\S]{0,450}abilityCardMatchesFilter/);assert.match(app,/function abilityCardMatchesFilter[^{]+\{[\s\S]{0,300}matchesTargetFilter/);
 });
 
 test("from-hand Guardian Circle Sentinel variants reject the same source placed from another zone",()=>{

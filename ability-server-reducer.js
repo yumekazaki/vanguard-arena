@@ -2787,6 +2787,7 @@
     const targetCard = serverCardDefinition(target.instance);
     return engine.matchesTargetFilter(effect.targetFilter, {
       source, target: target.instance, targetCard, targetZone: target.circle || target.zone,
+      targetPlayer: state.players?.[target.side], cardDefinitionForInstance: serverCardDefinition,
       sourceControllerPlayerId: located.controllerPlayerId, targetControllerPlayerId: target.controllerPlayerId,
       opponentPlayerId: Object.values(state.players || {}).find(player => player?.playerId !== located.controllerPlayerId)?.playerId || null
     });
@@ -3909,6 +3910,7 @@
         const context = {
           source, target: candidate, targetCard: serverCardDefinition(candidate),
           targetZone: located.circle || located.zone,
+          targetPlayer: player, cardDefinitionForInstance: serverCardDefinition,
           sourceControllerPlayerId: actorPlayerId,
           targetControllerPlayerId: located.controllerPlayerId,
           opponentPlayerId
@@ -3932,11 +3934,13 @@
       opponentFaceUpGZoneCardCount: (opponent?.gZone || []).filter(card => card?.faceUp === true).length,
       controllerVanguardGrade: Number(player.vanguard?.grade ?? -1),
       controllerVanguardCardNames: engine.getCardNames?.({id:String(player.vanguard?.cardId||""),name:String(player.vanguard?.cardName||"")},{location:"vanguard"}) || [],
+      controllerVanguardClans: engine.getCardClans?.(serverCardDefinition(player.vanguard)) || [],
+      cardDefinitionForInstance: serverCardDefinition,
       normalOrderPlayedThisTurn: state.side === side && Number(state.ordersPlayedThisTurn || 0) > 0,
       orderPlayedThisTurn: state.side === side && Number(state.ordersPlayedThisTurn || 0) > 0,
       controllerDamageCount: (player.damage || []).length,
       opponentTriggerRevealedThisTurn: player.opponentTriggerRevealedThisTurn === true,
-      controllerFieldCards: [...(player.vanguard ? [player.vanguard] : []), ...(player.rear || [])].filter(Boolean).map(card => { const definition = serverCardDefinition(card); return { uid: card.uid, zone: card.uid === player.vanguard?.uid ? "vanguard" : "rear-guard", names: engine.getCardNames?.(definition,{location:card.uid===player.vanguard?.uid?"vanguard":"rear-guard"}) || [card.cardName].filter(Boolean), clans: [definition.clan, ...(definition.clans || [])].filter(Boolean), allClansAndNations: engine.hasAbilityKeyword?.(card.cardId, "all-clans-and-nations") === true }; }),
+      controllerFieldCards: [...(player.vanguard ? [player.vanguard] : []), ...(player.rear || [])].filter(Boolean).map(card => { const definition = serverCardDefinition(card); return { uid: card.uid, cardId:card.cardId, zone: card.uid === player.vanguard?.uid ? "vanguard" : "rear-guard", names: engine.getCardNames?.(definition,{location:card.uid===player.vanguard?.uid?"vanguard":"rear-guard"}) || [card.cardName].filter(Boolean), clans: [definition.clan, ...(definition.clans || [])].filter(Boolean), allClansAndNations: engine.hasAbilityKeyword?.(card.cardId, "all-clans-and-nations") === true }; }),
       controllerDamageCards: (player.damage || []).filter(card => card && typeof card.uid === "string").map(card => ({ uid: card.uid, faceDown: card.faceDown === true, names: engine.getCardNames?.(serverCardDefinition(card), { location: "damage" }) || [serverCardDefinition(card).name || card.cardName].filter(Boolean) })),
       generationBreakCount: engine.countGenerationBreakUnits?.(player, card => card?.gDeckCard === true) || 0,
       sourceAttackedThisBattle: attackContext?.attackerUid === instance.uid,
@@ -4115,6 +4119,7 @@
     const targetCard = serverCardDefinition(located.instance);
     const matches = engine.matchesTargetFilter(selectedChoice?.targetFilter || step.targetFilter || {}, {
       source, target: located.instance, targetCard, targetZone,
+      targetPlayer: state.players?.[located.side], cardDefinitionForInstance: serverCardDefinition,
       sourceControllerPlayerId: actorPlayerId, targetControllerPlayerId: located.controllerPlayerId,
       opponentPlayerId, isBeingAttacked: state.pendingAttack?.targetUid === targetUid
     });
@@ -4143,7 +4148,7 @@
     "damage-at-least", "limit-break-active", "damage-zone-empty", "opponent-attacking-unit-attacked-at-least",
     "source-placed-from-hand", "generation-break", "controller-went-second", "controller-turn", "source-face-up",
     "opponent-turn", "opponent-vanguard-grade-at-least", "controller-vanguard-grade-lower-than-opponent",
-    "controller-vanguard-grade-at-most", "controller-vanguard-grade-at-least", "controller-has-no-rear-guards", "source-is-hollowed", "source-is-in-harmony",
+    "controller-vanguard-grade-at-most", "controller-vanguard-grade-at-least", "controller-vanguard-has-only-clan", "controller-has-no-rear-guards", "source-is-hollowed", "source-is-in-harmony",
     "controller-vanguard-is-blazing", "controller-vanguard-is-legion", "controller-has-empty-soul", "opponent-has-no-rear-guards",
     "controller-has-center-column-rear-guard", "controller-has-not-ridden-grade-three-plus-this-fight",
     "controller-back-row-rear-guards-at-most", "controller-back-row-grade-rear-guards-at-least", "source-never-legioned", "controller-drop-count-at-least",
@@ -4193,8 +4198,8 @@
       controllerDamageCount: (controller.damage || []).length,
       opponentDamageCount: (opponent.damage || []).length,
       controllerRearGuards: rearGuards.length,
-      controllerRearGuardClans: rearGuards.map(card => { const rules=serverCardDefinition(card); return { uid: card.uid, clan: rules?.clan, clans: Array.isArray(rules?.clans) && rules.clans.length ? rules.clans : rules?.clan ? [rules.clan] : [] }; }),
-      controllerFieldCards: [...(vanguard ? [vanguard] : []), ...rearGuards].map(card => { const rules=serverCardDefinition(card); return { uid: card.uid, clan: rules?.clan, clans: Array.isArray(rules?.clans) && rules.clans.length ? [...rules.clans] : rules?.clan ? [rules.clan] : [], hasLimitBreak4: card.hasLimitBreak4 === true }; }),
+      controllerRearGuardClans: rearGuards.map(card => { const rules=serverCardDefinition(card); return { uid: card.uid, cardId:card.cardId, zone:"rear-guard", clan: rules?.clan, clans: Array.isArray(rules?.clans) && rules.clans.length ? rules.clans : rules?.clan ? [rules.clan] : [] }; }),
+      controllerFieldCards: [...(vanguard ? [vanguard] : []), ...rearGuards].map(card => { const rules=serverCardDefinition(card); return { uid: card.uid, cardId:card.cardId, zone:card.uid===vanguard?.uid?"vanguard":"rear-guard", clan: rules?.clan, clans: Array.isArray(rules?.clans) && rules.clans.length ? [...rules.clans] : rules?.clan ? [rules.clan] : [], hasLimitBreak4: card.hasLimitBreak4 === true }; }),
       opponentRearGuards: opposingRearGuards.length,
       controllerBackRowRearGuards: backRow.filter(Boolean).length,
       controllerBackRowGradeRearGuards: backRowGradeRearGuards,
@@ -4225,6 +4230,8 @@
       vanguardNames: engine.getCardNames?.(vanguard,{location:"vanguard"}) || [vanguard?.cardName, vanguard?.name].filter(Boolean),
       vanguardClan: vanguardRules?.clan,
       vanguardClans: vanguardRules?.clans || [],
+      controllerVanguardClans: engine.getCardClans?.(vanguardRules) || [],
+      cardDefinitionForInstance: serverCardDefinition,
       vanguardRace: vanguardRules?.race,
       vanguardRaces: vanguardRules?.races || [],
       controllerVanguardCard: vanguardRules,
@@ -4274,6 +4281,7 @@
     }).length;
     const sourceOnField = ["vanguard", "rear-guard", "guardian"].includes(located.zone);
     return engine.canPayAbilityCosts(ability, {
+      player: controller,
       faceUpDamage: faceUpDamageCards.length,
       faceUpDamageCards,
       soulCount: (controller.soul || []).length,
@@ -4685,7 +4693,7 @@
               if (engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) skipped.push({ eventId: event.eventId, cardInstanceId: instance.uid, abilityId: ability.id, reason: "unpayable-filtered-discard-cost" });
               continue;
             }
-            if (isExactNamedGGuardianDiscardDrawAbility(ability) && !(controller.hand || []).some(card => engine.matchesTargetFilter(ability.costs[0].filter, { targetCard: serverCardDefinition(card) }))) {
+            if (isExactNamedGGuardianDiscardDrawAbility(ability) && !(controller.hand || []).some(card => engine.matchesTargetFilter(ability.costs[0].filter, { player:controller,target:card,targetCard:serverCardDefinition(card),targetZone:"hand",cardDefinitionForInstance:serverCardDefinition }))) {
               if (engine.claimAbilityTrigger(state, event.eventId, instance.uid, ability.id)) skipped.push({ eventId: event.eventId, cardInstanceId: instance.uid, abilityId: ability.id, reason: "unpayable-cost" });
               continue;
             }
@@ -6050,6 +6058,7 @@
       resolutionBlocked: false, alreadyUsed: used,
       conditions: conditionContext || {},
       resources: {
+        player,
         energy: Number(player.energy) || 0,
         hasEnergyGenerator: (player.crests || []).some(card => /energy generator/i.test(String(serverCardDefinition(card)?.name || card?.crestName || card?.cardName || ""))),
         faceUpDamage: (player.damage || []).filter(card => !card.faceDown).length,
