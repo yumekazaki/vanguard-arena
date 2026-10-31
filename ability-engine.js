@@ -747,8 +747,9 @@
   }  function registerAbilityDefinitions(definitions) {
     if (!Array.isArray(definitions)) throw new TypeError("Ability definitions must be an array.");
     for (const definition of definitions) {
-      const keywordOnly=definition?.kind==="CONT"&&(Array.isArray(definition.keywords)&&definition.keywords.length>0||Array.isArray(definition.continuousRestrictions)&&definition.continuousRestrictions.length>0);
+      const keywordOnly=definition?.kind==="CONT"&&(Array.isArray(definition.keywords)&&definition.keywords.length>0||Array.isArray(definition.continuousRestrictions)&&definition.continuousRestrictions.length>0||Array.isArray(definition.continuousEffects)&&definition.continuousEffects.length>0);
       if (!definition?.id || !definition.cardId || !definition.kind || !definition.printedText || ((!Array.isArray(definition.effects) || !definition.effects.length) && !keywordOnly)) throw new TypeError("A reviewed ability definition is incomplete.");
+      if((definition.continuousEffects||[]).some(effect=>definition.kind!=="CONT"||effect?.type!=="grant-keyword"||effect.target!=="source"||effect.duration!=="continuous"||String(effect.keyword||"").toLowerCase()!=="boost"||!continuousConditionSupported(effect.condition)))throw new TypeError("A CONT ability contains an unsupported or invalid continuous effect.");
       if ((definition.effects||[]).some(effect => {
         if (!effectOperations.has(effect.op)) return true;
         if (effect.op === "modify-power-target" && effect.condition !== undefined && !isSupportedEffectCondition(effect.condition)) return true;
@@ -1909,6 +1910,22 @@
     if(!match)return null;
     return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-rc-exact-vanguard-name-power-v1",review:"Exact RC CONT text: compares the controller's current Vanguard card name for exact equality, including official card-name aliases, then grants the printed power continuously while the source remains on RC."},effects:[{op:"continuous-power",target:"source",amount:Number(match[2]),duration:"continuous",condition:{op:"controller-vanguard-card-name-equals",name:match[1]}}]};
   }
+  const CONDITIONAL_NAMED_VANGUARD_KEYWORD_GRANTS=Object.freeze({
+    "cfa-12062":Object.freeze({name:"Drajeweled",keyword:"boost"}),
+    "cfa-12719":Object.freeze({name:"FLДMMe-Glam",keyword:"boost"}),
+    "cfa-13689":Object.freeze({name:"Argo Siren",keyword:"boost"}),
+    "cfa-7528":Object.freeze({name:"Blaster",keyword:"boost"})
+  });
+  function compileContinuousNamedVanguardKeywordGrantDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="CONT"||abilityId!==`${cardId}:1`)return null;
+    const expected=CONDITIONAL_NAMED_VANGUARD_KEYWORD_GRANTS[String(cardId)];if(!expected)return null;
+    const text=normalizePrintedText(printedText).replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/\s+/g," ").trim();
+    const exact=`CONT [RC]: If you have a vanguard with "${expected.name}" in its card name, this unit gets "Boost".`;
+    if(text!==exact)return null;
+    return{id:abilityId,cardId:String(cardId),kind,printedText,requiredLocation:["rear-guard"],conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,
+      source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-rc-named-vanguard-grants-keyword-v1",review:"Exact named Boost CONT text and card identity verified against the local catalog. Boost is active only while this source instance is face-up on RC and its controller's current Vanguard card name (including active official aliases) contains the printed phrase. It is recomputed from live state and expires immediately when either condition stops being true."},
+      continuousEffects:[{type:"grant-keyword",target:"source",keyword:expected.keyword,duration:"continuous",condition:{op:"controller-vanguard-card-name-contains",name:expected.name}}]};
+  }
   function compileContinuousOwnTurnRearGuardPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT")return null;
     const match=String(printedText||"").match(/^CONT \[RC\]: During your turn, this unit gets power \+(\d+)\.$/i);
@@ -2320,6 +2337,20 @@
       }
     }
     return result;
+  }
+  function evaluateContinuousAbilityKeywords(abilities,context={}){
+    const granted=new Set(),rawLocation=String(context.sourceLocation||context.location||"").toLowerCase(),location=rawLocation==="vanguard"?"vanguard":/^(?:rear-|accel-)/.test(rawLocation)?"rear-guard":rawLocation;
+    if(typeof context.sourceInstanceId!=="string"||!context.sourceInstanceId||typeof context.sourceCardId!=="string"||!context.sourceCardId||context.sourceFaceUp===false)return[];
+    for(const ability of abilities||[]){
+      if(ability?.kind!=="CONT"||!ability.definition||String(ability.cardId)!==context.sourceCardId||String(ability.definition.cardId)!==context.sourceCardId||ability.definition.id!==ability.id)continue;
+      if(ability.requiredLocation?.length&&(!location||!ability.requiredLocation.includes(location)))continue;
+      for(const effect of ability.definition.continuousEffects||[]){
+        const keyword=String(effect?.keyword||"").trim().toLowerCase();
+        if(effect?.type!=="grant-keyword"||effect.target!=="source"||effect.duration!=="continuous"||keyword!=="boost"||!continuousConditionMatches(effect.condition,context))continue;
+        granted.add(keyword);
+      }
+    }
+    return[...granted];
   }
   function evaluateStrideCostGrade(abilities,context={}){
     let grade=0,treatedAsGradeThree=false;if(context.isPayingStrideCost!==true||context.location!=="hand")return{grade};
@@ -2871,6 +2902,7 @@
     compileVanguardSoulNameThresholdCriticalDefinition,
     compileContinuousAttackedVanguardPowerDefinition,
     compileContinuousNormalOrderPowerDefinition,
+    compileContinuousNamedVanguardKeywordGrantDefinition,
     compileContinuousExactVanguardNamePowerDefinition,
     compileContinuousOwnTurnRearGuardPowerDefinition,
     compileTriggerZoneGenerationBreakGradeDefinition,
@@ -3807,5 +3839,5 @@
     if (subject === "any") return true;
     return false;
   }
-  return Object.freeze({ createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, countGenerationBreakUnits, parseCardAbilities, parseCardAbilitiesCached, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, evaluateEffectCondition, canPayAbilityCosts, evaluateAutoCostPayment, registerAbilityDefinitions, getReviewedAbilityDefinitionsForCard, registerCardAbilityKeywordIndex, getCardAbilityKeywords, compileVanguardTopFiveKeywordSearchDefinition, compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition, compileActRcSoulBlastThreeDrawDefinition, compileAutoRcPlacementChooseFriendlyPowerDefinition, compileRearGuardVanguardAttackSacrificeDrawPowerDefinition, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, evaluateContinuousEffects, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, evaluateContinuousGrade, expireTurnModifiers, compileAutoTrigger, isManuallyActivatable, autoAbilityReadiness, canActivateManualAbility, abilityUsageKey, validateAbilityChoices, canDeclineAbility, matchesTargetFilter, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, createRideGameEvent, claimGameEvent, claimAbilityTrigger, validateRemoteRequest, validateRemoteActionRequest, canResolveAbilitySource, abilitySourceZoneAtResolution, payAbilityCosts, validateAbilityDecision, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, claimRemoteRequest, eventSubjectMatches, recordAttackCount, getAttackCount, getPlayerAttackCount, retireHollowedUnitsAtTurnEnd, retireChargingUnitsAtBattleEnd, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, canCallCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance, prunePendingAbilitiesWithConsumedUsage, compileDragontreeGcRetireToSoulShieldDefinition, createDragontreeGcGrantedRetireToSoulAbility });
+  return Object.freeze({ createCardInstance, recordFightRide, recordOpponentTriggerCheck, clearOpponentTriggerFacts, locateCardInstance, countGenerationBreakUnits, parseCardAbilities, parseCardAbilitiesCached, getCardNames, cardHasName, cardsShareName, cardHasAbilityKeyword, parseAbilityCosts, parseAbilityConditions, evaluateAbilityConditions, evaluateEffectCondition, canPayAbilityCosts, evaluateAutoCostPayment, registerAbilityDefinitions, getReviewedAbilityDefinitionsForCard, registerCardAbilityKeywordIndex, getCardAbilityKeywords, compileVanguardTopFiveKeywordSearchDefinition, compileAutoVanguardPlacementTopSevenTwoNameSearchDefinition, compileActRcSoulBlastThreeDrawDefinition, compileAutoRcPlacementChooseFriendlyPowerDefinition, compileRearGuardVanguardAttackSacrificeDrawPowerDefinition, compileContinuousNamedVanguardKeywordGrantDefinition, EFFECT_HANDLERS, validateEffectProgram, resolveEffectProgram, evaluateContinuousEffects, evaluateContinuousAbilityKeywords, evaluateContinuousRestrictions, evaluateContinuousShieldEffects, evaluateStrideCostGrade, evaluateContinuousGrade, expireTurnModifiers, compileAutoTrigger, isManuallyActivatable, autoAbilityReadiness, canActivateManualAbility, abilityUsageKey, validateAbilityChoices, canDeclineAbility, matchesTargetFilter, eventMatchesAbilityTrigger, GAME_EVENT_TYPES, createGameEvent, createRideGameEvent, claimGameEvent, claimAbilityTrigger, validateRemoteRequest, validateRemoteActionRequest, canResolveAbilitySource, abilitySourceZoneAtResolution, payAbilityCosts, validateAbilityDecision, promotePendingAbilityForPlayer, simultaneousAbilityGroup, projectPendingAbilitiesForSide, claimRemoteRequest, eventSubjectMatches, recordAttackCount, getAttackCount, getPlayerAttackCount, retireHollowedUnitsAtTurnEnd, retireChargingUnitsAtBattleEnd, hasLegalAbilityTargets, hasAbilityKeyword, canRideCard, canCallCard, createHarmonyAssociation, isCardInHarmony, expireHarmonyAssociations, removeHarmonyAssociationsForInstance, prunePendingAbilitiesWithConsumedUsage, compileDragontreeGcRetireToSoulShieldDefinition, createDragontreeGcGrantedRetireToSoulAbility });
 });

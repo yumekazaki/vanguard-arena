@@ -3737,6 +3737,16 @@
     for (const ability of authoritativeRetireRearGuardAttackAbilities(instance?.cardId, engine)) if (!byId.has(ability.id)) byId.set(ability.id, ability);
     return [...byId.values()];
   }
+  function serverHasContinuousAbilityKeyword(state, located, keyword, engine) {
+    const instance=located?.instance,player=located&&state?.players?.[located.side];
+    if(!instance?.uid||!instance.cardId||!player||player.playerId!==located.controllerPlayerId||located.zone!=="rear-guard"||typeof engine?.evaluateContinuousAbilityKeywords!=="function")return false;
+    const vanguard=player.vanguard,controllerVanguardCardNames=vanguard&&vanguard.controllerPlayerId===player.playerId
+      ?engine.getCardNames?.(serverCardDefinition(vanguard),{location:"vanguard"})||[]:[];
+    return engine.evaluateContinuousAbilityKeywords(serverReviewedAbilities(instance,engine),{
+      sourceInstanceId:instance.uid,sourceCardId:String(instance.cardId),sourceLocation:located.zone,
+      sourceFaceUp:instance.faceUp!==false&&instance.locked!==true,controllerVanguardCardNames
+    }).includes(String(keyword||"").trim().toLowerCase());
+  }
   function serverEffectiveTriggerZoneGrade(state,player,instance,engine){
     const definition=serverCardDefinition(instance),baseGrade=Number(instance?.grade??definition?.grade),located=instance?.uid?engine.locateCardInstance(state,instance.uid):null;
     if(!Number.isInteger(baseGrade))return null;
@@ -5307,7 +5317,8 @@
       const boosterUid = command.payload?.boosterCardInstanceId;
       if (boosterUid != null) {
         const boosterLocation = typeof boosterUid === "string" ? engine.locateCardInstance(state, boosterUid) : null;
-        if (!boosterLocation || boosterLocation.ambiguous || boosterLocation.controllerPlayerId !== actorPlayerId || boosterLocation.zone !== "rear-guard" || boosterLocation.instance.rested || boosterLocation.instance.locked || boosterLocation.instance.boostAbility !== true) return reject("invalid-booster");
+        const hasContinuousBoost=boosterLocation&&!boosterLocation.ambiguous&&serverHasContinuousAbilityKeyword(state,boosterLocation,"boost",engine);
+        if (!boosterLocation || boosterLocation.ambiguous || boosterLocation.controllerPlayerId !== actorPlayerId || boosterLocation.zone !== "rear-guard" || boosterLocation.instance.rested || boosterLocation.instance.locked || boosterLocation.instance.boostAbility !== true&&!hasContinuousBoost) return reject("invalid-booster");
         const expectedBoosterIndex = attackerLocation.zone === "vanguard" ? 3 : attackerLocation.circle === "rear-left" ? 2 : attackerLocation.circle === "rear-right" ? 4 : -1;
         if (expectedBoosterIndex < 0 || boosterLocation.side !== side || boosterLocation.index !== expectedBoosterIndex || !Number.isFinite(boosterLocation.instance.power)) return reject("booster-not-behind-attacker");
         const boostRestriction = engine.evaluateContinuousRestrictions?.(serverReviewedAbilities(attacker, engine), {

@@ -66,7 +66,8 @@ function auditCatalog(cards, parseAbilities = engine.parseCardAbilitiesCached) {
       if (ability.definition.kind !== ability.kind) reasons.push("ability-kind-mismatch");
       const hasStructuredKeyword = ability.kind === "CONT" && Array.isArray(ability.definition.keywords) && ability.definition.keywords.length > 0;
       const hasStructuredRestriction = ability.kind === "CONT" && Array.isArray(ability.definition.continuousRestrictions) && ability.definition.continuousRestrictions.length > 0;
-      if ((!Array.isArray(ability.definition.effects) || !ability.definition.effects.length) && !hasStructuredKeyword && !hasStructuredRestriction) reasons.push("missing-effect-program");
+      const hasStructuredContinuousEffect = ability.kind === "CONT" && Array.isArray(ability.definition.continuousEffects) && ability.definition.continuousEffects.length > 0 && ability.definition.continuousEffects.every(effect => effect?.type === "grant-keyword" && effect.target === "source" && effect.duration === "continuous" && typeof effect.keyword === "string" && Boolean(effect.keyword.trim()) && Boolean(effect.condition?.op));
+      if ((!Array.isArray(ability.definition.effects) || !ability.definition.effects.length) && !hasStructuredKeyword && !hasStructuredRestriction && !hasStructuredContinuousEffect) reasons.push("missing-effect-program");
       if (ability.kind === "AUTO" && ability.trigger?.status !== "recognized-trigger") reasons.push("unrecognized-auto-trigger");
       if (ability.conditionStatus === "needs-review") reasons.push("unmodeled-condition");
       if (ability.costStatus === "needs-review") reasons.push("unmodeled-cost");

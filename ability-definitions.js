@@ -112335,6 +112335,16 @@
     source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-own-attack-clan-counter-blast-power-battle-v1", review: "Exact AUTO. This exact source attacks from VC or RC, its controller has the printed-clan Vanguard, may pay one Counter Blast using a face-up damage card of the printed clan, and gives only this source +4000 for that battle." },
     effects: [{ op: "modify-power", target: "source", amount: 4000, duration: "battle" }]
   });
+  const namedVanguardConditionalBoostTexts = [
+    ["cfa-12062", 'CONT [RC]: If you have a vanguard with "Drajeweled" in its card name, this unit gets "Boost".'],
+    ["cfa-12719", 'CONT [RC]: If you have a vanguard with "FLДMMe-Glam" in its card name, this unit gets "Boost".'],
+    ["cfa-13689", 'CONT [RC]: If you have a vanguard with "Argo Siren" in its card name, this unit gets "Boost".'],
+    ["cfa-7528", 'CONT [RC]: If you have a vanguard with "Blaster" in its card name, this unit gets "Boost".']
+  ];
+  for (const [cardId, printedText] of namedVanguardConditionalBoostTexts) {
+    const definition = root?.VanguardAbilityEngine?.compileContinuousNamedVanguardKeywordGrantDefinition?.(cardId, `${cardId}:1`, "CONT", printedText);
+    if (definition) definitions.push(definition);
+  }
   const dragontreeGcShieldIds = ["cfa-13498", "cfa-13566", "cfa-13607", "cfa-13609", "cfa-13638"];
   const dragontreeGcShieldText = 'AUTO: When this unit is put on GC, if your RC has a Dragontree marker, until end of that battle, this unit gets "AUTO: When this unit is retired from GC, you may put this card into soul." and shield +5000.';
   for (const cardId of dragontreeGcShieldIds) {
