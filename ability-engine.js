@@ -1989,9 +1989,11 @@
   }
   function compileContinuousNamedSoulPowerDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT")return null;
-    const match=normalizePrintedText(printedText).match(/^CONT \[(VC|RC|VC\/RC)\]: (?:During your turn, )?If you have a card named ["“]([^"”]+)["”] in your soul, this unit gets power \+(\d+)\.$/i);
+    const text=normalizePrintedText(printedText);
+    const match=text.match(/^CONT \[(VC|RC|VC\/RC)\]: (?:During your turn, )?If you have (?:(a card named) )?["“]([^"”]+)["”] in your soul, this unit gets power \+(\d+)\.$/i);
     if(!match)return null;
-    return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-named-soul-card-power-v1",review:"Exact CONT wording: checks the controller's Soul for the exact printed card name, any printed own-turn restriction, and only the printed Vanguard or Rear-guard circle."},effects:[{op:"continuous-power",target:"source",amount:Number(match[3]),duration:"continuous",condition:{op:"soul-has-card-name",name:match[2],controllerTurn:/During your turn/i.test(normalizePrintedText(printedText))}}]};
+    if(!match[2]&&match[1].toUpperCase()!=="VC")return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:parseAbilityLocation(`[${match[1]}]`),source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"cont-named-soul-card-power-v1",review:"Exact CONT wording: checks the controller's Soul for the exact printed card name, any printed own-turn restriction, and only the printed Vanguard or Rear-guard circle."},effects:[{op:"continuous-power",target:"source",amount:Number(match[4]),duration:"continuous",condition:{op:"soul-has-card-name",name:match[3],controllerTurn:/During your turn/i.test(text)}}]};
   }
   function compileGreatDaiyushaLimitBreakDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="CONT"||String(cardId)!=="cfa-264")return null;
