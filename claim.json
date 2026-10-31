@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "batchId": "CANDIDATE-C0086556-0016",
+  "workerId": "codex-cont-no-other-clan-field",
+  "baselineCommit": "c00865569ef43a5915401e313ef036c25dc963b2",
+  "abilityIds": [
+    "cfa-155:0",
+    "cfa-155:1",
+    "cfa-547:0",
+    "cfa-547:1",
+    "cfa-624:0",
+    "cfa-624:1",
+    "cfa-625:0",
+    "cfa-625:1"
+  ],
+  "claimedAt": "2026-10-31T15:47:46.255Z"
+}
