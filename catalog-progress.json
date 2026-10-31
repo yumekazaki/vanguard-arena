@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-31T02:46:08.550Z",
+  "generatedAt": "2026-10-31T03:09:03.172Z",
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "catalogSource": "scripts/audit-ability-catalog.js (local catalog file or committed HEAD snapshot)",
   "cards": {
@@ -10,7 +10,7 @@
     "withAllAbilityBlocksCompiledAndAuditValid": 1950,
     "withUnsupportedAbilityBlocks": 9891,
     "withUnmodeledRequirements": 9891,
-    "withExplicitPassingRegressionEvidence": 2824,
+    "withExplicitPassingRegressionEvidence": 2832,
     "fullyVerified": 645
   },
   "abilities": {
@@ -23,8 +23,8 @@
   },
   "verification": {
     "manifest": "card-verification-manifest.json",
-    "manifestRecords": 4250,
-    "passingTestCases": 15895,
+    "manifestRecords": 4264,
+    "passingTestCases": 15940,
     "latestFullSuite": {
       "command": "node --test",
       "testCommand": "node --test",
@@ -42,8 +42,8 @@
     "note": "Aggregate parsing or a passing pattern test does not make a whole card fully verified. Only explicit manifest records count as regression evidence; zero fully verified cards is reported when no complete card-level evidence exists."
   },
   "workflow": {
-    "catalogLoadMilliseconds": 153.9,
-    "fullCatalogParseAndAuditMilliseconds": 5061.1,
+    "catalogLoadMilliseconds": 285.1,
+    "fullCatalogParseAndAuditMilliseconds": 10513.7,
     "repeatedAuditsOfTheSameCatalogUseTheExistingDigestCache": true,
     "parseCacheExperiment": "Rejected JSON-clone-per-call caching after three full catalog parse passes measured about 9.5 seconds uncached versus 12.1 seconds with cloning. Adopted immutable per-card snapshots with definition-revision invalidation: the same three passes measured about 9.5 seconds uncached versus 3.82 seconds cached; cache-hit passes were about 2.5 milliseconds each.",
     "measuredBottlenecks": [

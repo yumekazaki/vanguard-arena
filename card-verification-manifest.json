@@ -74513,8 +74513,221 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10980",
+      "abilityId": "cfa-10980:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-normal-order-card-family.test.js"
+      ],
+      "testCases": [
+        "all six exact Normal Order CONT cards apply +5000 only on Rear-Guard after their controller plays a Normal Order",
+        "Normal Order count is scoped to the active controller on both client and authoritative reducer"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11052",
+      "abilityId": "cfa-11052:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-normal-order-card-family.test.js"
+      ],
+      "testCases": [
+        "all six exact Normal Order CONT cards apply +5000 only on Rear-Guard after their controller plays a Normal Order",
+        "Normal Order count is scoped to the active controller on both client and authoritative reducer"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11100",
+      "abilityId": "cfa-11100:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-normal-order-card-family.test.js"
+      ],
+      "testCases": [
+        "all six exact Normal Order CONT cards apply +5000 only on Rear-Guard after their controller plays a Normal Order",
+        "Normal Order count is scoped to the active controller on both client and authoritative reducer"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11610",
+      "abilityId": "cfa-11610:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-normal-order-card-family.test.js"
+      ],
+      "testCases": [
+        "all six exact Normal Order CONT cards apply +5000 only on Rear-Guard after their controller plays a Normal Order",
+        "Normal Order count is scoped to the active controller on both client and authoritative reducer"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12065",
+      "abilityId": "cfa-12065:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-normal-order-card-family.test.js"
+      ],
+      "testCases": [
+        "all six exact Normal Order CONT cards apply +5000 only on Rear-Guard after their controller plays a Normal Order",
+        "Normal Order count is scoped to the active controller on both client and authoritative reducer"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12112",
+      "abilityId": "cfa-12112:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-normal-order-card-family.test.js"
+      ],
+      "testCases": [
+        "all six exact Normal Order CONT cards apply +5000 only on Rear-Guard after their controller plays a Normal Order",
+        "Normal Order count is scoped to the active controller on both client and authoritative reducer"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2920",
+      "abilityId": "cfa-2920:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-soulblast-countercharge-server.test.js"
+      ],
+      "testCases": [
+        "all three exact records compile the optional RC-only Soul Blast 2 / Counter Charge 2 AUTO",
+        "only the exact source's Rear-Guard placement prompts its controller on either seat",
+        "accept pays exactly Soul Blast 2 and Counter Charges up to the available face-down Damage",
+        "declining leaves Soul and Damage unchanged, and the host cannot proxy the joiner's activation",
+        "invalid Soul Blast or damage selections reject atomically; duplicate event and action are rejected"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-3207",
+      "abilityId": "cfa-3207:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-soulblast-countercharge-server.test.js"
+      ],
+      "testCases": [
+        "all three exact records compile the optional RC-only Soul Blast 2 / Counter Charge 2 AUTO",
+        "only the exact source's Rear-Guard placement prompts its controller on either seat",
+        "accept pays exactly Soul Blast 2 and Counter Charges up to the available face-down Damage",
+        "declining leaves Soul and Damage unchanged, and the host cannot proxy the joiner's activation",
+        "invalid Soul Blast or damage selections reject atomically; duplicate event and action are rejected"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4636",
+      "abilityId": "cfa-4636:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-rc-soulblast-countercharge-server.test.js"
+      ],
+      "testCases": [
+        "all three exact records compile the optional RC-only Soul Blast 2 / Counter Charge 2 AUTO",
+        "only the exact source's Rear-Guard placement prompts its controller on either seat",
+        "accept pays exactly Soul Blast 2 and Counter Charges up to the available face-down Damage",
+        "declining leaves Soul and Damage unchanged, and the host cannot proxy the joiner's activation",
+        "invalid Soul Blast or damage selections reject atomically; duplicate event and action are rejected"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11706",
+      "abilityId": "cfa-11706:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-missed-vanguard-hit-server.test.js"
+      ],
+      "testCases": [
+        "a missed Vanguard attack uses the same Vanguard's exact CONT and resolves its attack-hit AUTO for either player",
+        "the same AUTO does not trigger from a different Vanguard without the CONT"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1201",
+      "abilityId": "cfa-1201:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-placed-counter-blast-retire-grade-two-server.test.js"
+      ],
+      "testCases": [
+        "all four placed Counter-Blast retirement records are production trusted with their exact circle and clan rules",
+        "host and joiner independently pay Counter-Blast 2 and retire only a legal opponent Grade 2 Rear-Guard",
+        "wrong source, VC-only circle, wrong Vanguard clan, missing cost, missing target, and host proxy cannot prompt or resolve",
+        "declining the optional placement ability leaves its costs and target unchanged"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-1767",
+      "abilityId": "cfa-1767:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-placed-counter-blast-retire-grade-two-server.test.js"
+      ],
+      "testCases": [
+        "all four placed Counter-Blast retirement records are production trusted with their exact circle and clan rules",
+        "host and joiner independently pay Counter-Blast 2 and retire only a legal opponent Grade 2 Rear-Guard",
+        "wrong source, VC-only circle, wrong Vanguard clan, missing cost, missing target, and host proxy cannot prompt or resolve",
+        "declining the optional placement ability leaves its costs and target unchanged"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-474",
+      "abilityId": "cfa-474:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-placed-counter-blast-retire-grade-two-server.test.js"
+      ],
+      "testCases": [
+        "all four placed Counter-Blast retirement records are production trusted with their exact circle and clan rules",
+        "host and joiner independently pay Counter-Blast 2 and retire only a legal opponent Grade 2 Rear-Guard",
+        "wrong source, VC-only circle, wrong Vanguard clan, missing cost, missing target, and host proxy cannot prompt or resolve",
+        "declining the optional placement ability leaves its costs and target unchanged"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-859",
+      "abilityId": "cfa-859:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-placed-counter-blast-retire-grade-two-server.test.js"
+      ],
+      "testCases": [
+        "all four placed Counter-Blast retirement records are production trusted with their exact circle and clan rules",
+        "host and joiner independently pay Counter-Blast 2 and retire only a legal opponent Grade 2 Rear-Guard",
+        "wrong source, VC-only circle, wrong Vanguard clan, missing cost, missing target, and host proxy cannot prompt or resolve",
+        "declining the optional placement ability leaves its costs and target unchanged"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T02:38:03.066Z"
+  "evidenceUpdatedAt": "2026-10-31T03:07:47.120Z"
 }

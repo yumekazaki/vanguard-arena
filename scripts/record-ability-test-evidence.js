@@ -14,8 +14,10 @@ function resolveTrustedAbilities(root, abilityIds) {
   for (const card of loadCatalog(root)) {
     for (const ability of engine.parseCardAbilitiesCached(card)) {
       if (!wanted.has(ability.id)) continue;
-      if (!ability.definition || !serverReducer.hasTrustedServerAbilityDefinition?.(ability, engine) ||
-          ["AUTO", "ACT"].includes(ability.kind) && !serverReducer.supportsServerAbilityEffects?.(ability)) {
+      const requiresTrustedActivation = ["AUTO", "ACT"].includes(ability.kind);
+      if (!ability.definition ||
+          requiresTrustedActivation && !serverReducer.hasTrustedServerAbilityDefinition?.(ability, engine) ||
+          requiresTrustedActivation && !serverReducer.supportsServerAbilityEffects?.(ability)) {
         throw new Error(`Ability ${ability.id} does not have a trusted, authoritative production definition.`);
       }
       found.set(ability.id, ability);

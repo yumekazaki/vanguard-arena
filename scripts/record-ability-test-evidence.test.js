@@ -59,3 +59,11 @@ test("evidence recorder accepts only trusted catalog-backed definitions, includi
   for (const abilityId of ids.slice(6)) assert.equal(abilities.get(abilityId).definition.source.patternId, "auto-vanguard-attack-retire-friendly-rearguard-cost-battle-modifier-v1");
   assert.throws(() => resolveTrustedAbilities(root, ["cfa-999999:0"]), /not found in the card catalog/);
 });
+
+test("evidence recorder accepts reviewed CONT definitions without requiring an AUTO/ACT activation trust entry", () => {
+  const root = path.resolve(__dirname, "..");
+  const abilities = resolveTrustedAbilities(root, ["cfa-10980:0"]);
+  const ability = abilities.get("cfa-10980:0");
+  assert.equal(ability.kind, "CONT");
+  assert.equal(ability.definition.source.patternId, "cont-rc-normal-order-power-v1");
+});
