@@ -74726,8 +74726,567 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10772",
+      "abilityId": "cfa-10772:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-cannot-be-ridden-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact Cannot Be Ridden CONT cards prohibit riding without becoming manual skills"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10824",
+      "abilityId": "cfa-10824:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-cannot-be-ridden-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact Cannot Be Ridden CONT cards prohibit riding without becoming manual skills"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10895",
+      "abilityId": "cfa-10895:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-cannot-be-ridden-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact Cannot Be Ridden CONT cards prohibit riding without becoming manual skills"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13426",
+      "abilityId": "cfa-13426:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-cannot-be-ridden-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact Cannot Be Ridden CONT cards prohibit riding without becoming manual skills"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7580",
+      "abilityId": "cfa-7580:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-cannot-be-ridden-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact Cannot Be Ridden CONT cards prohibit riding without becoming manual skills"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7631",
+      "abilityId": "cfa-7631:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-cannot-be-ridden-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact Cannot Be Ridden CONT cards prohibit riding without becoming manual skills"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11650",
+      "abilityId": "cfa-11650:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-gc-generation-break-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all four exact GC Generation Break shield CONT cards check live face-up G count on GC only"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-11704",
+      "abilityId": "cfa-11704:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-gc-generation-break-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all four exact GC Generation Break shield CONT cards check live face-up G count on GC only"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-3509",
+      "abilityId": "cfa-3509:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-gc-generation-break-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all four exact GC Generation Break shield CONT cards check live face-up G count on GC only"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-4587",
+      "abilityId": "cfa-4587:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-gc-generation-break-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all four exact GC Generation Break shield CONT cards check live face-up G count on GC only"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10033",
+      "abilityId": "cfa-10033:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-attacks-vanguard-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all five exact attack-battle CONT power cards apply only while their own RC unit attacks a Vanguard"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7111",
+      "abilityId": "cfa-7111:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-attacks-vanguard-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all five exact attack-battle CONT power cards apply only while their own RC unit attacks a Vanguard"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7382",
+      "abilityId": "cfa-7382:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-attacks-vanguard-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all five exact attack-battle CONT power cards apply only while their own RC unit attacks a Vanguard"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-9943",
+      "abilityId": "cfa-9943:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-attacks-vanguard-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all five exact attack-battle CONT power cards apply only while their own RC unit attacks a Vanguard"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-9950",
+      "abilityId": "cfa-9950:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-attacks-vanguard-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all five exact attack-battle CONT power cards apply only while their own RC unit attacks a Vanguard"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10030",
+      "abilityId": "cfa-10030:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-controller-grade-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all four exact RC CONT power cards use the controller Vanguard grade threshold and circle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-5816",
+      "abilityId": "cfa-5816:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-controller-grade-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all four exact RC CONT power cards use the controller Vanguard grade threshold and circle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-6543",
+      "abilityId": "cfa-6543:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-controller-grade-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all four exact RC CONT power cards use the controller Vanguard grade threshold and circle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-9947",
+      "abilityId": "cfa-9947:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-controller-grade-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all four exact RC CONT power cards use the controller Vanguard grade threshold and circle"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12787",
+      "abilityId": "cfa-12787:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grade-or-damage-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact dual-circle CONT abilities honor either Vanguard-grade or damage conditions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12795",
+      "abilityId": "cfa-12795:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grade-or-damage-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact dual-circle CONT abilities honor either Vanguard-grade or damage conditions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12804",
+      "abilityId": "cfa-12804:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grade-or-damage-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact dual-circle CONT abilities honor either Vanguard-grade or damage conditions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12831",
+      "abilityId": "cfa-12831:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grade-or-damage-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact dual-circle CONT abilities honor either Vanguard-grade or damage conditions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12873",
+      "abilityId": "cfa-12873:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grade-or-damage-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact dual-circle CONT abilities honor either Vanguard-grade or damage conditions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12949",
+      "abilityId": "cfa-12949:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grade-or-damage-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact dual-circle CONT abilities honor either Vanguard-grade or damage conditions"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13995",
+      "abilityId": "cfa-13995:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grant-intercept-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact RC/GC Intercept CONT cards grant Intercept and shield only on RC or GC"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13999",
+      "abilityId": "cfa-13999:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grant-intercept-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact RC/GC Intercept CONT cards grant Intercept and shield only on RC or GC"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-14000",
+      "abilityId": "cfa-14000:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grant-intercept-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact RC/GC Intercept CONT cards grant Intercept and shield only on RC or GC"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-14005",
+      "abilityId": "cfa-14005:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grant-intercept-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact RC/GC Intercept CONT cards grant Intercept and shield only on RC or GC"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-14010",
+      "abilityId": "cfa-14010:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grant-intercept-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact RC/GC Intercept CONT cards grant Intercept and shield only on RC or GC"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-14013",
+      "abilityId": "cfa-14013:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-grant-intercept-catalog.test.js"
+      ],
+      "testCases": [
+        "all six exact RC/GC Intercept CONT cards grant Intercept and shield only on RC or GC"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12534",
+      "abilityId": "cfa-12534:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-named-grade-vanguard-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six named-grade dual-circle CONT abilities preserve their name, grade, power, and shield values"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12566",
+      "abilityId": "cfa-12566:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-named-grade-vanguard-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six named-grade dual-circle CONT abilities preserve their name, grade, power, and shield values"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12713",
+      "abilityId": "cfa-12713:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-named-grade-vanguard-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six named-grade dual-circle CONT abilities preserve their name, grade, power, and shield values"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-12951",
+      "abilityId": "cfa-12951:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-named-grade-vanguard-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six named-grade dual-circle CONT abilities preserve their name, grade, power, and shield values"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13168",
+      "abilityId": "cfa-13168:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-named-grade-vanguard-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six named-grade dual-circle CONT abilities preserve their name, grade, power, and shield values"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-13829",
+      "abilityId": "cfa-13829:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-gc-named-grade-vanguard-power-shield-catalog.test.js"
+      ],
+      "testCases": [
+        "all six named-grade dual-circle CONT abilities preserve their name, grade, power, and shield values"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10183",
+      "abilityId": "cfa-10183:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-opponent-vanguard-grade-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all five exact RC CONT power abilities require the opponent's grade threshold during their controller's turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10269",
+      "abilityId": "cfa-10269:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-opponent-vanguard-grade-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all five exact RC CONT power abilities require the opponent's grade threshold during their controller's turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10335",
+      "abilityId": "cfa-10335:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-opponent-vanguard-grade-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all five exact RC CONT power abilities require the opponent's grade threshold during their controller's turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10348",
+      "abilityId": "cfa-10348:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-opponent-vanguard-grade-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all five exact RC CONT power abilities require the opponent's grade threshold during their controller's turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-10379",
+      "abilityId": "cfa-10379:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-rc-opponent-vanguard-grade-power-catalog.test.js"
+      ],
+      "testCases": [
+        "all five exact RC CONT power abilities require the opponent's grade threshold during their controller's turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-7474",
+      "abilityId": "cfa-7474:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-cont-vc-gzone-abilityless-power-catalog.test.js"
+      ],
+      "testCases": [
+        "Cycloned's exact face-up VC/G-zone CONT power applies only to friendly abilityless targets on its controller's turn"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T03:07:47.120Z"
+  "evidenceUpdatedAt": "2026-10-31T03:23:39.105Z"
 }
