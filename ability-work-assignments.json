@@ -16,6 +16,33 @@
         "cfa-4314:1",
         "cfa-4540:1"
       ]
+    },
+    {
+      "batchId": "PRIMARY-ORDER-SEARCH-NAME-AUTO",
+      "status": "in-progress",
+      "workerOwner": "primary-session/order_search_auto_family",
+      "reason": "Verifying and implementing the exact Order-search AUTO family, with source-identity, no-Order-played, discard-cost, Regalis Piece, and temporary name checks.",
+      "abilityIds": [
+        "cfa-12653:0",
+        "cfa-12654:0",
+        "cfa-12655:0",
+        "cfa-12656:0",
+        "cfa-12657:0",
+        "cfa-12658:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-DRAGONTREE-GC-SHIELD-AUTO",
+      "status": "in-progress",
+      "workerOwner": "primary-session/dragontree_gc_shield_family",
+      "reason": "Verifying and implementing the exact GC placement AUTO conditioned on the controller's Dragontree marker, with battle-scoped ability and shield changes.",
+      "abilityIds": [
+        "cfa-13498:0",
+        "cfa-13566:0",
+        "cfa-13607:0",
+        "cfa-13609:0",
+        "cfa-13638:0"
+      ]
     }
   ]
 }
