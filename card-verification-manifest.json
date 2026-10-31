@@ -2,17 +2,17 @@
   "schemaVersion": 1,
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "latestFullSuite": {
-    "command": "node --test --test-concurrency=2",
-    "testCommand": "node --test --test-concurrency=2",
+    "command": "node --test --test-concurrency=4",
+    "testCommand": "node --test --test-concurrency=4",
     "status": "passed",
-    "tests": 1544,
-    "testCount": 1544,
-    "passed": 1544,
+    "tests": 1565,
+    "testCount": 1565,
+    "passed": 1565,
     "failed": 0,
-    "durationMilliseconds": 491314,
-    "completedAt": "2026-10-31T04:41:13Z",
+    "durationMilliseconds": 318031,
+    "completedAt": "2026-10-31T05:07:53Z",
     "runDate": "2026-10-31",
-    "validationInputDigest": "c6531d4229b0ae4ce397ba48972193bf2ea72a9d41cbb34b75eb2dee0909b62c"
+    "validationInputDigest": "4b825beade973d5ea49d7e4424150dbdda731c18e4771018174b320913c06fcc"
   },
   "records": [
     {
