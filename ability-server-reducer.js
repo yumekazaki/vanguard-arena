@@ -1514,6 +1514,10 @@
   const NAMED_GRADE_RIDE_CALL = Object.freeze({"cfa-11178":{grade:2,name:"Mythiarq"},"cfa-11179":{grade:3,name:"Mythiarq"},"cfa-12502":{grade:3,name:"Direful Doll"},"cfa-12545":{grade:3,name:"Varga"},"cfa-12812":{grade:3,name:"Daiyusha"},"cfa-10068":{rider:"Demonic Stone Dragon, Jewelneel"},"cfa-9098":{rider:"Ascendance Assault"},"cfa-9559":{rider:"MiMish, Rikashenna"},"cfa-9863":{rider:"Tyrant of the Oceans, Poseidon"}});
   const NAMED_RIDE_DECK_SEARCH = Object.freeze({"cfa-7":{rider:"Blaster Javelin",target:"Blaster Dark"},"cfa-40":{rider:"Pupa Mutant, Giraffa",target:"Elite Mutant, Giraffa"},"cfa-106":{rider:"Blaupanzer",target:"Blaukluger"},"cfa-231":{rider:"Enigman Ripple",target:"Enigman Wave"},"cfa-491":{rider:"Amber Dragon, Daylight",target:"Amber Dragon, Dusk"}});
   const RIDE_SOURCE_TOP_SEVEN_SEARCH = Object.freeze({
+    "cfa-274": { rider: "Bringer of Knowledge, Lox", names: ["Guardian of Truth, Lox", "Law Official, Lox"], targetWording: "card name" },
+    "cfa-743": { rider: "Military Dragon, Raptor Sergeant", names: ["Military Dragon, Raptor Colonel", "Military Dragon, Raptor Captain"], targetWording: "card name" },
+    "cfa-948": { rider: "Arboros Dragon, Branch", names: ["Arboros Dragon, Sephirot", "Arboros Dragon, Timber"], targetWording: "card name" },
+    "cfa-974": { rider: "Eye of Destruction, Zeal", names: ["Galactic Beast, Zeal", "Devourer of Planets, Zeal"], targetWording: "card name" },
     "cfa-1267": { rider: "Fresh Star, Coral", names: ["Shiny Star, Coral", "Aurora Star, Coral"] },
     "cfa-1787": { rider: "Sanctuary of Light, Little Storm", names: ["Sanctuary of Light, Determinator", "Sanctuary of Light, Planetal Dragon"] },
     "cfa-561": { rider: "Mermaid Idol, Riviere", names: ["Top Idol, Riviere", "Super Idol, Riviere"] },
@@ -1644,7 +1648,7 @@
   function isExactRideSourceTopSevenSearchAbility(ability){
     const cardId=String(ability?.cardId||""),entry=RIDE_SOURCE_TOP_SEVEN_SEARCH[cardId],definition=ability?.definition,trigger=ability?.trigger,effect=definition?.effects?.[0];
     if(!entry||ability?.id!==`${cardId}:0`||ability?.kind!=="AUTO"||definition?.kind!=="AUTO"||String(definition.cardId)!==cardId||definition.source?.patternId!=="auto-ridden-source-top-seven-two-name-search-v1")return false;
-    const expected=`AUTO: When a card named "${entry.rider}" rides this unit, look at up to seven cards from the top of your deck, search for up to one card named "${entry.names[0]}" or "${entry.names[1]}" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.`;
+    const expected=`AUTO: When a card named "${entry.rider}" rides this unit, look at up to seven cards from the top of your deck, search for up to one ${entry.targetWording||"card named"} "${entry.names[0]}" or "${entry.names[1]}" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.`;
     return definition.printedText===expected&&trigger?.status==="recognized-trigger"&&trigger.eventType==="card.ridden"&&trigger.subject==="ridden-unit"&&JSON.stringify(trigger.circles||[])===JSON.stringify(["vanguard"])&&trigger.riderCardNameEquals===entry.rider&&definition.choicesReviewed===true&&ability.canDecline===false&&effect?.op==="search-top-up-to-one-filtered-to-hand"&&effect.target==="controller"&&effect.lookCount===7&&effect.maximum===1&&JSON.stringify(effect.filter?.cardNamesAny||[])===JSON.stringify(entry.names);
   }
   function rideSourceTopSevenSearchMatches(state,ability,source,located,event,actorPlayerId,engine){

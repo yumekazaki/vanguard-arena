@@ -950,7 +950,7 @@ test("optional clan-rider call AUTO matches the ridden source, clan, and exclude
  assert.equal(report.patterns["auto-ridden-unit-clan-optional-source-call-v1"],23);
  for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card)){
   if(ability.definition?.source?.patternId!=="auto-ridden-unit-clan-optional-source-call-v1")continue;
-  matches.push({card,ability});assert.deepEqual(ability.trigger,{status:"recognized-trigger",eventType:"card.ridden",subject:"ridden-unit",circles:[],riderClan:ability.trigger.riderClan,...(ability.trigger.excludedRiderName?{excludedRiderName:ability.trigger.excludedRiderName}:{})},card.id);
+  matches.push({card,ability});assert.deepEqual(ability.trigger,{status:"recognized-trigger",eventType:"card.ridden",subject:"ridden-unit",circles:["cfa-274","cfa-743","cfa-948","cfa-974"].includes(String(card.id))?["vanguard"]:[],riderClan:ability.trigger.riderClan,...(ability.trigger.excludedRiderName?{excludedRiderName:ability.trigger.excludedRiderName}:{})},card.id);
   assert.equal(ability.canDecline,true,card.id);assert.equal(ability.choiceStatus,"modeled",card.id);
   assert.deepEqual(ability.definition.effects,[{op:"call-source-from-soul",target:"source",position:"stand"}],card.id);
   const event=engine.createGameEvent({matchId:"rider-clan"},{type:"card.ridden",actingPlayerId:"p1",turnPlayerId:"p1",sourceCardInstanceId:"rider",sourceCardName:"Different " + ability.trigger.riderClan + " Rider",sourceCardClan:ability.trigger.riderClan,subjectCardInstanceId:"rider",targetCardInstanceIds:["ridden-source"],targetPreviousLocation:"vanguard",targetLocation:"vanguard"});
@@ -958,6 +958,7 @@ test("optional clan-rider call AUTO matches the ridden source, clan, and exclude
   if(ability.trigger.excludedRiderName)assert.equal(engine.eventMatchesAbilityTrigger(ability,"ride",{...event,sourceCardName:ability.trigger.excludedRiderName},"ridden-source","vanguard","vanguard","p1"),false,card.id);
   assert.equal(engine.eventMatchesAbilityTrigger(ability,"ride",{...event,targetCardInstanceIds:["other-source"]},"ridden-source","vanguard","vanguard","p1"),false,card.id);
   assert.equal(engine.eventMatchesAbilityTrigger(ability,"ride",{...event,sourceCardClan:"Wrong Clan",sourceCardClans:[]},"ridden-source","vanguard","vanguard","p1"),false,card.id);
+  if(["cfa-274","cfa-743","cfa-948","cfa-974"].includes(String(card.id)))assert.equal(engine.eventMatchesAbilityTrigger(ability,"ride",{...event,targetPreviousLocation:"rear-guard"},"ridden-source","rear-guard","rear-guard","p1"),false,card.id);
  }
  assert.equal(matches.length,23);assert.deepEqual(report.invalidCompiled,[]);
 });

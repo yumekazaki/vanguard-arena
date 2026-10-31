@@ -13443,6 +13443,9 @@
         "status": "recognized-trigger",
         "eventType": "card.ridden",
         "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
         "riderClan": "Great Nature",
         "excludedRiderName": "Bringer of Knowledge, Lox"
       },
@@ -13499,6 +13502,9 @@
         "status": "recognized-trigger",
         "eventType": "card.ridden",
         "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
         "riderClan": "Tachikaze",
         "excludedRiderName": "Military Dragon, Raptor Sergeant"
       },
@@ -13555,6 +13561,9 @@
         "status": "recognized-trigger",
         "eventType": "card.ridden",
         "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
         "riderClan": "Neo Nectar",
         "excludedRiderName": "Arboros Dragon, Branch"
       },
@@ -13583,6 +13592,9 @@
         "status": "recognized-trigger",
         "eventType": "card.ridden",
         "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
         "riderClan": "Dimension Police",
         "excludedRiderName": "Eye of Destruction, Zeal"
       },
@@ -112376,6 +112388,17 @@
   ];
   for (const [cardId, printedText] of rodeUponNamedVanguardCrestTexts) {
     const definition = root?.VanguardAbilityEngine?.compileRodeUponNamedVanguardDrawCrestDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
+    if (definition) definitions.push(definition);
+  }
+  const rideSourceTopSevenSearchCards = [
+    ["cfa-274", "Bringer of Knowledge, Lox", "Guardian of Truth, Lox", "Law Official, Lox", "card name"],
+    ["cfa-743", "Military Dragon, Raptor Sergeant", "Military Dragon, Raptor Colonel", "Military Dragon, Raptor Captain", "card name"],
+    ["cfa-948", "Arboros Dragon, Branch", "Arboros Dragon, Sephirot", "Arboros Dragon, Timber", "card name"],
+    ["cfa-974", "Eye of Destruction, Zeal", "Galactic Beast, Zeal", "Devourer of Planets, Zeal", "card name"]
+  ];
+  for (const [cardId, riderName, firstTargetName, secondTargetName, targetWording] of rideSourceTopSevenSearchCards) {
+    const printedText = `AUTO: When a card named "${riderName}" rides this unit, look at up to seven cards from the top of your deck, search for up to one ${targetWording} "${firstTargetName}" or "${secondTargetName}" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.`;
+    const definition = root?.VanguardAbilityEngine?.compileRideSourceTopSevenTwoNameSearchDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
     if (definition) definitions.push(definition);
   }
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
