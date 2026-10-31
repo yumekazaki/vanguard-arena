@@ -112357,6 +112357,16 @@
     const definition = root?.VanguardAbilityEngine?.compileAutoRcPlacementNamedDropCallDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
     if (definition) definitions.push(definition);
   }
+  const attackStepPowerCriticalCards = [
+    ["cfa-2007", "cfa-2007:1", "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 15000 or greater, this unit gets critical +1 until end of that battle."],
+    ["cfa-254", "cfa-254:0", "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 13000 or greater, this unit gets critical +1 until end of that battle."],
+    ["cfa-260", "cfa-260:1", "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 15000 or greater, this unit gets critical +1 until end of that battle."],
+    ["cfa-263", "cfa-263:0", "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 14000 or greater, this unit gets critical +1 until end of that battle."]
+  ];
+  for (const [cardId, abilityId, printedText] of attackStepPowerCriticalCards) {
+    const definition = root?.VanguardAbilityEngine?.compileOwnAttackStepPowerCriticalDefinition?.(cardId, abilityId, "AUTO", printedText);
+    if (definition) definitions.push(definition);
+  }
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
 })(typeof globalThis === "undefined" ? this : globalThis);

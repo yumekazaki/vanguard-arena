@@ -2141,6 +2141,31 @@
       event.previousLocation===booster.circle&&event.currentLocation===booster.circle&&event.circle===booster.circle&&event.targetLocation===attack.targetZone&&Array.isArray(event.targetCardInstanceIds)&&event.targetCardInstanceIds.length===1&&event.targetCardInstanceIds[0]===source.uid&&
       eventBoostPower>=minimum&&actualBoostPower>=minimum&&eventBoostPower===actualBoostPower);
   }
+  function isExactAttackStepPowerCriticalAbility(ability) {
+    const definition=ability?.definition,printed=String(definition?.printedText||ability?.printedText||"").replace(/[’]/g,"'").replace(/\s+/g," ").trim();
+    const match=printed.match(/^AUTO \[(VC\/RC|VC|RC)\]: At the beginning of your attack step, if this unit's power is (\d+) or greater, this unit gets critical \+(\d+) until end of that battle\.$/i);
+    if(!match)return false;
+    const circle=match[1].toUpperCase(),locations=circle==="VC"?["vanguard"]:circle==="RC"?["rear-guard"]:["vanguard","rear-guard"];
+    return ability?.kind==="AUTO"&&definition?.kind==="AUTO"&&String(definition.cardId)===String(ability.cardId)&&definition.id===ability.id&&
+      definition.source?.patternId==="auto-attack-step-source-power-critical-battle-v1"&&ability.trigger?.status==="recognized-trigger"&&
+      ability.trigger.eventType==="attack.step-started"&&ability.trigger.subject==="controller"&&ability.trigger.turnRelation==="controller"&&
+      ability.trigger.requiredTimingWindow==="attack-step-start"&&JSON.stringify(ability.requiredLocation||[])===JSON.stringify(locations)&&
+      JSON.stringify(ability.conditions||[])===JSON.stringify([{type:"source-power-at-least",count:Number(match[2])}])&&!(ability.costs||[]).length&&
+      ability.canDecline===false&&definition.optional===false&&definition.conditionsReviewed===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&
+      definition.effects?.length===1&&definition.effects[0]?.op==="modify-critical"&&definition.effects[0]?.target==="source"&&
+      Number(definition.effects[0]?.amount)===Number(match[3])&&definition.effects[0]?.duration==="battle";
+  }
+  function attackStepPowerCriticalEventMatches(state,ability,source,located,event,controllerPlayerId,engine) {
+    const attack=state?.pendingAttack,player=located&&state.players?.[located.side],current=source?.uid&&engine.locateCardInstance(state,source.uid),snapshot=event?.sourcePowerByCardInstanceId?.[source?.uid];
+    return Boolean(isExactAttackStepPowerCriticalAbility(ability)&&event?.eventId&&event.type==="attack.step-started"&&event.phase==="battle"&&
+      event.timingWindow==="attack-step-start"&&event.battleId&&event.battleId===attack?.battleId&&state.side===located?.side&&Number(state.phase)===5&&
+      player?.playerId===controllerPlayerId&&located.controllerPlayerId===controllerPlayerId&&
+      event.actingPlayerId===controllerPlayerId&&event.turnPlayerId===controllerPlayerId&&event.sourceControllerPlayerId===controllerPlayerId&&event.subjectControllerPlayerId===controllerPlayerId&&
+      attack.attackerSide===located.side&&attack.attackerPlayerId===controllerPlayerId&&event.sourceCardInstanceId===attack.attackerUid&&event.cardInstanceId===attack.attackerUid&&event.subjectCardInstanceId===attack.attackerUid&&
+      current&&!current.ambiguous&&current.instance===source&&
+      (located.zone==="vanguard"?player.vanguard?.uid===source.uid:player.rear?.some(card=>card?.uid===source.uid))&&source.faceUp!==false&&
+      Object.hasOwn(event.sourcePowerByCardInstanceId||{},source.uid)&&Number.isFinite(Number(snapshot))&&event.powerIncludesContinuous===true);
+  }
   function isExactNamedBoostPowerAbility(ability) {
     const definition = ability?.definition, cardId = String(definition?.cardId || ""), expectedName = NAMED_BOOST_POWER.get(cardId);
     const printed = String(definition?.printedText || ability?.printedText || "").replace(/[’]/g, "'").replace(/\s+/g, " ").trim();
@@ -3358,6 +3383,7 @@
     if (ability?.definition?.source?.patternId === "auto-dragontree-gc-granted-retire-to-soul-v1" && !isExactDragontreeGcGrantedRetireAbility(ability)) return false;
     if (effects.some(step => step?.op === "grant-battle-gc-retire-to-soul") && !isExactDragontreeGcShieldAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1" && !isExactPaidOwnVanguardAttackPowerAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-attack-step-source-power-critical-battle-v1" && !isExactAttackStepPowerCriticalAbility(ability)) return false;
     if ((ability?.definition?.source?.patternId === "auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1" || effects.some(step => step?.op === "call-named-drop-card-to-rearguard")) && !isExactSameNameDropCallAbility(ability)) return false;
     if(effects.some(step=>step?.op==="put-top-up-to-one-filtered-in-order-zone")&&!isExactAutoRcMainPhaseRaceTopThreeMemoryAbility(ability))return false;
     if (ability?.definition?.source?.patternId === "auto-vanguard-attack-retire-friendly-rearguard-cost-battle-modifier-v1" && !isExactRetireRearGuardAttackAbility(ability)) return false;
@@ -3837,6 +3863,19 @@
     return power;
   }
 
+  function snapshotAttackStepSourcePowers(state, side, engine) {
+    const player=state.players?.[side];
+    if(!player)return {};
+    const field=[...(player.vanguard?[{instance:player.vanguard,location:"vanguard"}]:[]),...(player.rear||[]).filter(Boolean).map(instance=>({instance,location:"rear-guard"}))];
+    const entries=[];
+    for(const {instance,location} of field){
+      if(typeof instance.uid!=="string"||!instance.uid||instance.faceUp===false)continue;
+      const power=Number(instance.power||0)+Number(instance.powerBoost||0)+Number(instance.turnPowerBoost||0)+serverContinuousPower(state,side,instance,location,null,engine);
+      if(Number.isFinite(power))entries.push([instance.uid,power]);
+    }
+    return Object.fromEntries(entries);
+  }
+
   function successPower(state, located, engine, baseValue = null) {
     const instance = located?.instance, side = located?.side;
     const attack = state?.pendingAttack;
@@ -4017,7 +4056,7 @@
     "controller-has-fewer-cards-in-hand-than-opponent", "controller-hand-size-at-least", "controller-hand-size-at-most",
     "opponent-rear-guards-at-most", "attack-target-grade-at-least", "controller-vanguard-name-contains",
     "controller-soul-has-card-name", "controller-vanguard-has-clan", "controller-vanguard-has-race", "source-was-boosted", "source-is-legion", "attack-target-location",
-    "event-subject-grade-equals", "event-subject-has-clan", "controller-has-dragontree-marker-on-rear-guard", "controller-vanguard-has-ability-keyword"
+    "event-subject-grade-equals", "event-subject-has-clan", "controller-has-dragontree-marker-on-rear-guard", "controller-vanguard-has-ability-keyword", "source-power-at-least"
   ]);
 
   function buildConditionContext(state, event, located, engine) {
@@ -4034,6 +4073,7 @@
     const targetDefinition = target && !target.ambiguous ? target.instance : null;
     const eventSubjectLocation = event.subjectCardInstanceId ? engine.locateCardInstance(state, event.subjectCardInstanceId) : null;
     const eventSubject = eventSubjectLocation && !eventSubjectLocation.ambiguous ? eventSubjectLocation.instance : null;
+    const eventSourcePower = event.sourcePowerByCardInstanceId?.[located.instance.uid];
     const faceUpGUnits = (controller.gZone || []).filter(card => card?.faceUp === true).length + (vanguard?.isGUnit === true ? 1 : 0);
     const center = controller.rear?.[3];
     const backRow = controller.rear?.slice(2) || [];
@@ -4073,6 +4113,7 @@
       isControllerTurn: state.side === controllerSide,
       isOpponentTurn: state.side !== controllerSide,
       sourceFaceUp: located.instance.faceUp !== false,
+      eventSourcePower: Number.isFinite(Number(eventSourcePower)) ? Number(eventSourcePower) : undefined,
       sourceEverLegioned: located.instance.everLegioned === true,
       sourceInLegion: located.zone === "vanguard" && Boolean(located.instance.legionMate || located.instance.legionMateInstanceId),
       controllerDropCount: (controller.drop || []).length,
@@ -4458,6 +4499,8 @@
                 !namedBoostPowerEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (ability.definition?.source?.patternId === "auto-order-zone-placement-draw-v1" &&
                 !autoOrderZonePlacementDrawEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
+            if (ability.definition?.source?.patternId === "auto-attack-step-source-power-critical-battle-v1" &&
+                !attackStepPowerCriticalEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, engine)) continue;
             if (ability.definition?.source?.patternId === "auto-vanguard-placement-discard-draw-v1" &&
                 !vanguardPlacementDiscardDrawEventMatches(state, ability, located.instance, located, event)) continue;
             if (ability.definition?.source?.patternId === "auto-own-attack-target-grade-power-battle-v1" &&
@@ -5366,6 +5409,7 @@
       const targetZone = targetLocation.circle || targetLocation.zone;
       const powerOf = (instance, instanceSide, location) => Number(instance.power) + Number(instance.powerBoost || 0) + Number(instance.turnPowerBoost || 0) + serverContinuousPower(state, instanceSide, instance, location === "vanguard" ? "vanguard" : "rear-guard", { attackTargetZone: targetZone, attackerUid: attacker.uid, attackerZone, boosterCardInstanceId: instance.uid === booster?.uid ? booster.uid : null, boostedUnitInstanceId: instance.uid === booster?.uid ? attacker.uid : null }, engine);
       const legionMate = attackerLocation.zone === "vanguard" && attacker.legionMate?.uid && attacker.legionMateInstanceId === attacker.legionMate.uid && attacker.legionMate.legionLeaderInstanceId === attacker.uid ? attacker.legionMate : null;
+      const attackStepSourcePowerByCardInstanceId = snapshotAttackStepSourcePowers(state, side, engine);
       const attackerPlayerCount = engine.recordAttackCount(state, actorPlayerId, attacker.uid);
       attacker.rested = true;
       if (legionMate) { legionMate.rested = true; legionMate.position = "rest"; }
@@ -5428,7 +5472,8 @@
         subjectOwnerPlayerId: attacker.ownerPlayerId, subjectControllerPlayerId: attacker.controllerPlayerId,
         previousLocation: attackerZone, currentLocation: attackerZone,
         phase: "battle", timingWindow: "attack-step-start", battleId,
-        playerAttackCount: attackerPlayerCount, before: { rested: false }, after: { rested: true }
+        playerAttackCount: attackerPlayerCount, sourcePowerByCardInstanceId: attackStepSourcePowerByCardInstanceId,
+        powerIncludesContinuous: true, before: { rested: false }, after: { rested: true }
       }));
       if (boostEvent) events.push(boostEvent);
       if (boostPowerEvent) events.push(boostPowerEvent);
@@ -6192,6 +6237,11 @@
     }
     if(ability.definition?.source?.patternId==="auto-boosted-by-power-threshold-critical-battle-v1"&&
       !boostedPowerThresholdCriticalEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,engine))return reject("boosted-power-critical-context-invalid");
+    if(ability.definition?.source?.patternId==="auto-attack-step-source-power-critical-battle-v1"){
+      if(!attackStepPowerCriticalEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,engine))return reject("attack-step-power-critical-context-invalid");
+      const triggerConditions=buildConditionContext(state,triggerEvent,located,engine);
+      if(!triggerConditions||!engine.evaluateAbilityConditions(ability,triggerConditions))return reject("attack-step-power-critical-condition-no-longer-met");
+    }
     if(ability.definition?.source?.patternId==="auto-own-attack-empty-soul-power-battle-v1"){
       if(!emptySoulOwnAttackPowerEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,engine))return reject("empty-soul-own-attack-power-context-invalid");
       const currentConditions=buildConditionContext(state,triggerEvent,located,engine);
@@ -6410,6 +6460,7 @@
       triggerEvent,
       sourceBindCostPaid: false,
       sourceAbilityId: ability.id,
+      abilityPatternId: ability.definition?.source?.patternId || null,
       turnKey: `${state.turn}:${side}`,
       actorPlayerId,
       sidePlayerId: actorPlayerId,
