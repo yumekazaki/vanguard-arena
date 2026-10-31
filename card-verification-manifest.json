@@ -74297,8 +74297,80 @@
       ],
       "fullyVerified": false,
       "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2000",
+      "abilityId": "cfa-2000:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-retire-friendly-rearguard-cost-server.test.js"
+      ],
+      "testCases": [
+        "the four exact catalog abilities compile with their distinct battle effects",
+        "host and joining player pay by selecting their own exact Rear-Guard instance",
+        "Legion is checked on the source Vanguard, and the critical modifier is battle-scoped",
+        "wrong attacker, target, circle, and timing cannot make the ability eligible",
+        "empty or opponent-controlled target, duplicate selection, and unpayable resources reject atomically",
+        "declining is free, and unsupported full-text variants remain uncompiled"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2173",
+      "abilityId": "cfa-2173:1",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-retire-friendly-rearguard-cost-server.test.js"
+      ],
+      "testCases": [
+        "the four exact catalog abilities compile with their distinct battle effects",
+        "host and joining player pay by selecting their own exact Rear-Guard instance",
+        "Legion is checked on the source Vanguard, and the critical modifier is battle-scoped",
+        "wrong attacker, target, circle, and timing cannot make the ability eligible",
+        "empty or opponent-controlled target, duplicate selection, and unpayable resources reject atomically",
+        "declining is free, and unsupported full-text variants remain uncompiled"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2239",
+      "abilityId": "cfa-2239:2",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-retire-friendly-rearguard-cost-server.test.js"
+      ],
+      "testCases": [
+        "the four exact catalog abilities compile with their distinct battle effects",
+        "host and joining player pay by selecting their own exact Rear-Guard instance",
+        "Legion is checked on the source Vanguard, and the critical modifier is battle-scoped",
+        "wrong attacker, target, circle, and timing cannot make the ability eligible",
+        "empty or opponent-controlled target, duplicate selection, and unpayable resources reject atomically",
+        "declining is free, and unsupported full-text variants remain uncompiled"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-2271",
+      "abilityId": "cfa-2271:2",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-retire-friendly-rearguard-cost-server.test.js"
+      ],
+      "testCases": [
+        "the four exact catalog abilities compile with their distinct battle effects",
+        "host and joining player pay by selecting their own exact Rear-Guard instance",
+        "Legion is checked on the source Vanguard, and the critical modifier is battle-scoped",
+        "wrong attacker, target, circle, and timing cannot make the ability eligible",
+        "empty or opponent-controlled target, duplicate selection, and unpayable resources reject atomically",
+        "declining is free, and unsupported full-text variants remain uncompiled"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-10-30T12:52:19.497Z",
-  "evidenceUpdatedAt": "2026-10-31T01:31:01.104Z"
+  "evidenceUpdatedAt": "2026-10-31T01:46:53.663Z"
 }

@@ -951,7 +951,7 @@
     const abilityId = String(ability?.id || "");
     if (!cardId || !abilityId || !engine) return false;
     if ((engine.getReviewedAbilityDefinitionsForCard?.(cardId) || []).some(definition => definition?.id === abilityId)) return true;
-    return isExactPaidOwnVanguardAttackPowerAbility(ability, engine);
+    return isExactPaidOwnVanguardAttackPowerAbility(ability, engine) || isExactRetireRearGuardAttackAbility(ability);
   }
   function paidOwnVanguardAttackPowerEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
     const attack = state?.pendingAttack, side = located?.side, player = side && state.players?.[side];

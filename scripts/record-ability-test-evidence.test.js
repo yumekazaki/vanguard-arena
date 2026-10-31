@@ -46,13 +46,16 @@ test("ability-level evidence refresh cannot downgrade a fully verified card reco
   assert.equal(merged.remaining, null);
 });
 
-test("evidence recorder accepts only trusted catalog-backed definitions, including the reusable paid-attack grammar", () => {
+test("evidence recorder accepts only trusted catalog-backed definitions, including reusable attack grammars", () => {
   const root = path.resolve(__dirname, "..");
-  const ids = ["cfa-2637:0", "cfa-3079:0", "cfa-4210:0", "cfa-4216:1", "cfa-4456:0", "cfa-4752:0"];
+  const ids = ["cfa-2637:0", "cfa-3079:0", "cfa-4210:0", "cfa-4216:1", "cfa-4456:0", "cfa-4752:0", "cfa-2000:1", "cfa-2173:1", "cfa-2239:2", "cfa-2271:2"];
   const abilities = resolveTrustedAbilities(root, ids);
   assert.deepEqual([...abilities.keys()].sort(), [...ids].sort());
-  for (const ability of abilities.values()) {
-    assert.equal(ability.definition.source.patternId, "auto-own-vanguard-attack-paid-power-battle-v1");
-  }
+  for (const ability of abilities.values()) assert.ok([
+    "auto-own-vanguard-attack-paid-power-battle-v1",
+    "auto-vanguard-attack-retire-friendly-rearguard-cost-battle-modifier-v1"
+  ].includes(ability.definition.source.patternId));
+  for (const abilityId of ids.slice(0, 6)) assert.equal(abilities.get(abilityId).definition.source.patternId, "auto-own-vanguard-attack-paid-power-battle-v1");
+  for (const abilityId of ids.slice(6)) assert.equal(abilities.get(abilityId).definition.source.patternId, "auto-vanguard-attack-retire-friendly-rearguard-cost-battle-modifier-v1");
   assert.throws(() => resolveTrustedAbilities(root, ["cfa-999999:0"]), /not found in the card catalog/);
 });
