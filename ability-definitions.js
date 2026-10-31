@@ -100946,6 +100946,125 @@
       ]
     },
     {
+      "id": "cfa-13707:0",
+      "cardId": "cfa-13707",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
+      "requiredLocation": [],
+      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
+        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
+        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
+      ] },
+      "conditionsReviewed": true,
+      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13707", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
+      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+    },
+    {
+      "id": "cfa-13709:0",
+      "cardId": "cfa-13709",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
+      "requiredLocation": [],
+      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
+        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
+        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
+      ] },
+      "conditionsReviewed": true,
+      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13709", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
+      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+    },
+    {
+      "id": "cfa-13710:0",
+      "cardId": "cfa-13710",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
+      "requiredLocation": [],
+      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
+        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
+        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
+      ] },
+      "conditionsReviewed": true,
+      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13710", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
+      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+    },
+    {
+      "id": "cfa-13711:0",
+      "cardId": "cfa-13711",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
+      "requiredLocation": [],
+      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
+        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
+        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
+      ] },
+      "conditionsReviewed": true,
+      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13711", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
+      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+    },
+    {
+      "id": "cfa-13712:0",
+      "cardId": "cfa-13712",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
+      "requiredLocation": [],
+      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
+        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
+        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
+      ] },
+      "conditionsReviewed": true,
+      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13712", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
+      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+    },
+    {
+      "id": "cfa-13713:0",
+      "cardId": "cfa-13713",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
+      "requiredLocation": [],
+      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
+        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
+        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
+      ] },
+      "conditionsReviewed": true,
+      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13713", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
+      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+    },
+    {
+      "id": "cfa-13708:0",
+      "cardId": "cfa-13708",
+      "kind": "CONT",
+      "printedText": "CONT [Hand]: During your turn, when you would discard a card while riding from ride deck or choose a card from hand by your card’s ability, this card cannot be chosen or discarded.",
+      "requiredLocation": ["hand"],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "continuousRestrictions": [{ "type": "persona-shield-hand-protection", "ownTurnOnly": true, "protectRideDeckDiscard": true, "protectCardAbilityChoices": true }],
+      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13708", "patternId": "cont-persona-shield-ticket-hand-protection-v1", "review": "Exact Hand CONT on the Persona Shield ticket. During its owner's turn, it cannot be discarded for a Ride Deck ride or selected from that owner's hand by that owner's card ability." }
+    },
+    {
       "id": "cfa-1984:2",
       "cardId": "cfa-1984",
       "kind": "AUTO",

@@ -28,7 +28,20 @@
     }
     return {};
   })();
+  const PERSONA_RIDE_CARD_IDS = new Set((() => {
+    const globalIndex = globalThis.VanguardPersonaRideMetadata?.ids;
+    if (Array.isArray(globalIndex)) return globalIndex.map(String);
+    if (typeof require === "function") {
+      try { return require("./card-persona-ride-metadata.js").ids || []; } catch { /* optional in isolated reducer harnesses */ }
+    }
+    return [];
+  })());
   const REVOLDRESS_CARD_IDS = new Set(["cfa-10050","cfa-10130","cfa-13899"]);
+  const PERSONA_SHIELD_AUTO_IDS = new Set(["cfa-13707", "cfa-13709", "cfa-13710", "cfa-13711", "cfa-13712", "cfa-13713"]);
+  const PERSONA_SHIELD_AUTO_TEXT = "AUTO: When this card is placed on RC from hand other than by a unit card's ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.";
+  const PERSONA_SHIELD_CONT_TEXT = "CONT [Hand]: During your turn, when you would discard a card while riding from ride deck or choose a card from hand by your card's ability, this card cannot be chosen or discarded.";
+  const PERSONA_SHIELD_AUTO_PATTERN = "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1";
+  const PERSONA_SHIELD_CONT_PATTERN = "cont-persona-shield-ticket-hand-protection-v1";
   const DAMAGE_ZONE_CLAN_POWER_IDS = new Set(["cfa-717", "cfa-725", "cfa-732"]);
   const DAMAGE_ZONE_CLAN_POWER_TEXT = "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.";
   function reject(reason) { return { ok: false, reason }; }
@@ -1408,7 +1421,7 @@
   }
 
   const SERVER_EFFECT_OPS = new Set([
-    "draw", "modify-power", "modify-power-target", "retire-target", "rest-target", "stand-target", "protect-target", "revelation-choice", "modify-critical", "rest-source", "stand-source", "set-charging", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "g-guardian-discard-charge-choice",
+    "draw", "modify-power", "modify-power-target", "retire-target", "rest-target", "stand-target", "protect-target", "revelation-choice", "modify-critical", "rest-source", "stand-source", "set-charging", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "g-guardian-discard-charge-choice", "persona-shield-ticket",
     "counter-charge", "soul-charge", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "call-source-from-soul", "engorge", "seek-mate", "modify-defending-source-power", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-source-from-drop-rested", "unlock-target", "protect-attacked-source", "set-successful", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "place-circle-marker"
   ]);
   SERVER_EFFECT_OPS.add("call-drop-trigger-to-guardian");
@@ -1707,6 +1720,16 @@
       hash = BigInt.asUintN(64, hash * 0x100000001b3n);
     }
     return `token-quick-shield-${hash.toString(16).padStart(16, "0")}`;
+  }
+
+  function stablePersonaShieldTicketUid(matchId, actionId, eventId, sourceUid) {
+    const value = `${String(matchId || "match")}\u0000${String(actionId || "")}\u0000${String(eventId || "")}\u0000${String(sourceUid || "")}`;
+    let hash = 0xcbf29ce484222325n;
+    for (let index = 0; index < value.length; index++) {
+      hash ^= BigInt(value.charCodeAt(index));
+      hash = BigInt.asUintN(64, hash * 0x100000001b3n);
+    }
+    return `token-persona-shield-${hash.toString(16).padStart(16, "0")}`;
   }
 
   const CONDITIONAL_DISCARD_GUARDIAN_CARD_IDS = new Set([
@@ -3231,6 +3254,7 @@
   function supportsServerAbilityEffects(ability) {
     const effects = ability?.definition?.effects;
     if (!Array.isArray(effects) || !effects.length) return false;
+    if (ability?.definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN && !isExactPersonaShieldTicketAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1" && !isExactPaidOwnVanguardAttackPowerAbility(ability)) return false;
     if(effects.some(step=>step?.op==="put-top-up-to-one-filtered-in-order-zone")&&!isExactAutoRcMainPhaseRaceTopThreeMemoryAbility(ability))return false;
     if (ability?.definition?.source?.patternId === "auto-vanguard-attack-retire-friendly-rearguard-cost-battle-modifier-v1" && !isExactRetireRearGuardAttackAbility(ability)) return false;
@@ -3438,8 +3462,117 @@
       grade: trusted.grade ?? instance.grade, clan: trusted.clan ?? instance.clan, clans: trusted.clans ?? instance.clans,
       nation: trusted.nation ?? instance.nation, nations: trusted.nations ?? instance.nations, race: trusted.race ?? instance.race, races: trusted.races ?? instance.races, shield: trusted.shield ?? instance.shield,
       trigger: trusted.trigger || instance.triggerType || instance.trigger || null, hasAutoActCont: trusted.hasAutoActCont,
-      hasRevolDress: REVOLDRESS_CARD_IDS.has(String(instance.cardId || ""))
+      hasRevolDress: REVOLDRESS_CARD_IDS.has(String(instance.cardId || "")),
+      personaRide: trusted.personaRide === true || PERSONA_RIDE_CARD_IDS.has(String(instance.cardId || ""))
     };
+  }
+
+  function normalizedPersonaShieldText(value) {
+    return String(value || "").replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, " ").trim();
+  }
+
+  function exactPersonaShieldBranches() {
+    return [
+      { status: "recognized-trigger", eventType: "card.placed", subject: "event-subject", circles: ["rear-guard"], sourceLocation: "hand", destinationLocation: "rear-guard" },
+      { status: "recognized-trigger", eventType: "card.discarded", subject: "event-subject", sourceLocation: "hand", destinationLocation: "drop", requiredPhase: "ride", requiredTimingWindow: "ride-deck-cost", discardReason: "ride-deck-cost" }
+    ];
+  }
+
+  function isExactPersonaShieldTicketAbility(ability) {
+    const definition = ability?.definition, cardId = String(ability?.cardId || "");
+    const costs = JSON.stringify(definition?.costs || []), branches = exactPersonaShieldBranches();
+    return PERSONA_SHIELD_AUTO_IDS.has(cardId) && ability?.id === `${cardId}:0` && ability?.kind === "AUTO" &&
+      definition?.id === ability.id && definition?.kind === "AUTO" && String(definition.cardId) === cardId &&
+      definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN && normalizedPersonaShieldText(definition?.printedText) === PERSONA_SHIELD_AUTO_TEXT &&
+      JSON.stringify(definition.requiredLocation || []) === "[]" && JSON.stringify(definition.trigger?.circles || []) === "[]" && JSON.stringify(definition.trigger?.anyOf || []) === JSON.stringify(branches) &&
+      definition.trigger?.status === "recognized-trigger" && JSON.stringify(definition.effects || []) === JSON.stringify([{ op: "persona-shield-ticket", target: "controller" }]) &&
+      definition.optional === false && definition.costsReviewed === true && definition.conditionsReviewed === true && definition.choicesReviewed === true &&
+      costs === JSON.stringify([{ type: "soul-blast", count: 1 }]) &&
+      JSON.stringify(ability.trigger?.circles || []) === "[]" && JSON.stringify(ability.trigger?.anyOf || []) === JSON.stringify(branches) && ability.trigger?.status === "recognized-trigger" &&
+      (!ability.costs?.length || JSON.stringify(ability.costs) === costs);
+  }
+
+  function isExactPersonaShieldHandProtectionDefinition(definition) {
+    return definition?.id === "cfa-13708:0" && String(definition?.cardId) === "cfa-13708" && definition?.kind === "CONT" &&
+      definition?.source?.patternId === PERSONA_SHIELD_CONT_PATTERN && normalizedPersonaShieldText(definition.printedText) === PERSONA_SHIELD_CONT_TEXT &&
+      JSON.stringify(definition.requiredLocation || []) === JSON.stringify(["hand"]) &&
+      JSON.stringify(definition.continuousRestrictions || []) === JSON.stringify([{ type: "persona-shield-hand-protection", ownTurnOnly: true, protectRideDeckDiscard: true, protectCardAbilityChoices: true }]) &&
+      !(definition.effects || []).length;
+  }
+
+  function personaShieldHandProtectionReviewed(engine) {
+    return Boolean(engine?.getReviewedAbilityDefinitionsForCard?.("cfa-13708")?.some(isExactPersonaShieldHandProtectionDefinition));
+  }
+
+  function isProtectedPersonaShieldTicket(state, card, actorPlayerId, engine) {
+    if (!card?.uid || String(card.cardId) !== "cfa-13708" ||
+        card.ownerPlayerId !== actorPlayerId || card.controllerPlayerId !== actorPlayerId ||
+        state?.players?.[state.side]?.playerId !== actorPlayerId || !personaShieldHandProtectionReviewed(engine)) return false;
+    const owner = Object.values(state.players || {}).find(player => player?.playerId === actorPlayerId);
+    return Boolean(owner?.hand?.some(candidate => candidate?.uid === card.uid));
+  }
+
+  function selectionContainsProtectedPersonaShieldTicket(state, selection, actorPlayerId, engine) {
+    if (state?.players?.[state.side]?.playerId !== actorPlayerId || !selection || typeof selection !== "object") return false;
+    const actor = Object.values(state.players || {}).find(player => player?.playerId === actorPlayerId);
+    const protectedUids = new Set((actor?.hand || []).filter(card => isProtectedPersonaShieldTicket(state, card, actorPlayerId, engine)).map(card => card.uid));
+    if (!protectedUids.size) return false;
+    const values = [], stack = [selection], seen = new WeakSet();
+    while (stack.length) {
+      const value = stack.pop();
+      if (typeof value === "string") values.push(value);
+      else if (value && typeof value === "object" && !seen.has(value)) {
+        seen.add(value);
+        for (const child of Object.values(value)) stack.push(child);
+      }
+    }
+    return values.some(value => protectedUids.has(value));
+  }
+
+  function stateHasInstanceUid(state, uid) {
+    if (!state || typeof uid !== "string") return false;
+    const seen = new WeakSet(), stack = [state];
+    while (stack.length) {
+      const value = stack.pop();
+      if (!value || typeof value !== "object" || seen.has(value)) continue;
+      seen.add(value);
+      if (value.uid === uid) return true;
+      for (const child of Object.values(value)) if (child && typeof child === "object") stack.push(child);
+    }
+    return false;
+  }
+
+  function isUnitCardDefinition(definition) {
+    return /\b(?:unit|trigger)\b/i.test(String(definition?.type || ""));
+  }
+
+  function personaShieldAutoEventMatches(state, ability, source, located, event, actorPlayerId, side, engine) {
+    if (!isExactPersonaShieldTicketAbility(ability) || !source?.uid || !event?.eventId || !located || located.ambiguous ||
+        located.instance?.uid !== source.uid || located.controllerPlayerId !== actorPlayerId || source.ownerPlayerId !== actorPlayerId ||
+        source.controllerPlayerId !== actorPlayerId || event.subjectCardInstanceId !== source.uid || event.cardInstanceId !== source.uid ||
+        event.subjectOwnerPlayerId !== actorPlayerId || event.subjectControllerPlayerId !== actorPlayerId) return false;
+    const player = state.players?.[side];
+    if (player?.playerId !== actorPlayerId) return false;
+    if (event.type === "card.placed") {
+      const circle = String(event.currentLocation || event.circle || "");
+      if (event.previousLocation !== "hand" || !/^(?:rear-(?:left|right|back-left|back-center|back-right)|accel-\d+)$/.test(circle) ||
+          located.zone !== "rear-guard" || located.side !== side || !player.rear?.some(card => card?.uid === source.uid)) return false;
+      if (event.abilitySourceInstanceId) {
+        const abilitySource = engine.locateCardInstance(state, event.abilitySourceInstanceId);
+        return Boolean(event.timingWindow?.startsWith("effect-") && event.abilitySourceInstanceId === event.sourceCardInstanceId &&
+          abilitySource && !abilitySource.ambiguous && abilitySource.instance?.uid === event.abilitySourceInstanceId &&
+          abilitySource.controllerPlayerId === event.abilitySourceControllerPlayerId && event.actingPlayerId === event.abilitySourceControllerPlayerId &&
+          !isUnitCardDefinition(serverCardDefinition(abilitySource.instance)));
+      }
+      return event.sourceCardInstanceId === source.uid && event.sourceOwnerPlayerId === actorPlayerId && event.sourceControllerPlayerId === actorPlayerId &&
+        event.actingPlayerId === actorPlayerId && event.turnPlayerId === actorPlayerId && event.phase === "main" && event.timingWindow === "normal-call";
+    }
+    if (event.type !== "card.discarded") return false;
+    return Number(state.phase) === 2 && state.side === side && state.players?.[state.side]?.playerId === actorPlayerId &&
+      event.sourceCardInstanceId === source.uid && event.sourceOwnerPlayerId === actorPlayerId && event.sourceControllerPlayerId === actorPlayerId &&
+      event.previousLocation === "hand" && event.currentLocation === "drop" && event.phase === "ride" && event.timingWindow === "ride-deck-cost" &&
+      event.discardReason === "ride-deck-cost" && event.actingPlayerId === actorPlayerId && event.turnPlayerId === actorPlayerId &&
+      located.zone === "drop" && located.side === side && player.drop?.some(card => card?.uid === source.uid);
   }
 
   function reviewedAbilityKeywords(instance, engine) {
@@ -3852,6 +3985,11 @@
 
   function automaticAbilityCostIsPayable(state, ability, located, controller, engine) {
     if (!Array.isArray(ability?.costs) || ability.costs.length === 0) return true;
+    if (isExactPersonaShieldTicketAbility(ability)) {
+      const vanguard = controller?.vanguard;
+      const hasPersonaRideVanguard = Boolean(vanguard && vanguard.ownerPlayerId === controller?.playerId && vanguard.controllerPlayerId === controller?.playerId && serverCardDefinition(vanguard)?.personaRide === true);
+      if (!hasPersonaRideVanguard && !(controller?.soul || []).length) return true;
+    }
     // Optionality does not make its costs payable. Keep existing reviewed
     // prompt flows intact while enforcing filtered discard availability for
     // the exact clan-discard attack family.
@@ -3939,7 +4077,7 @@
             const parsed = engine.parseCardAbilities({ id: String(instance.cardId), text: definition.printedText }).find(item => item.kind === "AUTO");
             if (!parsed) continue;
             const familyCandidate = { ...parsed, id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsed.requiredLocation, trigger: definition.trigger || parsed.trigger, conditions: definition.conditions || parsed.conditions, costs: definition.costs || parsed.costs, canDecline: definition.optional === true || parsed.canDecline };
-            const ability = { ...parsed, ...(isExactBoostSetOrderCounterChargeAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactHollowPlacementAbility(familyCandidate) || isExactClanPlacementDamageReturnAbility(familyCandidate) || isExactOtherHandDiscardReturnAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactAttackedUnboostedProtectAbility(familyCandidate) ? { canDecline: false } : {}), id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsed.requiredLocation, requiredCircle: definition.requiredCircle || parsed.requiredCircle || [], trigger: definition.trigger ? { ...parsed.trigger, ...definition.trigger, circles: definition.trigger.circles || parsed.trigger?.circles || [] } : parsed.trigger, conditions: definition.conditions || parsed.conditions, conditionStatus: definition.conditions?.length ? "modeled" : definition.conditionsReviewed === true ? "no-explicit-condition-detected" : parsed.conditionStatus, costs: definition.costs || parsed.costs, costAlternatives: definition.costAlternatives || parsed.costAlternatives, costStatus: definition.costAlternatives?.length ? "supported-cost" : definition.costs?.length ? "supported-cost" : definition.costsReviewed === true ? "no-cost" : definition.costs ? "supported-cost" : parsed.costStatus, choiceStatus: definition.choicesReviewed === true ? "modeled" : parsed.choiceStatus, effects: definition.effects, once: definition.once === true || parsed.once, usageRestriction: resolveUsageRestriction(definition, parsed) };
+            const ability = { ...parsed, ...(isExactBoostSetOrderCounterChargeAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactHollowPlacementAbility(familyCandidate) || isExactClanPlacementDamageReturnAbility(familyCandidate) || isExactOtherHandDiscardReturnAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactAttackedUnboostedProtectAbility(familyCandidate) || isExactPersonaShieldTicketAbility(familyCandidate) ? { canDecline: false } : {}), id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsed.requiredLocation, requiredCircle: definition.requiredCircle || parsed.requiredCircle || [], trigger: definition.trigger ? { ...parsed.trigger, ...definition.trigger, circles: definition.trigger.circles || parsed.trigger?.circles || [] } : parsed.trigger, conditions: definition.conditions || parsed.conditions, conditionStatus: definition.conditions?.length ? "modeled" : definition.conditionsReviewed === true ? "no-explicit-condition-detected" : parsed.conditionStatus, costs: definition.costs || parsed.costs, costAlternatives: definition.costAlternatives || parsed.costAlternatives, costStatus: definition.costAlternatives?.length ? "supported-cost" : definition.costs?.length ? "supported-cost" : definition.costsReviewed === true ? "no-cost" : definition.costs ? "supported-cost" : parsed.costStatus, choiceStatus: definition.choicesReviewed === true ? "modeled" : parsed.choiceStatus, effects: definition.effects, once: definition.once === true || parsed.once, usageRestriction: resolveUsageRestriction(definition, parsed) };
             if (event.attackHitOverride === true && (ability.trigger?.eventType !== "attack.hit" || ability.trigger?.subject !== "source" ||
                 instance.uid !== event.attackingUnitInstanceId || located.zone !== "vanguard" || !hasActiveMissedAttackHitCONT(state, instance, located, engine))) continue;
             if (definition.source?.patternId === "auto-soul-blast-named-boost-power-battle-v1" && String(definition.cardId) === "cfa-513") {
@@ -4074,6 +4212,8 @@
             const eventForMatch = authoritativeSoulBlastBoostEvent(state, ability, event, engine);
             const eventMatch = engine.eventMatchesAbilityTrigger(ability, eventName, eventForMatch, instance.uid, triggerSourceZone, subjectZone, located.controllerPlayerId);
             if (!eventMatch) continue;
+            if (ability.definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN &&
+                !personaShieldAutoEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId, side, engine)) continue;
             if (ability.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1" &&
                 !paidOwnVanguardAttackPowerEventMatches(state, ability, located.instance, located, eventForMatch, located.controllerPlayerId, engine)) continue;
             const quintupletMemoryAuto=ability.definition?.source?.patternId==="auto-rc-main-phase-race-top-three-memory-v1";
@@ -5294,6 +5434,7 @@
       if (discardIndex < 0) return reject("ride-cost-not-in-hand");
       const rider = player.rideDeck[riderIndex], discard = player.hand[discardIndex], previousVanguard = player.vanguard;
       if (rider.ownerPlayerId !== actorPlayerId || rider.controllerPlayerId !== actorPlayerId || discard.ownerPlayerId !== actorPlayerId || discard.controllerPlayerId !== actorPlayerId) return reject("ride-deck-card-not-owned-and-controlled");
+      if (isProtectedPersonaShieldTicket(state, discard, actorPlayerId, engine)) return reject("persona-shield-ticket-protected-from-ride-deck-cost");
       const riderGrade = Number(rider.grade), vanguardGrade = Number(previousVanguard.grade);
       if (rider.unitCard !== true || rider.gDeckCard === true || rider.cannotBeRidden === true) return reject("card-cannot-be-ridden");
       if (!Number.isInteger(riderGrade) || !Number.isInteger(vanguardGrade) || riderGrade < vanguardGrade || riderGrade > vanguardGrade + 1) return reject("illegal-ride-grade");
@@ -5595,6 +5736,7 @@
     const parsedAbility = parsed.find(item => item.kind === "ACT");
     if (!parsedAbility) return reject("invalid-reviewed-ability-text");
     const ability = { ...parsedAbility, id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsedAbility.requiredLocation, requiredCircle: definition.requiredCircle || parsedAbility.requiredCircle || [], conditions: definition.conditions || parsedAbility.conditions, conditionStatus: definition.conditionsReviewed === true || definition.conditions?.length ? "modeled" : parsedAbility.conditionStatus, costs: definition.costs || parsedAbility.costs, costAlternatives: definition.costAlternatives || parsedAbility.costAlternatives, costStatus: definition.costAlternatives?.length ? "supported-cost" : definition.costs ? "supported-cost" : parsedAbility.costStatus, choiceStatus: definition.choicesReviewed === true ? "modeled" : parsedAbility.choiceStatus, effects: definition.effects, once: definition.once === true || parsedAbility.once, usageRestriction: resolveUsageRestriction(definition, parsedAbility) };
+    if (selectionContainsProtectedPersonaShieldTicket(state, payload.selection || {}, actorPlayerId, engine)) return reject("persona-shield-ticket-protected-from-ability-choice");
     if (!supportsServerAbilityEffects(ability)) return reject("unsupported-server-ability");
     if (ability.conditionStatus === "needs-review" || ability.costStatus === "needs-review" || ability.choiceStatus === "needs-review" || ability.conditions?.some(condition => !SUPPORTED_CONDITION_TYPES.has(condition?.type))) return reject("unmodeled-activation-requirement");
     const sourceZone = located.circle || located.zone;
@@ -5703,16 +5845,30 @@
     if (!side) return reject("actor-not-seated");
     const actorPlayerId = state.players[side].playerId;
     if (Array.isArray(state.processedActionIds) && state.processedActionIds.includes(command.actionId)) return reject("duplicate-action");
-    const pending = state.pendingAbility;
+    let pending = state.pendingAbility;
     if (state.pendingTrigger) return reject("trigger-resolution-pending");
     const selection = command.payload?.selection;
+    if (selectionContainsProtectedPersonaShieldTicket(state, selection || {}, actorPlayerId, engine)) return reject("persona-shield-ticket-protected-from-ability-choice");
+    let validationSelection = selection;
+    if (isExactPersonaShieldTicketAbility(pending?.ability) && selection && typeof selection === "object" && !Array.isArray(selection)) {
+      const player = state.players?.[side], vanguard = player?.vanguard;
+      const vanguardHasPersonaRide = Boolean(vanguard && vanguard.ownerPlayerId === actorPlayerId && vanguard.controllerPlayerId === actorPlayerId && serverCardDefinition(vanguard)?.personaRide === true);
+      const requiresCost = selection.effectUid != null || vanguardHasPersonaRide;
+      if (requiresCost && selection.payCost === false) return reject("persona-shield-cost-cannot-be-declined");
+      const dynamicCosts = requiresCost ? pending.ability.definition.costs : [];
+      pending = { ...pending, ability: { ...pending.ability, costs: dynamicCosts } };
+      if (!requiresCost && selection.payCost === false) {
+        validationSelection = { ...selection };
+        delete validationSelection.payCost;
+      }
+    }
     const request = {
       actionId: command.actionId,
       matchId: state.matchId,
       expectedStateVersion: command.expectedStateVersion,
       actorPlayerId,
       accept: command.payload?.accept,
-      selection
+      selection: validationSelection
     };
     const legal = engine.validateAbilityDecision(state, request, actorPlayerId, pending, {hasEnergyGenerator:(state.players?.[side]?.crests||[]).some(card=>/energy generator/i.test(String(serverCardDefinition(card)?.name||card?.crestName||card?.cardName||"")))});
     if (!legal.ok) return reject(legal.reason);
@@ -5742,6 +5898,8 @@
       : pending.field || sourceZone;
     const authoritativeTriggerEvent = authoritativeSoulBlastBoostEvent(state, ability, triggerEvent, engine);
     if (!engine.eventMatchesAbilityTrigger(ability, triggerContext.event, authoritativeTriggerEvent, located.instance.uid, eventSourceZone, triggerContext.subjectZone || triggerEvent.currentLocation, actorPlayerId)) return reject("trigger-event-mismatch");
+    if (ability.definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN &&
+        !personaShieldAutoEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, side, engine)) return reject("persona-shield-trigger-context-invalid");
     if (ability.definition?.source?.patternId === "auto-vanguard-attack-retire-friendly-rearguard-cost-battle-modifier-v1" &&
         !retireRearGuardAttackEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, engine)) return reject("retire-rear-guard-attack-event-invalid");
     if (ability.definition?.source?.patternId === "auto-own-vanguard-attack-paid-power-battle-v1") {
@@ -6070,6 +6228,11 @@
     if (createQuickShield) {
       if (!Array.isArray(player.hand) || !actorPlayerId || engine.locateCardInstance(state, quickShieldUid)) return reject("quick-shield-token-state-invalid");
     }
+    const personaShieldAbility = isExactPersonaShieldTicketAbility(ability);
+    const personaShieldTicketUid = personaShieldAbility
+      ? stablePersonaShieldTicketUid(state.matchId, command.actionId, triggerContext.eventId, located.instance.uid)
+      : null;
+    if (personaShieldAbility && (!Array.isArray(player.hand) || stateHasInstanceUid(state, personaShieldTicketUid))) return reject("persona-shield-ticket-state-invalid");
     const costSelections = selection.costSelections || {};
     const context = {
       source: located.instance,
@@ -6114,6 +6277,13 @@
       shuffleDeck: secureShuffle,
       shieldValueForInstance: card => serverGuardianShieldValue(state, side, card, engine),
       revelationTopUid: selection.revelationTopUid,
+      personaShieldTicketUid,
+      createPersonaShieldTicket: (uid, ownerPlayerId) => {
+        if (!personaShieldAbility || uid !== personaShieldTicketUid || ownerPlayerId !== actorPlayerId) return null;
+        const ticket = engine.createCardInstance("cfa-13708", ownerPlayerId, uid, { zone: "hand", cardName: "Persona Shield", type: "Blitz Order", grade: 0, shield: 0, unitCard: false });
+        if (ticket) ticket.personaShieldTicket = true;
+        return ticket;
+      },
       ...selectedEffectTarget.context,
       sourceControllerPlayerId: actorPlayerId,
       successTriggerValidated,
@@ -6149,6 +6319,7 @@
           costAlternativeIndex: selection.costAlternativeIndex
         });
         if (paid.ok && paymentContext.sourceBindCostPaid) draft.sourceBindCostPaid = true;
+        if (paid.ok && personaShieldAbility) draft.personaShieldTicketCostPaid = true;
         return paid.ok;
       });
       if (!result.ok) return reject(result.reason || "effect-resolution-rejected");

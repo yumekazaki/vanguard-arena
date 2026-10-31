@@ -89,7 +89,7 @@
   function createHarmonyAssociation(state,firstUid,secondUid,turnKey,allowMovedSinceTrigger=false){if(!state||!firstUid||!secondUid||firstUid===secondUid||!turnKey)return false;const first=locateCardInstance(state,firstUid),second=locateCardInstance(state,secondUid);if(!first||!second||first.ambiguous||second.ambiguous||!["vanguard","rear-guard"].includes(first.zone)||!["vanguard","rear-guard"].includes(second.zone)||first.side!==second.side||first.controllerPlayerId!==second.controllerPlayerId||!allowMovedSinceTrigger&&(!harmonyColumn(first.circle||first.zone)||harmonyColumn(first.circle||first.zone)!==harmonyColumn(second.circle||second.zone)))return false;const active=(state.harmonyAssociations||[]).filter(pair=>pair?.turnKey===turnKey&&harmonyFieldPair(state,pair));state.harmonyAssociations=active;if(active.some(pair=>pair.firstUid===firstUid&&pair.secondUid===secondUid||pair.firstUid===secondUid&&pair.secondUid===firstUid))return true;state.harmonyAssociations.push({firstUid,secondUid,controllerPlayerId:first.controllerPlayerId,turnKey});return true}
   function isCardInHarmony(state,uid,turnKey){if(!state||!uid||!turnKey)return false;let found=false;for(const pair of state.harmonyAssociations||[]){if(pair?.turnKey!==turnKey||!harmonyFieldPair(state,pair))continue;if(pair.firstUid===uid||pair.secondUid===uid)found=true}return found}
   function expireHarmonyAssociations(state,endingTurnKey){if(!Array.isArray(state?.harmonyAssociations))return 0;const before=state.harmonyAssociations.length;state.harmonyAssociations=state.harmonyAssociations.filter(pair=>pair?.turnKey!==endingTurnKey&&harmonyFieldPair(state,pair));return before-state.harmonyAssociations.length}
-  const effectOperations = new Set(["draw", "modify-power", "modify-power-target", "modify-critical", "grant-temporary-boost", "continuous-power", "continuous-power-adjustment", "continuous-power-per-soul-card", "continuous-power-per-clan-rearguard", "continuous-power-per-dragontree-marker", "continuous-power-per-controller-rearguard", "continuous-power-per-named-face-up-damage-card", "continuous-critical", "continuous-shield", "continuous-grade", "modify-drive", "modify-drive-target", "counter-charge", "conditional-counter-charge", "soul-charge", "soul-charge-and-return-source-to-deck", "revelation-choice", "rest-target", "engorge", "g-guardian-discard-charge-choice", "g-guardian-grade-three-replacement-choice", "set-blazing", "set-hollowed", "set-charging", "set-successful", "deck-to-damage", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "reorder-deck-card", "retire-target", "stand-target", "unlock-target", "protect-target", "protect-attacked-source", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "modify-defending-source-power", "rest-source", "stand-source", "create-token", "discard-from-hand", "draw-then-discard", "search-top-grade-three-to-hand-then-discard", "search-top-up-to-one-grade-to-hand", "search-top-up-to-one-filtered-to-hand", "put-top-up-to-one-filtered-in-order-zone", "search-deck-named-grade-three-then-discard", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "call-checked-card-locked", "call-source-from-drop-rested", "call-source-from-soul", "associate-harmony-units", "modify-shield-source", "seek-mate", "place-circle-marker"]);
+  const effectOperations = new Set(["draw", "modify-power", "modify-power-target", "modify-critical", "grant-temporary-boost", "continuous-power", "continuous-power-adjustment", "continuous-power-per-soul-card", "continuous-power-per-clan-rearguard", "continuous-power-per-dragontree-marker", "continuous-power-per-controller-rearguard", "continuous-power-per-named-face-up-damage-card", "continuous-critical", "continuous-shield", "continuous-grade", "modify-drive", "modify-drive-target", "counter-charge", "conditional-counter-charge", "soul-charge", "soul-charge-and-return-source-to-deck", "revelation-choice", "rest-target", "engorge", "g-guardian-discard-charge-choice", "g-guardian-grade-three-replacement-choice", "set-blazing", "set-hollowed", "set-charging", "set-successful", "deck-to-damage", "schedule-damage-return-at-turn-end", "schedule-source-return-to-deck-at-turn-end", "return-chosen-damage-to-deck", "return-trigger-discard-to-hand", "reorder-deck-card", "retire-target", "stand-target", "unlock-target", "protect-target", "protect-attacked-source", "move-source-to-soul", "move-filtered-hand-card-to-soul", "move-source-to-hand", "modify-defending-source-power", "rest-source", "stand-source", "create-token", "discard-from-hand", "draw-then-discard", "persona-shield-ticket", "search-top-grade-three-to-hand-then-discard", "search-top-up-to-one-grade-to-hand", "search-top-up-to-one-filtered-to-hand", "put-top-up-to-one-filtered-in-order-zone", "search-deck-named-grade-three-then-discard", "search-deck-same-name-to-hand", "search-deck-or-drop-named-to-hand", "search-deck-named-call-to-rearguard", "ride-top-five-named-card", "ride-revoldress-source-from-soul-rested", "call-top-to-guardian", "call-filtered-top-to-guardian-drop", "call-checked-card-locked", "call-source-from-drop-rested", "call-source-from-soul", "associate-harmony-units", "modify-shield-source", "seek-mate", "place-circle-marker"]);
   effectOperations.add("call-drop-trigger-to-guardian");
   effectOperations.add("put-chosen-normal-drop-to-deck-bottom");
   const positiveInteger = value => Number.isInteger(Number(value)) && Number(value) > 0;
@@ -499,6 +499,46 @@
       validate(step, context) { return step.target === "source"&&context.sourceInPlay===true&&Boolean(context.source); },
       apply(step, context) { if(!context.source.rested)return true;context.source.rested=false;context.emitEvent?.({type:"unit.stood",cardInstanceId:context.source.uid,controllerSide:context.source.controllerPlayerId||context.player?.playerId||context.side,zone:context.sourceZone});return true; }
     }),
+    "persona-shield-ticket": Object.freeze({
+      validate(step, context) {
+        const player = context?.player, actorPlayerId = context?.actorPlayerId;
+        if (step.target !== "controller" || !actorPlayerId || player?.playerId !== actorPlayerId ||
+            !Array.isArray(player.rideDeck) || !Array.isArray(player.hand) || !Array.isArray(player.soul) ||
+            typeof context.cardDefinitionForInstance !== "function" || typeof context.personaShieldTicketUid !== "string" ||
+            typeof context.createPersonaShieldTicket !== "function") return false;
+        if (context.effectUid == null) return true;
+        const selected = player.rideDeck.find(card => card?.uid === context.effectUid);
+        const definition = selected && context.cardDefinitionForInstance(selected);
+        return Boolean(selected && selected.ownerPlayerId === actorPlayerId && selected.controllerPlayerId === actorPlayerId && definition?.personaRide === true);
+      },
+      apply(_step, context) {
+        const player = context.player, actorPlayerId = context.actorPlayerId;
+        const selected = context.effectUid == null ? null : player.rideDeck.find(card => card?.uid === context.effectUid);
+        const vanguardPersonaRide = player.vanguard?.ownerPlayerId === actorPlayerId && player.vanguard?.controllerPlayerId === actorPlayerId && context.cardDefinitionForInstance(player.vanguard)?.personaRide === true;
+        if (selected) {
+          const definition = context.cardDefinitionForInstance(selected);
+          context.emitEvent?.({
+            type: "card.revealed", cardInstanceId: selected.uid, controllerSide: context.side,
+            subjectOwnerPlayerId: selected.ownerPlayerId, subjectControllerPlayerId: selected.controllerPlayerId,
+            previousLocation: "ride-deck", currentLocation: "ride-deck", reason: "persona-shield",
+            revealedCardId: String(selected.cardId || ""), revealedCardName: definition?.name || selected.cardName || selected.name || null
+          });
+        }
+        if (!selected && !vanguardPersonaRide) return { ticketCreated: false };
+        if (context.personaShieldTicketCostPaid !== true) return false;
+        if (player.hand.some(card => card?.uid === context.personaShieldTicketUid)) return false;
+        const ticket = context.createPersonaShieldTicket(context.personaShieldTicketUid, actorPlayerId);
+        if (!ticket || ticket.uid !== context.personaShieldTicketUid || String(ticket.cardId) !== "cfa-13708" ||
+            ticket.ownerPlayerId !== actorPlayerId || ticket.controllerPlayerId !== actorPlayerId || ticket.personaShieldTicket !== true) return false;
+        player.hand.push(ticket);
+        context.emitEvent?.({
+          type: "card.created", cardInstanceId: ticket.uid, controllerPlayerId: actorPlayerId,
+          subjectOwnerPlayerId: actorPlayerId, subjectControllerPlayerId: actorPlayerId,
+          previousLocation: "outside", currentLocation: "hand", reason: "persona-shield-ticket"
+        });
+        return { ticketCreated: true, cardInstanceId: ticket.uid };
+      }
+    }),
     "draw-then-discard": Object.freeze({
       validate(step,context){const hand=context.player?.hand,deck=context.player?.deck,drop=context.player?.drop;if(step.target!=="controller"||step.drawCount!==1||step.discardCount!==1||!Array.isArray(hand)||!Array.isArray(deck)||!Array.isArray(drop)||!deck.length||typeof context.effectDiscardUid!=="string")return false;return hand.some(card=>card?.uid===context.effectDiscardUid)||deck.at(-1)?.uid===context.effectDiscardUid;},
       apply(_step,context){const drawn=context.player.deck.pop();if(!drawn)return false;context.player.hand.push(drawn);context.emitEvent?.({type:"card.drawn",cardInstanceId:drawn.uid});const index=context.player.hand.findIndex(card=>card?.uid===context.effectDiscardUid);if(index<0)return false;const [discarded]=context.player.hand.splice(index,1);context.player.drop.push(discarded);context.emitEvent?.({type:"card.discarded",cardInstanceId:discarded.uid,controllerSide:context.side,previousLocation:"hand",currentLocation:"drop"});return{drawn:drawn.uid,discarded:discarded.uid};}
@@ -728,6 +768,7 @@
         if (effect.op === "g-guardian-grade-three-replacement-choice") return effect.target !== "controller" || !Array.isArray(effect.choices) || effect.choices.length !== 2 || JSON.stringify(effect.choices.map(choice=>choice.id))!==JSON.stringify(["vanguard-power","opponent-critical"]) || effect.choices[0].amount!==10000 || JSON.stringify(effect.choices[0].targetFilter)!==JSON.stringify({controller:"source-controller",cardType:"unit",zone:"vanguard"}) || effect.choices[1].amount!==-2 || JSON.stringify(effect.choices[1].targetFilter)!==JSON.stringify({controller:"opponent",cardType:"unit"});
         if (effect.op === "place-circle-marker") return effect.target !== "chosen-controller-circle" || !(effect.markerType === "Treasures" && JSON.stringify(effect.circleTypes) === JSON.stringify(["vanguard","rear-guard"]) || effect.markerType === "Dragontree" && JSON.stringify(effect.circleTypes) === JSON.stringify(["rear-guard"]));
         if (effect.op === "protect-attacked-source") return effect.target !== "source" || effect.duration !== "battle";
+        if (effect.op === "persona-shield-ticket") return effect.target !== "controller";
         if (effect.op === "move-source-to-soul") return effect.target !== "source" || effect.from !== "drop";
         if (effect.op === "modify-defending-source-power") return effect.target !== "source" || !positiveInteger(effect.amount) || effect.duration !== "battle";
         if (effect.op === "modify-power-target") return !["chosen","boosted-unit"].includes(effect.target) || !positiveInteger(effect.amount) || !["turn","battle"].includes(effect.duration) || !effect.targetFilter || typeof effect.targetFilter !== "object" || effect.optionalTarget != null && (typeof effect.optionalTarget !== "boolean" || effect.target !== "chosen" || effect.duration !== "turn");
@@ -2983,7 +3024,34 @@
     const clan=match[1].trim();
     return{id:abilityId,cardId,kind,printedText,requiredLocation:["vanguard","rear-guard"],trigger:{status:"recognized-trigger",eventType:"card.placed",subject:"source",circles:["vanguard","rear-guard"]},conditions:[{type:"controller-vanguard-has-clan",value:clan}],costs:[{type:"counter-blast",count:1}],optional:true,conditionsReviewed:true,choicesReviewed:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-vc-rc-clan-placement-delayed-damage-return-v1",review:"Exact clan-gated VC/RC source-placement template. The exact source instance must be placed on VC or RC while its controller has a Vanguard of the printed clan. It offers Counter Blast 1; after payment it puts the deck top into Damage (without a damage check), then at that turn's End Phase start the controller chooses any Damage card, returns it to Deck, and shuffles. The delayed schedule is created only if the AUTO cost is accepted."},effects:[{op:"deck-to-damage",target:"controller",count:1},{op:"schedule-damage-return-at-turn-end",target:"controller",due:"end-phase-start"}]};
   }
+  const PERSONA_SHIELD_AUTO_IDS = new Set(["cfa-13707", "cfa-13709", "cfa-13710", "cfa-13711", "cfa-13712", "cfa-13713"]);
+  const PERSONA_SHIELD_AUTO_TEXT = "AUTO: When this card is placed on RC from hand other than by a unit card's ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.";
+  const PERSONA_SHIELD_CONT_TEXT = "CONT [Hand]: During your turn, when you would discard a card while riding from ride deck or choose a card from hand by your card's ability, this card cannot be chosen or discarded.";
+  function compilePersonaShieldTicketDefinition(cardId, abilityId, kind, printedText) {
+    if (kind !== "AUTO" || !PERSONA_SHIELD_AUTO_IDS.has(String(cardId)) || abilityId !== `${cardId}:0`) return null;
+    if (normalizePrintedText(printedText).replace(/[’‘]/g, "'") !== PERSONA_SHIELD_AUTO_TEXT) return null;
+    const place = { status: "recognized-trigger", eventType: "card.placed", subject: "event-subject", circles: ["rear-guard"], sourceLocation: "hand", destinationLocation: "rear-guard" };
+    const rideDiscard = { status: "recognized-trigger", eventType: "card.discarded", subject: "event-subject", sourceLocation: "hand", destinationLocation: "drop", requiredPhase: "ride", requiredTimingWindow: "ride-deck-cost", discardReason: "ride-deck-cost" };
+    return { id: abilityId, cardId: String(cardId), kind, printedText, requiredLocation: [],
+      trigger: { status: "recognized-trigger", circles: [], anyOf: [place, rideDiscard] }, conditionsReviewed: true,
+      costs: [{ type: "soul-blast", count: 1 }], costsReviewed: true, choicesReviewed: true, optional: false,
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1",
+        review: "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
+      effects: [{ op: "persona-shield-ticket", target: "controller" }] };
+  }
+  function compilePersonaShieldHandProtectionDefinition(cardId, abilityId, kind, printedText) {
+    if (String(cardId) !== "cfa-13708" || abilityId !== "cfa-13708:0" || kind !== "CONT") return null;
+    if (normalizePrintedText(printedText).replace(/[’‘]/g, "'") !== PERSONA_SHIELD_CONT_TEXT) return null;
+    return { id: abilityId, cardId: String(cardId), kind, printedText, requiredLocation: ["hand"], conditionsReviewed: true,
+      choicesReviewed: true, continuousRestrictions: [{ type: "persona-shield-hand-protection", ownTurnOnly: true, protectRideDeckDiscard: true, protectCardAbilityChoices: true }],
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "cont-persona-shield-ticket-hand-protection-v1",
+        review: "Exact Hand CONT on the Persona Shield ticket. During its owner's turn, it cannot be discarded for a Ride Deck ride or selected from that owner's hand by that owner's card ability." } };
+  }
   function compileAbilityDefinition(cardId, abilityId, kind, printedText, cardContext) {
+    const personaShieldTicket = compilePersonaShieldTicketDefinition(cardId, abilityId, kind, printedText);
+    if (personaShieldTicket) return personaShieldTicket;
+    const personaShieldProtection = compilePersonaShieldHandProtectionDefinition(cardId, abilityId, kind, printedText);
+    if (personaShieldProtection) return personaShieldProtection;
     const treasureHitIds = new Set(["cfa-7622", "cfa-7623", "cfa-7624", "cfa-7625", "cfa-7626", "cfa-7627"]);
     const treasureHitText = "AUTO [VC/RC]: When its attack hits, choose one of your VC or RC without any Treasures markers, and put a Treasures marker.";
     const normalizedTreasureText = normalizePrintedText(printedText).replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, " ").trim();
