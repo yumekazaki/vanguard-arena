@@ -11,6 +11,11 @@
   document.body.append(scrim, drawer);
   let closingTimer = null;
   let frame = null;
+  let guarding = false;
+  let defense = { active: false, canFinish: false };
+  const done = document.querySelector("#hand-done-guarding");
+  const hint = drawer.querySelector(".hand-fan-hint");
+  const normalHint = hint.textContent;
 
   function layoutFan() {
     frame = null;
@@ -41,6 +46,8 @@
   }
   function closeHand(restoreFocus = true) {
     if (drawer.hidden) return;
+    guarding = false;
+    if (done) done.hidden = true;
     drawer.classList.remove("is-open");
     opener.setAttribute("aria-expanded", "false");
     scrim.hidden = true;
@@ -50,7 +57,10 @@
     clearTimeout(closingTimer);
     closingTimer = setTimeout(() => { drawer.hidden = true; }, 180);
   }
-  function openHand() {
+  function openHand({ guarding: guardMode = false } = {}) {
+    guarding = Boolean(guardMode && defense.active);
+    if (done) { done.hidden = !guarding; done.disabled = !defense.canFinish; }
+    hint.textContent = guarding ? "Select cards to guard with, then choose Done guarding. Closing this hand does not finish your defense." : normalHint;
     clearTimeout(closingTimer);
     drawer.hidden = false;
     drawer.inert = false;
@@ -61,13 +71,19 @@
     requestAnimationFrame(() => drawer.classList.add("is-open"));
     closer.focus({ preventScroll: true });
   }
-  opener.addEventListener("click", openHand);
+  opener.addEventListener("click", () => openHand());
   closer.addEventListener("click", () => closeHand());
   scrim.addEventListener("click", () => closeHand());
   // Let the existing hand handler choose the card and open its normal action menu.
   cards.addEventListener("click", event => {
+    const card = event.target.closest("[data-hand-uid]");
+    if (guarding && card && !event.target.closest("[data-card-zoom]")) {
+      event.preventDefault(); event.stopImmediatePropagation();
+      if (defense.canFinish) document.dispatchEvent(new CustomEvent("arena:guard-card", { detail: { uid: card.dataset.handUid } }));
+      return;
+    }
     if (event.target.closest("[data-hand-uid]") && !event.target.closest("[data-card-zoom]")) closeHand(false);
-  });
+  }, true);
   drawer.addEventListener("keydown", event => {
     if (event.key === "Escape") { event.preventDefault(); closeHand(); }
     if (event.key !== "Tab") return;
@@ -82,5 +98,18 @@
   new MutationObserver(() => {
     if (!document.querySelector("#view-play.active-view") && !drawer.hidden) closeHand(false);
   }).observe(document.querySelector("#view-play"), { attributes: true, attributeFilter: ["class"] });
+  done?.addEventListener("click", () => {
+    if (!guarding || !defense.canFinish) return;
+    document.dispatchEvent(new CustomEvent("arena:done-guarding"));
+    closeHand();
+  });
+  window.VanguardHand = {
+    open: openHand, close: closeHand,
+    syncDefense(next) {
+      defense = next;
+      if (done) done.disabled = !defense.canFinish;
+      if (guarding && !defense.active) closeHand(false);
+    }
+  };
   layoutFan();
 })();
