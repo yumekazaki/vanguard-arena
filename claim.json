@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "batchId": "CANDIDATE-C0086556-0002",
+  "workerId": "codex-named-drop-search",
+  "baselineCommit": "c00865569ef43a5915401e313ef036c25dc963b2",
+  "abilityIds": [
+    "cfa-13068:0",
+    "cfa-13087:0",
+    "cfa-13096:0",
+    "cfa-13111:0",
+    "cfa-13145:0"
+  ],
+  "claimedAt": "2026-10-31T12:48:07.417Z"
+}
