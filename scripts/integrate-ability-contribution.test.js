@@ -40,8 +40,7 @@ test("integrator accepts a generated registry work-unit ID and preserves exact c
     fs.writeFileSync(path.join(root, "ability-definitions.js"), [
       "(function registerCuratedAbilityBatch(root) {",
       "  const definitions = [",
-      `    ${JSON.stringify({ id: "existing:0", cardId: "existing", kind: "CONT", printedText: "CONT: existing.", keywords: [{ name: "test-keyword" }] })},`,
-      "  ];",
+      `    ${JSON.stringify({ id: "existing:0", cardId: "existing", kind: "CONT", printedText: "CONT: existing.", keywords: [{ name: "test-keyword" }] })},  ];`,
       "  const otherTrustedArray = [",
       `    ${JSON.stringify({ id: "other:0", cardId: "other", kind: "CONT", printedText: "CONT: other.", keywords: [{ name: "test-keyword" }] })},`,
       "  ];",

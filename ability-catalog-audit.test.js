@@ -534,9 +534,9 @@ test("all five exact real Vanguard Counter-Blast unlock ACTs use locked friendly
  const app=require("node:fs").readFileSync("app.js","utf8");assert.ok(app.includes("unlock-target"));assert.ok(app.includes("unit.unlocked"));assert.deepEqual(report.invalidCompiled,[]);
 });
 
-test("all 91 exact named-Soul CONT records preserve circle, name, turn, and continuous effect",()=>{
+test("all 95 exact named-Soul CONT records preserve circle, name, turn, and continuous effect",()=>{
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const report=auditCatalog(loadCatalog());
- assert.equal(report.patterns["cont-named-soul-card-power-v1"],91);
+ assert.equal(report.patterns["cont-named-soul-card-power-v1"],95);
  for(const card of loadCatalog())for(const ability of parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="cont-named-soul-card-power-v1"){
   assert.equal(ability.kind,"CONT");assert.notEqual(ability.conditionStatus,"needs-review");assert.equal(ability.definition.effects[0].op,"continuous-power");assert.equal(ability.definition.effects[0].condition.op,"soul-has-card-name");assert.equal(ability.definition.effects[0].condition.controllerTurn,/During your turn/i.test(ability.raw));assert.ok(["vanguard","rear-guard"].some(location=>ability.requiredLocation.includes(location)));
  }

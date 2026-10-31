@@ -8,6 +8,31 @@ function isValidWorkUnitId(value) {
   return /^[A-Z0-9][A-Z0-9-]{1,80}$/.test(String(value || ""));
 }
 
+function findMatchingArrayClose(source, openIndex) {
+  if (source[openIndex] !== "[") return -1;
+  let depth = 0, quote = null, escaped = false, lineComment = false, blockComment = false;
+  for (let index = openIndex; index < source.length; index++) {
+    const char = source[index], next = source[index + 1];
+    if (lineComment) { if (char === "\n") lineComment = false; continue; }
+    if (blockComment) {
+      if (char === "*" && next === "/") { blockComment = false; index++; }
+      continue;
+    }
+    if (quote) {
+      if (escaped) { escaped = false; continue; }
+      if (char === "\\") { escaped = true; continue; }
+      if (char === quote) quote = null;
+      continue;
+    }
+    if (char === "/" && next === "/") { lineComment = true; index++; continue; }
+    if (char === "/" && next === "*") { blockComment = true; index++; continue; }
+    if (char === "\"" || char === "'" || char === "`") { quote = char; continue; }
+    if (char === "[") depth++;
+    else if (char === "]" && --depth === 0) return index;
+  }
+  return -1;
+}
+
 function integrateContribution(root, batchId) {
   if (!isValidWorkUnitId(batchId)) throw new TypeError("A registered ability work-unit ID is required.");
   const contributionPath = path.join(root, "ability-contributions", `batch-${batchId}.js`);
@@ -40,14 +65,13 @@ function integrateContribution(root, batchId) {
   const declaration = /\bconst\s+definitions\s*=\s*\[/g.exec(source);
   if (!declaration) throw new Error("Could not locate the curated definition array.");
   const arrayOpen = declaration.index + declaration[0].lastIndexOf("[");
-  const closingMatch = [...source.matchAll(/^  \];\s*$/gm)].find(match => match.index > arrayOpen);
-  if (!closingMatch) throw new Error("Could not find the trusted definition-array insertion point.");
+  const arrayClose = findMatchingArrayClose(source, arrayOpen);
+  if (arrayClose < 0) throw new Error("Could not find the trusted definition-array insertion point.");
   const newline = source.includes("\r\n") ? "\r\n" : "\n";
   const formatted = contribution.map(definition => JSON.stringify(definition, null, 2).split("\n").map(line => `    ${line}`).join(newline)).join(`,${newline}`);
-  const insertAt = closingMatch.index;
-  const arrayBody = source.slice(arrayOpen + 1, insertAt).trimEnd();
+  const arrayBody = source.slice(arrayOpen + 1, arrayClose).trimEnd();
   const separator = arrayBody && !arrayBody.endsWith(",") ? `,${newline}` : newline;
-  const updated = `${source.slice(0, insertAt)}${separator}${formatted}${source.slice(insertAt)}`;
+  const updated = `${source.slice(0, arrayOpen + 1)}${arrayBody}${separator}${formatted}${newline}  ${source.slice(arrayClose)}`;
   const temporary = `${definitionsPath}.${process.pid}.tmp`;
   fs.writeFileSync(temporary, updated, { flag: "wx" });
   try { fs.renameSync(temporary, definitionsPath); }
@@ -61,4 +85,4 @@ if (require.main === module) {
   catch (error) { process.stderr.write(`${error.message}\n`); process.exitCode = 1; }
 }
 
-module.exports = { integrateContribution, isValidWorkUnitId };
+module.exports = { integrateContribution, isValidWorkUnitId, findMatchingArrayClose };
