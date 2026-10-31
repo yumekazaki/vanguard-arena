@@ -112364,6 +112364,12 @@
     if (definition) definitions.push(definition);
   }
   const sameNameDropCallTargets = [["cfa-8541", "Honebami Toushirou"], ["cfa-8571", "Chiganemaru"], ["cfa-8577", "Chiyoganemaru"], ["cfa-8585", "Namazuo Toushirou"]];
+  const endPhaseRcNamedSearchTargets = [["cfa-273", "Ruler Chameleon"], ["cfa-284", "Pencil Squire, Hammsuke"], ["cfa-301", "Pencil Knight, Hammsuke"], ["cfa-309", "Pencil Hero, Hammsuke"]];
+  for (const [cardId, targetName] of endPhaseRcNamedSearchTargets) {
+    const printedText = `AUTO: [Counter Blast 1] During your end phase, when this unit is put into the drop zone from RC, if you have a «Great Nature» vanguard, you may pay the cost. If you do, search your deck for up to one card name "${targetName}", reveal it to your opponent, put it into your hand, and shuffle your deck.`;
+    const definition = root?.VanguardAbilityEngine?.compileEndPhaseRcNamedSearchDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
+    if (definition) definitions.push(definition);
+  }
   for (const [cardId, targetName] of sameNameDropCallTargets) {
     const printedText = `AUTO: When this unit is placed on RC from hand, COST [Counter Blast 1], choose a "${targetName}" from your drop, and call it to an open RC.`;
     const definition = root?.VanguardAbilityEngine?.compileAutoRcPlacementNamedDropCallDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);

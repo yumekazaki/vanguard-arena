@@ -2876,6 +2876,30 @@
     const definition=ability?.definition,cardId=String(definition?.cardId||ability?.cardId||""),name=RC_DECK_OR_DROP_NAMED_SEARCH[cardId],printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim(),effect=definition?.effects?.[0];
     return Boolean(name&&ability?.id===`${cardId}:${({"cfa-10980":1,"cfa-11021":1,"cfa-11052":1,"cfa-11100":1,"cfa-11963":0,"cfa-12112":1})[cardId]}`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&printed===`AUTO: When this unit is placed on RC, COST [Counter Blast 1], search your deck or drop for up to one "${name}", reveal it and put it into hand, and if you searched the deck, shuffle the deck.`&&definition.source?.patternId==="auto-rc-placement-counter-blast-deck-or-drop-named-search-v1"&&ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="card.placed"&&ability.trigger.subject==="source"&&JSON.stringify(ability.trigger.circles||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.requiredLocation||definition.requiredLocation||[])===JSON.stringify(["rear-guard"])&&ability.costs?.length===1&&ability.costs[0]?.type==="counter-blast"&&Number(ability.costs[0]?.count)===1&&definition.optional===true&&definition.choicesReviewed===true&&definition.conditionsReviewed===true&&definition.effects?.length===1&&effect?.op==="search-deck-or-drop-named-to-hand"&&effect.target==="controller"&&effect.maximum===1&&effect.cardName===name&&effect.reveal===true&&effect.shuffleIfDeckSearched===true);
   }
+  const END_PHASE_RC_NAMED_SEARCH=Object.freeze({"cfa-273":"Ruler Chameleon","cfa-284":"Pencil Squire, Hammsuke","cfa-301":"Pencil Knight, Hammsuke","cfa-309":"Pencil Hero, Hammsuke"});
+  function isExactEndPhaseRcNamedSearchAbility(ability){
+    const definition=ability?.definition,cardId=String(definition?.cardId||ability?.cardId||""),name=END_PHASE_RC_NAMED_SEARCH[cardId],printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim(),trigger=ability?.trigger,effect=definition?.effects?.[0];
+    if(!name||ability?.id!==`${cardId}:0`||ability?.kind!=="AUTO"||definition?.kind!=="AUTO"||definition.cardId!==cardId)return false;
+    const expected=`AUTO: [Counter Blast 1] During your end phase, when this unit is put into the drop zone from RC, if you have a «Great Nature» vanguard, you may pay the cost. If you do, search your deck for up to one card name "${name}", reveal it to your opponent, put it into your hand, and shuffle your deck.`;
+    const branches=trigger?.anyOf||[],branchTypes=branches.map(branch=>branch?.eventType).sort();
+    const branchShape=branches.length===2&&branches.every(branch=>branch?.status===undefined&&branch?.subject==="event-subject"&&JSON.stringify(branch?.circles||[])===JSON.stringify([])&&branch?.sourceLocation==="rear-guard"&&branch?.destinationLocation==="drop"&&branch?.requiredPhase==="end"&&branch?.turnRelation==="controller");
+    return printed===expected&&definition.source?.patternId==="auto-end-phase-rc-drop-counter-blast-same-name-search-v1"&&trigger?.status==="recognized-trigger"&&trigger.eventType==="card.moved"&&trigger.subject==="event-subject"&&JSON.stringify(trigger.circles||[])===JSON.stringify([])&&trigger.sourceLocation==="rear-guard"&&trigger.destinationLocation==="drop"&&trigger.requiredPhase==="end"&&trigger.turnRelation==="controller"&&branchShape&&JSON.stringify(branchTypes)===JSON.stringify(["card.moved","card.retired"])&&JSON.stringify(ability.requiredLocation||definition.requiredLocation||[])===JSON.stringify([])&&JSON.stringify(ability.conditions||[])===JSON.stringify([{type:"controller-vanguard-has-clan",value:"Great Nature"}])&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"counter-blast",count:1}])&&ability.canDecline===true&&definition.optional===true&&definition.conditionsReviewed===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&definition.effects?.length===1&&effect?.op==="search-deck-same-name-to-hand"&&effect.target==="controller"&&effect.maximum===1&&effect.cardName===name;
+  }
+  function endPhaseRcNamedSearchEventMatches(state,ability,source,located,event,engine){
+    if(!isExactEndPhaseRcNamedSearchAbility(ability)||!source?.uid||!located||located.ambiguous||!event?.eventId||!['card.moved','card.retired'].includes(event.type))return false;
+    const controllerId=located.controllerPlayerId,player=state?.players?.[located.side],activePlayerId=state?.players?.[state?.side]?.playerId;
+    const phaseIsEnd=value=>{const number=Number(value);return String(value||'').trim().toLowerCase()==='end'||(Number.isInteger(number)&&String(value).trim()!==''&&number===6)};
+    const isRearCircle=value=>/^(?:rear-|accel-|rear\d)/i.test(String(value||''))||String(value||'').toLowerCase()==='rear-guard';
+    const actingPlayerIsSeated=Object.values(state?.players||{}).some(candidate=>candidate?.playerId===event.actingPlayerId);
+    return Boolean(controllerId&&player?.playerId===controllerId&&activePlayerId===controllerId&&source.controllerPlayerId===controllerId&&located.controllerPlayerId===controllerId&&
+      located.ownerPlayerId===source.ownerPlayerId&&located.zone==='drop'&&player.drop?.some(card=>card?.uid===source.uid)&&event.cardInstanceId===source.uid&&event.subjectCardInstanceId===source.uid&&
+      event.subjectOwnerPlayerId===located.ownerPlayerId&&event.subjectControllerPlayerId===controllerId&&isRearCircle(event.previousLocation)&&String(event.currentLocation||'').toLowerCase()==='drop'&&
+      event.turnPlayerId===controllerId&&phaseIsEnd(event.phase)&&phaseIsEnd(state.phase)&&actingPlayerIsSeated);
+  }
+  function endPhaseRcNamedSearchConditionMatches(state,ability,event,located,engine){
+    const context=buildConditionContext(state,event,located,engine);
+    return Boolean(context&&engine.evaluateAbilityConditions(ability,context));
+  }
   function isExactRcGradeThreeClanNamedSearchAbility(ability){
     const definition=ability?.definition,cardId=String(definition?.cardId||ability?.cardId||""),entry=RC_GRADE_THREE_CLAN_NAMED_SEARCH[cardId],printed=String(definition?.printedText||ability?.printedText||"").replace(/\\s+/g," ").trim(),effect=definition?.effects?.[0];
     return Boolean(entry&&ability?.id===`${cardId}:1`&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&definition?.cardId===cardId&&printed===`AUTO: [Choose a grade 3 «${entry.clan}» from your hand, and discard it] When this unit is placed on RC, you may pay the cost. If you do, search your deck for up to one card named "${entry.name}", reveal it to your opponent, put it into your hand, and shuffle your deck.`&&definition.source?.patternId==="auto-rc-grade-three-clan-discard-named-search-v1"&&definition.optional===true&&definition.conditionsReviewed===true&&definition.choicesReviewed===true&&ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="card.placed"&&ability.trigger.subject==="source"&&JSON.stringify(ability.trigger.circles||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.requiredLocation||definition.requiredLocation||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"discard",count:1,filter:{clan:entry.clan,minGrade:3,maxGrade:3}}])&&definition.effects?.length===1&&effect?.op==="search-deck-same-name-to-hand"&&effect.target==="controller"&&effect.maximum===1&&effect.cardName===entry.name);
@@ -3447,6 +3471,7 @@
   function supportsServerAbilityEffects(ability) {
     const effects = ability?.definition?.effects;
     if (!Array.isArray(effects) || !effects.length) return false;
+    if(ability?.definition?.source?.patternId==="auto-end-phase-rc-drop-counter-blast-same-name-search-v1"&&!isExactEndPhaseRcNamedSearchAbility(ability))return false;
     if (ability?.definition?.source?.patternId === PERSONA_SHIELD_AUTO_PATTERN && !isExactPersonaShieldTicketAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1" && !isExactDragontreeGcShieldAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-dragontree-gc-granted-retire-to-soul-v1" && !isExactDragontreeGcGrantedRetireAbility(ability)) return false;
@@ -3603,7 +3628,7 @@
     if (hasInterceptShield && !isAnyInterceptShieldAbility(ability) && !isExactDragontreeGcShieldAbility(ability)) return false;
     if (hasActRcGradeThreeSearch && !isExactActRcGradeThreeSearchAbility(ability) && !isExactAutoVanguardTopFiveSearchAbility(ability) && !isExactRideSourceTopSevenSearchAbility(ability) && !isExactAutoVanguardTopSevenTwoNameSearchAbility(ability) && !isExactGlitterPlacementAbility(ability)) return false;
     if (hasHandRidePhaseSearch && !isExactHandRidePhaseSearchAbility(ability)) return false;
-    if (hasSameNameDeckSearch && !isExactActSameNameSearchPowerAbility(ability) && !isExactAutoNamedVanguardSearchAbility(ability) && !isExactNamedRideDeckSearchAbility(ability) && !isExactRcGradeThreeClanNamedSearchAbility(ability)) return false;
+    if (hasSameNameDeckSearch && !isExactActSameNameSearchPowerAbility(ability) && !isExactAutoNamedVanguardSearchAbility(ability) && !isExactNamedRideDeckSearchAbility(ability) && !isExactRcGradeThreeClanNamedSearchAbility(ability) && !isExactEndPhaseRcNamedSearchAbility(ability)) return false;
     if (hasDeckOrDropNamedSearch && !isExactRcDeckOrDropNamedSearchAbility(ability)) return false;
     if (hasRideTopFiveNamedCard && !isExactRidePhaseTopFiveNamedRideAbility(ability)) return false;
     if (hasCharging && !isExactChargeAbility(ability)) return false;
@@ -3638,7 +3663,7 @@
       (hasInterceptShield && step?.op === "modify-shield-source" && (isAnyInterceptShieldAbility(ability) || isExactDragontreeGcShieldAbility(ability))) ||
       (hasActRcGradeThreeSearch && step?.op === "search-top-up-to-one-filtered-to-hand" && (isExactActRcGradeThreeSearchAbility(ability) || isExactAutoVanguardTopFiveSearchAbility(ability) || isExactRideSourceTopSevenSearchAbility(ability) || isExactAutoVanguardTopSevenTwoNameSearchAbility(ability) || isExactGlitterPlacementAbility(ability))) ||
       (hasHandRidePhaseSearch && step?.op === "search-top-up-to-one-grade-to-hand") ||
-      (hasSameNameDeckSearch && step?.op === "search-deck-same-name-to-hand" && (isExactActSameNameSearchPowerAbility(ability) || isExactAutoNamedVanguardSearchAbility(ability) || isExactNamedRideDeckSearchAbility(ability) || isExactRcGradeThreeClanNamedSearchAbility(ability))) ||
+      (hasSameNameDeckSearch && step?.op === "search-deck-same-name-to-hand" && (isExactActSameNameSearchPowerAbility(ability) || isExactAutoNamedVanguardSearchAbility(ability) || isExactNamedRideDeckSearchAbility(ability) || isExactRcGradeThreeClanNamedSearchAbility(ability) || isExactEndPhaseRcNamedSearchAbility(ability))) ||
       (hasDeckOrDropNamedSearch && step?.op === "search-deck-or-drop-named-to-hand" && isExactRcDeckOrDropNamedSearchAbility(ability)) ||
       (hasRideTopFiveNamedCard && step?.op === "ride-top-five-named-card" && isExactRidePhaseTopFiveNamedRideAbility(ability)) ||
       (hasCharging && step?.op === "set-charging") ||
@@ -4457,6 +4482,7 @@
             const eventForMatch = authoritativeSoulBlastBoostEvent(state, ability, event, engine);
             const eventMatch = engine.eventMatchesAbilityTrigger(ability, eventName, eventForMatch, instance.uid, triggerSourceZone, subjectZone, located.controllerPlayerId);
             if (!eventMatch) continue;
+            if(isExactEndPhaseRcNamedSearchAbility(ability)&&(!endPhaseRcNamedSearchEventMatches(state,ability,located.instance,located,event,engine)||!endPhaseRcNamedSearchConditionMatches(state,ability,event,located,engine)))continue;
             if(ability.definition?.source?.patternId==="auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1"){
               if(!sameNameDropCallPlacementEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId))continue;
               const controller=state.players?.[side],effect=ability.definition.effects[0],claimUnavailable=(reason)=>{if(engine.claimAbilityTrigger(state,event.eventId,instance.uid,ability.id))skipped.push({eventId:event.eventId,cardInstanceId:instance.uid,abilityId:ability.id,reason});};
@@ -4751,6 +4777,10 @@
                 pendingKeys.add(unavailableKey);
                 skipped.push({ eventId: event.eventId, cardInstanceId: instance.uid, abilityId: ability.id, reason: "unpayable-cost" });
               }
+              continue;
+            }
+            if(isExactEndPhaseRcNamedSearchAbility(ability)&&!engine.canPayAbilityCosts(ability,{faceUpDamage:(controller.damage||[]).filter(card=>!card.faceDown).length})){
+              if(engine.claimAbilityTrigger(state,event.eventId,instance.uid,ability.id))skipped.push({eventId:event.eventId,cardInstanceId:instance.uid,abilityId:ability.id,reason:"unpayable-cost"});
               continue;
             }
             if (!automaticAbilityCostIsPayable(state, ability, located, controller, engine)) {
@@ -6164,6 +6194,13 @@
       : pending.field || sourceZone;
     const authoritativeTriggerEvent = authoritativeSoulBlastBoostEvent(state, ability, triggerEvent, engine);
     if (!engine.eventMatchesAbilityTrigger(ability, triggerContext.event, authoritativeTriggerEvent, located.instance.uid, eventSourceZone, triggerContext.subjectZone || triggerEvent.currentLocation, actorPlayerId)) return reject("trigger-event-mismatch");
+    if(isExactEndPhaseRcNamedSearchAbility(ability)){
+      if(!endPhaseRcNamedSearchEventMatches(state,ability,located.instance,located,triggerEvent,engine))return reject("end-phase-rc-drop-event-invalid");
+      if(command.payload.accept){
+        if(!endPhaseRcNamedSearchConditionMatches(state,ability,triggerEvent,located,engine))return reject("great-nature-vanguard-condition-no-longer-met");
+        if(!engine.canPayAbilityCosts(ability,{faceUpDamage:(state.players?.[side]?.damage||[]).filter(card=>!card.faceDown).length}))return reject("unpayable-cost");
+      }
+    }
     if (isExactClanCounterBlastAttackPowerAbility(ability)) {
       if (!clanCounterBlastAttackPowerEventMatches(state, ability, located.instance, located, triggerEvent, actorPlayerId, side, engine, command.payload.accept === true)) return reject("clan-counter-blast-attack-context-invalid");
       if (command.payload.accept) {
