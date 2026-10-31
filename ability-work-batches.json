@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "baselineCommit": "3cd72b45f85349f4a0a9b2cfef5fb865eb61a5d9",
-  "generatedAt": "2026-10-31T06:30:56.063Z",
+  "baselineCommit": "e6068faf9671b1c7d2a7d807e9a035f320215637",
+  "generatedAt": "2026-10-31T06:33:50.264Z",
   "sourceQueue": "current catalog + trusted ability definitions + verification manifest",
   "concurrencyProtocol": "GitHub atomic branch creation at refs/heads/claims/<batchId>; the first successful non-forced create owns the batch.",
   "counts": {
@@ -718,7 +718,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0001",
+      "batchId": "ABILITY-E6068FAF-0001",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -938,7 +938,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0002",
+      "batchId": "ABILITY-E6068FAF-0002",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1117,7 +1117,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0003",
+      "batchId": "ABILITY-E6068FAF-0003",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1263,7 +1263,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0004",
+      "batchId": "ABILITY-E6068FAF-0004",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1415,7 +1415,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0005",
+      "batchId": "ABILITY-E6068FAF-0005",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1596,7 +1596,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0006",
+      "batchId": "ABILITY-E6068FAF-0006",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1761,7 +1761,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0007",
+      "batchId": "ABILITY-E6068FAF-0007",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -1910,7 +1910,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0008",
+      "batchId": "ABILITY-E6068FAF-0008",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -2055,7 +2055,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0009",
+      "batchId": "ABILITY-E6068FAF-0009",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -2218,7 +2218,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0010",
+      "batchId": "ABILITY-E6068FAF-0010",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -2370,7 +2370,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0011",
+      "batchId": "ABILITY-E6068FAF-0011",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -2526,7 +2526,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0012",
+      "batchId": "ABILITY-E6068FAF-0012",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -2675,7 +2675,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0013",
+      "batchId": "ABILITY-E6068FAF-0013",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -2819,7 +2819,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0014",
+      "batchId": "ABILITY-E6068FAF-0014",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -2983,7 +2983,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0015",
+      "batchId": "ABILITY-E6068FAF-0015",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -3156,7 +3156,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0016",
+      "batchId": "ABILITY-E6068FAF-0016",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -3339,7 +3339,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0017",
+      "batchId": "ABILITY-E6068FAF-0017",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -3506,7 +3506,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0018",
+      "batchId": "ABILITY-E6068FAF-0018",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -3685,7 +3685,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0019",
+      "batchId": "ABILITY-E6068FAF-0019",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -3857,7 +3857,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0020",
+      "batchId": "ABILITY-E6068FAF-0020",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -4025,7 +4025,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0021",
+      "batchId": "ABILITY-E6068FAF-0021",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -4199,7 +4199,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0022",
+      "batchId": "ABILITY-E6068FAF-0022",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -4371,7 +4371,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0023",
+      "batchId": "ABILITY-E6068FAF-0023",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -4555,7 +4555,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0024",
+      "batchId": "ABILITY-E6068FAF-0024",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -4722,7 +4722,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0025",
+      "batchId": "ABILITY-E6068FAF-0025",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -4871,7 +4871,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0026",
+      "batchId": "ABILITY-E6068FAF-0026",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -5032,7 +5032,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0027",
+      "batchId": "ABILITY-E6068FAF-0027",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -5198,7 +5198,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0028",
+      "batchId": "ABILITY-E6068FAF-0028",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -5356,7 +5356,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0029",
+      "batchId": "ABILITY-E6068FAF-0029",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -5512,7 +5512,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0030",
+      "batchId": "ABILITY-E6068FAF-0030",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -5679,7 +5679,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0031",
+      "batchId": "ABILITY-E6068FAF-0031",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -5838,7 +5838,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0032",
+      "batchId": "ABILITY-E6068FAF-0032",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -5995,7 +5995,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0033",
+      "batchId": "ABILITY-E6068FAF-0033",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -6149,7 +6149,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0034",
+      "batchId": "ABILITY-E6068FAF-0034",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -6310,7 +6310,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0035",
+      "batchId": "ABILITY-E6068FAF-0035",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -6491,7 +6491,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0036",
+      "batchId": "ABILITY-E6068FAF-0036",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -6677,7 +6677,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0037",
+      "batchId": "ABILITY-E6068FAF-0037",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -6847,7 +6847,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0038",
+      "batchId": "ABILITY-E6068FAF-0038",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -6983,7 +6983,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0039",
+      "batchId": "ABILITY-E6068FAF-0039",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -7105,7 +7105,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0040",
+      "batchId": "ABILITY-E6068FAF-0040",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -7295,7 +7295,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0041",
+      "batchId": "ABILITY-E6068FAF-0041",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -7475,7 +7475,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0042",
+      "batchId": "ABILITY-E6068FAF-0042",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -7650,7 +7650,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0043",
+      "batchId": "ABILITY-E6068FAF-0043",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -7804,7 +7804,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0044",
+      "batchId": "ABILITY-E6068FAF-0044",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -7984,7 +7984,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0045",
+      "batchId": "ABILITY-E6068FAF-0045",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -8156,7 +8156,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0046",
+      "batchId": "ABILITY-E6068FAF-0046",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -8323,7 +8323,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0047",
+      "batchId": "ABILITY-E6068FAF-0047",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -8514,7 +8514,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0048",
+      "batchId": "ABILITY-E6068FAF-0048",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -8682,7 +8682,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0049",
+      "batchId": "ABILITY-E6068FAF-0049",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -8846,7 +8846,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0050",
+      "batchId": "ABILITY-E6068FAF-0050",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -9027,7 +9027,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0051",
+      "batchId": "ABILITY-E6068FAF-0051",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -9211,7 +9211,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0052",
+      "batchId": "ABILITY-E6068FAF-0052",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -9387,7 +9387,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0053",
+      "batchId": "ABILITY-E6068FAF-0053",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -9570,7 +9570,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0054",
+      "batchId": "ABILITY-E6068FAF-0054",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -9715,7 +9715,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0055",
+      "batchId": "ABILITY-E6068FAF-0055",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -9882,7 +9882,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0056",
+      "batchId": "ABILITY-E6068FAF-0056",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -10012,7 +10012,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0057",
+      "batchId": "ABILITY-E6068FAF-0057",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -10170,7 +10170,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0058",
+      "batchId": "ABILITY-E6068FAF-0058",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -10301,7 +10301,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0059",
+      "batchId": "ABILITY-E6068FAF-0059",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -10432,7 +10432,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0060",
+      "batchId": "ABILITY-E6068FAF-0060",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -10571,7 +10571,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0061",
+      "batchId": "ABILITY-E6068FAF-0061",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -10715,7 +10715,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0062",
+      "batchId": "ABILITY-E6068FAF-0062",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -10899,7 +10899,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0063",
+      "batchId": "ABILITY-E6068FAF-0063",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -11066,7 +11066,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0064",
+      "batchId": "ABILITY-E6068FAF-0064",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -11221,7 +11221,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0065",
+      "batchId": "ABILITY-E6068FAF-0065",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -11383,7 +11383,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0066",
+      "batchId": "ABILITY-E6068FAF-0066",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -11540,7 +11540,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0067",
+      "batchId": "ABILITY-E6068FAF-0067",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -11697,7 +11697,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0068",
+      "batchId": "ABILITY-E6068FAF-0068",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -11847,7 +11847,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0069",
+      "batchId": "ABILITY-E6068FAF-0069",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -12023,7 +12023,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0070",
+      "batchId": "ABILITY-E6068FAF-0070",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -12194,7 +12194,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0071",
+      "batchId": "ABILITY-E6068FAF-0071",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -12345,7 +12345,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0072",
+      "batchId": "ABILITY-E6068FAF-0072",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -12510,7 +12510,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0073",
+      "batchId": "ABILITY-E6068FAF-0073",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -12692,7 +12692,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0074",
+      "batchId": "ABILITY-E6068FAF-0074",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -12866,7 +12866,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0075",
+      "batchId": "ABILITY-E6068FAF-0075",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -13046,7 +13046,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0076",
+      "batchId": "ABILITY-E6068FAF-0076",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -13233,7 +13233,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0077",
+      "batchId": "ABILITY-E6068FAF-0077",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -13364,7 +13364,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0078",
+      "batchId": "ABILITY-E6068FAF-0078",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -13532,7 +13532,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0079",
+      "batchId": "ABILITY-E6068FAF-0079",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -13706,7 +13706,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0080",
+      "batchId": "ABILITY-E6068FAF-0080",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -13843,7 +13843,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0081",
+      "batchId": "ABILITY-E6068FAF-0081",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -13995,7 +13995,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0082",
+      "batchId": "ABILITY-E6068FAF-0082",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -14149,7 +14149,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0083",
+      "batchId": "ABILITY-E6068FAF-0083",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -14318,7 +14318,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0084",
+      "batchId": "ABILITY-E6068FAF-0084",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -14475,7 +14475,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0085",
+      "batchId": "ABILITY-E6068FAF-0085",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -14657,7 +14657,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0086",
+      "batchId": "ABILITY-E6068FAF-0086",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -14814,7 +14814,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0087",
+      "batchId": "ABILITY-E6068FAF-0087",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -14982,7 +14982,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0088",
+      "batchId": "ABILITY-E6068FAF-0088",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -15151,7 +15151,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0089",
+      "batchId": "ABILITY-E6068FAF-0089",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -15327,7 +15327,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0090",
+      "batchId": "ABILITY-E6068FAF-0090",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -15508,7 +15508,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0091",
+      "batchId": "ABILITY-E6068FAF-0091",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -15686,7 +15686,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0092",
+      "batchId": "ABILITY-E6068FAF-0092",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -15830,7 +15830,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0093",
+      "batchId": "ABILITY-E6068FAF-0093",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -15996,7 +15996,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0094",
+      "batchId": "ABILITY-E6068FAF-0094",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -16173,7 +16173,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0095",
+      "batchId": "ABILITY-E6068FAF-0095",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -16352,7 +16352,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0096",
+      "batchId": "ABILITY-E6068FAF-0096",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -16519,7 +16519,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0097",
+      "batchId": "ABILITY-E6068FAF-0097",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -16710,7 +16710,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0098",
+      "batchId": "ABILITY-E6068FAF-0098",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -16883,7 +16883,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0099",
+      "batchId": "ABILITY-E6068FAF-0099",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -17061,7 +17061,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0100",
+      "batchId": "ABILITY-E6068FAF-0100",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -17237,7 +17237,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0101",
+      "batchId": "ABILITY-E6068FAF-0101",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -17416,7 +17416,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0102",
+      "batchId": "ABILITY-E6068FAF-0102",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -17584,7 +17584,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0103",
+      "batchId": "ABILITY-E6068FAF-0103",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -17744,7 +17744,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0104",
+      "batchId": "ABILITY-E6068FAF-0104",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -17898,7 +17898,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0105",
+      "batchId": "ABILITY-E6068FAF-0105",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -18052,7 +18052,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0106",
+      "batchId": "ABILITY-E6068FAF-0106",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -18236,7 +18236,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0107",
+      "batchId": "ABILITY-E6068FAF-0107",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -18413,7 +18413,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0108",
+      "batchId": "ABILITY-E6068FAF-0108",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -18568,7 +18568,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0109",
+      "batchId": "ABILITY-E6068FAF-0109",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -18739,7 +18739,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0110",
+      "batchId": "ABILITY-E6068FAF-0110",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -18895,7 +18895,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0111",
+      "batchId": "ABILITY-E6068FAF-0111",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -19055,7 +19055,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0112",
+      "batchId": "ABILITY-E6068FAF-0112",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -19210,7 +19210,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0113",
+      "batchId": "ABILITY-E6068FAF-0113",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -19377,7 +19377,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0114",
+      "batchId": "ABILITY-E6068FAF-0114",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -19527,7 +19527,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0115",
+      "batchId": "ABILITY-E6068FAF-0115",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -19678,7 +19678,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0116",
+      "batchId": "ABILITY-E6068FAF-0116",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -19850,7 +19850,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0117",
+      "batchId": "ABILITY-E6068FAF-0117",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -20023,7 +20023,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0118",
+      "batchId": "ABILITY-E6068FAF-0118",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -20194,7 +20194,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0119",
+      "batchId": "ABILITY-E6068FAF-0119",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -20352,7 +20352,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0120",
+      "batchId": "ABILITY-E6068FAF-0120",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -20517,7 +20517,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0121",
+      "batchId": "ABILITY-E6068FAF-0121",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -20663,7 +20663,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0122",
+      "batchId": "ABILITY-E6068FAF-0122",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -20833,7 +20833,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0123",
+      "batchId": "ABILITY-E6068FAF-0123",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -21000,7 +21000,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0124",
+      "batchId": "ABILITY-E6068FAF-0124",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -21196,7 +21196,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0125",
+      "batchId": "ABILITY-E6068FAF-0125",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -21344,7 +21344,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0126",
+      "batchId": "ABILITY-E6068FAF-0126",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -21525,7 +21525,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0127",
+      "batchId": "ABILITY-E6068FAF-0127",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -21700,7 +21700,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0128",
+      "batchId": "ABILITY-E6068FAF-0128",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -21887,7 +21887,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0129",
+      "batchId": "ABILITY-E6068FAF-0129",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -22059,7 +22059,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0130",
+      "batchId": "ABILITY-E6068FAF-0130",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -22223,7 +22223,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0131",
+      "batchId": "ABILITY-E6068FAF-0131",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -22391,7 +22391,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0132",
+      "batchId": "ABILITY-E6068FAF-0132",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -22562,7 +22562,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0133",
+      "batchId": "ABILITY-E6068FAF-0133",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -22739,7 +22739,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0134",
+      "batchId": "ABILITY-E6068FAF-0134",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -22920,7 +22920,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0135",
+      "batchId": "ABILITY-E6068FAF-0135",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -23081,7 +23081,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0136",
+      "batchId": "ABILITY-E6068FAF-0136",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -23258,7 +23258,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0137",
+      "batchId": "ABILITY-E6068FAF-0137",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -23413,7 +23413,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0138",
+      "batchId": "ABILITY-E6068FAF-0138",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -23582,7 +23582,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0139",
+      "batchId": "ABILITY-E6068FAF-0139",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -23709,7 +23709,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0140",
+      "batchId": "ABILITY-E6068FAF-0140",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -23854,7 +23854,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0141",
+      "batchId": "ABILITY-E6068FAF-0141",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -23973,7 +23973,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0142",
+      "batchId": "ABILITY-E6068FAF-0142",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -24109,7 +24109,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0143",
+      "batchId": "ABILITY-E6068FAF-0143",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -24270,7 +24270,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0144",
+      "batchId": "ABILITY-E6068FAF-0144",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -24436,7 +24436,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0145",
+      "batchId": "ABILITY-E6068FAF-0145",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -24573,7 +24573,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0146",
+      "batchId": "ABILITY-E6068FAF-0146",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -24698,7 +24698,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0147",
+      "batchId": "ABILITY-E6068FAF-0147",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -24842,7 +24842,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0148",
+      "batchId": "ABILITY-E6068FAF-0148",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -25000,7 +25000,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0149",
+      "batchId": "ABILITY-E6068FAF-0149",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -25163,7 +25163,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0150",
+      "batchId": "ABILITY-E6068FAF-0150",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -25300,7 +25300,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0151",
+      "batchId": "ABILITY-E6068FAF-0151",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -25462,7 +25462,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0152",
+      "batchId": "ABILITY-E6068FAF-0152",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -25575,7 +25575,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0153",
+      "batchId": "ABILITY-E6068FAF-0153",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -25737,7 +25737,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0154",
+      "batchId": "ABILITY-E6068FAF-0154",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -25911,7 +25911,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0155",
+      "batchId": "ABILITY-E6068FAF-0155",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -26048,7 +26048,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0156",
+      "batchId": "ABILITY-E6068FAF-0156",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -26196,7 +26196,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0157",
+      "batchId": "ABILITY-E6068FAF-0157",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -26352,7 +26352,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0158",
+      "batchId": "ABILITY-E6068FAF-0158",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -26488,7 +26488,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0159",
+      "batchId": "ABILITY-E6068FAF-0159",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -26665,7 +26665,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0160",
+      "batchId": "ABILITY-E6068FAF-0160",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -26805,7 +26805,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0161",
+      "batchId": "ABILITY-E6068FAF-0161",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -26961,7 +26961,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0162",
+      "batchId": "ABILITY-E6068FAF-0162",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -27113,7 +27113,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0163",
+      "batchId": "ABILITY-E6068FAF-0163",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -27229,7 +27229,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0164",
+      "batchId": "ABILITY-E6068FAF-0164",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -27359,7 +27359,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0165",
+      "batchId": "ABILITY-E6068FAF-0165",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -27519,7 +27519,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0166",
+      "batchId": "ABILITY-E6068FAF-0166",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -27664,7 +27664,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0167",
+      "batchId": "ABILITY-E6068FAF-0167",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -27825,7 +27825,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0168",
+      "batchId": "ABILITY-E6068FAF-0168",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -27964,7 +27964,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0169",
+      "batchId": "ABILITY-E6068FAF-0169",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -28143,7 +28143,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0170",
+      "batchId": "ABILITY-E6068FAF-0170",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -28268,7 +28268,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0171",
+      "batchId": "ABILITY-E6068FAF-0171",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -28397,7 +28397,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0172",
+      "batchId": "ABILITY-E6068FAF-0172",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -28548,7 +28548,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0173",
+      "batchId": "ABILITY-E6068FAF-0173",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -28699,7 +28699,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0174",
+      "batchId": "ABILITY-E6068FAF-0174",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -28833,7 +28833,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0175",
+      "batchId": "ABILITY-E6068FAF-0175",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -28973,7 +28973,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0176",
+      "batchId": "ABILITY-E6068FAF-0176",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -29120,7 +29120,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0177",
+      "batchId": "ABILITY-E6068FAF-0177",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -29267,7 +29267,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0178",
+      "batchId": "ABILITY-E6068FAF-0178",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -29399,7 +29399,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0179",
+      "batchId": "ABILITY-E6068FAF-0179",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -29552,7 +29552,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0180",
+      "batchId": "ABILITY-E6068FAF-0180",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -29701,7 +29701,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0181",
+      "batchId": "ABILITY-E6068FAF-0181",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -29853,7 +29853,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0182",
+      "batchId": "ABILITY-E6068FAF-0182",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -30001,7 +30001,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0183",
+      "batchId": "ABILITY-E6068FAF-0183",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -30132,7 +30132,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0184",
+      "batchId": "ABILITY-E6068FAF-0184",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -30280,7 +30280,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0185",
+      "batchId": "ABILITY-E6068FAF-0185",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -30439,7 +30439,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0186",
+      "batchId": "ABILITY-E6068FAF-0186",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -30578,7 +30578,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0187",
+      "batchId": "ABILITY-E6068FAF-0187",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -30715,7 +30715,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0188",
+      "batchId": "ABILITY-E6068FAF-0188",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -30856,7 +30856,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0189",
+      "batchId": "ABILITY-E6068FAF-0189",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -30998,7 +30998,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0190",
+      "batchId": "ABILITY-E6068FAF-0190",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -31145,7 +31145,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0191",
+      "batchId": "ABILITY-E6068FAF-0191",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -31305,7 +31305,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0192",
+      "batchId": "ABILITY-E6068FAF-0192",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -31446,7 +31446,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0193",
+      "batchId": "ABILITY-E6068FAF-0193",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -31582,7 +31582,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0194",
+      "batchId": "ABILITY-E6068FAF-0194",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -31730,7 +31730,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0195",
+      "batchId": "ABILITY-E6068FAF-0195",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -31881,7 +31881,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0196",
+      "batchId": "ABILITY-E6068FAF-0196",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -32028,7 +32028,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0197",
+      "batchId": "ABILITY-E6068FAF-0197",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -32186,7 +32186,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0198",
+      "batchId": "ABILITY-E6068FAF-0198",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -32341,7 +32341,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0199",
+      "batchId": "ABILITY-E6068FAF-0199",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -32502,7 +32502,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0200",
+      "batchId": "ABILITY-E6068FAF-0200",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -32649,7 +32649,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0201",
+      "batchId": "ABILITY-E6068FAF-0201",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -32794,7 +32794,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0202",
+      "batchId": "ABILITY-E6068FAF-0202",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -32953,7 +32953,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0203",
+      "batchId": "ABILITY-E6068FAF-0203",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -33100,7 +33100,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0204",
+      "batchId": "ABILITY-E6068FAF-0204",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -33264,7 +33264,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0205",
+      "batchId": "ABILITY-E6068FAF-0205",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -33411,7 +33411,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0206",
+      "batchId": "ABILITY-E6068FAF-0206",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -33551,7 +33551,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0207",
+      "batchId": "ABILITY-E6068FAF-0207",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -33690,7 +33690,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0208",
+      "batchId": "ABILITY-E6068FAF-0208",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -33834,7 +33834,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0209",
+      "batchId": "ABILITY-E6068FAF-0209",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -33968,7 +33968,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0210",
+      "batchId": "ABILITY-E6068FAF-0210",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -34123,7 +34123,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0211",
+      "batchId": "ABILITY-E6068FAF-0211",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -34274,7 +34274,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0212",
+      "batchId": "ABILITY-E6068FAF-0212",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -34431,7 +34431,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0213",
+      "batchId": "ABILITY-E6068FAF-0213",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -34585,7 +34585,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0214",
+      "batchId": "ABILITY-E6068FAF-0214",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -34736,7 +34736,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0215",
+      "batchId": "ABILITY-E6068FAF-0215",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -34891,7 +34891,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0216",
+      "batchId": "ABILITY-E6068FAF-0216",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -35038,7 +35038,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0217",
+      "batchId": "ABILITY-E6068FAF-0217",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -35199,7 +35199,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0218",
+      "batchId": "ABILITY-E6068FAF-0218",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -35357,7 +35357,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0219",
+      "batchId": "ABILITY-E6068FAF-0219",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -35504,7 +35504,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0220",
+      "batchId": "ABILITY-E6068FAF-0220",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -35643,7 +35643,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0221",
+      "batchId": "ABILITY-E6068FAF-0221",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -35793,7 +35793,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0222",
+      "batchId": "ABILITY-E6068FAF-0222",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -35931,7 +35931,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0223",
+      "batchId": "ABILITY-E6068FAF-0223",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -36083,7 +36083,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0224",
+      "batchId": "ABILITY-E6068FAF-0224",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -36242,7 +36242,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0225",
+      "batchId": "ABILITY-E6068FAF-0225",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -36394,7 +36394,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0226",
+      "batchId": "ABILITY-E6068FAF-0226",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -36553,7 +36553,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0227",
+      "batchId": "ABILITY-E6068FAF-0227",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -36709,7 +36709,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0228",
+      "batchId": "ABILITY-E6068FAF-0228",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -36890,7 +36890,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0229",
+      "batchId": "ABILITY-E6068FAF-0229",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -37072,7 +37072,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0230",
+      "batchId": "ABILITY-E6068FAF-0230",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -37242,7 +37242,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0231",
+      "batchId": "ABILITY-E6068FAF-0231",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -37395,7 +37395,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0232",
+      "batchId": "ABILITY-E6068FAF-0232",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -37541,7 +37541,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0233",
+      "batchId": "ABILITY-E6068FAF-0233",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -37707,7 +37707,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0234",
+      "batchId": "ABILITY-E6068FAF-0234",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -37879,7 +37879,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0235",
+      "batchId": "ABILITY-E6068FAF-0235",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -38042,7 +38042,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0236",
+      "batchId": "ABILITY-E6068FAF-0236",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -38199,7 +38199,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0237",
+      "batchId": "ABILITY-E6068FAF-0237",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -38345,7 +38345,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0238",
+      "batchId": "ABILITY-E6068FAF-0238",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -38508,7 +38508,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0239",
+      "batchId": "ABILITY-E6068FAF-0239",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -38655,7 +38655,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0240",
+      "batchId": "ABILITY-E6068FAF-0240",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -38816,7 +38816,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0241",
+      "batchId": "ABILITY-E6068FAF-0241",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -38985,7 +38985,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0242",
+      "batchId": "ABILITY-E6068FAF-0242",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -39153,7 +39153,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0243",
+      "batchId": "ABILITY-E6068FAF-0243",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -39313,7 +39313,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0244",
+      "batchId": "ABILITY-E6068FAF-0244",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -39482,7 +39482,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0245",
+      "batchId": "ABILITY-E6068FAF-0245",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -39641,7 +39641,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0246",
+      "batchId": "ABILITY-E6068FAF-0246",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -39813,7 +39813,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0247",
+      "batchId": "ABILITY-E6068FAF-0247",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -39994,7 +39994,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0248",
+      "batchId": "ABILITY-E6068FAF-0248",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -40149,7 +40149,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0249",
+      "batchId": "ABILITY-E6068FAF-0249",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -40297,7 +40297,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0250",
+      "batchId": "ABILITY-E6068FAF-0250",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -40475,7 +40475,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0251",
+      "batchId": "ABILITY-E6068FAF-0251",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -40636,7 +40636,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0252",
+      "batchId": "ABILITY-E6068FAF-0252",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -40808,7 +40808,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0253",
+      "batchId": "ABILITY-E6068FAF-0253",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -40976,7 +40976,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0254",
+      "batchId": "ABILITY-E6068FAF-0254",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -41144,7 +41144,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0255",
+      "batchId": "ABILITY-E6068FAF-0255",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -41296,7 +41296,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0256",
+      "batchId": "ABILITY-E6068FAF-0256",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -41478,7 +41478,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0257",
+      "batchId": "ABILITY-E6068FAF-0257",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -41624,7 +41624,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0258",
+      "batchId": "ABILITY-E6068FAF-0258",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -41758,7 +41758,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0259",
+      "batchId": "ABILITY-E6068FAF-0259",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -41900,7 +41900,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0260",
+      "batchId": "ABILITY-E6068FAF-0260",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -42053,7 +42053,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0261",
+      "batchId": "ABILITY-E6068FAF-0261",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -42198,7 +42198,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0262",
+      "batchId": "ABILITY-E6068FAF-0262",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -42371,7 +42371,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0263",
+      "batchId": "ABILITY-E6068FAF-0263",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -42548,7 +42548,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0264",
+      "batchId": "ABILITY-E6068FAF-0264",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -42717,7 +42717,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0265",
+      "batchId": "ABILITY-E6068FAF-0265",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -42872,7 +42872,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0266",
+      "batchId": "ABILITY-E6068FAF-0266",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -43040,7 +43040,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0267",
+      "batchId": "ABILITY-E6068FAF-0267",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -43203,7 +43203,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0268",
+      "batchId": "ABILITY-E6068FAF-0268",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -43360,7 +43360,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0269",
+      "batchId": "ABILITY-E6068FAF-0269",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -43508,7 +43508,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0270",
+      "batchId": "ABILITY-E6068FAF-0270",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -43693,7 +43693,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0271",
+      "batchId": "ABILITY-E6068FAF-0271",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -43859,7 +43859,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0272",
+      "batchId": "ABILITY-E6068FAF-0272",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -44029,7 +44029,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0273",
+      "batchId": "ABILITY-E6068FAF-0273",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -44170,7 +44170,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0274",
+      "batchId": "ABILITY-E6068FAF-0274",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -44335,7 +44335,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0275",
+      "batchId": "ABILITY-E6068FAF-0275",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -44493,7 +44493,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0276",
+      "batchId": "ABILITY-E6068FAF-0276",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -44654,7 +44654,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0277",
+      "batchId": "ABILITY-E6068FAF-0277",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -44807,7 +44807,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0278",
+      "batchId": "ABILITY-E6068FAF-0278",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -44968,7 +44968,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0279",
+      "batchId": "ABILITY-E6068FAF-0279",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -45135,7 +45135,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0280",
+      "batchId": "ABILITY-E6068FAF-0280",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -45310,7 +45310,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0281",
+      "batchId": "ABILITY-E6068FAF-0281",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -45470,7 +45470,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0282",
+      "batchId": "ABILITY-E6068FAF-0282",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -45649,7 +45649,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0283",
+      "batchId": "ABILITY-E6068FAF-0283",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -45810,7 +45810,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0284",
+      "batchId": "ABILITY-E6068FAF-0284",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -45964,7 +45964,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0285",
+      "batchId": "ABILITY-E6068FAF-0285",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -46148,7 +46148,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0286",
+      "batchId": "ABILITY-E6068FAF-0286",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -46310,7 +46310,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0287",
+      "batchId": "ABILITY-E6068FAF-0287",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -46480,7 +46480,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0288",
+      "batchId": "ABILITY-E6068FAF-0288",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -46643,7 +46643,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0289",
+      "batchId": "ABILITY-E6068FAF-0289",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -46814,7 +46814,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0290",
+      "batchId": "ABILITY-E6068FAF-0290",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -46972,7 +46972,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0291",
+      "batchId": "ABILITY-E6068FAF-0291",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -47146,7 +47146,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0292",
+      "batchId": "ABILITY-E6068FAF-0292",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -47323,7 +47323,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0293",
+      "batchId": "ABILITY-E6068FAF-0293",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -47464,7 +47464,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0294",
+      "batchId": "ABILITY-E6068FAF-0294",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -47650,7 +47650,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0295",
+      "batchId": "ABILITY-E6068FAF-0295",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -47823,7 +47823,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0296",
+      "batchId": "ABILITY-E6068FAF-0296",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -47977,7 +47977,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0297",
+      "batchId": "ABILITY-E6068FAF-0297",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -48120,7 +48120,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0298",
+      "batchId": "ABILITY-E6068FAF-0298",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -48260,7 +48260,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0299",
+      "batchId": "ABILITY-E6068FAF-0299",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -48425,7 +48425,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0300",
+      "batchId": "ABILITY-E6068FAF-0300",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -48570,7 +48570,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0301",
+      "batchId": "ABILITY-E6068FAF-0301",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -48731,7 +48731,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0302",
+      "batchId": "ABILITY-E6068FAF-0302",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -48892,7 +48892,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0303",
+      "batchId": "ABILITY-E6068FAF-0303",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -49045,7 +49045,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0304",
+      "batchId": "ABILITY-E6068FAF-0304",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -49213,7 +49213,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0305",
+      "batchId": "ABILITY-E6068FAF-0305",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -49367,7 +49367,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0306",
+      "batchId": "ABILITY-E6068FAF-0306",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -49517,7 +49517,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0307",
+      "batchId": "ABILITY-E6068FAF-0307",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -49685,7 +49685,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0308",
+      "batchId": "ABILITY-E6068FAF-0308",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -49835,7 +49835,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0309",
+      "batchId": "ABILITY-E6068FAF-0309",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -49974,7 +49974,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0310",
+      "batchId": "ABILITY-E6068FAF-0310",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -50123,7 +50123,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0311",
+      "batchId": "ABILITY-E6068FAF-0311",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -50276,7 +50276,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0312",
+      "batchId": "ABILITY-E6068FAF-0312",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -50422,7 +50422,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0313",
+      "batchId": "ABILITY-E6068FAF-0313",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -50577,7 +50577,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0314",
+      "batchId": "ABILITY-E6068FAF-0314",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -50734,7 +50734,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0315",
+      "batchId": "ABILITY-E6068FAF-0315",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -50878,7 +50878,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0316",
+      "batchId": "ABILITY-E6068FAF-0316",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -51045,7 +51045,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0317",
+      "batchId": "ABILITY-E6068FAF-0317",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -51203,7 +51203,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0318",
+      "batchId": "ABILITY-E6068FAF-0318",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -51371,7 +51371,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0319",
+      "batchId": "ABILITY-E6068FAF-0319",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -51514,7 +51514,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0320",
+      "batchId": "ABILITY-E6068FAF-0320",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -51676,7 +51676,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0321",
+      "batchId": "ABILITY-E6068FAF-0321",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -51832,7 +51832,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0322",
+      "batchId": "ABILITY-E6068FAF-0322",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -51986,7 +51986,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0323",
+      "batchId": "ABILITY-E6068FAF-0323",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -52134,7 +52134,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0324",
+      "batchId": "ABILITY-E6068FAF-0324",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -52279,7 +52279,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0325",
+      "batchId": "ABILITY-E6068FAF-0325",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -52429,7 +52429,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0326",
+      "batchId": "ABILITY-E6068FAF-0326",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -52586,7 +52586,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0327",
+      "batchId": "ABILITY-E6068FAF-0327",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -52741,7 +52741,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0328",
+      "batchId": "ABILITY-E6068FAF-0328",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -52910,7 +52910,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0329",
+      "batchId": "ABILITY-E6068FAF-0329",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -53078,7 +53078,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0330",
+      "batchId": "ABILITY-E6068FAF-0330",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -53239,7 +53239,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0331",
+      "batchId": "ABILITY-E6068FAF-0331",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -53409,7 +53409,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0332",
+      "batchId": "ABILITY-E6068FAF-0332",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -53576,7 +53576,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0333",
+      "batchId": "ABILITY-E6068FAF-0333",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -53732,7 +53732,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0334",
+      "batchId": "ABILITY-E6068FAF-0334",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -53881,7 +53881,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0335",
+      "batchId": "ABILITY-E6068FAF-0335",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -54049,7 +54049,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0336",
+      "batchId": "ABILITY-E6068FAF-0336",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -54199,7 +54199,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0337",
+      "batchId": "ABILITY-E6068FAF-0337",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -54375,7 +54375,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0338",
+      "batchId": "ABILITY-E6068FAF-0338",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -54533,7 +54533,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0339",
+      "batchId": "ABILITY-E6068FAF-0339",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -54690,7 +54690,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0340",
+      "batchId": "ABILITY-E6068FAF-0340",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -54850,7 +54850,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0341",
+      "batchId": "ABILITY-E6068FAF-0341",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -54996,7 +54996,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0342",
+      "batchId": "ABILITY-E6068FAF-0342",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -55155,7 +55155,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0343",
+      "batchId": "ABILITY-E6068FAF-0343",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -55314,7 +55314,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0344",
+      "batchId": "ABILITY-E6068FAF-0344",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -55463,7 +55463,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0345",
+      "batchId": "ABILITY-E6068FAF-0345",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -55611,7 +55611,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0346",
+      "batchId": "ABILITY-E6068FAF-0346",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -55763,7 +55763,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0347",
+      "batchId": "ABILITY-E6068FAF-0347",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -55911,7 +55911,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0348",
+      "batchId": "ABILITY-E6068FAF-0348",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -56070,7 +56070,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0349",
+      "batchId": "ABILITY-E6068FAF-0349",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -56220,7 +56220,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0350",
+      "batchId": "ABILITY-E6068FAF-0350",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -56389,7 +56389,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0351",
+      "batchId": "ABILITY-E6068FAF-0351",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -56554,7 +56554,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0352",
+      "batchId": "ABILITY-E6068FAF-0352",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -56716,7 +56716,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0353",
+      "batchId": "ABILITY-E6068FAF-0353",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -56874,7 +56874,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0354",
+      "batchId": "ABILITY-E6068FAF-0354",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -57027,7 +57027,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0355",
+      "batchId": "ABILITY-E6068FAF-0355",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -57190,7 +57190,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0356",
+      "batchId": "ABILITY-E6068FAF-0356",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -57342,7 +57342,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0357",
+      "batchId": "ABILITY-E6068FAF-0357",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -57493,7 +57493,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0358",
+      "batchId": "ABILITY-E6068FAF-0358",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -57648,7 +57648,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0359",
+      "batchId": "ABILITY-E6068FAF-0359",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -57806,7 +57806,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0360",
+      "batchId": "ABILITY-E6068FAF-0360",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -57977,7 +57977,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0361",
+      "batchId": "ABILITY-E6068FAF-0361",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -58146,7 +58146,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0362",
+      "batchId": "ABILITY-E6068FAF-0362",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -58294,7 +58294,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0363",
+      "batchId": "ABILITY-E6068FAF-0363",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -58451,7 +58451,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0364",
+      "batchId": "ABILITY-E6068FAF-0364",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -58625,7 +58625,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0365",
+      "batchId": "ABILITY-E6068FAF-0365",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -58800,7 +58800,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0366",
+      "batchId": "ABILITY-E6068FAF-0366",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -58971,7 +58971,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0367",
+      "batchId": "ABILITY-E6068FAF-0367",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -59138,7 +59138,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0368",
+      "batchId": "ABILITY-E6068FAF-0368",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -59297,7 +59297,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0369",
+      "batchId": "ABILITY-E6068FAF-0369",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -59460,7 +59460,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0370",
+      "batchId": "ABILITY-E6068FAF-0370",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -59621,7 +59621,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0371",
+      "batchId": "ABILITY-E6068FAF-0371",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -59797,7 +59797,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0372",
+      "batchId": "ABILITY-E6068FAF-0372",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -59955,7 +59955,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0373",
+      "batchId": "ABILITY-E6068FAF-0373",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -60133,7 +60133,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0374",
+      "batchId": "ABILITY-E6068FAF-0374",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -60307,7 +60307,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0375",
+      "batchId": "ABILITY-E6068FAF-0375",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -60480,7 +60480,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0376",
+      "batchId": "ABILITY-E6068FAF-0376",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -60662,7 +60662,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0377",
+      "batchId": "ABILITY-E6068FAF-0377",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -60831,7 +60831,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0378",
+      "batchId": "ABILITY-E6068FAF-0378",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -61018,7 +61018,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0379",
+      "batchId": "ABILITY-E6068FAF-0379",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -61200,7 +61200,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0380",
+      "batchId": "ABILITY-E6068FAF-0380",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -61395,7 +61395,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0381",
+      "batchId": "ABILITY-E6068FAF-0381",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -61603,7 +61603,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0382",
+      "batchId": "ABILITY-E6068FAF-0382",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -61803,7 +61803,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0383",
+      "batchId": "ABILITY-E6068FAF-0383",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -62007,7 +62007,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0384",
+      "batchId": "ABILITY-E6068FAF-0384",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -62174,7 +62174,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0385",
+      "batchId": "ABILITY-E6068FAF-0385",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -62336,7 +62336,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0386",
+      "batchId": "ABILITY-E6068FAF-0386",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -62507,7 +62507,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0387",
+      "batchId": "ABILITY-E6068FAF-0387",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -62653,7 +62653,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0388",
+      "batchId": "ABILITY-E6068FAF-0388",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -62797,7 +62797,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0389",
+      "batchId": "ABILITY-E6068FAF-0389",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -62935,7 +62935,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0390",
+      "batchId": "ABILITY-E6068FAF-0390",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -63086,7 +63086,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0391",
+      "batchId": "ABILITY-E6068FAF-0391",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -63232,7 +63232,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0392",
+      "batchId": "ABILITY-E6068FAF-0392",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -63389,7 +63389,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0393",
+      "batchId": "ABILITY-E6068FAF-0393",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -63532,7 +63532,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0394",
+      "batchId": "ABILITY-E6068FAF-0394",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -63681,7 +63681,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0395",
+      "batchId": "ABILITY-E6068FAF-0395",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -63831,7 +63831,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0396",
+      "batchId": "ABILITY-E6068FAF-0396",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -63985,7 +63985,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0397",
+      "batchId": "ABILITY-E6068FAF-0397",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -64137,7 +64137,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0398",
+      "batchId": "ABILITY-E6068FAF-0398",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -64297,7 +64297,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0399",
+      "batchId": "ABILITY-E6068FAF-0399",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -64466,7 +64466,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0400",
+      "batchId": "ABILITY-E6068FAF-0400",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -64614,7 +64614,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0401",
+      "batchId": "ABILITY-E6068FAF-0401",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -64774,7 +64774,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0402",
+      "batchId": "ABILITY-E6068FAF-0402",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -64925,7 +64925,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0403",
+      "batchId": "ABILITY-E6068FAF-0403",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -65083,7 +65083,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0404",
+      "batchId": "ABILITY-E6068FAF-0404",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -65223,7 +65223,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0405",
+      "batchId": "ABILITY-E6068FAF-0405",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -65377,7 +65377,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0406",
+      "batchId": "ABILITY-E6068FAF-0406",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -65517,7 +65517,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0407",
+      "batchId": "ABILITY-E6068FAF-0407",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -65684,7 +65684,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0408",
+      "batchId": "ABILITY-E6068FAF-0408",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -65863,7 +65863,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0409",
+      "batchId": "ABILITY-E6068FAF-0409",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -66048,7 +66048,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0410",
+      "batchId": "ABILITY-E6068FAF-0410",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -66233,7 +66233,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0411",
+      "batchId": "ABILITY-E6068FAF-0411",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -66390,7 +66390,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0412",
+      "batchId": "ABILITY-E6068FAF-0412",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -66518,7 +66518,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0413",
+      "batchId": "ABILITY-E6068FAF-0413",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -66686,7 +66686,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0414",
+      "batchId": "ABILITY-E6068FAF-0414",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -66848,7 +66848,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0415",
+      "batchId": "ABILITY-E6068FAF-0415",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -66990,7 +66990,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0416",
+      "batchId": "ABILITY-E6068FAF-0416",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -67155,7 +67155,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0417",
+      "batchId": "ABILITY-E6068FAF-0417",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -67322,7 +67322,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0418",
+      "batchId": "ABILITY-E6068FAF-0418",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -67492,7 +67492,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0419",
+      "batchId": "ABILITY-E6068FAF-0419",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -67645,7 +67645,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0420",
+      "batchId": "ABILITY-E6068FAF-0420",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -67809,7 +67809,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0421",
+      "batchId": "ABILITY-E6068FAF-0421",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -67957,7 +67957,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0422",
+      "batchId": "ABILITY-E6068FAF-0422",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -68113,7 +68113,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0423",
+      "batchId": "ABILITY-E6068FAF-0423",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -68270,7 +68270,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0424",
+      "batchId": "ABILITY-E6068FAF-0424",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -68450,7 +68450,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0425",
+      "batchId": "ABILITY-E6068FAF-0425",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -68642,7 +68642,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0426",
+      "batchId": "ABILITY-E6068FAF-0426",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -68847,7 +68847,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0427",
+      "batchId": "ABILITY-E6068FAF-0427",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -69031,7 +69031,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0428",
+      "batchId": "ABILITY-E6068FAF-0428",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -69195,7 +69195,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0429",
+      "batchId": "ABILITY-E6068FAF-0429",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -69340,7 +69340,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0430",
+      "batchId": "ABILITY-E6068FAF-0430",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -69491,7 +69491,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0431",
+      "batchId": "ABILITY-E6068FAF-0431",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -69646,7 +69646,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0432",
+      "batchId": "ABILITY-E6068FAF-0432",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -69797,7 +69797,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0433",
+      "batchId": "ABILITY-E6068FAF-0433",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -69948,7 +69948,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0434",
+      "batchId": "ABILITY-E6068FAF-0434",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -70102,7 +70102,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0435",
+      "batchId": "ABILITY-E6068FAF-0435",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -70266,7 +70266,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0436",
+      "batchId": "ABILITY-E6068FAF-0436",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -70428,7 +70428,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0437",
+      "batchId": "ABILITY-E6068FAF-0437",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -70587,7 +70587,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0438",
+      "batchId": "ABILITY-E6068FAF-0438",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -70751,7 +70751,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0439",
+      "batchId": "ABILITY-E6068FAF-0439",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -70900,7 +70900,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0440",
+      "batchId": "ABILITY-E6068FAF-0440",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -71059,7 +71059,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0441",
+      "batchId": "ABILITY-E6068FAF-0441",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -71216,7 +71216,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0442",
+      "batchId": "ABILITY-E6068FAF-0442",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -71367,7 +71367,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0443",
+      "batchId": "ABILITY-E6068FAF-0443",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -71534,7 +71534,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0444",
+      "batchId": "ABILITY-E6068FAF-0444",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -71724,7 +71724,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0445",
+      "batchId": "ABILITY-E6068FAF-0445",
       "status": "available",
       "workerOwner": null,
       "cardIds": [
@@ -71935,7 +71935,7 @@
       ]
     },
     {
-      "batchId": "ABILITY-3CD72B45-0446",
+      "batchId": "ABILITY-E6068FAF-0446",
       "status": "available",
       "workerOwner": null,
       "cardIds": [

@@ -5,8 +5,8 @@
 - Repository: https://github.com/yumekazaki/vanguard-arena
 - Local checkout: `C:\Users\yumek\Documents\Codex\2026-10-24\ne\work\vanguard-arena`
 - Active branch: `codex/standard-ride-deck`
-- Current local checkpoint: `865aa63cb2738f7205bd8e1afd19823e00c6e32d` (`Enable modern ability contribution batches`). New work is in progress locally on top of this checkpoint.
-- Ability queue and registry baseline: `865aa63cb2738f7205bd8e1afd19823e00c6e32d`.
+- Current local checkpoint: `e6068faf9671b1c7d2a7d807e9a035f320215637` (`Tighten ability verification and add Glitter support`). Current registry/progress refreshes are uncommitted on top of this checkpoint.
+- Ability queue and registry baseline: `e6068faf9671b1c7d2a7d807e9a035f320215637`.
 - The branch is local and has not been confirmed pushed to GitHub. Do not start external workers until it is published and the registry is visible there. The Pages publishing branch is not the collaboration branch.
 - Card catalog: `assets/cards/catalog-data.js` when available; `scripts/audit-ability-catalog.js` also supports the committed catalog snapshot.
 
@@ -22,7 +22,9 @@
 - Whole-card promotion gate: `scripts/promote-fully-verified-cards.js` (dry-run by default; `--apply` writes evidence only when the complete source-validation suite is fresh).
 - Contribution contract: `ABILITY_CONTRIBUTION_GUIDE.md`
 
-Current catalog snapshot: **17,240 abilities; 4,326 compiled (25.09%); 12,914 unsupported or unreviewed; 645 fully verified cards**. The queue contains 16,595 abilities on cards that are not yet fully verified. The registry reserves 117 ability entries across 55 cards, with 446 available batches. The queue reports no missing registered client/server effect handlers, but this does not mean the live website is using the server authority path: online matches still relay ability decisions through the host browser. The latest full suite passed **1,565/1,565**, but its evidence is stale against current source. The latest focused queue, registry, contribution-integrator, and whole-card-gate checks passed **10/10**; rerun the full suite before claiming fresh full-suite validation.
+Current catalog snapshot: **17,240 abilities; 4,331 compiled (25.12%); 12,909 unsupported or unreviewed; 645 fully verified cards**. The queue contains 16,595 abilities on cards that are not yet fully verified. The registry reserves 134 ability entries across 65 cards, with 446 available batches. The latest complete suite passed **1,584/1,584 in 384.29 seconds**, but its digest is stale after the whole-card gate was tightened. The current focused Glitter, contribution, queue, registry, and promotion-gate checks pass **24/24**. `catalog-progress.json` now reports the suite freshness explicitly. The queue reports no missing registered client/server effect handlers; online matches still relay ability decisions through the host browser, so reducer tests do not establish live authoritative multiplayer behavior.
+
+Three disjoint batches are reserved for isolated internal worktrees: `PRIMARY-WORKER-CONT-CONDITIONAL-CARD-NAME-6` (six abilities), `PRIMARY-WORKER-AUTO-CLAN-CB-ATTACK-POWER-4` (four abilities), and `PRIMARY-WORKER-AUTO-SAME-NAME-DROP-CALL-4` (four abilities). Each worker must preserve exact card text and leave whole-card verification pending until all abilities and live-game requirements are satisfied.
 
 The repository's measured bottleneck is card-specific interpretation and requirement/effect validation, not missing generic client/server handlers. Similarity groups are candidates for review only; they are not proof that different cards have equivalent rules.
 
@@ -31,7 +33,10 @@ The repository's measured bottleneck is card-specific interpretation and require
 - `PRIMARY-ACT-DECKTOP-DRAW-POWER` — implemented eight exact ACT abilities; six focused tests pass and per-ability evidence is recorded. It remains reserved until full-card verification and a fresh full suite.
 - `PRIMARY-ORDER-SEARCH-NAME-AUTO` — six abilities: `cfa-12653:0` through `cfa-12658:0`. Reserved because live online matches still use host-relayed browser state; do not integrate a separate server-only Order action until the authoritative match path is connected.
 - `PRIMARY-GC-INTERCEPT-ABILITY-NEGATION-CONT` — six abilities: `cfa-13119:0` through `cfa-13124:0`. Reserved until the authoritative online path supports Intercept and exact temporary ability suppression.
-- `PRIMARY-AUTO-GLITTER-PLACEMENT-TOP-FIVE` — five abilities: `cfa-13520:0`, `cfa-13542:0`, `cfa-13584:0`, `cfa-13608:0`, and `cfa-13621:0`. Integrated locally with authoritative reducer checks for Glitter Vanguard eligibility, exact hand-to-RC source, top-five filtering, both player seats, and source-to-Soul only after a revealed card. Focused suite: 13/13 passed. The browser multiplayer app still uses its host-relay path, so live online verification remains outstanding and these cards are not fully verified.
+- `PRIMARY-AUTO-GLITTER-PLACEMENT-TOP-FIVE` — five abilities: `cfa-13520:0`, `cfa-13542:0`, `cfa-13584:0`, `cfa-13608:0`, and `cfa-13621:0`. Integrated locally with authoritative reducer checks for Glitter Vanguard eligibility, exact hand-to-RC source, top-five filtering, both player seats, and source-to-Soul only after a revealed card. The five-card focused suite passes 13/13. The browser multiplayer app still uses its host-relay path, so live online verification remains outstanding and these cards are not fully verified.
+- `PRIMARY-WORKER-CONT-CONDITIONAL-CARD-NAME-6` — `cfa-12062:1`, `cfa-12719:1`, `cfa-13689:1`, `cfa-5264:0`, `cfa-5349:1`, `cfa-7528:1`; assigned to isolated worker `worker-conditional-name`.
+- `PRIMARY-WORKER-AUTO-CLAN-CB-ATTACK-POWER-4` — `cfa-1140:0`, `cfa-1159:0`, `cfa-1170:0`, `cfa-1187:0`; assigned to isolated worker `worker-clan-counterblast`.
+- `PRIMARY-WORKER-AUTO-SAME-NAME-DROP-CALL-4` — `cfa-8541:0`, `cfa-8571:0`, `cfa-8577:0`, `cfa-8585:0`; assigned to isolated worker `worker-same-name-drop-call`.
 - `PRIMARY-PERSONA-SHIELD-TICKET-AUTO` — thirteen abilities across six Persona Shield units and the ticket card, including the ride-deck trigger, grade-three attack bonus, and ticket protection restriction; already integrated.
 - `PRIMARY-GZONE-STRIDE` — 112 abilities remain reserved for the primary session.
 
