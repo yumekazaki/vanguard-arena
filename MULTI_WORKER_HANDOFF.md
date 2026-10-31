@@ -5,7 +5,7 @@
 - Repository: https://github.com/yumekazaki/vanguard-arena
 - Local checkout: `C:\Users\yumek\Documents\Codex\2026-10-24\ne\work\vanguard-arena`
 - Active branch: `codex/standard-ride-deck`
-- Latest local checkpoint: `fa7648c44053ebd6068abe0fbf1a57e066353178` (`Reserve Persona Shield ability batch`)
+- Implementation checkpoint before this handoff-document update: `fa7648c44053ebd6068abe0fbf1a57e066353178` (`Reserve Persona Shield ability batch`); the latest branch commit also contains this coordination document.
 - Ability queue and registry source baseline: `a334c44bdc196655303d21d0ec521990ec369c2d`
 - The branch is local and has not been confirmed pushed to GitHub. Do not start external workers until it is published and the registry is visible there. The Pages publishing branch is not the collaboration branch.
 - Card catalog: `assets/cards/catalog-data.js` when available; `scripts/audit-ability-catalog.js` also supports the committed catalog snapshot.
