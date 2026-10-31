@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "batchId": "CANDIDATE-C0086556-0003",
+  "workerId": "codex-new-era-multi-abilities",
+  "baselineCommit": "c00865569ef43a5915401e313ef036c25dc963b2",
+  "abilityIds": [
+    "cfa-11524:0",
+    "cfa-11524:1",
+    "cfa-11524:2",
+    "cfa-11544:0",
+    "cfa-11544:1",
+    "cfa-11544:2",
+    "cfa-11556:0",
+    "cfa-11556:1",
+    "cfa-11556:2",
+    "cfa-11605:0",
+    "cfa-11605:1",
+    "cfa-11605:2",
+    "cfa-11605:3",
+    "cfa-11669:0",
+    "cfa-11669:1",
+    "cfa-11669:2"
+  ],
+  "claimedAt": "2026-10-31T12:48:13.525Z"
+}
