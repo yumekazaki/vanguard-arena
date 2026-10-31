@@ -30,6 +30,42 @@
         "cfa-12657:0",
         "cfa-12658:0"
       ]
+    },
+    {
+      "batchId": "PRIMARY-STRIDE-TWO-GIFT-ACT",
+      "status": "in-progress",
+      "workerOwner": "primary-session/stride_gift_family",
+      "reason": "Review and implement the exact seven Accel and seven Force G-zone ACT abilities that stride this card after grade-sum discard, then flip a same-name G-zone card and gain two matching gifts. Keep other gift/crest variants separate.",
+      "abilityIds": [
+        "cfa-11108:0",
+        "cfa-11116:0",
+        "cfa-11118:0",
+        "cfa-11122:0",
+        "cfa-11132:0",
+        "cfa-11138:0",
+        "cfa-11142:0",
+        "cfa-11110:0",
+        "cfa-11112:0",
+        "cfa-11124:0",
+        "cfa-11126:0",
+        "cfa-11128:0",
+        "cfa-11136:0",
+        "cfa-11144:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-GC-INTERCEPT-ABILITY-NEGATION-CONT",
+      "status": "in-progress",
+      "workerOwner": "primary-session/gc_ability_negation_family",
+      "reason": "Review the exact six front-row RC CONT abilities that suppress opponent GC intercept AUTO activation and remove opponent CONT/AUTO abilities from units moved RC to GC; preserve exact turn, controller, and source instance scope.",
+      "abilityIds": [
+        "cfa-13119:0",
+        "cfa-13120:0",
+        "cfa-13121:0",
+        "cfa-13122:0",
+        "cfa-13123:0",
+        "cfa-13124:0"
+      ]
     }
   ],
   "completedAssignments": [
