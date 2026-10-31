@@ -130,3 +130,29 @@ test("an opponent's matching Soul and a wrong Rear-Guard location do not grant t
     assert.equal(wrongCircleOutcome.state.pendingAttack.power, Number(wrongCircle.source.power), `${side}/${id}: VC-only modifier does not apply on RC`);
   }
 });
+
+test("unmodeled sibling effects remain unsupported instead of receiving partial definitions", () => {
+  const expected = new Map([
+    ["cfa-11767:0", {
+      cardId: "cfa-11767",
+      text: "ACT [VC] Limit Break 4: COST [Counter Blast 2], this unit gets power +5000 until end of turn, search your deck for up to two <Iconic> cards, call them to RC, shuffle your deck."
+    }],
+    ["cfa-4411:1", {
+      cardId: "cfa-4411",
+      text: 'CONT [RC]: If you have "Chic Folk Dracokid" in your soul, this unit gets power +1000 / grade +1.'
+    }]
+  ]);
+  for (const [id, item] of expected) {
+    const card = cards.find(value => value.id === item.cardId);
+    const abilities = Engine.parseCardAbilitiesCached(card);
+    const ability = abilities.find(value => value.id === id);
+    assert.ok(ability, id);
+    assert.equal(ability.printedText, item.text, `${id}: exact catalog text remains attached`);
+    assert.equal(ability.definition, null, `${id}: no incomplete handler is registered`);
+    if (ability.kind === "ACT") {
+      assert.deepEqual(Engine.canActivateManualAbility(ability, {}), { ok: false, reason: "unsupported-effect" }, id);
+    } else {
+      assert.equal(ability.conditionStatus, "needs-review", id);
+    }
+  }
+});
