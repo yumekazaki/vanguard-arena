@@ -41,7 +41,7 @@ test("five exact clan-filtered ACT abilities retain RC location, both costs, cla
     assert.ok(definition, `${abilityId} is trusted`);
     assert.equal(ability.definition.source.patternId, "act-rc-source-to-soul-discard-draw-clan-v1");
     assert.deepEqual(ability.requiredLocation, ["rear-guard"]);
-    assert.deepEqual(ability.costs, [{ type: "discard", count: 1 }, { type: "source-to-soul", count: 1 }]);
+    assert.deepEqual(ability.costs, [{ type: "source-to-soul", count: 1 }, { type: "discard", count: 1 }]);
     assert.deepEqual(ability.conditions, [{ type: "controller-vanguard-has-clan", value: clan }]);
     assert.deepEqual(ability.definition.effects, [{ op: "draw", count: 1 }]);
     assert.equal(ability.conditionStatus, "modeled");

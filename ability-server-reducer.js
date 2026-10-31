@@ -195,11 +195,12 @@
   function isExactActRestDiscardDrawAbility(ability) {
     const cardId = String(ability?.cardId || ""), definition = ability?.definition;
     const printed = String(definition?.printedText || ability?.printedText || "").replace(/\s+/g, " ").trim();
+    const costs = JSON.stringify((ability?.costs || []).map(cost => [String(cost?.type || ""), Number(cost?.count)]).sort(([leftType, leftCount], [rightType, rightCount]) => leftType.localeCompare(rightType) || leftCount - rightCount));
     return ACT_REST_DISCARD_DRAW_IDS.has(cardId) && ability?.id === `${cardId}:0` && ability.kind === "ACT" &&
       definition?.kind === "ACT" && String(definition.cardId) === cardId && definition.id === ability.id &&
       definition.source?.patternId === "act-rest-discard-draw-v1" && printed === ACT_REST_DISCARD_DRAW_TEXT &&
       JSON.stringify(ability.requiredLocation || []) === JSON.stringify(["vanguard", "rear-guard"]) &&
-      JSON.stringify(ability.costs || []) === JSON.stringify([{ type: "discard", count: 1 }, { type: "rest-source", count: 1 }]) &&
+      costs === JSON.stringify([["discard", 1], ["rest-source", 1]]) &&
       !(ability.conditions || []).length && !ability.once && !ability.usageRestriction &&
       definition.conditionsReviewed === true && definition.costsReviewed === true && definition.choicesReviewed === true &&
       definition.effects?.length === 1 && definition.effects[0]?.op === "draw" && Number(definition.effects[0]?.count) === 1;
