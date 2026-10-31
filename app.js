@@ -692,7 +692,18 @@
   function addLog(message) { if (!match) return; match.log.unshift({ time: new Date(), message }); match.log = match.log.slice(0, 15); renderLog(); }
   function renderLog() { if (!match) return; $("#match-log").innerHTML = match.log.map((entry) => `<div class="log-entry"><time>${entry.time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</time><span>${escapeHtml(entry.message)}</span></div>`).join(""); }
   function setMessage(message) { $("#table-message").textContent = message; }
+  function updateOnlineChat() {
+    window.VanguardTableChat?.controller?.setSession({
+      role: online.role, sessionId: online.publicRoomCode || online.roomId || "",
+      matchId: match?.matchId || "",
+      connected: Boolean(online.connection?.open) && (online.role !== "host" || !online.connection?.isRelay || online.relayPlayerJoined),
+      localName: online.localName || match?.players?.human?.name || "Player",
+      opponentName: match?.players?.bot?.name || "Opponent",
+      send: message => online.connection?.send(message)
+    });
+  }
   function renderMatch() {
+    updateOnlineChat();
     if (!match) return;
     window.VanguardArenaVisualEffects?.beforeRender();
     checkDamageEnd();
@@ -2407,6 +2418,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }
   function handleRemoteMessage(message) {
     if (!message || typeof message !== "object") return;
+    if (message.type === "table-chat") { updateOnlineChat(); window.VanguardTableChat?.controller?.receive(message); return; }
     if (online.role === "host" && message.type === "join") {
       if (!match) startMatch(onlineDeck(), "human", true);
       const deck = sanitizedDeck(message.deck);
@@ -2520,6 +2532,10 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       if (role !== "host" || !connection.isRelay) { $("#match-status").textContent = "ONLINE · CONNECTED"; setConnectionPill("CONNECTED"); } const reconnectButton = $("#reconnect-match"); if (reconnectButton) reconnectButton.hidden = true;
     });
     connection.on("data", handleRemoteMessage);
+    if (role === "host" || role === "guest") {
+      connection.on("open", updateOnlineChat);
+      connection.on("close", updateOnlineChat);
+    }
     connection.on("close", () => { $("#match-status").textContent = "ONLINE · DISCONNECTED"; setConnectionPill("DISCONNECTED"); const reconnectButton = $("#reconnect-match"); if (role === "guest" && reconnectButton) reconnectButton.hidden = false; toast("Connection lost. Reconnect to continue this match."); });
     connection.on("error", onlinePeerError);
   }
@@ -2597,6 +2613,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (online.role === "host" && online.publicRoomCode && account.matchClient) void account.matchClient.rpc("close_match_room", { p_room_code: online.publicRoomCode });
     try { online.connection?.close(); online.watchConnection?.close(); online.watchers?.forEach((connection) => connection.close()); online.peer?.destroy(); } catch {}
     online = { role: null, peer: null, connection: null, watchConnection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, joinRetry: null, remoteRequestTimer: null, remoteRequestPending: null, relayStateReceived: false, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false, abilityResponsePending: null, lastSentStateSignature: null };
+    updateOnlineChat();
     setConnectionPill("READY");
     $("#online-invite").classList.add("hidden");
   }
