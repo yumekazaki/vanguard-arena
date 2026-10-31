@@ -43,8 +43,8 @@
     return Number(id) > 10504 ? `${upstreamCardArtBase}/CardSprite/n${id}.jpg` : `assets/cards/full/n${id}.jpg`;
   }
   cardMap.set("token-quick-shield", { id: "token-quick-shield", image: "assets/ui/tokens/quick-shield.jpg", name: "Quick Shield", grade: 0, nation: "Token", power: 0, shield: 5000, type: "Quick Shield Token", text: "Provides 5,000 shield when used to guard.", color: "#a39bff", glyph: "◇", source: "Vanguard Arena token" });
-  cardMap.set("token-guardian-shield", { id: "token-guardian-shield", image: "assets/ui/tokens/guardian-shield.webp", name: "Guardian Shield", grade: 0, nation: "Token", power: 0, shield: 2000, type: "Guardian Shield Token", text: "Provides 2,000 shield when used to guard.", color: "#89d4ee", glyph: "◇", source: "Vanguard Arena token" });
-  cardMap.set("token-protect", { id: "token-protect", image: "assets/ui/tokens/protect.webp", name: "Protect Marker", grade: 0, nation: "Token", power: 0, shield: 0, type: "Protect Marker", text: "When used to guard, discard one other card from your hand to completely stop the attack.", color: "#81d9ee", glyph: "◇", source: "Vanguard Arena token" });
+  cardMap.set("token-guardian-shield", { id: "token-guardian-shield", image: "assets/ui/tokens/guardian-shield.webp", name: "Guardian Shield", grade: 0, nation: "Token", power: 0, shield: 20000, type: "Guardian Shield Token", text: "Provides 20,000 shield when used to guard.", color: "#89d4ee", glyph: "◇", source: "Vanguard Arena token" });
+  cardMap.set("token-protect", { id: "token-protect", image: "assets/ui/tokens/protect.webp", name: "Protect Marker", grade: 0, nation: "Token", power: 0, shield: 0, type: "Protect Marker", text: "[CONT]: Sentinel. When used to guard, discard one other card from your hand to completely stop the attack.", color: "#81d9ee", glyph: "◇", source: "Vanguard Arena token" });
   window.ArenaInspector?.setCatalog([...cardMap.values()]);
   const artIds = Array.isArray(window.CARD_ART_IDS) ? window.CARD_ART_IDS : [];
   const isUnitCard = (card) => /\b(?:unit|trigger)\b/i.test(card?.type || "");
@@ -2252,7 +2252,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       player.hand = player.hand.filter((item) => item.uid !== card.uid); player.damage.push(card); queueAbilityPrompts("damagePlace","human",card.uid,{zone:"damage",sourceZone:"hand",currentLocation:"damage"}); match.selected = null;
       addLog(`${player.name} moved ${cardMap.get(card.cardId)?.name || "a card"} from hand to damage.`);
     } else if (action === "quick-shield" || action === "guardian-shield") {
-      const tokenId=action==="guardian-shield"?"token-guardian-shield":"token-quick-shield"; if(action==="guardian-shield")player.guardianShields=(player.guardianShields||0)+1;else player.quickShields=(player.quickShields||0)+1; player.hand.push({ uid: `${tokenId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, cardId: tokenId, isToken: true }); addLog(`${player.name} added a ${action==="guardian-shield"?"Guardian Shield (2,000)":"Quick Shield (5,000)"} to hand.`);
+      const tokenId=action==="guardian-shield"?"token-guardian-shield":"token-quick-shield"; if(action==="guardian-shield")player.guardianShields=(player.guardianShields||0)+1;else player.quickShields=(player.quickShields||0)+1; player.hand.push({ uid: `${tokenId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, cardId: tokenId, isToken: true }); addLog(`${player.name} added a ${action==="guardian-shield"?"Guardian Shield (20,000)":"Quick Shield (5,000)"} to hand.`);
     } else if (action === "protect-to-hand") {
       player.protectMarkers = (player.protectMarkers || 0) + 1; player.hand.push({ uid: `protect-marker-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, cardId: "token-protect", isToken: true }); addLog(`${player.name} added a Protect marker to hand.`);
     }

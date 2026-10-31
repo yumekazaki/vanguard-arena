@@ -31,11 +31,11 @@ test("defense hand mode cannot act for an attacker, spectator, completed defense
   c.match.pendingAttack.defenderSide="human";c.online.role="watcher";assert.equal(c.handDefenseState().active,false);
   c.online.role="guest";c.match.pendingAbility={};assert.equal(c.handDefenseState().active,true);assert.equal(c.handDefenseState().canFinish,false);
 });
-test("supplied token images are registered without changing existing shield values",()=>{
+test("supplied token images are registered with their correct shield values",()=>{
   const cardMap=new Map(),c={cardMap};vm.createContext(c);
   const lines=app.split("\n").filter(x=>x.includes('cardMap.set("token-'));
   vm.runInContext(lines.join("\n"),c);
-  for(const [id,shield] of [["token-quick-shield",5000],["token-guardian-shield",2000],["token-protect",0]]){
+  for(const [id,shield] of [["token-quick-shield",5000],["token-guardian-shield",20000],["token-protect",0]]){
     const card=cardMap.get(id);assert.equal(card.shield,shield);assert.ok(fs.existsSync(require("node:path").join(__dirname,card.image)));
   }
 });
