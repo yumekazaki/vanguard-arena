@@ -62,6 +62,26 @@ test("active worker assignments reserve every ability on each assigned card and 
   ] }), /unknown ability/);
 });
 
+test("candidate mechanic families group intact cards for triage without treating similarity as verified equivalence", () => {
+  const queue = { validationEvidenceFresh: false, items: [
+    ...["cfa-3000", "cfa-3001", "cfa-3002"].flatMap((cardId, index) => [
+      { abilityId: `${cardId}:0`, cardId, kind: "AUTO", printedText: `AUTO candidate ${index}`, effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"], mechanicGroup: "candidate-call-from-drop", mechanicGroupType: "unreviewed-similarity-candidate" },
+      ...(index === 0 ? [{ abilityId: `${cardId}:1`, cardId, kind: "CONT", printedText: "Different ability on same card", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"], mechanicGroup: "other-candidate", mechanicGroupType: "unreviewed-similarity-candidate" }] : [])
+    ]),
+    { abilityId: "cfa-3999:0", cardId: "cfa-3999", kind: "ACT", printedText: "Unrelated", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] }
+  ] };
+  const result = buildRegistry(queue, { baselineCommit: BASELINE, cardsPerBatch: 2, minMechanicGroupCards: 3 });
+  const familyBatches = result.batches.filter(batch => batch.candidateMechanicGroup === "candidate-call-from-drop");
+  assert.equal(familyBatches.length, 2);
+  assert.equal(familyBatches.reduce((count, batch) => count + batch.focusedAbilityIds.length, 0), 3);
+  assert.ok(familyBatches.every(batch => batch.groupingNote.includes("does not establish rule equivalence")));
+  assert.ok(familyBatches.flatMap(batch => batch.abilityIds).includes("cfa-3000:1"), "all abilities on a family-assigned card stay in the same batch");
+  assert.equal(result.records.find(record => record.abilityId === "cfa-3000:1").batchId, result.records.find(record => record.abilityId === "cfa-3000:0").batchId);
+  assert.equal(result.records.find(record => record.abilityId === "cfa-3999:0").batchId, `ABILITY-${BASELINE.slice(0, 8).toUpperCase()}-0001`);
+  const assignedCards = result.batches.flatMap(batch => batch.cardIds);
+  assert.equal(new Set(assignedCards).size, assignedCards.length, "a card must not be placed into more than one work batch");
+});
+
 function git(cwd, args, input, env = process.env) {
   return execFileSync("git", args, { cwd, encoding: "utf8", input, env, stdio: input === undefined ? ["ignore", "pipe", "pipe"] : ["pipe", "pipe", "pipe"] }).trim();
 }

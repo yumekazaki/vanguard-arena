@@ -19,9 +19,10 @@ function atomicWrite(file, contents) {
   fs.renameSync(temporary, file);
 }
 
-function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, assignments = [] } = {}) {
+function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicGroupCards = 4, assignments = [] } = {}) {
   if (!queue || !Array.isArray(queue.items) || !baselineCommit || !/^[0-9a-f]{40}$/i.test(baselineCommit)) throw new TypeError("A work queue and full baseline commit SHA are required.");
   if (!Number.isInteger(cardsPerBatch) || cardsPerBatch < 1 || cardsPerBatch > 100) throw new RangeError("cardsPerBatch must be between 1 and 100.");
+  if (!Number.isInteger(minMechanicGroupCards) || minMechanicGroupCards < 2 || minMechanicGroupCards > 100) throw new RangeError("minMechanicGroupCards must be between 2 and 100.");
   if (!Array.isArray(assignments)) throw new TypeError("Assignments must be an array.");
 
   const byCard = new Map(), seen = new Set();
@@ -72,7 +73,6 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, assignments 
   const reservedCards = new Set([...RESERVED_ABILITIES].map(id => queueByAbility.get(id)?.cardId).filter(Boolean).map(String));
   for (const cardId of assignedCards.keys()) reservedCards.add(cardId);
   const reservedRows = queue.items.filter(item => reservedCards.has(String(item.cardId)));
-  const normalCards = [...byCard.keys()].filter(cardId => !reservedCards.has(cardId)).sort((a, b) => a.localeCompare(b));
   const batches = [...assignmentBatches];
   if (reservedCards.size) batches.push({
     batchId: "PRIMARY-GZONE-STRIDE",
@@ -83,6 +83,46 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, assignments 
     abilityIds: reservedRows.map(item => item.abilityId).sort(),
     dependencies: [...new Set(reservedRows.flatMap(item => (item.dependencies || []).map(dep => dep.id)))].sort()
   });
+  const candidateCardsByGroup = new Map();
+  for (const [cardId, cardItems] of byCard) {
+    if (reservedCards.has(cardId)) continue;
+    const groups = new Set(cardItems.filter(item => item.workFlags?.includes("unsupported-or-unreviewed") &&
+      item.mechanicGroupType === "unreviewed-similarity-candidate" && typeof item.mechanicGroup === "string")
+      .map(item => item.mechanicGroup));
+    for (const mechanicGroup of groups) {
+      let cardSet = candidateCardsByGroup.get(mechanicGroup);
+      if (!cardSet) candidateCardsByGroup.set(mechanicGroup, cardSet = new Set());
+      cardSet.add(cardId);
+    }
+  }
+  const rankedCandidateGroups = [...candidateCardsByGroup.entries()]
+    .filter(([, cardSet]) => cardSet.size >= minMechanicGroupCards)
+    .sort((a, b) => b[1].size - a[1].size || a[0].localeCompare(b[0]));
+  const familyAssignedCards = new Set();
+  let familyBatchSequence = 1;
+  for (const [mechanicGroup, cardSet] of rankedCandidateGroups) {
+    const eligibleCards = [...cardSet].filter(cardId => !familyAssignedCards.has(cardId)).sort((a, b) => a.localeCompare(b));
+    for (let offset = 0; offset < eligibleCards.length; offset += cardsPerBatch) {
+      const cardIds = eligibleCards.slice(offset, offset + cardsPerBatch);
+      if (!cardIds.length) continue;
+      cardIds.forEach(cardId => familyAssignedCards.add(cardId));
+      const rows = cardIds.flatMap(cardId => byCard.get(cardId));
+      const focusedAbilityIds = rows.filter(item => item.mechanicGroup === mechanicGroup).map(item => item.abilityId).sort();
+      batches.push({
+        batchId: `FAMILY-${baselineCommit.slice(0, 8).toUpperCase()}-${String(familyBatchSequence++).padStart(4, "0")}`,
+        status: "available",
+        workerOwner: null,
+        cardIds,
+        abilityIds: rows.map(item => item.abilityId).sort(),
+        focusedAbilityIds,
+        candidateMechanicGroup: mechanicGroup,
+        groupingNote: "Similarity triage only: review each printed ability independently; matching this group does not establish rule equivalence.",
+        dependencies: [...new Set(rows.flatMap(item => (item.dependencies || []).map(dep => dep.id)))].sort()
+      });
+    }
+  }
+
+  const normalCards = [...byCard.keys()].filter(cardId => !reservedCards.has(cardId) && !familyAssignedCards.has(cardId)).sort((a, b) => a.localeCompare(b));
   for (let index = 0; index < normalCards.length; index += cardsPerBatch) {
     const cardIds = normalCards.slice(index, index + cardsPerBatch);
     const rows = cardIds.flatMap(cardId => byCard.get(cardId));
