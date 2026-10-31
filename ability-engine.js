@@ -1264,6 +1264,13 @@
     if(!match||Number(match[1])!==1)return null;
     return{id:abilityId,cardId,kind,printedText,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-gb-boosted-vanguard-attack-counter-blast-draw-v1",review:"Exact Diviner, Kuroikazuchi catalog text. Own attack to Vanguard, exact booster evidence, GB1, Counter Blast 1, optional cost, and one-card draw are modeled."},effects:[{op:"draw",count:1}]};
   }
+  function compileBoostedVanguardAttackCounterBlastSoulChargePowerDefinition(cardId,abilityId,kind,printedText){
+    if(kind!=="AUTO")return null;
+    const pattern=/^AUTO\s*\[RC\]\s*Generation Break (\d+) \(This ability is active if you have one or more face up G units(?: in total)? (?:on your VC and\/or G Zone|in total on your VC or G zone)\): \[Counter Blast (\d+)\] When this unit attacks a vanguard, if this unit is boosted, you may pay the cost\. If you do, Soul Charge (\d+), and this unit gets power \+(\d+) until end of that battle\.$/i;
+    const match=String(printedText||"").match(pattern);
+    if(!match||match.slice(1).some(value=>!positiveInteger(Number(value))))return null;
+    return{id:abilityId,cardId,kind,printedText,requiredLocation:["rear-guard"],trigger:{status:"recognized-trigger",eventType:"unit.attacked",subject:"source",targetLocation:"vanguard"},conditions:[{type:"generation-break",count:Number(match[1])},{type:"source-was-boosted"}],costs:[{type:"counter-blast",count:Number(match[2])}],canDecline:true,conditionsReviewed:true,costsReviewed:true,choicesReviewed:true,optional:true,source:{dataset:"Cardfight Area snapshot",snapshotDate:"2025-05-09",patternId:"auto-gb-boosted-vanguard-attack-counter-blast-soul-charge-power-battle-v1",review:"Exact Squallmaker Vampir text template. The source must be this Rear-Guard's own boosted attack to a Vanguard with the printed Generation Break active; optional Counter Blast is paid before Soul Charge, then only the same source receives the printed battle power."},effects:[{op:"soul-charge",count:Number(match[3])},{op:"modify-power",target:"source",amount:Number(match[4]),duration:"battle"}]};
+  }
   function compilePlacedOnRearGuardSoulBlastDrawDefinition(cardId,abilityId,kind,printedText){
     if(kind!=="AUTO")return null;
     const match=String(printedText||"").match(/^AUTO:\s*\[Soul Blast (\d+)\] When this unit is placed on RC, you may pay the cost\. If you do, draw a card\.$/i);
@@ -2722,6 +2729,7 @@
     compileEmptyDamageZonePlacementDefinition,
     compileBoostedAttackHitDiscardDrawDefinition,
     compileBoostedVanguardAttackCounterBlastDrawDefinition,
+    compileBoostedVanguardAttackCounterBlastSoulChargePowerDefinition,
     compilePlacedOnRearGuardSoulBlastDrawDefinition,
     compilePlacedOnRearGuardSoulBlastClanDrawDefinition,
     compileActNamedSoulPowerCriticalDefinition,

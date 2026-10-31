@@ -958,6 +958,27 @@
       typeof attack?.boostUid==="string"&&event.boosterCardInstanceId===attack.boostUid&&booster&&!booster.ambiguous&&booster.zone==="rear-guard"&&booster.side===located.side&&booster.controllerPlayerId===actorPlayerId&&located.zone==="rear-guard"&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&player.rear?.some(card=>card?.uid===source?.uid);
   }
 
+  function isExactGbBoostedVanguardAttackSoulChargePowerAbility(ability) {
+    const definition=ability?.definition,printed=String(definition?.printedText||ability?.printedText||"").replace(/\s+/g," ").trim();
+    const match=/^AUTO \[RC\] Generation Break (\d+) \(This ability is active if you have one or more face up G units(?: in total)? (?:on your VC and\/or G Zone|in total on your VC or G zone)\): \[Counter Blast (\d+)\] When this unit attacks a vanguard, if this unit is boosted, you may pay the cost\. If you do, Soul Charge (\d+), and this unit gets power \+(\d+) until end of that battle\.$/i.exec(printed);
+    if(!match||match.slice(1).some(value=>!Number.isInteger(Number(value))||Number(value)<=0))return false;
+    const [generationBreak,counterBlast,soulCharge,power]=match.slice(1).map(Number);
+    return typeof ability?.cardId==="string"&&ability.cardId.length>0&&ability?.id===definition?.id&&ability.id.startsWith(`${ability.cardId}:`)&&ability.kind==="AUTO"&&definition?.kind==="AUTO"&&definition.cardId===ability.cardId&&
+      definition.source?.patternId==="auto-gb-boosted-vanguard-attack-counter-blast-soul-charge-power-battle-v1"&&printed===String(ability.printedText||"").replace(/\s+/g," ").trim()&&
+      definition.conditionsReviewed===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&definition.optional===true&&definition.once!==true&&!definition.usageRestriction&&
+      JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["rear-guard"])&&JSON.stringify(definition.requiredLocation||[])===JSON.stringify(["rear-guard"])&&ability.trigger?.status==="recognized-trigger"&&ability.trigger.eventType==="unit.attacked"&&ability.trigger.subject==="source"&&ability.trigger.targetLocation==="vanguard"&&
+      JSON.stringify(ability.conditions||[])===JSON.stringify([{type:"generation-break",count:generationBreak},{type:"source-was-boosted"}])&&JSON.stringify(ability.costs||[])===JSON.stringify([{type:"counter-blast",count:counterBlast}])&&ability.canDecline===true&&
+      definition.effects?.length===2&&definition.effects[0]?.op==="soul-charge"&&definition.effects[0]?.count===soulCharge&&definition.effects[1]?.op==="modify-power"&&definition.effects[1]?.target==="source"&&Number(definition.effects[1]?.amount)===power&&definition.effects[1]?.duration==="battle";
+  }
+  function gbBoostedVanguardAttackSoulChargePowerEventMatches(state,ability,source,located,event,actorPlayerId,engine) {
+    const attack=state?.pendingAttack,player=located&&state?.players?.[located.side],booster=engine?.locateCardInstance?.(state,event?.boosterCardInstanceId);
+    return isExactGbBoostedVanguardAttackSoulChargePowerAbility(ability)&&event?.type==="unit.attacked"&&Boolean(event.eventId&&event.battleId)&&event.battleId===attack?.battleId&&
+      event.sourceCardInstanceId===source?.uid&&event.cardInstanceId===source?.uid&&event.subjectCardInstanceId===source?.uid&&event.sourceOwnerPlayerId===located?.ownerPlayerId&&event.subjectOwnerPlayerId===located?.ownerPlayerId&&
+      event.sourceControllerPlayerId===actorPlayerId&&event.subjectControllerPlayerId===actorPlayerId&&event.actingPlayerId===actorPlayerId&&event.turnPlayerId===actorPlayerId&&event.phase==="battle"&&event.timingWindow==="attack-declared"&&
+      event.targetLocation==="vanguard"&&event.targetCardInstanceIds?.length===1&&event.targetCardInstanceIds[0]===attack?.targetUid&&attack?.attackerUid===source?.uid&&attack?.attackerSide===located?.side&&attack?.attackerPlayerId===actorPlayerId&&attack?.attackerZone===located?.circle&&attack?.targetZone==="vanguard"&&attack?.defenderSide!==located?.side&&
+      typeof attack?.boostUid==="string"&&attack.boostUid!==source?.uid&&event.boosterCardInstanceId===attack.boostUid&&booster&&!booster.ambiguous&&booster.zone==="rear-guard"&&booster.side===located.side&&booster.controllerPlayerId===actorPlayerId&&located.zone==="rear-guard"&&located.controllerPlayerId===actorPlayerId&&player?.playerId===actorPlayerId&&player.rear?.some(card=>card?.uid===source?.uid);
+  }
+
   function isExactRcPlacementChooseFriendlyPowerAbility(ability) {
     const definition = ability?.definition;
     const printed = String(definition?.printedText || ability?.printedText || "").replace(/[’‘]/g, "'").replace(/\s+/g, " ").trim();
@@ -3089,6 +3110,7 @@
     if (ability?.definition?.source?.patternId === "auto-own-attack-counter-blast-power-mandatory-battle-v1" && !isExactOwnAttackMandatoryCounterBlastPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-placement-hand-normal-drop-bottom-power-v1" && !isExactRcPlacementNormalDropBottomPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-gb-boosted-vanguard-attack-counter-blast-draw-v1" && !isExactGbBoostedVanguardAttackDrawAbility(ability)) return false;
+    if (ability?.definition?.source?.patternId === "auto-gb-boosted-vanguard-attack-counter-blast-soul-charge-power-battle-v1" && !isExactGbBoostedVanguardAttackSoulChargePowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-placement-choose-friendly-clan-power-turn-v1" && !isExactRcPlacementChooseFriendlyPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-placement-soul-blast-choose-friendly-power-turn-v1" && !isExactRcPlacementSoulBlastFriendlyPowerAbility(ability)) return false;
     if (ability?.definition?.source?.patternId === "auto-rc-gb-vanguard-attack-sacrifice-draw-power-v1" && !isExactRearGuardVanguardAttackSacrificeAbility(ability)) return false;
@@ -3928,6 +3950,10 @@
             if (isExactOwnAttackMandatoryCounterBlastPowerAbility(ability) && !ownAttackMandatoryCounterBlastEventMatches(state, ability, located.instance, located, event, located.controllerPlayerId)) continue;
             if(isExactGbBoostedVanguardAttackDrawAbility(ability)){
               if(!gbBoostedVanguardAttackDrawEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,engine))continue;
+              if(!engine.canPayAbilityCosts(ability,{faceUpDamage:(state.players?.[side]?.damage||[]).filter(card=>!card.faceDown).length})){if(engine.claimAbilityTrigger(state,event.eventId,instance.uid,ability.id))skipped.push({eventId:event.eventId,cardInstanceId:instance.uid,abilityId:ability.id,reason:"unpayable-cost"});continue;}
+            }
+            if(isExactGbBoostedVanguardAttackSoulChargePowerAbility(ability)){
+              if(!gbBoostedVanguardAttackSoulChargePowerEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,engine))continue;
               if(!engine.canPayAbilityCosts(ability,{faceUpDamage:(state.players?.[side]?.damage||[]).filter(card=>!card.faceDown).length})){if(engine.claimAbilityTrigger(state,event.eventId,instance.uid,ability.id))skipped.push({eventId:event.eventId,cardInstanceId:instance.uid,abilityId:ability.id,reason:"unpayable-cost"});continue;}
             }
             if (ability.definition?.source?.patternId === "auto-vanguard-own-attack-hit-draw-v1" &&
@@ -5624,6 +5650,12 @@
       if(!gbBoostedVanguardAttackDrawEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,engine))return reject("gb-boosted-vanguard-attack-draw-context-invalid");
       const currentConditions=buildConditionContext(state,triggerEvent,located,engine);
       if(!currentConditions||!engine.evaluateAbilityConditions(ability,currentConditions))return reject("gb-boosted-vanguard-attack-draw-condition-no-longer-met");
+      if(command.payload.accept&&!engine.canPayAbilityCosts(ability,{faceUpDamage:(state.players?.[side]?.damage||[]).filter(card=>!card.faceDown).length}))return reject("unpayable-cost");
+    }
+    if(isExactGbBoostedVanguardAttackSoulChargePowerAbility(ability)){
+      if(!gbBoostedVanguardAttackSoulChargePowerEventMatches(state,ability,located.instance,located,triggerEvent,actorPlayerId,engine))return reject("gb-boosted-vanguard-attack-soul-charge-power-context-invalid");
+      const currentConditions=buildConditionContext(state,triggerEvent,located,engine);
+      if(!currentConditions||!engine.evaluateAbilityConditions(ability,currentConditions))return reject("gb-boosted-vanguard-attack-soul-charge-power-condition-no-longer-met");
       if(command.payload.accept&&!engine.canPayAbilityCosts(ability,{faceUpDamage:(state.players?.[side]?.damage||[]).filter(card=>!card.faceDown).length}))return reject("unpayable-cost");
     }
     if(ability.definition?.source?.patternId==="auto-boosted-by-power-threshold-critical-battle-v1"&&

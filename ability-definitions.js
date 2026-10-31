@@ -105812,6 +105812,41 @@
       ]
     },
     {
+      "id": "cfa-2923:0",
+      "cardId": "cfa-2923",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): [Counter Blast 1] When this unit attacks a vanguard, if this unit is boosted, you may pay the cost. If you do, Soul Charge 2, and this unit gets power +5000 until end of that battle.",
+      "requiredLocation": ["rear-guard"],
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [],
+        "targetLocation": "vanguard"
+      },
+      "conditions": [
+        { "type": "generation-break", "count": 1 },
+        { "type": "source-was-boosted" }
+      ],
+      "costs": [{ "type": "counter-blast", "count": 1 }],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-2923",
+        "patternId": "auto-gb-boosted-vanguard-attack-counter-blast-soul-charge-power-battle-v1",
+        "review": "Exact Squallmaker Vampir AUTO. Requires Generation Break 1 and this exact Rear-Guard to attack the opponent Vanguard while boosted. Its controller may pay Counter Blast 1; resolution Soul Charges two cards before granting this same attacker +5000 for this battle."
+      },
+      "effects": [
+        { "op": "soul-charge", "count": 2 },
+        { "op": "modify-power", "target": "source", "amount": 5000, "duration": "battle" }
+      ]
+    },
+    {
       "id": "cfa-8839:0",
       "cardId": "cfa-8839",
       "kind": "AUTO",
