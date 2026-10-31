@@ -4366,6 +4366,169 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
     });
   }
 
+  const BATTLE_SCOPED_EVENT_TYPES = new Set([
+    "attack.step-started", "unit.attacked", "attack.declared", "attack.hit",
+    "unit.boosted", "drive.checked", "damage.checked", "battle.close-step"
+  ]);
+  const BATTLE_ATTACK_SOURCE_EVENT_TYPES = new Set([
+    "attack.step-started", "unit.attacked", "attack.declared", "attack.hit",
+    "battle.close-step", "drive.checked", "damage.checked"
+  ]);
+
+  function locateEventCardReference(state, event, engine, uidField, ownerField = null, controllerField = null) {
+    const uid = event?.[uidField];
+    const ownerId = ownerField ? event?.[ownerField] : null;
+    const controllerId = controllerField ? event?.[controllerField] : null;
+    if (uid == null) {
+      return ownerId != null || controllerId != null
+        ? { ok: false, reason: "event-provenance-id-missing" }
+        : { ok: true, located: null };
+    }
+    if (typeof uid !== "string" || !uid) return { ok: false, reason: "event-provenance-id-invalid" };
+    const located = engine?.locateCardInstance?.(state, uid);
+    if (!located || located.ambiguous || located.instance?.uid !== uid) {
+      return { ok: false, reason: "event-provenance-card-not-found" };
+    }
+    if (ownerId != null && ownerId !== located.ownerPlayerId) {
+      return { ok: false, reason: "event-provenance-owner-mismatch" };
+    }
+    if (controllerId != null && controllerId !== located.controllerPlayerId) {
+      return { ok: false, reason: "event-provenance-controller-mismatch" };
+    }
+    return { ok: true, located };
+  }
+
+  function validateAuthoritativeEventProvenance(state, event, engine) {
+    if (!event || typeof event !== "object" || !event.eventId || !event.type) {
+      return { ok: false, reason: "event-provenance-event-invalid" };
+    }
+    const references = [
+      ["sourceCardInstanceId", "sourceOwnerPlayerId", "sourceControllerPlayerId"],
+      ["subjectCardInstanceId", "subjectOwnerPlayerId", "subjectControllerPlayerId"],
+      ["cardInstanceId", null, null],
+      ["attackingUnitInstanceId", null, null],
+      ["boosterCardInstanceId", null, null],
+      ["boostedCardInstanceId", null, null],
+      ["checkedCardInstanceId", null, null],
+      ["abilitySourceInstanceId", "abilitySourceOwnerPlayerId", "abilitySourceControllerPlayerId"],
+      ["eventSubjectUid", null, null]
+    ];
+    for (const [uidField, ownerField, controllerField] of references) {
+      const result = locateEventCardReference(state, event, engine, uidField, ownerField, controllerField);
+      if (!result.ok) return result;
+    }
+    for (const field of ["targetCardInstanceIds", "attackingCardInstanceIds"]) {
+      if (event[field] == null) continue;
+      if (!Array.isArray(event[field])) return { ok: false, reason: "event-provenance-card-list-invalid" };
+      for (const uid of event[field]) {
+        const result = locateEventCardReference(state, { cardUid: uid }, engine, "cardUid");
+        if (!result.ok) return result;
+      }
+    }
+
+    if (event.type === "unit.attacked" &&
+        ["sourceOwnerPlayerId", "sourceControllerPlayerId", "subjectOwnerPlayerId", "subjectControllerPlayerId"].some(field => event[field] == null)) {
+      return { ok: false, reason: "event-provenance-attack-identity-missing" };
+    }
+
+    const battleScoped = BATTLE_SCOPED_EVENT_TYPES.has(event.type) ||
+      (event.phase === "battle" && Boolean(event.battleId));
+    if (!battleScoped) return { ok: true };
+
+    const attack = state?.pendingAttack;
+    if (!event.battleId || !attack?.battleId || event.battleId !== attack.battleId) {
+      return { ok: false, reason: "event-provenance-battle-id-mismatch" };
+    }
+    const attackerUid = attack.attackerUid;
+    const targetUid = attack.targetUid;
+    const attacker = attackerUid && engine?.locateCardInstance?.(state, attackerUid);
+    const target = targetUid && engine?.locateCardInstance?.(state, targetUid);
+    if (!attackerUid || !targetUid || !attacker || attacker.ambiguous || attacker.instance?.uid !== attackerUid ||
+        !target || target.ambiguous || target.instance?.uid !== targetUid) {
+      return { ok: false, reason: "event-provenance-battle-participant-missing" };
+    }
+    const attackerSide = attack.attackerSide || attacker.side;
+    const defenderSide = attack.defenderSide || target.side;
+    const attackerPlayerId = attack.attackerPlayerId || state.players?.[attackerSide]?.playerId || attacker.controllerPlayerId;
+    const defenderPlayerId = state.players?.[defenderSide]?.playerId || target.controllerPlayerId;
+    const activeTurnPlayerId = state.players?.[state.side]?.playerId;
+    if (!attackerSide || !defenderSide || attackerSide === defenderSide || attacker.side !== attackerSide ||
+        target.side !== defenderSide || !attackerPlayerId || !defenderPlayerId ||
+        state.players?.[attackerSide]?.playerId !== attackerPlayerId ||
+        (attack.attackerPlayerId != null && attack.attackerPlayerId !== attackerPlayerId) ||
+        (attacker.controllerPlayerId && attacker.controllerPlayerId !== attackerPlayerId) ||
+        (target.controllerPlayerId && target.controllerPlayerId !== defenderPlayerId) ||
+        activeTurnPlayerId !== attackerPlayerId ||
+        (event.turnPlayerId != null && event.turnPlayerId !== attackerPlayerId)) {
+      return { ok: false, reason: "event-provenance-battle-controller-mismatch" };
+    }
+    if (attack.attackerZone && attacker.zone !== "vanguard" && attacker.zone !== "rear-guard" && attacker.zone !== "soul") {
+      return { ok: false, reason: "event-provenance-battle-attacker-location-invalid" };
+    }
+    if (event.attackingUnitInstanceId != null && event.attackingUnitInstanceId !== attackerUid) {
+      return { ok: false, reason: "event-provenance-battle-attacker-mismatch" };
+    }
+    if (event.targetCardInstanceIds && event.targetCardInstanceIds.length && !event.targetCardInstanceIds.includes(targetUid) &&
+        event.type !== "unit.boosted") {
+      return { ok: false, reason: "event-provenance-battle-target-mismatch" };
+    }
+    if (event.type === "unit.attacked" && !(event.targetCardInstanceIds || []).includes(targetUid)) {
+      return { ok: false, reason: "event-provenance-battle-target-mismatch" };
+    }
+    if (attack.targetZone && event.targetLocation && event.type !== "unit.boosted" && event.targetLocation !== attack.targetZone) {
+      return { ok: false, reason: "event-provenance-battle-target-location-mismatch" };
+    }
+    if (["attack.step-started", "unit.attacked"].includes(event.type) && attack.attackerZone &&
+        ((event.currentLocation != null && event.currentLocation !== attack.attackerZone) ||
+         (event.previousLocation != null && event.previousLocation !== attack.attackerZone))) {
+      return { ok: false, reason: "event-provenance-battle-attacker-location-mismatch" };
+    }
+    if (attack.attackingCardInstanceIds && event.attackingCardInstanceIds &&
+        JSON.stringify(attack.attackingCardInstanceIds) !== JSON.stringify(event.attackingCardInstanceIds)) {
+      return { ok: false, reason: "event-provenance-battle-attacker-list-mismatch" };
+    }
+    if (BATTLE_ATTACK_SOURCE_EVENT_TYPES.has(event.type) && event.sourceCardInstanceId !== attackerUid) {
+      return { ok: false, reason: "event-provenance-battle-source-mismatch" };
+    }
+    if (["attack.step-started", "unit.attacked", "battle.close-step"].includes(event.type) &&
+        event.subjectCardInstanceId !== attackerUid) {
+      return { ok: false, reason: "event-provenance-battle-subject-mismatch" };
+    }
+    if (event.type === "unit.attacked" && event.cardInstanceId != null && event.cardInstanceId !== attackerUid) {
+      return { ok: false, reason: "event-provenance-battle-card-mismatch" };
+    }
+    if (event.type === "unit.boosted" &&
+        (!attack.boostUid || event.sourceCardInstanceId !== attack.boostUid || event.subjectCardInstanceId !== attack.boostUid ||
+         event.boosterCardInstanceId !== attack.boostUid || event.boostedCardInstanceId !== attackerUid ||
+         !(event.targetCardInstanceIds || []).includes(attackerUid))) {
+      return { ok: false, reason: "event-provenance-battle-boost-mismatch" };
+    }
+    if (event.type === "attack.declared" &&
+        (event.subjectCardInstanceId !== targetUid || event.cardInstanceId !== targetUid ||
+         !(event.targetCardInstanceIds || []).includes(targetUid))) {
+      return { ok: false, reason: "event-provenance-battle-target-mismatch" };
+    }
+    if (event.type === "attack.hit" &&
+        (!event.attackingUnitInstanceId || event.attackingUnitInstanceId !== attackerUid ||
+         !(event.targetCardInstanceIds || []).includes(targetUid) ||
+         (event.attackHitOverride === true ? event.subjectCardInstanceId !== attackerUid : event.subjectCardInstanceId !== targetUid))) {
+      return { ok: false, reason: "event-provenance-battle-hit-mismatch" };
+    }
+    if (event.type === "battle.close-step" && !(event.targetCardInstanceIds || []).includes(targetUid)) {
+      return { ok: false, reason: "event-provenance-battle-target-mismatch" };
+    }
+    if (["drive.checked", "damage.checked"].includes(event.type) &&
+        (!event.checkedCardInstanceId || event.cardInstanceId !== event.checkedCardInstanceId ||
+         event.subjectCardInstanceId !== event.checkedCardInstanceId)) {
+      return { ok: false, reason: "event-provenance-battle-check-card-mismatch" };
+    }
+    if (["attack.step-started", "unit.attacked"].includes(event.type) &&
+        event.actingPlayerId !== attackerPlayerId) {
+      return { ok: false, reason: "event-provenance-battle-actor-mismatch" };
+    }
+    return { ok: true };
+  }
+
   function discoverAutoTriggers(state, events, engine) {
     if (!state || !Array.isArray(events) || !engine?.getReviewedAbilityDefinitionsForCard) return { queued: [], skipped: [] };
     const queued = [], skipped = [], queue = state.pendingAbilities ||= [];
@@ -4373,23 +4536,10 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
     for (const event of events) {
       const eventName = EVENT_NAME_BY_TYPE[event?.type];
       if (!eventName || !event?.eventId) continue;
-      if (event.type === "unit.attacked") {
-        const attackerUid = event.attackingUnitInstanceId || event.sourceCardInstanceId;
-        const attacker = attackerUid ? engine.locateCardInstance(state, attackerUid) : null;
-        const activeTurnPlayerId = state.players?.[state.side]?.playerId;
-        const authoritativeAttack = Boolean(attacker && !attacker.ambiguous && attacker.instance?.uid === attackerUid &&
-          (!event.attackingUnitInstanceId || event.attackingUnitInstanceId === attackerUid) &&
-          event.sourceCardInstanceId === attackerUid && event.subjectCardInstanceId === attackerUid &&
-          (event.sourceOwnerPlayerId == null || event.sourceOwnerPlayerId === attacker.ownerPlayerId) &&
-          (event.subjectOwnerPlayerId == null || event.subjectOwnerPlayerId === attacker.ownerPlayerId) &&
-          (event.sourceControllerPlayerId == null || event.sourceControllerPlayerId === attacker.controllerPlayerId) &&
-          (event.subjectControllerPlayerId == null || event.subjectControllerPlayerId === attacker.controllerPlayerId) &&
-          event.actingPlayerId === attacker.controllerPlayerId && event.turnPlayerId === attacker.controllerPlayerId &&
-          event.actingPlayerId === activeTurnPlayerId);
-        if (!authoritativeAttack) {
-          skipped.push({ eventId: event.eventId, reason: "attack-event-source-identity-mismatch" });
-          continue;
-        }
+      const provenance = validateAuthoritativeEventProvenance(state, event, engine);
+      if (!provenance.ok) {
+        skipped.push({ eventId: event.eventId, reason: provenance.reason });
+        continue;
       }
       removeHarmonyAssociationsForEvent(state, event, engine);
       for (const [side, player] of Object.entries(state.players || {})) {
@@ -6271,6 +6421,8 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
     const triggerContext = pending.eventContext;
     const triggerEvent = triggerContext?.gameEvent;
     if (!triggerContext?.eventId || !triggerEvent || triggerEvent.eventId !== triggerContext.eventId) return reject("trigger-event-missing");
+    const eventProvenance = validateAuthoritativeEventProvenance(state, triggerEvent, engine);
+    if (!eventProvenance.ok) return reject(eventProvenance.reason);
     const eventSourceZone = ["event-target", "ridden-unit"].includes(ability.trigger?.subject) && triggerEvent.type === "card.ridden"
       ? triggerEvent.targetPreviousLocation || triggerEvent.previousLocation || pending.field || sourceZone
       : ability.trigger?.subject === "event-subject" && ability.trigger?.sourceLocation && triggerEvent.previousLocation
