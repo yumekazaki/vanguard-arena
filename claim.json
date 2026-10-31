@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "batchId": "CANDIDATE-C0086556-0001",
+  "workerId": "codex-ot-additional-effect",
+  "baselineCommit": "c00865569ef43a5915401e313ef036c25dc963b2",
+  "abilityIds": [
+    "cfa-12625:0",
+    "cfa-12626:0",
+    "cfa-13110:0",
+    "cfa-13142:0",
+    "cfa-13537:0",
+    "cfa-13639:0"
+  ],
+  "claimedAt": "2026-10-31T12:48:01.526Z"
+}
