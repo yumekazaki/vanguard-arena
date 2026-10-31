@@ -65,4 +65,10 @@ test("central work queue covers unverified abilities and separates reviewed mech
     assert.deepEqual(perClan.missingEffectHandlers, [], `continuous evaluator handles ${abilityId}`);
     assert.deepEqual(perClan.missingServerEffectHandlers, [], `trusted server handles ${abilityId}`);
   }
+  for (const abilityId of ["cfa-10476:2", "cfa-10668:2", "cfa-12183:2", "cfa-13177:2", "cfa-13186:2"]) {
+    const crestPower = result.items.find(item => item.abilityId === abilityId);
+    assert.ok(crestPower, `expected the exact face-up G-zone CONT ${abilityId}`);
+    assert.deepEqual(crestPower.missingEffectHandlers, [], `continuous evaluator handles ${abilityId}`);
+    assert.deepEqual(crestPower.missingServerEffectHandlers, [], `trusted server handles ${abilityId}`);
+  }
 });
