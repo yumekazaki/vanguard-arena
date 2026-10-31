@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "baselineCommit": "f78280091abd8c9093776422d6fd6941926d8c7e",
-  "generatedAt": "2026-10-31T02:38:21.948Z",
+  "baselineCommit": "a334c44bdc196655303d21d0ec521990ec369c2d",
+  "generatedAt": "2026-10-31T02:52:59.015Z",
   "sourceQueue": "current catalog + trusted ability definitions + verification manifest",
   "concurrencyProtocol": "GitHub atomic branch creation at refs/heads/claims/<batchId>; the first successful non-forced create owns the batch.",
   "counts": {
     "queuedAbilities": 16595,
     "uniqueAbilityIds": 16595,
-    "reservedAbilities": 111,
-    "availableAbilities": 16484,
-    "reservedCards": 49,
-    "activeAssignments": 3,
+    "reservedAbilities": 124,
+    "availableAbilities": 16471,
+    "reservedCards": 56,
+    "activeAssignments": 4,
     "availableBatches": 446,
     "validationEvidenceFresh": false
   },

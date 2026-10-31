@@ -3,9 +3,9 @@
   "assignments": [
     {
       "batchId": "PRIMARY-ACT-DECKTOP-DRAW-POWER",
-      "status": "in-progress",
-      "workerOwner": "primary-session/next_high_yield_family",
-      "reason": "Implementing and validating two exact four-card ACT text variants that pay source-to-Soul and normal-unit discard costs, reorder the deck top, draw, and conditionally grant power based on face-up G units.",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Exact eight-card ACT family is implemented and has passing ability-level regression evidence; reserved pending whole-card verification and fresh full-suite evidence.",
       "abilityIds": [
         "cfa-3801:1",
         "cfa-3870:1",
@@ -42,6 +42,27 @@
         "cfa-13607:0",
         "cfa-13609:0",
         "cfa-13638:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-PERSONA-SHIELD-TICKET-AUTO",
+      "status": "in-progress",
+      "workerOwner": "primary-session/persona_shield_family",
+      "reason": "Audit and implement the six exact hand-to-RC/Ride-Deck AUTO Persona Shield abilities, their Grade-3 attack abilities, and the generated Persona Shield ticket's protection ability; preserve exact player ownership and ticket choices.",
+      "abilityIds": [
+        "cfa-13707:0",
+        "cfa-13707:1",
+        "cfa-13708:0",
+        "cfa-13709:0",
+        "cfa-13709:1",
+        "cfa-13710:0",
+        "cfa-13710:1",
+        "cfa-13711:0",
+        "cfa-13711:1",
+        "cfa-13712:0",
+        "cfa-13712:1",
+        "cfa-13713:0",
+        "cfa-13713:1"
       ]
     }
   ]
