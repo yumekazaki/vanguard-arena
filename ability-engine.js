@@ -1248,6 +1248,26 @@
       source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-own-vanguard-attack-paid-power-battle-v1", review: "Reusable exact grammar for optional cost-paid power when this exact VC/RC unit attacks a Vanguard. Shinken Hissatsu uses the live three-Damage condition, Generation Break uses the printed face-up G-unit count, and Brave uses the live three-or-fewer-card hand condition." },
       generationBreak, effects: [{ op: "modify-power", target: "source", amount: power, duration: "battle" }] };
   }
+  function compileFriendlyRearGuardRetireVanguardAttackDefinition(cardId, abilityId, kind, printedText) {
+    if (kind !== "AUTO") return null;
+    const text = normalizePrintedText(printedText);
+    const match = text.match(/^AUTO \[VC\]: \[Choose one of your rear-guards, and retire it\] When this unit attacks a vanguard, (?:(if this unit is Legion), )?you may pay the cost\. If you do, this unit gets (?:power \+(\d+)|critical \+(\d+)) until end of that battle\.$/i);
+    if (!match) return null;
+    const amount = Number(match[2] || match[3]);
+    if (!positiveInteger(amount)) return null;
+    const effect = match[2]
+      ? { op: "modify-power", target: "source", amount, duration: "battle" }
+      : { op: "modify-critical", target: "source", amount, duration: "battle" };
+    return { id: abilityId, cardId: String(cardId), kind, printedText, optional: true,
+      requiredLocation: ["vanguard"],
+      trigger: { status: "recognized-trigger", eventType: "unit.attacked", subject: "source", circles: ["vanguard"], targetLocation: "vanguard" },
+      conditions: match[1] ? [{ type: "controller-vanguard-is-legion" }] : [],
+      conditionsReviewed: true,
+      costs: [{ type: "retire-rear-guard", count: 1, targetFilter: { controller: "source-controller", zone: "rear-guard" } }],
+      costsReviewed: true, choicesReviewed: true,
+      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-vanguard-attack-retire-friendly-rearguard-cost-battle-modifier-v1", review: "Exact AUTO [VC] grammar. The exact source Vanguard must attack a Vanguard; when printed, the Legion condition is checked on that same controller Vanguard. Its controller may pay by choosing one currently controlled Rear-Guard and retiring that exact instance, then the printed source modifier lasts only for that battle." },
+      effects: [effect] };
+  }
   function compileClanCounterBlastAttackPowerDefinition(cardId, abilityId, kind, printedText) {
     if (kind !== "AUTO") return null;
     const text = normalizePrintedText(printedText);
@@ -2390,8 +2410,8 @@
     const text = String(raw || ""), costText=text
       .replace(/\bwhile (?:you are )?paying the cost for \[?Stride\]?/gi," ")
       .replace(/\bif you Energy Blast \d+ or more at the same time for the cost of your card[’']s ability this turn\b/gi," ");
-    const explicit = [...costText.matchAll(/\bCOST\s*\[([^\]]+)\]|\[((?:CB|SB|E\s*BLAST|Counter[- ]Blast|Soul[- ]Blast|Energy[- ]Blast|discard|choose (?:a|one) (?:card|«[^»]+»|<[^>]+>) from (?:your )?hand[^\]]*discard it|rest this unit|put this (?:unit|card) into (?:your )?soul)[^\]]*)\]/gi)];
-    const mentionsCost = /\bCOST\b|\b(?:CB|SB|E\s*BLAST|Counter[- ]Blast|Soul[- ]Blast|Energy[- ]Blast|discard|retire this unit|rest this unit|put this unit into your soul)\b/i.test(costText);
+    const explicit = [...costText.matchAll(/\bCOST\s*\[([^\]]+)\]|\[((?:CB|SB|E\s*BLAST|Counter[- ]Blast|Soul[- ]Blast|Energy[- ]Blast|discard|choose (?:a|one) (?:card|«[^»]+»|<[^>]+>) from (?:your )?hand[^\]]*discard it|choose one of your (?:other )?rear-guards?, and retire it|rest this unit|put this (?:unit|card) into (?:your )?soul)[^\]]*)\]/gi)];
+    const mentionsCost = /\bCOST\b|\b(?:CB|SB|E\s*BLAST|Counter[- ]Blast|Soul[- ]Blast|Energy[- ]Blast|discard|retire this unit|choose one of your (?:other )?rear-guards?, and retire it|rest this unit|put this unit into your soul)\b/i.test(costText);
     if (!explicit.length) return { status: mentionsCost ? "needs-review" : "no-cost", costs: [] };
     const clause = explicit.map(match => match[1] || match[2]).join(" & ");
     // Preserve explicit alternative cost branches. Only split top-level `or`
@@ -2437,6 +2457,9 @@
     const clanDiscard=/choose\s+(?:a|one)\s+(?:«([^»]+)»|<([^>]+)>)\s+from\s+(?:your\s+)?hand,?\s+and\s+discard\s+it/gi;
     for(const match of clause.matchAll(clanDiscard)){costs.push({type:"discard",count:1,filter:{clan:String(match[1]||match[2]).trim()}})}
     remainder=remainder.replace(clanDiscard," ");
+    const rearGuardRetire=/choose\s+one\s+of\s+your\s+(other\s+)?rear-guards?,\s+and\s+retire\s+it/gi;
+    for(const match of clause.matchAll(rearGuardRetire))costs.push({type:"retire-rear-guard",count:1,targetFilter:{controller:"source-controller",zone:"rear-guard",...(match[1]?{excludeSource:true}:{})}});
+    remainder=remainder.replace(rearGuardRetire," ");
     for (const [type, pattern] of patterns) {
       for (const match of remainder.matchAll(pattern)) costs.push({ type, count: Number(match[1] || 1) });
       remainder = remainder.replace(pattern, " ");
@@ -2444,6 +2467,25 @@
     if (/rest this unit/i.test(remainder)) { costs.push({ type: "rest-source", count: 1 }); remainder = remainder.replace(/rest this unit/i, " "); }
     const residue = remainder.replace(/[\s&+(),.;:[\]0-9-]/g, "").toLowerCase();
     if (residue || !costs.length) return { status: "needs-review", costs: [] };
+    const costPositionPatterns = [
+      ["counter-blast", /(?:CB|Counter[- ]Blast)\s*\(?\s*\d+/gi], ["soul-blast", /(?:SB|Soul[- ]Blast)\s*\(?\s*\d+/gi],
+      ["energy-blast", /(?:E\s*Blast|Energy[- ]Blast)\s*\(?\s*\d+/gi], ["reveal-grade-from-hand", /reveal\s+a\s+grade\s+\d+\s+card\s+from\s+(?:your\s+)?hand/gi],
+      ["retire-rear-guard", /choose\s+one\s+of\s+your\s+(?:other\s+)?rear-guards?,\s+and\s+retire\s+it/gi],
+      ["source-retire", /retire\s+this\s+(?:unit|card)/gi], ["source-discard", /discard\s+this\s+(?:unit|card)/gi],
+      ["discard", /(?:choose\s+(?:a|one)\s+card\s+from\s+(?:your\s+)?hand,?\s+and\s+discard\s+it|discard(?:ing)?\s+(?:a|one|\d+)\s+cards?(?:\s+from\s+(?:your\s+)?hand)?)/gi],
+      ["source-to-soul", /put\s+this\s+(?:unit|card)\s+into\s+(?:your\s+)?soul/gi],
+      ["source-to-bottom-deck", /put\s+this\s+(?:unit|card)\s+on\s+(?:the\s+)?bottom\s+of\s+(?:your\s+)?deck/gi],
+      ["rest-source", /rest\s+this\s+unit/gi]
+    ];
+    const positions = new Map();
+    for (const [type, pattern] of costPositionPatterns) positions.set(type, [...clause.matchAll(pattern)].map(match => match.index));
+    const usedPosition = new Map();
+    const orderedCosts = costs.map((cost, originalIndex) => {
+      const index = usedPosition.get(cost.type) || 0;
+      usedPosition.set(cost.type, index + 1);
+      return { cost, originalIndex, position: positions.get(cost.type)?.[index] ?? Number.MAX_SAFE_INTEGER };
+    }).sort((left, right) => left.position - right.position || left.originalIndex - right.originalIndex).map(entry => entry.cost);
+    costs.splice(0, costs.length, ...orderedCosts);
     return { status: "supported-cost", costs };
   }
   function canPayAbilityCosts(ability, resources = {}) {
@@ -2478,6 +2520,14 @@
       if (cost.type === "source-bind" && resources.sourceCanBind !== true) return false;
       if (cost.type === "source-bind-from-field-or-drop" && resources.sourceCanBindFromFieldOrDrop !== true) return false;
       if (cost.type === "bind-heal-from-drop" && Number(resources.bindableHealInDrop || 0) < cost.count) return false;
+      if (cost.type === "retire-rear-guard") {
+        const cards = resources.retirableRearGuards;
+        if (!Array.isArray(cards)) return false;
+        const eligible = cards.filter(card => card?.uid &&
+          (!cost.targetFilter?.excludeSource || card.uid !== resources.sourceInstanceId) &&
+          (!card.controllerPlayerId || !resources.actorPlayerId || card.controllerPlayerId === resources.actorPlayerId));
+        if (eligible.length < Number(cost.count)) return false;
+      }
     }
     return true;
   }
@@ -2795,6 +2845,7 @@
     compileExactTemplateDefinition,
     compileVanguardAttackPowerTemplateDefinition,
     compileClanVanguardAttackPowerTemplateDefinition,
+    compileFriendlyRearGuardRetireVanguardAttackDefinition,
     compilePaidOwnVanguardAttackPowerDefinition,
     compileRcNarukamiVanguardOwnAttackPowerDefinition,
     compileOwnAttackAgainstVanguardNamedVanguardPowerDefinition,
@@ -3337,20 +3388,32 @@
       if (!Number.isInteger(index) || index < 0 || index >= ability.costAlternatives.length) return { ok: false, reason: "invalid-cost-alternative" };
       return payAbilityCosts({ ...ability, costs: ability.costAlternatives[index], costAlternatives: undefined }, context, selection);
     }
-    const player=context.player,source=context.source,costs={"counter-blast":0,"soul-blast":0,"energy-blast":0,discard:0,"reveal-grade-from-hand":0,"source-discard":0,"source-retire":0,"source-to-soul":0,"source-to-bottom-deck":0,"rest-source":0,"source-bind":0,"source-bind-from-field-or-drop":0,"bind-heal-from-drop":0};
+    const player=context.player,source=context.source,costs={"counter-blast":0,"soul-blast":0,"energy-blast":0,discard:0,"reveal-grade-from-hand":0,"source-discard":0,"source-retire":0,"source-to-soul":0,"source-to-bottom-deck":0,"rest-source":0,"source-bind":0,"source-bind-from-field-or-drop":0,"bind-heal-from-drop":0,"retire-rear-guard":0};
     if(!ability||!player||!source||ability.costStatus==="needs-review"||!Array.isArray(player.damage)||!Array.isArray(player.soul)||!Array.isArray(player.hand)||!Array.isArray(player.drop)||!Array.isArray(player.rear))return{ok:false,reason:"invalid-cost-context"};
     for(const cost of ability.costs||[]){if(!Object.hasOwn(costs,cost.type))return{ok:false,reason:"unsupported-cost"};if(!Number.isInteger(Number(cost.count))||Number(cost.count)<1)return{ok:false,reason:"invalid-cost-definition"};costs[cost.type]+=Number(cost.count)}
     if(costs["energy-blast"]&&(context.hasEnergyGenerator!==true||!Number.isInteger(Number(player.energy))||Number(player.energy)<costs["energy-blast"]))return{ok:false,reason:"insufficient-energy"};
-    const selected={"counter-blast":selection.cb||[],"soul-blast":selection.sb||[],discard:selection.discard||[]},chosen={};
+    const selected={"counter-blast":selection.cb||[],"soul-blast":selection.sb||[],discard:selection.discard||[],"retire-rear-guard":selection.retireRearGuard||[]},chosen={};
     for(const type of Object.keys(selected)){
       const ids=selected[type];if(!Array.isArray(ids)||new Set(ids).size!==ids.length||ids.length!==costs[type])return{ok:false,reason:"invalid-cost-selection"};
-      const zone=type==="counter-blast"?player.damage:type==="soul-blast"?player.soul:player.hand;
+      const zone=type==="counter-blast"?player.damage:type==="soul-blast"?player.soul:type==="retire-rear-guard"?player.rear:player.hand;
       chosen[type]=ids.map(uid=>zone.find(card=>card?.uid===uid)).filter(Boolean);
       if(chosen[type].length!==ids.length)return{ok:false,reason:"cost-card-unavailable"};
       if(type==="counter-blast"&&chosen[type].some(card=>card.faceDown))return{ok:false,reason:"damage-not-face-up"};
       if(type==="counter-blast")for(const cost of ability.costs||[])if(cost.type==="counter-blast"&&cost.filter){const matching=chosen[type].filter(card=>typeof context.cardDefinitionForInstance==="function"&&matchesTargetFilter(cost.filter,{targetCard:context.cardDefinitionForInstance(card)}));if(matching.length<Number(cost.count||0))return{ok:false,reason:"counter-blast-filter-not-met"}}
       if(type==="discard"&&chosen[type].some(card=>card.uid===source.uid))return{ok:false,reason:"cannot-discard-source"};
       if(type==="discard")for(const cost of ability.costs||[])if(cost.type==="discard"&&cost.filter){const matching=chosen[type].filter(card=>typeof context.cardDefinitionForInstance==="function"&&matchesTargetFilter(cost.filter,{targetCard:context.cardDefinitionForInstance(card)}));if(matching.length<Number(cost.count||0))return{ok:false,reason:"discard-filter-not-met"}}
+      if(type==="retire-rear-guard"){
+        const costsOfType=(ability.costs||[]).filter(cost=>cost.type===type);
+        if(costsOfType.some(cost=>Number(cost.count)!==1))return{ok:false,reason:"invalid-cost-definition"};
+        if(ids.length!==costsOfType.length)return{ok:false,reason:"invalid-cost-selection"};
+        const actorPlayerId=context.actorPlayerId||player.playerId||null;
+        if(chosen[type].some(card=>!card?.uid||card.controllerPlayerId&&actorPlayerId&&card.controllerPlayerId!==actorPlayerId))return{ok:false,reason:"invalid-cost-target"};
+        let cursor=0;
+        for(const cost of costsOfType){
+          const target=chosen[type][cursor++];
+          if(!target||cost.targetFilter?.excludeSource&&target.uid===source.uid)return{ok:false,reason:"invalid-cost-target"};
+        }
+      }
     }
     if(costs["source-discard"]&&(costs["source-discard"]!==1||!player.hand.some(card=>card?.uid===source.uid)))return{ok:false,reason:"source-not-in-hand"};
     const revealedCostUids=selection.reveal||[],revealCosts=(ability.costs||[]).filter(cost=>cost.type==="reveal-grade-from-hand");if(!Array.isArray(revealedCostUids)||new Set(revealedCostUids).size!==revealedCostUids.length||revealedCostUids.length!==costs["reveal-grade-from-hand"])return{ok:false,reason:"invalid-reveal-cost-selection"};const revealedCostCards=revealedCostUids.map(uid=>player.hand.find(card=>card?.uid===uid)).filter(Boolean);if(revealedCostCards.length!==revealedCostUids.length||revealCosts.some((cost,index)=>Number(context.cardDefinitionForInstance?.(revealedCostCards[index])?.grade)!==Number(cost.grade)))return{ok:false,reason:"reveal-cost-filter-not-met"};
@@ -3363,6 +3426,12 @@
     if(bindAnyZoneCount&&(bindAnyZoneCount!==1||!(sourceOnRear||sourceZone==="drop"&&sourceInDrop)||source.ownerPlayerId!==player.playerId&&source.ownerPlayerId!==context.actorPlayerId||source.controllerPlayerId!==player.playerId&&source.controllerPlayerId!==context.actorPlayerId))return{ok:false,reason:"source-not-in-field-or-drop"};
     const bindHealCosts=(ability.costs||[]).filter(cost=>cost.type==="bind-heal-from-drop"),bindHealUid=selection.effectUid,bindHeal=player.drop.find(card=>card?.uid===bindHealUid&&card.uid!==source.uid);
     if(costs["bind-heal-from-drop"]&&(costs["bind-heal-from-drop"]!==1||!bindHeal||bindHealCosts.some(cost=>String(context.cardDefinitionForInstance?.(bindHeal)?.trigger||"").toLowerCase()!==String(cost.filter?.trigger||"heal").toLowerCase())))return{ok:false,reason:"invalid-bind-heal-target"};
+    if(costs["retire-rear-guard"]>0){
+      if(!Array.isArray(player.rear)||costs["retire-rear-guard"]!==1)return{ok:false,reason:"invalid-cost-definition"};
+      const retireCosts=(ability.costs||[]).filter(cost=>cost.type==="retire-rear-guard"),target=chosen["retire-rear-guard"][0],targetIndex=player.rear.findIndex(card=>card?.uid===target?.uid),targetCost=retireCosts[0];
+      if(retireCosts.length!==1||targetIndex<0||targetCost?.targetFilter?.excludeSource&&target.uid===source.uid)return{ok:false,reason:"invalid-cost-target"};
+      if(target.controllerPlayerId&&context.actorPlayerId&&target.controllerPlayerId!==context.actorPlayerId)return{ok:false,reason:"invalid-cost-target"};
+    }
     if(costs["rest-source"]&&source.rested)return{ok:false,reason:"source-already-rested"};
     let usageKey=null;
     if(ability.once||ability.usageRestriction){try{const cardName=context.cardDefinitionForInstance?.(source)?.name;usageKey=abilityUsageKey(context.turnId,player.playerId||context.actorPlayerId,source.uid,ability.id,ability.usageRestriction,cardName,ability.printedText||ability.raw)}catch{return{ok:false,reason:"missing-usage-identity"}};player.usedAbilities||=[];if(player.usedAbilities.includes(usageKey))return{ok:false,reason:"usage-restriction"}}
@@ -3375,12 +3444,13 @@
     if(chosen.discard.length){const ids=new Set(chosen.discard.map(card=>card.uid));player.hand=player.hand.filter(card=>!ids.has(card.uid));player.drop.push(...chosen.discard);for(const card of chosen.discard)context.emitEvent?.({type:"card.discarded",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"hand",currentLocation:"drop"})}
     if(costs["source-to-soul"]){if(sourceZone==="vanguard")player.vanguard=null;else player.rear[sourceIndex]=null;player.soul.push(source);context.emitEvent?.({type:"card.moved",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:sourceZone,currentLocation:"soul"})}
     if(costs["source-retire"]){player.rear[sourceIndex]=null;player.drop.push(source);context.emitEvent?.({type:"card.retired",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:sourceZone,currentLocation:"drop"})}
+    if(costs["retire-rear-guard"]){const target=chosen["retire-rear-guard"][0],targetIndex=player.rear.findIndex(card=>card?.uid===target.uid),located=context.match&&locateCardInstance(context.match,target.uid),previousLocation=located&&!located.ambiguous?located.circle||located.zone:target.circle||target.zone||(["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right"][targetIndex]||`accel-${targetIndex-4}`);if(targetIndex<0)return{ok:false,reason:"invalid-cost-target"};player.rear[targetIndex]=null;player.drop.push(target);context.emitEvent?.({type:"card.retired",cardInstanceId:target.uid,controllerSide:context.side,previousLocation,currentLocation:"drop",circle:previousLocation})}
     if(costs["source-to-bottom-deck"]){const index=player.drop.findIndex(card=>card?.uid===source.uid);if(index<0)return{ok:false,reason:"source-not-in-drop"};player.drop.splice(index,1);player.deck.unshift(source);context.emitEvent?.({type:"card.moved",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"deck"})}
     if(costs["source-bind"]){const index=player.drop.findIndex(card=>card?.uid===source.uid);if(index<0)return{ok:false,reason:"source-not-in-drop"};player.drop.splice(index,1);source.faceUp=true;player.bind||=[];player.bind.push(source);context.emitEvent?.({type:"card.bound",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"bind"})}
     if(bindAnyZoneCount){const oldLocation=sourceZone;let removed=false;if(sourceOnRear){player.rear[sourceIndex]=null;removed=true}else if(sourceZone==="drop"){const index=player.drop.findIndex(card=>card?.uid===source.uid);if(index>=0){player.drop.splice(index,1);removed=true}}if(!removed)return{ok:false,reason:"source-not-in-field-or-drop"};source.faceUp=true;player.bind||=[];player.bind.push(source);context.sourceBindCostPaid=true;context.emitEvent?.({type:"card.bound",cardInstanceId:source.uid,controllerSide:context.side,previousLocation:oldLocation,currentLocation:"bind"})}
     if(costs["bind-heal-from-drop"]){const index=player.drop.findIndex(card=>card?.uid===bindHealUid);if(index<0)return{ok:false,reason:"invalid-bind-heal-target"};const [card]=player.drop.splice(index,1);card.faceUp=true;player.bind||=[];player.bind.push(card);context.emitEvent?.({type:"card.bound",cardInstanceId:card.uid,controllerSide:context.side,previousLocation:"drop",currentLocation:"bind"})}
     if(costs["rest-source"])source.rested=true;
-    return{ok:true,usageKey,paid:{counterBlast:chosen["counter-blast"].length,soulBlast:chosen["soul-blast"].length,discard:chosen.discard.length,sourceToSoul:costs["source-to-soul"],sourceToBottomDeck:costs["source-to-bottom-deck"],restSource:costs["rest-source"],sourceBind:costs["source-bind"],bindHealFromDrop:costs["bind-heal-from-drop"]}};
+    return{ok:true,usageKey,paid:{counterBlast:chosen["counter-blast"].length,soulBlast:chosen["soul-blast"].length,discard:chosen.discard.length,retiredRearGuard:chosen["retire-rear-guard"].length,sourceToSoul:costs["source-to-soul"],sourceToBottomDeck:costs["source-to-bottom-deck"],restSource:costs["rest-source"],sourceBind:costs["source-bind"],bindHealFromDrop:costs["bind-heal-from-drop"]}};
   }  function abilitySourceZoneAtResolution(ability, pending, currentLocation) {
     if (ability?.kind === "AUTO" && pending?.eventContext?.eventId && pending?.field) return pending.field;
     return currentLocation || pending?.field || null;
@@ -3404,16 +3474,16 @@
     if (typeof request.accept !== "boolean") return { ok: false, reason: "invalid-decision" };
     if (!request.accept) return canDeclineAbility(pending.ability) ? { ok: true } : { ok: false, reason: "mandatory-ability" };
     if(selection.payCost!==undefined&&typeof selection.payCost!=="boolean")return{ok:false,reason:"invalid-cost-decision"};
-    if(selection.payCost===false){const selectedCosts=selection.costSelections??{};if(pending.ability.kind!=="AUTO"||pending.ability.costStatus==="needs-review"||!((Array.isArray(pending.ability.costs)&&pending.ability.costs.length)||(Array.isArray(pending.ability.costAlternatives)&&pending.ability.costAlternatives.length))||selection.costAlternativeIndex!==undefined||!selectedCosts||typeof selectedCosts!=="object"||Array.isArray(selectedCosts)||Object.keys(selectedCosts).some(key=>!(["cb","sb","discard","reveal"].includes(key)))||Object.values(selectedCosts).some(ids=>!Array.isArray(ids)||ids.length))return{ok:false,reason:"cost-not-skipped"};return{ok:true}}
+    if(selection.payCost===false){const selectedCosts=selection.costSelections??{};if(pending.ability.kind!=="AUTO"||pending.ability.costStatus==="needs-review"||!((Array.isArray(pending.ability.costs)&&pending.ability.costs.length)||(Array.isArray(pending.ability.costAlternatives)&&pending.ability.costAlternatives.length))||selection.costAlternativeIndex!==undefined||!selectedCosts||typeof selectedCosts!=="object"||Array.isArray(selectedCosts)||Object.keys(selectedCosts).some(key=>!(["cb","sb","discard","reveal","retireRearGuard"].includes(key)))||Object.values(selectedCosts).some(ids=>!Array.isArray(ids)||ids.length))return{ok:false,reason:"cost-not-skipped"};return{ok:true}}
     const costs=selection.costSelections ?? {};
     const alternatives=pending.ability.costAlternatives;
     if(alternatives!==undefined&&!Array.isArray(alternatives))return{ok:false,reason:"invalid-cost-definition"};
     if(Array.isArray(alternatives)&&(!Number.isInteger(selection.costAlternativeIndex)||selection.costAlternativeIndex<0||selection.costAlternativeIndex>=alternatives.length))return{ok:false,reason:"invalid-cost-alternative"};
     if(!Array.isArray(alternatives)&&selection.costAlternativeIndex!==undefined)return{ok:false,reason:"unexpected-cost-alternative"};
     const selectedAbilityCosts=Array.isArray(alternatives)?alternatives[selection.costAlternativeIndex]:pending.ability.costs||[];
-    if (!costs || typeof costs !== "object" || Array.isArray(costs) || Object.keys(costs).some(key=>!(["cb","sb","discard","reveal"].includes(key)))) return { ok: false, reason: "invalid-cost-selection" };
-    const expected={cb:0,sb:0,discard:0,reveal:0},automaticCosts=new Set(["source-discard","source-retire","source-to-soul","source-to-bottom-deck","rest-source","source-bind","source-bind-from-field-or-drop","bind-heal-from-drop"]);
-    for(const cost of selectedAbilityCosts){if(!Number.isInteger(Number(cost.count))||Number(cost.count)<1)return{ok:false,reason:"invalid-cost-definition"};const key=cost.type==="counter-blast"?"cb":cost.type==="soul-blast"?"sb":cost.type==="discard"?"discard":cost.type==="reveal-grade-from-hand"?"reveal":null;if(key)expected[key]+=Number(cost.count);else if(cost.type==="energy-blast")continue;else if(!automaticCosts.has(cost.type))return{ok:false,reason:"unsupported-cost"};else if(Number(cost.count)!==1)return{ok:false,reason:"invalid-cost-definition"}}
+    if (!costs || typeof costs !== "object" || Array.isArray(costs) || Object.keys(costs).some(key=>!(["cb","sb","discard","reveal","retireRearGuard"].includes(key)))) return { ok: false, reason: "invalid-cost-selection" };
+    const expected={cb:0,sb:0,discard:0,reveal:0,retireRearGuard:0},automaticCosts=new Set(["source-discard","source-retire","source-to-soul","source-to-bottom-deck","rest-source","source-bind","source-bind-from-field-or-drop","bind-heal-from-drop","retire-rear-guard"]);
+    for(const cost of selectedAbilityCosts){if(!Number.isInteger(Number(cost.count))||Number(cost.count)<1)return{ok:false,reason:"invalid-cost-definition"};const key=cost.type==="counter-blast"?"cb":cost.type==="soul-blast"?"sb":cost.type==="discard"?"discard":cost.type==="reveal-grade-from-hand"?"reveal":cost.type==="retire-rear-guard"?"retireRearGuard":null;if(key)expected[key]+=Number(cost.count);else if(cost.type==="energy-blast")continue;else if(!automaticCosts.has(cost.type))return{ok:false,reason:"unsupported-cost"};else if(Number(cost.count)!==1)return{ok:false,reason:"invalid-cost-definition"}}
     const revealSelections=costs.reveal??[];if(!Array.isArray(revealSelections)||revealSelections.some(uid=>typeof uid!=="string"||!uid||uid.length>180)||new Set(revealSelections).size!==revealSelections.length||revealSelections.length!==expected.reveal)return{ok:false,reason:"invalid-cost-selection"};
     for(const key of Object.keys(expected)){
       const ids=costs[key]??[];
@@ -3429,7 +3499,7 @@
       if((costs.sb||[]).some(uid=>!inZone("soul",uid)))return{ok:false,reason:"cost-card-unavailable"};
       if((costs.discard||[]).some(uid=>!inZone("hand",uid)))return{ok:false,reason:"cost-card-unavailable"};
       if((costs.discard||[]).includes(pending.instance?.uid))return{ok:false,reason:"cannot-discard-source"};
-      if((costs.reveal||[]).some(uid=>!inZone("hand",uid)))return{ok:false,reason:"cost-card-unavailable"};
+      if((costs.reveal||[]).some(uid=>!inZone("hand",uid)))return{ok:false,reason:"cost-card-unavailable"};const retireSelections=costs.retireRearGuard??[];if(!Array.isArray(retireSelections)||retireSelections.some(uid=>typeof uid!=="string"||!uid||uid.length>180)||new Set(retireSelections).size!==retireSelections.length||retireSelections.length!==expected.retireRearGuard)return{ok:false,reason:"invalid-cost-selection"};let retireCursor=0;for(const cost of selectedAbilityCosts.filter(item=>item.type==="retire-rear-guard")){const uid=retireSelections[retireCursor++],target=(actor.rear||[]).find(card=>card?.uid===uid);if(!target)return{ok:false,reason:"cost-card-unavailable"};if(target.controllerPlayerId&&target.controllerPlayerId!==expectedPlayerId||cost.targetFilter?.excludeSource&&uid===pending.instance?.uid)return{ok:false,reason:"invalid-cost-target"}}
       if(selectedAbilityCosts.some(cost=>cost.type==="source-retire")&&(!Array.isArray(actor.rear)||!actor.rear.some(card=>card?.uid===pending.instance?.uid)))return{ok:false,reason:"source-not-retirable"};
       if(selectedAbilityCosts.some(cost=>cost.type==="source-bind-from-field-or-drop")&&!([...((actor.rear)||[]).filter(Boolean),...(actor.drop||[])].some(card=>card?.uid===pending.instance?.uid)))return{ok:false,reason:"source-not-in-field-or-drop"};
     }
