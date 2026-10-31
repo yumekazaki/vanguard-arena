@@ -1,53 +1,65 @@
-# Vanguard ability work handoff
+# Vanguard Arena ability work handoff
 
-## Repository and checkpoint
+## Repository and current checkpoint
 
 - Repository: https://github.com/yumekazaki/vanguard-arena
 - Local checkout: `C:\Users\yumek\Documents\Codex\2026-10-24\ne\work\vanguard-arena`
 - Active branch: `codex/standard-ride-deck`
-- Local branch checkpoint: `b758f5ea` (`Record Squallmaker Vampir ability evidence`)
-- Ability engine baseline recorded in the queue registry: `98a536329d32263eb76b7dc54018aee806a674d8` (stale; refresh before external workers start)
-- The active branch is local and has not been pushed. It is 16 commits ahead of `origin/main`; do not push it to the Pages publishing branch as part of worker setup.
-- Card source: `assets/cards/catalog-data.js` when present; the catalog loader also supports the committed Git snapshot.
+- Latest local checkpoint: `fa7648c44053ebd6068abe0fbf1a57e066353178` (`Reserve Persona Shield ability batch`)
+- Ability queue and registry source baseline: `a334c44bdc196655303d21d0ec521990ec369c2d`
+- The branch is local and has not been confirmed pushed to GitHub. Do not start external workers until it is published and the registry is visible there. The Pages publishing branch is not the collaboration branch.
+- Card catalog: `assets/cards/catalog-data.js` when available; `scripts/audit-ability-catalog.js` also supports the committed catalog snapshot.
 
-## Central queue and assignment
+## Queue and verified progress
 
-- Ability evidence registry: `ability-work-registry.jsonl`
-- Whole-card batches and dependency links: `ability-work-batches.json`
-- Registry summary: `ability-work-registry-manifest.json`
+- Per-ability registry: `ability-work-registry.jsonl`
+- Batch/dependency registry: `ability-work-batches.json`
+- Registry counts and baseline: `ability-work-registry-manifest.json`
+- Active assignments: `ability-work-assignments.json`
 - Queue generator: `scripts/build-ability-work-queue.js`
 - Registry generator: `scripts/build-ability-work-registry.js`
-- Atomic remote claim: `scripts/claim-ability-batch.js`
+- Atomic remote batch claim: `scripts/claim-ability-batch.js`
 - Contribution contract: `ABILITY_CONTRIBUTION_GUIDE.md`
 
-Current catalog snapshot (queue refreshed 2026-10-31): 17,240 ability blocks; 4,291 compiled (24.89%); 12,949 unsupported or unreviewed; 645 fully verified cards. The queue contains 16,595 ability records whose cards are not yet fully verified. It has 84 abilities reserved across 30 primary-session cards and 447 available batches. The batch file is a snapshot: a GitHub claim ref is the live ownership record.
+Current catalog snapshot: **17,240 abilities; 4,314 compiled (25.02%); 12,926 unsupported or unreviewed; 645 fully verified cards**. The queue contains 16,595 abilities on cards that are not yet fully verified. The registry reserves 124 abilities across 56 cards, with 446 unassigned batches. There are no invalid compiled definitions or missing client/server effect handlers. The latest targeted integrated run passed **431/431** engine, catalog-audit, queue, and ACT-family tests. The last full-suite result was **1,495/1,495**, but its evidence is stale against current source and must be rerun before claiming fresh full-suite validation.
 
-The latest audit reports zero invalid compiled abilities and zero missing client or server effect handlers, but 10,145 abilities still need condition/cost/choice/trigger review and 13,013 lack passing ability-level test evidence. Since the latest code changes, the refreshed queue reports 3,582 stale full-suite evidence records (`validationEvidenceFresh: false`). The last historical full-suite result was 1,481/1,481 in 289.14 seconds at an earlier commit; rerun it after current integrations before claiming fresh suite evidence. Similarity groups are triage candidates only; they do not establish that card effects are equivalent. The deterministic eight-worker catalog pass classified all 14,022 cards in 2.59 seconds; it does not count as semantic verification.
+The repository's measured bottleneck is card-specific interpretation and requirement/effect validation, not missing generic client/server handlers. Similarity groups are candidates for review only; they are not proof that different cards have equivalent rules.
 
-## Current readiness gate (2026-10-31)
+## Current primary-session assignments
 
-**Not ready for new external Work chats yet.** The current feature branch is not published and its queue registry still records the old `98a5363` baseline. The two internal workers attempted remote claims, but Git Credential Manager failed to read GitHub credentials; no claim refs were created. The current internal work is:
+- `PRIMARY-ACT-DECKTOP-DRAW-POWER` — implemented eight exact ACT abilities; six focused tests pass and per-ability evidence is recorded. It remains reserved until full-card verification and a fresh full suite.
+- `PRIMARY-ORDER-SEARCH-NAME-AUTO` — six abilities: `cfa-12653:0` through `cfa-12658:0`. The blocker is the authoritative play-from-Drop Order lifecycle and post-play replacement; partial definitions must not be treated as supported.
+- `PRIMARY-DRAGONTREE-GC-SHIELD-AUTO` — five abilities: `cfa-13498:0`, `cfa-13566:0`, `cfa-13607:0`, `cfa-13609:0`, `cfa-13638:0`. Requires exact temporary per-guard grant and battle-scoped resolution.
+- `PRIMARY-PERSONA-SHIELD-TICKET-AUTO` — thirteen abilities across six Persona Shield units and the ticket card, including the ride-deck trigger, grade-three attack bonus, and ticket protection restriction.
 
-- Paid Vanguard-attack AUTO family: `cfa-2637:0`, `cfa-3079:0`, `cfa-4210:0`, `cfa-4216:1`, `cfa-4456:0`, `cfa-4752:0` (coarse batches `ABILITY-0182`, `ABILITY-0198`, `ABILITY-0241`, `ABILITY-0250`, `ABILITY-0261`).
-- Quintuplet memory placement AUTO family: `cfa-11526:0`, `cfa-11545:0`, `cfa-11558:0`, `cfa-11607:0`, `cfa-11671:0` (coarse batches `ABILITY-0052`, `ABILITY-0053`, `ABILITY-0055`, `ABILITY-0057`).
-- Squallmaker Vampir `cfa-2923:0` has passing focused evidence, but is not a fully verified card.
+These assignments are reserved in the registry. Do not reassign them or edit the primary checkout.
 
-Tell external workers to start only after the primary session explicitly announces **SAFE TO START EXTERNAL WORKERS** with a published feature-branch SHA, refreshed queue/registry baseline, confirmed claims for the assignments above, and Pages publishing-source check. Local GitHub credentials currently need repair or an authenticated GitHub Desktop push path. A feature-branch push is for collaboration; it is not approval to merge or deploy the site.
+## External-worker readiness
+
+**Not ready to start external Work chats yet.** The baseline and assignments are safely checkpointed locally, but the feature branch has not been confirmed on GitHub. Publish the feature branch first, then refresh the registry baseline and verify that its files are present on GitHub. A claim is real only after GitHub accepts the atomic claim-ref push; a failed push means no claim was made.
+
+When the published registry is available, list the unassigned batches with:
+
+```powershell
+node -e "const r=require('./ability-work-batches.json'); console.log(r.batches.filter(b=>b.status==='available').slice(0,20).map(b=>b.batchId).join('\n'))"
+```
+
+The current local registry begins with `ABILITY-A334C44B-0001` through `ABILITY-A334C44B-0010`; confirm the published registry still uses these IDs before claiming one.
 
 ## Safe worker setup
 
-Do not begin from the original checkout. After `codex/standard-ride-deck` has been pushed, clone that branch into a new directory and claim a currently unclaimed batch:
+After the feature branch and current registry have been pushed:
 
 ```powershell
 git clone --branch codex/standard-ride-deck https://github.com/yumekazaki/vanguard-arena.git vanguard-arena-worker
 Set-Location vanguard-arena-worker
-node scripts/claim-ability-batch.js --batch ABILITY-0001 --worker work-chat-1
-git worktree add ..\vanguard-arena-ABILITY-0001 -b work/ABILITY-0001 origin/codex/standard-ride-deck
-Set-Location ..\vanguard-arena-ABILITY-0001
+node scripts/claim-ability-batch.js --batch ABILITY-A334C44B-0001 --worker work-chat-1
+git worktree add ..\vanguard-arena-ABILITY-A334C44B-0001 -b work/ABILITY-A334C44B-0001 origin/codex/standard-ride-deck
+Set-Location ..\vanguard-arena-ABILITY-A334C44B-0001
 ```
 
-Use any available `ABILITY-NNNN` batch, but first run the atomic claim command. If it says the claim already exists, choose another batch. Never edit the primary checkout. Do not edit a card outside the claimed batch. Do not change shared runtime files without primary-session coordination.
+Replace the example batch ID with an available ID from the published registry. If the atomic claim says the ref already exists or authentication/network access fails, stop and do not edit that batch. Work only in the isolated worktree, preserve exact card text and IDs, add focused rejection and success tests, and open a branch/PR for integration. Never push to `main` or the Pages publishing branch directly.
 
 ## Integration and verification
 
-Workers add unique contribution and test files, preserve exact text and IDs, and follow `ABILITY_CONTRIBUTION_GUIDE.md`. Run focused tests and catalog validation before proposing integration. Use `tests-passing` only for ability-level evidence; a whole card stays unverified until every printed ability and relevant rule interaction is covered. Integrate accepted changes serially, run the full regression suite, then refresh the manifest, queue, and registry. Do not push directly to `main` or mark unsupported text as implemented.
+Review contributions serially in the primary worktree. Confirm the code matches the card text, validates both player identities and all trigger/cost/zone/timing conditions, and passes focused and adjacent tests. Record ability-level evidence as `tests-passing`; do not mark a card fully verified until all of its printed abilities and relevant rules interactions are covered. After an integration milestone, run the complete regression suite and regenerate the card manifest, queue, registry, and progress report from the resulting source revision.
