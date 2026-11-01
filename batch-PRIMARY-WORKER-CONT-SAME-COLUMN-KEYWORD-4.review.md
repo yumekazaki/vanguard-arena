@@ -50,4 +50,6 @@ Focused command: `node --test ability-batch-PRIMARY-WORKER-CONT-SAME-COLUMN-KEYW
 
 Catalog command: `node scripts/audit-ability-catalog.js`: exit 0; 14,022 cards, 17,240 ability blocks, 4,377 compiled, 273 patterns, zero invalid compiled definitions. Batch-only audit: 12 blocks, 8 compiled, 4 unsupported, zero completely compiled cards.
 
-A complete `node --test` run is also being collected; its final result is reported in the PR. Tests do not establish live multiplayer authority or whole-card verification.
+Full `node --test`: exit 1; 1,681 tests, 1,672 passed, 1 failed, 8 failing TODO regressions, 0 skipped; 584.631 seconds. The sole non-TODO failure is `scripts/build-persona-ride-metadata.test.js:11`, an unchanged metadata byte-equality test: Windows checkout has 7 CRLF line endings while the generator emits LF. Read-only comparison confirmed that the base-commit blob equals generated text exactly, and normalizing checkout CRLF to LF also equals it exactly. No shared file was edited to mask this failure.
+
+Tests do not establish live multiplayer authority or whole-card verification.
