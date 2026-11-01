@@ -3973,6 +3973,7 @@
     if (!player || !instance || typeof engine.evaluateContinuousEffects !== "function") return 0;
     const opponent = Object.values(state.players || {}).find(candidate => candidate && candidate !== player);
     const common = {
+      controllerPlayerId: player.playerId,
       dragontreeMarkerCount: (player.giftZones || []).filter(marker => marker?.type === "Dragontree" && /^(?:rear-|accel-)/.test(String(marker.zone || ""))).length,
       isControllerTurn: state.side === side,
       soulCardNames: (player.soul || []).map(card => card?.cardName).filter(Boolean),
@@ -3987,7 +3988,7 @@
       orderPlayedThisTurn: state.side === side && Number(state.ordersPlayedThisTurn || 0) > 0,
       controllerDamageCount: (player.damage || []).length,
       opponentTriggerRevealedThisTurn: player.opponentTriggerRevealedThisTurn === true,
-      controllerFieldCards: [...(player.vanguard ? [player.vanguard] : []), ...(player.rear || [])].filter(Boolean).map(card => { const definition = serverCardDefinition(card); return { uid: card.uid, cardId:card.cardId, zone: card.uid === player.vanguard?.uid ? "vanguard" : "rear-guard", names: engine.getCardNames?.(definition,{location:card.uid===player.vanguard?.uid?"vanguard":"rear-guard"}) || [card.cardName].filter(Boolean), clans: [definition.clan, ...(definition.clans || [])].filter(Boolean), allClansAndNations: engine.hasAbilityKeyword?.(card.cardId, "all-clans-and-nations") === true }; }),
+      controllerFieldCards: [...(player.vanguard ? [player.vanguard] : []), ...(player.rear || [])].filter(Boolean).map(card => { const definition = serverCardDefinition(card); return { uid: card.uid, cardId:card.cardId, controllerPlayerId: player.playerId, zone: card.uid === player.vanguard?.uid ? "vanguard" : "rear-guard", names: engine.getCardNames?.(definition,{location:card.uid===player.vanguard?.uid?"vanguard":"rear-guard"}) || [card.cardName].filter(Boolean), clans: [definition.clan, ...(definition.clans || [])].filter(Boolean), allClansAndNations: engine.hasAbilityKeyword?.(card.cardId, "all-clans-and-nations") === true }; }),
       controllerDamageCards: (player.damage || []).filter(card => card && typeof card.uid === "string").map(card => ({ uid: card.uid, faceDown: card.faceDown === true, names: engine.getCardNames?.(serverCardDefinition(card), { location: "damage" }) || [serverCardDefinition(card).name || card.cardName].filter(Boolean) })),
       generationBreakCount: engine.countGenerationBreakUnits?.(player, card => card?.gDeckCard === true) || 0,
       sourceAttackedThisBattle: attackContext?.attackerUid === instance.uid,
