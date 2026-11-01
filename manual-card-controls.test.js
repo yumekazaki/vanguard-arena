@@ -97,3 +97,20 @@ test('viewed-card top/bottom buttons invoke their actual list handler',()=>{
   assert.equal(c.match.players.human.deck[0].uid,'host-5');
   assert.equal(c.match.revealed.cards.length,1);
 });
+test('face-up G cards bind from either existing storage zone without duplication',()=>{
+  for(const source of ['gzone','gdeck']){
+    const c=harness(),p=c.match.players.human,key=source==='gzone'?'gZone':'gDeck';
+    p[key]=[{uid:'faceup',cardId:'g',faceUp:true}];
+    c.manualGameAction('zone-move:'+source+':bind:faceup');
+    assert.equal(p[key].length,0);assert.equal(p.bind.length,1);assert.equal(p.bind[0].uid,'faceup');
+  }
+});
+test('face-up G Guardians cannot use the new Superior Call or Superior Ride routes',()=>{
+  const c=harness(),p=c.match.players.human;
+  c.cardMap.set('guardian',{id:'guardian',type:'G Guardian',grade:4});
+  c.isGGuardian=card=>card?.type==='G Guardian';
+  p.gZone=[{uid:'guardian',cardId:'guardian',faceUp:true}];
+  c.beginSuperiorCall('superior-call:gzone:guardian');assert.equal(c.zoneFieldSelection,undefined);
+  vm.runInContext(section('performSuperiorRide(','beginSuperiorCall('),c);
+  c.performSuperiorRide('gzone','guardian');assert.equal(p.gZone.length,1);assert.equal(p.vanguard,undefined);
+});
