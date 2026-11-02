@@ -349,7 +349,7 @@
     };
     return { id: "practice-bot-83ua", name: "[MLB] deck · Deck Log 83UA", cards, starterCardId: "cfa-6826" };
   }  function isGDeckCard(card) { return /G Unit|G Guardian|G-Guard/i.test(String(card?.type || "")+" "+String(card?.name||"")); }
-  function isGGuardian(card) { const info=(String(card?.type||"")+" "+String(card?.text||"")+" "+String(card?.name||"")).toLowerCase(); return info.includes("g guardian") || info.includes("g-guard") || info.includes("g guard") || (isGDeckCard(card) && Number(card?.grade)>=4 && Number(card?.power||0)===0 && Number(card?.shield||0)>0); }
+  function isGGuardian(card) { return isGDeckCard(card) && Number(card?.grade)===4 && (parseFloat(card?.power)||0)===0 && (parseFloat(card?.shield)||0)>0; }
   function deckCount(deck) { return Object.entries(deck.cards || {}).reduce((total, [id, qty]) => total + (isGDeckCard(cardMap.get(id)) ? 0 : Number(qty || 0)), 0); }
   function gDeckCount(deck) { return Object.entries(deck.cards || {}).reduce((total, [id, qty]) => total + (isGDeckCard(cardMap.get(id)) ? Number(qty || 0) : 0), 0); }
   function standardRideDeckErrors(deck) {
