@@ -758,6 +758,8 @@
     $("#hand-count").textContent = `${you.hand.length} card${you.hand.length === 1 ? "" : "s"}`;
     $("#hand-cards").innerHTML = you.hand.map((instance, i) => { const c = cardMap.get(instance.cardId); return c ? cardNode(c, match.selected === instance.uid).replace('data-card-id=', `data-hand-uid="${instance.uid}" data-hand-index="${i}" data-card-id=`) : ""; }).join("");
     updateActionAvailability(); renderLog(); renderGAssistDialog(); renderRemotePaymentPrompt();
+    window.VanguardZonePiles?.render(match, id => cardMap.get(id)?.image || "");
+    if ($("#faceup-gdeck-dialog").open) openFaceUpGDeck($("#faceup-gdeck-dialog").dataset.side || "human");
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
     renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderBattleActionPrompt(); renderAttackArrow(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal(); renderOnlineTurnOrderAnnouncement(); renderRideDeckFlow();
     window.VanguardArenaVisualEffects?.afterRender(match);
@@ -1898,12 +1900,12 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       if(field?.side!=="human"||field.zone==="vanguard"){toast("Choose one of your Rear-Guards to Superior Ride.");return;}
       instance=field.instance;
     }else{
-      sourceCards={hand:player.hand,deck:player.deck,soul:player.soul,bind:player.bind||[],drop:player.drop,damage:player.damage,reveal:match.revealed?.owner==="human"?match.revealed.cards||[]:[]}[source];
+      sourceCards={gzone:player.gZone||[],gdeck:player.gDeck||[],hand:player.hand,deck:player.deck,soul:player.soul,bind:player.bind||[],drop:player.drop,damage:player.damage,reveal:match.revealed?.owner==="human"?match.revealed.cards||[]:[]}[source];
       const index=sourceCards?.findIndex(card=>card.uid===uid)??-1;
       if(index<0)return;
       instance=sourceCards[index];
     }
-    if(!isUnitCard(cardMap.get(instance?.cardId))){toast("Only a Unit card can be Superior Ridden.");return;}
+    if(!isUnitCard(cardMap.get(instance?.cardId)) || (["gzone","gdeck"].includes(source) && isGGuardian(cardMap.get(instance.cardId)))){toast("Only a Unit card can be Superior Ridden.");return;}
     if(!window.VanguardAbilityEngine.canRideCard(cardMap.get(instance.cardId),{vanguardCard:cardMap.get(player.vanguard?.cardId),crests:(player.crests||[]).map(crest=>cardMap.get(crest.cardId))})){toast("This card cannot be ridden under your current ride restrictions.");return;}
     if(player.vanguard?.uid===instance.uid){toast("That card is already your Vanguard.");return;}
     if(field)player.rear[field.index]=null;
@@ -1922,9 +1924,9 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function beginSuperiorCall(action) {
     if (!match || match.ended || online.role === "watcher") return;
     const [, source, uid] = action.split(":");
-    const cards = source === "reveal" ? (match.revealed?.owner === "human" ? match.revealed.cards : []) : match.players.human[source === "gdeck" ? "gDeck" : source];
+    const cards = source === "reveal" ? (match.revealed?.owner === "human" ? match.revealed.cards : []) : match.players.human[source === "gdeck" ? "gDeck" : source === "gzone" ? "gZone" : source];
     const instance = cards?.find(item => item.uid === uid);
-    if (!instance || !isUnitCard(cardMap.get(instance.cardId)) || !["hand", "deck", "bind", "drop", "soul", "damage", "reveal", "gdeck"].includes(source)) return;
+    if (!instance || !isUnitCard(cardMap.get(instance.cardId)) || (["gdeck", "gzone"].includes(source) && isGGuardian(cardMap.get(instance.cardId))) || !["hand", "deck", "bind", "drop", "soul", "damage", "reveal", "gdeck", "gzone"].includes(source)) return;
     zoneFieldSelection = { source, uid, superior: true };
     document.querySelectorAll("dialog[open]").forEach(dialog => dialog.close());
     window.VanguardHand?.close(false);
@@ -2091,7 +2093,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       match.revealed = { owner: "human", cards, private: privateLook }; addLog(`${player.name} ${privateLook ? "privately looked at" : "revealed"} ${cards.length} card${cards.length === 1 ? "" : "s"} from the top of the deck.`); renderSharedReveal();
     } else if (action.startsWith("zone-move:")) {
       const [, source, choice, uid, targetZone] = action.split(":");
-      const sourceZones = { hand: player.hand, deck: player.deck, bind: player.bind || [], gdeck: player.gDeck || [], soul: player.soul || [], drop: player.drop || [], damage: player.damage || [], reveal: match.revealed?.owner === "human" ? match.revealed.cards || [] : [] };
+      const sourceZones = { hand: player.hand, deck: player.deck, bind: player.bind || [], gdeck: player.gDeck || [], gzone: player.gZone || [], soul: player.soul || [], drop: player.drop || [], damage: player.damage || [], reveal: match.revealed?.owner === "human" ? match.revealed.cards || [] : [] };
       const sourceCards = sourceZones[source], index = sourceCards?.findIndex((item) => item.uid === uid) ?? -1;
       if (index < 0) return;
       if (choice === "field") {
@@ -2758,6 +2760,21 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     $("#stride-cost-confirm").disabled = !valid;
     if (!$("#stride-cost-dialog").open) $("#stride-cost-dialog").showModal();
   }
+  function openFaceUpGDeck(side = "human") {
+    if (!match || !["human", "bot"].includes(side)) return;
+    const own = side === "human" && online.role !== "watcher";
+    const cards = window.VanguardZonePiles.faceUpCards(match.players[side]);
+    const dialog = $("#faceup-gdeck-dialog");
+    dialog.dataset.side = side;
+    $("#faceup-gdeck-title").textContent = (own ? "Your" : "Opponent") + " face-up G-deck · " + cards.length;
+    $("#faceup-gdeck-list").innerHTML = cards.length ? cards.map(({card:instance, source}) => {
+      const card = cardMap.get(instance.cardId); if (!card) return "";
+      const unitActions = !isGGuardian(card) ? `<button class="button" type="button" data-superior-ride="${source}:${escapeHtml(instance.uid)}">Superior Ride</button><button class="button" type="button" data-superior-call="${source}:${escapeHtml(instance.uid)}">Superior Call</button>` : "";
+      const actions = own ? `<div class="peek-actions" hidden>${unitActions}<button class="button" type="button" data-zone-move="${source}:bind:${escapeHtml(instance.uid)}">Bind</button></div>` : "";
+      return `<article class="zone-view-card" data-card-id="${escapeHtml(card.id)}"><button class="zone-card-face" type="button" data-zone-select>${cardImage(card)}<b>${escapeHtml(card.name)}</b></button><button class="zone-card-zoom" type="button" data-card-zoom="${escapeHtml(card.id)}" aria-label="Zoom ${escapeHtml(card.name)}">⤢</button>${actions}</article>`;
+    }).join("") : '<p class="zone-empty-message">No face-up cards in this G-deck.</p>';
+    if (!dialog.open) dialog.showModal();
+  }
   function openGDeckDialog(kind, healUid = "") {
     if (!match) { toast("Start a match first."); return; }
     if (match.players.human.format === "standard" && kind !== "inspect") { toast("Standard decks use a Ride Deck and cannot stride or G-Guard."); return; }
@@ -2767,7 +2784,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if(isGuard&&(!match.pendingAttack||match.pendingAttack.defenderSide!=="human"||match.pendingAttack.defenderDone||(vanguardGrade<3||attackerGrade<3))){toast("G-Guard needs an active defense with both Vanguards at grade 3 or greater.");return;}
     if(isGuard&&!selectedHeal){openGGuardCostDialog();return;}
     const allCards = match.players.human.gDeck || [];
-    const cards = isInspect ? allCards : allCards.filter((item) => {
+    const cards = isInspect ? allCards.filter(item => !item.faceUp) : allCards.filter((item) => {
       const card = cardMap.get(item.cardId);
       return !item.faceUp && (isGuard ? isGGuardian(card) : isStrideUnit(card));
     });
@@ -2828,7 +2845,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       return;
     }
     if (action === "counter-blast" || action === "counter-charge" || action === "heal-damage") { openDamageDialog(action); return; }
-    if (action.startsWith("ride-deck-") || action === "g-assist" || action === "g-assist-none" || action === "g-assist-finish" || action.startsWith("g-assist-pick:") || action.startsWith("g-assist-discard:") || action.startsWith("g-guard:") || action.startsWith("intercept:") || action.startsWith("superior-ride:") || action.startsWith("attack-choice:") || action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("gift-force:") || action.startsWith("gift-accel:") || action.startsWith("gdeck-reveal:") || action.startsWith("gdeck-flip-up:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done" || action.startsWith("g-assist") ) { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}sendGuestRequest("action",{action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("superior-ride:")){["deck-view-dialog","soul-dialog","bind-dialog","drop-dialog","damage-dialog","reveal-dialog"].forEach(id=>{if($("#"+id).open)$("#"+id).close()});} if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog($("#bind-dialog").dataset.side || "human"); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
+    if (action.startsWith("ride-deck-") || action === "g-assist" || action === "g-assist-none" || action === "g-assist-finish" || action.startsWith("g-assist-pick:") || action.startsWith("g-assist-discard:") || action.startsWith("g-guard:") || action.startsWith("intercept:") || action.startsWith("superior-ride:") || action.startsWith("attack-choice:") || action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("gift-force:") || action.startsWith("gift-accel:") || action.startsWith("gdeck-reveal:") || action.startsWith("gdeck-flip-up:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done" || action.startsWith("g-assist") ) { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}sendGuestRequest("action",{action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("superior-ride:")){["deck-view-dialog","soul-dialog","bind-dialog","drop-dialog","damage-dialog","reveal-dialog","faceup-gdeck-dialog"].forEach(id=>{if($("#"+id).open)$("#"+id).close()});} if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog($("#bind-dialog").dataset.side || "human"); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
     if (action === "reveal-top-cards") { if (!match) { toast("Start a match first."); return; } $("#reveal-count-dialog").showModal(); return; }
     if (action === "gift-force" || action === "gift-accel") { openGiftDialog(action === "gift-force" ? "force" : "accel"); return; }
     if (online.role === "guest") {
@@ -2942,6 +2959,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   document.addEventListener("click", (event) => { const button = event.target.closest("[data-zone-field-select]"); if (!button || !match) return; const [source, uid] = button.dataset.zoneFieldSelect.split(":"); zoneFieldSelection = { source, uid }; button.closest("dialog")?.close(); toast("Card selected. Click a Vanguard or empty Rear-Guard circle to place it."); });
   $$('[data-close-dialog]').forEach((button)=>button.addEventListener("click",()=>$("#"+button.dataset.closeDialog)?.close()));
   $$("dialog").forEach((dialog) => dialog.addEventListener("click", (event) => { if (event.target === dialog && dialog.id !== "ability-dialog") dialog.close(); }));
+  document.addEventListener("arena:faceup-gdeck", event => openFaceUpGDeck(event.detail.side));
+  $("#faceup-gdeck-list").addEventListener("click", event => { const zoom=event.target.closest("[data-card-zoom]"); if(zoom){showCardDetails(zoom.dataset.cardZoom);return;}const move=event.target.closest("[data-zone-move]");if(move)performManualAction("zone-move:"+move.dataset.zoneMove); });
   $("#open-opponent-bind-zone").addEventListener("click",()=>openBindDialog("bot"));
   $("#reveal-top-cards").addEventListener("click",()=>performManualAction("reveal-top-cards"));
   [ ["#reveal-count-confirm", "reveal-top:"], ["#look-count-confirm", "look-top:"] ].forEach(([selector, action]) => $(selector).addEventListener("click", () => { const n=Math.max(1,Math.min(60,Number($("#reveal-count").value)||1)); $("#reveal-count-dialog").close(); performManualAction(action+n); }));
