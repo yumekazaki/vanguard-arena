@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "batchId": "CANDIDATE-C0086556-0013",
+  "workerId": "worker-exclusive-candidate-0013",
+  "baselineCommit": "c00865569ef43a5915401e313ef036c25dc963b2",
+  "abilityIds": [
+    "cfa-13243:0",
+    "cfa-13253:0",
+    "cfa-13264:0",
+    "cfa-13309:0"
+  ],
+  "claimedAt": "2026-11-02T04:38:28.811Z"
+}
