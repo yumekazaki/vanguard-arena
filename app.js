@@ -874,7 +874,7 @@
   }
   function showDeckMenu() {
     if (!match || online.role === "watcher") return;
-    const actions = [["deck-view", "View deck"], ["draw", "Draw a card"], ["top-to-drop", "Mill top card to Drop"], ["trigger-check", "Trigger check"], ["damage-check", "Damage check"], ["shuffle", "Shuffle deck"], ["soul-charge", "Soul Charge"], ["reveal-top-cards", "Look at top cards"]];
+    const actions = [["deck-view", "View deck"], ["draw-card", "Draw a card"], ["top-to-drop", "Mill top card to Drop"], ["trigger-check", "Trigger check"], ["damage-check", "Damage check"], ["shuffle", "Shuffle deck"], ["soul-charge", "Soul Charge"], ["reveal-top-cards", "Look at top cards"]];
     $("#context-menu-title").textContent = "Deck actions";
     $("#context-menu-help").textContent = "Choose an action for your deck.";
     $("#context-menu-actions").innerHTML = actions.map(([action, label]) => `<button class="button" type="button" data-context-action="${action}">${label}</button>`).join("");
@@ -898,7 +898,7 @@
       if (field.zone === "vanguard") {
         if (Number(card.grade) === 4 && isGDeckCard(card) && field.instance.strideHeart) actions.push(["return-g-vanguard", "Return to G-deck face up"]);
         if (match.phase === 5 && !match.pendingAttack) actions.push(["attack", "Attack"]);
-        actions.push(["view-selected-soul", "View Soul"], ["rest-selected", field.instance.rested ? "Stand" : "Rest"], ["selected-to-soul", "Put into Soul"], ["alter-power", "Alter power"]);
+        actions.push(["view-selected-soul", "View Soul"], ["rest-selected", field.instance.rested ? "Stand" : "Rest"], ["alter-power", "Alter power"]);
       } else {
         if (match.phase === 5 && !match.pendingAttack) actions.push(["attack", "Attack"]);
         actions.push(["rest-selected", field.instance.rested ? "Stand" : "Rest"], ["move-select", "Move / Swap Rear-Guard"], ["selected-to-hand", "Return to hand"], ["selected-to-soul", "Put into Soul"], ["selected-to-top", "Return to deck top"], ["selected-to-bottom", "Return to deck bottom"], ["selected-to-drop", "Move to Drop"], ["bind", "Move to Bind"], ["alter-power", "Alter power"]);
@@ -958,7 +958,7 @@
       "stand-selected": onHumanField && fieldCard.instance.rested,
       "hand-to-damage": onHumanHand, lock: onHumanField, power: onHumanField
     };
-    Object.keys(contextualActions).forEach((action) => $$(`.selected-card-actions [data-manual-action="${action}"]`).forEach((button) => { button.hidden = false; }));
+    Object.keys(contextualActions).forEach((action) => $$(`.selected-card-actions [data-manual-action="${action}"]`).forEach((button) => { button.hidden = action === "selected-to-soul" && onHumanField && fieldCard.zone === "vanguard"; }));
     $("#manual-selection-help").textContent = onHumanHand ? "Hand card selected · choose where to move or play it." : onHumanField ? `${fieldCard.zone === "vanguard" ? "Vanguard" : "Rear-Guard"} selected · choose a card action.` : "Select a card on your hand or field to see its actions.";
     const nextPhase = match.players.human.format === "standard" && match.phase === 2 ? 4 : match.phase + 1;
     $("#advance-phase").innerHTML = match.phase === phases.length - 1 ? `End turn <span>→</span>` : `Continue ${phases[nextPhase].toLowerCase()} phase <span>→</span>`;
@@ -2272,6 +2272,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       match.selected = null;
     } else if (action === "selected-to-soul") {
       const hand = selectedHandCard(), field = findFieldCard(match.selected);
+      if (!hand && field?.side === "human" && field.zone === "vanguard") { toast("The Vanguard cannot be moved to Soul with this control."); return; }
       if (hand) { player.hand = player.hand.filter((item) => item.uid !== hand.uid); player.soul.push(hand); queueMovedCardAbility(hand,"human","soulMove","hand",{currentLocation:"soul"}); addLog(`${player.name} moved ${cardMap.get(hand.cardId)?.name || "a card"} from hand to Soul.`); }
       else if (field?.side === "human") { if (field.zone === "vanguard") player.vanguard = null; else player.rear[field.index] = null; player.soul.push(field.instance); queueMovedCardAbility(field.instance,"human","soulMove",field.zone,{currentLocation:"soul"}); addLog(`${player.name} moved ${cardMap.get(field.instance.cardId)?.name || "a unit"} from the field to Soul.`); }
       else { toast("Select a card in your hand or on your field first."); return; }
