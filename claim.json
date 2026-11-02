@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "batchId": "CANDIDATE-C0086556-0011",
+  "workerId": "worker-unique-grade-name-0011",
+  "baselineCommit": "c00865569ef43a5915401e313ef036c25dc963b2",
+  "abilityIds": [
+    "cfa-12547:0",
+    "cfa-12547:1",
+    "cfa-12862:0",
+    "cfa-12862:1",
+    "cfa-13727:0",
+    "cfa-13727:1",
+    "cfa-13759:0",
+    "cfa-13759:1"
+  ],
+  "claimedAt": "2026-11-02T04:29:40.357Z"
+}
