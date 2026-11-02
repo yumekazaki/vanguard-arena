@@ -1,0 +1,13 @@
+{
+  "batchId": "CANDIDATE-C0086556-0018",
+  "workerId": "primary-2026-11-01-deck-limit-cont",
+  "baselineCommit": "c00865569ef43a5915401e313ef036c25dc963b2",
+  "abilityIds": [
+    "cfa-9656:0",
+    "cfa-9657:0",
+    "cfa-9660:0",
+    "cfa-9661:0"
+  ],
+  "status": "in-progress",
+  "claimMethod": "GitHub branch creation at claims/CANDIDATE-C0086556-0018"
+}
