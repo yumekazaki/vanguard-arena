@@ -1,0 +1,108 @@
+/* Battlefield finish only. The existing mat, cards and controls keep their geometry. */
+#match-layout #game-table {
+  background: #071714 url("./assets/ui/arena-live-circuit.svg") center / 100% 100% no-repeat;
+  box-shadow: inset 0 0 0 1px #b7e8e0a0, inset 0 0 70px #000b, 0 20px 56px #02080ca0;
+}
+#match-layout #game-table .mat-half { background: transparent !important; }
+#match-layout #game-table .mat-half img { opacity: .06 !important; }
+#match-layout #game-table .table-glow {
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 25%, #7aeaff1b 49%, transparent 71%),
+    radial-gradient(ellipse at center,#32af9d30,transparent 68%);
+}
+#match-layout #game-table .field-zone { --ring: #c9ee80; }
+#match-layout #game-table .opponent-side .field-zone { --ring: #ff8188; }
+#match-layout #game-table .field-zone.vanguard-zone { --ring: #7be2ff; }
+#match-layout #game-table .field-zone::before {
+  pointer-events: none;
+  inset: 5% auto auto 50%;
+  translate: -50% 0;
+  width: auto;
+  height: 90%;
+  aspect-ratio: 1;
+  max-width: 94%;
+  box-sizing: border-box;
+  border: 1px solid var(--ring);
+  border-radius: 50%;
+  background: radial-gradient(circle, #091922 0 37%, transparent 39%),
+    repeating-conic-gradient(from 8deg, #071714 0deg 5deg, transparent 5deg 14deg),
+    radial-gradient(circle, transparent 0 45%, var(--ring) 46% 47%, transparent 48% 53%, var(--ring) 54% 57%, transparent 58% 64%, var(--ring) 65% 68%, transparent 69%);
+  box-shadow: 0 0 14px color-mix(in srgb,var(--ring) 44%,transparent),
+    inset 0 0 12px color-mix(in srgb,var(--ring) 38%,transparent);
+}
+#match-layout #game-table .field-zone > span { color: #ecf7f3; text-shadow: 0 1px 4px #000; }
+#match-layout #game-table .player-line :is(.deck-zone,.drop-zone,.gdeck-button) {
+  border-color: #c8d9df;
+  box-shadow: 0 0 0 1px #637f89, 0 3px 10px #000a, inset 0 0 0 2px #d4faff24;
+}
+#match-layout #game-table .center-divider {
+  background: linear-gradient(100deg,#10253b,#12373e 50%,#10253b);
+  border-color: #79c6d5;
+  color: #eafaff;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #match-layout #game-table .table-glow { animation: arena-circuit-light 6s ease-in-out infinite alternate; }
+  @keyframes arena-circuit-light { from { opacity: .33; } to { opacity: .84; } }
+}
+/* Use the existing phase list so Premium and Standard keep their own sequence. */
+#match-layout .battle-phase-toolbar {
+  border-color: #5ea9b4;
+  background: linear-gradient(105deg,#081927,#12363e);
+}
+#match-layout .battle-phase-toolbar .phase-item {
+  color: #c3d4dc;
+  font: 900 italic clamp(11px,1.25vw,19px)/1 ArenaDisplay,Impact,sans-serif;
+  text-transform: uppercase;
+}
+#match-layout .battle-phase-toolbar .phase-item.active {
+  color: #fff;
+  border-color: #e5d89a;
+  background: linear-gradient(110deg,#10566c,#284346);
+  text-shadow: 0 0 9px #6deaff;
+}
+body.battlefield-expanded #match-layout .table-column {
+  grid-template-rows: auto minmax(0,1fr) auto auto;
+}
+body.battlefield-expanded #match-layout .table-column > .battle-phase-toolbar {
+  display: block;
+  margin: 0;
+  padding: max(4px,env(safe-area-inset-top)) 6px 4px;
+  border-radius: 0;
+}
+body.battlefield-expanded #match-layout .battle-phase-toolbar :is(.rail-heading,.phase-track,#advance-phase,.phase-bullet) {
+  display: none;
+}
+body.battlefield-expanded #match-layout .battle-phase-toolbar .phase-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+}
+body.battlefield-expanded #match-layout .battle-phase-toolbar .phase-item { margin: 0; padding: 5px 7px; }
+#match-layout #game-table .bind-zone-button {
+  flex: none;
+  min-width: 56px;
+  border: 1px solid #c8d9df;
+  border-radius: 5px;
+  background: linear-gradient(135deg,#24424a,#091821);
+  box-shadow: inset 0 0 0 2px #d4faff24,0 2px 8px #0009;
+  color: #effaff;
+}
+#match-layout #game-table .bind-zone-button b { color: #def7ac; }
+#match-layout #game-table .player-line .avatar {
+  border-radius: 12% 22% 12% 22%;
+  box-shadow: 0 0 0 2px #132e49,0 0 0 4px #5f9cc880,0 6px 22px #001422b0;
+}
+#match-layout #game-table .player-line .avatar img { border-radius: 0; }
+#match-layout #game-table .player-title {
+  padding: 5px 10px;
+  border-left: 2px solid #7bdcf0;
+  background: linear-gradient(90deg,#0b253aef,#163e5080,transparent);
+}
+@media (min-width: 900px) and (min-height: 650px) {
+  #match-layout #game-table .field-zone::before { inset-block-start: 1%; height: 98%; }
+  body.battlefield-expanded #match-layout #game-table {
+    background-size: cover;
+  }
+}
