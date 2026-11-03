@@ -15,12 +15,12 @@
 #match-layout #game-table .field-zone.vanguard-zone { --ring: #7be2ff; }
 #match-layout #game-table .field-zone::before {
   pointer-events: none;
-  inset: 5% auto auto 50%;
+  inset: 0 auto auto 50%;
   translate: -50% 0;
   width: auto;
-  height: 90%;
+  height: 100%;
   aspect-ratio: 1;
-  max-width: 94%;
+  max-width: 100%;
   box-sizing: border-box;
   border: 1px solid var(--ring);
   border-radius: 50%;
@@ -60,26 +60,6 @@
   background: linear-gradient(110deg,#10566c,#284346);
   text-shadow: 0 0 9px #6deaff;
 }
-body.battlefield-expanded #match-layout .table-column {
-  grid-template-rows: auto minmax(0,1fr) auto auto;
-}
-body.battlefield-expanded #match-layout .table-column > .battle-phase-toolbar {
-  display: block;
-  margin: 0;
-  padding: max(4px,env(safe-area-inset-top)) 6px 4px;
-  border-radius: 0;
-}
-body.battlefield-expanded #match-layout .battle-phase-toolbar :is(.rail-heading,.phase-track,#advance-phase,.phase-bullet) {
-  display: none;
-}
-body.battlefield-expanded #match-layout .battle-phase-toolbar .phase-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px;
-  margin: 0;
-}
-body.battlefield-expanded #match-layout .battle-phase-toolbar .phase-item { margin: 0; padding: 5px 7px; }
 #match-layout #game-table .bind-zone-button {
   flex: none;
   min-width: 56px;
@@ -101,8 +81,16 @@ body.battlefield-expanded #match-layout .battle-phase-toolbar .phase-item { marg
   background: linear-gradient(90deg,#0b253aef,#163e5080,transparent);
 }
 @media (min-width: 900px) and (min-height: 650px) {
-  #match-layout #game-table .field-zone::before { inset-block-start: 1%; height: 98%; }
+  #match-layout #game-table .field-zone::before { inset-block-start: -4%; height: 108%; }
   body.battlefield-expanded #match-layout #game-table {
     background-size: cover;
   }
+}
+
+/* Grow pile tiles from their existing anchors on boards with room for them. */
+@media (min-width: 900px) and (min-height: 650px) {
+  #match-layout #game-table .player-line > :is(.deck-zone,.drop-zone,.gdeck-pile-frame) { scale: 1.16; }
+  #match-layout #game-table .human-line > :is(.deck-zone,.drop-zone,.gdeck-pile-frame) { transform-origin: right center; }
+  #match-layout #game-table .opponent-line > :is(.deck-zone,.drop-zone,.gdeck-pile-frame) { transform-origin: left center; }
+  #match-layout #game-table .bind-zone-button { min-width: 68px; }
 }
