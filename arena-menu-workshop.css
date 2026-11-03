@@ -76,11 +76,11 @@
 }
 #match-empty:has(.theme-royal:hover) .title-royal,
 #match-empty:not(:has(.fighter-option:hover)):not(:has(.fighter-option:not(.theme-royal):focus-visible)) .title-royal,
-#match-empty:has(.theme-oracle:hover),
+#match-empty:has(.theme-oracle:hover) .title-oracle,
 #match-empty:not(:has(.fighter-option:hover)):has(.theme-oracle:focus-visible) .title-oracle,
-#match-empty:has(.theme-nova:hover),
+#match-empty:has(.theme-nova:hover) .title-nova,
 #match-empty:not(:has(.fighter-option:hover)):has(.theme-nova:focus-visible) .title-nova,
-#match-empty:has(.theme-kagero:hover),
+#match-empty:has(.theme-kagero:hover) .title-kagero,
 #match-empty:not(:has(.fighter-option:hover)):has(.theme-kagero:focus-visible) .title-kagero { opacity: 1; transform: none; }
 @keyframes arena-title-drift { from { transform: translateY(8px); } to { transform: translateY(-18px); } }
 
