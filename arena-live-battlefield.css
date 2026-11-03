@@ -44,3 +44,65 @@
   #match-layout #game-table .table-glow { animation: arena-circuit-light 6s ease-in-out infinite alternate; }
   @keyframes arena-circuit-light { from { opacity: .33; } to { opacity: .84; } }
 }
+/* Use the existing phase list so Premium and Standard keep their own sequence. */
+#match-layout .battle-phase-toolbar {
+  border-color: #5ea9b4;
+  background: linear-gradient(105deg,#081927,#12363e);
+}
+#match-layout .battle-phase-toolbar .phase-item {
+  color: #c3d4dc;
+  font: 900 italic clamp(11px,1.25vw,19px)/1 ArenaDisplay,Impact,sans-serif;
+  text-transform: uppercase;
+}
+#match-layout .battle-phase-toolbar .phase-item.active {
+  color: #fff;
+  border-color: #e5d89a;
+  background: linear-gradient(110deg,#10566c,#284346);
+  text-shadow: 0 0 9px #6deaff;
+}
+body.battlefield-expanded #match-layout .table-column {
+  grid-template-rows: auto minmax(0,1fr) auto auto;
+}
+body.battlefield-expanded #match-layout .table-column > .battle-phase-toolbar {
+  display: block;
+  margin: 0;
+  padding: max(4px,env(safe-area-inset-top)) 6px 4px;
+  border-radius: 0;
+}
+body.battlefield-expanded #match-layout .battle-phase-toolbar :is(.rail-heading,.phase-track,#advance-phase,.phase-bullet) {
+  display: none;
+}
+body.battlefield-expanded #match-layout .battle-phase-toolbar .phase-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+}
+body.battlefield-expanded #match-layout .battle-phase-toolbar .phase-item { margin: 0; padding: 5px 7px; }
+#match-layout #game-table .bind-zone-button {
+  flex: none;
+  min-width: 56px;
+  border: 1px solid #c8d9df;
+  border-radius: 5px;
+  background: linear-gradient(135deg,#24424a,#091821);
+  box-shadow: inset 0 0 0 2px #d4faff24,0 2px 8px #0009;
+  color: #effaff;
+}
+#match-layout #game-table .bind-zone-button b { color: #def7ac; }
+#match-layout #game-table .player-line .avatar {
+  border-radius: 12% 22% 12% 22%;
+  box-shadow: 0 0 0 2px #132e49,0 0 0 4px #5f9cc880,0 6px 22px #001422b0;
+}
+#match-layout #game-table .player-line .avatar img { border-radius: 0; }
+#match-layout #game-table .player-title {
+  padding: 5px 10px;
+  border-left: 2px solid #7bdcf0;
+  background: linear-gradient(90deg,#0b253aef,#163e5080,transparent);
+}
+@media (min-width: 900px) and (min-height: 650px) {
+  #match-layout #game-table .field-zone::before { inset-block-start: 1%; height: 98%; }
+  body.battlefield-expanded #match-layout #game-table {
+    background-size: cover;
+  }
+}
