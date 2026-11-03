@@ -76,11 +76,11 @@
 }
 #match-empty:has(.theme-royal:hover) .title-royal,
 #match-empty:not(:has(.fighter-option:hover)):not(:has(.fighter-option:not(.theme-royal):focus-visible)) .title-royal,
-#match-empty:has(.theme-oracle:hover),
+#match-empty:has(.theme-oracle:hover) .title-oracle,
 #match-empty:not(:has(.fighter-option:hover)):has(.theme-oracle:focus-visible) .title-oracle,
-#match-empty:has(.theme-nova:hover),
+#match-empty:has(.theme-nova:hover) .title-nova,
 #match-empty:not(:has(.fighter-option:hover)):has(.theme-nova:focus-visible) .title-nova,
-#match-empty:has(.theme-kagero:hover),
+#match-empty:has(.theme-kagero:hover) .title-kagero,
 #match-empty:not(:has(.fighter-option:hover)):has(.theme-kagero:focus-visible) .title-kagero { opacity: 1; transform: none; }
 @keyframes arena-title-drift { from { transform: translateY(8px); } to { transform: translateY(-18px); } }
 
@@ -124,28 +124,18 @@
 
 @media (min-width: 1080px) {
   body:not(.mobile-mode) #view-decks .visual-workshop {
-    grid-template-columns: minmax(200px, .65fr) minmax(0, 1.6fr) minmax(0, 1.4fr);
-    grid-template-rows: auto 1fr;
-    align-items: start;
+    grid-template-columns: minmax(190px, .7fr) minmax(0, 2.4fr) minmax(240px, 1fr);
   }
-  body:not(.mobile-mode) #view-decks .workshop-search { display: contents; }
-  body:not(.mobile-mode) #view-decks .workshop-filter-panel { grid-area: 1 / 1; }
-  body:not(.mobile-mode) #view-decks .workshop-collection { grid-area: 1 / 2 / span 2; }
-  body:not(.mobile-mode) #view-decks .deck-builder-panel { grid-area: 1 / 3 / span 2; padding: 14px; }
-  body:not(.mobile-mode) #view-decks .workshop-inspector { grid-area: 2 / 1; position: sticky; top: 12px; }
-  body:not(.mobile-mode) #view-decks .workshop-inspector .inspector-content {
-    height: clamp(300px, 55dvh, 520px);
-    min-height: 0;
+  body:not(.mobile-mode) #view-decks .workshop-search {
+    overflow: auto;
+    padding: 10px;
   }
-  body:not(.mobile-mode) #view-decks .workshop-inspector .inspector-art { max-height: 23dvh; }
+  body:not(.mobile-mode) #view-decks .workshop-collection { margin-top: 10px; }
   body:not(.mobile-mode) #view-decks .builder-card-grid {
-    grid-template-columns: repeat(auto-fill,minmax(93px,1fr));
-    max-height: max(320px,calc(100dvh - 275px));
+    grid-template-columns: repeat(auto-fill,minmax(94px,1fr));
+    max-height: none;
+    overflow: visible;
   }
-  body:not(.mobile-mode) #view-decks .workshop-toolbar { flex-wrap: wrap; }
-  body:not(.mobile-mode) #view-decks .workshop-name { flex-basis: 100%; }
-  body:not(.mobile-mode) #view-decks .deck-save-row { width: 100%; flex-wrap: wrap; }
-  body:not(.mobile-mode) #view-decks .deck-card-grid { grid-template-columns: repeat(8,minmax(0,1fr)); }
 }
 @media (max-width: 800px) {
   #match-empty:not(.hidden) { padding: 20px; }
