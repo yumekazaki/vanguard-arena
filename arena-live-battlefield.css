@@ -1,0 +1,46 @@
+/* Battlefield finish only. The existing mat, cards and controls keep their geometry. */
+#match-layout #game-table {
+  background: #071714 url("./assets/ui/arena-live-circuit.svg") center / 100% 100% no-repeat;
+  box-shadow: inset 0 0 0 1px #b7e8e0a0, inset 0 0 70px #000b, 0 20px 56px #02080ca0;
+}
+#match-layout #game-table .mat-half { background: transparent !important; }
+#match-layout #game-table .mat-half img { opacity: .06 !important; }
+#match-layout #game-table .table-glow {
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 25%, #7aeaff1b 49%, transparent 71%),
+    radial-gradient(ellipse at center,#32af9d30,transparent 68%);
+}
+#match-layout #game-table .field-zone { --ring: #c9ee80; }
+#match-layout #game-table .opponent-side .field-zone { --ring: #ff8188; }
+#match-layout #game-table .field-zone.vanguard-zone { --ring: #7be2ff; }
+#match-layout #game-table .field-zone::before {
+  pointer-events: none;
+  inset: 5% auto auto 50%;
+  translate: -50% 0;
+  width: auto;
+  height: 90%;
+  aspect-ratio: 1;
+  max-width: 94%;
+  box-sizing: border-box;
+  border: 1px solid var(--ring);
+  border-radius: 50%;
+  background: radial-gradient(circle, #091922 0 37%, transparent 39%),
+    repeating-conic-gradient(from 8deg, #071714 0deg 5deg, transparent 5deg 14deg),
+    radial-gradient(circle, transparent 0 45%, var(--ring) 46% 47%, transparent 48% 53%, var(--ring) 54% 57%, transparent 58% 64%, var(--ring) 65% 68%, transparent 69%);
+  box-shadow: 0 0 14px color-mix(in srgb,var(--ring) 44%,transparent),
+    inset 0 0 12px color-mix(in srgb,var(--ring) 38%,transparent);
+}
+#match-layout #game-table .field-zone > span { color: #ecf7f3; text-shadow: 0 1px 4px #000; }
+#match-layout #game-table .player-line :is(.deck-zone,.drop-zone,.gdeck-button) {
+  border-color: #c8d9df;
+  box-shadow: 0 0 0 1px #637f89, 0 3px 10px #000a, inset 0 0 0 2px #d4faff24;
+}
+#match-layout #game-table .center-divider {
+  background: linear-gradient(100deg,#10253b,#12373e 50%,#10253b);
+  border-color: #79c6d5;
+  color: #eafaff;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #match-layout #game-table .table-glow { animation: arena-circuit-light 6s ease-in-out infinite alternate; }
+  @keyframes arena-circuit-light { from { opacity: .33; } to { opacity: .84; } }
+}
