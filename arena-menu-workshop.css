@@ -11,9 +11,12 @@
     url('assets/ui/cray-arena.jpg') center / cover;
   box-shadow: 0 28px 80px #03061180;
 }
-#match-empty:has(.theme-oracle:is(:hover,:focus-visible)) { --title-accent: #e3aaff; }
-#match-empty:has(.theme-nova:is(:hover,:focus-visible)) { --title-accent: #ffc576; }
-#match-empty:has(.theme-kagero:is(:hover,:focus-visible)) { --title-accent: #ff91ab; }
+#match-empty:has(.theme-oracle:hover),
+#match-empty:not(:has(.fighter-option:hover)):has(.theme-oracle:focus-visible) { --title-accent: #e3aaff; }
+#match-empty:has(.theme-nova:hover),
+#match-empty:not(:has(.fighter-option:hover)):has(.theme-nova:focus-visible) { --title-accent: #ffc576; }
+#match-empty:has(.theme-kagero:hover),
+#match-empty:not(:has(.fighter-option:hover)):has(.theme-kagero:focus-visible) { --title-accent: #ff91ab; }
 #match-empty .fighter-menu-heading { position: relative; z-index: 1; max-width: 550px; }
 #match-empty .fighter-menu-heading h1 { font-size: clamp(42px, 6vw, 96px); line-height: .92; }
 #match-empty .fighter-menu-heading h1 em { display: block; color: #f9d89f; }
@@ -71,10 +74,14 @@
   color: #f5e8cb;
   font: 900 italic clamp(20px,3vw,42px)/1 ArenaDisplay,Impact,sans-serif;
 }
-#match-empty:not(:has(.fighter-option:not(.theme-royal):is(:hover,:focus-visible))) .title-royal,
-#match-empty:has(.theme-oracle:is(:hover,:focus-visible)) .title-oracle,
-#match-empty:has(.theme-nova:is(:hover,:focus-visible)) .title-nova,
-#match-empty:has(.theme-kagero:is(:hover,:focus-visible)) .title-kagero { opacity: 1; transform: none; }
+#match-empty:has(.theme-royal:hover) .title-royal,
+#match-empty:not(:has(.fighter-option:hover)):not(:has(.fighter-option:not(.theme-royal):focus-visible)) .title-royal,
+#match-empty:has(.theme-oracle:hover),
+#match-empty:not(:has(.fighter-option:hover)):has(.theme-oracle:focus-visible) .title-oracle,
+#match-empty:has(.theme-nova:hover),
+#match-empty:not(:has(.fighter-option:hover)):has(.theme-nova:focus-visible) .title-nova,
+#match-empty:has(.theme-kagero:hover),
+#match-empty:not(:has(.fighter-option:hover)):has(.theme-kagero:focus-visible) .title-kagero { opacity: 1; transform: none; }
 @keyframes arena-title-drift { from { transform: translateY(8px); } to { transform: translateY(-18px); } }
 
 #view-decks {
@@ -173,4 +180,9 @@
 @media (max-width: 800px) {
   #match-empty .fighter-menu-heading { align-items: start; min-height: 190px; }
   .arena-title-fighter span { bottom: 20%; font-size: 16px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .arena-title-fighter { transform: translateX(18px) scale(.97); }
+  .arena-title-fighter img { animation: arena-fighter-float 5s ease-in-out infinite alternate; }
+  @keyframes arena-fighter-float { to { transform: translateY(-7px); } }
 }
