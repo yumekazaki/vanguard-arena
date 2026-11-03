@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="./arena-zone-piles.css?v=zone-piles-1" />
     <link rel="stylesheet" href="./arena-mobile-fullscreen.css?v=mobile-prompts-1" />
     <link rel="stylesheet" href="./arena-mobile-interface.css?v=mobile-interface-1" />
+    <link rel="stylesheet" href="./arena-menu-workshop.css?v=2" />
   </head>
   <body>
     <div class="app-shell">
@@ -42,7 +43,8 @@
           </div>
 
           <div id="match-empty" class="empty-match hidden">
-            <div class="fighter-menu-heading"><div><p class="eyebrow">YOUR CARDS. YOUR STORY.</p><h1>Stand up, <em>Vanguard.</em></h1><p>Choose your next chapter. Hover a deck to meet its fighter.</p></div><span class="q4-badge">FOUR CLANS <i>✦</i> ONE ARENA</span></div>
+            <div class="fighter-menu-heading"><div><p class="eyebrow">YOUR CARDS. YOUR STORY.</p><h1>Stand up, <em>Vanguard.</em></h1><p>Choose your next cardfight.</p></div><span class="q4-badge">FOUR CLANS <i>✦</i> ONE ARENA</span></div>
+            <div class="arena-title-stage" aria-hidden="true"><div class="arena-title-fighter title-royal"><img src="assets/ui/aichi-sendou.png" alt=""><span>Aichi Sendou</span></div><div class="arena-title-fighter title-oracle"><img src="assets/ui/menu-misaki.png" alt=""><span>Misaki Tokura</span></div><div class="arena-title-fighter title-nova"><img src="assets/ui/menu-kamui.png" alt=""><span>Kamui Katsuragi</span></div><div class="arena-title-fighter title-kagero"><img src="assets/ui/menu-kai.png" alt=""><span>Toshiki Kai</span></div></div>
             <div class="fighter-menu">
               <button class="fighter-option theme-royal" data-goto="decks" type="button" aria-label="Deck workshop — Royal Paladin">
                 <span class="fighter-scene" aria-hidden="true"><span class="clan-sigil"></span><span class="fighter-cards"><img class="menu-card menu-card-0" src="assets/cards/full/n694.jpg" alt=""><img class="menu-card menu-card-1" src="assets/cards/full/n686.jpg" alt=""><img class="menu-card menu-card-2" src="assets/cards/full/n664.jpg" alt=""></span><span class="fighter-reveal"><img class="fighter-portrait" src="assets/ui/aichi-sendou.png" alt=""><span class="fighter-name">Aichi Sendou</span></span><span class="scene-shine"></span></span>
@@ -121,9 +123,9 @@
           <div class="page-heading"><div><p class="eyebrow">YOUR COLLECTION</p><h1>Deck <em>workshop</em></h1><p class="subheading">Build your next strategy. Save a deck, or bring one with you.</p></div><div class="heading-actions"><button class="button button-quiet" id="import-deck">Import deck</button><button class="button button-primary" id="create-deck">New deck <span>＋</span></button><input type="file" id="deck-file" accept="application/json,.json" hidden /></div></div>
           <div class="deck-workshop-grid visual-workshop">
             <aside class="card-inspector workshop-inspector" aria-label="Workshop card inspector">
-              <div class="inspector-heading"><div><p class="eyebrow">CARD INSPECTOR</p><span data-inspector-status role="status">Hover a card to inspect</span></div><button data-inspector-unpin class="button" type="button" hidden>Unpin</button><button data-inspector-close class="icon-button" type="button" aria-label="Close card preview">×</button></div>
-              <div id="workshop-inspector-content" class="inspector-content" tabindex="0" aria-label="Workshop card image and information"><div class="inspector-empty"><span>◇</span><h2>See every detail.</h2><p>Hover a card in your deck or the search results to inspect it here.</p><small>Move here to scroll through its text. Hover another card to change the preview.</small></div></div>
-            </aside>
+            <div class="inspector-heading"><div><p class="eyebrow">CARD INSPECTOR</p><span data-inspector-status role="status">Hover a card to inspect</span></div><button data-inspector-unpin class="button" type="button" hidden>Unpin</button><button data-inspector-close class="icon-button" type="button" aria-label="Close card preview">×</button></div>
+            <div id="workshop-inspector-content" class="inspector-content" tabindex="0" aria-label="Workshop card image and information"><div class="inspector-empty"><span>◇</span><h2>See every detail.</h2><p>Hover a card in your deck or the search results to inspect it here.</p><small>Move here to scroll through its text. Hover another card to change the preview.</small></div></div>
+          </aside>
             <section class="deck-builder-panel panel" aria-label="Visual deck editor">
               <h2 id="builder-title" class="workshop-accessible-title">Untitled deck</h2>
               <div class="workshop-toolbar"><div class="workshop-name"><label class="input-label" for="deck-name">Deck name</label><input class="text-input" id="deck-name" maxlength="40" placeholder="Give your deck a name" /></div><div class="deck-save-row"><button class="button button-primary" id="save-deck">Save deck</button><button class="button button-quiet" id="load-deck-editor">Load deck</button><button class="button button-quiet" id="export-deck">Export</button><button class="icon-button" id="builder-menu" title="Deck actions">•••</button></div></div>
@@ -134,9 +136,14 @@
               <div class="deck-validation" id="deck-validation">Add cards from the search panel to start building.</div>
             </section>
             <aside class="card-browser panel workshop-search" aria-label="Search and add cards">
+              <div class="workshop-filter-panel">
               <div class="panel-heading"><div><span class="eyebrow">CARD SEARCH</span><h2>Find your next ace.</h2></div></div>
               <div class="workshop-search-fields"><label class="workshop-filter wide-filter" for="card-search"><span>Name or number</span><input class="text-input" id="card-search" aria-label="Search cards for your deck" placeholder="Search card name or number…" /></label><label class="workshop-filter wide-filter" for="card-text-search"><span>Ability text</span><input class="text-input" id="card-text-search" placeholder="e.g. Counter Blast or draw" /></label><label class="workshop-filter" for="builder-type-filter"><span>Card type</span><select class="text-input filter-select" id="builder-type-filter" aria-label="Filter deck cards by card type"><option value="all">All card types</option><option value="order">Order</option></select></label><label class="workshop-filter" for="builder-trigger-filter"><span>Trigger type</span><select class="text-input filter-select" id="builder-trigger-filter" aria-label="Filter deck cards by trigger type"><option value="all">All triggers</option><option value="heal">Heal</option><option value="draw">Draw</option><option value="stand">Stand</option><option value="critical">Critical</option><option value="over">Over Trigger</option><option value="front">Front</option></select></label><label class="workshop-filter" for="grade-filter"><span>Grade</span><select class="text-input filter-select" id="grade-filter" aria-label="Filter deck cards by grade"><option value="all">All grades</option><option value="0">Grade 0</option><option value="1">Grade 1</option><option value="2">Grade 2</option><option value="3">Grade 3</option><option value="4">Grade 4</option><option value="5+">Grade 5+</option><option value="unknown">Not listed</option></select></label><label class="workshop-filter" for="builder-clan-filter"><span>Clan</span><select class="text-input filter-select clan-select" id="builder-clan-filter" aria-label="Filter deck cards by clan"><option value="all">All clans</option></select></label><label class="workshop-filter wide-filter" for="builder-nation-filter"><span>Nation</span><select class="text-input filter-select" id="builder-nation-filter" aria-label="Filter deck cards by nation"><option value="all">All nations</option></select></label></div>
+              </div>
+              <section class="workshop-collection" aria-label="Card collection">
+              <h2>Card collection</h2>
               <div class="catalog-pager"><span class="muted-text" id="builder-results-count"></span><div><button class="button button-quiet" id="builder-prev" aria-label="Previous search results">←</button><span class="muted-text" id="builder-page-label"></span><button class="button button-quiet" id="builder-next" aria-label="Next search results">→</button></div></div><p class="search-add-hint">Click a result to add it to your deck.</p><div id="builder-card-grid" class="builder-card-grid"></div>
+              </section>
             </aside>
           </div>
           <div class="saved-decks-section" id="deck-folder"><div class="section-title"><div><span class="eyebrow" id="saved-deck-eyebrow">DECK FOLDER</span><h2>Your saved decks</h2><p class="muted-text" id="deck-folder-help">Sign in to sync this folder across devices. Saved decks sync to your account automatically.</p></div><span id="saved-deck-subtitle" class="muted-text">No decks yet</span></div><div id="saved-decks" class="saved-decks-grid"></div></div>
