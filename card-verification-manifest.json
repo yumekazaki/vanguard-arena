@@ -2,18 +2,18 @@
   "schemaVersion": 1,
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "latestFullSuite": {
-    "command": "node --test --test-reporter=tap",
-    "testCommand": "node --test --test-reporter=tap",
+    "command": "node --test --test-concurrency=4 --test-reporter=tap",
+    "testCommand": "node --test --test-concurrency=4 --test-reporter=tap",
     "status": "passed",
-    "tests": 2054,
-    "passed": 2054,
+    "tests": 2094,
+    "passed": 2094,
     "failed": 0,
-    "durationMilliseconds": 605590.9097,
-    "completedAt": "2026-11-04T00:14:33.086Z",
+    "durationMilliseconds": 390711.2506,
+    "completedAt": "2026-11-04T03:25:30.000Z",
     "runDate": "2026-11-04",
-    "validationInputDigest": "d1292482dd6a93ba8bb65192be11d54090a674a393b0850583f89437f45790de",
+    "validationInputDigest": "8394355a18d15d61ad922ca83daacfcf8e308ce920c97edf9433ca08ec109391",
     "logCaptureAvailable": true,
-    "logFile": ".card-pipeline/full-suite-2026-11-04-vc-placement-soul-charge.tap"
+    "logFile": ".card-pipeline/full-suite-final-merge.tap"
   },
   "records": [
     {
@@ -81414,7 +81414,7 @@
     {
       "cardId": "cfa-479",
       "abilityId": "cfa-479:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-vc-other-clan-placement-soul-charge.test.js"
       ],
@@ -81425,13 +81425,24 @@
         "declining the optional trigger consumes that event without charging Soul",
         "a matching clan placed under the opponent's control does not trigger this player's Vanguard"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-11-04T03:28:15.454Z",
+        "validationInputDigest": "8394355a18d15d61ad922ca83daacfcf8e308ce920c97edf9433ca08ec109391",
+        "printedAbilityIds": [
+          "cfa-479:0"
+        ],
+        "testFiles": [
+          "ability-vc-other-clan-placement-soul-charge.test.js"
+        ]
+      }
     },
     {
       "cardId": "cfa-763",
       "abilityId": "cfa-763:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-vc-other-clan-placement-soul-charge.test.js"
       ],
@@ -81442,13 +81453,24 @@
         "declining the optional trigger consumes that event without charging Soul",
         "a matching clan placed under the opponent's control does not trigger this player's Vanguard"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-11-04T03:28:15.454Z",
+        "validationInputDigest": "8394355a18d15d61ad922ca83daacfcf8e308ce920c97edf9433ca08ec109391",
+        "printedAbilityIds": [
+          "cfa-763:0"
+        ],
+        "testFiles": [
+          "ability-vc-other-clan-placement-soul-charge.test.js"
+        ]
+      }
     },
     {
       "cardId": "cfa-809",
       "abilityId": "cfa-809:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-vc-other-clan-placement-soul-charge.test.js"
       ],
@@ -81459,13 +81481,24 @@
         "declining the optional trigger consumes that event without charging Soul",
         "a matching clan placed under the opponent's control does not trigger this player's Vanguard"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-11-04T03:28:15.454Z",
+        "validationInputDigest": "8394355a18d15d61ad922ca83daacfcf8e308ce920c97edf9433ca08ec109391",
+        "printedAbilityIds": [
+          "cfa-809:0"
+        ],
+        "testFiles": [
+          "ability-vc-other-clan-placement-soul-charge.test.js"
+        ]
+      }
     },
     {
       "cardId": "cfa-12760",
       "abilityId": "cfa-12760:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-order-zone-battle-phase-back-row-boost-server.test.js"
       ],
@@ -81475,13 +81508,24 @@
         "wrong phase, timing window, controller, source zone, and repeat events do not trigger",
         "no legal back-row target consumes the trigger without prompting, while a stale or front-row choice is rejected"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-11-04T03:28:15.454Z",
+        "validationInputDigest": "8394355a18d15d61ad922ca83daacfcf8e308ce920c97edf9433ca08ec109391",
+        "printedAbilityIds": [
+          "cfa-12760:0"
+        ],
+        "testFiles": [
+          "ability-auto-order-zone-battle-phase-back-row-boost-server.test.js"
+        ]
+      }
     },
     {
       "cardId": "cfa-12762",
       "abilityId": "cfa-12762:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-order-zone-battle-phase-back-row-boost-server.test.js"
       ],
@@ -81491,13 +81535,24 @@
         "wrong phase, timing window, controller, source zone, and repeat events do not trigger",
         "no legal back-row target consumes the trigger without prompting, while a stale or front-row choice is rejected"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-11-04T03:28:15.454Z",
+        "validationInputDigest": "8394355a18d15d61ad922ca83daacfcf8e308ce920c97edf9433ca08ec109391",
+        "printedAbilityIds": [
+          "cfa-12762:0"
+        ],
+        "testFiles": [
+          "ability-auto-order-zone-battle-phase-back-row-boost-server.test.js"
+        ]
+      }
     },
     {
       "cardId": "cfa-12764",
       "abilityId": "cfa-12764:0",
-      "status": "tests-passing",
+      "status": "fully-verified",
       "testFiles": [
         "ability-auto-order-zone-battle-phase-back-row-boost-server.test.js"
       ],
@@ -81507,8 +81562,19 @@
         "wrong phase, timing window, controller, source zone, and repeat events do not trigger",
         "no legal back-row target consumes the trigger without prompting, while a stale or front-row choice is rejected"
       ],
-      "fullyVerified": false,
-      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-11-04T03:28:15.454Z",
+        "validationInputDigest": "8394355a18d15d61ad922ca83daacfcf8e308ce920c97edf9433ca08ec109391",
+        "printedAbilityIds": [
+          "cfa-12764:0"
+        ],
+        "testFiles": [
+          "ability-auto-order-zone-battle-phase-back-row-boost-server.test.js"
+        ]
+      }
     },
     {
       "cardId": "cfa-10769",
@@ -81852,5 +81918,5 @@
     }
   ],
   "generatedAt": "2026-11-03T15:59:53.724Z",
-  "evidenceUpdatedAt": "2026-11-04T02:32:23.012Z"
+  "evidenceUpdatedAt": "2026-11-04T03:28:15.454Z"
 }
