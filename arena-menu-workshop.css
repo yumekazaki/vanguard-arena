@@ -259,3 +259,66 @@
   #match-empty .arena-title-stage::before { animation: none; }
   #match-empty .arena-title-fighter { transition: none; }
 }
+/* Full-width title composition with room for the fighter and their ace. */
+#match-empty .arena-title-fighter { display: block; inset: 3% 4% 4% 4%; }
+#match-empty .arena-stage-portrait {
+  position: absolute;
+  inset: 0 25% 0 0;
+  display: grid;
+  place-items: end center;
+  container-type: size;
+}
+#match-empty .arena-stage-portrait > img { display: block; }
+#match-empty :is(.title-oracle,.title-kagero) .arena-stage-portrait > img {
+  position: absolute;
+  width: min(292cqw,139cqh);
+  height: auto;
+  max-width: none;
+  bottom: 0;
+  left: 50%;
+  object-fit: fill;
+  animation: none;
+  transform: translateX(-82%);
+}
+#match-empty .title-oracle .arena-stage-portrait > img {
+  clip-path: polygon(64.7% 18.4%,99% 18.4%,99% 100%,64.7% 100%);
+}
+#match-empty .title-kagero .arena-stage-portrait > img {
+  clip-path: polygon(66% 13%,98.8% 13%,98.8% 100%,68% 100%,68% 56%,66% 51%);
+}
+#match-empty .arena-stage-ace {
+  position: absolute;
+  right: 0;
+  top: 30%;
+  width: 25%;
+  margin: 0;
+  padding: 7px;
+  border: 1px solid var(--scene-metal);
+  border-radius: 9px;
+  background: var(--scene-ink);
+  color: var(--scene-metal);
+  box-shadow: 0 8px 26px #0009;
+  transform: rotate(5deg);
+}
+#match-empty .arena-stage-ace img { display: block; height: auto; border-radius: 5px; animation: none; }
+#match-empty .arena-stage-ace figcaption { padding: 6px 1px 2px; font-size: clamp(10px,1vw,15px); text-align: center; }
+#match-empty .arena-title-fighter > span { right: 30%; bottom: 0; }
+@media (min-width: 801px) {
+  body:has(#view-play.active-view #match-empty:not(.hidden)) .app-shell {
+    max-width: none;
+    padding-inline: 0;
+  }
+  #view-play.active-view:has(#match-empty:not(.hidden)) { max-width: none; padding: 0; }
+  #match-empty:not(.hidden) {
+    max-width: none;
+    min-height: calc(100svh - 85px);
+    border-radius: 0;
+    padding: clamp(24px,4vh,52px) clamp(30px,6vw,110px);
+  }
+  #match-empty .fighter-menu-heading h1 { font-size: clamp(48px, min(7vw,10vh),96px); }
+}
+@media (max-width: 800px) {
+  #match-empty .arena-title-fighter { inset: 0 3% 0 32%; }
+  #match-empty .arena-stage-ace { width: 29%; padding: 3px; top: 23%; }
+  #match-empty .arena-stage-ace figcaption { font-size: 9px; }
+}
