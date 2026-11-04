@@ -5,7 +5,7 @@
 - Repository: https://github.com/yumekazaki/vanguard-arena
 - Local project: `C:\Users\yumek\Documents\Codex\2026-10-24\ne\work\vanguard-arena`
 - Collaboration branch: `codex/standard-ride-deck` (not the GitHub Pages publishing branch)
-- Current integration checkpoint: `a275182c2` on `codex/standard-ride-deck`, pushed to the shared remote branch. It contains the integrated ability-engine checkpoint `27f9aa5e8` and merges live `main` through `0c382fb3d`, preserving its newer player-portrait, menu, mobile, G-zone, and joined-player fixes. Registry/verification metadata is being refreshed after the full suite. This is not a Pages deployment; PR #72 is the staging review.
+- Current integration checkpoint: `3a2ffe782` on `codex/standard-ride-deck`, pushed to the shared remote branch. It contains source checkpoint `a275182c2`, which integrates ability-engine work with live `main` through `0c382fb3d`, preserving its newer player-portrait, menu, mobile, G-zone, and joined-player fixes. The registry now records the fresh full-suite result and six additional whole-card verifications. This is not a Pages deployment; PR #72 is the staging review.
 - Registry baseline: `320008f138b9fccfc1dea30b2ebc2b542aef927f`
 - Exact queue: `ability-work-registry.jsonl`; batch status and dependencies: `ability-work-batches.json`; ownership: `ability-work-assignments.json`; counts and baseline: `ability-work-registry-manifest.json`.
 - `codex/standard-ride-deck` is the shared collaboration branch; it is separate from the GitHub Pages publishing branch. Check its latest commit before creating worker checkouts.
