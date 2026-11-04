@@ -3273,7 +3273,7 @@ test("Dauntless Dominate Dragon locks only its exact normal drive-check card and
 
 test("the site cache-busts every changed engine script bundle",()=>{
   const html=fs.readFileSync("index.html","utf8");
- assert.match(html,/ability-engine\.js\?v=20261031-attack-step-critical-1/);assert.match(html,/app\.js\?v=20261031-attack-step-critical-1/);assert.match(html,/ability-definitions\.js\?v=20261031-attack-step-critical-1/);assert.match(html,/practice-bot\.js\?v=20261028-ability-batch-v1/);
+ assert.match(html,/ability-engine\.js\?v=20261104-integrated-1/);assert.match(html,/app\.js\?v=20261104-integrated-1/);assert.match(html,/ability-definitions\.js\?v=20261104-integrated-1/);assert.match(html,/practice-bot\.js\?v=20261028-ability-batch-v1/);
 });
 
 test("ride-phase discard AUTO calls only its exact source from Drop to a legal rested circle",()=>{
