@@ -101,3 +101,37 @@ body:has(#view-decks.active-view) .topbar { height:70px; }
 .saved-deck-default { width:100%; margin-top:14px; min-height:39px; border-color:#a9c5ff55; color:#d5e6ff; background:#34457555; }
 .saved-deck-default[aria-pressed="true"] { color:#c5f5e5; border-color:#8fd4b68c; background:#397b652d; }
 .saved-deck-card.is-default-deck { border-color:#8fd4b68c; box-shadow:0 0 0 1px #8fd4b61f; }
+/* Use the available desktop width while keeping the deck the largest panel. */
+@media (min-width: 1280px) {
+  body:not(.mobile-mode):has(#view-decks.active-view) .app-shell {
+    max-width: none;
+    padding-inline: clamp(16px,1.35vw,32px);
+  }
+  body:not(.mobile-mode) #view-decks { max-width: none; }
+  body:not(.mobile-mode) #view-decks .visual-workshop {
+    grid-template-columns: minmax(245px,1fr) minmax(0,3.15fr) minmax(255px,1.15fr);
+  }
+  body:not(.mobile-mode) #view-decks .workshop-search .builder-card-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  body:not(.mobile-mode) #view-decks .workshop-search .text-input {
+    font-size: 12px;
+    min-height: 38px;
+  }
+  body:not(.mobile-mode) #view-decks .deck-card-grid {
+    height: auto;
+    grid-auto-rows: auto;
+    gap: clamp(5px,.5vw,12px);
+  }
+  body:not(.mobile-mode) #view-decks .deck-card-grid > :is(.deck-grid-card,.deck-empty-slot) {
+    width: 100%;
+    height: auto;
+  }
+  body:not(.mobile-mode) #view-decks .workshop-inspector .inspector-content {
+    height: calc(100dvh - 135px);
+    min-height: 0;
+  }
+  body:not(.mobile-mode) #view-decks .workshop-inspector .inspector-art {
+    max-height: min(44dvh,480px);
+  }
+}
