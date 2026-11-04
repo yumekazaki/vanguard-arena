@@ -322,13 +322,20 @@
   #match-empty .arena-stage-ace { width: 29%; padding: 3px; top: 23%; }
   #match-empty .arena-stage-ace figcaption { font-size: 9px; }
 }
-/* Match the title lettering across the lobby and its navigation. */
-#match-empty:not(.hidden),
-#match-empty:not(.hidden) :is(button, p, small, figcaption, .eyebrow),
-body:has(#view-play.active-view #match-empty:not(.hidden)) :is(.main-nav button, .topbar-right button, .topbar-right .local-pill, .brand-wordmark small, .app-footer) {
-  font-family: ArenaDisplay, Impact, sans-serif;
+/* Angular display type for the title screen and its navigation. */
+@font-face {
+  font-family: ArenaMenu;
+  src: url("assets/ui/ChakraPetch-BoldItalic.ttf") format("truetype");
   font-style: italic;
-  font-weight: 900;
+  font-weight: 700;
+  font-display: swap;
+}
+#match-empty:not(.hidden),
+#match-empty:not(.hidden) :is(button, p, small, figcaption, .eyebrow, .fighter-menu-heading h1, .fighter-title-row strong, .arena-title-fighter > span),
+body:has(#view-play.active-view #match-empty:not(.hidden)) :is(.main-nav button, .topbar-right button, .topbar-right .local-pill, .brand-wordmark small, .app-footer) {
+  font-family: ArenaMenu, ArenaDisplay, sans-serif;
+  font-style: italic;
+  font-weight: 700;
 }
 #match-empty:not(.hidden) .fighter-option .fighter-description,
 #match-empty:not(.hidden) .lobby-library p {
@@ -336,3 +343,6 @@ body:has(#view-play.active-view #match-empty:not(.hidden)) :is(.main-nav button,
   letter-spacing: .02em;
 }
 #match-empty:not(.hidden) .fighter-option .fighter-kicker { font-size: 11px; }
+
+#match-empty:not(.hidden) .fighter-menu-heading h1 { letter-spacing: -.045em; }
+#match-empty:not(.hidden) .fighter-title-row strong { letter-spacing: -.025em; }
