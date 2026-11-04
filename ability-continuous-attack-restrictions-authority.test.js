@@ -45,9 +45,9 @@ function attackFixture({ side = "bot", sourceDefinition = lords[0].definition, l
 }
 
 test("all real Lord, All Clans and Nations, and Restraint definitions are registered and retain their exact rules", () => {
-  assert.equal(lords.length, 115);
+  assert.equal(lords.length, 116);
   assert.equal(restraints.length, 6);
-  assert.equal(allClans.length, 28);
+  assert.equal(allClans.length, 29);
   for (const { definition, ability } of [...lords, ...restraints, ...allClans]) {
     assert.ok(Engine.getReviewedAbilityDefinitionsForCard(definition.id).some(item => item.id === ability.id), ability.id);
     assert.equal(ability.kind, "CONT", ability.id);

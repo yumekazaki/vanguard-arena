@@ -2,9 +2,31 @@
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
 const path = require("node:path");
 const { loadCatalog } = require("./audit-ability-catalog.js");
-const { buildAbilityWorkQueue } = require("./build-ability-work-queue.js");
+const { buildAbilityWorkQueue, writeQueueFile } = require("./build-ability-work-queue.js");
+const { readQueueFile } = require("./build-ability-work-registry.js");
+
+test("work queue can be atomically stored compressed and read by the registry builder", () => {
+  const directory = fs.mkdtempSync(path.join(__dirname, ".ability-queue-test-"));
+  const destination = path.join(directory, "ability-work-queue.json.gz");
+  const queue = {
+    schemaVersion: 1,
+    validationEvidenceFresh: true,
+    counts: { remainingAbilities: 200 },
+    items: Array.from({ length: 200 }, (_, index) => ({ abilityId: `cfa-${index}:0`, printedText: "AUTO: When this unit is placed on RC, choose one of your units, and it gets power +5000 until end of turn." }))
+  };
+  try {
+    writeQueueFile(queue, destination);
+    assert.deepEqual(readQueueFile(destination), queue);
+    assert.ok(fs.statSync(destination).size < Buffer.byteLength(JSON.stringify(queue)), "gzip output should reduce generated queue storage");
+    assert.ok(fs.existsSync(destination));
+    assert.equal(fs.readdirSync(directory).filter(name => name.endsWith(".tmp")).length, 0, "atomic writer should leave no temporary file");
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+});
 
 test("central work queue covers unverified abilities and separates reviewed mechanics from similarity candidates", () => {
   const cards = loadCatalog();
@@ -13,8 +35,8 @@ test("central work queue covers unverified abilities and separates reviewed mech
     latestFullSuite: { status: "passed", tests: 1, passed: 1, validationInputDigest: "stale" }
   }, path.resolve(__dirname, ".."));
 
-  assert.equal(result.counts.catalogAbilities, 17240);
-  assert.equal(result.counts.remainingAbilities, 17240);
+  assert.equal(result.counts.catalogAbilities, 17254);
+  assert.equal(result.counts.remainingAbilities, 17254);
   assert.equal(result.counts.fullyVerifiedCards, 0);
   assert.equal(result.counts.fullyVerifiedAbilities, 0);
   assert.equal(result.validationEvidenceFresh, false);
@@ -37,8 +59,22 @@ test("central work queue covers unverified abilities and separates reviewed mech
   assert.ok(reviewed.dependencies.some(dependency => dependency.id === "fresh-full-suite"));
   assert.ok(candidate.dependencies.some(dependency => dependency.type === "candidate-review" && dependency.shared === false));
   assert.ok(candidate.dependencies.some(dependency => dependency.id === `whole-card-evidence:${candidate.cardId}`));
-  assert.equal(result.counts.missingTrustedServerDefinitions, 0, "every compiled definition in the current registry must be registered for trusted server resolution");
-  assert.deepEqual(result.items.filter(item => item.missingTrustedDefinition), []);
+  assert.deepEqual(result.items.filter(item => item.missingTrustedDefinition).map(item => item.abilityId), [],
+    "every compiled AUTO/ACT in this fixture must pass the exact trusted-server definition gate");
+  const unconfirmedNamedVanguard = result.items.find(item => item.abilityId === "cfa-10769:0");
+  assert.ok(unconfirmedNamedVanguard);
+  assert.equal(unconfirmedNamedVanguard.missingTrustedDefinition, false,
+    "Ala Dargente has an exact card-number source and an exact server-validated definition");
+  for (const abilityId of ["cfa-2637:0", "cfa-3079:0", "cfa-4210:0", "cfa-4216:1", "cfa-4456:0", "cfa-4752:0"]) {
+    const dynamicallyTrusted = result.items.find(item => item.abilityId === abilityId);
+    assert.ok(dynamicallyTrusted, `expected the catalog-compiled paid Vanguard-attack ability ${abilityId}`);
+    assert.equal(dynamicallyTrusted.missingTrustedDefinition, false, `${abilityId} must use the same exact catalog-backed server trust path as live resolution`);
+  }
+  for (const abilityId of ["cfa-2000:1", "cfa-2173:1", "cfa-2239:2", "cfa-2271:2"]) {
+    const dynamicallyTrusted = result.items.find(item => item.abilityId === abilityId);
+    assert.ok(dynamicallyTrusted, `expected the catalog-compiled Rear-Guard retirement attack ability ${abilityId}`);
+    assert.equal(dynamicallyTrusted.missingTrustedDefinition, false, `${abilityId} must use the same exact catalog-backed server trust path as live resolution`);
+  }
   const highestImpactBlocker = result.dependencySummary[0];
   assert.ok(highestImpactBlocker.blockedAbilityCount >= 1);
   assert.ok(result.dependencyEdges.some(edge => edge.from === `ability:${candidate.abilityId}` && edge.to === `whole-card-evidence:${candidate.cardId}`));
@@ -54,5 +90,11 @@ test("central work queue covers unverified abilities and separates reviewed mech
     assert.ok(perClan, `expected the exact per-clan CONT ${abilityId}`);
     assert.deepEqual(perClan.missingEffectHandlers, [], `continuous evaluator handles ${abilityId}`);
     assert.deepEqual(perClan.missingServerEffectHandlers, [], `trusted server handles ${abilityId}`);
+  }
+  for (const abilityId of ["cfa-10476:2", "cfa-10668:2", "cfa-12183:2", "cfa-13177:2", "cfa-13186:2"]) {
+    const crestPower = result.items.find(item => item.abilityId === abilityId);
+    assert.ok(crestPower, `expected the exact face-up G-zone CONT ${abilityId}`);
+    assert.deepEqual(crestPower.missingEffectHandlers, [], `continuous evaluator handles ${abilityId}`);
+    assert.deepEqual(crestPower.missingServerEffectHandlers, [], `trusted server handles ${abilityId}`);
   }
 });

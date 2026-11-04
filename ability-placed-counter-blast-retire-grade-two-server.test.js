@@ -12,9 +12,10 @@ function fixture(cardId,side="human",sourceZone="vanguard",options={}){
  const source=instance(cardId,`retire-source-${cardId}-${side}-${sourceZone}`,playerId,{zone:sourceZone,circle:sourceZone==="vanguard"?"vanguard":"rear-left"});
  const vanguard=sourceZone==="vanguard"?source:instance(rule==="Narukami"?"cfa-859":rule==="Dark Irregulars"?"cfa-474":"cfa-14",`retire-vg-${cardId}-${side}`,playerId,{zone:"vanguard",circle:"vanguard"});
  const target=options.target===false?null:instance("cfa-14",`retire-target-${cardId}-${side}`,otherId,{zone:"rear-guard",circle:"rear-left"});
+ const resistAura=options.resistAura?instance("cfa-4023",`resist-aura-${cardId}-${side}`,otherId,{zone:"rear-guard",circle:"rear-back-left"}):null;
  const costA=instance("cfa-14",`retire-cb-a-${cardId}-${side}`,playerId,{zone:"damage",faceDown:false}),costB=instance("cfa-14",`retire-cb-b-${cardId}-${side}`,playerId,{zone:"damage",faceDown:false});
  const own={playerId,vanguard,rear:sourceZone==="rear-guard"?[source,null,null,null,null]:Array(5).fill(null),damage:options.affordable===false?[]:[costA,costB],deck:[],hand:[],soul:[],drop:[],bind:[],orders:[],guardCircle:[],gDeck:[],gZone:[]};
- const opponent={playerId:otherId,vanguard:instance("cfa-14",`retire-op-vg-${cardId}-${side}`,otherId,{zone:"vanguard",circle:"vanguard"}),rear:target?[target,null,null,null,null]:Array(5).fill(null),damage:[],deck:[],hand:[],soul:[],drop:[],bind:[],orders:[],guardCircle:[],gDeck:[],gZone:[]};
+ const opponent={playerId:otherId,vanguard:instance("cfa-14",`retire-op-vg-${cardId}-${side}`,otherId,{zone:"vanguard",circle:"vanguard"}),rear:target?[target,null,resistAura,null,null]:Array(5).fill(null),damage:[],deck:[],hand:[],soul:[],drop:[],bind:[],orders:[],guardCircle:[],gDeck:[],gZone:[]};
  const state={matchId:`placed-retire-${cardId}-${side}`,stateVersion:1,turn:2,phase:2,side,processedActionIds:[],processedEventIds:[],processedAbilityTriggers:[],pendingAbility:null,pendingAbilities:[],players:{[side]:own,[otherSide]:opponent}};
  const event=Engine.createGameEvent(state,{type:"card.placed",actingPlayerId:playerId,turnPlayerId:playerId,sourceCardInstanceId:source.uid,sourceOwnerPlayerId:playerId,sourceControllerPlayerId:playerId,cardInstanceId:source.uid,subjectCardInstanceId:source.uid,subjectOwnerPlayerId:playerId,subjectControllerPlayerId:playerId,previousLocation:"hand",currentLocation:sourceZone,circle:sourceZone==="vanguard"?"vanguard":"rear-left",phase:"main",timingWindow:"card-placement"});
  return{state,own,opponent,source,target,costA,costB,event,ability,side,playerId};
@@ -38,3 +39,29 @@ test("wrong source, VC-only circle, wrong Vanguard clan, missing cost, missing t
 });
 
 test("declining the optional placement ability leaves its costs and target unchanged",()=>{const f=fixture("cfa-1201"),result=Reducer.discoverAutoTriggers(f.state,[f.event],Engine);assert.equal(result.queued.length,1);assert.equal(decide(f,false).ok,true);assert.ok(f.own.damage.every(card=>card.faceDown===false));assert.ok(f.opponent.rear.some(card=>card?.uid===f.target.uid));});
+
+test("same-column Resist blocks the covered target while leaving the aura source itself legal",()=>{
+ const f=fixture("cfa-1201","human","vanguard",{resistAura:true});
+ const auraAbility=Engine.parseCardAbilities(cards.get("cfa-4023")).find(ability=>ability.id==="cfa-4023:1");
+ assert.equal(auraAbility?.definition?.source?.patternId,"cont-rc-same-column-grants-resist-v1");
+ const found=Reducer.discoverAutoTriggers(f.state,[f.event],Engine);
+ assert.equal(found.queued.length,1,"the uncovered aura source is still a legal retirement target");
+ const before=JSON.stringify(f.state),result=decide(f);
+ assert.equal(result.ok,false);
+ assert.equal(result.reason,"ability-target-filter-not-met");
+ assert.equal(JSON.stringify(f.state),before);
+ assert.ok(f.opponent.rear.some(card=>card?.uid===f.target.uid));
+ assert.equal(f.own.damage.every(card=>card.faceDown===false),true);
+});
+
+test("same-column Resist is rechecked before a previously offered effect can pay cost or retire its target",()=>{
+ const f=fixture("cfa-1201"),found=Reducer.discoverAutoTriggers(f.state,[f.event],Engine);
+ assert.equal(found.queued.length,1);
+ f.opponent.rear[2]=instance("cfa-4023",`late-resist-aura-${f.side}`,f.opponent.playerId,{zone:"rear-guard",circle:"rear-back-left"});
+ const before=JSON.stringify(f.state),result=decide(f);
+ assert.equal(result.ok,false);
+ assert.equal(result.reason,"ability-target-filter-not-met");
+ assert.equal(JSON.stringify(f.state),before);
+ assert.ok(f.opponent.rear.some(card=>card?.uid===f.target.uid));
+ assert.ok(f.own.damage.every(card=>card.faceDown===false));
+});

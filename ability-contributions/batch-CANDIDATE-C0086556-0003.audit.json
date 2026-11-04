@@ -1,0 +1,184 @@
+{
+  "batchId": "CANDIDATE-C0086556-0003",
+  "worker": "codex-new-era-multi-abilities",
+  "baselineCommit": "826779006f4b183ac8e5190c512f26df884c9394",
+  "status": "unsupported-audit-only",
+  "implementedAbilityIds": [],
+  "wholeCardsVerified": [],
+  "sharedHandlerDependencies": [
+    {
+      "id": "quintuplet-memory-counts",
+      "needed": "Authoritative memory queries by race, total count, and distinct card name, available to both AUTO conditions and CONT evaluation. The existing top-three-to-memory handler does not provide these queries."
+    },
+    {
+      "id": "top-seven-select-two-hand-and-memory",
+      "needed": "One ordered, private effect that inspects the top seven; chooses/reveals up to two eligible cards; adds one selected revealed card to hand; puts the remaining revealed cards into memory; shuffles the remainder; and commits atomically for either player. No current operation models this sequence."
+    },
+    {
+      "id": "multi-card-guard-call-restriction",
+      "needed": "A continuous Vanguard-circle restriction that enforces two or more simultaneous calls from hand to Guardian Circle when the distinct-name memory condition is active."
+    },
+    {
+      "id": "retire-and-copy-retired-power",
+      "needed": "An attack AUTO choice sequence that retires a legal opposing Rear-Guard, captures that exact instance's power, then applies that amount to two chosen friendly units; it also needs the printed +10000 fallback when no card was retired."
+    },
+    {
+      "id": "attack-miss-set-critical-drive",
+      "needed": "An exact-source attack-missed event and once-per-turn consumption; after Counter Blast, stand the source and set its critical and drive to 1 through turn end. Existing events do not expose a general miss trigger, and current modifiers do not represent setting both values to 1."
+    },
+    {
+      "id": "return-up-to-two-and-call-to-open-circles",
+      "needed": "An attack effect that optionally returns up to two exact-race Rear-Guards, then optionally calls up to two exact-race unit cards from hand to open Rear-Guard Circles. The existing clan operation returns all matching units and is not equivalent."
+    },
+    {
+      "id": "memory-scaled-power-and-conditional-draw",
+      "needed": "A Counter-Blast attack effect whose power amount is +5000 per two Quintuplets in memory, with a separate draw condition requiring six distinct Quintuplet names."
+    },
+    {
+      "id": "drop-to-memory-filtered-move",
+      "needed": "On this Vanguard's attack hitting a Vanguard, choose one Quintuplet in the controller's Drop and move that exact card into memory."
+    },
+    {
+      "id": "turn-start-win-condition",
+      "needed": "At the beginning of the controller's turn, check both seven distinct Quintuplet names and fourteen total Quintuplet cards in memory, then resolve a game-win effect. The current effect set has no win-condition operation."
+    },
+    {
+      "id": "drop-scaled-quintuplet-front-row-power",
+      "needed": "During the controller's turn, grant all friendly front-row Quintuplet Rear-Guards +2000 for each card in that controller's Drop, gated by six distinct Quintuplet names in memory."
+    },
+    {
+      "id": "battle-close-stand-and-drive-minus-two",
+      "needed": "An exact source attack battle-close event, once-per-turn restriction, Counter Blast, stand, and drive reduction by two through turn end. Current drive modification only supports the unrelated positive drive-check path."
+    }
+  ],
+  "abilities": [
+    {
+      "id": "cfa-11524:0",
+      "cardId": "cfa-11524",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to two <Quintuplet> from among them, reveal them, choose a card from among the revealed cards, put it into hand, put the rest of the revealed cards into memory, and shuffle the deck.",
+      "effectFamily": "vanguard-placement-top-seven-reveal-two-one-to-hand-rest-to-memory",
+      "blocker": ["top-seven-select-two-hand-and-memory"]
+    },
+    {
+      "id": "cfa-11524:1",
+      "cardId": "cfa-11524",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: If your memory has six or more <Quintuplet> with different card names, when your opponent would call cards from hand to GC, they must call two or more cards at the same time.",
+      "effectFamily": "distinct-memory-threshold-simultaneous-multi-card-guardian-call-restriction",
+      "blocker": ["quintuplet-memory-counts", "multi-card-guard-call-restriction"]
+    },
+    {
+      "id": "cfa-11524:2",
+      "cardId": "cfa-11524",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When this unit attacks a vanguard, COST [Counter Blast 1], choose one of your opponent’s rear-guards, retire it, choose one of your <Quintuplet> rear-guards, and increase the power of that unit and this unit by the power of the unit retired by this ability. If you did not retire a card, increase power by +10000 instead.",
+      "effectFamily": "vanguard-attack-retire-opponent-and-copy-retired-power-with-fallback",
+      "blocker": ["retire-and-copy-retired-power"]
+    },
+    {
+      "id": "cfa-11544:0",
+      "cardId": "cfa-11544",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to two <Quintuplet> from among them, reveal them, choose a card from among the revealed cards, put it into hand, put the rest of the revealed cards into memory, and shuffle the deck.",
+      "effectFamily": "vanguard-placement-top-seven-reveal-two-one-to-hand-rest-to-memory",
+      "blocker": ["top-seven-select-two-hand-and-memory"]
+    },
+    {
+      "id": "cfa-11544:1",
+      "cardId": "cfa-11544",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: If your memory has six or more <Quintuplet> with different card names, this unit gets critical +1.",
+      "effectFamily": "distinct-memory-threshold-critical-plus-one",
+      "blocker": ["quintuplet-memory-counts"]
+    },
+    {
+      "id": "cfa-11544:2",
+      "cardId": "cfa-11544",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC] 1/Turn: When this unit’s attack does not hit, COST [Counter Blast 1], stand this unit, and increase of decrease its critical and drive to 1 until end of turn.",
+      "effectFamily": "once-per-turn-vanguard-attack-miss-counter-blast-stand-set-critical-and-drive",
+      "blocker": ["attack-miss-set-critical-drive", "printed-wording-needs-rules-review"]
+    },
+    {
+      "id": "cfa-11556:0",
+      "cardId": "cfa-11556",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to two <Quintuplet> from among them, reveal them, choose a card from among the revealed cards, put it into hand, put the rest of the revealed cards into memory, and shuffle the deck.",
+      "effectFamily": "vanguard-placement-top-seven-reveal-two-one-to-hand-rest-to-memory",
+      "blocker": ["top-seven-select-two-hand-and-memory"]
+    },
+    {
+      "id": "cfa-11556:1",
+      "cardId": "cfa-11556",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: During your turn, if your memory has six or more <Quintuplet> with different card names, all of your front row <Quintuplet> get power +10000.",
+      "effectFamily": "distinct-memory-threshold-front-row-race-power",
+      "blocker": ["quintuplet-memory-counts"]
+    },
+    {
+      "id": "cfa-11556:2",
+      "cardId": "cfa-11556",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC] 1/Turn: When this unit attacks, COST [Counter Blast 1], choose up to two of your <Quintuplet> rear-guards, return them to hand, choose up to two <Quintuplet> unit cards from your hand, and call them to open RC.",
+      "effectFamily": "once-per-turn-attack-counter-blast-return-up-to-two-and-call-up-to-two-open-circles",
+      "blocker": ["return-up-to-two-and-call-to-open-circles"]
+    },
+    {
+      "id": "cfa-11605:0",
+      "cardId": "cfa-11605",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to two <Quintuplet> from among them, reveal them, choose a card from among the revealed cards, put it into hand, put the rest of the revealed cards into memory, and shuffle the deck.",
+      "effectFamily": "vanguard-placement-top-seven-reveal-two-one-to-hand-rest-to-memory",
+      "blocker": ["top-seven-select-two-hand-and-memory"]
+    },
+    {
+      "id": "cfa-11605:1",
+      "cardId": "cfa-11605",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When this unit attacks, COST [Counter Blast 1], and this unit gets power +5000 until end of turn for every two <Quintuplet> in your memory. If your memory has six or more <Quintuplet> with different card names, draw a card.",
+      "effectFamily": "vanguard-attack-counter-blast-memory-count-scaled-power-and-distinct-name-draw",
+      "blocker": ["quintuplet-memory-counts", "memory-scaled-power-and-conditional-draw"]
+    },
+    {
+      "id": "cfa-11605:2",
+      "cardId": "cfa-11605",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When this unit’s attack hits a vanguard, choose a <Quintuplet> from your drop, and put it into memory.",
+      "effectFamily": "vanguard-hit-move-race-card-from-drop-to-memory",
+      "blocker": ["drop-to-memory-filtered-move"]
+    },
+    {
+      "id": "cfa-11605:3",
+      "cardId": "cfa-11605",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: At the beginning of your turn, if your memory has seven or more <Quintuplet> with different card names and a total of fourteen or more <Quintuplet>, you win the game.",
+      "effectFamily": "turn-start-dual-memory-threshold-game-win",
+      "blocker": ["quintuplet-memory-counts", "turn-start-win-condition"]
+    },
+    {
+      "id": "cfa-11669:0",
+      "cardId": "cfa-11669",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to two <Quintuplet> from among them, reveal them, choose a card from among the revealed cards, put it into hand, put the rest of the revealed cards into memory, and shuffle the deck.",
+      "effectFamily": "vanguard-placement-top-seven-reveal-two-one-to-hand-rest-to-memory",
+      "blocker": ["top-seven-select-two-hand-and-memory"]
+    },
+    {
+      "id": "cfa-11669:1",
+      "cardId": "cfa-11669",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: During your turn, if your memory has six or more <Quintuplet> with different card names, all of your front row <Quintuplet> rear-guards get power +2000 for each card in your drop.",
+      "effectFamily": "distinct-memory-threshold-front-row-race-power-per-drop-card",
+      "blocker": ["quintuplet-memory-counts", "drop-scaled-quintuplet-front-row-power"]
+    },
+    {
+      "id": "cfa-11669:2",
+      "cardId": "cfa-11669",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC] 1/Turn: At the end of the battle this unit attacked, COST [Counter Blast 1], stand this unit, and it gets drive -2 until end of turn.",
+      "effectFamily": "once-per-turn-attack-battle-close-counter-blast-stand-drive-minus-two",
+      "blocker": ["battle-close-stand-and-drive-minus-two"]
+    }
+  ]
+}

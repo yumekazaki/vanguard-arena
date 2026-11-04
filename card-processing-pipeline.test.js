@@ -19,7 +19,7 @@ test("bounded card workers stage validated catalog shards and resume only matchi
     const execute = () => JSON.parse(execFileSync(process.execPath, [pipeline, "--batch-size", "2000", "--run-id", runId], { cwd: root, encoding: "utf8" }));
     const first = execute();
     assert.equal(first.metrics.cards, 14022);
-    assert.equal(first.metrics.abilityBlocks, 17240);
+    assert.equal(first.metrics.abilityBlocks, 17254);
     assert.equal(first.metrics.invalidDefinitions, 0);
     assert.equal(first.metrics.failedAbilities, 0);
     assert.ok(first.metrics.workersUsed >= 1 && first.metrics.workersUsed <= Math.min(8, os.availableParallelism?.() || os.cpus().length));

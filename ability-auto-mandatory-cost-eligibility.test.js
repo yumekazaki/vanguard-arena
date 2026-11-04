@@ -28,6 +28,7 @@ function fixture(side = "human", soulCount = 1, changes = {}) {
     human: { playerId: "player-host", vanguard: side === "human" ? vanguard : instance("cfa-3", "host-vg", "player-host", { grade: 3 }), rear: side === "human" ? [source, null, null, null, null] : Array(5).fill(null), damage: [], hand: [], soul: side === "human" ? soul : [], drop: [], deck: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] },
     bot: { playerId: "player-guest", vanguard: side === "bot" ? vanguard : instance("cfa-3", "guest-vg", "player-guest", { grade: 3 }), rear: side === "bot" ? [source, null, null, null, null] : Array(5).fill(null), damage: [], hand: [], soul: side === "bot" ? soul : [], drop: [], deck: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] }
   };
+  players[side === "human" ? "bot" : "human"].vanguard = opponentVanguard;
   const attackZone = "rear-left";
   const state = {
     matchId: "mandatory-auto-cost-test", stateVersion: 1, turn: 2, side, phase: 5, eventSequence: 0,

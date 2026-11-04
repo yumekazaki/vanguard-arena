@@ -37,7 +37,8 @@ test("the joining player's qualifying Vanguard attack privately queues only thei
   const vanguard = { uid: "guest-vanguard", cardId: "chronojet-fixture", cardName: "Chronojet Dragon", grade: 3, unitCard: true, ownerPlayerId: "guest", controllerPlayerId: "guest" };
   const state = {
     matchId: "named-attack-room", stateVersion: 3, eventSequence: 0, turn: 2, side: "bot", phase: 5,
-    pendingAttack: { attackerUid: "guest-vanguard", power: 18000, battleId: "guest-battle" }, processedAbilityTriggers: [], players: {
+    pendingAttack: { attackerUid: "guest-vanguard", attackerSide: "bot", attackerPlayerId: "guest", attackerZone: "vanguard",
+      defenderSide: "human", defenderPlayerId: "host", targetUid: "host-vanguard", targetZone: "vanguard", power: 18000, battleId: "guest-battle" }, processedAbilityTriggers: [], players: {
       human: { playerId: "host", vanguard: { uid: "host-vanguard", grade: 3, cardName: "Other Dragon", controllerPlayerId: "host" }, rear: [], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [] },
       bot: { playerId: "guest", vanguard, rear: [source], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [{ uid: "guest-draw", cardId: "draw-card" }] }
     }
@@ -46,7 +47,7 @@ test("the joining player's qualifying Vanguard attack privately queues only thei
     type: "unit.attacked", actingPlayerId: "guest", turnPlayerId: "guest", sourceCardInstanceId: vanguard.uid,
     sourceOwnerPlayerId: "guest", sourceControllerPlayerId: "guest", subjectCardInstanceId: vanguard.uid,
     subjectOwnerPlayerId: "guest", subjectControllerPlayerId: "guest", currentLocation: "vanguard",
-    battleId: "guest-battle", timingWindow: "attack-declared"
+    targetCardInstanceIds: ["host-vanguard"], targetLocation: "vanguard", battleId: "guest-battle", timingWindow: "attack-declared"
   });
   const discovered = Reducer.discoverAutoTriggers(state, [event], Engine);
   assert.equal(discovered.queued.length, 1);

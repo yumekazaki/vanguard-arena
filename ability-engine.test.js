@@ -395,7 +395,7 @@ test("ability cost payment validates atomically, records usage, and emits exact 
   const player={playerId:"p1",vanguard:{uid:"vg"},rear:[source],hand:[discard],soul:[soulBlast],damage:[damage],drop:[],usedAbilities:[]};
   const ability={id:"paid-skill",once:true,costs:[{type:"counter-blast",count:1},{type:"soul-blast",count:1},{type:"discard",count:1},{type:"source-to-soul",count:1},{type:"rest-source",count:1}]};
   const events=[],selection={cb:["damage"],sb:["soul-blast"],discard:["discard"]};
-  assert.deepEqual(payAbilityCosts(ability,{player,source,sourceZone:"rear-left",turnId:3,actorPlayerId:"p1",side:"human",emitEvent:event=>events.push(event)},selection),{ok:true,usageKey:"3:p1:source:paid-skill",paid:{counterBlast:1,soulBlast:1,discard:1,sourceToSoul:1,sourceToBottomDeck:0,restSource:1,sourceBind:0,bindHealFromDrop:0}});
+  assert.deepEqual(payAbilityCosts(ability,{player,source,sourceZone:"rear-left",turnId:3,actorPlayerId:"p1",side:"human",emitEvent:event=>events.push(event)},selection),{ok:true,usageKey:"3:p1:source:paid-skill",paid:{counterBlast:1,soulBlast:1,discard:1,retiredRearGuard:0,sourceToSoul:1,sourceToBottomDeck:0,returnDropToDeckBottom:0,bindSameNameFromDrop:0,restSource:1,sourceBind:0,bindHealFromDrop:0}});
   assert.equal(damage.faceDown,true);
   assert.deepEqual(player.soul.map(card=>card.uid),["source"]);
   assert.deepEqual(player.drop.map(card=>card.uid),["soul-blast","discard"]);
@@ -424,6 +424,7 @@ test("illegal or repeated ability cost payments leave game state unchanged", () 
   assert.equal(canActivateManualAbility(ability, { ...context, actorPlayerId: "player-b" }).reason, "not-controller");
   assert.equal(canActivateManualAbility(ability, { ...context, phase: "battle" }).reason, "wrong-timing-window");
   assert.equal(canActivateManualAbility(ability, { ...context, inPermittedZone: false }).reason, "wrong-zone");
+  assert.equal(canActivateManualAbility(ability, { ...context, sourceLocked: true }).reason, "source-locked");
   assert.equal(canActivateManualAbility(ability, { ...context, alreadyUsed: true }).reason, "usage-restriction");
   assert.equal(canActivateManualAbility(ability, { ...context, resources: { faceUpDamage: 0 } }).reason, "unpayable-cost");
   assert.equal(canActivateManualAbility(ability, { ...context, resolutionBlocked: true }).reason, "resolution-in-progress");
@@ -641,6 +642,22 @@ test("legacy Limit Break attack AUTO parses its exact source, circle, damage thr
   assert.equal(resolveEffectProgram(ability.effects,EFFECT_HANDLERS,{source,sourceInPlay:true,side:"p1",match}).ok,true);
   assert.equal(match.pendingAttack.power,18000);
 });
+test("legacy Limit Break attack text ending with 'end of battle' uses the same exact battle duration", () => {
+  const cards = [
+    { id: "cfa-1018", text: "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle." },
+    { id: "cfa-1059", text: "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle." },
+    { id: "cfa-1767", text: "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle." }
+  ];
+  for (const card of cards) {
+    const ability = parseCardAbilities(card)[0];
+    assert.equal(ability.definition.source.patternId, "auto-legacy-limit-break-vanguard-attack-power-v1", card.id);
+    assert.deepEqual(ability.requiredLocation, ["vanguard"], card.id);
+    assert.deepEqual(ability.conditions, [{ type: "limit-break-active", count: 4 }], card.id);
+    assert.deepEqual(ability.definition.effects, [{ op: "modify-power", target: "source", amount: 5000, duration: "battle" }], card.id);
+    assert.equal(evaluateAbilityConditions(ability, { damageCount: 3 }), false, card.id);
+    assert.equal(evaluateAbilityConditions(ability, { damageCount: 4 }), true, card.id);
+  }
+});
 test("legacy Limit Break text with conflicting thresholds stays unsupported", () => {
   const ability=parseCardAbilities({id:"bad-limit-break",text:"[VC] Limit Break 4 (This ability is active if you have three or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of that battle."})[0];
   assert.equal(ability.definition,null);
@@ -650,7 +667,7 @@ test("legacy Limit Break text with conflicting thresholds stays unsupported", ()
   const restDiscard = parseCardAbilities({ id: "cfa-19", name: "Witch of Nostrum, Arianrhod", text: "ACT [VC/RC]: [Rest this unit & Choose a card from your hand, and discard it] Draw a card." })[0];
   assert.equal(restDiscard.definition.source.patternId, "act-rest-discard-draw-v1");
   assert.equal(restDiscard.costStatus, "supported-cost");
-  assert.deepEqual(restDiscard.costs, [{ type: "discard", count: 1 }, { type: "rest-source", count: 1 }]);
+  assert.deepEqual(restDiscard.costs, [{ type: "rest-source", count: 1 }, { type: "discard", count: 1 }]);
   assert.deepEqual(restDiscard.definition.effects, [{ op: "draw", count: 1 }]);
   assert.deepEqual(restDiscard.requiredLocation, ["vanguard", "rear-guard"]);
 
@@ -885,7 +902,7 @@ test("dual-circle Intercept CONT grants the keyword and continuous shield on RC 
   const card={id:"intercept-grant",text:"CONT [RC/GC]: This unit gets \"Intercept\", and it gets shield +5000."},ability=parseCardAbilities(card)[0];
   assert.equal(ability.kind,"CONT");assert.equal(ability.definition?.source?.patternId,"cont-rc-gc-grant-intercept-shield-v1");assert.deepEqual(ability.requiredLocation,["rear-guard","guardian"]);assert.deepEqual(ability.definition?.keywords,["intercept"]);assert.equal(isManuallyActivatable(ability),false);assert.equal(hasAbilityKeyword(card,"intercept"),true);
   assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"rear-guard"}),{shield:5000});assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"guardian"}),{shield:5000});assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"vanguard"}),{shield:0});assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"hand"}),{shield:0});
-  const app=fs.readFileSync("app.js","utf8");assert.match(app,/function hasIntercept\(card\)[\s\S]{0,260}definition\?\.keywords\?\.includes\("intercept"\)/);assert.match(app,/function eligibleInterceptors\(\)[\s\S]{0,900}Number\(card\?\.grade \?\? -1\) >= 2 \|\| hasIntercept\(card\)/);assert.doesNotMatch(app,/eligibleInterceptors\(\)[\s\S]{0,500}Number\(cardMap\.get\(unit\.cardId\)\?\.grade\) === 2/);
+  const app=fs.readFileSync("app.js","utf8");assert.match(app,/function hasIntercept\(instance,side="human",zone="rear-guard"\)[\s\S]{0,500}ability\.definition\?\.keywords\?\.includes\("intercept"\)/);assert.match(app,/function eligibleInterceptors\(\)[\s\S]{0,900}if\(frontRow\)return Number\(card\?\.grade\?\?-1\)>=2\|\|hasIntercept\(unit,"human","rear-guard"\)/);assert.doesNotMatch(app,/eligibleInterceptors\(\)[\s\S]{0,500}Number\(cardMap\.get\(unit\.cardId\)\?\.grade\) === 2/);
 });
 
 test("the app initializes and records the Grade 3+ ride fact on every ride path",()=>{
@@ -1588,7 +1605,7 @@ test("movement triggers require the exact moved instance and verified source and
   assert.equal(resolveEffectProgram(definition.effects, EFFECT_HANDLERS, context).ok, true);
   assert.equal(state.players.b.rear[0], null);
   assert.equal(state.players.b.drop[0].uid, "target-copy");
-  assert.deepEqual(emitted, [{ type: "card.retired", cardInstanceId: "target-copy", controllerSide: "b", previousLocation: "rear-left", currentLocation: "drop" }]);
+  assert.deepEqual(emitted, [{ type: "card.retired", cardInstanceId: "target-copy", subjectCardInstanceId: "target-copy", subjectOwnerPlayerId: "player-b", subjectControllerPlayerId: "player-b", controllerSide: "b", previousLocation: "rear-left", currentLocation: "drop" }]);
 });
 test("retirement target handler rejects a friendly, Vanguard, or stale target", () => {
   const effect = [{ op: "retire-target", target: "chosen", targetFilter: { controller: "opponent", zone: "rear-guard" } }];
@@ -2063,7 +2080,8 @@ test("real Kungfu Kid, Bolta AUTO requires its own attack and a strict Rear-Guar
   assert.equal(resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{source,sourceInPlay:true,side:"p1",match}).ok,true);
   assert.equal(match.pendingAttack.power,11000);
   const app=fs.readFileSync("app.js","utf8");
-  assert.match(app,/controllerRearGuards:\(player\.rear\|\|\[\]\)\.filter\(Boolean\)\.length,opponentRearGuards:\(opponent\?\.rear\|\|\[\]\)\.filter\(Boolean\)\.length/);
+  assert.match(app,/controllerRearGuards:\(player\.rear\|\|\[\]\)\.filter\(Boolean\)\.length/);
+  assert.match(app,/opponentRearGuards:\(opponent\?\.rear\|\|\[\]\)\.filter\(Boolean\)\.length/);
 });
 
 test("rear-Guard advantage attack wording variants preserve the same exact condition",()=>{
@@ -2340,7 +2358,7 @@ test("real Dark Shield, Mac Lir preserves its clan-filtered Sentinel discard and
   assert.equal(player.hand.length,2);assert.equal(player.drop.length,0);
   assert.equal(payAbilityCosts(ability,context,{discard:["shadow-paladin"]}).ok,true);
   assert.deepEqual(player.hand,[hand[0]]);assert.equal(player.drop[0].uid,"shadow-paladin");
-  const app=fs.readFileSync("app.js","utf8");assert.match(app,/function abilityDiscardCards[^{]+\{[\s\S]{0,450}matchesTargetFilter/);
+  const app=fs.readFileSync("app.js","utf8");assert.match(app,/function abilityDiscardCards[^{]+\{[\s\S]{0,450}abilityCardMatchesFilter/);assert.match(app,/function abilityCardMatchesFilter[^{]+\{[\s\S]{0,300}matchesTargetFilter/);
 });
 
 test("from-hand Guardian Circle Sentinel variants reject the same source placed from another zone",()=>{
@@ -2652,6 +2670,7 @@ test("normal ride events identify the rider and exact previous Vanguard for rode
   assert.equal(event.timingWindow,"normal-ride");
   assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,ridden.uid,"vanguard",event.targetLocation,"p1"),true);
   assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,"another-copy","vanguard",event.targetLocation,"p1"),false);
+  assert.equal(eventMatchesAbilityTrigger(ability,"ride",event,rider.uid,"vanguard",event.targetLocation,"p1"),false,"the rider is the event subject, not the ridden-upon source");
 });
 
 
@@ -3238,15 +3257,15 @@ test("Dauntless Dominate Dragon locks only its exact normal drive-check card and
   assert.deepEqual(ability.requiredLocation,["vanguard"]);assert.deepEqual(ability.costs,[{type:"counter-blast",count:1}]);assert.equal(abilities[1].definition,null);
   const driveEvent=createGameEvent({matchId:"ddr-room"},{type:"drive.checked",actingPlayerId:"p1",turnPlayerId:"p1",sourceCardInstanceId:"dd-vanguard",sourceControllerPlayerId:"p1",subjectCardInstanceId:"checked-normal",subjectControllerPlayerId:"p1",checkedCardInstanceId:"checked-normal",checkedCardTriggerType:"",checkKind:"drive",checkSourceLocation:"vanguard"});
   assert.equal(eventMatchesAbilityTrigger(ability,"driveCheck",driveEvent,"dd-vanguard","vanguard","hand","p1"),true);assert.equal(eventMatchesAbilityTrigger(ability,"driveCheck",{...driveEvent,actingPlayerId:"p2"},"dd-vanguard","vanguard","hand","p1"),false);assert.equal(eventMatchesAbilityTrigger(ability,"driveCheck",{...driveEvent,checkedCardInstanceId:"another-card"},"dd-vanguard","vanguard","hand","p1"),false);assert.equal(eventMatchesAbilityTrigger(ability,"driveCheck",driveEvent,"dd-vanguard","rear-left","hand","p1"),false);
-  const checked={uid:"checked-normal",cardId:"normal",locked:false},displaced={uid:"old-rear",cardId:"unit"},source={uid:"dd-vanguard",cardId:"cfa-9421"},cb={uid:"cb",faceDown:false},attack={attackerUid:source.uid,attackerZone:"vanguard",driveChecksRemaining:1,maxDriveChecks:1,power:13000};
+   const checked={uid:"checked-normal",cardId:"normal",locked:false},displaced={uid:"old-rear",cardId:"unit"},source={uid:"dd-vanguard",cardId:"cfa-9421"},cb={uid:"cb",faceDown:false},attack={battleId:"ddr-battle-1",attackerUid:source.uid,attackerZone:"vanguard",driveChecksRemaining:1,maxDriveChecks:1,power:13000};
   const player={playerId:"p1",vanguard:source,rear:[displaced,null,null,null,null],hand:[checked],drop:[],damage:[cb],soul:[]},events=[];
-  const context={source,player,side:"human",sourceZone:"vanguard",sourceInPlay:true,checkedCard:checked,checkedCardInstanceId:checked.uid,callZone:"rear-left",match:{pendingAttack:attack},emitEvent:event=>events.push(event)};
+   const context={source,player,side:"human",sourceZone:"vanguard",sourceInPlay:true,checkedCard:checked,checkedCardInstanceId:checked.uid,callZone:"rear-left",battleId:attack.battleId,match:{pendingAttack:attack},emitEvent:event=>events.push(event)};
   const result=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,context,draft=>payAbilityCosts(ability,{...draft,turnId:4,actorPlayerId:"p1",side:"human",sourceZone:"vanguard"},{cb:[cb.uid],sb:[],discard:[],reveal:[]}).ok);
   assert.equal(result.ok,true);assert.equal(player.hand.length,0);assert.equal(player.rear[0].uid,checked.uid);assert.equal(player.rear[0].locked,true);assert.equal(player.rear[1],null);assert.deepEqual(player.drop,[displaced]);
   assert.equal(cb.faceDown,true);assert.equal(attack.power,23000);assert.equal(attack.driveChecksRemaining,2);assert.equal(attack.maxDriveChecks,2);
   assert.deepEqual(events.map(event=>[event.type,event.cardInstanceId]),[["card.retired",displaced.uid],["card.placed",checked.uid],["characteristic.changed",source.uid]]);
-  const cb2={uid:"cb-2",faceDown:false},noSpacePlayer={...player,rear:Array.from({length:5},(_,index)=>({uid:`lock-${index}`,locked:true})),hand:[{...checked}],damage:[cb2]},noSpaceAttack={attackerUid:source.uid,attackerZone:"vanguard",driveChecksRemaining:1,maxDriveChecks:1,power:13000};
-  const noSpace=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{...context,player:noSpacePlayer,checkedCard:noSpacePlayer.hand[0],checkedCardInstanceId:noSpacePlayer.hand[0].uid,callZone:null,match:{pendingAttack:noSpaceAttack}},draft=>payAbilityCosts(ability,{...draft,turnId:4,actorPlayerId:"p1",side:"human",sourceZone:"vanguard"},{cb:[cb2.uid],sb:[],discard:[],reveal:[]}).ok);
+   const cb2={uid:"cb-2",faceDown:false},noSpacePlayer={...player,rear:Array.from({length:5},(_,index)=>({uid:`lock-${index}`,locked:true})),hand:[{...checked}],damage:[cb2]},noSpaceAttack={battleId:"ddr-battle-2",attackerUid:source.uid,attackerZone:"vanguard",driveChecksRemaining:1,maxDriveChecks:1,power:13000};
+   const noSpace=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{...context,player:noSpacePlayer,checkedCard:noSpacePlayer.hand[0],checkedCardInstanceId:noSpacePlayer.hand[0].uid,callZone:null,battleId:noSpaceAttack.battleId,match:{pendingAttack:noSpaceAttack}},draft=>payAbilityCosts(ability,{...draft,turnId:4,actorPlayerId:"p1",side:"human",sourceZone:"vanguard"},{cb:[cb2.uid],sb:[],discard:[],reveal:[]}).ok);
   assert.equal(noSpace.ok,true);assert.equal(noSpace.results[0],0);assert.equal(noSpaceAttack.power,13000);assert.equal(noSpaceAttack.driveChecksRemaining,1);
   const invalid=validateEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{...context,checkedCardInstanceId:"different-card"});assert.equal(invalid.ok,false);
   const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("lockedCallStep=x.ability.definition"));assert.ok(app.includes("event.position!==\"locked\""));
@@ -3254,7 +3273,7 @@ test("Dauntless Dominate Dragon locks only its exact normal drive-check card and
 
 test("the site cache-busts every changed engine script bundle",()=>{
   const html=fs.readFileSync("index.html","utf8");
-  assert.match(html,/ability-engine\.js\?v=20261029-ability-response-null-defaults-1/);assert.match(html,/app\.js\?v=20261030-face-crops-3/);assert.match(html,/ability-definitions\.js\?v=20261028-clan-hand-soul-1/);assert.match(html,/practice-bot\.js\?v=20261028-ability-batch-v1/);
+ assert.match(html,/ability-engine\.js\?v=20261104-integrated-1/);assert.match(html,/app\.js\?v=20261104-integrated-1/);assert.match(html,/ability-definitions\.js\?v=20261104-integrated-1/);assert.match(html,/practice-bot\.js\?v=20261028-ability-batch-v1/);
 });
 
 test("ride-phase discard AUTO calls only its exact source from Drop to a legal rested circle",()=>{
@@ -3352,7 +3371,7 @@ test("Blaze AUTO respects source circle, controller attack count, Rear-Guard com
 
 test("all real catalog Blaze reminder variants compile as controller-scoped AUTO abilities",()=>{
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),cards=loadCatalog(),matches=[];for(const card of cards)for(const ability of parseCardAbilities(card))if(/\bBlaze \(/i.test(ability.raw))matches.push({card,ability});assert.equal(matches.length,10);for(const {ability} of matches){assert.equal(ability.definition?.source?.patternId,"auto-blaze-own-attack-more-rearguards-v1");assert.equal(ability.trigger?.subject,"controller");assert.equal(ability.trigger?.eventType,"attack.step-started");assert.equal(ability.conditionStatus,"modeled")}
- const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("ability.trigger?.subject!==\"controller\""));assert.ok(app.includes("getPlayerAttackCount(match"));assert.ok(app.includes("queueAbilityPrompts(\"attackStep\""));assert.ok(app.includes("controllerVanguardIsBlazing:Boolean(player.vanguard?.blazing)"));const humanAttack=app.slice(app.indexOf("function resolveHumanAttack()"),app.indexOf("function beginChosenAttack("));assert.ok(humanAttack.indexOf('queueAbilityPrompts("attackStep"')<humanAttack.indexOf("match.pendingAttackSetup="));const botAttack=app.slice(app.indexOf("function nextBotAttack()"),app.indexOf("function beginTurnEnd("));assert.ok(botAttack.indexOf('queueAbilityPrompts("attackStep"')<botAttack.indexOf("match.pendingAttack={"));
+ const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("ability.trigger?.subject!==\"controller\""));assert.ok(app.includes("getPlayerAttackCount(match"));assert.ok(app.includes("queueAbilityPrompts(\"attackStep\""));assert.ok(app.includes("controllerVanguardIsBlazing:Boolean(player.vanguard?.blazing)"));const humanAttack=app.slice(app.indexOf("function resolveHumanAttack()"),app.indexOf("function beginChosenAttack("));assert.ok(humanAttack.indexOf("match.pendingAttackSetup=")<humanAttack.indexOf('queueAbilityPrompts("attackStep"'));assert.ok(humanAttack.includes("battleId,sourcePowerByCardInstanceId"));const botAttack=app.slice(app.indexOf("function nextBotAttack()"),app.indexOf("function beginTurnEnd("));assert.ok(botAttack.indexOf("match.pendingAttackSetup=")<botAttack.indexOf('queueAbilityPrompts("attackStep"'));assert.ok(botAttack.indexOf('queueAbilityPrompts("attackStep"')<botAttack.indexOf("match.pendingAttack={"));
 });
 
 test("all catalog Blaze keyword records, including concise official keyword text, have recognized controller attack events",()=>{
@@ -3406,7 +3425,7 @@ test("catalog Charge AUTO definitions include keyword-only records and remain ef
 test("Forerunner is an optional exact-source same-clan ride AUTO that calls from Soul standing",()=>{
  const ability=parseCardAbilities({id:"forerunner-test",text:"AUTO: Forerunner."})[0];assert.equal(ability.definition?.source?.patternId,"auto-forerunner-same-clan-ride-call-source-v1");assert.equal(ability.trigger?.eventType,"card.ridden");assert.equal(ability.trigger?.subject,"ridden-unit");assert.equal(ability.canDecline,true);assert.deepEqual(ability.definition.effects,[{op:"call-source-from-soul",target:"source",position:"stand"}]);
  const source={uid:"starter-copy",cardId:"forerunner-test"},player={playerId:"p1",soul:[source],rear:[null,null,null,null,null],accelZones:0},events=[];const apply=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{player,source,side:"human",callZone:"rear-left",cardDefinitionForInstance:()=>({type:"Normal Unit"}),emitEvent:event=>events.push(event)});assert.equal(apply.ok,true);assert.equal(player.soul.length,0);assert.equal(player.rear[0].uid,"starter-copy");assert.equal(player.rear[0].rested,false);assert.equal(events[0].previousLocation,"soul");
- const occupiedSource={uid:"occupied-starter"},occupiedPlayer={soul:[occupiedSource],rear:[{uid:"occupant"},null,null,null,null]};assert.equal(resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{player:occupiedPlayer,source:occupiedSource,side:"human",callZone:"rear-left",cardDefinitionForInstance:()=>({type:"Normal Unit"})}).ok,false);assert.equal(occupiedPlayer.soul[0].uid,"occupied-starter");
+ const occupiedSource={uid:"occupied-starter"},occupant={uid:"occupant"},occupiedPlayer={soul:[occupiedSource],rear:[occupant,null,null,null,null],drop:[]};const replacement=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{player:occupiedPlayer,source:occupiedSource,side:"human",callZone:"rear-left",cardDefinitionForInstance:()=>({type:"Normal Unit"})});assert.equal(replacement.ok,true);assert.equal(occupiedPlayer.soul.length,0);assert.equal(occupiedPlayer.rear[0].uid,"occupied-starter");assert.equal(occupiedPlayer.drop[0].uid,"occupant");
  const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("auto-forerunner-same-clan-ride-call-source-v1"));assert.ok(app.includes("Choose an open Rear-Guard circle"));
 });
 

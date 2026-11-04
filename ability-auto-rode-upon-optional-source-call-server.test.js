@@ -95,7 +95,7 @@ test("either player's exact former Vanguard can be called standing into an open 
   }
 });
 
-test("decline, wrong ride source/destination, host proxy, unavailable circle, and tampered definitions are rejected", () => {
+test("decline, wrong ride source/destination, host proxy, locked circles, and tampered definitions are rejected", () => {
   const decline = fixture();
   assert.equal(discover(decline).queued.length, 1);
   const declined = resolve(decline, { accept: false });
@@ -120,11 +120,21 @@ test("decline, wrong ride source/destination, host proxy, unavailable circle, an
   assert.equal(proxy.state.players.bot.soul.some(item => item.uid === proxy.source.uid), true);
 
   const occupied = fixture();
-  occupied.state.players.human.rear = Array(5).fill(null).map((_, i) => card("cfa-4", `occupied-${i}`, occupied.actor));
+  const displaced = card("cfa-4", "occupied-rear-left", occupied.actor, { zone: "rear-guard", circle: "rear-left" });
+  occupied.state.players.human.rear[0] = displaced;
   assert.equal(discover(occupied).queued.length, 1);
-  const noCircle = resolve(occupied, { callZone: "rear-left" });
-  assert.equal(noCircle.ok, false);
-  assert.equal(occupied.state.players.human.soul.some(item => item.uid === occupied.source.uid), true);
+  const replacement = resolve(occupied, { callZone: "rear-left" });
+  assert.equal(replacement.ok, true, replacement.reason);
+  assert.equal(occupied.state.players.human.rear[0]?.uid, occupied.source.uid);
+  assert.ok(occupied.state.players.human.drop.some(item => item.uid === displaced.uid));
+  assert.deepEqual(replacement.events.map(event => event.type), ["card.retired", "card.placed"]);
+
+  const noCircle = fixture();
+  noCircle.state.players.human.rear = Array(5).fill(null).map((_, i) => Object.assign(card("cfa-4", `locked-${i}`, noCircle.actor), { locked: true, isLocked: true }));
+  assert.equal(discover(noCircle).queued.length, 1);
+  const unavailable = resolve(noCircle, { callZone: "rear-left" });
+  assert.equal(unavailable.ok, false);
+  assert.equal(noCircle.state.players.human.soul.some(item => item.uid === noCircle.source.uid), true);
 
   const badZone = fixture();
   assert.equal(discover(badZone).queued.length, 1);

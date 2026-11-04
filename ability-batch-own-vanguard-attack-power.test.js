@@ -61,9 +61,9 @@ function resolve(f, abilityId, actorAuthUid = f.side === "human" ? seats.hostAut
     payload: { type: "ability-response", accept: true, selection: { instanceUid: f.source.uid, abilityId } } }, seats, Engine);
 }
 
-test("all 69 source-specific Vanguard attack AUTO definitions preserve exact printed circles, target, amount, and duration", () => {
-  assert.equal(family.length, 69);
-  assert.equal(new Set(family.map(({ ability }) => ability.id)).size, 69);
+test("all 70 source-specific Vanguard attack AUTO definitions preserve exact printed circles, target, amount, and duration", () => {
+  assert.equal(family.length, 70);
+  assert.equal(new Set(family.map(({ ability }) => ability.id)).size, 70);
   for (const { card, ability } of family) {
     assert.ok(Engine.getReviewedAbilityDefinitionsForCard(card.id).some(definition => definition.id === ability.id), ability.id);
     assert.equal(ability.kind, "AUTO", ability.id);

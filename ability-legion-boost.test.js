@@ -18,7 +18,10 @@ function makeState({ legion = false } = {}) {
   const hostVanguard = { uid: "host-vanguard", cardId: "host-vanguard-def", grade: 3, unitCard: true, ownerPlayerId: "player-host", controllerPlayerId: "player-host" };
   const guest = { playerId: "player-guest", vanguard: guestVanguard, rear: [booster, null, null, null, null], hand: [], deck: [], drop: [], soul: [], bind: [], damage: [], guardCircle: [], orders: [] };
   const host = { playerId: "player-host", vanguard: hostVanguard, rear: [null, null, null, null, null], hand: [], deck: [], drop: [], soul: [], bind: [], damage: [], guardCircle: [], orders: [] };
-  const state = { matchId: "legion-boost-room", stateVersion: 4, processedActionIds: [], eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], turn: 2, side: "bot", phase: 5, players: { human: host, bot: guest } };
+  const state = { matchId: "legion-boost-room", stateVersion: 4, processedActionIds: [], eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], turn: 2, side: "bot", phase: 5, players: { human: host, bot: guest },
+    pendingAttack: { battleId: "legion-boost-room:attack-1", attackerUid: guestVanguard.uid, attackerSide: "bot", attackerPlayerId: "player-guest",
+      attackerZone: "vanguard", defenderSide: "human", defenderPlayerId: "player-host", targetUid: hostVanguard.uid,
+      targetZone: "vanguard", boostUid: booster.uid, boostZone: "rear-left", power: 18000, critical: 1 } };
   const event = Engine.createGameEvent(state, {
     type: "unit.boosted", actingPlayerId: "player-guest", turnPlayerId: "player-guest",
     sourceCardInstanceId: booster.uid, sourceOwnerPlayerId: booster.ownerPlayerId, sourceControllerPlayerId: booster.controllerPlayerId,

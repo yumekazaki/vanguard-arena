@@ -2,6 +2,7 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const zlib = require("node:zlib");
 const engine = require("../ability-engine.js");
 engine.registerAbilityDefinitions(require("../ability-definitions.js"));
 const serverReducer = require("../ability-server-reducer.js");
@@ -10,7 +11,7 @@ const { candidatePatternKey } = require("./unsupported-ability-patterns.js");
 const { sourceValidationDigest } = require("./source-validation-digest.js");
 const CONTINUOUS_EFFECT_OPS = new Set([
   "continuous-power", "continuous-critical", "continuous-shield", "continuous-grade",
-  "continuous-power-per-soul-card", "continuous-power-adjustment", "continuous-power-per-clan-rearguard", "continuous-power-per-dragontree-marker", "continuous-power-per-controller-rearguard", "continuous-power-per-named-face-up-damage-card"
+  "continuous-power-per-soul-card", "continuous-power-adjustment", "continuous-power-per-clan-rearguard", "continuous-power-per-dragontree-marker", "continuous-power-per-controller-rearguard", "continuous-power-per-named-face-up-damage-card", "continuous-power-per-face-up-g-zone-card"
 ]);
 
 function dependenciesForAbility({ ability, definition, missingRequirements, missingHandlers, missingServerHandlers, missingTrustedDefinition, hasTests, suiteFresh, mechanicGroup }) {
@@ -56,7 +57,8 @@ function buildAbilityWorkQueue(cards, manifest, root = path.resolve(__dirname, "
       if (fullyVerifiedCards.has(cardId)) continue;
       const definition = ability.definition || null;
       const record = evidence.get(ability.id) || null;
-      const missingTrustedDefinition = Boolean(definition && ["AUTO", "ACT"].includes(ability.kind) && !trustedByCard.get(cardId)?.has(ability.id));
+      const missingTrustedDefinition = Boolean(definition && ["AUTO", "ACT"].includes(ability.kind) &&
+        !trustedByCard.get(cardId)?.has(ability.id) && !serverReducer.hasTrustedServerAbilityDefinition?.(ability, engine));
       const badDefinitionReasons = invalid.get(ability.id) || [];
       const missingHandlers = [...new Set((definition?.effects || []).map(step => step?.op).filter(op => !op || !(engine.EFFECT_HANDLERS?.[op]) && !(ability.kind === "CONT" && CONTINUOUS_EFFECT_OPS.has(op))))];
       const serverAbilitySupported = ability.kind === "CONT" || Boolean(serverReducer.supportsServerAbilityEffects?.(ability));
@@ -195,6 +197,16 @@ function buildAbilityWorkQueue(cards, manifest, root = path.resolve(__dirname, "
   };
 }
 
+function writeQueueFile(queue, destination) {
+  fs.mkdirSync(path.dirname(destination), { recursive: true });
+  const temporary = `${destination}.${process.pid}.tmp`;
+  const serialized = `${JSON.stringify(queue, null, 2)}\n`;
+  const contents = destination.toLowerCase().endsWith(".gz") ? zlib.gzipSync(serialized) : serialized;
+  fs.writeFileSync(temporary, contents, { flag: "wx" });
+  fs.renameSync(temporary, destination);
+  return destination;
+}
+
 function main(argv = process.argv.slice(2)) {
   const root = path.resolve(__dirname, "..");
   const manifestPath = path.join(root, "card-verification-manifest.json");
@@ -202,12 +214,9 @@ function main(argv = process.argv.slice(2)) {
   const queue = buildAbilityWorkQueue(loadCatalog(root), manifest, root);
   const outputIndex = argv.indexOf("--output");
   const destination = outputIndex >= 0 ? path.resolve(argv[outputIndex + 1] || ".card-pipeline/ability-work-queue.json") : path.join(root, ".card-pipeline", "ability-work-queue.json");
-  fs.mkdirSync(path.dirname(destination), { recursive: true });
-  const temporary = `${destination}.${process.pid}.tmp`;
-  fs.writeFileSync(temporary, `${JSON.stringify(queue, null, 2)}\n`, { flag: "wx" });
-  fs.renameSync(temporary, destination);
+  writeQueueFile(queue, destination);
   process.stdout.write(`${JSON.stringify({ output: path.relative(root, destination), counts: queue.counts, validationEvidenceFresh: queue.validationEvidenceFresh }, null, 2)}\n`);
 }
 
 if (require.main === module) main();
-module.exports = { buildAbilityWorkQueue, validationSourceDigest: sourceValidationDigest, dependenciesForAbility };
+module.exports = { buildAbilityWorkQueue, validationSourceDigest: sourceValidationDigest, dependenciesForAbility, writeQueueFile };

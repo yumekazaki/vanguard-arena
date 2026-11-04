@@ -18,6 +18,7 @@ const EXPECTED = new Map([
   ["cfa-13973:0", ["Thoughts Spun Out", 8]],
   ["cfa-13974:0", ["Each of Their Dreams", 8]],
   ["cfa-13975:0", ["Together with Everyone", 8]],
+  ["cfa-10401:0", ["Purgatory Dragon Deity, Favrneel", 1]],
   ["cfa-7512:0", ["Sparkling Memories!", 12]],
   ["cfa-7513:0", ["Heart-pounding Dreams!", 8]],
   ["cfa-7610:0", ["Sparkling Memories!", 12]],
@@ -29,10 +30,14 @@ const EXPECTED = new Map([
   ["cfa-7736:0", ["Sparkling Memories!", 12]],
   ["cfa-7737:0", ["Heart-pounding Dreams!", 8]],
   ["cfa-7773:0", ["Sparkling Memories!", 12]],
-  ["cfa-7774:0", ["Heart-pounding Dreams!", 8]]
+  ["cfa-7774:0", ["Heart-pounding Dreams!", 8]],
+  ["cfa-9656:0", ["Battle in the Abyss", 8]],
+  ["cfa-9657:0", ["Men Battle with their Fists", 8]],
+  ["cfa-9660:0", ["Battle in the Abyss", 8]],
+  ["cfa-9661:0", ["Men Battle with their Fists", 8]]
 ]);
 
-test("all eleven exact printed CONT deck-copy restrictions compile as non-activatable named limits", () => {
+test("all twenty-eight exact printed CONT deck-copy restrictions compile as non-activatable named limits", () => {
   const catalog = loadCatalog();
   for (const [abilityId, [cardName, maximum]] of EXPECTED) {
     const card = catalog.find(item => String(item.id) === abilityId.split(":")[0]);
@@ -46,7 +51,7 @@ test("all eleven exact printed CONT deck-copy restrictions compile as non-activa
   }
 });
 
-test("all twenty-three real named deck-copy restrictions remain tied to their exact printed card names and limits", () => {
+test("all twenty-eight real named deck-copy restrictions remain tied to their exact printed card names and limits", () => {
   const catalog = loadCatalog();
   let matches = 0;
   for (const card of catalog) {
@@ -60,6 +65,6 @@ test("all twenty-three real named deck-copy restrictions remain tied to their ex
       assert.equal(ability.definition.effects, undefined, `${ability.id} is not a manually activated effect`);
     }
   }
-  assert.equal(matches, 23);
+  assert.equal(matches, 28);
   assert.equal(EXPECTED.size, matches);
 });

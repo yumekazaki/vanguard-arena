@@ -37,7 +37,7 @@ test("the trusted hit trigger queues for the joining attacker, requires its clan
     bot: { playerId: "guest", vanguard: { uid: "guest-vg", cardId: "guest-vg", clan, clans: [clan], ownerPlayerId: "guest", controllerPlayerId: "guest" }, rear: [source, null, null, null, null], hand: [], soul: [], drop: [], deck: [], damage: [{ ...damage }], bind: [], orders: [], guardCircle: [] }
   }, pendingAttack: { battleId: "hit-counter-charge:battle", attackerSide: "bot", attackerUid: source.uid, attackerZone: "rear-left", targetUid: "host-vg", targetZone: "vanguard", power: 15000, targetPower: 10000 } });
   const state = makeState("Nova Grappler");
-  const event = Engine.createGameEvent(state, { type: "attack.hit", actingPlayerId: "guest", turnPlayerId: "guest", sourceCardInstanceId: source.uid, sourceControllerPlayerId: "guest", subjectCardInstanceId: "host-vg", subjectControllerPlayerId: "host", targetCardInstanceIds: ["host-vg"], targetLocation: "vanguard", battleId: "hit-counter-charge:battle" });
+  const event = Engine.createGameEvent(state, { type: "attack.hit", actingPlayerId: "guest", turnPlayerId: "guest", sourceCardInstanceId: source.uid, sourceControllerPlayerId: "guest", cardInstanceId: "host-vg", subjectCardInstanceId: "host-vg", subjectControllerPlayerId: "host", targetCardInstanceIds: ["host-vg"], targetLocation: "vanguard", battleId: "hit-counter-charge:battle", phase: "battle", timingWindow: "attack-hit" });
   const result = Reducer.discoverAutoTriggers(state, [event], Engine);
   assert.equal(result.queued.length, 1);
   assert.equal(state.pendingAbility?.side, "bot");

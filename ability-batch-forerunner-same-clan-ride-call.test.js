@@ -9,11 +9,21 @@ const Reducer = require("./ability-server-reducer.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const PATTERN = "auto-forerunner-same-clan-ride-call-source-v1";
+const DUAL_SKILL_FORERUNNER_IDS = ["cfa-3801:0", "cfa-3870:0", "cfa-4060:0", "cfa-4074:0", "cfa-4097:0", "cfa-4229:0", "cfa-4314:0", "cfa-4540:0"];
 const catalog = loadCatalog();
 const family = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
   .filter(ability => ability.definition?.source?.patternId === PATTERN)
   .map(ability => ({ card, ability })));
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
+
+test("the eight dual-skill ACT cards map to their exact Forerunner ability IDs", () => {
+  for (const abilityId of DUAL_SKILL_FORERUNNER_IDS) {
+    const found = family.find(({ ability }) => ability.id === abilityId);
+    assert.ok(found, abilityId);
+    assert.equal(found.ability.printedText, "AUTO: Forerunner.", abilityId);
+    assert.equal(found.ability.definition.source.patternId, PATTERN, abilityId);
+  }
+});
 
 function fixture({ card, ability, side, clan, riderClan = clan, unrelatedRideTarget = false }) {
   const playerId = side === "human" ? "host-player" : "guest-player";

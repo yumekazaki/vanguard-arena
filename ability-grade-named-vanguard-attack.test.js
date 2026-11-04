@@ -46,7 +46,7 @@ test("all 24 grade-and-name Vanguard attack texts compile with optional Soul cos
 
 test("the trusted trigger queues only for its controller's exact qualifying Vanguard attack", () => {
   const { state, source, attacker } = makeState();
-  const event = engine.createGameEvent(state, { type: "unit.attacked", actingPlayerId: "guest", turnPlayerId: "guest", sourceCardInstanceId: attacker.uid, sourceOwnerPlayerId: "guest", sourceControllerPlayerId: "guest", subjectCardInstanceId: attacker.uid, subjectOwnerPlayerId: "guest", subjectControllerPlayerId: "guest", currentLocation: "vanguard", circle: "vanguard", battleId: state.pendingAttack.battleId, timingWindow: "attack-declared" });
+  const event = engine.createGameEvent(state, { type: "unit.attacked", actingPlayerId: "guest", turnPlayerId: "guest", sourceCardInstanceId: attacker.uid, sourceOwnerPlayerId: "guest", sourceControllerPlayerId: "guest", subjectCardInstanceId: attacker.uid, subjectOwnerPlayerId: "guest", subjectControllerPlayerId: "guest", currentLocation: "vanguard", circle: "vanguard", targetCardInstanceIds: [state.pendingAttack.targetUid], targetLocation: "vanguard", battleId: state.pendingAttack.battleId, timingWindow: "attack-declared" });
   const queued = reducer.discoverAutoTriggers(state, [event], engine);
   assert.equal(queued.queued.length, 1);
   assert.equal(state.pendingAbility.side, "bot");
@@ -55,7 +55,7 @@ test("the trusted trigger queues only for its controller's exact qualifying Vang
 
   for (const options of [{ grade: 2 }, { name: "Other Dragon" }, { attackerSide: "human" }]) {
     const wrong = makeState(options);
-    const wrongEvent = engine.createGameEvent(wrong.state, { type: "unit.attacked", actingPlayerId: wrong.attackerPlayerId, turnPlayerId: wrong.attackerPlayerId, sourceCardInstanceId: wrong.attacker.uid, sourceOwnerPlayerId: wrong.attackerPlayerId, sourceControllerPlayerId: wrong.attackerPlayerId, subjectCardInstanceId: wrong.attacker.uid, subjectOwnerPlayerId: wrong.attackerPlayerId, subjectControllerPlayerId: wrong.attackerPlayerId, currentLocation: "vanguard", circle: "vanguard", battleId: wrong.state.pendingAttack.battleId, timingWindow: "attack-declared" });
+    const wrongEvent = engine.createGameEvent(wrong.state, { type: "unit.attacked", actingPlayerId: wrong.attackerPlayerId, turnPlayerId: wrong.attackerPlayerId, sourceCardInstanceId: wrong.attacker.uid, sourceOwnerPlayerId: wrong.attackerPlayerId, sourceControllerPlayerId: wrong.attackerPlayerId, subjectCardInstanceId: wrong.attacker.uid, subjectOwnerPlayerId: wrong.attackerPlayerId, subjectControllerPlayerId: wrong.attackerPlayerId, currentLocation: "vanguard", circle: "vanguard", targetCardInstanceIds: [wrong.state.pendingAttack.targetUid], targetLocation: "vanguard", battleId: wrong.state.pendingAttack.battleId, timingWindow: "attack-declared" });
     assert.equal(reducer.discoverAutoTriggers(wrong.state, [wrongEvent], engine).queued.length, 0);
   }
 });
@@ -63,7 +63,7 @@ test("the trusted trigger queues only for its controller's exact qualifying Vang
 test("the joining player may decline the printed COST, or pay it and resolve draw before Vanguard power", () => {
   const makeTriggeredState = () => {
     const setup = makeState();
-    const event = engine.createGameEvent(setup.state, { type: "unit.attacked", actingPlayerId: "guest", turnPlayerId: "guest", sourceCardInstanceId: setup.attacker.uid, sourceOwnerPlayerId: "guest", sourceControllerPlayerId: "guest", subjectCardInstanceId: setup.attacker.uid, subjectOwnerPlayerId: "guest", subjectControllerPlayerId: "guest", currentLocation: "vanguard", circle: "vanguard", battleId: setup.state.pendingAttack.battleId, timingWindow: "attack-declared" });
+    const event = engine.createGameEvent(setup.state, { type: "unit.attacked", actingPlayerId: "guest", turnPlayerId: "guest", sourceCardInstanceId: setup.attacker.uid, sourceOwnerPlayerId: "guest", sourceControllerPlayerId: "guest", subjectCardInstanceId: setup.attacker.uid, subjectOwnerPlayerId: "guest", subjectControllerPlayerId: "guest", currentLocation: "vanguard", circle: "vanguard", targetCardInstanceIds: [setup.state.pendingAttack.targetUid], targetLocation: "vanguard", battleId: setup.state.pendingAttack.battleId, timingWindow: "attack-declared" });
     reducer.discoverAutoTriggers(setup.state, [event], engine);
     assert.equal(setup.state.pendingAbility?.triggerControllerPlayerId, "guest");
     return setup;

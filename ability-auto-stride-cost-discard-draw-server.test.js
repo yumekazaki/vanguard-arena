@@ -7,7 +7,7 @@ Engine.registerAbilityDefinitions(require("./ability-definitions.js"));
 const Reducer = require("./ability-server-reducer.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
-const FAMILY = [["cfa-12191", 1], ["cfa-12194", 1], ["cfa-13178", 2]];
+const FAMILY = [["cfa-12191", 1], ["cfa-12194", 1], ["cfa-13178", 2], ["cfa-10775", 1]];
 const PATTERN = "auto-stride-cost-discard-draw-v1";
 const SEATS = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 const CATALOG = loadCatalog();
@@ -45,12 +45,16 @@ function decide(f, actor = f.side === "human" ? SEATS.hostAuthUid : SEATS.guestA
     payload: { type: "ability-response", accept: true, selection: { instanceUid: f.source.uid, abilityId: f.ability.id } } }, SEATS, Engine);
 }
 
-test("all three exact Stride-cost AUTO definitions retain the event-only draw condition", () => {
+test("all four exact Stride-cost AUTO definitions retain the event-only draw condition", () => {
   for (const [cardId, index] of FAMILY) {
     const f = fixture({ family: [cardId, index] });
     assert.equal(f.ability.definition?.source?.patternId, PATTERN, cardId);
     assert.equal(f.ability.id, `${cardId}:${index}`);
     assert.equal(f.ability.kind, "AUTO");
+    if (cardId === "cfa-10775") {
+      assert.equal(f.ability.printedText, "AUTO: When this card is discarded from hand for the cost of Stride, draw a card.");
+      assert.equal(f.ability.definition.source.officialCardNumber, "D-SS04/005EN");
+    }
     assert.equal(f.ability.canDecline, false);
     assert.deepEqual(f.ability.costs, []);
     assert.deepEqual(f.ability.definition.effects, [{ op: "draw", count: 1 }]);

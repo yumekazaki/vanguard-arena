@@ -7,6 +7,32 @@ const Reducer = require("./ability-server-reducer.js");
 
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 
+function authoritativeAttackEvent(state, source, attackerSide, attackerZone, battleId) {
+  const defenderSide = attackerSide === "human" ? "bot" : "human";
+  const attacker = state.players[attackerSide], defender = state.players[defenderSide];
+  state.side = attackerSide;
+  state.phase = 5;
+  state.turn ||= 1;
+  const target = { uid: `${battleId}-target`, cardId: "cfa-3", ownerPlayerId: defender.playerId, controllerPlayerId: defender.playerId };
+  defender.vanguard = target;
+  const attackerPlayerId = attacker.playerId;
+  state.pendingAttack = {
+    battleId, attackerUid: source.uid, attackerSide, attackerPlayerId, attackerZone: attackerZone,
+    attackingCardInstanceIds: [source.uid], defenderSide, targetUid: target.uid, targetZone: "vanguard",
+    guardCards: [], power: 10000, targetPower: 10000, critical: 1
+  };
+  return Engine.createGameEvent(state, {
+    type: "unit.attacked", actingPlayerId: attackerPlayerId, turnPlayerId: attackerPlayerId,
+    sourceCardInstanceId: source.uid, sourceOwnerPlayerId: source.ownerPlayerId,
+    sourceControllerPlayerId: source.controllerPlayerId, cardInstanceId: source.uid,
+    subjectCardInstanceId: source.uid, subjectOwnerPlayerId: source.ownerPlayerId,
+    subjectControllerPlayerId: source.controllerPlayerId, attackingUnitInstanceId: source.uid,
+    attackingCardInstanceIds: [source.uid], targetCardInstanceIds: [target.uid], targetLocation: "vanguard",
+    currentLocation: attackerZone, previousLocation: attackerZone, battleId,
+    phase: "battle", timingWindow: "attack-declared"
+  });
+}
+
 test("joined Standard player pays their own Ride Deck cost and rides through the authoritative action", () => {
   const oldVanguard = { uid: "guest-vg-g0", cardId: "guest-g0", grade: 0, unitCard: true, cardName: "Starter", ownerPlayerId: "player-guest", controllerPlayerId: "player-guest" };
   const rider = { uid: "guest-ride-g1", cardId: "guest-g1", grade: 1, unitCard: true, cardName: "Rider", ownerPlayerId: "player-guest", controllerPlayerId: "player-guest" };
@@ -36,13 +62,7 @@ test("server discovers a reviewed AUTO only for the exact source card event and 
       bot: { playerId: "player-guest", vanguard: null, rear: [], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [] }
     }
   };
-  const event = Engine.createGameEvent(state, {
-    type: "unit.attacked", actingPlayerId: "player-host", turnPlayerId: "player-host",
-    sourceCardInstanceId: source.uid, sourceOwnerPlayerId: source.ownerPlayerId,
-    sourceControllerPlayerId: source.controllerPlayerId, subjectCardInstanceId: source.uid,
-    subjectOwnerPlayerId: source.ownerPlayerId, subjectControllerPlayerId: source.controllerPlayerId,
-    currentLocation: "vanguard", battleId: "battle-1", timingWindow: "attack-declared"
-  });
+  const event = authoritativeAttackEvent(state, source, "human", "vanguard", "battle-1");
   const first = Reducer.discoverAutoTriggers(state, [event], Engine);
   assert.equal(first.queued.length, 1);
   assert.equal(state.pendingAbility.instance.uid, source.uid);
@@ -63,17 +83,11 @@ test("server discovers a reviewed AUTO only for the exact source card event and 
   const crossState = {
     matchId: "control-room", eventSequence: 0, turn: 3, side: "human", phase: 5,
     players: {
-      human: { playerId: "player-host", vanguard: null, rear: [], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [] },
-      bot: { playerId: "player-guest", vanguard: null, rear: [controlledAcrossSides], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [] }
+      human: { playerId: "player-host", vanguard: null, rear: [controlledAcrossSides], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [] },
+      bot: { playerId: "player-guest", vanguard: null, rear: [], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [] }
     }
   };
-  const controlledAttack = Engine.createGameEvent(crossState, {
-    type: "unit.attacked", actingPlayerId: "player-host", turnPlayerId: "player-host",
-    sourceCardInstanceId: controlledAcrossSides.uid, sourceOwnerPlayerId: "player-guest",
-    sourceControllerPlayerId: "player-host", subjectCardInstanceId: controlledAcrossSides.uid,
-    subjectOwnerPlayerId: "player-guest", subjectControllerPlayerId: "player-host",
-    currentLocation: "rear-left", battleId: "battle-controlled"
-  });
+  const controlledAttack = authoritativeAttackEvent(crossState, controlledAcrossSides, "human", "rear-left", "battle-controlled");
   assert.equal(Reducer.discoverAutoTriggers(crossState, [controlledAttack], Engine).queued.length, 1);
   assert.equal(crossState.pendingAbility.side, "human");
   assert.equal(crossState.pendingAbility.triggerControllerPlayerId, "player-host");
@@ -257,13 +271,12 @@ function fixture() {
       human: { playerId: "player-host", vanguard: null, rear: [], drop: [], hand: [], damage: [], soul: [], deck: [], bind: [] },
       bot: { playerId: "player-guest", vanguard: null, rear: [source, rearOne, rearTwo], drop: [], hand: [], damage: [], soul: [], deck: [], bind: [] }
     },
-    pendingAttack: { attackerUid: source.uid, attackerSide: "bot", battleId: "battle-42" },
-    pendingAbility: {
-      side: "bot", instance: source, field: "rear-guard", ability,
-      triggerControllerPlayerId: "player-guest",
-      eventContext: { event: "attack", eventId: "event-42", battleId: "battle-42", gameEvent: { eventId: "event-42", type: "unit.attacked", sourceCardInstanceId: source.uid, subjectCardInstanceId: source.uid, sourceControllerPlayerId: "player-guest" } }
-    }
+    pendingAttack: null,
+    pendingAbility: null
   };
+  const gameEvent = authoritativeAttackEvent(state, source, "bot", "rear-left", "battle-42");
+  state.pendingAbility = { side: "bot", instance: source, field: "rear-guard", ability, triggerControllerPlayerId: "player-guest",
+    eventContext: { event: "attack", eventId: gameEvent.eventId, battleId: "battle-42", subjectZone: "rear-left", gameEvent } };
   return { state, source, rearOne, rearTwo };
 }
 function command(actorAuthUid, selection, extra = {}) {
@@ -329,9 +342,8 @@ test("trusted reducer resolves the host player's own prompt through the same sea
   const source = { uid: "host-attacker", cardId: "engorge-real-text", ownerPlayerId: "player-host", controllerPlayerId: "player-host" };
   const retired = { uid: "host-rear", cardId: "rear-unit", ownerPlayerId: "player-host", controllerPlayerId: "player-host" };
   state.players.human.rear = [source, retired];
-  state.pendingAttack = { attackerUid: source.uid, attackerSide: "human" };
-  const eventId = "host-event";
-  state.pendingAbility = { side: "human", field: "rear-left", instance: source, ability, triggerControllerPlayerId: "player-host", eventContext: { event: "attack", eventId, gameEvent: { eventId, type: "unit.attacked", sourceCardInstanceId: source.uid, subjectCardInstanceId: source.uid, sourceControllerPlayerId: "player-host" } } };
+  const gameEvent = authoritativeAttackEvent(state, source, "human", "rear-left", "host-event");
+  state.pendingAbility = { side: "human", field: "rear-left", instance: source, ability, triggerControllerPlayerId: "player-host", eventContext: { event: "attack", eventId: gameEvent.eventId, battleId: "host-event", subjectZone: "rear-left", gameEvent } };
   const hostCommand = command("auth-host", { instanceUid: source.uid, abilityId: ability.id, engorgeTargetUids: [retired.uid] }, { actionId: "host-decision" });
   assert.equal(Reducer.applyEngorgeDecision(state, hostCommand, seats, Engine).ok, true);
   assert.equal(state.players.human.drop[0].uid, retired.uid);
@@ -400,6 +412,6 @@ test("trusted ability reducer rechecks the exact queued trigger event before res
 
   const mismatched = simpleAbilityState({ effects: [{ op: "draw", target: "controller", count: 1 }] });
   mismatched.state.pendingAbility.eventContext.gameEvent.sourceCardInstanceId = "different-copy";
-  assert.equal(Reducer.applyAbilityDecision(mismatched.state, mismatched.command, seats, Engine).reason, "trigger-event-mismatch");
+  assert.equal(Reducer.applyAbilityDecision(mismatched.state, mismatched.command, seats, Engine).reason, "event-provenance-card-not-found");
   assert.deepEqual(mismatched.player.hand, []);
 });

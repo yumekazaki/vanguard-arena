@@ -3,12 +3,48 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
+const engine = require("../ability-engine.js");
+engine.registerAbilityDefinitions(require("../ability-definitions.js"));
+const serverReducer = require("../ability-server-reducer.js");
+
+function resolveTrustedAbilities(root, abilityIds) {
+  const wanted = new Set(abilityIds);
+  const found = new Map();
+  const { loadCatalog } = require("./audit-ability-catalog.js");
+  for (const card of loadCatalog(root)) {
+    for (const ability of engine.parseCardAbilitiesCached(card)) {
+      if (!wanted.has(ability.id)) continue;
+      const requiresTrustedActivation = ["AUTO", "ACT"].includes(ability.kind);
+      if (!ability.definition ||
+          requiresTrustedActivation && !serverReducer.hasTrustedServerAbilityDefinition?.(ability, engine) ||
+          requiresTrustedActivation && !serverReducer.supportsServerAbilityEffects?.(ability)) {
+        throw new Error(`Ability ${ability.id} does not have a trusted, authoritative production definition.`);
+      }
+      found.set(ability.id, ability);
+    }
+  }
+  for (const abilityId of wanted) if (!found.has(abilityId)) throw new Error(`Ability ${abilityId} was not found in the card catalog.`);
+  return found;
+}
 
 function atomicWrite(file, contents) {
   const temporary = `${file}.${process.pid}.tmp`;
   fs.writeFileSync(temporary, contents, { flag: "wx" });
   try { fs.renameSync(temporary, file); }
   catch (error) { fs.rmSync(temporary, { force: true }); throw error; }
+}
+
+function mergeAbilityEvidence(existing, update) {
+  const wasFullyVerified = existing?.status === "fully-verified" && existing.fullyVerified === true;
+  return {
+    ...existing,
+    ...update,
+    status: wasFullyVerified ? "fully-verified" : update.status,
+    testFiles: [...new Set([...(existing?.testFiles || []), ...(update.testFiles || [])])],
+    testCases: [...new Set([...(existing?.testCases || []), ...(update.testCases || [])])],
+    fullyVerified: wasFullyVerified || update.fullyVerified === true,
+    remaining: wasFullyVerified ? existing.remaining : update.remaining
+  };
 }
 
 function recordPassingEvidence(root, abilityIds, testFiles) {
@@ -21,16 +57,14 @@ function recordPassingEvidence(root, abilityIds, testFiles) {
   const testCases = [...`${run.stdout || ""}\n${run.stderr || ""}`.matchAll(/^ok \d+ - (.+)$/gm)].map(match => match[1].trim());
   if (!testCases.length) throw new Error("Test command passed but did not report any passing TAP cases.");
 
-  const definitions = require(path.join(root, "ability-definitions.js"));
-  const definitionById = new Map(definitions.map(definition => [definition.id, definition]));
+  const abilityById = resolveTrustedAbilities(root, abilityIds);
   const manifestPath = path.join(root, "card-verification-manifest.json");
   const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
   if (!Array.isArray(manifest.records)) throw new Error("Verification manifest has no record array.");
   const now = new Date().toISOString();
   for (const abilityId of abilityIds) {
-    const definition = definitionById.get(abilityId);
-    if (!definition) throw new Error(`Ability ${abilityId} is not in the trusted production registry.`);
-    const cardId = String(definition.cardId);
+    const ability = abilityById.get(abilityId);
+    const cardId = String(ability.cardId);
     const testSource = absoluteFiles.map(file => fs.readFileSync(file, "utf8")).join("\n");
     if (!testSource.includes(cardId)) throw new Error(`No test reference found for ${abilityId}.`);
     const record = {
@@ -44,7 +78,7 @@ function recordPassingEvidence(root, abilityIds, testFiles) {
     };
     const index = manifest.records.findIndex(existing => existing.abilityId === abilityId);
     if (index < 0) manifest.records.push(record);
-    else manifest.records[index] = { ...manifest.records[index], ...record };
+    else manifest.records[index] = mergeAbilityEvidence(manifest.records[index], record);
   }
   manifest.evidenceUpdatedAt = now;
   atomicWrite(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
@@ -63,4 +97,4 @@ if (require.main === module) {
   } catch (error) { process.stderr.write(`${error.message}\n`); process.exitCode = 1; }
 }
 
-module.exports = { recordPassingEvidence };
+module.exports = { mergeAbilityEvidence, resolveTrustedAbilities, recordPassingEvidence };

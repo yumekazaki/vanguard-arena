@@ -26,7 +26,6 @@ function fixture(cardId = IDS[0], side = "human", turnPlayerOverride = null) {
   const turnPlayerId = turnPlayerOverride || playerId;
   const event = Engine.createGameEvent(state, {
     type: "card.discarded", actingPlayerId: playerId, turnPlayerId,
-    sourceCardInstanceId: `discard-effect-${side}`, sourceControllerPlayerId: playerId,
     cardInstanceId: source.uid, subjectCardInstanceId: source.uid, subjectOwnerPlayerId: playerId, subjectControllerPlayerId: playerId,
     previousLocation: "hand", currentLocation: "drop", phase: turnPlayerId === playerId ? "main" : "opponent-turn", timingWindow: "discard-resolution"
   });

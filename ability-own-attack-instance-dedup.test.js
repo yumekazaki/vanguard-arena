@@ -22,7 +22,7 @@ test("Crimson Impact, Metatron power AUTO matches its exact Vanguard attack and 
   assert.equal(ability.trigger.targetLocation, "vanguard");
   assert.deepEqual(ability.requiredLocation, ["vanguard"]);
   assert.match(ability.printedText, /When this unit attacks a vanguard, this unit gets power \+3000 until the end of that battle\./i);
-  assert.equal(auditCatalog(cards).patterns[PATTERN_ID], 69);
+  assert.equal(auditCatalog(cards).patterns[PATTERN_ID], 70);
 
   const state = { matchId: "metatron-own-attack", eventSequence: 0, processedEvents: [], processedAbilityTriggers: [] };
   const event = Engine.createGameEvent(state, {

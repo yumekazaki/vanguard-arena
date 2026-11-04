@@ -126,6 +126,28 @@ test("the host can independently resolve their own Guardian discard-and-protect 
   assert.equal(fixture.state.pendingAttack.perfectGuard, true);
 });
 
+test("up-to-one Guardian protection resolves with zero targets for host and joining player", () => {
+  for (const ownerSide of ["human", "bot"]) {
+    const actorAuthUid = ownerSide === "human" ? "auth-host" : "auth-guest";
+    const noLegalTarget = setup("cfa-3492", { ownerSide });
+    assert.equal(noLegalTarget.ability.definition.effects[0]?.optionalTarget, true);
+    const attackedRear = cardInstance(cardDefinition("cfa-3"), `${ownerSide}-attacked-rear`, ownerSide === "human" ? "host" : "guest", { circle: "rear-left" });
+    noLegalTarget.state.players[ownerSide].rear.push(attackedRear);
+    noLegalTarget.state.pendingAttack.targetUid = attackedRear.uid;
+    noLegalTarget.state.pendingAttack.targetZone = "rear-left";
+    const noTargetAvailableResult = decide(noLegalTarget, actorAuthUid, {}, `gc-up-to-one-no-legal-target-${ownerSide}`);
+    assert.equal(noTargetAvailableResult.ok, true, JSON.stringify(noTargetAvailableResult));
+    assert.equal(noLegalTarget.state.pendingAttack.perfectGuard, undefined);
+    assert.deepEqual(noLegalTarget.state.players[ownerSide].drop.map(card => card.uid), [noLegalTarget.discard.uid]);
+
+    const declineLegalTarget = setup("cfa-3492", { ownerSide });
+    const declineTargetResult = decide(declineLegalTarget, actorAuthUid, { optionalNoTarget: true }, `gc-up-to-one-decline-target-${ownerSide}`);
+    assert.equal(declineTargetResult.ok, true, JSON.stringify(declineTargetResult));
+    assert.equal(declineLegalTarget.state.pendingAttack.perfectGuard, undefined);
+    assert.deepEqual(declineLegalTarget.state.players[ownerSide].drop.map(card => card.uid), [declineLegalTarget.discard.uid]);
+  }
+});
+
 test("all 92 exact generic Guardian discard-and-protect abilities are registered and server-supported", () => {
   const family = [];
   for (const definition of catalog) for (const ability of Engine.parseCardAbilitiesCached(definition)) {
@@ -143,12 +165,12 @@ test("all 92 exact generic Guardian discard-and-protect abilities are registered
   }
 });
 
-test("all 73 exact filtered Guardian protect abilities resolve for their owning host and joining player", () => {
+test("all 76 exact filtered Guardian protect abilities resolve for their owning host and joining player", () => {
   const family = [];
   for (const definition of catalog) for (const ability of Engine.parseCardAbilitiesCached(definition)) {
     if (ability.definition?.source?.patternId === "auto-gc-discard-protect-attacked-unit-v1") family.push(ability);
   }
-  assert.equal(family.length, 73);
+  assert.equal(family.length, 76);
   for (const ability of family) for (const ownerSide of ["human", "bot"]) {
     const defenderTargetZone = ability.definition.effects[0]?.targetFilter?.zone === "vanguard" ? "vanguard" : "rear";
     const fixture = setup(ability.cardId, { abilityId: ability.id, ownerSide, defenderTargetZone, attackTargetUid: `${ownerSide}-target` });
