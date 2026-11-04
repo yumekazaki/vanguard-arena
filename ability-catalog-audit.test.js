@@ -148,6 +148,24 @@ test("all exact catalog matches for the reviewed GC shield template remain valid
   assert.deepEqual(report.invalidCompiled,[]);
 });
 
+test("front-row Intercept ability suppression is an audited structured CONT effect for all six exact cards",()=>{
+  const ids=["cfa-13119","cfa-13120","cfa-13121","cfa-13122","cfa-13123","cfa-13124"];
+  const cards=loadCatalog().filter(card=>ids.includes(String(card.id)));
+  const report=auditCatalog(cards);
+  const abilities=cards.flatMap(card=>engine.parseCardAbilitiesCached(card)).filter(ability=>ability.definition?.source?.patternId==="cont-front-row-opponent-intercept-ability-negation-v1");
+  assert.equal(abilities.length,6);
+  assert.equal(report.patterns["cont-front-row-opponent-intercept-ability-negation-v1"],6);
+  assert.deepEqual(report.invalidCompiled,[]);
+  for(const ability of abilities){
+    assert.equal(ability.kind,"CONT",ability.id);
+    assert.deepEqual(ability.requiredLocation,["rear-guard"],ability.id);
+    assert.deepEqual(ability.definition.continuousEffects[0],{
+      type:"suppress-abilities",target:"opponent-intercepted-guardian-unit",abilityKinds:["AUTO","CONT"],duration:"continuous",
+      sourceCircle:"front-row",targetZone:"guardian",targetEntryLocation:"rear-guard",condition:{op:"controller-turn"}
+    },ability.id);
+  }
+});
+
 test("all 55 opponent-grade Guardian Circle shields retain exact threshold and apply only on GC",()=>{
   const abilities=[];
   for(const card of loadCatalog())for(const ability of engine.parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="cont-gc-opponent-grade-shield-v1")abilities.push(ability);
@@ -316,7 +334,7 @@ test("all standalone Sentinel keyword reminder variants compile as structured CO
 
 
 test("all exact Lord keyword templates compile as continuous attack restrictions",()=>{
-  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const report=auditCatalog(loadCatalog());assert.equal(report.patterns["cont-lord-attack-restriction-v1"],115);assert.deepEqual(report.invalidCompiled,[]);
+  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const report=auditCatalog(loadCatalog());assert.equal(report.patterns["cont-lord-attack-restriction-v1"],116);assert.deepEqual(report.invalidCompiled,[]);
 });
 
 
@@ -327,8 +345,14 @@ test("all exact ride draw and Quick Shield abilities compile with ride and grade
 
 
 test("all exact Guardian Circle discard protection variants compile with attacked-target validation",()=>{
-  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const report=auditCatalog(loadCatalog());assert.equal(report.patterns["auto-gc-discard-protect-attacked-unit-v1"],73);assert.deepEqual(report.invalidCompiled,[]);
+  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const report=auditCatalog(loadCatalog());assert.equal(report.patterns["auto-gc-discard-protect-attacked-unit-v1"],76);assert.deepEqual(report.invalidCompiled,[]);
   for(const card of loadCatalog())for(const ability of parseCardAbilitiesCached(card)){if(ability.definition?.source?.patternId!=="auto-gc-discard-protect-attacked-unit-v1")continue;assert.equal(ability.trigger?.eventType,"card.placed");assert.equal(ability.trigger?.circles.includes("guardian"),true);assert.equal(ability.costStatus,"supported-cost");assert.equal(ability.effects[0]?.requiresAttackedTarget,true);assert.equal(ability.effects[0]?.targetFilter?.mustBeAttacked,true)}
+});
+
+test("Guardian Circle up-to-one protection wording compiles to optional target selection only",()=>{
+  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");let familyCount=0,optionalCount=0;
+  for(const card of loadCatalog())for(const ability of parseCardAbilitiesCached(card)){if(ability.definition?.source?.patternId!=="auto-gc-discard-protect-attacked-unit-v1")continue;familyCount++;const optional=/\bchoose up to one of your\b/i.test(ability.printedText);assert.equal(ability.effects[0]?.optionalTarget===true,optional,ability.id);if(optional)optionalCount++}
+  assert.equal(familyCount,76);assert.equal(optionalCount,16);
 });
 
 
@@ -351,7 +375,7 @@ test("all conditional-discard Guardian Circle protection variants compile to exa
 });
 
 test("all catalog all-clans-and-nations abilities compile as continuous identity keywords",()=>{
- const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const report=auditCatalog(loadCatalog());assert.equal(report.patterns["cont-all-clans-and-nations-v1"],28);assert.deepEqual(report.invalidCompiled,[]);for(const card of loadCatalog())for(const ability of parseCardAbilitiesCached(card)){if(ability.definition?.source?.patternId!=="cont-all-clans-and-nations-v1")continue;assert.equal(ability.kind,"CONT");assert.deepEqual(ability.definition.keywords,["all-clans-and-nations"]);assert.equal(ability.trigger,null);assert.equal(ability.definition.effects,undefined)}
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const report=auditCatalog(loadCatalog());assert.equal(report.patterns["cont-all-clans-and-nations-v1"],29);assert.deepEqual(report.invalidCompiled,[]);for(const card of loadCatalog())for(const ability of parseCardAbilitiesCached(card)){if(ability.definition?.source?.patternId!=="cont-all-clans-and-nations-v1")continue;assert.equal(ability.kind,"CONT");assert.deepEqual(ability.definition.keywords,["all-clans-and-nations"]);assert.equal(ability.trigger,null);assert.equal(ability.definition.effects,undefined)}
 });
 
 test("all 24 Vanguard CONT missed-attack hit-effect cards compile as a source-scoped keyword",()=>{
@@ -431,7 +455,7 @@ test("the exact Vanguard boost draw-discard catalog card is compiled and audit-c
 test("catalog audit compiles all exact top-five grade-three placement searches",()=>{const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const cards=loadCatalog(),matches=[];for(const card of cards)for(const ability of require("./ability-engine.js").parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="auto-placement-top-five-grade-three-search-discard-v1")matches.push(ability);assert.equal(matches.length,25);assert.ok(matches.every(ability=>ability.trigger?.sourceLocation==="hand"&&ability.conditionStatus==="no-explicit-condition-detected"&&ability.costStatus==="no-cost"));assert.deepEqual(auditCatalog(cards).invalidCompiled,[])});
 
 test("exact standalone Resist CONT variants compile and remain target-protective",()=>{
- const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const report=auditCatalog(loadCatalog());assert.equal(report.patterns["cont-resist-keyword-v1"],22);assert.deepEqual(report.invalidCompiled,[]);for(const card of loadCatalog())for(const ability of parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="cont-resist-keyword-v1"){assert.equal(ability.kind,"CONT");assert.deepEqual(ability.definition.keywords,["resist"]);assert.equal(ability.trigger,null);assert.equal(ability.effects,null)}
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const report=auditCatalog(loadCatalog());assert.equal(report.patterns["cont-resist-keyword-v1"],25);assert.deepEqual(report.invalidCompiled,[]);for(const card of loadCatalog())for(const ability of parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="cont-resist-keyword-v1"){assert.equal(ability.kind,"CONT");assert.deepEqual(ability.definition.keywords,["resist"]);assert.equal(ability.trigger,null);assert.equal(ability.effects,null)}
 });
 
 test("all seven exact RC cannot-be-chosen CONT catalog abilities are location-scoped passive Resist",()=>{
@@ -506,9 +530,9 @@ test("all five real Counter-Blast During-this-turn ACT records compile as source
  assert.deepEqual(report.invalidCompiled,[]);
 });
 
-test("all 31 source-to-Soul friendly-power ACT records use the same parsed target effect",()=>{
+test("all 32 required-target source-to-Soul friendly-power ACT records preserve the mandatory target effect",()=>{
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const report=auditCatalog(loadCatalog());
- assert.equal(report.patterns["act-source-to-soul-choose-friendly-power-turn-v1"],31);
+ assert.equal(report.patterns["act-source-to-soul-choose-friendly-power-turn-v1"],32);
  const matched=[];for(const card of loadCatalog())for(const ability of parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="act-source-to-soul-choose-friendly-power-turn-v1"){
   matched.push(card.id);assert.equal(ability.choiceStatus,"modeled");assert.equal(ability.costStatus,"supported-cost");assert.deepEqual(ability.costs,[{type:"source-to-soul",count:1}]);assert.equal(ability.definition.effects[0].targetFilter.excludeSource,true);
  }
@@ -754,7 +778,7 @@ test("Grade 3 ACT top-five source-to-Soul searches compile for the real catalog 
 
 test("unconditional own-Vanguard attack power supports legacy source and duration wording",()=>{
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const report=auditCatalog(loadCatalog());
- assert.equal(report.patterns["auto-own-attack-vanguard-power-battle-v1"],69);
+  assert.equal(report.patterns["auto-own-attack-vanguard-power-battle-v1"],70);
  for(const cardId of ["cfa-918","cfa-1027","cfa-2028","cfa-2233","cfa-2465","cfa-2598","cfa-2900"]){const card=loadCatalog().find(item=>item.id===cardId);const ability=parseCardAbilitiesCached(card).find(item=>item.definition?.source?.patternId==="auto-own-attack-vanguard-power-battle-v1");assert.ok(ability);assert.equal(ability.trigger?.eventType,"unit.attacked");assert.equal(ability.trigger?.subject,"source");assert.equal(ability.trigger?.targetLocation,"vanguard");assert.equal(ability.conditionStatus,"no-explicit-condition-detected");assert.deepEqual(ability.definition.effects,[{op:"modify-power",target:"source",amount:Number(ability.definition.printedText.match(/power \+(\d+)/i)?.[1]),duration:"battle"}]);}
  assert.deepEqual(report.invalidCompiled,[]);
 });
@@ -832,9 +856,9 @@ test("all eight exact clan-conditioned VC-or-RC Soul Charge AUTO abilities remai
  assert.deepEqual(report.invalidCompiled,[]);
 });
 
-test("all thirty optional source-to-soul power ACT abilities preserve target optionality and filters",()=>{
+test("all thirty-one optional source-to-soul power ACT abilities preserve target optionality and filters",()=>{
  const cards=loadCatalog(),report=auditCatalog(cards),matches=[];
- assert.equal(report.patterns["act-source-to-soul-optional-up-to-one-friendly-power-v1"],30);
+ assert.equal(report.patterns["act-source-to-soul-optional-up-to-one-friendly-power-v1"],31);
  for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card)){
   if(ability.definition?.source?.patternId!=="act-source-to-soul-optional-up-to-one-friendly-power-v1")continue;
   matches.push({card,ability});
@@ -850,7 +874,8 @@ test("all thirty optional source-to-soul power ACT abilities preserve target opt
   assert.equal(effect.targetFilter.controller,"source-controller",card.id);
   assert.equal(effect.targetFilter.excludeSource,true,card.id);
  }
- assert.equal(matches.length,30);
+ assert.equal(matches.length,31);
+ assert.ok(matches.some(({card,ability})=>card.id==="cfa-3387"&&ability.id==="cfa-3387:0"),"Amethyst Beast Tamer is in the optional-target variant");
  assert.deepEqual(report.invalidCompiled,[]);
 });
 
@@ -913,9 +938,9 @@ test("named-Vanguard Guardian CONT shield batch preserves exact name, circle, an
  assert.deepEqual(report.invalidCompiled,[]);
 });
 
-test("non-clan VC/RC CONT power penalty compiles all eleven exact catalog abilities and checks only controller field clans",()=>{
+test("non-clan VC/RC CONT power penalty compiles all twelve exact catalog abilities and checks only controller field clans",()=>{
  const cards=loadCatalog(),report=auditCatalog(cards),matches=[];
- assert.equal(report.patterns["cont-vc-rc-non-clan-field-power-penalty-v1"],11);
+ assert.equal(report.patterns["cont-vc-rc-non-clan-field-power-penalty-v1"],12);
  for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card)){
   if(ability.definition?.source?.patternId!=="cont-vc-rc-non-clan-field-power-penalty-v1")continue;
   matches.push({card,ability});assert.equal(ability.conditionStatus,"modeled",card.id);assert.deepEqual(ability.requiredLocation,["vanguard","rear-guard"],card.id);
@@ -925,7 +950,7 @@ test("non-clan VC/RC CONT power penalty compiles all eleven exact catalog abilit
   assert.equal(engine.evaluateContinuousEffects([ability],{...context,location:"guardian",sourceInstanceId:"source",targetInstanceId:"source",controllerFieldCards:[{uid:"foreign",clans:["Unrelated Clan"]}]}).power,0,card.id);
   assert.equal(engine.evaluateContinuousEffects([ability],{...context,location:"rear-guard",sourceInstanceId:"source",targetInstanceId:"source",controllerFieldCards:[{uid:"ambiguous",clans:[clan,"Unrelated Clan"]}]}).power,0,card.id);
  }
- assert.equal(matches.length,11);
+ assert.equal(matches.length,12);
  assert.deepEqual(report.invalidCompiled,[]);
 });
 

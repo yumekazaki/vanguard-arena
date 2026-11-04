@@ -35,8 +35,8 @@ test("central work queue covers unverified abilities and separates reviewed mech
     latestFullSuite: { status: "passed", tests: 1, passed: 1, validationInputDigest: "stale" }
   }, path.resolve(__dirname, ".."));
 
-  assert.equal(result.counts.catalogAbilities, 17240);
-  assert.equal(result.counts.remainingAbilities, 17240);
+  assert.equal(result.counts.catalogAbilities, 17254);
+  assert.equal(result.counts.remainingAbilities, 17254);
   assert.equal(result.counts.fullyVerifiedCards, 0);
   assert.equal(result.counts.fullyVerifiedAbilities, 0);
   assert.equal(result.validationEvidenceFresh, false);
@@ -59,8 +59,12 @@ test("central work queue covers unverified abilities and separates reviewed mech
   assert.ok(reviewed.dependencies.some(dependency => dependency.id === "fresh-full-suite"));
   assert.ok(candidate.dependencies.some(dependency => dependency.type === "candidate-review" && dependency.shared === false));
   assert.ok(candidate.dependencies.some(dependency => dependency.id === `whole-card-evidence:${candidate.cardId}`));
-  assert.equal(result.counts.missingTrustedServerDefinitions, 0, "every compiled definition in the current registry must be registered for trusted server resolution");
-  assert.deepEqual(result.items.filter(item => item.missingTrustedDefinition), []);
+  assert.deepEqual(result.items.filter(item => item.missingTrustedDefinition).map(item => item.abilityId), [],
+    "every compiled AUTO/ACT in this fixture must pass the exact trusted-server definition gate");
+  const unconfirmedNamedVanguard = result.items.find(item => item.abilityId === "cfa-10769:0");
+  assert.ok(unconfirmedNamedVanguard);
+  assert.equal(unconfirmedNamedVanguard.missingTrustedDefinition, false,
+    "Ala Dargente has an exact card-number source and an exact server-validated definition");
   for (const abilityId of ["cfa-2637:0", "cfa-3079:0", "cfa-4210:0", "cfa-4216:1", "cfa-4456:0", "cfa-4752:0"]) {
     const dynamicallyTrusted = result.items.find(item => item.abilityId === abilityId);
     assert.ok(dynamicallyTrusted, `expected the catalog-compiled paid Vanguard-attack ability ${abilityId}`);

@@ -66,7 +66,25 @@ function auditCatalog(cards, parseAbilities = engine.parseCardAbilitiesCached) {
       if (ability.definition.kind !== ability.kind) reasons.push("ability-kind-mismatch");
       const hasStructuredKeyword = ability.kind === "CONT" && Array.isArray(ability.definition.keywords) && ability.definition.keywords.length > 0;
       const hasStructuredRestriction = ability.kind === "CONT" && Array.isArray(ability.definition.continuousRestrictions) && ability.definition.continuousRestrictions.length > 0;
-      const hasStructuredContinuousEffect = ability.kind === "CONT" && Array.isArray(ability.definition.continuousEffects) && ability.definition.continuousEffects.length > 0 && ability.definition.continuousEffects.every(effect => effect?.type === "grant-keyword" && effect.target === "source" && effect.duration === "continuous" && typeof effect.keyword === "string" && Boolean(effect.keyword.trim()) && Boolean(effect.condition?.op));
+      const hasStructuredContinuousEffect = ability.kind === "CONT" && Array.isArray(ability.definition.continuousEffects) && ability.definition.continuousEffects.length > 0 && ability.definition.continuousEffects.every(effect => {
+        const sourceGrant = effect?.target === "source";
+        const sameColumnResistGrant = ability.definition.source?.patternId === "cont-rc-same-column-grants-resist-v1" &&
+          effect?.target === "other-friendly-rear-guards-same-column" && effect.keyword === "resist" &&
+          JSON.stringify(ability.definition.requiredLocation || []) === JSON.stringify(["rear-guard"]);
+        const orderZoneGradeBoostGrant = ability.definition.source?.patternId === "cont-order-zone-grade-rearguards-grant-boost-v1" &&
+          effect?.target === "controller-rear-guards-of-grade" && effect?.type === "grant-keyword" && effect.keyword === "boost" &&
+          Number.isInteger(Number(effect.grade)) && Number(effect.grade) >= 0 && Number(effect.grade) <= 4 &&
+          effect.duration === "continuous" && effect.condition?.op === "always" &&
+          JSON.stringify(ability.definition.requiredLocation || []) === JSON.stringify(["order"]);
+        const exactInterceptAbilitySuppression = ability.definition.source?.patternId === "cont-front-row-opponent-intercept-ability-negation-v1" &&
+          effect?.type === "suppress-abilities" && effect.target === "opponent-intercepted-guardian-unit" &&
+          JSON.stringify(effect.abilityKinds) === JSON.stringify(["AUTO", "CONT"]) && effect.duration === "continuous" &&
+          effect.sourceCircle === "front-row" && effect.targetZone === "guardian" && effect.targetEntryLocation === "rear-guard" &&
+          effect.condition?.op === "controller-turn" && JSON.stringify(ability.definition.requiredLocation || []) === JSON.stringify(["rear-guard"]);
+        const exactKeywordGrant = effect?.type === "grant-keyword" && (sourceGrant || sameColumnResistGrant || orderZoneGradeBoostGrant) && effect.duration === "continuous" &&
+          typeof effect.keyword === "string" && Boolean(effect.keyword.trim()) && Boolean(effect.condition?.op);
+        return exactKeywordGrant || exactInterceptAbilitySuppression;
+      });
       const hasStructuredClanIdentity = ability.kind === "CONT" && Array.isArray(ability.definition.clanIdentityEffects) && ability.definition.clanIdentityEffects.length > 0 && ability.definition.clanIdentityEffects.every(effect => effect?.type === "conditional-clan-only" && typeof effect.clan === "string" && Boolean(effect.clan.trim()) && effect.duration === "continuous" && effect.condition?.type === "controller-vanguard-has-only-clan" && String(effect.condition.value || "").trim().toLocaleLowerCase() === effect.clan.trim().toLocaleLowerCase());
       if ((!Array.isArray(ability.definition.effects) || !ability.definition.effects.length) && !hasStructuredKeyword && !hasStructuredRestriction && !hasStructuredContinuousEffect && !hasStructuredClanIdentity) reasons.push("missing-effect-program");
       if (ability.kind === "AUTO" && ability.trigger?.status !== "recognized-trigger") reasons.push("unrecognized-auto-trigger");

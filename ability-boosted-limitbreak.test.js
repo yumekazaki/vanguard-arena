@@ -70,9 +70,11 @@ test("boost AUTO checks the exact boosted card and lets the joining player pay a
   const damage = { uid: "guest-face-up-damage", faceDown: false, ownerPlayerId: "guest", controllerPlayerId: "guest" };
   const state = {
     matchId: "boost-limit-break-room", stateVersion: 5, eventSequence: 0, turn: 4, side: "bot", phase: 5,
-    pendingAttack: { attackerUid: target.uid, attackerSide: "bot", power: 18000, battleId: "guest-boost-battle" },
+    pendingAttack: { attackerUid: target.uid, attackerSide: "bot", attackerPlayerId: "guest", attackerZone: "vanguard",
+      defenderSide: "human", defenderPlayerId: "host", targetUid: "host-opponent-vanguard", targetZone: "vanguard",
+      boostUid: source.uid, boostZone: "rear-left", power: 18000, battleId: "guest-boost-battle" },
     processedAbilityTriggers: [], players: {
-      human: { playerId: "host", vanguard: null, rear: [], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [] },
+      human: { playerId: "host", vanguard: { uid: "host-opponent-vanguard", cardId: "cfa-3", ownerPlayerId: "host", controllerPlayerId: "host", grade: 3, unitCard: true }, rear: [], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [] },
       bot: { playerId: "guest", vanguard: target, rear: [source], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [damage], deck: [] }
     }
   };

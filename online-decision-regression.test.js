@@ -58,6 +58,29 @@ test("joining player can choose their own Heal trigger target and skip", () => {
   );
 });
 
+test("joining player's active trigger choice is not blocked by queued resolution work", () => {
+  const queuedWindows = [
+    { pendingAbility: { side: "bot", abilityId: "queued-auto" } },
+    { pendingAbilities: [{ side: "bot", abilityId: "queued-auto" }] },
+    { pendingDamageQueue: [{ type: "damage-check", side: "bot" }] }
+  ];
+  for (const [index, queued] of queuedWindows.entries()) {
+    const game = state();
+    game.pendingTrigger = { side: "bot", stage: "heal-target" };
+    Object.assign(game, queued);
+    assert.deepEqual(
+      validateRemoteActionRequest(game, request(`manual:trigger-pick:joiner-damage`, `queued-trigger-${index}`), "joining-player"),
+      { ok: true },
+      `queued resolution window ${index} must not block the active player's trigger choice`
+    );
+    assert.equal(
+      validateRemoteActionRequest(game, request("draw", `queued-unrelated-${index}`), "joining-player").reason,
+      "resolution-in-progress",
+      `queued resolution window ${index} must continue blocking unrelated actions`
+    );
+  }
+});
+
 test("joining player's power trigger target is authorized only for their pending trigger", () => {
   const game = state();
   game.players.bot.rear = [{ uid: "joiner-rearguard" }, null, null, null, null];

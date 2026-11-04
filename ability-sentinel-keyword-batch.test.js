@@ -21,6 +21,8 @@ test("all 410 catalog Sentinel keywords remain passive CONT keywords, never manu
     assert.equal(ability.kind, "CONT", card.id);
     assert.equal(ability.trigger, null, card.id);
     assert.deepEqual(ability.definition.keywords, ["sentinel"], card.id);
+    assert.equal(ability.definition.choicesReviewed, true, card.id);
+    assert.notEqual(ability.choiceStatus, "needs-review", card.id);
     assert.equal(ability.definition.effects, undefined, card.id);
     assert.equal(Engine.hasAbilityKeyword([ability], "sentinel"), true, card.id);
     assert.equal(Engine.hasAbilityKeyword(card, "sentinel"), true, card.id);

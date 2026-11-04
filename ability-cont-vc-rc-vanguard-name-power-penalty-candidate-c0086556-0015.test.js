@@ -16,6 +16,7 @@ const FAMILY = new Map([
   ["cfa-536", ["Amber Dragon, Eclipse", "Amber Dragon, Dusk"]],
   ["cfa-63", ["Evil Armor General, Giraffa", "Elite Mutant, Giraffa"]]
 ]);
+const EXPECTED_ABILITY_IDS = ["cfa-24:0", "cfa-24:1", "cfa-251:0", "cfa-251:1", "cfa-536:0", "cfa-536:1", "cfa-63:0", "cfa-63:1"];
 const cards = loadCatalog();
 const SEATS = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 
@@ -52,12 +53,13 @@ function player(playerId, vanguard, rear = []) {
   };
 }
 
-function attackPower({ cardId, side, sourceLocation, controllerVanguardName = "Unrelated Vanguard", opponentVanguardName = "Opponent Vanguard", actionTag }) {
+function attackPower({ cardId, side, sourceLocation, controllerVanguardName = "Unrelated Vanguard", opponentVanguardName = "Opponent Vanguard", actionTag, details = false, attackerIsSource = true }) {
   const card = cards.find(value => value.id === cardId);
   const ownerId = side === "human" ? "player-host" : "player-guest";
   const opponentId = side === "human" ? "player-guest" : "player-host";
   const opponentSide = side === "human" ? "bot" : "human";
   const source = unit(`source-${side}-${cardId}-${sourceLocation}-${actionTag}`, cardId, card.name, ownerId, 2, 10000);
+  const attacker = attackerIsSource ? source : unit(`unrelated-attacker-${side}-${cardId}-${actionTag}`, "cfa-3", "Unrelated Attacker", ownerId, 2, 10000);
   const friendlyVanguard = sourceLocation === "vanguard"
     ? source
     : unit(`friendly-vanguard-${side}-${cardId}-${actionTag}`, "fixture-own-vanguard", controllerVanguardName, ownerId, 3, 13000);
@@ -68,7 +70,7 @@ function attackPower({ cardId, side, sourceLocation, controllerVanguardName = "U
     processedActionIds: [], pendingAttack: null, pendingAbility: null, pendingAbilities: [], pendingTrigger: null,
     authoritySeats: { hostSide: "human", guestSide: "bot" },
     players: {
-      [side]: player(ownerId, friendlyVanguard, sourceLocation === "rear-guard" ? [source] : []),
+      [side]: player(ownerId, friendlyVanguard, [...(sourceLocation === "rear-guard" ? [source] : []), ...(!attackerIsSource ? [attacker] : [])]),
       [opponentSide]: player(opponentId, opposingVanguard)
     }
   };
@@ -76,13 +78,14 @@ function attackPower({ cardId, side, sourceLocation, controllerVanguardName = "U
     actorAuthUid: side === "human" ? SEATS.hostAuthUid : SEATS.guestAuthUid,
     actionId: `attack-${state.matchId}`,
     expectedStateVersion: 0,
-    payload: { type: "game-action", action: "attack", attackerCardInstanceId: source.uid, targetCardInstanceId: opposingVanguard.uid }
+    payload: { type: "game-action", action: "attack", attackerCardInstanceId: attacker.uid, targetCardInstanceId: opposingVanguard.uid }
   }, SEATS, Engine);
   assert.equal(result.ok, true, `${side}/${cardId}/${sourceLocation}/${actionTag}: ${result.reason}`);
-  return Number(result.state.pendingAttack.power);
+  return details ? { state: result.state, source, attacker, ability: findAbility(cardId, 1), ownerId, side } : Number(result.state.pendingAttack.power);
 }
 
 test("the four exact CONT penalties preserve catalog text, IDs, scope, and compile cleanly", () => {
+  assert.deepEqual([...FAMILY.keys()].flatMap(cardId => [`${cardId}:0`, `${cardId}:1`]).sort(), EXPECTED_ABILITY_IDS);
   assert.deepEqual(contribution.map(ability => ability.id).sort(), [...FAMILY.keys()].map(cardId => `${cardId}:0`).sort());
   for (const [cardId, names] of FAMILY) {
     const ability = findAbility(cardId, 0);
@@ -158,5 +161,27 @@ test("each sibling own-attack AUTO is already trusted and is not duplicated by t
     assert.deepEqual(ability.definition.effects, [{ op: "modify-power", target: "source", amount: 2000, duration: "battle" }]);
     assert.equal(ability.canDecline, false);
     assert.ok(typeof ability.definition.source?.review === "string" && ability.definition.source.review.length > 0);
+  }
+});
+
+test("each sibling AUTO resolves only for its exact attacking source on both seats", () => {
+  for (const side of ["human", "bot"]) for (const cardId of FAMILY.keys()) for (const sourceLocation of ["vanguard", "rear-guard"]) {
+    const actionTag = `source-${side}-${sourceLocation}`;
+    const f = attackPower({ cardId, side, sourceLocation, actionTag, details: true });
+    assert.equal(f.state.pendingAbility?.side, side, `${cardId}/${side}/${sourceLocation} prompt owner`);
+    assert.equal(f.state.pendingAbility?.instance?.uid, f.source.uid, `${cardId}/${side}/${sourceLocation} source instance`);
+    assert.equal(f.state.pendingAbility?.ability?.id, `${cardId}:1`, `${cardId}/${side}/${sourceLocation} exact skill`);
+    const result = Reducer.applyAbilityDecision(f.state, {
+      actorAuthUid: side === "human" ? SEATS.hostAuthUid : SEATS.guestAuthUid,
+      actionId: `resolve-${actionTag}-${cardId}`,
+      expectedStateVersion: f.state.stateVersion,
+      payload: { type: "ability-response", accept: true, selection: { instanceUid: f.source.uid, abilityId: f.ability.id } }
+    }, SEATS, Engine);
+    assert.equal(result.ok, true, `${cardId}/${side}/${sourceLocation}: ${result.reason}`);
+    assert.equal(f.state.pendingAttack.power, 7000, `${cardId}/${side}/${sourceLocation} -5000 CONT plus +2000 battle AUTO`);
+
+    const unrelated = attackPower({ cardId, side, sourceLocation, actionTag: `other-${actionTag}`, details: true, attackerIsSource: false });
+    assert.notEqual(unrelated.state.pendingAbility?.instance?.uid, unrelated.source.uid, `${cardId}/${side}/${sourceLocation} unrelated attack cannot trigger this source`);
+    assert.equal((unrelated.state.pendingAbilities || []).some(item => item.instance?.uid === unrelated.source.uid && item.ability?.id === `${cardId}:1`), false);
   }
 });

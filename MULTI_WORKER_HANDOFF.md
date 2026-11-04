@@ -5,42 +5,45 @@
 - Repository: https://github.com/yumekazaki/vanguard-arena
 - Local project: `C:\Users\yumek\Documents\Codex\2026-10-24\ne\work\vanguard-arena`
 - Collaboration branch: `codex/standard-ride-deck` (not the GitHub Pages publishing branch)
-- Local checkpoint: `3d1561cc` plus uncommitted event-identity and registry updates. These local changes have not been pushed; do not publish this checkout yet.
-- The local branch currently tracks `origin/main` by mistake. Do not use GitHub Desktop's Push button until its upstream is corrected and the integration checkpoint is reviewed.
-- Registry baseline: `c00865569ef43a5915401e313ef036c25dc963b2`
+- Current local baseline: `320008f138b9fccfc1dea30b2ebc2b542aef927f` on `codex/standard-ride-deck`, tracking `origin/codex/standard-ride-deck` and 15 commits ahead. The checkout also contains uncommitted implementation, test, catalog, and registry changes. These changes have not been pushed; review them before publishing.
+- Registry baseline: `320008f138b9fccfc1dea30b2ebc2b542aef927f`
 - Exact queue: `ability-work-registry.jsonl`; batch status and dependencies: `ability-work-batches.json`; ownership: `ability-work-assignments.json`; counts and baseline: `ability-work-registry-manifest.json`.
 - `codex/standard-ride-deck` is the shared collaboration branch; it is separate from the GitHub Pages publishing branch. Check its latest commit before creating worker checkouts.
 
 ## Actual measured status
 
-- Catalog snapshot: 14,022 cards, 17,240 printed ability blocks.
-- 4,377 abilities compiled (25.39%); 12,863 remain unsupported or unreviewed.
-- 647 cards meet the strict whole-card verification gate. Do not infer card completion from parsed or compiled abilities.
-- Latest complete source suite: `node --test`, 1,642/1,642 passing in 350.39 seconds on 2026-10-31; evidence is fresh for the current source checkpoint. Queue/registry focused tests pass 9/9.
-- Latest concurrent catalog pipeline: eight workers, 57 shards, 2,892.7 ms; it classified existing records and verified zero new cards. This is parsing throughput, not verification throughput.
-- Current registry: 16,593 queued abilities; 275 reserved; 455 available batches; 21 active assignments (14 primary-session reservations and 7 claimed in-progress batches). Queue evidence is fresh. The strict card gate remains at 647 verified cards.
-- Live authoritative online multiplayer validation remains outstanding. Browser matches still use a host-relay path for some actions; reducer tests do not prove live multiplayer authority.
+- Catalog snapshot: 14,022 cards, 17,254 printed ability blocks.
+- 4,576 abilities have compiled definitions (26.52%); 12,678 remain unsupported or unreviewed. This is not a card-completion percentage.
+- 803 cards and 812 abilities meet the strict whole-card verification gate. Do not infer card completion from parsed or compiled abilities.
+- Latest recorded passing complete suite: 2,054/2,054 on 2026-11-04 00:14 UTC; its evidence is stale for current source changes. A full pre-publish run on 2026-11-04 completed 2,062/2,063 tests; the sole failure was an outdated work-queue expectation for `cfa-10769:0`, which the exact trusted reducer definition now accepts. The expectation was corrected and the related focused suite passed 6/6. The full suite has not yet been rerun after that correction, so current evidence is not marked fresh.
+- Current queue/registry snapshot (generated 2026-11-04): 16,442 queued abilities; 1,130 reserved; 15,312 available; 414 available batches; 58 active assignment records (54 reserved, 4 in progress). Queue validation reports 0 invalid definitions, 9,961 missing requirements, 12,722 missing tests, and 3,720 stale suite records. These are remaining work, not ignored warnings.
+- A strict whole-card promotion pass verified one additional single-ability card (`cfa-9042`), bringing the totals above to 803 cards and 812 abilities. The incomplete sibling assignment on `cfa-9115` remains reserved.
+- Main-Phase G-Zone ACT timing is honored by the trusted reducer and remote request pre-check; the G-deck inspect menu can expose eligible reviewed ACTs in Main Phase. The normal Stride Step default remains intact. `PRIMARY-GZONE-STRIDE` owns 84 ability rows across 30 affected cards; 18 exact named-Vanguard Imaginary Gift Stride ACTs now have definitions and focused tests, while the batch still has unfinished rows and no new whole-card verification claim. The batch is not a claim that all 84 are Stride abilities or that any of those cards are fully verified.
+- The registry builder was corrected so `PRIMARY-GZONE-STRIDE` no longer duplicates the other reserved assignments. A direct consistency check confirmed all 16,442 queued abilities appear in exactly one batch.
+- Sentinel keyword parsing now treats the printed four-copy reminder as a deck-construction restriction, not an activation choice. All 410 Sentinel CONT records still remain passive, and the catalog regression now confirms none is left with an unreviewed choice classification. Focused Sentinel/catalog checks passed 118/118; the full suite above passed after the fix.
+- A hot regression that repeatedly searched the full card catalog for legal/illegal targets now caches the two examples each filter needs. Its expensive assertion fell from 53.20 seconds in the prior full-suite log to 0.45 seconds in the latest full-suite log; all assertions remain and the full suite passes.
+- A read-only catalog audit found 140 gauge-related ability IDs on 96 cards. All 140 remain unreviewed; 10 are already reserved. The equip-gauge family lacks an authoritative attached-card model and must not be reported as implemented based on the catalog classification.
+- This local checkpoint has not been pushed or deployed. Live authoritative online multiplayer validation remains outstanding. Browser matches still use a host-relay path for some actions; reducer tests do not prove live multiplayer authority.
 
-## Preassigned independent batches
+## Current assignment status
 
-These exact batches are already reserved in the registry. Each worker must use the matching worker ID. Do not run the claim script for a reserved batch; it correctly accepts only `available` batches.
+The current registry has 58 active assignment records: 54 reserved and 4 in progress. The authoritative owners and IDs are in `ability-work-assignments.json`; generated status and expanded whole-card scope are in `ability-work-batches.json`. Do not rely on the older static worker table or treat any reserved batch as claimable.
 
-| Batch | Worker ID | Scope |
+These four batches are in progress and must not be assigned again:
+
+| Batch | Owner | Current scope |
 |---|---|---|
-| `PRIMARY-WORKER-CONT-DIVINE-SKILL-ATTACK-LOCK-6` | `worker-divine-skill-attack-lock` | 6 cards, 12 abilities; preserve the separate own-attack AUTO on each card while reviewing the Divine Skill CONT. |
-| `PRIMARY-WORKER-CONT-SOUL-CLAN-COUNT-6-4` | `worker-soul-clan-count` | 4 cards, 4 abilities; clan-specific soul-count CONT power. |
-| `PRIMARY-WORKER-CONT-SAME-COLUMN-KEYWORD-4` | `worker-same-column-keyword` | 4 cards, 12 abilities; same-column keyword CONT plus every sibling ability on those cards. |
+| `PRIMARY-ACT-HAND-CREST-GRADE-3-NAME-SEARCH-5` | `primary-session` | Five ACTs have definitions and ability-level tests; whole-card evidence remains incomplete. |
+| `PRIMARY-AUTO-GC-CLAN-PROTECT-3` | `worker-gc-protect` | Three exact Guardian Circle abilities; contribution and focused tests are present, pending primary review and whole-card evidence. |
+| `PRIMARY-AUTO-RC-GRADE3-DISCARD-SEARCH-3` | `worker-rc-search` | Three assigned abilities remain unreviewed; no trusted instance definitions recorded. |
+| `PRIMARY-AUTO-VC-STRIDE-POWER-3` | `primary-session/stride-power-audit` | Three abilities have tests-passing evidence; three sibling abilities remain unsupported. |
 
-All three reserved batches own every ability on their listed cards, including sibling abilities. Keep the card unverified unless every printed ability passes the complete card gate.
+Only choose a newly generated batch currently marked `available` in `ability-work-batches.json`; IDs change when the queue is rebuilt. Claim it atomically before implementation.
 
-Other batch IDs may be selected only from entries whose `status` is `available` in `ability-work-batches.json`. The first available candidate batch IDs at this checkpoint are `CANDIDATE-C0086556-0004` through `CANDIDATE-C0086556-0013`; batches 0001–0003 are already claimed. Always confirm availability on the collaboration branch before assigning a batch.
+## Open worker pull requests (checked 2026-11-04)
 
-`CANDIDATE-C0086556-0014` is also claimed by `codex-soul-name-variants`; it owns all eight abilities on `cfa-11767`, `cfa-11769`, `cfa-242`, and `cfa-4411`, focusing on four Soul-name CONTs. The next available candidate ID skips to `CANDIDATE-C0086556-0015`.
-
-## Open worker pull requests
-
-- PR #1 is a draft audit of event-context identity and stale-battle blockers; it adds no production ability definitions and is not integrated.
-- PR #2 adds focused regression evidence for 24 passive abilities, but has no compiler coverage or whole-card verification and is not integrated. Neither PR is a website deployment. Review and integrate contributions only after rebasing them onto the current collaboration branch and rerunning relevant tests.
+- PRs #52 and #53 are draft dependency reviews with unsupported abilities and failing TODO specifications; PR #54 adds review/test material but records 8 unresolved TODO regressions and 4 unsupported abilities. They are not complete card implementations and must not be counted as supported effects.
+- PR #1 is a draft audit of event-context identity and stale-battle blockers; PR #2 adds regression evidence for existing passive abilities without compiler coverage or whole-card verification. None is a website deployment. Side-worker branches must be reviewed and integrated on the collaboration branch before live publication.
 
 ## Worker setup
 
@@ -71,4 +74,4 @@ The first successful non-forced push to `refs/heads/claims/<batchId>` owns the b
 
 ## Primary-session reserved work
 
-The other 14 reserved assignments in `ability-work-assignments.json` belong to `primary-session`. Check that file before proposing or changing any batch. Shared integration and whole-card verification remain with the primary session.
+Check `ability-work-assignments.json` before proposing or changing any batch. It is the authority for reserved, in-progress, and completed ownership. Shared integration and whole-card verification remain with the primary session. The strict promotion dry run after the latest suite found zero newly eligible cards; unresolved siblings and live-gameplay evidence remain blockers.

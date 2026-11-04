@@ -81,8 +81,11 @@ test("only the exact 22 catalog definitions are registered and trusted; generic 
 test("Ride Phase prompt belongs to each source in that controller's hand, independent of the ridden card", () => {
   for (const ownerSide of ["human", "bot"]) {
     const fixture = setup({ ownerSide });
-    const event = phaseEvent(fixture, { sourceCardInstanceId: `${fixture.ownerSide}-different-rider`,
-      subjectCardInstanceId: `${fixture.ownerSide}-different-rider`, cardInstanceId: `${fixture.ownerSide}-different-rider` });
+    const otherRider = instance(card("cfa-3"), `${fixture.ownerSide}-different-rider`, fixture.ownerId);
+    fixture.owner.hand.push(otherRider);
+    const event = phaseEvent(fixture, { sourceCardInstanceId: otherRider.uid, sourceOwnerPlayerId: fixture.ownerId,
+      sourceControllerPlayerId: fixture.ownerId, subjectCardInstanceId: otherRider.uid, subjectOwnerPlayerId: fixture.ownerId,
+      subjectControllerPlayerId: fixture.ownerId, cardInstanceId: otherRider.uid });
     const result = discover(fixture, event);
     assert.equal(result.queued.length, 1);
     assert.equal(fixture.state.pendingAbility.instance.uid, fixture.source.uid);

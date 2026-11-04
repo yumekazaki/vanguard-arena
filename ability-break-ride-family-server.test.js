@@ -35,7 +35,7 @@ function placeBreakRidePair(state, cardId, side) {
   own.soul.push(oldSource); own.vanguard = rider;
   own.damage = Array.from({ length: 4 }, (_, index) => instance(cardDef("cfa-3"), `damage-${cardId}-${side}-${index}`, actor, { zone: "damage", faceDown: false }));
   foe.vanguard = instance(cardDef("cfa-3"), `foe-vg-${cardId}-${side}`, foe.playerId, { zone: "vanguard", circle: "vanguard" });
-  return { spec, own, foe, oldSource, rider, actor, other };
+  return { spec, own, foe, oldSource, rider, actor, other, side };
 }
 function rideEvent(state, pair, overrides = {}) {
   return Engine.createRideGameEvent(state, {
@@ -205,12 +205,18 @@ function childEvent(state, pair, childCardId) {
     const rear = instance(clanUnit("Kagero"), `opponent-rear-${pair.rider.uid}`, pair.foe.playerId, { zone: "rear-guard", circle: "rear-left" });
     pair.foe.rear[0] = rear; targetUid = rear.uid;
   }
+  const battleId = `battle-${pair.rider.uid}`;
+  state.pendingAttack = {
+    battleId, attackerUid: pair.rider.uid, attackerSide: pair.side, attackerPlayerId: pair.actor,
+    attackerZone: "vanguard", defenderSide: pair.other, defenderPlayerId: pair.foe.playerId,
+    targetUid, targetZone: targetLocation, boostUid: null, power: 18000, targetPower: 13000, critical: 1
+  };
   return Engine.createGameEvent(state, {
     type: eventType, eventId: `${eventType}-${pair.rider.uid}`, actingPlayerId: pair.actor, turnPlayerId: pair.actor,
     sourceCardInstanceId: pair.rider.uid, sourceOwnerPlayerId: pair.actor, sourceControllerPlayerId: pair.actor,
     cardInstanceId: pair.rider.uid, subjectCardInstanceId: pair.rider.uid, subjectOwnerPlayerId: pair.actor, subjectControllerPlayerId: pair.actor,
     currentLocation: "vanguard", circle: "vanguard", targetCardInstanceIds: [targetUid], targetLocation,
-    battleId: `battle-${pair.rider.uid}`, attackingUnitInstanceId: pair.rider.uid,
+    battleId, attackingUnitInstanceId: pair.rider.uid, attackingCardInstanceIds: [pair.rider.uid],
     phase: "battle", timingWindow: eventType === "unit.attacked" ? "attack-declared" : "battle-close"
   });
 }

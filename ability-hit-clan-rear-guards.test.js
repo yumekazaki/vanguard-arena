@@ -36,12 +36,16 @@ test("trusted hit event uses its attacker source, excludes that source from clan
       bot: { playerId: "guest", vanguard: null, rear: [source, ...allies], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [{ uid: "guest-hit-draw", cardId: "drawn" }] }
     }
   };
+  const battleId = "guest-hit-battle";
+  state.pendingAttack = { battleId, attackerUid: source.uid, attackerSide: "bot", attackerPlayerId: "guest", attackerZone: "rear-left",
+    defenderSide: "human", defenderPlayerId: "host", targetUid: target.uid, targetZone: "vanguard", power: 18000, targetPower: 13000, critical: 1 };
   const makeHit = (attacker = source, targetInstance = target, suffix = "first") => Engine.createGameEvent(state, {
     type: "attack.hit", actingPlayerId: "guest", turnPlayerId: "guest", sourceCardInstanceId: attacker.uid,
     sourceOwnerPlayerId: attacker.ownerPlayerId, sourceControllerPlayerId: attacker.controllerPlayerId,
     subjectCardInstanceId: targetInstance.uid, subjectOwnerPlayerId: targetInstance.ownerPlayerId,
-    subjectControllerPlayerId: targetInstance.controllerPlayerId, targetCardInstanceIds: [targetInstance.uid],
-    targetLocation: "vanguard", battleId: `guest-hit-${suffix}`, timingWindow: "attack-hit"
+    subjectControllerPlayerId: targetInstance.controllerPlayerId,
+    targetLocation: "vanguard", attackingUnitInstanceId: attacker.uid, attackingCardInstanceIds: [attacker.uid],
+    targetCardInstanceIds: [targetInstance.uid], battleId, timingWindow: "attack-hit", phase: "battle"
   });
   const event = makeHit();
   const discovered = Reducer.discoverAutoTriggers(state, [event], Engine);

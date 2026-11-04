@@ -50,8 +50,11 @@ test("the trusted event queue grants the battle power only for the matching cont
     const state = { matchId: "field-lb-authority", stateVersion: 0, turn: 1, side: "bot", players: {
       human: { playerId: "host", vanguard: { uid: "host-vg", cardId: "host-vg", ownerPlayerId: "host", controllerPlayerId: "host" }, rear: [], hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [] },
       bot: { playerId: "guest", vanguard: fieldUnit, rear: [source, null, null, null, null], hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [] }
-    }, pendingAttack: { battleId: "field-lb-battle", attackerSide: "bot", attackerUid: attackingUid, attackerZone: "rear-left", power: 10000 } };
-    const event = Engine.createGameEvent(state, { type: "unit.attacked", actingPlayerId: "guest", turnPlayerId: "guest", sourceCardInstanceId: attackingUid, sourceControllerPlayerId: "guest", subjectCardInstanceId: attackingUid, currentLocation: "rear-left", battleId: "field-lb-battle" });
+    }, pendingAttack: { battleId: "field-lb-battle", attackerSide: "bot", attackerPlayerId: "guest", attackerUid: attackingUid, attackerZone: "rear-left",
+      defenderSide: "human", defenderPlayerId: "host", targetUid: "host-vg", targetZone: "vanguard", power: 10000 } };
+    const event = Engine.createGameEvent(state, { type: "unit.attacked", actingPlayerId: "guest", turnPlayerId: "guest", sourceCardInstanceId: attackingUid,
+      sourceOwnerPlayerId: "guest", sourceControllerPlayerId: "guest", subjectCardInstanceId: attackingUid, subjectOwnerPlayerId: "guest",
+      subjectControllerPlayerId: "guest", currentLocation: "rear-left", targetCardInstanceIds: ["host-vg"], targetLocation: "vanguard", battleId: "field-lb-battle" });
     return { state, event, source };
   };
   const legal = makeState("Royal Paladin", true);

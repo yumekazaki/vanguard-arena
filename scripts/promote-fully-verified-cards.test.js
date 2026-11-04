@@ -3,6 +3,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { assessCardPromotion } = require("./promote-fully-verified-cards.js");
+const SINGLE_ABILITY_GENERIC_REMAINING = "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass.";
 
 function fixture(kind = "CONT", source = "test cfa-1:0") {
   const ability = {
@@ -63,6 +64,67 @@ test("any nonempty remaining-work note blocks whole-card promotion", () => {
   const result = assessCardPromotion(unresolved);
   assert.equal(result.eligible, false);
   assert.deepEqual(result.reasons, ["cfa-1:0:unresolved-remaining-work"]);
+});
+
+test("the exact generic sibling warning does not block a fully evidenced single-ability card", () => {
+  const single = fixture();
+  single.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_GENERIC_REMAINING;
+  const result = assessCardPromotion(single);
+  assert.equal(result.eligible, true);
+  assert.deepEqual(result.reasons, []);
+});
+
+test("a sole printed ability may be linked by exact card ID when its cited test parses and asserts that card", () => {
+  const source = 'const IDS = ["cfa-1"]; Engine.parseCardAbilitiesCached(card); test("cfa-1 exact ability", () => assert.equal(true, true));';
+  const single = fixture("CONT", source);
+  single.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_GENERIC_REMAINING;
+  assert.equal(assessCardPromotion(single).eligible, true);
+
+  const noParser = fixture("CONT", 'const IDS = ["cfa-1"]; test("generic card check", () => assert.equal(true, true));');
+  noParser.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_GENERIC_REMAINING;
+  assert.equal(assessCardPromotion(noParser).reasons.includes("cfa-1:0:tests-do-not-reference-exact-ability-id"), true);
+
+  const sibling = fixture("CONT", source);
+  const second = {
+    ...sibling.abilities[0],
+    id: "cfa-1:1",
+    printedText: "CONT exact second ability",
+    definition: { id: "cfa-1:1", cardId: "cfa-1", printedText: "CONT exact second ability" }
+  };
+  sibling.abilities.push(second);
+  sibling.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_GENERIC_REMAINING;
+  sibling.recordsByAbility.set(second.id, {
+    cardId: "cfa-1",
+    abilityId: second.id,
+    status: "tests-passing",
+    testFiles: ["focused.test.js"],
+    testCases: ["card-specific behavior"],
+    remaining: SINGLE_ABILITY_GENERIC_REMAINING
+  });
+  assert.equal(assessCardPromotion(sibling).reasons.includes("cfa-1:0:tests-do-not-reference-exact-ability-id"), true);
+});
+
+test("the exact generic warning still blocks cards with any additional printed ability", () => {
+  const multi = fixture();
+  const second = {
+    ...multi.abilities[0],
+    id: "cfa-1:1",
+    printedText: "CONT exact second ability",
+    definition: { id: "cfa-1:1", cardId: "cfa-1", printedText: "CONT exact second ability" }
+  };
+  multi.abilities.push(second);
+  multi.recordsByAbility.set(second.id, {
+    cardId: "cfa-1",
+    abilityId: second.id,
+    status: "tests-passing",
+    testFiles: ["focused.test.js"],
+    testCases: ["exact second ability evidence"],
+    remaining: SINGLE_ABILITY_GENERIC_REMAINING
+  });
+  multi.readTestFile = () => "test cfa-1:0 and cfa-1:1";
+  const result = assessCardPromotion(multi);
+  assert.equal(result.eligible, false);
+  assert.equal(result.reasons.includes("cfa-1:1:unresolved-remaining-work"), true);
 });
 
 test("one unsupported printed ability blocks promotion of the entire card", () => {

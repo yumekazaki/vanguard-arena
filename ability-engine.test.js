@@ -395,7 +395,7 @@ test("ability cost payment validates atomically, records usage, and emits exact 
   const player={playerId:"p1",vanguard:{uid:"vg"},rear:[source],hand:[discard],soul:[soulBlast],damage:[damage],drop:[],usedAbilities:[]};
   const ability={id:"paid-skill",once:true,costs:[{type:"counter-blast",count:1},{type:"soul-blast",count:1},{type:"discard",count:1},{type:"source-to-soul",count:1},{type:"rest-source",count:1}]};
   const events=[],selection={cb:["damage"],sb:["soul-blast"],discard:["discard"]};
-  assert.deepEqual(payAbilityCosts(ability,{player,source,sourceZone:"rear-left",turnId:3,actorPlayerId:"p1",side:"human",emitEvent:event=>events.push(event)},selection),{ok:true,usageKey:"3:p1:source:paid-skill",paid:{counterBlast:1,soulBlast:1,discard:1,retiredRearGuard:0,sourceToSoul:1,sourceToBottomDeck:0,restSource:1,sourceBind:0,bindHealFromDrop:0}});
+  assert.deepEqual(payAbilityCosts(ability,{player,source,sourceZone:"rear-left",turnId:3,actorPlayerId:"p1",side:"human",emitEvent:event=>events.push(event)},selection),{ok:true,usageKey:"3:p1:source:paid-skill",paid:{counterBlast:1,soulBlast:1,discard:1,retiredRearGuard:0,sourceToSoul:1,sourceToBottomDeck:0,returnDropToDeckBottom:0,bindSameNameFromDrop:0,restSource:1,sourceBind:0,bindHealFromDrop:0}});
   assert.equal(damage.faceDown,true);
   assert.deepEqual(player.soul.map(card=>card.uid),["source"]);
   assert.deepEqual(player.drop.map(card=>card.uid),["soul-blast","discard"]);
@@ -424,6 +424,7 @@ test("illegal or repeated ability cost payments leave game state unchanged", () 
   assert.equal(canActivateManualAbility(ability, { ...context, actorPlayerId: "player-b" }).reason, "not-controller");
   assert.equal(canActivateManualAbility(ability, { ...context, phase: "battle" }).reason, "wrong-timing-window");
   assert.equal(canActivateManualAbility(ability, { ...context, inPermittedZone: false }).reason, "wrong-zone");
+  assert.equal(canActivateManualAbility(ability, { ...context, sourceLocked: true }).reason, "source-locked");
   assert.equal(canActivateManualAbility(ability, { ...context, alreadyUsed: true }).reason, "usage-restriction");
   assert.equal(canActivateManualAbility(ability, { ...context, resources: { faceUpDamage: 0 } }).reason, "unpayable-cost");
   assert.equal(canActivateManualAbility(ability, { ...context, resolutionBlocked: true }).reason, "resolution-in-progress");
@@ -901,7 +902,7 @@ test("dual-circle Intercept CONT grants the keyword and continuous shield on RC 
   const card={id:"intercept-grant",text:"CONT [RC/GC]: This unit gets \"Intercept\", and it gets shield +5000."},ability=parseCardAbilities(card)[0];
   assert.equal(ability.kind,"CONT");assert.equal(ability.definition?.source?.patternId,"cont-rc-gc-grant-intercept-shield-v1");assert.deepEqual(ability.requiredLocation,["rear-guard","guardian"]);assert.deepEqual(ability.definition?.keywords,["intercept"]);assert.equal(isManuallyActivatable(ability),false);assert.equal(hasAbilityKeyword(card,"intercept"),true);
   assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"rear-guard"}),{shield:5000});assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"guardian"}),{shield:5000});assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"vanguard"}),{shield:0});assert.deepEqual(evaluateContinuousShieldEffects([ability],{location:"hand"}),{shield:0});
-  const app=fs.readFileSync("app.js","utf8");assert.match(app,/function hasIntercept\(card\)[\s\S]{0,260}definition\?\.keywords\?\.includes\("intercept"\)/);assert.match(app,/function eligibleInterceptors\(\)[\s\S]{0,900}Number\(card\?\.grade \?\? -1\) >= 2 \|\| hasIntercept\(card\)/);assert.doesNotMatch(app,/eligibleInterceptors\(\)[\s\S]{0,500}Number\(cardMap\.get\(unit\.cardId\)\?\.grade\) === 2/);
+  const app=fs.readFileSync("app.js","utf8");assert.match(app,/function hasIntercept\(instance,side="human",zone="rear-guard"\)[\s\S]{0,500}ability\.definition\?\.keywords\?\.includes\("intercept"\)/);assert.match(app,/function eligibleInterceptors\(\)[\s\S]{0,900}if\(frontRow\)return Number\(card\?\.grade\?\?-1\)>=2\|\|hasIntercept\(unit,"human","rear-guard"\)/);assert.doesNotMatch(app,/eligibleInterceptors\(\)[\s\S]{0,500}Number\(cardMap\.get\(unit\.cardId\)\?\.grade\) === 2/);
 });
 
 test("the app initializes and records the Grade 3+ ride fact on every ride path",()=>{
@@ -1604,7 +1605,7 @@ test("movement triggers require the exact moved instance and verified source and
   assert.equal(resolveEffectProgram(definition.effects, EFFECT_HANDLERS, context).ok, true);
   assert.equal(state.players.b.rear[0], null);
   assert.equal(state.players.b.drop[0].uid, "target-copy");
-  assert.deepEqual(emitted, [{ type: "card.retired", cardInstanceId: "target-copy", controllerSide: "b", previousLocation: "rear-left", currentLocation: "drop" }]);
+  assert.deepEqual(emitted, [{ type: "card.retired", cardInstanceId: "target-copy", subjectCardInstanceId: "target-copy", subjectOwnerPlayerId: "player-b", subjectControllerPlayerId: "player-b", controllerSide: "b", previousLocation: "rear-left", currentLocation: "drop" }]);
 });
 test("retirement target handler rejects a friendly, Vanguard, or stale target", () => {
   const effect = [{ op: "retire-target", target: "chosen", targetFilter: { controller: "opponent", zone: "rear-guard" } }];
@@ -3424,7 +3425,7 @@ test("catalog Charge AUTO definitions include keyword-only records and remain ef
 test("Forerunner is an optional exact-source same-clan ride AUTO that calls from Soul standing",()=>{
  const ability=parseCardAbilities({id:"forerunner-test",text:"AUTO: Forerunner."})[0];assert.equal(ability.definition?.source?.patternId,"auto-forerunner-same-clan-ride-call-source-v1");assert.equal(ability.trigger?.eventType,"card.ridden");assert.equal(ability.trigger?.subject,"ridden-unit");assert.equal(ability.canDecline,true);assert.deepEqual(ability.definition.effects,[{op:"call-source-from-soul",target:"source",position:"stand"}]);
  const source={uid:"starter-copy",cardId:"forerunner-test"},player={playerId:"p1",soul:[source],rear:[null,null,null,null,null],accelZones:0},events=[];const apply=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{player,source,side:"human",callZone:"rear-left",cardDefinitionForInstance:()=>({type:"Normal Unit"}),emitEvent:event=>events.push(event)});assert.equal(apply.ok,true);assert.equal(player.soul.length,0);assert.equal(player.rear[0].uid,"starter-copy");assert.equal(player.rear[0].rested,false);assert.equal(events[0].previousLocation,"soul");
- const occupiedSource={uid:"occupied-starter"},occupiedPlayer={soul:[occupiedSource],rear:[{uid:"occupant"},null,null,null,null]};assert.equal(resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{player:occupiedPlayer,source:occupiedSource,side:"human",callZone:"rear-left",cardDefinitionForInstance:()=>({type:"Normal Unit"})}).ok,false);assert.equal(occupiedPlayer.soul[0].uid,"occupied-starter");
+ const occupiedSource={uid:"occupied-starter"},occupant={uid:"occupant"},occupiedPlayer={soul:[occupiedSource],rear:[occupant,null,null,null,null],drop:[]};const replacement=resolveEffectProgram(ability.definition.effects,EFFECT_HANDLERS,{player:occupiedPlayer,source:occupiedSource,side:"human",callZone:"rear-left",cardDefinitionForInstance:()=>({type:"Normal Unit"})});assert.equal(replacement.ok,true);assert.equal(occupiedPlayer.soul.length,0);assert.equal(occupiedPlayer.rear[0].uid,"occupied-starter");assert.equal(occupiedPlayer.drop[0].uid,"occupant");
  const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("auto-forerunner-same-clan-ride-call-source-v1"));assert.ok(app.includes("Choose an open Rear-Guard circle"));
 });
 

@@ -27,12 +27,18 @@ function fixture(cardId = IDS[0], side = "human", { eventBooster = true } = {}) 
     human: { playerId: "player-host", vanguard: side === "human" ? vanguard : opponentVanguard, rear: side === "human" ? [target, null, source, null, null] : Array(5).fill(null), hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] },
     bot: { playerId: "player-guest", vanguard: side === "bot" ? vanguard : opponentVanguard, rear: side === "bot" ? [target, null, source, null, null] : Array(5).fill(null), hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] }
   };
-  const state = { matchId: "boosted-close-test", stateVersion: 1, turn: 3, side, phase: 5, eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], pendingAbilities: [], players };
+  const state = { matchId: "boosted-close-test", stateVersion: 1, turn: 3, side, phase: 5, eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], pendingAbilities: [], players,
+    pendingAttack: { battleId: "boost-battle", attackerUid: vanguard.uid, attackerSide: side, attackerPlayerId: ownerId,
+      attackerZone: "vanguard", defenderSide: side === "human" ? "bot" : "human", defenderPlayerId: opponentId,
+      targetUid: opponentVanguard.uid, targetZone: "vanguard", boostUid: source.uid, boostZone: "rear-left", power: 13000 } };
   const event = Engine.createGameEvent(state, {
     type: "battle.close-step", actingPlayerId: ownerId, turnPlayerId: ownerId,
-    sourceCardInstanceId: "attacker", subjectCardInstanceId: "attacker", subjectControllerPlayerId: ownerId,
-    boosterCardInstanceId: eventBooster ? source.uid : "another-booster", boostedCardInstanceId: "attacker",
-    currentLocation: "rear-back-left", battleId: "boost-battle", phase: "battle", timingWindow: "close-step"
+    sourceCardInstanceId: vanguard.uid, sourceOwnerPlayerId: ownerId, sourceControllerPlayerId: ownerId,
+    subjectCardInstanceId: vanguard.uid, subjectOwnerPlayerId: ownerId, subjectControllerPlayerId: ownerId,
+    attackingUnitInstanceId: vanguard.uid, attackingCardInstanceIds: [vanguard.uid],
+    boosterCardInstanceId: eventBooster ? source.uid : "another-booster", boostedCardInstanceId: vanguard.uid,
+    previousLocation: "vanguard", currentLocation: "vanguard", targetCardInstanceIds: [opponentVanguard.uid], targetLocation: "vanguard",
+    battleId: "boost-battle", phase: "battle", timingWindow: "close-step"
   });
   return { state, event, ability, source, target, ownerId, side };
 }

@@ -23,7 +23,7 @@ function setup(tokenId, remote = false) {
     dialog, list, messages, token, cost
   };
   vm.createContext(c);
-  vm.runInContext(app.split('\n').filter(x => x.includes('cardMap.set("token-') || x.startsWith('  function isSentinel(') || x.startsWith('  function effectiveShieldValue(')).join('\n'), c);
+  vm.runInContext(app.split('\n').filter(x => x.includes('cardMap.set("token-') || x.startsWith('  function isSentinel(') || x.startsWith('  function controllerMemoryCards(') || x.startsWith('  function effectiveShieldValue(')).join('\n'), c);
   cardMap.set('cost', { id: 'cost', name: 'Discard cost', shield: 5000 });
   vm.runInContext(app.slice(app.indexOf('  function humanGuard('), app.indexOf('  function canStrideForSide(')), c);
   return c;

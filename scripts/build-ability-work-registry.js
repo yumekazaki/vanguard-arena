@@ -79,18 +79,20 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
     });
   }
 
-  const reservedCards = new Set([...RESERVED_ABILITIES].map(id => queueByAbility.get(id)?.cardId).filter(Boolean).map(String));
+  const primaryReservedCards = new Set([...RESERVED_ABILITIES].map(id => queueByAbility.get(id)?.cardId).filter(Boolean).map(String));
+  const reservedCards = new Set(primaryReservedCards);
   for (const cardId of assignedCards.keys()) reservedCards.add(cardId);
-  const reservedRows = queue.items.filter(item => reservedCards.has(String(item.cardId)));
+  const primaryReservedRows = queue.items.filter(item => primaryReservedCards.has(String(item.cardId)));
+  const allReservedRows = queue.items.filter(item => reservedCards.has(String(item.cardId)));
   const batches = [...assignmentBatches];
-  if (reservedCards.size) batches.push({
+  if (primaryReservedCards.size) batches.push({
     batchId: "PRIMARY-GZONE-STRIDE",
     status: "reserved",
     workerOwner: "primary-session",
     reason: "Current primary-session G-zone ACT/Stride implementation scope; includes every outstanding ability on each affected card.",
-    cardIds: [...reservedCards].sort((a, b) => a.localeCompare(b)),
-    abilityIds: reservedRows.map(item => item.abilityId).sort(),
-    dependencies: [...new Set(reservedRows.flatMap(item => (item.dependencies || []).map(dep => dep.id)))].sort()
+    cardIds: [...primaryReservedCards].sort((a, b) => a.localeCompare(b)),
+    abilityIds: primaryReservedRows.map(item => item.abilityId).sort(),
+    dependencies: [...new Set(primaryReservedRows.flatMap(item => (item.dependencies || []).map(dep => dep.id)))].sort()
   });
   const candidateCardsByGroup = new Map();
   for (const [cardId, cardItems] of byCard) {
@@ -207,8 +209,8 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
       counts: {
         queuedAbilities: records.length,
         uniqueAbilityIds: seen.size,
-        reservedAbilities: reservedRows.length,
-        availableAbilities: records.length - reservedRows.length,
+        reservedAbilities: allReservedRows.length,
+        availableAbilities: records.length - allReservedRows.length,
         reservedCards: reservedCards.size,
         activeAssignments: assignmentBatches.length,
         availableBatches: batches.filter(batch => batch.status === "available").length,

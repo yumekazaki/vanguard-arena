@@ -5,16 +5,24 @@ const engine = require("../ability-engine.js");
 const definitions = require("../ability-definitions.js");
 const { loadCatalog } = require("./audit-ability-catalog.js");
 
-const [patternId, expectedCountText] = process.argv.slice(2);
+const [patternId, expectedCountText, ...requestedCardIds] = process.argv.slice(2);
 const expectedCount = Number(expectedCountText);
 if (!patternId || !Number.isInteger(expectedCount) || expectedCount < 1) {
-  throw new Error("Usage: node scripts/append-compiled-pattern-definitions.js <pattern-id> <expected-count>");
+  throw new Error("Usage: node scripts/append-compiled-pattern-definitions.js <pattern-id> <expected-count> [card-id ...]");
 }
+const cardIds = requestedCardIds.map(value => String(value || "").trim());
+if (cardIds.some(value => !value) || new Set(cardIds).size !== cardIds.length) throw new Error("Optional card IDs must be non-empty and unique.");
+const cardIdFilter = cardIds.length ? new Set(cardIds) : null;
 engine.registerAbilityDefinitions(definitions);
-const matches = loadCatalog().flatMap(card => engine.parseCardAbilities(card)
+const matches = loadCatalog().filter(card => !cardIdFilter || cardIdFilter.has(String(card.id))).flatMap(card => engine.parseCardAbilities(card)
   .filter(ability => ability.definition?.source?.patternId === patternId)
   .map(ability => ability.definition));
 if (matches.length !== expectedCount) throw new Error(`Expected ${expectedCount} catalog matches for ${patternId}, found ${matches.length}.`);
+if (cardIdFilter) {
+  const matchedCardIds = new Set(matches.map(definition => String(definition.cardId)));
+  const missing = cardIds.filter(cardId => !matchedCardIds.has(cardId));
+  if (missing.length) throw new Error(`Requested cards did not match ${patternId}: ${missing.join(", ")}.`);
+}
 
 const byId = new Map(definitions.map(definition => [definition.id, definition]));
 const additions = [];

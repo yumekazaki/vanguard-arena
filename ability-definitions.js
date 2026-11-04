@@ -31366,7 +31366,7 @@
       "id": "cfa-10636:1",
       "cardId": "cfa-10636",
       "kind": "AUTO",
-      "printedText": "AUTO [Hand]: At the beginning of your ride phase, if your vanguard is grade 1 or less, COST [discard this card], look at the top five cards of your deck, choose up to one grade 2 or less card from among them, reveal it and put it into your hand, and shuffle your deck.\n\n(SHIFT + left click to count up attacks.)\n(SHIFT + right click to count down attacks.)\n(Middle click or hover and press SPACE to set number of attacks.)",
+      "printedText": "AUTO [Hand]: At the beginning of your ride phase, if your vanguard is grade 1 or less, COST [discard this card], look at the top five cards of your deck, choose up to one grade 2 or less card from among them, reveal it and put it into your hand, and shuffle your deck.",
       "source": {
         "dataset": "Cardfight Area snapshot",
         "snapshotDate": "2025-05-09",
@@ -41294,6 +41294,110 @@
           "position": "stand"
         }
       ]
+    },
+    {
+      "id": "cfa-4023:1",
+      "cardId": "cfa-4023",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: All of your other rear-guards in the same column as this unit get \"CONT [RC]: Resist\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "other-friendly-rear-guards-same-column",
+          "keyword": "resist",
+          "duration": "continuous",
+          "condition": {
+            "op": "always"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-same-column-grants-resist-v1",
+        "review": "Exact CONT text for the four audited Forerunners. While this source is an active face-up Rear-Guard, its other same-controller Rear-Guards in the same rear column gain Resist. The grant ends when the source leaves RC, becomes face down or locked, or the target no longer qualifies as an active unit in that column."
+      }
+    },
+    {
+      "id": "cfa-4101:1",
+      "cardId": "cfa-4101",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: All of your other rear-guards in the same column as this unit get \"CONT [RC]: Resist\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "other-friendly-rear-guards-same-column",
+          "keyword": "resist",
+          "duration": "continuous",
+          "condition": {
+            "op": "always"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-same-column-grants-resist-v1",
+        "review": "Exact CONT text for the four audited Forerunners. While this source is an active face-up Rear-Guard, its other same-controller Rear-Guards in the same rear column gain Resist. The grant ends when the source leaves RC, becomes face down or locked, or the target no longer qualifies as an active unit in that column."
+      }
+    },
+    {
+      "id": "cfa-4614:1",
+      "cardId": "cfa-4614",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: All of your other rear-guards in the same column as this unit get \"CONT [RC]: Resist\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "other-friendly-rear-guards-same-column",
+          "keyword": "resist",
+          "duration": "continuous",
+          "condition": {
+            "op": "always"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-same-column-grants-resist-v1",
+        "review": "Exact CONT text for the four audited Forerunners. While this source is an active face-up Rear-Guard, its other same-controller Rear-Guards in the same rear column gain Resist. The grant ends when the source leaves RC, becomes face down or locked, or the target no longer qualifies as an active unit in that column."
+      }
+    },
+    {
+      "id": "cfa-5080:1",
+      "cardId": "cfa-5080",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: All of your other rear-guards in the same column as this unit get \"CONT [RC]: Resist\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "other-friendly-rear-guards-same-column",
+          "keyword": "resist",
+          "duration": "continuous",
+          "condition": {
+            "op": "always"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-same-column-grants-resist-v1",
+        "review": "Exact CONT text for the four audited Forerunners. While this source is an active face-up Rear-Guard, its other same-controller Rear-Guards in the same rear column gain Resist. The grant ends when the source leaves RC, becomes face down or locked, or the target no longer qualifies as an active unit in that column."
+      }
     },
     {
       "id": "cfa-4023:0",
@@ -62025,7 +62129,7 @@
       "id": "cfa-4298:1",
       "cardId": "cfa-4298",
       "kind": "AUTO",
-      "printedText": "AUTO: [Counter Blast 1 & Soul Blast 1] When this unit is placed on VC, you may pay the cost. If you do, look at five cards from the top of your deck, search for up to one card with the wave ability from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.\n\n(SHIFT + left click to count up attacks.)\n(SHIFT + right click to count down attacks.)\n(Middle click or hover and press SPACE to set number of attacks.)",
+      "printedText": "AUTO: [Counter Blast 1 & Soul Blast 1] When this unit is placed on VC, you may pay the cost. If you do, look at five cards from the top of your deck, search for up to one card with the wave ability from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.",
       "source": {
         "dataset": "Cardfight Area snapshot",
         "snapshotDate": "2025-05-09",
@@ -80348,7 +80452,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80385,7 +80490,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80422,7 +80528,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80459,7 +80566,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80496,7 +80604,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80605,7 +80714,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80642,7 +80752,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80679,7 +80790,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80716,7 +80828,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80753,7 +80866,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80790,7 +80904,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80827,7 +80942,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -80864,7 +80980,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -81012,7 +81129,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -81049,7 +81167,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -81122,7 +81241,8 @@
             "cardType": "unit",
             "zone": "vanguard",
             "mustBeAttacked": true
-          }
+          },
+          "optionalTarget": true
         }
       ],
       "requiredLocation": [],
@@ -83255,6 +83375,46 @@
       ]
     },
     {
+      "id": "cfa-10129:0",
+      "cardId": "cfa-10129",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your unit boosts a vanguard, this unit gets power +2000 until end of turn.",
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "any",
+        "circles": [],
+        "targetLocation": "vanguard",
+        "subjectControllerRelation": "source-controller"
+      },
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [],
+      "costs": [],
+      "canDecline": false,
+      "optional": false,
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=196&s_param=d-Stoicheia&sort=no&view=text",
+        "officialCardNumber": "D-BT06/098EN",
+        "setCode": "D-BT06",
+        "patternId": "auto-rc-friendly-unit-boosts-vanguard-source-power-turn-v1",
+        "review": "Official card-list text confirms the exact RC AUTO: any of the controller's units boosting a Vanguard triggers this source's +2000 until end of turn. The source must remain on a Rear-Guard Circle; another friendly booster may trigger it, but an opponent's booster or a boost of a Rear-Guard does not."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
       "id": "cfa-1012:0",
       "cardId": "cfa-1012",
       "kind": "AUTO",
@@ -84266,15 +84426,18 @@
       "id": "cfa-3387:0",
       "cardId": "cfa-3387",
       "kind": "ACT",
-      "printedText": "ACT [RC]: [Put this unit into your soul] Choose one of your units, and it gets power +3000 until end of turn.",
+      "printedText": "ACT [RC]: [Put this unit into your soul] Choose up to one of your units, and it gets power +3000 until end of turn.",
       "requiredLocation": [
         "rear-guard"
       ],
       "choicesReviewed": true,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "patternId": "act-source-to-soul-choose-friendly-power-turn-v1",
-        "review": "Exact ACT template: RC source pays by moving to Soul, then chooses a different friendly unit for the printed turn power modifier; accepts optional COST keyword and comma as printed."
+        "dataset": "Bushiroad Official Card List",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-TD07%2F019EN",
+        "officialCardNumber": "G-TD07/019EN",
+        "setCode": "G-TD07",
+        "patternId": "act-source-to-soul-optional-up-to-one-friendly-power-v1",
+        "review": "Verified against the official G-TD07/019EN card list on 2026-11-02. The source must be on RC and pays by moving this exact card to Soul. The controller may choose zero or one other friendly unit; if chosen, that unit gets +3000 power until end of turn."
       },
       "effects": [
         {
@@ -84282,6 +84445,7 @@
           "target": "chosen",
           "amount": 3000,
           "duration": "turn",
+          "optionalTarget": true,
           "targetFilter": {
             "controller": "source-controller",
             "cardType": "unit",
@@ -100963,17 +101127,55 @@
       "kind": "AUTO",
       "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
       "requiredLocation": [],
-      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
-        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
-        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
-      ] },
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "event-subject",
+            "circles": [
+              "rear-guard"
+            ],
+            "sourceLocation": "hand",
+            "destinationLocation": "rear-guard"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "event-subject",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
       "conditionsReviewed": true,
-      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
       "costsReviewed": true,
       "choicesReviewed": true,
       "optional": false,
-      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13707", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
-      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13707",
+        "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1",
+        "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride."
+      },
+      "effects": [
+        {
+          "op": "persona-shield-ticket",
+          "target": "controller"
+        }
+      ]
     },
     {
       "id": "cfa-13709:0",
@@ -100981,17 +101183,55 @@
       "kind": "AUTO",
       "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
       "requiredLocation": [],
-      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
-        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
-        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
-      ] },
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "event-subject",
+            "circles": [
+              "rear-guard"
+            ],
+            "sourceLocation": "hand",
+            "destinationLocation": "rear-guard"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "event-subject",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
       "conditionsReviewed": true,
-      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
       "costsReviewed": true,
       "choicesReviewed": true,
       "optional": false,
-      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13709", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
-      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13709",
+        "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1",
+        "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride."
+      },
+      "effects": [
+        {
+          "op": "persona-shield-ticket",
+          "target": "controller"
+        }
+      ]
     },
     {
       "id": "cfa-13710:0",
@@ -100999,17 +101239,55 @@
       "kind": "AUTO",
       "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
       "requiredLocation": [],
-      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
-        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
-        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
-      ] },
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "event-subject",
+            "circles": [
+              "rear-guard"
+            ],
+            "sourceLocation": "hand",
+            "destinationLocation": "rear-guard"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "event-subject",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
       "conditionsReviewed": true,
-      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
       "costsReviewed": true,
       "choicesReviewed": true,
       "optional": false,
-      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13710", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
-      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13710",
+        "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1",
+        "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride."
+      },
+      "effects": [
+        {
+          "op": "persona-shield-ticket",
+          "target": "controller"
+        }
+      ]
     },
     {
       "id": "cfa-13711:0",
@@ -101017,17 +101295,55 @@
       "kind": "AUTO",
       "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
       "requiredLocation": [],
-      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
-        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
-        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
-      ] },
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "event-subject",
+            "circles": [
+              "rear-guard"
+            ],
+            "sourceLocation": "hand",
+            "destinationLocation": "rear-guard"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "event-subject",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
       "conditionsReviewed": true,
-      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
       "costsReviewed": true,
       "choicesReviewed": true,
       "optional": false,
-      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13711", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
-      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13711",
+        "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1",
+        "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride."
+      },
+      "effects": [
+        {
+          "op": "persona-shield-ticket",
+          "target": "controller"
+        }
+      ]
     },
     {
       "id": "cfa-13712:0",
@@ -101035,17 +101351,55 @@
       "kind": "AUTO",
       "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
       "requiredLocation": [],
-      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
-        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
-        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
-      ] },
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "event-subject",
+            "circles": [
+              "rear-guard"
+            ],
+            "sourceLocation": "hand",
+            "destinationLocation": "rear-guard"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "event-subject",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
       "conditionsReviewed": true,
-      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
       "costsReviewed": true,
       "choicesReviewed": true,
       "optional": false,
-      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13712", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
-      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13712",
+        "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1",
+        "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride."
+      },
+      "effects": [
+        {
+          "op": "persona-shield-ticket",
+          "target": "controller"
+        }
+      ]
     },
     {
       "id": "cfa-13713:0",
@@ -101053,30 +101407,83 @@
       "kind": "AUTO",
       "printedText": "AUTO: When this card is placed on RC from hand other than by a unit card’s ability or discarded from hand while riding from the ride deck, choose a card with persona ride from your ride deck, and you may reveal it. If you revealed a card or have a vanguard with persona ride, COST [Soul Blast 1], and put a Persona Shield ticket into hand.",
       "requiredLocation": [],
-      "trigger": { "status": "recognized-trigger", "circles": [], "anyOf": [
-        { "status": "recognized-trigger", "eventType": "card.placed", "subject": "event-subject", "circles": ["rear-guard"], "sourceLocation": "hand", "destinationLocation": "rear-guard" },
-        { "status": "recognized-trigger", "eventType": "card.discarded", "subject": "event-subject", "sourceLocation": "hand", "destinationLocation": "drop", "requiredPhase": "ride", "requiredTimingWindow": "ride-deck-cost", "discardReason": "ride-deck-cost" }
-      ] },
+      "trigger": {
+        "status": "recognized-trigger",
+        "circles": [],
+        "anyOf": [
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.placed",
+            "subject": "event-subject",
+            "circles": [
+              "rear-guard"
+            ],
+            "sourceLocation": "hand",
+            "destinationLocation": "rear-guard"
+          },
+          {
+            "status": "recognized-trigger",
+            "eventType": "card.discarded",
+            "subject": "event-subject",
+            "sourceLocation": "hand",
+            "destinationLocation": "drop",
+            "requiredPhase": "ride",
+            "requiredTimingWindow": "ride-deck-cost",
+            "discardReason": "ride-deck-cost"
+          }
+        ]
+      },
       "conditionsReviewed": true,
-      "costs": [{ "type": "soul-blast", "count": 1 }],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
       "costsReviewed": true,
       "choicesReviewed": true,
       "optional": false,
-      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13713", "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1", "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride." },
-      "effects": [{ "op": "persona-shield-ticket", "target": "controller" }]
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13713",
+        "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1",
+        "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride."
+      },
+      "effects": [
+        {
+          "op": "persona-shield-ticket",
+          "target": "controller"
+        }
+      ]
     },
     {
       "id": "cfa-13708:0",
       "cardId": "cfa-13708",
       "kind": "CONT",
       "printedText": "CONT [Hand]: During your turn, when you would discard a card while riding from ride deck or choose a card from hand by your card’s ability, this card cannot be chosen or discarded.",
-      "requiredLocation": ["hand"],
+      "requiredLocation": [
+        "hand"
+      ],
       "conditionsReviewed": true,
       "costs": [],
       "costsReviewed": true,
       "choicesReviewed": true,
-      "continuousRestrictions": [{ "type": "persona-shield-hand-protection", "ownTurnOnly": true, "protectRideDeckDiscard": true, "protectCardAbilityChoices": true }],
-      "source": { "dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "cardNumber": "cfa-13708", "patternId": "cont-persona-shield-ticket-hand-protection-v1", "review": "Exact Hand CONT on the Persona Shield ticket. During its owner's turn, it cannot be discarded for a Ride Deck ride or selected from that owner's hand by that owner's card ability." }
+      "continuousRestrictions": [
+        {
+          "type": "persona-shield-hand-protection",
+          "ownTurnOnly": true,
+          "protectRideDeckDiscard": true,
+          "protectCardAbilityChoices": true
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-13708",
+        "patternId": "cont-persona-shield-ticket-hand-protection-v1",
+        "review": "Exact Hand CONT on the Persona Shield ticket. During its owner's turn, it cannot be discarded for a Ride Deck ride or selected from that owner's hand by that owner's card ability."
+      }
     },
     {
       "id": "cfa-1984:2",
@@ -105949,7 +106356,9 @@
       "cardId": "cfa-2923",
       "kind": "AUTO",
       "printedText": "AUTO [RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): [Counter Blast 1] When this unit attacks a vanguard, if this unit is boosted, you may pay the cost. If you do, Soul Charge 2, and this unit gets power +5000 until end of that battle.",
-      "requiredLocation": ["rear-guard"],
+      "requiredLocation": [
+        "rear-guard"
+      ],
       "canDecline": true,
       "trigger": {
         "status": "recognized-trigger",
@@ -105959,10 +106368,20 @@
         "targetLocation": "vanguard"
       },
       "conditions": [
-        { "type": "generation-break", "count": 1 },
-        { "type": "source-was-boosted" }
+        {
+          "type": "generation-break",
+          "count": 1
+        },
+        {
+          "type": "source-was-boosted"
+        }
       ],
-      "costs": [{ "type": "counter-blast", "count": 1 }],
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
       "conditionsReviewed": true,
       "costsReviewed": true,
       "choicesReviewed": true,
@@ -105975,8 +106394,16 @@
         "review": "Exact Squallmaker Vampir AUTO. Requires Generation Break 1 and this exact Rear-Guard to attack the opponent Vanguard while boosted. Its controller may pay Counter Blast 1; resolution Soul Charges two cards before granting this same attacker +5000 for this battle."
       },
       "effects": [
-        { "op": "soul-charge", "count": 2 },
-        { "op": "modify-power", "target": "source", "amount": 5000, "duration": "battle" }
+        {
+          "op": "soul-charge",
+          "count": 2
+        },
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
       ]
     },
     {
@@ -111087,8 +111514,7 @@
           "count": 1
         }
       ]
-    }
-,
+    },
     {
       "id": "cfa-13854:0",
       "cardId": "cfa-13854",
@@ -111889,142 +112315,988 @@
         }
       ]
     },
-    ...[
-      ["cfa-3842", "Gavrail"],
-      ["cfa-3959", "Bigbelly"],
-      ["cfa-3980", "Yasuie"],
-      ["cfa-3998", "Darkface"]
-    ].map(([cardId, name]) => ({
-      id: `${cardId}:0`,
-      cardId,
-      kind: "AUTO",
-      printedText: `AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a vanguard with "${name}" in its card name, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.`,
-      requiredLocation: ["rear-guard"],
-      optional: true,
-      conditions: [{ type: "controller-vanguard-name-contains", value: name }],
-      conditionsReviewed: true,
-      costs: [{ type: "source-to-soul", count: 1 }],
-      costsReviewed: true,
-      choicesReviewed: true,
-      source: {
-        dataset: "Cardfight Area snapshot",
-        snapshotDate: "2025-05-09",
-        patternId: "auto-vanguard-name-attack-source-soul-draw-power-battle-v1",
-        review: "Exact four-card AUTO family. The controller's exact Vanguard attack triggers this Rear-Guard's optional source-to-Soul cost; the live Vanguard must contain its card's printed name fragment. If paid, draw one, then select the friendly Vanguard to receive +5000 for that same battle."
-      },
-      effects: [
-        { op: "draw", count: 1 },
-        { op: "modify-power-target", target: "chosen", amount: 5000, duration: "battle", targetFilter: { controller: "source-controller", cardType: "unit", zone: "vanguard" } }
-      ]
-    })),
-    ...[
-      "cfa-1018",
-      "cfa-1059",
-      "cfa-1767"
-    ].map(cardId => ({
-      id: `${cardId}:0`,
-      cardId,
-      kind: "AUTO",
-      printedText: "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle.",
-      requiredLocation: ["vanguard"],
-      conditions: [{ type: "limit-break-active", count: 4 }],
-      source: {
-        dataset: "Cardfight Area snapshot",
-        snapshotDate: "2025-05-09",
-        patternId: "auto-legacy-limit-break-vanguard-attack-power-v1",
-        review: "Exact legacy reminder Limit Break attack template; source circle, damage threshold, target circle, and source instance are separately enforced."
-      },
-      effects: [
-        { op: "modify-power", target: "source", amount: 5000, duration: "battle" }
-      ]
-    })),
-    ...["cfa-443", "cfa-734", "cfa-785"].map(cardId => ({
-      id: `${cardId}:0`,
-      cardId,
-      kind: "AUTO",
-      printedText: "AUTO [RC]: When an attack hits during the battle that this unit boosted, you may Soul Charge 1. If you do, return this unit to your deck, and shuffle your deck.",
-      requiredLocation: ["rear-guard"],
-      trigger: { status: "recognized-trigger", eventType: "attack.hit", subject: "booster", requiresBoostedBattle: true },
-      optional: true,
-      conditions: [],
-      conditionsReviewed: true,
-      costs: [],
-      costsReviewed: true,
-      choicesReviewed: true,
-      source: {
-        dataset: "Cardfight Area snapshot",
-        snapshotDate: "2025-05-09",
-        patternId: "auto-boosted-attack-hit-soul-charge-return-source-v1",
-        review: "Exact three-card AUTO family. The controller may Soul Charge one only when this exact Rear-Guard instance boosted the unit in the battle that hit; only if a card was Soul Charged does this same source return to its owner's deck and that deck is shuffled."
-      },
-      effects: [{ op: "soul-charge-and-return-source-to-deck", target: "source", count: 1, shuffle: true }]
-    })),
     {
-      id: "cfa-717:0",
-      cardId: "cfa-717",
-      kind: "AUTO",
-      printedText: "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.",
-      requiredLocation: ["vanguard", "rear-guard"],
-      trigger: { status: "recognized-trigger", eventType: "card.damage_moved", subject: "any", destinationLocation: "damage", subjectControllerRelation: "source-controller" },
-      conditions: [{ type: "controller-vanguard-has-clan", value: "Angel Feather" }],
-      conditionsReviewed: true,
-      costs: [],
-      costsReviewed: true,
-      optional: false,
-      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1", review: "Exact AUTO family on Thousand Ray Pegasus, Million Ray Pegasus, and The Phoenix, Calamity Flame. Only a card entering this controller's Damage Zone triggers the exact VC/RC source instance; its controller must have an Angel Feather Vanguard, and the +2000 expires at the active turn's end even when this trigger occurs during the opponent's turn." },
-      effects: [{ op: "modify-power", target: "source", amount: 2000, duration: "turn", expiry: "active-turn" }]
+      "id": "cfa-3842:0",
+      "cardId": "cfa-3842",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a vanguard with \"Gavrail\" in its card name, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Gavrail"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-vanguard-name-attack-source-soul-draw-power-battle-v1",
+        "review": "Exact four-card AUTO family. The controller's exact Vanguard attack triggers this Rear-Guard's optional source-to-Soul cost; the live Vanguard must contain its card's printed name fragment. If paid, draw one, then select the friendly Vanguard to receive +5000 for that same battle."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
     },
     {
-      id: "cfa-725:0",
-      cardId: "cfa-725",
-      kind: "AUTO",
-      printedText: "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.",
-      requiredLocation: ["vanguard", "rear-guard"],
-      trigger: { status: "recognized-trigger", eventType: "card.damage_moved", subject: "any", destinationLocation: "damage", subjectControllerRelation: "source-controller" },
-      conditions: [{ type: "controller-vanguard-has-clan", value: "Angel Feather" }],
-      conditionsReviewed: true,
-      costs: [],
-      costsReviewed: true,
-      optional: false,
-      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1", review: "Exact AUTO family on Thousand Ray Pegasus, Million Ray Pegasus, and The Phoenix, Calamity Flame. Only a card entering this controller's Damage Zone triggers the exact VC/RC source instance; its controller must have an Angel Feather Vanguard, and the +2000 expires at the active turn's end even when this trigger occurs during the opponent's turn." },
-      effects: [{ op: "modify-power", target: "source", amount: 2000, duration: "turn", expiry: "active-turn" }]
+      "id": "cfa-3959:0",
+      "cardId": "cfa-3959",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a vanguard with \"Bigbelly\" in its card name, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Bigbelly"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-vanguard-name-attack-source-soul-draw-power-battle-v1",
+        "review": "Exact four-card AUTO family. The controller's exact Vanguard attack triggers this Rear-Guard's optional source-to-Soul cost; the live Vanguard must contain its card's printed name fragment. If paid, draw one, then select the friendly Vanguard to receive +5000 for that same battle."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
     },
     {
-      id: "cfa-732:0",
-      cardId: "cfa-732",
-      kind: "AUTO",
-      printedText: "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.",
-      requiredLocation: ["vanguard", "rear-guard"],
-      trigger: { status: "recognized-trigger", eventType: "card.damage_moved", subject: "any", destinationLocation: "damage", subjectControllerRelation: "source-controller" },
-      conditions: [{ type: "controller-vanguard-has-clan", value: "Angel Feather" }],
-      conditionsReviewed: true,
-      costs: [],
-      costsReviewed: true,
-      optional: false,
-      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1", review: "Exact AUTO family on Thousand Ray Pegasus, Million Ray Pegasus, and The Phoenix, Calamity Flame. Only a card entering this controller's Damage Zone triggers the exact VC/RC source instance; its controller must have an Angel Feather Vanguard, and the +2000 expires at the active turn's end even when this trigger occurs during the opponent's turn." },
-      effects: [{ op: "modify-power", target: "source", amount: 2000, duration: "turn", expiry: "active-turn" }]
-    },
-    ...[
-      ["cfa-3801", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
-      ["cfa-4229", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
-      ["cfa-4314", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
-      ["cfa-4540", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
-      ["cfa-3870", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
-      ["cfa-4060", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
-      ["cfa-4074", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."],
-      ["cfa-4097", "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn."]
-    ].map(([cardId, printedText]) => ({
-      id: `${cardId}:1`, cardId, kind: "ACT", printedText, requiredLocation: ["rear-guard"],
-      costsReviewed: true, conditionsReviewed: true, choicesReviewed: true,
-      costs: [{ type: "source-to-soul", count: 1 }, { type: "discard", count: 1, filter: { cardType: "normal-unit" } }],
-      source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", officialReference: "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf", patternId: "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1", review: "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit." },
-      effects: [
-        { op: "reorder-deck-card", target: "chosen", destination: "player-choice", requireTopCard: true, allowEmptyDeck: true },
-        { op: "draw", count: 1 },
-        { op: "modify-power-target", target: "chosen", amount: 5000, duration: "turn", targetFilter: { controller: "source-controller", cardType: "unit" }, condition: { op: "controller-face-up-g-zone-count-at-least", count: 1 } }
+      "id": "cfa-3980:0",
+      "cardId": "cfa-3980",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a vanguard with \"Yasuie\" in its card name, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Yasuie"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-vanguard-name-attack-source-soul-draw-power-battle-v1",
+        "review": "Exact four-card AUTO family. The controller's exact Vanguard attack triggers this Rear-Guard's optional source-to-Soul cost; the live Vanguard must contain its card's printed name fragment. If paid, draw one, then select the friendly Vanguard to receive +5000 for that same battle."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
       ]
-    })),
-
+    },
+    {
+      "id": "cfa-3998:0",
+      "cardId": "cfa-3998",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: [Put this unit into your soul] When your vanguard attacks, if you have a vanguard with \"Darkface\" in its card name, you may pay the cost. If you do, draw a card, choose one of your vanguards, and it gets power +5000 until end of that battle.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Darkface"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-vanguard-name-attack-source-soul-draw-power-battle-v1",
+        "review": "Exact four-card AUTO family. The controller's exact Vanguard attack triggers this Rear-Guard's optional source-to-Soul cost; the live Vanguard must contain its card's printed name fragment. If paid, draw one, then select the friendly Vanguard to receive +5000 for that same battle."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "battle",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1018:0",
+      "cardId": "cfa-1018",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditions": [
+        {
+          "type": "limit-break-active",
+          "count": 4
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-legacy-limit-break-vanguard-attack-power-v1",
+        "review": "Exact legacy reminder Limit Break attack template; source circle, damage threshold, target circle, and source instance are separately enforced."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1059:0",
+      "cardId": "cfa-1059",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditions": [
+        {
+          "type": "limit-break-active",
+          "count": 4
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-legacy-limit-break-vanguard-attack-power-v1",
+        "review": "Exact legacy reminder Limit Break attack template; source circle, damage threshold, target circle, and source instance are separately enforced."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1767:0",
+      "cardId": "cfa-1767",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When this unit attacks a vanguard, this unit gets power +5000 until end of battle.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditions": [
+        {
+          "type": "limit-break-active",
+          "count": 4
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-legacy-limit-break-vanguard-attack-power-v1",
+        "review": "Exact legacy reminder Limit Break attack template; source circle, damage threshold, target circle, and source instance are separately enforced."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-443:0",
+      "cardId": "cfa-443",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When an attack hits during the battle that this unit boosted, you may Soul Charge 1. If you do, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "booster",
+        "requiresBoostedBattle": true
+      },
+      "optional": true,
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-boosted-attack-hit-soul-charge-return-source-v1",
+        "review": "Exact three-card AUTO family. The controller may Soul Charge one only when this exact Rear-Guard instance boosted the unit in the battle that hit; only if a card was Soul Charged does this same source return to its owner's deck and that deck is shuffled."
+      },
+      "effects": [
+        {
+          "op": "soul-charge-and-return-source-to-deck",
+          "target": "source",
+          "count": 1,
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-734:0",
+      "cardId": "cfa-734",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When an attack hits during the battle that this unit boosted, you may Soul Charge 1. If you do, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "booster",
+        "requiresBoostedBattle": true
+      },
+      "optional": true,
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-boosted-attack-hit-soul-charge-return-source-v1",
+        "review": "Exact three-card AUTO family. The controller may Soul Charge one only when this exact Rear-Guard instance boosted the unit in the battle that hit; only if a card was Soul Charged does this same source return to its owner's deck and that deck is shuffled."
+      },
+      "effects": [
+        {
+          "op": "soul-charge-and-return-source-to-deck",
+          "target": "source",
+          "count": 1,
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-785:0",
+      "cardId": "cfa-785",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When an attack hits during the battle that this unit boosted, you may Soul Charge 1. If you do, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "booster",
+        "requiresBoostedBattle": true
+      },
+      "optional": true,
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-boosted-attack-hit-soul-charge-return-source-v1",
+        "review": "Exact three-card AUTO family. The controller may Soul Charge one only when this exact Rear-Guard instance boosted the unit in the battle that hit; only if a card was Soul Charged does this same source return to its owner's deck and that deck is shuffled."
+      },
+      "effects": [
+        {
+          "op": "soul-charge-and-return-source-to-deck",
+          "target": "source",
+          "count": 1,
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-717:0",
+      "cardId": "cfa-717",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.damage_moved",
+        "subject": "any",
+        "destinationLocation": "damage",
+        "subjectControllerRelation": "source-controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Angel Feather"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1",
+        "review": "Exact AUTO family on Thousand Ray Pegasus, Million Ray Pegasus, and The Phoenix, Calamity Flame. Only a card entering this controller's Damage Zone triggers the exact VC/RC source instance; its controller must have an Angel Feather Vanguard, and the +2000 expires at the active turn's end even when this trigger occurs during the opponent's turn."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn",
+          "expiry": "active-turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-725:0",
+      "cardId": "cfa-725",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.damage_moved",
+        "subject": "any",
+        "destinationLocation": "damage",
+        "subjectControllerRelation": "source-controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Angel Feather"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1",
+        "review": "Exact AUTO family on Thousand Ray Pegasus, Million Ray Pegasus, and The Phoenix, Calamity Flame. Only a card entering this controller's Damage Zone triggers the exact VC/RC source instance; its controller must have an Angel Feather Vanguard, and the +2000 expires at the active turn's end even when this trigger occurs during the opponent's turn."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn",
+          "expiry": "active-turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-732:0",
+      "cardId": "cfa-732",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When a card is put into your damage zone, if you have an «Angel Feather» vanguard, this unit gets power +2000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.damage_moved",
+        "subject": "any",
+        "destinationLocation": "damage",
+        "subjectControllerRelation": "source-controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Angel Feather"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-vc-rc-own-damage-zone-angel-feather-vanguard-power-turn-v1",
+        "review": "Exact AUTO family on Thousand Ray Pegasus, Million Ray Pegasus, and The Phoenix, Calamity Flame. Only a card entering this controller's Damage Zone triggers the exact VC/RC source instance; its controller must have an Angel Feather Vanguard, and the +2000 expires at the active turn's end even when this trigger occurs during the opponent's turn."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn",
+          "expiry": "active-turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-3801:1",
+      "cardId": "cfa-3801",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        },
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "cardType": "normal-unit"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1",
+        "review": "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit."
+      },
+      "effects": [
+        {
+          "op": "reorder-deck-card",
+          "target": "chosen",
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
+        },
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          },
+          "condition": {
+            "op": "controller-face-up-g-zone-count-at-least",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-4229:1",
+      "cardId": "cfa-4229",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        },
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "cardType": "normal-unit"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1",
+        "review": "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit."
+      },
+      "effects": [
+        {
+          "op": "reorder-deck-card",
+          "target": "chosen",
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
+        },
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          },
+          "condition": {
+            "op": "controller-face-up-g-zone-count-at-least",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-4314:1",
+      "cardId": "cfa-4314",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        },
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "cardType": "normal-unit"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1",
+        "review": "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit."
+      },
+      "effects": [
+        {
+          "op": "reorder-deck-card",
+          "target": "chosen",
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
+        },
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          },
+          "condition": {
+            "op": "controller-face-up-g-zone-count-at-least",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-4540:1",
+      "cardId": "cfa-4540",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        },
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "cardType": "normal-unit"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1",
+        "review": "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit."
+      },
+      "effects": [
+        {
+          "op": "reorder-deck-card",
+          "target": "chosen",
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
+        },
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          },
+          "condition": {
+            "op": "controller-face-up-g-zone-count-at-least",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-3870:1",
+      "cardId": "cfa-3870",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        },
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "cardType": "normal-unit"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1",
+        "review": "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit."
+      },
+      "effects": [
+        {
+          "op": "reorder-deck-card",
+          "target": "chosen",
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
+        },
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          },
+          "condition": {
+            "op": "controller-face-up-g-zone-count-at-least",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-4060:1",
+      "cardId": "cfa-4060",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        },
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "cardType": "normal-unit"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1",
+        "review": "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit."
+      },
+      "effects": [
+        {
+          "op": "reorder-deck-card",
+          "target": "chosen",
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
+        },
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          },
+          "condition": {
+            "op": "controller-face-up-g-zone-count-at-least",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-4074:1",
+      "cardId": "cfa-4074",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        },
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "cardType": "normal-unit"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT08%2F093EN",
+        "patternId": "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1",
+        "review": "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit."
+      },
+      "effects": [
+        {
+          "op": "reorder-deck-card",
+          "target": "chosen",
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
+        },
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          },
+          "condition": {
+            "op": "controller-face-up-g-zone-count-at-least",
+            "count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-4097:1",
+      "cardId": "cfa-4097",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        },
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "cardType": "normal-unit"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT08%2F071EN",
+        "patternId": "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1",
+        "review": "Exact eight-card ACT family with two punctuation/order variants. The controller may activate only from this exact source on RC during Main Phase, pays by moving that source to Soul and discarding one normal unit, chooses the exact deck top to remain on top or move to bottom, then draws one. The +5000 choice is available only if the controller has at least one face-up card in G zone at resolution; the target must be a friendly unit."
+      },
+      "effects": [
+        {
+          "op": "reorder-deck-card",
+          "target": "chosen",
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
+        },
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          },
+          "condition": {
+            "op": "controller-face-up-g-zone-count-at-least",
+            "count": 1
+          }
+        }
+      ]
+    },
     {
       "id": "cfa-13520:0",
       "cardId": "cfa-13520",
@@ -112431,122 +113703,10536 @@
           }
         }
       ]
+    },
+    {
+      "id": "cfa-24:0",
+      "cardId": "cfa-24",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: If you do not have a unit named \"Phantom Blaster Dragon\" or a unit named \"Blaster Dark\" on your VC, this unit gets power -5000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-power-penalty-unless-vanguard-name-one-of-v1",
+        "review": "Exact VC/RC CONT wording on four catalog records. This source gets the printed power penalty on VC or RC unless its controller's current Vanguard Circle has either exact printed unit name. Rear-Guards, the opponent's Vanguard, and substring-only matches do not satisfy the exception. The condition is continuous and is recomputed as the source's location or its controller's Vanguard changes."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "any",
+              "conditions": [
+                {
+                  "op": "controller-vanguard-card-name-equals",
+                  "name": "Phantom Blaster Dragon"
+                },
+                {
+                  "op": "controller-vanguard-card-name-equals",
+                  "name": "Blaster Dark"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-251:0",
+      "cardId": "cfa-251",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: If you do not have a unit named \"Enigman Storm\" or a unit named \"Enigman Wave\" on your VC, this unit gets power -5000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-power-penalty-unless-vanguard-name-one-of-v1",
+        "review": "Exact VC/RC CONT wording on four catalog records. This source gets the printed power penalty on VC or RC unless its controller's current Vanguard Circle has either exact printed unit name. Rear-Guards, the opponent's Vanguard, and substring-only matches do not satisfy the exception. The condition is continuous and is recomputed as the source's location or its controller's Vanguard changes."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "any",
+              "conditions": [
+                {
+                  "op": "controller-vanguard-card-name-equals",
+                  "name": "Enigman Storm"
+                },
+                {
+                  "op": "controller-vanguard-card-name-equals",
+                  "name": "Enigman Wave"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-536:0",
+      "cardId": "cfa-536",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: If you do not have a unit named \"Amber Dragon, Eclipse\" or a unit named \"Amber Dragon, Dusk\" on your VC, this unit gets power -5000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-power-penalty-unless-vanguard-name-one-of-v1",
+        "review": "Exact VC/RC CONT wording on four catalog records. This source gets the printed power penalty on VC or RC unless its controller's current Vanguard Circle has either exact printed unit name. Rear-Guards, the opponent's Vanguard, and substring-only matches do not satisfy the exception. The condition is continuous and is recomputed as the source's location or its controller's Vanguard changes."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "any",
+              "conditions": [
+                {
+                  "op": "controller-vanguard-card-name-equals",
+                  "name": "Amber Dragon, Eclipse"
+                },
+                {
+                  "op": "controller-vanguard-card-name-equals",
+                  "name": "Amber Dragon, Dusk"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-63:0",
+      "cardId": "cfa-63",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: If you do not have a unit named \"Evil Armor General, Giraffa\" or a unit named \"Elite Mutant, Giraffa\" on your VC, this unit gets power -5000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-power-penalty-unless-vanguard-name-one-of-v1",
+        "review": "Exact VC/RC CONT wording on four catalog records. This source gets the printed power penalty on VC or RC unless its controller's current Vanguard Circle has either exact printed unit name. Rear-Guards, the opponent's Vanguard, and substring-only matches do not satisfy the exception. The condition is continuous and is recomputed as the source's location or its controller's Vanguard changes."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "not",
+            "condition": {
+              "op": "any",
+              "conditions": [
+                {
+                  "op": "controller-vanguard-card-name-equals",
+                  "name": "Evil Armor General, Giraffa"
+                },
+                {
+                  "op": "controller-vanguard-card-name-equals",
+                  "name": "Elite Mutant, Giraffa"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11526:0",
+      "cardId": "cfa-11526",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC during your main phase, if you have a <Quintuplet> vanguard, look at the top three cards of your deck, choose up to one <Quintuplet> from among them, put it into memory, and shuffle the deck.",
+      "requiredLocation": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "event-subject",
+        "circles": [
+          "rear-guard"
+        ],
+        "requiredPhase": "main",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-race",
+          "value": "Quintuplet"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "optional": false,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-10-30",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-main-phase-race-top-three-memory-v1",
+        "review": "Exact shared AUTO on five Quintuplet units. It triggers only when this exact card enters an RC during its controller's Main Phase while that controller has a Vanguard with race Quintuplet. The controller privately chooses zero or one matching card among the top three; a chosen card enters the existing Order Zone, which Comprehensive Rules 4.52 §17.14.1 identifies as memory for effects, then the remaining looked cards are shuffled back. Only this AUTO is represented; each card's separate CONT ability is reviewed independently."
+      },
+      "effects": [
+        {
+          "op": "put-top-up-to-one-filtered-in-order-zone",
+          "target": "controller",
+          "lookCount": 3,
+          "maximum": 1,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11545:0",
+      "cardId": "cfa-11545",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC during your main phase, if you have a <Quintuplet> vanguard, look at the top three cards of your deck, choose up to one <Quintuplet> from among them, put it into memory, and shuffle the deck.",
+      "requiredLocation": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "event-subject",
+        "circles": [
+          "rear-guard"
+        ],
+        "requiredPhase": "main",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-race",
+          "value": "Quintuplet"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "optional": false,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-10-30",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-main-phase-race-top-three-memory-v1",
+        "review": "Exact shared AUTO on five Quintuplet units. It triggers only when this exact card enters an RC during its controller's Main Phase while that controller has a Vanguard with race Quintuplet. The controller privately chooses zero or one matching card among the top three; a chosen card enters the existing Order Zone, which Comprehensive Rules 4.52 §17.14.1 identifies as memory for effects, then the remaining looked cards are shuffled back. Only this AUTO is represented; each card's separate CONT ability is reviewed independently."
+      },
+      "effects": [
+        {
+          "op": "put-top-up-to-one-filtered-in-order-zone",
+          "target": "controller",
+          "lookCount": 3,
+          "maximum": 1,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11558:0",
+      "cardId": "cfa-11558",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC during your main phase, if you have a <Quintuplet> vanguard, look at the top three cards of your deck, choose up to one <Quintuplet> from among them, put it into memory, and shuffle the deck.",
+      "requiredLocation": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "event-subject",
+        "circles": [
+          "rear-guard"
+        ],
+        "requiredPhase": "main",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-race",
+          "value": "Quintuplet"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "optional": false,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-10-30",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-main-phase-race-top-three-memory-v1",
+        "review": "Exact shared AUTO on five Quintuplet units. It triggers only when this exact card enters an RC during its controller's Main Phase while that controller has a Vanguard with race Quintuplet. The controller privately chooses zero or one matching card among the top three; a chosen card enters the existing Order Zone, which Comprehensive Rules 4.52 §17.14.1 identifies as memory for effects, then the remaining looked cards are shuffled back. Only this AUTO is represented; each card's separate CONT ability is reviewed independently."
+      },
+      "effects": [
+        {
+          "op": "put-top-up-to-one-filtered-in-order-zone",
+          "target": "controller",
+          "lookCount": 3,
+          "maximum": 1,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11607:0",
+      "cardId": "cfa-11607",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC during your main phase, if you have a <Quintuplet> vanguard, look at the top three cards of your deck, choose up to one <Quintuplet> from among them, put it into memory, and shuffle the deck.",
+      "requiredLocation": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "event-subject",
+        "circles": [
+          "rear-guard"
+        ],
+        "requiredPhase": "main",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-race",
+          "value": "Quintuplet"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "optional": false,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-10-30",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-main-phase-race-top-three-memory-v1",
+        "review": "Exact shared AUTO on five Quintuplet units. It triggers only when this exact card enters an RC during its controller's Main Phase while that controller has a Vanguard with race Quintuplet. The controller privately chooses zero or one matching card among the top three; a chosen card enters the existing Order Zone, which Comprehensive Rules 4.52 §17.14.1 identifies as memory for effects, then the remaining looked cards are shuffled back. Only this AUTO is represented; each card's separate CONT ability is reviewed independently."
+      },
+      "effects": [
+        {
+          "op": "put-top-up-to-one-filtered-in-order-zone",
+          "target": "controller",
+          "lookCount": 3,
+          "maximum": 1,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11671:0",
+      "cardId": "cfa-11671",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC during your main phase, if you have a <Quintuplet> vanguard, look at the top three cards of your deck, choose up to one <Quintuplet> from among them, put it into memory, and shuffle the deck.",
+      "requiredLocation": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "event-subject",
+        "circles": [
+          "rear-guard"
+        ],
+        "requiredPhase": "main",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-race",
+          "value": "Quintuplet"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "optional": false,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-10-30",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-main-phase-race-top-three-memory-v1",
+        "review": "Exact shared AUTO on five Quintuplet units. It triggers only when this exact card enters an RC during its controller's Main Phase while that controller has a Vanguard with race Quintuplet. The controller privately chooses zero or one matching card among the top three; a chosen card enters the existing Order Zone, which Comprehensive Rules 4.52 §17.14.1 identifies as memory for effects, then the remaining looked cards are shuffled back. Only this AUTO is represented; each card's separate CONT ability is reviewed independently."
+      },
+      "effects": [
+        {
+          "op": "put-top-up-to-one-filtered-in-order-zone",
+          "target": "controller",
+          "lookCount": 3,
+          "maximum": 1,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-1140:0",
+      "cardId": "cfa-1140",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: [Counter Blast 1 - «Genesis»] When this unit attacks, if you have a «Genesis» vanguard, you may pay the cost. If you do, this unit gets power +4000 until the end of that battle.",
+      "optional": true,
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "vanguard",
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Genesis"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1,
+          "filter": {
+            "clan": "Genesis"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-counter-blast-power-battle-v1",
+        "review": "Exact AUTO. This exact source attacks from VC or RC, its controller has the printed-clan Vanguard, may pay one Counter Blast using a face-up damage card of the printed clan, and gives only this source +4000 for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 4000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1159:0",
+      "cardId": "cfa-1159",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: [Counter Blast 1 - «Royal Paladin»] When this unit attacks, if you have a «Royal Paladin» vanguard, you may pay the cost. If you do, this unit gets power +4000 until the end of that battle.",
+      "optional": true,
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "vanguard",
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Royal Paladin"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1,
+          "filter": {
+            "clan": "Royal Paladin"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-counter-blast-power-battle-v1",
+        "review": "Exact AUTO. This exact source attacks from VC or RC, its controller has the printed-clan Vanguard, may pay one Counter Blast using a face-up damage card of the printed clan, and gives only this source +4000 for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 4000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1170:0",
+      "cardId": "cfa-1170",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: [Counter Blast 1 - «Narukami»] When this unit attacks, if you have a «Narukami» vanguard, you may pay the cost. If you do, this unit gets power +4000 until the end of that battle.",
+      "optional": true,
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "vanguard",
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Narukami"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1,
+          "filter": {
+            "clan": "Narukami"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-counter-blast-power-battle-v1",
+        "review": "Exact AUTO. This exact source attacks from VC or RC, its controller has the printed-clan Vanguard, may pay one Counter Blast using a face-up damage card of the printed clan, and gives only this source +4000 for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 4000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1187:0",
+      "cardId": "cfa-1187",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: [Counter Blast 1 - «Spike Brothers»] When this unit attacks, if you have a «Spike Brothers» vanguard, you may pay the cost. If you do, this unit gets power +4000 until the end of that battle.",
+      "optional": true,
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "turnRelation": "any",
+        "circles": [
+          "vanguard",
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Spike Brothers"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1,
+          "filter": {
+            "clan": "Spike Brothers"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-counter-blast-power-battle-v1",
+        "review": "Exact AUTO. This exact source attacks from VC or RC, its controller has the printed-clan Vanguard, may pay one Counter Blast using a face-up damage card of the printed clan, and gives only this source +4000 for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 4000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12062:1",
+      "cardId": "cfa-12062",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If you have a vanguard with \"Drajeweled\" in its card name, this unit gets \"Boost\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-named-vanguard-grants-keyword-v1",
+        "review": "Exact named Boost CONT text and card identity verified against the local catalog. Boost is active only while this source instance is face-up on RC and its controller's current Vanguard card name (including active official aliases) contains the printed phrase. It is recomputed from live state and expires immediately when either condition stops being true."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "boost",
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-vanguard-card-name-contains",
+            "name": "Drajeweled"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12719:1",
+      "cardId": "cfa-12719",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If you have a vanguard with \"FLДMMe-Glam\" in its card name, this unit gets \"Boost\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-named-vanguard-grants-keyword-v1",
+        "review": "Exact named Boost CONT text and card identity verified against the local catalog. Boost is active only while this source instance is face-up on RC and its controller's current Vanguard card name (including active official aliases) contains the printed phrase. It is recomputed from live state and expires immediately when either condition stops being true."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "boost",
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-vanguard-card-name-contains",
+            "name": "FLДMMe-Glam"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13689:1",
+      "cardId": "cfa-13689",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If you have a vanguard with \"Argo Siren\" in its card name, this unit gets \"Boost\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-named-vanguard-grants-keyword-v1",
+        "review": "Exact named Boost CONT text and card identity verified against the local catalog. Boost is active only while this source instance is face-up on RC and its controller's current Vanguard card name (including active official aliases) contains the printed phrase. It is recomputed from live state and expires immediately when either condition stops being true."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "boost",
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-vanguard-card-name-contains",
+            "name": "Argo Siren"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-7528:1",
+      "cardId": "cfa-7528",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If you have a vanguard with \"Blaster\" in its card name, this unit gets \"Boost\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-named-vanguard-grants-keyword-v1",
+        "review": "Exact named Boost CONT text and card identity verified against the local catalog. Boost is active only while this source instance is face-up on RC and its controller's current Vanguard card name (including active official aliases) contains the printed phrase. It is recomputed from live state and expires immediately when either condition stops being true."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "boost",
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-vanguard-card-name-contains",
+            "name": "Blaster"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12547:1",
+      "cardId": "cfa-12547",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If you have a grade 3 or greater vanguard with \"Varga\" in its card name, this unit gets \"Boost\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-grade-named-vanguard-grants-keyword-v1",
+        "review": "Exact conditional Boost CONT text and card identity verified against the local catalog. Boost is active only while this exact source instance is face-up on RC and its controller's current Vanguard is grade 3 or greater and has the printed name phrase (including an active official heart name). The grade and name are recomputed from live state."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "boost",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Varga"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12862:1",
+      "cardId": "cfa-12862",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If you have a grade 3 or greater vanguard with \"Vyrgilla\" in its card name, this unit gets \"Boost\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-grade-named-vanguard-grants-keyword-v1",
+        "review": "Exact conditional Boost CONT text and card identity verified against the local catalog. Boost is active only while this exact source instance is face-up on RC and its controller's current Vanguard is grade 3 or greater and has the printed name phrase (including an active official heart name). The grade and name are recomputed from live state."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "boost",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Vyrgilla"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13727:1",
+      "cardId": "cfa-13727",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If you have a grade 3 or greater vanguard with \"Cristianos\" in its card name, this unit gets \"Boost\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-grade-named-vanguard-grants-keyword-v1",
+        "review": "Exact conditional Boost CONT text and card identity verified against the local catalog. Boost is active only while this exact source instance is face-up on RC and its controller's current Vanguard is grade 3 or greater and has the printed name phrase (including an active official heart name). The grade and name are recomputed from live state."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "boost",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Cristianos"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13759:1",
+      "cardId": "cfa-13759",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If you have a grade 3 or greater vanguard with \"Veissrugr\" in its card name, this unit gets \"Boost\".",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-grade-named-vanguard-grants-keyword-v1",
+        "review": "Exact conditional Boost CONT text and card identity verified against the local catalog. Boost is active only while this exact source instance is face-up on RC and its controller's current Vanguard is grade 3 or greater and has the printed name phrase (including an active official heart name). The grade and name are recomputed from live state."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "boost",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Veissrugr"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13498:0",
+      "cardId": "cfa-13498",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC, if your RC has a Dragontree marker, until end of that battle, this unit gets \"AUTO: When this unit is retired from GC, you may put this card into soul.\" and shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-has-dragontree-marker-on-rear-guard"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-10-30",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "patternId": "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1",
+        "review": "Exact five-card family. The exact source must be placed on Guardian Circle during the current battle while its controller has a Dragontree marker on a Rear-Guard Circle. It gains +5000 shield for that battle and a temporary optional AUTO; only that exact instance's retirement from GC to Drop in the same battle can queue the granted AUTO."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        },
+        {
+          "op": "grant-battle-gc-retire-to-soul",
+          "target": "source",
+          "duration": "battle",
+          "abilityText": "AUTO: When this unit is retired from GC, you may put this card into soul."
+        }
+      ]
+    },
+    {
+      "id": "cfa-13566:0",
+      "cardId": "cfa-13566",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC, if your RC has a Dragontree marker, until end of that battle, this unit gets \"AUTO: When this unit is retired from GC, you may put this card into soul.\" and shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-has-dragontree-marker-on-rear-guard"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-10-30",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "patternId": "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1",
+        "review": "Exact five-card family. The exact source must be placed on Guardian Circle during the current battle while its controller has a Dragontree marker on a Rear-Guard Circle. It gains +5000 shield for that battle and a temporary optional AUTO; only that exact instance's retirement from GC to Drop in the same battle can queue the granted AUTO."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        },
+        {
+          "op": "grant-battle-gc-retire-to-soul",
+          "target": "source",
+          "duration": "battle",
+          "abilityText": "AUTO: When this unit is retired from GC, you may put this card into soul."
+        }
+      ]
+    },
+    {
+      "id": "cfa-13607:0",
+      "cardId": "cfa-13607",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC, if your RC has a Dragontree marker, until end of that battle, this unit gets \"AUTO: When this unit is retired from GC, you may put this card into soul.\" and shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-has-dragontree-marker-on-rear-guard"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-10-30",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "patternId": "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1",
+        "review": "Exact five-card family. The exact source must be placed on Guardian Circle during the current battle while its controller has a Dragontree marker on a Rear-Guard Circle. It gains +5000 shield for that battle and a temporary optional AUTO; only that exact instance's retirement from GC to Drop in the same battle can queue the granted AUTO."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        },
+        {
+          "op": "grant-battle-gc-retire-to-soul",
+          "target": "source",
+          "duration": "battle",
+          "abilityText": "AUTO: When this unit is retired from GC, you may put this card into soul."
+        }
+      ]
+    },
+    {
+      "id": "cfa-13609:0",
+      "cardId": "cfa-13609",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC, if your RC has a Dragontree marker, until end of that battle, this unit gets \"AUTO: When this unit is retired from GC, you may put this card into soul.\" and shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-has-dragontree-marker-on-rear-guard"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-10-30",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "patternId": "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1",
+        "review": "Exact five-card family. The exact source must be placed on Guardian Circle during the current battle while its controller has a Dragontree marker on a Rear-Guard Circle. It gains +5000 shield for that battle and a temporary optional AUTO; only that exact instance's retirement from GC to Drop in the same battle can queue the granted AUTO."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        },
+        {
+          "op": "grant-battle-gc-retire-to-soul",
+          "target": "source",
+          "duration": "battle",
+          "abilityText": "AUTO: When this unit is retired from GC, you may put this card into soul."
+        }
+      ]
+    },
+    {
+      "id": "cfa-13638:0",
+      "cardId": "cfa-13638",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC, if your RC has a Dragontree marker, until end of that battle, this unit gets \"AUTO: When this unit is retired from GC, you may put this card into soul.\" and shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-has-dragontree-marker-on-rear-guard"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-10-30",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "patternId": "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1",
+        "review": "Exact five-card family. The exact source must be placed on Guardian Circle during the current battle while its controller has a Dragontree marker on a Rear-Guard Circle. It gains +5000 shield for that battle and a temporary optional AUTO; only that exact instance's retirement from GC to Drop in the same battle can queue the granted AUTO."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        },
+        {
+          "op": "grant-battle-gc-retire-to-soul",
+          "target": "source",
+          "duration": "battle",
+          "abilityText": "AUTO: When this unit is retired from GC, you may put this card into soul."
+        }
+      ]
+    },
+    {
+      "id": "cfa-11079:1",
+      "cardId": "cfa-11079",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-gc-opponent-grade-shield-v1",
+        "review": "Exact GC continuous text; only the defending player's opponent Vanguard grade is checked while the exact card is on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "opponent-vanguard-grade-at-least",
+            "grade": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11080:1",
+      "cardId": "cfa-11080",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-gc-opponent-grade-shield-v1",
+        "review": "Exact GC continuous text; only the defending player's opponent Vanguard grade is checked while the exact card is on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "opponent-vanguard-grade-at-least",
+            "grade": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11082:1",
+      "cardId": "cfa-11082",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-gc-opponent-grade-shield-v1",
+        "review": "Exact GC continuous text; only the defending player's opponent Vanguard grade is checked while the exact card is on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "opponent-vanguard-grade-at-least",
+            "grade": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11083:1",
+      "cardId": "cfa-11083",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-gc-opponent-grade-shield-v1",
+        "review": "Exact GC continuous text; only the defending player's opponent Vanguard grade is checked while the exact card is on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "opponent-vanguard-grade-at-least",
+            "grade": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11085:1",
+      "cardId": "cfa-11085",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-gc-opponent-grade-shield-v1",
+        "review": "Exact GC continuous text; only the defending player's opponent Vanguard grade is checked while the exact card is on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "opponent-vanguard-grade-at-least",
+            "grade": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11086:1",
+      "cardId": "cfa-11086",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-gc-opponent-grade-shield-v1",
+        "review": "Exact GC continuous text; only the defending player's opponent Vanguard grade is checked while the exact card is on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "opponent-vanguard-grade-at-least",
+            "grade": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11088:1",
+      "cardId": "cfa-11088",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-gc-opponent-grade-shield-v1",
+        "review": "Exact GC continuous text; only the defending player's opponent Vanguard grade is checked while the exact card is on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "opponent-vanguard-grade-at-least",
+            "grade": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11089:1",
+      "cardId": "cfa-11089",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-gc-opponent-grade-shield-v1",
+        "review": "Exact GC continuous text; only the defending player's opponent Vanguard grade is checked while the exact card is on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "opponent-vanguard-grade-at-least",
+            "grade": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11091:1",
+      "cardId": "cfa-11091",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-gc-opponent-grade-shield-v1",
+        "review": "Exact GC continuous text; only the defending player's opponent Vanguard grade is checked while the exact card is on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "opponent-vanguard-grade-at-least",
+            "grade": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11092:1",
+      "cardId": "cfa-11092",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-gc-opponent-grade-shield-v1",
+        "review": "Exact GC continuous text; only the defending player's opponent Vanguard grade is checked while the exact card is on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "opponent-vanguard-grade-at-least",
+            "grade": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-273:0",
+      "cardId": "cfa-273",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1] During your end phase, when this unit is put into the drop zone from RC, if you have a «Great Nature» vanguard, you may pay the cost. If you do, search your deck for up to one card name \"Ruler Chameleon\", reveal it to your opponent, put it into your hand, and shuffle your deck.",
+      "optional": true,
+      "requiredLocation": [],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Great Nature"
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.moved",
+        "subject": "event-subject",
+        "circles": [],
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "requiredPhase": "end",
+        "turnRelation": "controller",
+        "anyOf": [
+          {
+            "eventType": "card.moved",
+            "subject": "event-subject",
+            "circles": [],
+            "sourceLocation": "rear-guard",
+            "destinationLocation": "drop",
+            "requiredPhase": "end",
+            "turnRelation": "controller"
+          },
+          {
+            "eventType": "card.retired",
+            "subject": "event-subject",
+            "circles": [],
+            "sourceLocation": "rear-guard",
+            "destinationLocation": "drop",
+            "requiredPhase": "end",
+            "turnRelation": "controller"
+          }
+        ]
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-end-phase-rc-drop-counter-blast-same-name-search-v1",
+        "review": "Exact four-card Great Nature AUTO family. During the controller's End Phase, the exact source must move from its own RC to Drop and its controller must have a Great Nature Vanguard. Its controller may pay Counter Blast 1, then searches the controller's Deck for up to one card with the exact printed source name, reveals it, adds it to hand, and shuffles."
+      },
+      "effects": [
+        {
+          "op": "search-deck-same-name-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardName": "Ruler Chameleon"
+        }
+      ]
+    },
+    {
+      "id": "cfa-284:0",
+      "cardId": "cfa-284",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1] During your end phase, when this unit is put into the drop zone from RC, if you have a «Great Nature» vanguard, you may pay the cost. If you do, search your deck for up to one card name \"Pencil Squire, Hammsuke\", reveal it to your opponent, put it into your hand, and shuffle your deck.",
+      "optional": true,
+      "requiredLocation": [],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Great Nature"
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.moved",
+        "subject": "event-subject",
+        "circles": [],
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "requiredPhase": "end",
+        "turnRelation": "controller",
+        "anyOf": [
+          {
+            "eventType": "card.moved",
+            "subject": "event-subject",
+            "circles": [],
+            "sourceLocation": "rear-guard",
+            "destinationLocation": "drop",
+            "requiredPhase": "end",
+            "turnRelation": "controller"
+          },
+          {
+            "eventType": "card.retired",
+            "subject": "event-subject",
+            "circles": [],
+            "sourceLocation": "rear-guard",
+            "destinationLocation": "drop",
+            "requiredPhase": "end",
+            "turnRelation": "controller"
+          }
+        ]
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-end-phase-rc-drop-counter-blast-same-name-search-v1",
+        "review": "Exact four-card Great Nature AUTO family. During the controller's End Phase, the exact source must move from its own RC to Drop and its controller must have a Great Nature Vanguard. Its controller may pay Counter Blast 1, then searches the controller's Deck for up to one card with the exact printed source name, reveals it, adds it to hand, and shuffles."
+      },
+      "effects": [
+        {
+          "op": "search-deck-same-name-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardName": "Pencil Squire, Hammsuke"
+        }
+      ]
+    },
+    {
+      "id": "cfa-301:0",
+      "cardId": "cfa-301",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1] During your end phase, when this unit is put into the drop zone from RC, if you have a «Great Nature» vanguard, you may pay the cost. If you do, search your deck for up to one card name \"Pencil Knight, Hammsuke\", reveal it to your opponent, put it into your hand, and shuffle your deck.",
+      "optional": true,
+      "requiredLocation": [],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Great Nature"
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.moved",
+        "subject": "event-subject",
+        "circles": [],
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "requiredPhase": "end",
+        "turnRelation": "controller",
+        "anyOf": [
+          {
+            "eventType": "card.moved",
+            "subject": "event-subject",
+            "circles": [],
+            "sourceLocation": "rear-guard",
+            "destinationLocation": "drop",
+            "requiredPhase": "end",
+            "turnRelation": "controller"
+          },
+          {
+            "eventType": "card.retired",
+            "subject": "event-subject",
+            "circles": [],
+            "sourceLocation": "rear-guard",
+            "destinationLocation": "drop",
+            "requiredPhase": "end",
+            "turnRelation": "controller"
+          }
+        ]
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-end-phase-rc-drop-counter-blast-same-name-search-v1",
+        "review": "Exact four-card Great Nature AUTO family. During the controller's End Phase, the exact source must move from its own RC to Drop and its controller must have a Great Nature Vanguard. Its controller may pay Counter Blast 1, then searches the controller's Deck for up to one card with the exact printed source name, reveals it, adds it to hand, and shuffles."
+      },
+      "effects": [
+        {
+          "op": "search-deck-same-name-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardName": "Pencil Knight, Hammsuke"
+        }
+      ]
+    },
+    {
+      "id": "cfa-309:0",
+      "cardId": "cfa-309",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1] During your end phase, when this unit is put into the drop zone from RC, if you have a «Great Nature» vanguard, you may pay the cost. If you do, search your deck for up to one card name \"Pencil Hero, Hammsuke\", reveal it to your opponent, put it into your hand, and shuffle your deck.",
+      "optional": true,
+      "requiredLocation": [],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Great Nature"
+        }
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.moved",
+        "subject": "event-subject",
+        "circles": [],
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "requiredPhase": "end",
+        "turnRelation": "controller",
+        "anyOf": [
+          {
+            "eventType": "card.moved",
+            "subject": "event-subject",
+            "circles": [],
+            "sourceLocation": "rear-guard",
+            "destinationLocation": "drop",
+            "requiredPhase": "end",
+            "turnRelation": "controller"
+          },
+          {
+            "eventType": "card.retired",
+            "subject": "event-subject",
+            "circles": [],
+            "sourceLocation": "rear-guard",
+            "destinationLocation": "drop",
+            "requiredPhase": "end",
+            "turnRelation": "controller"
+          }
+        ]
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-end-phase-rc-drop-counter-blast-same-name-search-v1",
+        "review": "Exact four-card Great Nature AUTO family. During the controller's End Phase, the exact source must move from its own RC to Drop and its controller must have a Great Nature Vanguard. Its controller may pay Counter Blast 1, then searches the controller's Deck for up to one card with the exact printed source name, reveals it, adds it to hand, and shuffles."
+      },
+      "effects": [
+        {
+          "op": "search-deck-same-name-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardName": "Pencil Hero, Hammsuke"
+        }
+      ]
+    },
+    {
+      "id": "cfa-8541:0",
+      "cardId": "cfa-8541",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, COST [Counter Blast 1], choose a \"Honebami Toushirou\" from your drop, and call it to an open RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "optional": false,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad Cardfight Area card-text snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "patternId": "auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1",
+        "review": "Four exact Touken Ranbu AUTO records. Only this exact source instance entering its controller's RC from hand triggers. Its controller pays Counter Blast 1, selects the exact printed-name Unit from their own Drop, and calls it standing to an empty, unlocked RC. No circle is replaced, and no trigger is offered if the cost, named card, or open RC is unavailable."
+      },
+      "effects": [
+        {
+          "op": "call-named-drop-card-to-rearguard",
+          "target": "controller",
+          "cardName": "Honebami Toushirou",
+          "destination": "rear-guard",
+          "position": "stand",
+          "requireOpenCircle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-8571:0",
+      "cardId": "cfa-8571",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, COST [Counter Blast 1], choose a \"Chiganemaru\" from your drop, and call it to an open RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "optional": false,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad Cardfight Area card-text snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "patternId": "auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1",
+        "review": "Four exact Touken Ranbu AUTO records. Only this exact source instance entering its controller's RC from hand triggers. Its controller pays Counter Blast 1, selects the exact printed-name Unit from their own Drop, and calls it standing to an empty, unlocked RC. No circle is replaced, and no trigger is offered if the cost, named card, or open RC is unavailable."
+      },
+      "effects": [
+        {
+          "op": "call-named-drop-card-to-rearguard",
+          "target": "controller",
+          "cardName": "Chiganemaru",
+          "destination": "rear-guard",
+          "position": "stand",
+          "requireOpenCircle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-8577:0",
+      "cardId": "cfa-8577",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, COST [Counter Blast 1], choose a \"Chiyoganemaru\" from your drop, and call it to an open RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "optional": false,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad Cardfight Area card-text snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "patternId": "auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1",
+        "review": "Four exact Touken Ranbu AUTO records. Only this exact source instance entering its controller's RC from hand triggers. Its controller pays Counter Blast 1, selects the exact printed-name Unit from their own Drop, and calls it standing to an empty, unlocked RC. No circle is replaced, and no trigger is offered if the cost, named card, or open RC is unavailable."
+      },
+      "effects": [
+        {
+          "op": "call-named-drop-card-to-rearguard",
+          "target": "controller",
+          "cardName": "Chiyoganemaru",
+          "destination": "rear-guard",
+          "position": "stand",
+          "requireOpenCircle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-8585:0",
+      "cardId": "cfa-8585",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC from hand, COST [Counter Blast 1], choose a \"Namazuo Toushirou\" from your drop, and call it to an open RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "optional": false,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad Cardfight Area card-text snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "patternId": "auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1",
+        "review": "Four exact Touken Ranbu AUTO records. Only this exact source instance entering its controller's RC from hand triggers. Its controller pays Counter Blast 1, selects the exact printed-name Unit from their own Drop, and calls it standing to an empty, unlocked RC. No circle is replaced, and no trigger is offered if the cost, named card, or open RC is unavailable."
+      },
+      "effects": [
+        {
+          "op": "call-named-drop-card-to-rearguard",
+          "target": "controller",
+          "cardName": "Namazuo Toushirou",
+          "destination": "rear-guard",
+          "position": "stand",
+          "requireOpenCircle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-2007:1",
+      "cardId": "cfa-2007",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 15000 or greater, this unit gets critical +1 until end of that battle.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.step-started",
+        "subject": "controller",
+        "turnRelation": "controller",
+        "requiredTimingWindow": "attack-step-start"
+      },
+      "conditions": [
+        {
+          "type": "source-power-at-least",
+          "count": 15000
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "rulesReference": "Comprehensive Rules 4.52 §10.4.1.2; Official FAQ Q52",
+        "patternId": "auto-attack-step-source-power-critical-battle-v1",
+        "review": "Exact printed-template family. At the beginning of each modeled battle attack step, the source's own power is read from the authoritative pre-boost event snapshot; a booster or a different unit's power cannot satisfy the threshold. The AUTO belongs to the controller's attack step and applies critical to this exact source through that battle only."
+      },
+      "effects": [
+        {
+          "op": "modify-critical",
+          "target": "source",
+          "amount": 1,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-254:0",
+      "cardId": "cfa-254",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 13000 or greater, this unit gets critical +1 until end of that battle.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.step-started",
+        "subject": "controller",
+        "turnRelation": "controller",
+        "requiredTimingWindow": "attack-step-start"
+      },
+      "conditions": [
+        {
+          "type": "source-power-at-least",
+          "count": 13000
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "rulesReference": "Comprehensive Rules 4.52 §10.4.1.2; Official FAQ Q52",
+        "patternId": "auto-attack-step-source-power-critical-battle-v1",
+        "review": "Exact printed-template family. At the beginning of each modeled battle attack step, the source's own power is read from the authoritative pre-boost event snapshot; a booster or a different unit's power cannot satisfy the threshold. The AUTO belongs to the controller's attack step and applies critical to this exact source through that battle only."
+      },
+      "effects": [
+        {
+          "op": "modify-critical",
+          "target": "source",
+          "amount": 1,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-260:1",
+      "cardId": "cfa-260",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 15000 or greater, this unit gets critical +1 until end of that battle.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.step-started",
+        "subject": "controller",
+        "turnRelation": "controller",
+        "requiredTimingWindow": "attack-step-start"
+      },
+      "conditions": [
+        {
+          "type": "source-power-at-least",
+          "count": 15000
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "rulesReference": "Comprehensive Rules 4.52 §10.4.1.2; Official FAQ Q52",
+        "patternId": "auto-attack-step-source-power-critical-battle-v1",
+        "review": "Exact printed-template family. At the beginning of each modeled battle attack step, the source's own power is read from the authoritative pre-boost event snapshot; a booster or a different unit's power cannot satisfy the threshold. The AUTO belongs to the controller's attack step and applies critical to this exact source through that battle only."
+      },
+      "effects": [
+        {
+          "op": "modify-critical",
+          "target": "source",
+          "amount": 1,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-263:0",
+      "cardId": "cfa-263",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 14000 or greater, this unit gets critical +1 until end of that battle.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.step-started",
+        "subject": "controller",
+        "turnRelation": "controller",
+        "requiredTimingWindow": "attack-step-start"
+      },
+      "conditions": [
+        {
+          "type": "source-power-at-least",
+          "count": 14000
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "rulesReference": "Comprehensive Rules 4.52 §10.4.1.2; Official FAQ Q52",
+        "patternId": "auto-attack-step-source-power-critical-battle-v1",
+        "review": "Exact printed-template family. At the beginning of each modeled battle attack step, the source's own power is read from the authoritative pre-boost event snapshot; a booster or a different unit's power cannot satisfy the threshold. The AUTO belongs to the controller's attack step and applies critical to this exact source through that battle only."
+      },
+      "effects": [
+        {
+          "op": "modify-critical",
+          "target": "source",
+          "amount": 1,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-10475:0",
+      "cardId": "cfa-10475",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed by riding from \"Chrono Dran\", draw a card, and you get a \"Chronojet Dragon\" crest.\n\n(You will be prompted to get the crest upon ride.)",
+      "optional": false,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetCardNameEquals": "Chrono Dran"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Vanguard Arena reviewed catalog",
+        "snapshotDate": "2026-10-31",
+        "patternId": "auto-ride-from-named-vanguard-draw-get-crest-v1",
+        "review": "Exact catalog text for this five-card batch. The triggering source is the exact incoming Vanguard instance; its prior Vanguard must be the named card and must actually move from Vanguard to Soul in the same ride event. Draw one, then add the actual named Crest card to the same controller's Crest zone."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "create-crest",
+          "target": "controller",
+          "cardId": "cfa-10476",
+          "cardName": "Chronojet Dragon"
+        }
+      ]
+    },
+    {
+      "id": "cfa-10764:0",
+      "cardId": "cfa-10764",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed by riding from \"Neon Messiah\", draw a card, and you get a \"Alter Ego Messiah\" crest.\n\n(You will be prompted to get the crest upon ride.)",
+      "optional": false,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetCardNameEquals": "Neon Messiah"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Vanguard Arena reviewed catalog",
+        "snapshotDate": "2026-10-31",
+        "patternId": "auto-ride-from-named-vanguard-draw-get-crest-v1",
+        "review": "Exact catalog text for this five-card batch. The triggering source is the exact incoming Vanguard instance; its prior Vanguard must be the named card and must actually move from Vanguard to Soul in the same ride event. Draw one, then add the actual named Crest card to the same controller's Crest zone."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "create-crest",
+          "target": "controller",
+          "cardId": "cfa-10668",
+          "cardName": "Alter Ego Messiah"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12185:0",
+      "cardId": "cfa-12185",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed by riding from \"Dragprince, Rute\", draw a card, and you get a \"Dragheart, Luard\" crest.\n\n(You will be prompted to get the crest upon ride.)",
+      "optional": false,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetCardNameEquals": "Dragprince, Rute"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Vanguard Arena reviewed catalog",
+        "snapshotDate": "2026-10-31",
+        "patternId": "auto-ride-from-named-vanguard-draw-get-crest-v1",
+        "review": "Exact catalog text for this five-card batch. The triggering source is the exact incoming Vanguard instance; its prior Vanguard must be the named card and must actually move from Vanguard to Soul in the same ride event. Draw one, then add the actual named Crest card to the same controller's Crest zone."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "create-crest",
+          "target": "controller",
+          "cardId": "cfa-12183",
+          "cardName": "Dragheart, Luard"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13174:0",
+      "cardId": "cfa-13174",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed by riding from \"Undying Departed, Grenache\", draw a card, and you get a \"Vampire Princess of Night Fog, Nightrose\" crest.\n\n(You will be prompted to get the crest upon ride.)",
+      "optional": false,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetCardNameEquals": "Undying Departed, Grenache"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Vanguard Arena reviewed catalog",
+        "snapshotDate": "2026-10-31",
+        "patternId": "auto-ride-from-named-vanguard-draw-get-crest-v1",
+        "review": "Exact catalog text for this five-card batch. The triggering source is the exact incoming Vanguard instance; its prior Vanguard must be the named card and must actually move from Vanguard to Soul in the same ride event. Draw one, then add the actual named Crest card to the same controller's Crest zone."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "create-crest",
+          "target": "controller",
+          "cardId": "cfa-13177",
+          "cardName": "Vampire Princess of Night Fog, Nightrose"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13188:0",
+      "cardId": "cfa-13188",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed by riding from \"Happiness Collector\", draw a card, and you get a \"Masked Magician, Harri\" crest.\n\n(You will be prompted to get the crest upon ride.)",
+      "optional": false,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetCardNameEquals": "Happiness Collector"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Vanguard Arena reviewed catalog",
+        "snapshotDate": "2026-10-31",
+        "patternId": "auto-ride-from-named-vanguard-draw-get-crest-v1",
+        "review": "Exact catalog text for this five-card batch. The triggering source is the exact incoming Vanguard instance; its prior Vanguard must be the named card and must actually move from Vanguard to Soul in the same ride event. Draw one, then add the actual named Crest card to the same controller's Crest zone."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        },
+        {
+          "op": "create-crest",
+          "target": "controller",
+          "cardId": "cfa-13186",
+          "cardName": "Masked Magician, Harri"
+        }
+      ]
+    },
+    {
+      "id": "cfa-274:0",
+      "cardId": "cfa-274",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a card named \"Bringer of Knowledge, Lox\" rides this unit, look at up to seven cards from the top of your deck, search for up to one card name \"Guardian of Truth, Lox\" or \"Law Official, Lox\" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.",
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderCardNameEquals": "Bringer of Knowledge, Lox"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-source-top-seven-two-name-search-v1",
+        "review": "Exact ride-trigger search template. The exact previous Vanguard instance and exact named rider are matched; the controller may choose zero or one of the two exact-name cards among the top seven, reveal it, add it to hand, and shuffle the deck."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-one-filtered-to-hand",
+          "target": "controller",
+          "lookCount": 7,
+          "maximum": 1,
+          "filter": {
+            "cardNamesAny": [
+              "Guardian of Truth, Lox",
+              "Law Official, Lox"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-743:0",
+      "cardId": "cfa-743",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a card named \"Military Dragon, Raptor Sergeant\" rides this unit, look at up to seven cards from the top of your deck, search for up to one card name \"Military Dragon, Raptor Colonel\" or \"Military Dragon, Raptor Captain\" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.",
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderCardNameEquals": "Military Dragon, Raptor Sergeant"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-source-top-seven-two-name-search-v1",
+        "review": "Exact ride-trigger search template. The exact previous Vanguard instance and exact named rider are matched; the controller may choose zero or one of the two exact-name cards among the top seven, reveal it, add it to hand, and shuffle the deck."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-one-filtered-to-hand",
+          "target": "controller",
+          "lookCount": 7,
+          "maximum": 1,
+          "filter": {
+            "cardNamesAny": [
+              "Military Dragon, Raptor Colonel",
+              "Military Dragon, Raptor Captain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-948:0",
+      "cardId": "cfa-948",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a card named \"Arboros Dragon, Branch\" rides this unit, look at up to seven cards from the top of your deck, search for up to one card name \"Arboros Dragon, Sephirot\" or \"Arboros Dragon, Timber\" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.",
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderCardNameEquals": "Arboros Dragon, Branch"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-source-top-seven-two-name-search-v1",
+        "review": "Exact ride-trigger search template. The exact previous Vanguard instance and exact named rider are matched; the controller may choose zero or one of the two exact-name cards among the top seven, reveal it, add it to hand, and shuffle the deck."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-one-filtered-to-hand",
+          "target": "controller",
+          "lookCount": 7,
+          "maximum": 1,
+          "filter": {
+            "cardNamesAny": [
+              "Arboros Dragon, Sephirot",
+              "Arboros Dragon, Timber"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-974:0",
+      "cardId": "cfa-974",
+      "kind": "AUTO",
+      "printedText": "AUTO: When a card named \"Eye of Destruction, Zeal\" rides this unit, look at up to seven cards from the top of your deck, search for up to one card name \"Galactic Beast, Zeal\" or \"Devourer of Planets, Zeal\" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.",
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderCardNameEquals": "Eye of Destruction, Zeal"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-source-top-seven-two-name-search-v1",
+        "review": "Exact ride-trigger search template. The exact previous Vanguard instance and exact named rider are matched; the controller may choose zero or one of the two exact-name cards among the top seven, reveal it, add it to hand, and shuffle the deck."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-one-filtered-to-hand",
+          "target": "controller",
+          "lookCount": 7,
+          "maximum": 1,
+          "filter": {
+            "cardNamesAny": [
+              "Galactic Beast, Zeal",
+              "Devourer of Planets, Zeal"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10476:2",
+      "cardId": "cfa-10476",
+      "kind": "CONT",
+      "printedText": "CONT: During your turn, if you have a grade 3 or greater vanguard with \"Chronojet\" in its card name, all of your front row units get power +5000 for each face up card in your G Zone.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.45.pdf",
+        "patternId": "cont-crest-own-turn-named-vanguard-front-row-power-per-face-up-g-zone-v1",
+        "review": "Exact CONT text and ID-specific name match verified against the local catalog. While this exact crest is controlled in the crest area, its controller's turn is active, and that controller has a Grade 3+ Vanguard (including the selected heart card's name during Stride) containing \"Chronojet\", each of that player's front-row units gets +5000 for each distinct face-up card in that player's G Zone. The continuous modifier is recomputed from current state; only VC, front RC, and Accel circles qualify."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-face-up-g-zone-card",
+          "target": "all-controller-front-row-units",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Chronojet"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10668:2",
+      "cardId": "cfa-10668",
+      "kind": "CONT",
+      "printedText": "CONT: During your turn, if you have a grade 3 or greater vanguard with \"Messiah\" in its card name, all of your front row units get power +5000 for each face up card in your G zone.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.45.pdf",
+        "patternId": "cont-crest-own-turn-named-vanguard-front-row-power-per-face-up-g-zone-v1",
+        "review": "Exact CONT text and ID-specific name match verified against the local catalog. While this exact crest is controlled in the crest area, its controller's turn is active, and that controller has a Grade 3+ Vanguard (including the selected heart card's name during Stride) containing \"Messiah\", each of that player's front-row units gets +5000 for each distinct face-up card in that player's G Zone. The continuous modifier is recomputed from current state; only VC, front RC, and Accel circles qualify."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-face-up-g-zone-card",
+          "target": "all-controller-front-row-units",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Messiah"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12183:2",
+      "cardId": "cfa-12183",
+      "kind": "CONT",
+      "printedText": "CONT: During your turn, if you have a grade 3 or greater vanguard with \"Luard\" in its card name, all of your front row units get power +5000 for each face up card in your G zone.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.45.pdf",
+        "patternId": "cont-crest-own-turn-named-vanguard-front-row-power-per-face-up-g-zone-v1",
+        "review": "Exact CONT text and ID-specific name match verified against the local catalog. While this exact crest is controlled in the crest area, its controller's turn is active, and that controller has a Grade 3+ Vanguard (including the selected heart card's name during Stride) containing \"Luard\", each of that player's front-row units gets +5000 for each distinct face-up card in that player's G Zone. The continuous modifier is recomputed from current state; only VC, front RC, and Accel circles qualify."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-face-up-g-zone-card",
+          "target": "all-controller-front-row-units",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Luard"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13177:2",
+      "cardId": "cfa-13177",
+      "kind": "CONT",
+      "printedText": "CONT: During your turn, if you have a grade 3 or greater vanguard with \"Nightrose\" in its card name, all of your front row units get power +5000 for each face up card in your G zone.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.45.pdf",
+        "patternId": "cont-crest-own-turn-named-vanguard-front-row-power-per-face-up-g-zone-v1",
+        "review": "Exact CONT text and ID-specific name match verified against the local catalog. While this exact crest is controlled in the crest area, its controller's turn is active, and that controller has a Grade 3+ Vanguard (including the selected heart card's name during Stride) containing \"Nightrose\", each of that player's front-row units gets +5000 for each distinct face-up card in that player's G Zone. The continuous modifier is recomputed from current state; only VC, front RC, and Accel circles qualify."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-face-up-g-zone-card",
+          "target": "all-controller-front-row-units",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Nightrose"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13186:2",
+      "cardId": "cfa-13186",
+      "kind": "CONT",
+      "printedText": "CONT: During your turn, if you have a grade 3 or greater vanguard with \"Harri\" in its card name, all of your front row units get power +5000 for each face up card in your G zone.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.45.pdf",
+        "patternId": "cont-crest-own-turn-named-vanguard-front-row-power-per-face-up-g-zone-v1",
+        "review": "Exact CONT text and ID-specific name match verified against the local catalog. While this exact crest is controlled in the crest area, its controller's turn is active, and that controller has a Grade 3+ Vanguard (including the selected heart card's name during Stride) containing \"Harri\", each of that player's front-row units gets +5000 for each distinct face-up card in that player's G Zone. The continuous modifier is recomputed from current state; only VC, front RC, and Accel circles qualify."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-face-up-g-zone-card",
+          "target": "all-controller-front-row-units",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Harri"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1251:0",
+      "cardId": "cfa-1251",
+      "kind": "AUTO",
+      "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Kagero» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Choose three cards from your hand, and discard them] At the end of the battle that this unit attacked, if this unit has not become stand during that turn, you may pay the cost. If you do, stand this unit.\".",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderClan": "Kagero"
+      },
+      "conditions": [
+        {
+          "type": "limit-break-active",
+          "count": 4
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "grant-vanguard-break-ride-ability",
+          "target": "controller",
+          "parentCardId": "cfa-1251",
+          "parentAbilityId": "cfa-1251:0",
+          "amount": 10000
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-limit-break-clan-break-ride-grant-v1",
+        "review": "Exact catalog text for this five-card Limit Break break-ride family. The old Vanguard's exact ridden instance must be the event target, a same-clan Rider must be the current Vanguard under the same controller, the ride must move the old source from VC to Soul, and the controller must have at least four Damage. Resolution grants +10000 and only this rider instance receives this source card's exact quoted AUTO until the current turn ends. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
+      }
+    },
+    {
+      "id": "cfa-1671:0",
+      "cardId": "cfa-1671",
+      "kind": "AUTO",
+      "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Nova Grappler» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Counter Blast 1] When this unit attacks a vanguard, you may pay the cost. If you do, stand all of your «Nova Grappler» rear-guards.\".",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderClan": "Nova Grappler"
+      },
+      "conditions": [
+        {
+          "type": "limit-break-active",
+          "count": 4
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "grant-vanguard-break-ride-ability",
+          "target": "controller",
+          "parentCardId": "cfa-1671",
+          "parentAbilityId": "cfa-1671:0",
+          "amount": 10000
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-limit-break-clan-break-ride-grant-v1",
+        "review": "Exact catalog text for this five-card Limit Break break-ride family. The old Vanguard's exact ridden instance must be the event target, a same-clan Rider must be the current Vanguard under the same controller, the ride must move the old source from VC to Soul, and the controller must have at least four Damage. Resolution grants +10000 and only this rider instance receives this source card's exact quoted AUTO until the current turn ends. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
+      }
+    },
+    {
+      "id": "cfa-1879:0",
+      "cardId": "cfa-1879",
+      "kind": "AUTO",
+      "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Kagero» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Counter Blast 1 & Choose one «Kagero» from your hand, and discard it] At the end of the battle that this unit attacked a rear-guard, you may pay the cost. If you do, stand this unit. This ability cannot be used for the rest of that turn. (This ability cannot be used even if the cost is not paid.)\".",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderClan": "Kagero"
+      },
+      "conditions": [
+        {
+          "type": "limit-break-active",
+          "count": 4
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "grant-vanguard-break-ride-ability",
+          "target": "controller",
+          "parentCardId": "cfa-1879",
+          "parentAbilityId": "cfa-1879:0",
+          "amount": 10000
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-limit-break-clan-break-ride-grant-v1",
+        "review": "Exact catalog text for this five-card Limit Break break-ride family. The old Vanguard's exact ridden instance must be the event target, a same-clan Rider must be the current Vanguard under the same controller, the ride must move the old source from VC to Soul, and the controller must have at least four Damage. Resolution grants +10000 and only this rider instance receives this source card's exact quoted AUTO until the current turn ends. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
+      }
+    },
+    {
+      "id": "cfa-1945:0",
+      "cardId": "cfa-1945",
+      "kind": "AUTO",
+      "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Bermuda Triangle» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Counter Blast 1] When this unit attacks a vanguard, you may pay the cost. If you do, return all of your «Bermuda Triangle» rear-guards to your hand, then choose up to two «Bermuda Triangle» from your hand, and call them to separate RC.\".",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderClan": "Bermuda Triangle"
+      },
+      "conditions": [
+        {
+          "type": "limit-break-active",
+          "count": 4
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "grant-vanguard-break-ride-ability",
+          "target": "controller",
+          "parentCardId": "cfa-1945",
+          "parentAbilityId": "cfa-1945:0",
+          "amount": 10000
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-limit-break-clan-break-ride-grant-v1",
+        "review": "Exact catalog text for this five-card Limit Break break-ride family. The old Vanguard's exact ridden instance must be the event target, a same-clan Rider must be the current Vanguard under the same controller, the ride must move the old source from VC to Soul, and the controller must have at least four Damage. Resolution grants +10000 and only this rider instance receives this source card's exact quoted AUTO until the current turn ends. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
+      }
+    },
+    {
+      "id": "cfa-1954:0",
+      "cardId": "cfa-1954",
+      "kind": "AUTO",
+      "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Bermuda Triangle» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: When your «Bermuda Triangle» is returned to your hand from RC, search your deck for up to one «Bermuda Triangle», call it to RC, and shuffle your deck. This ability cannot be used for the rest of that turn.\".",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderClan": "Bermuda Triangle"
+      },
+      "conditions": [
+        {
+          "type": "limit-break-active",
+          "count": 4
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "grant-vanguard-break-ride-ability",
+          "target": "controller",
+          "parentCardId": "cfa-1954",
+          "parentAbilityId": "cfa-1954:0",
+          "amount": 10000
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-limit-break-clan-break-ride-grant-v1",
+        "review": "Exact catalog text for this five-card Limit Break break-ride family. The old Vanguard's exact ridden instance must be the event target, a same-clan Rider must be the current Vanguard under the same controller, the ride must move the old source from VC to Soul, and the controller must have at least four Damage. Resolution grants +10000 and only this rider instance receives this source card's exact quoted AUTO until the current turn ends. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
+      }
+    },
+    {
+      "id": "cfa-1954:1",
+      "cardId": "cfa-1954",
+      "kind": "ACT",
+      "printedText": "ACT [Soul]: [Counter Blast 1 & Choose a unit named \"Top Idol, Pacifica\" from your RC, and put it into your soul] Put this card into your hand, choose up to one of your «Bermuda Triangle» rear-guards, and return it to your hand.",
+      "activationWindow": "main",
+      "requiredLocation": [
+        "soul"
+      ],
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "pacifica-soul-cycle",
+          "target": "controller",
+          "requiredName": "Top Idol, Pacifica",
+          "returnClan": "Bermuda Triangle"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "patternId": "act-soul-counter-blast-named-unit-soul-source-hand-clan-return-v1",
+        "review": "Exact Pacifica ACT. The source must be this controller's Pacifica instance in Soul during Main Phase; Counter Blast 1 is paid, an exact Top Idol, Pacifica instance is moved from that controller's RC to Soul, then this source moves from Soul to hand, and the controller may return up to one different Bermuda Triangle Rear-Guard to hand. The server revalidates all three instance identities before committing."
+      }
+    },
+    {
+      "id": "cfa-911:0",
+      "cardId": "cfa-911",
+      "kind": "ACT",
+      "printedText": "ACT [Damage Zone]: [Turn this card from face up to face down] Choose your «Angel Feather» vanguard, and that unit gets power +3000 until end of turn.",
+      "activationWindow": "main",
+      "requiredLocation": [
+        "damage"
+      ],
+      "costs": [
+        {
+          "type": "source-turn-face-down",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 3000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard",
+            "clan": "Angel Feather"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT09%2F083EN",
+        "officialCardNumber": "BT09/083EN",
+        "setCode": "BT09",
+        "patternId": "act-damage-zone-turn-self-face-down-angel-feather-vanguard-power-turn-v1",
+        "review": "Exact ACT template. Only this exact face-up source instance in its controller's Damage Zone can pay by turning itself face down; it then targets that controller's Angel Feather Vanguard for +3000 until end of turn. The server revalidates the source instance, location, face-up state, player, timing, and target before committing."
+      }
+    },
+    {
+      "id": "cfa-913:0",
+      "cardId": "cfa-913",
+      "kind": "ACT",
+      "printedText": "ACT [Damage Zone]: [Turn this card from face up to face down] Choose your «Angel Feather» vanguard, and that unit gets power +3000 until end of turn.",
+      "activationWindow": "main",
+      "requiredLocation": [
+        "damage"
+      ],
+      "costs": [
+        {
+          "type": "source-turn-face-down",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 3000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard",
+            "clan": "Angel Feather"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT09%2F078EN",
+        "officialCardNumber": "BT09/078EN",
+        "setCode": "BT09",
+        "patternId": "act-damage-zone-turn-self-face-down-angel-feather-vanguard-power-turn-v1",
+        "review": "Exact ACT template. Only this exact face-up source instance in its controller's Damage Zone can pay by turning itself face down; it then targets that controller's Angel Feather Vanguard for +3000 until end of turn. The server revalidates the source instance, location, face-up state, player, timing, and target before committing."
+      }
+    },
+    {
+      "id": "cfa-916:0",
+      "cardId": "cfa-916",
+      "kind": "ACT",
+      "printedText": "ACT [Damage Zone]: [Turn this card from face up to face down] Choose your «Angel Feather» vanguard, and that unit gets power +3000 until end of turn.",
+      "activationWindow": "main",
+      "requiredLocation": [
+        "damage"
+      ],
+      "costs": [
+        {
+          "type": "source-turn-face-down",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 3000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard",
+            "clan": "Angel Feather"
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT09%2F076EN",
+        "officialCardNumber": "BT09/076EN",
+        "setCode": "BT09",
+        "patternId": "act-damage-zone-turn-self-face-down-angel-feather-vanguard-power-turn-v1",
+        "review": "Exact ACT template. Only this exact face-up source instance in its controller's Damage Zone can pay by turning itself face down; it then targets that controller's Angel Feather Vanguard for +3000 until end of turn. The server revalidates the source instance, location, face-up state, player, timing, and target before committing."
+      }
+    },
+    {
+      "id": "cfa-155:0",
+      "cardId": "cfa-155",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: If you do not have another «Nova Grappler» vanguard or rear-guard, this unit gets power -2000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-no-other-clan-field-power-penalty-v1",
+        "review": "Exact VC/RC CONT wording across four catalog records. Checks only the source controller's Vanguard and Rear-Guards, excludes the source instance by stable UID, and tests exact structured clan identity. Opposing units are ignored. Missing controller or clan identity fails closed, and the continuous condition is reevaluated as the field changes."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-field-lacks-other-card-of-clan",
+            "clan": "Nova Grappler"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-547:0",
+      "cardId": "cfa-547",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: If you do not have another «Kagero» vanguard or rear-guard, this unit gets power -2000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-no-other-clan-field-power-penalty-v1",
+        "review": "Exact VC/RC CONT wording across four catalog records. Checks only the source controller's Vanguard and Rear-Guards, excludes the source instance by stable UID, and tests exact structured clan identity. Opposing units are ignored. Missing controller or clan identity fails closed, and the continuous condition is reevaluated as the field changes."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-field-lacks-other-card-of-clan",
+            "clan": "Kagero"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-624:0",
+      "cardId": "cfa-624",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: If you do not have another «Spike Brothers» vanguard or rear-guard, this unit gets power -2000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-no-other-clan-field-power-penalty-v1",
+        "review": "Exact VC/RC CONT wording across four catalog records. Checks only the source controller's Vanguard and Rear-Guards, excludes the source instance by stable UID, and tests exact structured clan identity. Opposing units are ignored. Missing controller or clan identity fails closed, and the continuous condition is reevaluated as the field changes."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-field-lacks-other-card-of-clan",
+            "clan": "Spike Brothers"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-625:0",
+      "cardId": "cfa-625",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: If you do not have another «Spike Brothers» vanguard or rear-guard, this unit gets power -2000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-no-other-clan-field-power-penalty-v1",
+        "review": "Exact VC/RC CONT wording across four catalog records. Checks only the source controller's Vanguard and Rear-Guards, excludes the source instance by stable UID, and tests exact structured clan identity. Opposing units are ignored. Missing controller or clan identity fails closed, and the continuous condition is reevaluated as the field changes."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-field-lacks-other-card-of-clan",
+            "clan": "Spike Brothers"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11522:1",
+      "cardId": "cfa-11522",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your memory has three or more <Quintuplet> with different card names, this unit gets shield +5000.\n\n(Hold TAB to view the related card.)",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-memory-distinct-race-power-or-shield-v1",
+        "review": "Exact GC CONT wording. Count distinct card names among Quintuplet race cards in this player's Memory; the local game represents Memory in this player's Order Zone per Comprehensive Rules 4.52 §17.14.1–17.14.1.1. This ability grants shield only while on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-memory-has-at-least-n-different-card-names-of-race",
+            "count": 3,
+            "race": "Quintuplet"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11542:1",
+      "cardId": "cfa-11542",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your memory has three or more <Quintuplet> with different card names, this unit gets shield +5000.\n\n(Hold TAB to view the related card.)",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-memory-distinct-race-power-or-shield-v1",
+        "review": "Exact GC CONT wording. Count distinct card names among Quintuplet race cards in this player's Memory; the local game represents Memory in this player's Order Zone per Comprehensive Rules 4.52 §17.14.1–17.14.1.1. This ability grants shield only while on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-memory-has-at-least-n-different-card-names-of-race",
+            "count": 3,
+            "race": "Quintuplet"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11554:1",
+      "cardId": "cfa-11554",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your memory has three or more <Quintuplet> with different card names, this unit gets shield +5000.\n\n(Hold TAB to view the related card.)",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-memory-distinct-race-power-or-shield-v1",
+        "review": "Exact GC CONT wording. Count distinct card names among Quintuplet race cards in this player's Memory; the local game represents Memory in this player's Order Zone per Comprehensive Rules 4.52 §17.14.1–17.14.1.1. This ability grants shield only while on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-memory-has-at-least-n-different-card-names-of-race",
+            "count": 3,
+            "race": "Quintuplet"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11603:1",
+      "cardId": "cfa-11603",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your memory has three or more <Quintuplet> with different card names, this unit gets shield +5000.\n\n(Hold TAB to view the related card.)",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-memory-distinct-race-power-or-shield-v1",
+        "review": "Exact GC CONT wording. Count distinct card names among Quintuplet race cards in this player's Memory; the local game represents Memory in this player's Order Zone per Comprehensive Rules 4.52 §17.14.1–17.14.1.1. This ability grants shield only while on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-memory-has-at-least-n-different-card-names-of-race",
+            "count": 3,
+            "race": "Quintuplet"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11667:1",
+      "cardId": "cfa-11667",
+      "kind": "CONT",
+      "printedText": "CONT [GC]: If your memory has three or more <Quintuplet> with different card names, this unit gets shield +5000.\n\n(Hold TAB to view the related card.)",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-memory-distinct-race-power-or-shield-v1",
+        "review": "Exact GC CONT wording. Count distinct card names among Quintuplet race cards in this player's Memory; the local game represents Memory in this player's Order Zone per Comprehensive Rules 4.52 §17.14.1–17.14.1.1. This ability grants shield only while on GC."
+      },
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-memory-has-at-least-n-different-card-names-of-race",
+            "count": 3,
+            "race": "Quintuplet"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11526:1",
+      "cardId": "cfa-11526",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If your memory has three or more <Quintuplet> with different card names, this unit gets power +2000. (Active on opponent’s turn too)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-memory-distinct-race-power-or-shield-v1",
+        "review": "Exact RC CONT wording. Count distinct card names among Quintuplet race cards in this player's Memory; the local game represents Memory in this player's Order Zone per Comprehensive Rules 4.52 §17.14.1–17.14.1.1. This ability grants power while on RC, including on the opponent's turn."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-memory-has-at-least-n-different-card-names-of-race",
+            "count": 3,
+            "race": "Quintuplet"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11545:1",
+      "cardId": "cfa-11545",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If your memory has three or more <Quintuplet> with different card names, this unit gets power +2000. (Active on opponent’s turn too)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-memory-distinct-race-power-or-shield-v1",
+        "review": "Exact RC CONT wording. Count distinct card names among Quintuplet race cards in this player's Memory; the local game represents Memory in this player's Order Zone per Comprehensive Rules 4.52 §17.14.1–17.14.1.1. This ability grants power while on RC, including on the opponent's turn."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-memory-has-at-least-n-different-card-names-of-race",
+            "count": 3,
+            "race": "Quintuplet"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11607:1",
+      "cardId": "cfa-11607",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If your memory has three or more <Quintuplet> with different card names, this unit gets power +2000. (Active on opponent’s turn too)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-memory-distinct-race-power-or-shield-v1",
+        "review": "Exact RC CONT wording. Count distinct card names among Quintuplet race cards in this player's Memory; the local game represents Memory in this player's Order Zone per Comprehensive Rules 4.52 §17.14.1–17.14.1.1. This ability grants power while on RC, including on the opponent's turn."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-memory-has-at-least-n-different-card-names-of-race",
+            "count": 3,
+            "race": "Quintuplet"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11671:1",
+      "cardId": "cfa-11671",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If your memory has three or more <Quintuplet> with different card names, this unit gets power +2000. (Active on opponent’s turn too)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-memory-distinct-race-power-or-shield-v1",
+        "review": "Exact RC CONT wording. Count distinct card names among Quintuplet race cards in this player's Memory; the local game represents Memory in this player's Order Zone per Comprehensive Rules 4.52 §17.14.1–17.14.1.1. This ability grants power while on RC, including on the opponent's turn."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-memory-has-at-least-n-different-card-names-of-race",
+            "count": 3,
+            "race": "Quintuplet"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13243:0",
+      "cardId": "cfa-13243",
+      "kind": "CONT",
+      "printedText": "CONT [RC/GC]: If you have a grade 3 or greater vanguard with \"Sarevsael\" in its card name, this unit gets \"Intercept\", can intercept from the back row, and gets shield +5000.",
+      "requiredLocation": [
+        "rear-guard",
+        "guardian"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Sarevsael"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "intercept",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Sarevsael"
+              }
+            ]
+          }
+        },
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "back-row-intercept",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Sarevsael"
+              }
+            ]
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Sarevsael"
+              }
+            ]
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT05%2F057EN",
+        "officialCardNumber": "DZ-BT05/057EN",
+        "setCode": "DZ-BT05",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-rc-gc-named-vanguard-back-row-intercept-shield-v1",
+        "review": "Exact printed CONT for DZ-BT05/057EN. On RC or GC, the controller must have a grade 3 or greater Vanguard whose card name contains “Sarevsael”. While that live condition is true, this unit gains Intercept and permission to intercept from the back row; it also gains 5000 shield. The engine reevaluates the condition and location for each legality and shield check. The battle reducer still enforces defender timing, the exact untargeted source instance, and the front/back-row rule."
+      }
+    },
+    {
+      "id": "cfa-13253:0",
+      "cardId": "cfa-13253",
+      "kind": "CONT",
+      "printedText": "CONT [RC/GC]: If you have a grade 3 or greater vanguard with \"Oselargest\" in its card name, this unit gets \"Intercept\", can intercept from the back row, and gets shield +5000.",
+      "requiredLocation": [
+        "rear-guard",
+        "guardian"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Oselargest"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "intercept",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Oselargest"
+              }
+            ]
+          }
+        },
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "back-row-intercept",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Oselargest"
+              }
+            ]
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Oselargest"
+              }
+            ]
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT05%2F050EN",
+        "officialCardNumber": "DZ-BT05/050EN",
+        "setCode": "DZ-BT05",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-rc-gc-named-vanguard-back-row-intercept-shield-v1",
+        "review": "Exact printed CONT for DZ-BT05/050EN. On RC or GC, the controller must have a grade 3 or greater Vanguard whose card name contains “Oselargest”. While that live condition is true, this unit gains Intercept and permission to intercept from the back row; it also gains 5000 shield. The engine reevaluates the condition and location for each legality and shield check. The battle reducer still enforces defender timing, the exact untargeted source instance, and the front/back-row rule."
+      }
+    },
+    {
+      "id": "cfa-13264:0",
+      "cardId": "cfa-13264",
+      "kind": "CONT",
+      "printedText": "CONT [RC/GC]: If you have a grade 3 or greater vanguard with \"Asturm\" in its card name, this unit gets \"Intercept\", can intercept from the back row, and gets shield +5000.",
+      "requiredLocation": [
+        "rear-guard",
+        "guardian"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Asturm"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "intercept",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Asturm"
+              }
+            ]
+          }
+        },
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "back-row-intercept",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Asturm"
+              }
+            ]
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Asturm"
+              }
+            ]
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT05%2F054EN",
+        "officialCardNumber": "DZ-BT05/054EN",
+        "setCode": "DZ-BT05",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-rc-gc-named-vanguard-back-row-intercept-shield-v1",
+        "review": "Exact printed CONT for DZ-BT05/054EN. On RC or GC, the controller must have a grade 3 or greater Vanguard whose card name contains “Asturm”. While that live condition is true, this unit gains Intercept and permission to intercept from the back row; it also gains 5000 shield. The engine reevaluates the condition and location for each legality and shield check. The battle reducer still enforces defender timing, the exact untargeted source instance, and the front/back-row rule."
+      }
+    },
+    {
+      "id": "cfa-13309:0",
+      "cardId": "cfa-13309",
+      "kind": "CONT",
+      "printedText": "CONT [RC/GC]: If you have a grade 3 or greater vanguard with \"Triumph Dragon\" in its card name, this unit gets \"Intercept\", can intercept from the back row, and gets shield +5000.",
+      "requiredLocation": [
+        "rear-guard",
+        "guardian"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Triumph Dragon"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "intercept",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Triumph Dragon"
+              }
+            ]
+          }
+        },
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "back-row-intercept",
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Triumph Dragon"
+              }
+            ]
+          }
+        }
+      ],
+      "effects": [
+        {
+          "op": "continuous-shield",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-vanguard-grade-at-least",
+                "grade": 3
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Triumph Dragon"
+              }
+            ]
+          }
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-01",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT05%2F047EN",
+        "officialCardNumber": "DZ-BT05/047EN",
+        "setCode": "DZ-BT05",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-rc-gc-named-vanguard-back-row-intercept-shield-v1",
+        "review": "Exact printed CONT for DZ-BT05/047EN. On RC or GC, the controller must have a grade 3 or greater Vanguard whose card name contains “Triumph Dragon”. While that live condition is true, this unit gains Intercept and permission to intercept from the back row; it also gains 5000 shield. The engine reevaluates the condition and location for each legality and shield check. The battle reducer still enforces defender timing, the exact untargeted source instance, and the front/back-row rule."
+      }
+    },
+    {
+      "id": "cfa-10830:0",
+      "cardId": "cfa-10830",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Counter Blast 1 & Soul Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker. Search your deck for up to one \"Masque of Hydragrum\", reveal it and put it into your hand, and shuffle your deck.\n\n(SHIFT + left click to get a Dragontree Marker)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        },
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Dragontree",
+          "circleTypes": [
+            "rear-guard"
+          ]
+        },
+        {
+          "op": "search-deck-same-name-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardName": "Masque of Hydragrum"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-counter-soul-blast-dragontree-marker-masque-search-v1",
+        "review": "Exact four-card catalog template. Only this source instance's RC placement triggers; its controller pays Counter Blast 1 and Soul Blast 1, chooses an unmarked own Rear-Guard Circle for a Dragontree marker, then may search up to one exact-name Masque of Hydragrum, reveal and add it, and shuffle."
+      }
+    },
+    {
+      "id": "cfa-10850:0",
+      "cardId": "cfa-10850",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Counter Blast 1 & Soul Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker. Search your deck for up to one \"Masque of Hydragrum\", reveal it and put it into your hand, and shuffle your deck.\n\n(SHIFT + left click to get a Dragontree Marker)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        },
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Dragontree",
+          "circleTypes": [
+            "rear-guard"
+          ]
+        },
+        {
+          "op": "search-deck-same-name-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardName": "Masque of Hydragrum"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-counter-soul-blast-dragontree-marker-masque-search-v1",
+        "review": "Exact four-card catalog template. Only this source instance's RC placement triggers; its controller pays Counter Blast 1 and Soul Blast 1, chooses an unmarked own Rear-Guard Circle for a Dragontree marker, then may search up to one exact-name Masque of Hydragrum, reveal and add it, and shuffle."
+      }
+    },
+    {
+      "id": "cfa-11627:0",
+      "cardId": "cfa-11627",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Counter Blast 1 & Soul Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker. Search your deck for up to one \"Masque of Hydragrum\", reveal it and put it into your hand, and shuffle your deck.\n\n(SHIFT + left click to get a Dragontree Marker)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        },
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Dragontree",
+          "circleTypes": [
+            "rear-guard"
+          ]
+        },
+        {
+          "op": "search-deck-same-name-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardName": "Masque of Hydragrum"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-counter-soul-blast-dragontree-marker-masque-search-v1",
+        "review": "Exact four-card catalog template. Only this source instance's RC placement triggers; its controller pays Counter Blast 1 and Soul Blast 1, chooses an unmarked own Rear-Guard Circle for a Dragontree marker, then may search up to one exact-name Masque of Hydragrum, reveal and add it, and shuffle."
+      }
+    },
+    {
+      "id": "cfa-11952:0",
+      "cardId": "cfa-11952",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Counter Blast 1 & Soul Blast 1], choose one of your RC without any Dragontree markers, and put a Dragontree marker. Search your deck for up to one \"Masque of Hydragrum\", reveal it and put it into your hand, and shuffle your deck.\n\n(SHIFT + left click to get a Dragontree Marker)",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        },
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "place-circle-marker",
+          "target": "chosen-controller-circle",
+          "markerType": "Dragontree",
+          "circleTypes": [
+            "rear-guard"
+          ]
+        },
+        {
+          "op": "search-deck-same-name-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardName": "Masque of Hydragrum"
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-counter-soul-blast-dragontree-marker-masque-search-v1",
+        "review": "Exact four-card catalog template. Only this source instance's RC placement triggers; its controller pays Counter Blast 1 and Soul Blast 1, chooses an unmarked own Rear-Guard Circle for a Dragontree marker, then may search up to one exact-name Masque of Hydragrum, reveal and add it, and shuffle."
+      }
+    },
+    {
+      "id": "cfa-9718:0",
+      "cardId": "cfa-9718",
+      "kind": "CONT",
+      "printedText": "CONT: This card can only be ridden from a grade 3 card with \"Tao Ren\" in its card name.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-ride-from-grade-and-named-vanguard-v1",
+        "review": "Exact CONT ride restriction. This card is a legal ride candidate only when the current Vanguard has the printed grade and its card name contains the printed name fragment."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-from-grade-and-name",
+          "grade": 3,
+          "name": "Tao Ren"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11825:0",
+      "cardId": "cfa-11825",
+      "kind": "CONT",
+      "printedText": "CONT: This card can only be ridden from a grade 3 card with \"Magnolia\" in its card name.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-ride-from-grade-and-named-vanguard-v1",
+        "review": "Exact CONT ride restriction. This card is a legal ride candidate only when the current Vanguard has the printed grade and its card name contains the printed name fragment."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-from-grade-and-name",
+          "grade": 3,
+          "name": "Magnolia"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13003:0",
+      "cardId": "cfa-13003",
+      "kind": "CONT",
+      "printedText": "CONT: This card can only be ridden from a grade 3 unit with \"Luticia\" in its card name.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-ride-from-grade-and-named-vanguard-v1",
+        "review": "Exact CONT ride restriction. This card is a legal ride candidate only when the current Vanguard has the printed grade and its card name contains the printed name fragment."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-from-grade-and-name",
+          "grade": 3,
+          "name": "Luticia"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13490:0",
+      "cardId": "cfa-13490",
+      "kind": "CONT",
+      "printedText": "CONT: This card can only be ridden from a grade 3 card with \"Solrairon\" in its card name.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-ride-from-grade-and-named-vanguard-v1",
+        "review": "Exact CONT ride restriction. This card is a legal ride candidate only when the current Vanguard has the printed grade and its card name contains the printed name fragment."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-from-grade-and-name",
+          "grade": 3,
+          "name": "Solrairon"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13625:0",
+      "cardId": "cfa-13625",
+      "kind": "CONT",
+      "printedText": "CONT: This card can only be ridden from a grade 3 card with \"Gandeeva\" in its card name.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-ride-from-grade-and-named-vanguard-v1",
+        "review": "Exact CONT ride restriction. This card is a legal ride candidate only when the current Vanguard has the printed grade and its card name contains the printed name fragment."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-from-grade-and-name",
+          "grade": 3,
+          "name": "Gandeeva"
+        }
+      ]
+    },
+    {
+      "id": "cfa-459:0",
+      "cardId": "cfa-459",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, if the number of «Dark Irregulars» in your soul is six or more, this unit gets power +3000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot; Bushiroad official Card List and Q&A rules cross-check",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-turn-clan-soul-threshold-power-v1",
+        "review": "Exact four-card template match from the local catalog. Bushiroad's official list confirms the Amon wording; its official Q&A confirms cards entering Soul during a ride are counted. During the controller's turn, count distinct Soul instances with authoritative printed Clan metadata and apply power only at the printed circle(s)."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "soul-clan-count-at-least",
+                "clan": "Dark Irregulars",
+                "count": 6
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-470:0",
+      "cardId": "cfa-470",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, if the number of «Dark Irregulars» in your soul is six or more, this unit gets power +3000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot; Bushiroad official Card List and Q&A rules cross-check",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-turn-clan-soul-threshold-power-v1",
+        "review": "Exact four-card template match from the local catalog. Bushiroad's official list confirms the Amon wording; its official Q&A confirms cards entering Soul during a ride are counted. During the controller's turn, count distinct Soul instances with authoritative printed Clan metadata and apply power only at the printed circle(s)."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "soul-clan-count-at-least",
+                "clan": "Dark Irregulars",
+                "count": 6
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-643:0",
+      "cardId": "cfa-643",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, if the number of «Royal Paladin» in your soul is six or more, this unit gets power +3000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot; Bushiroad official Card List and Q&A rules cross-check",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-turn-clan-soul-threshold-power-v1",
+        "review": "Exact four-card template match from the local catalog. Bushiroad's official list confirms the Amon wording; its official Q&A confirms cards entering Soul during a ride are counted. During the controller's turn, count distinct Soul instances with authoritative printed Clan metadata and apply power only at the printed circle(s)."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "soul-clan-count-at-least",
+                "clan": "Royal Paladin",
+                "count": 6
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-668:0",
+      "cardId": "cfa-668",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, if the number of «Royal Paladin» in your soul is six or more, this unit gets power +3000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot; Bushiroad official Card List and Q&A rules cross-check",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-turn-clan-soul-threshold-power-v1",
+        "review": "Exact four-card template match from the local catalog. Bushiroad's official list confirms the Amon wording; its official Q&A confirms cards entering Soul during a ride are counted. During the controller's turn, count distinct Soul instances with authoritative printed Clan metadata and apply power only at the printed circle(s)."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "soul-clan-count-at-least",
+                "clan": "Royal Paladin",
+                "count": 6
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-100:1",
+      "cardId": "cfa-100",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When this unit attacks a vanguard, this unit gets power +3000 until end of that battle.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=21&view=text",
+        "patternId": "auto-own-attack-vanguard-power-battle-v1",
+        "review": "BT08/006EN's AUTO gains +3000 until end of that battle. The exact VC source must be the attacking Vanguard and the target must be the opposing Vanguard."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-10016:0",
+      "cardId": "cfa-10016",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: During your turn, if you have \"Spectral Duke Dragon\" in your soul, this unit gets power +10000, and if your opponent’s vanguard is grade 3 or greater, then it gets critical +1.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS06%2FSP03EN",
+        "patternId": "cont-vanguard-soul-name-power-critical-v1",
+        "review": "D-VS06/SP03EN CONT: +10000 is active only during the controller's turn with Spectral Duke Dragon in their Soul; +1 critical additionally requires the opposing Vanguard to be grade 3 or greater."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 10000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "soul-has-card-name",
+                "name": "Spectral Duke Dragon"
+              }
+            ]
+          }
+        },
+        {
+          "op": "continuous-critical",
+          "target": "source",
+          "amount": 1,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "soul-has-card-name",
+                "name": "Spectral Duke Dragon"
+              },
+              {
+                "op": "opponent-vanguard-grade-at-least",
+                "grade": 3
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2236:2",
+      "cardId": "cfa-2236",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When this unit attacks a vanguard, if you have another unit in the center column, this unit gets power +3000 until end of that battle.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-vanguard-attack-center-column-power-battle-v1",
+        "review": "Exact VC attack template. The condition checks the rear back-center slot, not any rear unit, and source/target identity remains tied to the declared attack."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1593:2",
+      "cardId": "cfa-1593",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: Lord (If you have a unit without a same clan as this unit, this unit cannot attack)",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-lord-attack-restriction-v1",
+        "review": "Exact Lord keyword variants on VC/RC compile as a continuous attack restriction; no activation prompt is created."
+      },
+      "keywords": [
+        "lord"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "lord"
+        }
+      ]
+    },
+    {
+      "id": "cfa-4293:2",
+      "cardId": "cfa-4293",
+      "kind": "CONT",
+      "printedText": "CONT: This card is from all clans and nations.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-all-clans-and-nations-v1",
+        "review": "Exact CONT identity wording. This is a continuous clan/nation identity property, not a manually activated skill."
+      },
+      "keywords": [
+        "all-clans-and-nations"
+      ]
+    },
+    {
+      "id": "cfa-98:1",
+      "cardId": "cfa-98",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: If you have a non-«Aqua Force» vanguard or rear-guard, this unit gets power -2000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-vc-rc-non-clan-field-power-penalty-v1",
+        "review": "Exact VC/RC CONT wording across 11 catalog records. Checks the controller's Vanguard and Rear-Guards only; a field card qualifies only when its structured single-clan identity is known and differs from the printed clan. Unavailable or ambiguous clan data fails closed."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-field-has-non-clan",
+            "clan": "Aqua Force"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10089:0",
+      "cardId": "cfa-10089",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is rode upon by \"Brilliant Tune, Rektina\", you may call this card to RC.",
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderCardNameEquals": "Brilliant Tune, Rektina"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS06%2F003EN",
+        "patternId": "auto-rode-upon-named-rider-optional-source-call-v1",
+        "review": "Exact optional AUTO on the previously ridden Vanguard. The ride event must target this exact source, identify Brilliant Tune, Rektina as the rider, and move the source from Vanguard to its controller's Soul; accepting calls that source standing to an open RC."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-10102:0",
+      "cardId": "cfa-10102",
+      "kind": "ACT",
+      "printedText": "ACT [RC] 1/Turn: If your vanguard is grade 3 or greater, COST [Counter Blast 2], and draw a card.",
+      "activationWindow": "main",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 2
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "once": true,
+      "usageRestriction": {
+        "type": "once-per-turn",
+        "scope": "ability-instance",
+        "reset": "turn"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=193&view=text",
+        "patternId": "act-rc-grade-three-counter-blast-draw-v1",
+        "review": "Exact RC ACT template. It is available to its controller during Main Phase only with a grade 3 or greater Vanguard, costs Counter Blast 2, draws one card, and is once per turn for this ability instance."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-13049:1",
+      "cardId": "cfa-13049",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, this unit gets power +2000 until end of that battle for each of your rear-guards.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-own-attack-power-per-count-battle-v1",
+        "review": "Exact Rear-Guard own-attack template. The battle bonus is computed from the controller's or opponent's live authoritative zone count when this exact source attacks; locked cards are excluded from Rear-Guard counts, drop and Soul thresholds round down, and the modifier applies only to the current battle."
+      },
+      "effects": [
+        {
+          "op": "source-power-per-count",
+          "target": "source",
+          "amountPerCount": 2000,
+          "duration": "battle",
+          "countBy": "controller-rear-guards",
+          "divisor": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-13057:1",
+      "cardId": "cfa-13057",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, this unit gets power +2000 until end of that battle for every five cards in your drop.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-own-attack-power-per-count-battle-v1",
+        "review": "Exact Rear-Guard own-attack template. The battle bonus is computed from the controller's or opponent's live authoritative zone count when this exact source attacks; locked cards are excluded from Rear-Guard counts, drop and Soul thresholds round down, and the modifier applies only to the current battle."
+      },
+      "effects": [
+        {
+          "op": "source-power-per-count",
+          "target": "source",
+          "amountPerCount": 2000,
+          "duration": "battle",
+          "countBy": "controller-drop",
+          "divisor": 5
+        }
+      ]
+    },
+    {
+      "id": "cfa-13060:1",
+      "cardId": "cfa-13060",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, this unit gets power +2000 until end of that battle for every three cards in your soul.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-own-attack-power-per-count-battle-v1",
+        "review": "Exact Rear-Guard own-attack template. The battle bonus is computed from the controller's or opponent's live authoritative zone count when this exact source attacks; locked cards are excluded from Rear-Guard counts, drop and Soul thresholds round down, and the modifier applies only to the current battle."
+      },
+      "effects": [
+        {
+          "op": "source-power-per-count",
+          "target": "source",
+          "amountPerCount": 2000,
+          "duration": "battle",
+          "countBy": "controller-soul",
+          "divisor": 3
+        }
+      ]
+    },
+    {
+      "id": "cfa-13071:1",
+      "cardId": "cfa-13071",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, this unit gets power +2000 until end of that battle for each of your opponent’s rear-guards.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-own-attack-power-per-count-battle-v1",
+        "review": "Exact Rear-Guard own-attack template. The battle bonus is computed from the controller's or opponent's live authoritative zone count when this exact source attacks; locked cards are excluded from Rear-Guard counts, drop and Soul thresholds round down, and the modifier applies only to the current battle."
+      },
+      "effects": [
+        {
+          "op": "source-power-per-count",
+          "target": "source",
+          "amountPerCount": 2000,
+          "duration": "battle",
+          "countBy": "opponent-rear-guards",
+          "divisor": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-13083:1",
+      "cardId": "cfa-13083",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, this unit gets power +2000 until end of that battle for each set order in your order zone.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-own-attack-power-per-count-battle-v1",
+        "review": "Exact Rear-Guard own-attack template. The battle bonus is computed from the controller's or opponent's live authoritative zone count when this exact source attacks; locked cards are excluded from Rear-Guard counts, drop and Soul thresholds round down, and the modifier applies only to the current battle."
+      },
+      "effects": [
+        {
+          "op": "source-power-per-count",
+          "target": "source",
+          "amountPerCount": 2000,
+          "duration": "battle",
+          "countBy": "controller-set-orders",
+          "divisor": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-13113:1",
+      "cardId": "cfa-13113",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, this unit gets power +2000 until end of that battle for each of your opponent’s open RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-own-attack-power-per-count-battle-v1",
+        "review": "Exact Rear-Guard own-attack template. The battle bonus is computed from the controller's or opponent's live authoritative zone count when this exact source attacks; locked cards are excluded from Rear-Guard counts, drop and Soul thresholds round down, and the modifier applies only to the current battle."
+      },
+      "effects": [
+        {
+          "op": "source-power-per-count",
+          "target": "source",
+          "amountPerCount": 2000,
+          "duration": "battle",
+          "countBy": "opponent-open-rear-guards",
+          "divisor": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-13049:0",
+      "cardId": "cfa-13049",
+      "kind": "CONT",
+      "printedText": "CONT: This unit cannot be ridden, and if you did not use [Divine Skill] this fight, this unit cannot attack.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/about-cardfight-vanguard/",
+        "patternId": "cont-cannot-ride-until-divine-skill-used-v1",
+        "review": "Exact continuous restriction from six catalog cards. The unit is never a legal ride candidate. This location-unrestricted CONT prevents this unit from attacking until its controller has successfully used a Divine Skill this fight; declining or leaving a cost unpaid does not satisfy the condition."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "requires-divine-skill-this-fight"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13057:0",
+      "cardId": "cfa-13057",
+      "kind": "CONT",
+      "printedText": "CONT: This unit cannot be ridden, and if you did not use [Divine Skill] this fight, this unit cannot attack.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/about-cardfight-vanguard/",
+        "patternId": "cont-cannot-ride-until-divine-skill-used-v1",
+        "review": "Exact continuous restriction from six catalog cards. The unit is never a legal ride candidate. This location-unrestricted CONT prevents this unit from attacking until its controller has successfully used a Divine Skill this fight; declining or leaving a cost unpaid does not satisfy the condition."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "requires-divine-skill-this-fight"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13060:0",
+      "cardId": "cfa-13060",
+      "kind": "CONT",
+      "printedText": "CONT: This unit cannot be ridden, and if you did not use [Divine Skill] this fight, this unit cannot attack.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/about-cardfight-vanguard/",
+        "patternId": "cont-cannot-ride-until-divine-skill-used-v1",
+        "review": "Exact continuous restriction from six catalog cards. The unit is never a legal ride candidate. This location-unrestricted CONT prevents this unit from attacking until its controller has successfully used a Divine Skill this fight; declining or leaving a cost unpaid does not satisfy the condition."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "requires-divine-skill-this-fight"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13071:0",
+      "cardId": "cfa-13071",
+      "kind": "CONT",
+      "printedText": "CONT: This unit cannot be ridden, and if you did not use [Divine Skill] this fight, this unit cannot attack.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/about-cardfight-vanguard/",
+        "patternId": "cont-cannot-ride-until-divine-skill-used-v1",
+        "review": "Exact continuous restriction from six catalog cards. The unit is never a legal ride candidate. This location-unrestricted CONT prevents this unit from attacking until its controller has successfully used a Divine Skill this fight; declining or leaving a cost unpaid does not satisfy the condition."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "requires-divine-skill-this-fight"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13083:0",
+      "cardId": "cfa-13083",
+      "kind": "CONT",
+      "printedText": "CONT: This unit cannot be ridden, and if you did not use [Divine Skill] this fight, this unit cannot attack.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/about-cardfight-vanguard/",
+        "patternId": "cont-cannot-ride-until-divine-skill-used-v1",
+        "review": "Exact continuous restriction from six catalog cards. The unit is never a legal ride candidate. This location-unrestricted CONT prevents this unit from attacking until its controller has successfully used a Divine Skill this fight; declining or leaving a cost unpaid does not satisfy the condition."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "requires-divine-skill-this-fight"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13113:0",
+      "cardId": "cfa-13113",
+      "kind": "CONT",
+      "printedText": "CONT: This unit cannot be ridden, and if you did not use [Divine Skill] this fight, this unit cannot attack.",
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/about-cardfight-vanguard/",
+        "patternId": "cont-cannot-ride-until-divine-skill-used-v1",
+        "review": "Exact continuous restriction from six catalog cards. The unit is never a legal ride candidate. This location-unrestricted CONT prevents this unit from attacking until its controller has successfully used a Divine Skill this fight; declining or leaving a cost unpaid does not satisfy the condition."
+      },
+      "keywords": [
+        "cannot-be-ridden"
+      ],
+      "continuousRestrictions": [
+        {
+          "type": "requires-divine-skill-this-fight"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11522:0",
+      "cardId": "cfa-11522",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed by riding from \"The Quintessential Quintuplets\", you get a \"The Quintuplets’ Memories\" crest.",
+      "optional": false,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetCardNameEquals": "The Quintessential Quintuplets"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ride-from-named-vanguard-get-crest-v1",
+        "review": "Exact ride-from-named-Vanguard Crest grant for the four listed card instances. The source must be the incoming Vanguard in an actual ride event whose exact prior Vanguard moves from VC to Soul; create only the named Crest for that controller."
+      },
+      "effects": [
+        {
+          "op": "create-crest",
+          "target": "controller",
+          "cardId": "cfa-11531",
+          "cardName": "The Quintuplets’ Memories"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11542:0",
+      "cardId": "cfa-11542",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed by riding from \"The Quintessential Quintuplets\", you get a \"The Quintuplets’ Memories\" crest.",
+      "optional": false,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetCardNameEquals": "The Quintessential Quintuplets"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ride-from-named-vanguard-get-crest-v1",
+        "review": "Exact ride-from-named-Vanguard Crest grant for the four listed card instances. The source must be the incoming Vanguard in an actual ride event whose exact prior Vanguard moves from VC to Soul; create only the named Crest for that controller."
+      },
+      "effects": [
+        {
+          "op": "create-crest",
+          "target": "controller",
+          "cardId": "cfa-11531",
+          "cardName": "The Quintuplets’ Memories"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11554:0",
+      "cardId": "cfa-11554",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed by riding from \"The Quintessential Quintuplets\", you get a \"The Quintuplets’ Memories\" crest.",
+      "optional": false,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetCardNameEquals": "The Quintessential Quintuplets"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ride-from-named-vanguard-get-crest-v1",
+        "review": "Exact ride-from-named-Vanguard Crest grant for the four listed card instances. The source must be the incoming Vanguard in an actual ride event whose exact prior Vanguard moves from VC to Soul; create only the named Crest for that controller."
+      },
+      "effects": [
+        {
+          "op": "create-crest",
+          "target": "controller",
+          "cardId": "cfa-11531",
+          "cardName": "The Quintuplets’ Memories"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11667:0",
+      "cardId": "cfa-11667",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed by riding from \"The Quintessential Quintuplets\", you get a \"The Quintuplets’ Memories\" crest.",
+      "optional": false,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetCardNameEquals": "The Quintessential Quintuplets"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ride-from-named-vanguard-get-crest-v1",
+        "review": "Exact ride-from-named-Vanguard Crest grant for the four listed card instances. The source must be the incoming Vanguard in an actual ride event whose exact prior Vanguard moves from VC to Soul; create only the named Crest for that controller."
+      },
+      "effects": [
+        {
+          "op": "create-crest",
+          "target": "controller",
+          "cardId": "cfa-11531",
+          "cardName": "The Quintuplets’ Memories"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11603:0",
+      "cardId": "cfa-11603",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed by riding from \"The Quintessential Quintuplets\", you get a \"The Quintuplets’ Memories\" crest, search your deck for up to one <Quintuplet>, put it into the memory, and shuffle the deck.",
+      "optional": false,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetCardNameEquals": "The Quintessential Quintuplets"
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-ride-from-named-vanguard-get-crest-search-memory-v1",
+        "review": "Exact Yotsuba AUTO sequence: first create the named Crest, then privately choose up to one Quintuplet from the full deck, put it face-up into the Order Zone (Memory), and shuffle the remaining deck. Comprehensive Rules 4.52 §17.14.1 treats the Order Zone as memory for card effects. The exact previous Vanguard and ride event are validated by the server."
+      },
+      "effects": [
+        {
+          "op": "create-crest",
+          "target": "controller",
+          "cardId": "cfa-11531",
+          "cardName": "The Quintuplets’ Memories"
+        },
+        {
+          "op": "search-deck-up-to-one-filtered-to-memory",
+          "target": "controller",
+          "maximum": 1,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-848:0",
+      "cardId": "cfa-848",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: This unit gets power -4000.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "cardNumber": "BT08/098EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT08%2F098EN",
+        "patternId": "cont-self-power-adjustment-v1",
+        "review": "Exact ability text confirmed against Bushiroad's official card list. The shared continuous adjustment applies only to this source instance at the printed circle and, when specified, only during its controller's turn."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -4000,
+          "duration": "continuous",
+          "condition": {
+            "op": "always"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1678:3",
+      "cardId": "cfa-1678",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: This unit gets power -1000.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "cardNumber": "EB09/S01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB09%2FS01EN",
+        "patternId": "cont-self-power-adjustment-v1",
+        "review": "Exact ability text confirmed against Bushiroad's official card list. The shared continuous adjustment applies only to this source instance at the printed circle and, when specified, only during its controller's turn."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": -1000,
+          "duration": "continuous",
+          "condition": {
+            "op": "always"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-6217:1",
+      "cardId": "cfa-6217",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: This unit gets power +5000.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "cardNumber": "V-EB04/018EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F018EN",
+        "patternId": "cont-self-power-adjustment-v1",
+        "review": "Exact ability text confirmed against Bushiroad's official card list. The shared continuous adjustment applies only to this source instance at the printed circle and, when specified, only during its controller's turn."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "always"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-6583:0",
+      "cardId": "cfa-6583",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, this unit gets power +10000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "cardNumber": "V-EB06/017EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=131&sort=no&view=text",
+        "patternId": "cont-self-power-adjustment-v1",
+        "review": "Exact ability text confirmed against Bushiroad's official card list. The shared continuous adjustment applies only to this source instance at the printed circle and, when specified, only during its controller's turn."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": 10000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-6816:0",
+      "cardId": "cfa-6816",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: During your turn, this unit gets power +5000.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "cardNumber": "V-SS08/046EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS08%2F046EN",
+        "patternId": "cont-self-power-adjustment-v1",
+        "review": "Exact ability text confirmed against Bushiroad's official card list. The shared continuous adjustment applies only to this source instance at the printed circle and, when specified, only during its controller's turn."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-adjustment",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10115:0",
+      "cardId": "cfa-10115",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your vanguard attacks, if your opponent has two or less rear-guards, COST [put this unit into your soul], choose one of your vanguards, and it gets power +10000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "vanguard",
+        "circles": [],
+        "subjectControllerRelation": "source-controller",
+        "requiredTimingWindow": "attack-declared"
+      },
+      "conditions": [
+        {
+          "type": "opponent-rear-guards-at-most",
+          "count": 2
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-own-vanguard-attack-opponent-rear-guards-at-most-two-source-soul-choose-vanguard-power-turn-v1",
+        "review": "The controller's exact Vanguard attack triggers this Rear-Guard AUTO. It checks the opponent's live Rear-Guard count, moves only this source from RC to Soul as its cost, and selects one Vanguard controlled by this source's controller for +10000 until turn end."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 10000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10118:1",
+      "cardId": "cfa-10118",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Soul Blast 1], choose one of your vanguards, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-placement-soul-blast-choose-friendly-vanguard-power-turn-v1",
+        "review": "The exact source must be placed on RC. Its controller pays Soul Blast 1 and chooses a Vanguard that they control; only that Vanguard receives +5000 until turn end."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10133:1",
+      "cardId": "cfa-10133",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is rode upon by a unit with \"Blaster\" in its card name, call this card to RC.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderCardNameContains": "Blaster"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ridden-by-blaster-source-call-v1",
+        "review": "The exact prior Vanguard instance must be the ridden unit, and the rider's actual card name must contain Blaster. The same source is called standing from Soul to a legal RC."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-soul",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-10343:0",
+      "cardId": "cfa-10343",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit’s attack hits a vanguard, choose one of your rear-guards, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "conditions": [],
+      "costs": [],
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "noOpIfNoLegalTargets": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "rear-guard"
+          }
+        }
+      ],
+      "optional": false,
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardNumber": "cfa-10343",
+        "patternId": "auto-rc-own-attack-hit-rearguard-power-turn-v1",
+        "review": "Exact Rear-Guard AUTO from the local catalog snapshot. Only this source's attack hitting the opposing Vanguard qualifies. Its controller chooses a friendly Rear-Guard, including the source if desired, and gives it +5000 until end of turn. The target is intentionally not restricted by clan."
+      }
+    },
+    {
+      "id": "cfa-3745:0",
+      "cardId": "cfa-3745",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on GC, if the number of cards in your hand is three or more, this unit gets shield +5000 until end of that battle.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "conditions": [
+        {
+          "type": "controller-hand-size-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-gc-hand-size-shield-battle-v1",
+        "review": "Exact Guardian Circle placement AUTO. It checks the controller's hand after the source has entered Guardian Circle, then gives only that exact guardian the printed shield through the current battle. The trigger does not require an intercept; exact source placement, current controller, legal guard circle, battle ID, and the hand-size threshold are revalidated by the event and effect handlers."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-4913:0",
+      "cardId": "cfa-4913",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on GC, if the number of cards in your hand is three or more, this unit gets shield +5000 until end of that battle.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "conditions": [
+        {
+          "type": "controller-hand-size-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-gc-hand-size-shield-battle-v1",
+        "review": "Exact Guardian Circle placement AUTO. It checks the controller's hand after the source has entered Guardian Circle, then gives only that exact guardian the printed shield through the current battle. The trigger does not require an intercept; exact source placement, current controller, legal guard circle, battle ID, and the hand-size threshold are revalidated by the event and effect handlers."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-11499:1",
+      "cardId": "cfa-11499",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If the circle this unit is on has a protect marker, this unit cannot be chosen by your opponent’s card effect.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-protect-marker-grants-resist-v1",
+        "review": "Exact Rear-Guard CONT. Only while this exact unit is on a circle with its controller's Protect marker, it gains Resist against opponent card-effect choices. Non-targeting effects and the controller's own choices are unaffected."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "resist",
+          "duration": "continuous",
+          "condition": {
+            "op": "source-circle-has-protect-marker"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11500:1",
+      "cardId": "cfa-11500",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If the circle this unit is on has a protect marker, this unit cannot be chosen by your opponent’s card effect.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-protect-marker-grants-resist-v1",
+        "review": "Exact Rear-Guard CONT. Only while this exact unit is on a circle with its controller's Protect marker, it gains Resist against opponent card-effect choices. Non-targeting effects and the controller's own choices are unaffected."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "resist",
+          "duration": "continuous",
+          "condition": {
+            "op": "source-circle-has-protect-marker"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11503:1",
+      "cardId": "cfa-11503",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If the circle this unit is on has a protect marker, this unit cannot be chosen by your opponent’s card effect.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-protect-marker-grants-resist-v1",
+        "review": "Exact Rear-Guard CONT. Only while this exact unit is on a circle with its controller's Protect marker, it gains Resist against opponent card-effect choices. Non-targeting effects and the controller's own choices are unaffected."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "resist",
+          "duration": "continuous",
+          "condition": {
+            "op": "source-circle-has-protect-marker"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12727:1",
+      "cardId": "cfa-12727",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: If the circle this unit is on has a protect marker, this unit cannot be chosen by your opponent’s card effect.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-rc-protect-marker-grants-resist-v1",
+        "review": "Exact Rear-Guard CONT. Only while this exact unit is on a circle with its controller's Protect marker, it gains Resist against opponent card-effect choices. Non-targeting effects and the controller's own choices are unaffected."
+      },
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "source",
+          "keyword": "resist",
+          "duration": "continuous",
+          "condition": {
+            "op": "source-circle-has-protect-marker"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-3042:0",
+      "cardId": "cfa-3042",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): When this unit boosts, Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-boost-soul-charge-v1",
+        "review": "Exact catalog wording for these four records. Only the exact Rear-Guard instance that actually boosted can trigger; the three Generation Break records require one or more face-up G units. The mandatory effect Soul Charges one card."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-3392:0",
+      "cardId": "cfa-3392",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): When this unit boosts, Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-boost-soul-charge-v1",
+        "review": "Exact catalog wording for these four records. Only the exact Rear-Guard instance that actually boosted can trigger; the three Generation Break records require one or more face-up G units. The mandatory effect Soul Charges one card."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-4535:0",
+      "cardId": "cfa-4535",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC] Generation Break 1: When this unit boosts, Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-boost-soul-charge-v1",
+        "review": "Exact catalog wording for these four records. Only the exact Rear-Guard instance that actually boosted can trigger; the three Generation Break records require one or more face-up G units. The mandatory effect Soul Charges one card."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-6022:0",
+      "cardId": "cfa-6022",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When it boosts, Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-boost-soul-charge-v1",
+        "review": "Exact catalog wording for these four records. Only the exact Rear-Guard instance that actually boosted can trigger; the three Generation Break records require one or more face-up G units. The mandatory effect Soul Charges one card."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-1691:1",
+      "cardId": "cfa-1691",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a grade 3 «Genesis», you may Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": [],
+        "boostedUnitClan": "Genesis",
+        "boostedUnitGradeEquals": 3
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-boost-soul-charge-v1",
+        "review": "Exact catalog wording for six records. Only the exact Rear-Guard instance that actually boosted can trigger; Generation Break, boosted-unit grade/clan filters, and optionality are preserved. The effect Soul Charges one card."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-10081:0",
+      "cardId": "cfa-10081",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts a grade 2 or greater unit, you may Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": [],
+        "boostedUnitGradeAtLeast": 2
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-boost-soul-charge-v1",
+        "review": "Exact catalog wording for six records. Only the exact Rear-Guard instance that actually boosted can trigger; Generation Break, boosted-unit grade/clan filters, and optionality are preserved. The effect Soul Charges one card."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-10069:0",
+      "cardId": "cfa-10069",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit’s attack hits a vanguard, Soul Charge 1.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "D-TD02/002EN",
+          "D-SS05/037EN",
+          "DZ-SS07/002EN"
+        ],
+        "patternId": "auto-own-attack-hit-soul-charge-one-v1",
+        "review": "Exact mandatory AUTO for Demonic Stone Dragon, Jewelneel. The exact VC or RC source must make its own attack hit the opposing Vanguard; its controller Soul Charges one card."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-10069:1",
+      "cardId": "cfa-10069",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is rode upon by a unit with \"Drajeweled\" in its card name, Soul Charge 1, and if your soul has three or more cards with different grades, draw a card.",
+      "choicesReviewed": true,
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "ridden-unit",
+        "circles": [
+          "vanguard"
+        ],
+        "riderCardNameContains": "Drajeweled"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "D-TD02/002EN",
+          "D-SS05/037EN",
+          "DZ-SS07/002EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS07%2F002EN",
+        "patternId": "auto-jewelneel-rode-upon-drajeweled-soul-charge-distinct-grade-draw-v1",
+        "review": "Exact mandatory AUTO for Demonic Stone Dragon, Jewelneel. It requires this exact Vanguard instance to be ridden by a current Vanguard whose trusted card name contains Drajeweled. Soul Charge resolves first; only then does the draw effect check whether Soul has at least three distinct trusted grades."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        },
+        {
+          "op": "draw",
+          "count": 1,
+          "condition": {
+            "op": "controller-soul-distinct-grades-at-least",
+            "count": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10071:0",
+      "cardId": "cfa-10071",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded from hand during your ride phase, you may put this card into your soul.",
+      "optional": true,
+      "requiredLocation": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "source",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "D-TD02/007EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-TD02%2F007EN&expansion=194&view=text",
+        "patternId": "auto-ride-phase-discard-source-to-soul-v1",
+        "review": "Exact optional AUTO for Mystic Accordionist. It only follows this exact card being discarded from its controller's hand during that controller's Ride Phase; accepting moves that same card from Drop to Soul."
+      },
+      "effects": [
+        {
+          "op": "move-source-to-soul",
+          "target": "source",
+          "from": "drop"
+        }
+      ]
+    },
+    {
+      "id": "cfa-10054:0",
+      "cardId": "cfa-10054",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded from hand during your ride phase, you may call this card to RC.",
+      "optional": true,
+      "requiredLocation": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "source",
+        "circles": [],
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "D-TD03/011EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-TD03%2F011EN&expansion=195&view=text",
+        "patternId": "auto-ride-phase-discard-source-call-standing-v1",
+        "review": "Exact optional AUTO for this card. The exact source is discarded from its controller's hand during that controller's Ride Phase. The official wording does not say to call it rested, so the called Rear-Guard stands; the controller chooses a legal RC and the existing unit there is retired."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-10093:0",
+      "cardId": "cfa-10093",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded from hand during your ride phase, you may call this card to RC.",
+      "optional": true,
+      "requiredLocation": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "source",
+        "circles": [],
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "D-TD01/011EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-TD01%2F011EN&expansion=193&view=text",
+        "patternId": "auto-ride-phase-discard-source-call-standing-v1",
+        "review": "Exact optional AUTO for this card. The exact source is discarded from its controller's hand during that controller's Ride Phase. The official wording does not say to call it rested, so the called Rear-Guard stands; the controller chooses a legal RC and the existing unit there is retired."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "stand"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1075:0",
+      "cardId": "cfa-1075",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: [Counter Blast 2] When this unit’s attack hits a vanguard, if you have a vanguard with \"Eradicator\" in its card name, you may pay the cost. If you do, choose one of your opponent’s rear-guards in the front row, and retire it.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Eradicator"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 2
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "TD09/006EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=TD09%2F006EN",
+        "patternId": "auto-own-attack-hit-counter-blast-retire-front-row-v1",
+        "review": "Exact Susei AUTO. This exact VC or RC source must hit the opposing Vanguard while its controller has an Eradicator Vanguard. Its controller may Counter Blast 2, then chooses an unlocked opposing front-row Rear-Guard to retire. The attack event ID prevents the AUTO from being paid twice for one hit."
+      },
+      "effects": [
+        {
+          "op": "retire-target",
+          "target": "chosen",
+          "targetFilter": {
+            "controller": "opponent",
+            "zone": "rear-guard",
+            "row": "front",
+            "locked": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10775:1",
+      "cardId": "cfa-10775",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded from hand for the cost of Stride, draw a card.",
+      "optional": false,
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "source",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "discardReason": "stride-cost",
+        "requiredPhase": "stride",
+        "turnRelation": "controller"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "D-SS04/005EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-SS04%2F005EN&expansion=204",
+        "patternId": "auto-stride-cost-discard-draw-v1",
+        "review": "Exact Astrolabe Dragon AUTO wording. Only this card instance discarded from its controller's hand to pay Stride during that controller's Stride phase triggers; the mandatory effect draws one card."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-10883:0",
+      "cardId": "cfa-10883",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is put on GC, if you have a vanguard with \"Sorceress\" in its card name, look at the top card of your deck, and put it on the top or bottom of your deck.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Sorceress"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-02",
+        "officialCardNumber": "D-BT10/051EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=203&s_param=d-Keter+Sanctuary&sort=no&view=text",
+        "patternId": "auto-gc-sorceress-top-deck-order-v1",
+        "review": "Exact Wtater AUTO. Only this source instance being placed on GC can trigger it; its controller must have a Vanguard whose name contains Sorceress. The mandatory AUTO lets that controller put the exact top card on top or bottom. No cost or decline choice is printed."
+      },
+      "effects": [
+        {
+          "op": "reorder-deck-card",
+          "target": "chosen",
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-10775:0",
+      "cardId": "cfa-10775",
+      "kind": "CONT",
+      "printedText": "CONT [RC] Generation Break 2 (Active if you have two or more face up G units in total on your VC or G zone): During your turn, if any player has a locked card, this unit gets power +10000.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-02",
+        "officialCardNumber": "D-SS04/005EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-SS04%2F005EN&expansion=204",
+        "patternId": "cont-rc-own-turn-any-player-locked-power-v1",
+        "review": "Exact Messiah Stride Deckset CONT family. Only the source on RC gets its printed power during its controller's turn while any player's field has a locked card. Astrolabe additionally requires Generation Break 2, counted as face-up G units on VC/G zone. This is continuous and creates no activation prompt."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 10000,
+          "duration": "continuous",
+          "location": "rear-guard",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "any-field-card-is-locked"
+              },
+              {
+                "op": "generation-break",
+                "count": 2
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10777:0",
+      "cardId": "cfa-10777",
+      "kind": "CONT",
+      "printedText": "CONT [RC]: During your turn, if any player has a locked card, this unit gets power +5000.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-02",
+        "officialCardNumber": "D-SS04/006EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=204&sort=no&view=text",
+        "patternId": "cont-rc-own-turn-any-player-locked-power-v1",
+        "review": "Exact Messiah Stride Deckset CONT family. Only the source on RC gets its printed power during its controller's turn while any player's field has a locked card. Astrolabe additionally requires Generation Break 2, counted as face-up G units on VC/G zone. This is continuous and creates no activation prompt."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "location": "rear-guard",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "any-field-card-is-locked"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10873:0",
+      "cardId": "cfa-10873",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, if you have three or more Dragontree markers on your RC, COST [Counter Blast 1 & Soul Blast 1], and draw a card.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-dragontree-marker-count-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        },
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "canDecline": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-02",
+        "officialCardNumber": "D-BT10/053EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT10%2F053EN&expansion=203&s_param=d-Stoicheia&view=image",
+        "patternId": "auto-rc-three-dragontree-markers-counter-soul-draw-v1",
+        "review": "Exact Lahbart AUTO. Only this source instance's placement on an RC triggers it; the controller must have at least three Dragontree markers on existing Rear-Guard Circles (including Accel Circles). The controller may decline the AUTO cost; if accepted, Counter-Blast 1 and Soul-Blast 1 are paid before drawing one card."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-454:0",
+      "cardId": "cfa-454",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When an attack hits a vanguard during the battle that this unit boosted a «Dark Irregulars», you may Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "booster",
+        "targetLocation": "vanguard",
+        "requiresBoostedBattle": true,
+        "boostedUnitClan": "Dark Irregulars",
+        "circles": []
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "canDecline": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "BT07/036EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT07%2F036EN&expansion=13&view=text",
+        "patternId": "auto-boosted-clan-vanguard-hit-soul-charge-v1",
+        "review": "Exact text is from the local Cardfight Area snapshot; the official individual card-list page is recorded but its text could not be retrieved during review. Keep whole-card verification pending primary-text confirmation. The controller may Soul Charge 1 only when this exact Rear-Guard instance boosted a unit of the printed clan and that attack hit the opposing Vanguard in the same battle."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-788:0",
+      "cardId": "cfa-788",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When an attack hits a vanguard during the battle that this unit boosted a «Pale Moon», you may Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "booster",
+        "targetLocation": "vanguard",
+        "requiresBoostedBattle": true,
+        "boostedUnitClan": "Pale Moon",
+        "circles": []
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "canDecline": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "BT07/031EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT07%2F031EN&expansion=13&view=text",
+        "patternId": "auto-boosted-clan-vanguard-hit-soul-charge-v1",
+        "review": "Exact text is from the local Cardfight Area snapshot; the official individual card-list page is recorded but its text could not be retrieved during review. Keep whole-card verification pending primary-text confirmation. The controller may Soul Charge 1 only when this exact Rear-Guard instance boosted a unit of the printed clan and that attack hit the opposing Vanguard in the same battle."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-1353:0",
+      "cardId": "cfa-1353",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When an attack hits a vanguard during the battle that this unit boosted a «Genesis», you may Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "booster",
+        "targetLocation": "vanguard",
+        "requiresBoostedBattle": true,
+        "boostedUnitClan": "Genesis",
+        "circles": []
+      },
+      "conditions": [],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "canDecline": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "TD13/010EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=TD13%2F010EN&expansion=39&view=text",
+        "patternId": "auto-boosted-clan-vanguard-hit-soul-charge-v1",
+        "review": "Exact ability text and card number checked against the Bushiroad official card list. The controller may Soul Charge 1 only when this exact Rear-Guard instance boosted a unit of the printed clan and that attack hit the opposing Vanguard in the same battle."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-6764:1",
+      "cardId": "cfa-6764",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: At the end of your turn, if the total number of attacks this turn is four or more, COST [put this unit into your soul], and draw a card.",
+      "optional": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "turn.ended",
+        "subject": "controller",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "total-attack-count-this-turn-at-least",
+          "count": 4
+        }
+      ],
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-02",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB08%2F008EN",
+        "patternId": "auto-rc-end-turn-four-attacks-source-to-soul-draw-v1",
+        "review": "Exact official AUTO [RC] family for Coral Assault and Blue Artillery Dragon, Inlet Pulse Dragon. It triggers only on its controller's authenticated end-turn event while this exact source remains on RC. The condition counts all recorded attacks in the current turn; the controller may decline the [COST], and paying moves this source instance from RC into its controller's Soul before drawing one card."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-9379:1",
+      "cardId": "cfa-9379",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: At the end of your turn, if the total number of attacks this turn is four or more, COST [put this unit into your soul], and draw a card.",
+      "optional": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "turn.ended",
+        "subject": "controller",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "total-attack-count-this-turn-at-least",
+          "count": 4
+        }
+      ],
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-02",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT04%2F014EN",
+        "patternId": "auto-rc-end-turn-four-attacks-source-to-soul-draw-v1",
+        "review": "Exact official AUTO [RC] family for Coral Assault and Blue Artillery Dragon, Inlet Pulse Dragon. It triggers only on its controller's authenticated end-turn event while this exact source remains on RC. The condition counts all recorded attacks in the current turn; the controller may decline the [COST], and paying moves this source instance from RC into its controller's Soul before drawing one card."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-8754:0",
+      "cardId": "cfa-8754",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, this unit gets power +10000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-02",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-LTD01%2F005EN",
+        "patternId": "auto-rc-placement-self-power-v1",
+        "review": "Exact three-card official family: only the card instance that is placed on its controller's Rear-Guard Circle receives its printed power bonus until end of turn. The event must record this exact source as the placed subject and must represent a placement from outside the Rear-Guard Circle; moving an existing Rear-Guard between circles is not a placement trigger."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 10000,
+          "duration": "turn",
+          "noOpIfSourceNotInPlay": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-8759:1",
+      "cardId": "cfa-8759",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, this unit gets power +2000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-02",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-LTD01%2F003EN",
+        "patternId": "auto-rc-placement-self-power-v1",
+        "review": "Exact three-card official family: only the card instance that is placed on its controller's Rear-Guard Circle receives its printed power bonus until end of turn. The event must record this exact source as the placed subject and must represent a placement from outside the Rear-Guard Circle; moving an existing Rear-Guard between circles is not a placement trigger."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn",
+          "noOpIfSourceNotInPlay": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-9151:0",
+      "cardId": "cfa-9151",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-02",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT03%2F013EN",
+        "patternId": "auto-rc-placement-self-power-v1",
+        "review": "Exact three-card official family: only the card instance that is placed on its controller's Rear-Guard Circle receives its printed power bonus until end of turn. The event must record this exact source as the placed subject and must represent a placement from outside the Rear-Guard Circle; moving an existing Rear-Guard between circles is not a placement trigger."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn",
+          "noOpIfSourceNotInPlay": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-4622:1",
+      "cardId": "cfa-4622",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul] Choose one of your units, and it gets \"Boost\" until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "G-BT10/047EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT10%2F047EN",
+        "patternId": "act-rc-source-soul-grant-friendly-boost-turn-v1",
+        "review": "Exact ACT text is matched for Plasgal and Ringer Paprika. During the controller's Main Phase, move this exact Rear-Guard from RC to Soul as the cost, then choose a different unit that player controls on VC or RC and grant it Boost through the turn. The target must remain a unit in play and the grant expires through the shared turn cleanup."
+      },
+      "effects": [
+        {
+          "op": "grant-temporary-boost",
+          "target": "chosen",
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "excludeSource": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-4628:1",
+      "cardId": "cfa-4628",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul] Choose one of your units, and it gets \"Boost\" until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "G-BT10/104EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT10%2F104EN",
+        "patternId": "act-rc-source-soul-grant-friendly-boost-turn-v1",
+        "review": "Exact ACT text is matched for Plasgal and Ringer Paprika. During the controller's Main Phase, move this exact Rear-Guard from RC to Soul as the cost, then choose a different unit that player controls on VC or RC and grant it Boost through the turn. The target must remain a unit in play and the grant expires through the shared turn cleanup."
+      },
+      "effects": [
+        {
+          "op": "grant-temporary-boost",
+          "target": "chosen",
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "excludeSource": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-4731:0",
+      "cardId": "cfa-4731",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul] Choose one of your units, it gets power +3000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "G-CHB03/059EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-CHB03%2F059EN",
+        "patternId": "act-source-to-soul-choose-friendly-power-turn-v1",
+        "review": "Exact source-to-Soul ACT family. The local snapshot preserves this card's source text. Its official card-list entry confirms this source pays by moving from RC to Soul, then its controller chooses one of their units to receive the printed +power until end of turn; the snapshot has a minor word-order difference."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 3000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "excludeSource": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-5052:0",
+      "cardId": "cfa-5052",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Put this unit into your soul] Choose one of your units, and until end of turn, it gets power +3000.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "G-BT12/060EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT12%2F060EN",
+        "patternId": "act-source-to-soul-choose-friendly-power-turn-v1",
+        "review": "Exact source-to-Soul ACT family. The local snapshot preserves this card's source text. Its official card-list entry confirms this source pays by moving from RC to Soul, then its controller chooses one of their units to receive the printed +power until end of turn; the snapshot has a minor word-order difference."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 3000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "excludeSource": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13771:2",
+      "cardId": "cfa-13771",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: At the end of your turn, if the total number of attacks this turn is four or more, COST [put this unit into your soul], and draw a card.",
+      "optional": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "turn.ended",
+        "subject": "controller",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "total-attack-count-this-turn-at-least",
+          "count": 4
+        }
+      ],
+      "costs": [
+        {
+          "type": "source-to-soul",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-rc-end-turn-four-attacks-source-to-soul-draw-v1",
+        "review": "Exact ability text is from the Cardfight Area snapshot; no official individual card-list entry was located for this Valentine's Day catalog record. Its end-of-controller-turn condition, four-total-attacks threshold, source-to-Soul cost, and draw effect use the shared tested mechanics. Keep whole-card verification pending because the card has another unresolved AUTO ability."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-2841:1",
+      "cardId": "cfa-2841",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose one of your vanguards that is being attacked, and that unit cannot be hit until end of that battle. Then, if you have a card named \"Little Skull Witch, Nemain\" in your drop zone, draw a card, choose a card from your hand, and discard it.",
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "optional": true,
+      "choicesReviewed": true,
+      "conditionsReviewed": true,
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-gc-named-drop-protect-draw-discard-v1",
+        "review": "Exact Guardian Circle ability, cross-checked against Bushiroad G-LD01/010EN. The exact source must enter GC from hand, its controller may pay one hand discard, and it can protect only that controller's vanguard currently being attacked. The later draw-then-discard happens only if a same-name card is in that controller's Drop after cost payment. The printed target is required.",
+        "officialCardNumber": "G-LD01/010EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-LD01%2F010EN"
+      },
+      "effects": [
+        {
+          "op": "protect-target",
+          "target": "chosen",
+          "duration": "battle",
+          "requiresAttackedTarget": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard",
+            "mustBeAttacked": true
+          }
+        },
+        {
+          "op": "conditional-draw-then-discard",
+          "target": "controller",
+          "drawCount": 1,
+          "discardCount": 1,
+          "condition": {
+            "op": "controller-drop-has-card-name",
+            "cardName": "Little Skull Witch, Nemain"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-3701:1",
+      "cardId": "cfa-3701",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose one of your vanguards that is being attacked, and that unit cannot be hit until end of that battle. Then, if you have a card named \"Flame of Tranquility, Aermo\" in your drop zone, draw a card, choose a card from your hand, and discard it.",
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "optional": true,
+      "choicesReviewed": true,
+      "conditionsReviewed": true,
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-gc-named-drop-protect-draw-discard-v1",
+        "review": "Exact Guardian Circle ability, cross-checked against Bushiroad G-LD02/011EN. The exact source must enter GC from hand, its controller may pay one hand discard, and it can protect only that controller's vanguard currently being attacked. The later draw-then-discard happens only if a same-name card is in that controller's Drop after cost payment. Bushiroad's official Aermo wording says up to one target; the local snapshot omits up to, so resolution follows the official optional-target wording.",
+        "officialCardNumber": "G-LD02/011EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-LD02%2F011EN"
+      },
+      "effects": [
+        {
+          "op": "protect-target",
+          "target": "chosen",
+          "optionalTarget": true,
+          "duration": "battle",
+          "requiresAttackedTarget": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard",
+            "mustBeAttacked": true
+          }
+        },
+        {
+          "op": "conditional-draw-then-discard",
+          "target": "controller",
+          "drawCount": 1,
+          "discardCount": 1,
+          "condition": {
+            "op": "controller-drop-has-card-name",
+            "cardName": "Flame of Tranquility, Aermo"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-5742:1",
+      "cardId": "cfa-5742",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Choose a card from your hand, and discard it] When this unit is placed on GC from hand, you may pay the cost. If you do, choose one of your vanguards that is being attacked, and that unit cannot be hit until end of that battle. Then, if you have a card named \"Pancake Mask\" in your drop zone, draw a card, choose a card from your hand, and discard it.",
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "optional": true,
+      "choicesReviewed": true,
+      "conditionsReviewed": true,
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-gc-named-drop-protect-draw-discard-v1",
+        "review": "Exact Guardian Circle ability from the local Cardfight Area snapshot. The exact source must enter GC from hand, its controller may pay one hand discard, and it can protect only that controller's vanguard currently being attacked. The later draw-then-discard happens only if a same-name card is in that controller's Drop after cost payment. No official listing was located; whole-card verification stays pending."
+      },
+      "effects": [
+        {
+          "op": "protect-target",
+          "target": "chosen",
+          "duration": "battle",
+          "requiresAttackedTarget": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard",
+            "mustBeAttacked": true
+          }
+        },
+        {
+          "op": "conditional-draw-then-discard",
+          "target": "controller",
+          "drawCount": 1,
+          "discardCount": 1,
+          "condition": {
+            "op": "controller-drop-has-card-name",
+            "cardName": "Pancake Mask"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12961:0",
+      "cardId": "cfa-12961",
+      "kind": "AUTO",
+      "printedText": "AUTO [Drop]: When your grade 3 or greater vanguard with \"Marlean\" in its card name is placed during your ride phase, if you do not have another rear-guard with the same card name as this unit, COST [Soul Blast 1], and call this card to RC. If you called a card, Energy Charge 1.",
+      "requiredLocation": [
+        "drop"
+      ],
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "vanguard",
+        "circles": [
+          "vanguard"
+        ],
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Marlean"
+        },
+        {
+          "type": "controller-has-no-other-rear-guard-with-source-name"
+        }
+      ],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "DZ-SS08/Re35EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS08%2FRe35EN",
+        "patternId": "auto-ride-phase-drop-source-call-energy-charge-v1",
+        "review": "Exact Ride Phase Drop AUTO cross-checked against the official card list. Validate the actual Ride event and current Grade 3+ Vanguard name, check for another controlled same-name Rear-Guard, pay Soul Blast 1, call this exact Drop instance to a legal RC, and Energy Charge 1 only after the call succeeds. Companion printed abilities remain independently reviewed."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "stand"
+        },
+        {
+          "op": "energy-charge",
+          "target": "controller",
+          "count": 1,
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
+    {
+      "id": "cfa-12962:0",
+      "cardId": "cfa-12962",
+      "kind": "AUTO",
+      "printedText": "AUTO [Drop]: When your grade 3 or greater vanguard with \"Triumph Dragon\" in its card name is placed during your ride phase, if you do not have another rear-guard with the same card name as this card, COST [Soul Blast 1], and call this card to RC. If you called a card, Energy Charge 1.",
+      "requiredLocation": [
+        "drop"
+      ],
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "vanguard",
+        "circles": [
+          "vanguard"
+        ],
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Triumph Dragon"
+        },
+        {
+          "type": "controller-has-no-other-rear-guard-with-source-name"
+        }
+      ],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "DZ-SS08/Re03EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=240&s_param=d-Dragon+Empire&sort=no&view=text",
+        "patternId": "auto-ride-phase-drop-source-call-energy-charge-v1",
+        "review": "Exact Ride Phase Drop AUTO cross-checked against the official card list. Validate the actual Ride event and current Grade 3+ Vanguard name, check for another controlled same-name Rear-Guard, pay Soul Blast 1, call this exact Drop instance to a legal RC, and Energy Charge 1 only after the call succeeds. Companion printed abilities remain independently reviewed."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "stand"
+        },
+        {
+          "op": "energy-charge",
+          "target": "controller",
+          "count": 1,
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
+    {
+      "id": "cfa-12963:0",
+      "cardId": "cfa-12963",
+      "kind": "AUTO",
+      "printedText": "AUTO [Drop]: When your grade 3 or greater vanguard with \"Sarevsael\" in its card name is placed during your ride phase, if you do not have another rear-guard with the same card name as this unit, COST [Soul Blast 1], and call this card to RC. If you called a card, Energy Charge 1.",
+      "requiredLocation": [
+        "drop"
+      ],
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "vanguard",
+        "circles": [
+          "vanguard"
+        ],
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Sarevsael"
+        },
+        {
+          "type": "controller-has-no-other-rear-guard-with-source-name"
+        }
+      ],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "D-PR/564EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PR%2F564EN",
+        "patternId": "auto-ride-phase-drop-source-call-energy-charge-v1",
+        "review": "Exact Ride Phase Drop AUTO cross-checked against the official card list. Validate the actual Ride event and current Grade 3+ Vanguard name, check for another controlled same-name Rear-Guard, pay Soul Blast 1, call this exact Drop instance to a legal RC, and Energy Charge 1 only after the call succeeds. Companion printed abilities remain independently reviewed."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "stand"
+        },
+        {
+          "op": "energy-charge",
+          "target": "controller",
+          "count": 1,
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
+    {
+      "id": "cfa-13183:0",
+      "cardId": "cfa-13183",
+      "kind": "AUTO",
+      "printedText": "AUTO [Drop]: When your grade 3 or greater vanguard with \"Oselargest\" in its card name is placed during your ride phase, if you do not have a rear-guard with the same card name as this card, COST [Soul Blast 1], and call this card to RC. If you called a card, Energy Charge 1 .",
+      "requiredLocation": [
+        "drop"
+      ],
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "vanguard",
+        "circles": [
+          "vanguard"
+        ],
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Oselargest"
+        },
+        {
+          "type": "controller-has-no-other-rear-guard-with-source-name"
+        }
+      ],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ride-phase-drop-source-call-energy-charge-v1",
+        "review": "Exact text from the local Cardfight Area snapshot. The same strict event, name, cost, source-instance, and resolution checks apply; this source has not been independently confirmed on an official listing, and whole-card verification remains pending."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "stand"
+        },
+        {
+          "op": "energy-charge",
+          "target": "controller",
+          "count": 1,
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
+    {
+      "id": "cfa-13184:0",
+      "cardId": "cfa-13184",
+      "kind": "AUTO",
+      "printedText": "AUTO [Drop]: When your grade 3 or greater vanguard with \"Asturm\" in its card name is placed during your ride phase, if you do not have a rear-guard with the same card name as this card, COST [Soul Blast 1], and call this card to RC. If you called a card, Energy Charge 1 .",
+      "requiredLocation": [
+        "drop"
+      ],
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "vanguard",
+        "circles": [
+          "vanguard"
+        ],
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Asturm"
+        },
+        {
+          "type": "controller-has-no-other-rear-guard-with-source-name"
+        }
+      ],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ride-phase-drop-source-call-energy-charge-v1",
+        "review": "Exact text from the local Cardfight Area snapshot. The same strict event, name, cost, source-instance, and resolution checks apply; this source has not been independently confirmed on an official listing, and whole-card verification remains pending."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "stand"
+        },
+        {
+          "op": "energy-charge",
+          "target": "controller",
+          "count": 1,
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
+    {
+      "id": "cfa-13194:0",
+      "cardId": "cfa-13194",
+      "kind": "AUTO",
+      "printedText": "AUTO [Drop]: When your grade 3 or greater vanguard with \"Cristianos\" in its card name is placed during your ride phase, if you do not have a rear-guard with the same card name as this card, COST [Soul Blast 1], and call this card to RC. If you called a card, Energy Charge 1 .",
+      "requiredLocation": [
+        "drop"
+      ],
+      "optional": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.ridden",
+        "subject": "vanguard",
+        "circles": [
+          "vanguard"
+        ],
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Cristianos"
+        },
+        {
+          "type": "controller-has-no-other-rear-guard-with-source-name"
+        }
+      ],
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "DZ-SS08/Re31EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=240&s_param=d-Stoicheia&sort=no&view=text",
+        "patternId": "auto-ride-phase-drop-source-call-energy-charge-v1",
+        "review": "Exact Ride Phase Drop AUTO cross-checked against the official card list. Validate the actual Ride event and current Grade 3+ Vanguard name, check for another controlled same-name Rear-Guard, pay Soul Blast 1, call this exact Drop instance to a legal RC, and Energy Charge 1 only after the call succeeds. Companion printed abilities remain independently reviewed."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "stand"
+        },
+        {
+          "op": "energy-charge",
+          "target": "controller",
+          "count": 1,
+          "ifPreviousEffectSucceeded": 0
+        }
+      ]
+    },
+    {
+      "id": "cfa-10778:1",
+      "cardId": "cfa-10778",
+      "kind": "ACT",
+      "printedText": "ACT [Hand]: If you have an \"Alter Ego Messiah\" crest, COST [discard this card], search your deck or drop for up to one grade 3 card with \"Messiah\" in its card name, reveal it and put it into your hand, and if you searched your deck, shuffle your deck.",
+      "requiredLocation": [
+        "hand"
+      ],
+      "activationWindow": "main",
+      "conditions": [
+        {
+          "type": "controller-has-crest",
+          "cardName": "Alter Ego Messiah"
+        }
+      ],
+      "costs": [
+        {
+          "type": "source-discard",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialCardNumbers": [
+          "DZ-BT06/EX24EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT06%2FEX24EN",
+        "patternId": "act-hand-crest-grade-three-name-fragment-search-v1",
+        "review": "Exact ACT from hand. Require the controller to have the named Alter Ego Messiah Crest; discard this exact source from hand; choose Deck or Drop, then optionally reveal up to one grade 3 card whose card name contains Messiah and add it to hand. Shuffle only when Deck was selected."
+      },
+      "effects": [
+        {
+          "op": "search-deck-or-drop-named-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardNameContains": "Messiah",
+          "grade": 3,
+          "reveal": true,
+          "shuffleIfDeckSearched": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-12193:1",
+      "cardId": "cfa-12193",
+      "kind": "ACT",
+      "printedText": "ACT [Hand]: If you have a \"Demon Stealth Dragon, Shiranui \"Oboro\"\" crest, COST [discard this card], search your deck or drop for up to one grade 3 card with \"Demon Stealth Dragon, Shiranui\" in its card name, reveal it and put it into hand, and if you searched the deck, shuffle the deck.",
+      "requiredLocation": [
+        "hand"
+      ],
+      "activationWindow": "main",
+      "conditions": [
+        {
+          "type": "controller-has-crest",
+          "cardName": "Demon Stealth Dragon, Shiranui \"Oboro\""
+        }
+      ],
+      "costs": [
+        {
+          "type": "source-discard",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialCardNumbers": [
+          "D-SS09/009EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-SS09%2F009EN",
+        "patternId": "act-hand-crest-grade-three-name-fragment-search-v1",
+        "review": "Exact ACT from hand. Require the controller to have the named Shiranui Oboro Crest; discard this exact source from hand; choose Deck or Drop, then optionally reveal up to one grade 3 card whose card name contains Demon Stealth Dragon, Shiranui and add it to hand. Shuffle only when Deck was selected."
+      },
+      "effects": [
+        {
+          "op": "search-deck-or-drop-named-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardNameContains": "Demon Stealth Dragon, Shiranui",
+          "grade": 3,
+          "reveal": true,
+          "shuffleIfDeckSearched": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-12202:0",
+      "cardId": "cfa-12202",
+      "kind": "ACT",
+      "printedText": "ACT [Hand]: If you have a \"Dragheart, Luard\" crest, COST [discard this card], search your deck or drop for up to one grade 3 card with \"Luard\" in its card name, reveal it and put it into hand, and if you searched the deck, shuffle the deck.",
+      "requiredLocation": [
+        "hand"
+      ],
+      "activationWindow": "main",
+      "conditions": [
+        {
+          "type": "controller-has-crest",
+          "cardName": "Dragheart, Luard"
+        }
+      ],
+      "costs": [
+        {
+          "type": "source-discard",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialCardNumbers": [
+          "D-SS10/008EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=217&sort=no&view=text",
+        "patternId": "act-hand-crest-grade-three-name-fragment-search-v1",
+        "review": "Exact ACT from hand. Require the controller to have the named Dragheart, Luard Crest; discard this exact source from hand; choose Deck or Drop, then optionally reveal up to one grade 3 card whose card name contains Luard and add it to hand. Shuffle only when Deck was selected."
+      },
+      "effects": [
+        {
+          "op": "search-deck-or-drop-named-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardNameContains": "Luard",
+          "grade": 3,
+          "reveal": true,
+          "shuffleIfDeckSearched": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-13200:1",
+      "cardId": "cfa-13200",
+      "kind": "ACT",
+      "printedText": "ACT [Hand]: If you have a \"Masked Magician, Harri\" crest, COST [discard this card], search your deck or drop for up to one grade 3 card with \"Harri\" in its card name, reveal it and put it into hand, and if you searched the deck, shuffle the deck.",
+      "requiredLocation": [
+        "hand"
+      ],
+      "activationWindow": "main",
+      "conditions": [
+        {
+          "type": "controller-has-crest",
+          "cardName": "Masked Magician, Harri"
+        }
+      ],
+      "costs": [
+        {
+          "type": "source-discard",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialCardNumbers": [
+          "DZ-SS02/009EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=232&sort=no&view=text",
+        "patternId": "act-hand-crest-grade-three-name-fragment-search-v1",
+        "review": "Exact ACT from hand. Require the controller to have the named Masked Magician, Harri Crest; discard this exact source from hand; choose Deck or Drop, then optionally reveal up to one grade 3 card whose card name contains Harri and add it to hand. Shuffle only when Deck was selected."
+      },
+      "effects": [
+        {
+          "op": "search-deck-or-drop-named-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardNameContains": "Harri",
+          "grade": 3,
+          "reveal": true,
+          "shuffleIfDeckSearched": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-13207:1",
+      "cardId": "cfa-13207",
+      "kind": "ACT",
+      "printedText": "ACT [Hand]: If you have a \"Vampire Princess of Night Fog, Nightrose\" crest, COST [discard this card], search your deck or drop for up to one grade 3 card with \"Nightrose\" in its card name, reveal it and put it into hand, and if you searched the deck, shuffle the deck.",
+      "requiredLocation": [
+        "hand"
+      ],
+      "activationWindow": "main",
+      "conditions": [
+        {
+          "type": "controller-has-crest",
+          "cardName": "Vampire Princess of Night Fog, Nightrose"
+        }
+      ],
+      "costs": [
+        {
+          "type": "source-discard",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialCardNumbers": [
+          "DZ-SS03/009EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=233&sort=no&view=text",
+        "patternId": "act-hand-crest-grade-three-name-fragment-search-v1",
+        "review": "Exact ACT from hand. Require the controller to have the named Vampire Princess of Night Fog, Nightrose Crest; discard this exact source from hand; choose Deck or Drop, then optionally reveal up to one grade 3 card whose card name contains Nightrose and add it to hand. Shuffle only when Deck was selected."
+      },
+      "effects": [
+        {
+          "op": "search-deck-or-drop-named-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardNameContains": "Nightrose",
+          "grade": 3,
+          "reveal": true,
+          "shuffleIfDeckSearched": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-1698:0",
+      "cardId": "cfa-1698",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Choose a grade 3 card with \"Regalia\" in its card name from your drop zone, and put it on the bottom of your deck] If you have a «Genesis» vanguard, choose one of your grade 3 units with \"Regalia\" in its card name, and that unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Genesis"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "return-filtered-drop-to-deck-bottom",
+          "count": 1,
+          "filter": {
+            "minGrade": 3,
+            "maxGrade": 3,
+            "cardNameContains": "Regalia"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list and Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "BT14/074EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT14%2F074EN",
+        "patternId": "act-rc-return-named-grade-from-drop-to-deck-bottom-named-grade-power-v1",
+        "review": "Exact official text verified for this card. During the controller's Main Phase, return a matching Grade 3 card from that controller's Drop Zone to the bottom of their Deck, then choose a matching Grade 3 unit they control and give it +5000 until end of turn. The authoritative reducer rechecks the Vanguard clan, source circle, selected cost card, target and player identity before payment."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "minGrade": 3,
+            "maxGrade": 3,
+            "cardNameContains": "Regalia"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1705:0",
+      "cardId": "cfa-1705",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Choose a grade 3 card with \"Gancelot\" in its card name from your drop zone, and put it on the bottom of your deck] If you have a «Gold Paladin» vanguard, choose one of your grade 3 units with \"Gancelot\" in its card name, and that unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Gold Paladin"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "return-filtered-drop-to-deck-bottom",
+          "count": 1,
+          "filter": {
+            "minGrade": 3,
+            "maxGrade": 3,
+            "cardNameContains": "Gancelot"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list and Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "BT14/061EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT14%2F061EN",
+        "patternId": "act-rc-return-named-grade-from-drop-to-deck-bottom-named-grade-power-v1",
+        "review": "Exact official text verified for this card. During the controller's Main Phase, return a matching Grade 3 card from that controller's Drop Zone to the bottom of their Deck, then choose a matching Grade 3 unit they control and give it +5000 until end of turn. The authoritative reducer rechecks the Vanguard clan, source circle, selected cost card, target and player identity before payment."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "minGrade": 3,
+            "maxGrade": 3,
+            "cardNameContains": "Gancelot"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1708:0",
+      "cardId": "cfa-1708",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: [Choose a grade 3 card with \"Ashlei\" in its card name from your drop zone, and put it on the bottom of your deck] If you have a «Royal Paladin» vanguard, choose one of your grade 3 units with \"Ashlei\" in its card name, and that unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Royal Paladin"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "return-filtered-drop-to-deck-bottom",
+          "count": 1,
+          "filter": {
+            "minGrade": 3,
+            "maxGrade": 3,
+            "cardNameContains": "Ashlei"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list and Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "BT14/048EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT14%2F048EN",
+        "patternId": "act-rc-return-named-grade-from-drop-to-deck-bottom-named-grade-power-v1",
+        "review": "Exact official text verified for this card. During the controller's Main Phase, return a matching Grade 3 card from that controller's Drop Zone to the bottom of their Deck, then choose a matching Grade 3 unit they control and give it +5000 until end of turn. The authoritative reducer rechecks the Vanguard clan, source circle, selected cost card, target and player identity before payment."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "minGrade": 3,
+            "maxGrade": 3,
+            "cardNameContains": "Ashlei"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1304:1",
+      "cardId": "cfa-1304",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Choose an «Angel Feather» from your hand, and discard it] When this unit is placed on GC, you may pay the cost. If you do, choose one of your «Angel Feather» that is being attacked, and that unit cannot be hit until end of that battle.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Angel Feather"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT11%2F009EN",
+        "officialCardNumber": "BT11/009EN",
+        "patternId": "auto-gc-discard-protect-attacked-unit-v1",
+        "review": "Exact AUTO on Adamantine Celestial, Aniel. Its controller may discard one Angel Feather from hand, then must choose one of their Angel Feather units currently being attacked; that exact target cannot be hit through the end of that battle. The AUTO is caused by this exact source being placed on GC by any legal method, as confirmed by Bushiroad's Sentinel Q&A (Q734/Q735)."
+      },
+      "effects": [
+        {
+          "op": "protect-target",
+          "target": "chosen",
+          "duration": "battle",
+          "requiresAttackedTarget": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "clan": "Angel Feather",
+            "mustBeAttacked": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1573:1",
+      "cardId": "cfa-1573",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Choose an «Oracle Think Tank» from your hand, and discard it] When this unit is placed on GC, you may pay the cost. If you do, choose one of your «Oracle Think Tank» that is being attacked, and that unit cannot be hit until end of that battle.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Oracle Think Tank"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=35&view=text",
+        "officialCardNumber": "EB07/007EN",
+        "patternId": "auto-gc-discard-protect-attacked-unit-v1",
+        "review": "Exact AUTO on Tetra Magus. Its controller may discard one Oracle Think Tank from hand, then must choose one of their Oracle Think Tank units currently being attacked; that exact target cannot be hit through the end of that battle. The AUTO is caused by this exact source being placed on GC by any legal method, as confirmed by Bushiroad's Sentinel Q&A (Q734/Q735)."
+      },
+      "effects": [
+        {
+          "op": "protect-target",
+          "target": "chosen",
+          "duration": "battle",
+          "requiresAttackedTarget": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "clan": "Oracle Think Tank",
+            "mustBeAttacked": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-716:1",
+      "cardId": "cfa-716",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Choose an «Angel Feather» from your hand, and discard it] When this unit is placed on GC, you may pay the cost. If you do, choose one of your «Angel Feather» that is being attacked, and that unit cannot be hit until end of that battle.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ]
+      },
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "discard",
+          "count": 1,
+          "filter": {
+            "clan": "Angel Feather"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT06%2F012EN",
+        "officialCardNumber": "BT06/012EN",
+        "patternId": "auto-gc-discard-protect-attacked-unit-v1",
+        "review": "Exact AUTO on Pure Keeper, Requiel. Its controller may discard one Angel Feather from hand, then must choose one of their Angel Feather units currently being attacked; that exact target cannot be hit through the end of that battle. The AUTO is caused by this exact source being placed on GC by any legal method, as confirmed by Bushiroad's Sentinel Q&A (Q734/Q735)."
+      },
+      "effects": [
+        {
+          "op": "protect-target",
+          "target": "chosen",
+          "duration": "battle",
+          "requiresAttackedTarget": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "clan": "Angel Feather",
+            "mustBeAttacked": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-752:0",
+      "cardId": "cfa-752",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1] When this unit is put into the drop zone from RC, if you have a «Tachikaze» vanguard, you may pay the cost. If you do, search your deck for up to one card named \"Carrier Dragon, Brachiocarrier\", call it to RC, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.retired",
+        "subject": "event-subject",
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "subjectControllerRelation": "source-controller",
+        "circles": [],
+        "anyOf": [
+          {
+            "eventType": "card.retired"
+          },
+          {
+            "eventType": "card.moved"
+          },
+          {
+            "eventType": "card.discarded"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Tachikaze"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list and official Q&A",
+        "officialCardNumber": "BT08/080EN",
+        "officialCardReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT08%2F080EN",
+        "officialReference": "https://en.cf-vanguard.com/howto/question/?id=basic",
+        "officialQAndA": [
+          "Q272",
+          "Q273"
+        ],
+        "patternId": "auto-rc-drop-tachikaze-counter-blast-search-named-call-v1",
+        "review": "Exact BT08 Tachikaze chain wording, checked against the catalog and Bushiroad Q272–Q273. The exact source instance must leave its own RC for the Drop Zone; its current controller must have a Tachikaze Vanguard. The controller may decline or pay Counter Blast 1, then may search their own deck for up to one Unit with the exact next-card name, call it standing to a legal open RC, and shuffle. A missing search target is legal and still shuffles (Q273); the same AUTO cannot pay its cost twice for one triggering event (Q272)."
+      },
+      "effects": [
+        {
+          "op": "search-deck-named-call-to-rearguard",
+          "target": "controller",
+          "cardName": "Carrier Dragon, Brachiocarrier",
+          "maximum": 1,
+          "destination": "rear-guard",
+          "position": "stand",
+          "opensSourceCircle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-755:0",
+      "cardId": "cfa-755",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1] When this unit is put into the drop zone from RC, if you have a «Tachikaze» vanguard, you may pay the cost. If you do, search your deck for up to one card named \"Citadel Dragon, Brachiocastle\", call it to RC, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.retired",
+        "subject": "event-subject",
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "subjectControllerRelation": "source-controller",
+        "circles": [],
+        "anyOf": [
+          {
+            "eventType": "card.retired"
+          },
+          {
+            "eventType": "card.moved"
+          },
+          {
+            "eventType": "card.discarded"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Tachikaze"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list and official Q&A",
+        "officialCardNumber": "BT08/076EN",
+        "officialCardReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT08%2F076EN",
+        "officialReference": "https://en.cf-vanguard.com/howto/question/?id=basic",
+        "officialQAndA": [
+          "Q272",
+          "Q273"
+        ],
+        "patternId": "auto-rc-drop-tachikaze-counter-blast-search-named-call-v1",
+        "review": "Exact BT08 Tachikaze chain wording, checked against the catalog and Bushiroad Q272–Q273. The exact source instance must leave its own RC for the Drop Zone; its current controller must have a Tachikaze Vanguard. The controller may decline or pay Counter Blast 1, then may search their own deck for up to one Unit with the exact next-card name, call it standing to a legal open RC, and shuffle. A missing search target is legal and still shuffles (Q273); the same AUTO cannot pay its cost twice for one triggering event (Q272)."
+      },
+      "effects": [
+        {
+          "op": "search-deck-named-call-to-rearguard",
+          "target": "controller",
+          "cardName": "Citadel Dragon, Brachiocastle",
+          "maximum": 1,
+          "destination": "rear-guard",
+          "position": "stand",
+          "opensSourceCircle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-765:0",
+      "cardId": "cfa-765",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1] When this unit is put into the drop zone from RC, if you have a «Tachikaze» vanguard, you may pay the cost. If you do, search your deck for up to one card named \"Transport Dragon, Brachioporter\", call it to RC, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.retired",
+        "subject": "event-subject",
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "subjectControllerRelation": "source-controller",
+        "circles": [],
+        "anyOf": [
+          {
+            "eventType": "card.retired"
+          },
+          {
+            "eventType": "card.moved"
+          },
+          {
+            "eventType": "card.discarded"
+          }
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Tachikaze"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list and official Q&A",
+        "officialCardNumber": "BT08/074EN",
+        "officialCardReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT08%2F074EN",
+        "officialReference": "https://en.cf-vanguard.com/howto/question/?id=basic",
+        "officialQAndA": [
+          "Q272",
+          "Q273"
+        ],
+        "patternId": "auto-rc-drop-tachikaze-counter-blast-search-named-call-v1",
+        "review": "Exact BT08 Tachikaze chain wording, checked against the catalog and Bushiroad Q272–Q273. The exact source instance must leave its own RC for the Drop Zone; its current controller must have a Tachikaze Vanguard. The controller may decline or pay Counter Blast 1, then may search their own deck for up to one Unit with the exact next-card name, call it standing to a legal open RC, and shuffle. A missing search target is legal and still shuffles (Q273); the same AUTO cannot pay its cost twice for one triggering event (Q272)."
+      },
+      "effects": [
+        {
+          "op": "search-deck-named-call-to-rearguard",
+          "target": "controller",
+          "cardName": "Transport Dragon, Brachioporter",
+          "maximum": 1,
+          "destination": "rear-guard",
+          "position": "stand",
+          "opensSourceCircle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-13119:0",
+      "cardId": "cfa-13119",
+      "kind": "CONT",
+      "printedText": "CONT [Front Row RC]: During your turn, AUTO abilities cannot activate from your opponent’s intercepts, and all of your opponent’s units that were put on GC from RC lose all of their CONT and AUTO abilities.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list plus Cardfight Area catalog snapshot",
+        "snapshotDate": "2026-11-03",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2FFR33EN",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F020EN&expansion=229&view=text",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F040EN",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Keter+Sanctuary&sort=no&view=text",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Dark+States&sort=no&view=text"
+        ],
+        "patternId": "cont-front-row-opponent-intercept-ability-negation-v1",
+        "review": "Bushiroad's official English card-list text confirms the five verified variants in this family; the exact legacy catalog variant and the exact Guncannon wording variant are separately accepted without fuzzy text matching. During its controller's turn, while this exact face-up source remains on a front-row Rear-Guard Circle, its opponent's units moved from RC to GC have their AUTO and CONT abilities suppressed. The source controller, target controller, target's previous location, and current GC location are checked from authoritative instance state."
+      },
+      "continuousEffects": [
+        {
+          "type": "suppress-abilities",
+          "target": "opponent-intercepted-guardian-unit",
+          "abilityKinds": [
+            "AUTO",
+            "CONT"
+          ],
+          "duration": "continuous",
+          "sourceCircle": "front-row",
+          "targetZone": "guardian",
+          "targetEntryLocation": "rear-guard",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ],
+      "effects": []
+    },
+    {
+      "id": "cfa-13120:0",
+      "cardId": "cfa-13120",
+      "kind": "CONT",
+      "printedText": "CONT [Front Row RC]: During your turn, AUTO abilities cannot activate from your opponent’s intercepts, and all of your opponent’s units that were put on GC from RC lose all of their CONT and AUTO abilities.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list plus Cardfight Area catalog snapshot",
+        "snapshotDate": "2026-11-03",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2FFR33EN",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F020EN&expansion=229&view=text",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F040EN",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Keter+Sanctuary&sort=no&view=text",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Dark+States&sort=no&view=text"
+        ],
+        "patternId": "cont-front-row-opponent-intercept-ability-negation-v1",
+        "review": "Bushiroad's official English card-list text confirms the five verified variants in this family; the exact legacy catalog variant and the exact Guncannon wording variant are separately accepted without fuzzy text matching. During its controller's turn, while this exact face-up source remains on a front-row Rear-Guard Circle, its opponent's units moved from RC to GC have their AUTO and CONT abilities suppressed. The source controller, target controller, target's previous location, and current GC location are checked from authoritative instance state."
+      },
+      "continuousEffects": [
+        {
+          "type": "suppress-abilities",
+          "target": "opponent-intercepted-guardian-unit",
+          "abilityKinds": [
+            "AUTO",
+            "CONT"
+          ],
+          "duration": "continuous",
+          "sourceCircle": "front-row",
+          "targetZone": "guardian",
+          "targetEntryLocation": "rear-guard",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ],
+      "effects": []
+    },
+    {
+      "id": "cfa-13121:0",
+      "cardId": "cfa-13121",
+      "kind": "CONT",
+      "printedText": "CONT [Front Row RC]: During your turn, AUTO abilities cannot activate from your opponent’s intercepts, and all of your opponent’s units that were put on GC from RC lose all of their CONT and AUTO abilities.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list plus Cardfight Area catalog snapshot",
+        "snapshotDate": "2026-11-03",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2FFR33EN",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F020EN&expansion=229&view=text",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F040EN",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Keter+Sanctuary&sort=no&view=text",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Dark+States&sort=no&view=text"
+        ],
+        "patternId": "cont-front-row-opponent-intercept-ability-negation-v1",
+        "review": "Bushiroad's official English card-list text confirms the five verified variants in this family; the exact legacy catalog variant and the exact Guncannon wording variant are separately accepted without fuzzy text matching. During its controller's turn, while this exact face-up source remains on a front-row Rear-Guard Circle, its opponent's units moved from RC to GC have their AUTO and CONT abilities suppressed. The source controller, target controller, target's previous location, and current GC location are checked from authoritative instance state."
+      },
+      "continuousEffects": [
+        {
+          "type": "suppress-abilities",
+          "target": "opponent-intercepted-guardian-unit",
+          "abilityKinds": [
+            "AUTO",
+            "CONT"
+          ],
+          "duration": "continuous",
+          "sourceCircle": "front-row",
+          "targetZone": "guardian",
+          "targetEntryLocation": "rear-guard",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ],
+      "effects": []
+    },
+    {
+      "id": "cfa-13122:0",
+      "cardId": "cfa-13122",
+      "kind": "CONT",
+      "printedText": "CONT [Front Row RC]: During your turn, AUTO abilities cannot activate from your opponent’s intercepts, and all of your opponent’s units that were put on GC from RC lose all of their CONT and AUTO abilities.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list plus Cardfight Area catalog snapshot",
+        "snapshotDate": "2026-11-03",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2FFR33EN",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F020EN&expansion=229&view=text",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F040EN",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Keter+Sanctuary&sort=no&view=text",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Dark+States&sort=no&view=text"
+        ],
+        "patternId": "cont-front-row-opponent-intercept-ability-negation-v1",
+        "review": "Bushiroad's official English card-list text confirms the five verified variants in this family; the exact legacy catalog variant and the exact Guncannon wording variant are separately accepted without fuzzy text matching. During its controller's turn, while this exact face-up source remains on a front-row Rear-Guard Circle, its opponent's units moved from RC to GC have their AUTO and CONT abilities suppressed. The source controller, target controller, target's previous location, and current GC location are checked from authoritative instance state."
+      },
+      "continuousEffects": [
+        {
+          "type": "suppress-abilities",
+          "target": "opponent-intercepted-guardian-unit",
+          "abilityKinds": [
+            "AUTO",
+            "CONT"
+          ],
+          "duration": "continuous",
+          "sourceCircle": "front-row",
+          "targetZone": "guardian",
+          "targetEntryLocation": "rear-guard",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ],
+      "effects": []
+    },
+    {
+      "id": "cfa-13123:0",
+      "cardId": "cfa-13123",
+      "kind": "CONT",
+      "printedText": "CONT [Front Row RC]: During your turn, AUTO abilities cannot activate from your opponent’s intercepts, and all of your opponent’s units that were put on GC from RC lose all of their CONT and AUTO abilities.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list plus Cardfight Area catalog snapshot",
+        "snapshotDate": "2026-11-03",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2FFR33EN",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F020EN&expansion=229&view=text",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F040EN",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Keter+Sanctuary&sort=no&view=text",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Dark+States&sort=no&view=text"
+        ],
+        "patternId": "cont-front-row-opponent-intercept-ability-negation-v1",
+        "review": "Bushiroad's official English card-list text confirms the five verified variants in this family; the exact legacy catalog variant and the exact Guncannon wording variant are separately accepted without fuzzy text matching. During its controller's turn, while this exact face-up source remains on a front-row Rear-Guard Circle, its opponent's units moved from RC to GC have their AUTO and CONT abilities suppressed. The source controller, target controller, target's previous location, and current GC location are checked from authoritative instance state."
+      },
+      "continuousEffects": [
+        {
+          "type": "suppress-abilities",
+          "target": "opponent-intercepted-guardian-unit",
+          "abilityKinds": [
+            "AUTO",
+            "CONT"
+          ],
+          "duration": "continuous",
+          "sourceCircle": "front-row",
+          "targetZone": "guardian",
+          "targetEntryLocation": "rear-guard",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ],
+      "effects": []
+    },
+    {
+      "id": "cfa-13124:0",
+      "cardId": "cfa-13124",
+      "kind": "CONT",
+      "printedText": "CONT [Front Row RC]: During your turn, AUTO abilities cannot activate from your opponent’s intercepts, and all of your opponent’s units that were put on GC from RC lose all of their CONT and AUTO abilities.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list plus Cardfight Area catalog snapshot",
+        "snapshotDate": "2026-11-03",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2FFR33EN",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F020EN&expansion=229&view=text",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT04%2F040EN",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Keter+Sanctuary&sort=no&view=text",
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=229&s_param=d-Dark+States&sort=no&view=text"
+        ],
+        "patternId": "cont-front-row-opponent-intercept-ability-negation-v1",
+        "review": "Bushiroad's official English card-list text confirms the five verified variants in this family; the exact legacy catalog variant and the exact Guncannon wording variant are separately accepted without fuzzy text matching. During its controller's turn, while this exact face-up source remains on a front-row Rear-Guard Circle, its opponent's units moved from RC to GC have their AUTO and CONT abilities suppressed. The source controller, target controller, target's previous location, and current GC location are checked from authoritative instance state."
+      },
+      "continuousEffects": [
+        {
+          "type": "suppress-abilities",
+          "target": "opponent-intercepted-guardian-unit",
+          "abilityKinds": [
+            "AUTO",
+            "CONT"
+          ],
+          "duration": "continuous",
+          "sourceCircle": "front-row",
+          "targetZone": "guardian",
+          "targetEntryLocation": "rear-guard",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ],
+      "effects": []
+    },
+    {
+      "id": "cfa-12828:0",
+      "cardId": "cfa-12828",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, if you have a grade 3 or greater vanguard with \"Kotihblaze\" in its card name, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Kotihblaze"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact grammar cross-checked against Bushiroad's official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT03%2F004EN",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS05%2F010EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-own-attack-grade-named-vanguard-power-turn-v1",
+        "review": "Exact Rear-Guard AUTO template. Only this source instance's own attack from RC qualifies. Its controller's Vanguard must satisfy both printed conditions when the trigger is checked; the source receives the printed power for the exact printed duration. No cost, target, or once-per-turn restriction is printed. Official examples confirm the end-of-turn wording; card-specific source review remains separate from this reusable implementation."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13472:1",
+      "cardId": "cfa-13472",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, if you have a grade 3 or greater vanguard with \"Black\" in its card name, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Black"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact grammar cross-checked against Bushiroad's official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT03%2F004EN",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS05%2F010EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-own-attack-grade-named-vanguard-power-turn-v1",
+        "review": "Exact Rear-Guard AUTO template. Only this source instance's own attack from RC qualifies. Its controller's Vanguard must satisfy both printed conditions when the trigger is checked; the source receives the printed power for the exact printed duration. No cost, target, or once-per-turn restriction is printed. Official examples confirm the end-of-turn wording; card-specific source review remains separate from this reusable implementation."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13902:1",
+      "cardId": "cfa-13902",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, if you have a grade 3 or greater vanguard with \"Youthberk\" in its card name, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Youthberk"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact grammar cross-checked against Bushiroad's official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT03%2F004EN",
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS05%2F010EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-own-attack-grade-named-vanguard-power-turn-v1",
+        "review": "Exact Rear-Guard AUTO template. Only this source instance's own attack from RC qualifies. Its controller's Vanguard must satisfy both printed conditions when the trigger is checked; the source receives the printed power for the exact printed duration. No cost, target, or once-per-turn restriction is printed. Official examples confirm the end-of-turn wording; card-specific source review remains separate from this reusable implementation."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-9042:0",
+      "cardId": "cfa-9042",
+      "kind": "CONT",
+      "printedText": "CONT [Order Zone]: All of your grade 3 rear-guards get \"Boost\".",
+      "requiredLocation": [
+        "order"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "curated card catalog exact-text family",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT03%2F049EN",
+        "rulesReference": "https://en.cf-vanguard.com/howto/",
+        "patternId": "cont-order-zone-grade-rearguards-grant-boost-v1",
+        "review": "Exact Order Zone CONT wording. The order must remain face up in its controller's Order Zone; only that controller's Rear-guards of the printed grade gain Boost. The effect is continuous, applies during either player's turn, and is re-evaluated from the current card instances and locations. This exact card text was checked against its linked Bushiroad card listing."
+      },
+      "conditions": [],
+      "costs": [],
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "controller-rear-guards-of-grade",
+          "keyword": "boost",
+          "grade": 3,
+          "duration": "continuous",
+          "condition": {
+            "op": "always"
+          }
+        }
+      ],
+      "effects": []
+    },
+    {
+      "id": "cfa-9115:1",
+      "cardId": "cfa-9115",
+      "kind": "CONT",
+      "printedText": "CONT [Order Zone]: All of your grade 2 rear-guards get \"Boost\".",
+      "requiredLocation": [
+        "order"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "curated card catalog exact-text family",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT03%2F093EN",
+        "rulesReference": "https://en.cf-vanguard.com/howto/",
+        "patternId": "cont-order-zone-grade-rearguards-grant-boost-v1",
+        "review": "Exact Order Zone CONT wording. The order must remain face up in its controller's Order Zone; only that controller's Rear-guards of the printed grade gain Boost. The effect is continuous, applies during either player's turn, and is re-evaluated from the current card instances and locations. This exact card text was checked against its linked Bushiroad card listing."
+      },
+      "conditions": [],
+      "costs": [],
+      "continuousEffects": [
+        {
+          "type": "grant-keyword",
+          "target": "controller-rear-guards-of-grade",
+          "keyword": "boost",
+          "grade": 2,
+          "duration": "continuous",
+          "condition": {
+            "op": "always"
+          }
+        }
+      ],
+      "effects": []
+    },
+    {
+      "id": "cfa-4410:1",
+      "cardId": "cfa-4410",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your vanguard with \"Chronojet\" in its card name attacks, this unit gets power +2000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "vanguard",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Chronojet"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact grammar cross-checked against Bushiroad's official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=G-CHB01%2F007EN&expansion=91&view=text"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-named-vanguard-attack-power-turn-v1",
+        "review": "Exact Rear-Guard AUTO template. It becomes eligible only when this controller's own Vanguard attacks and its card name matches the printed requirement. The exact source rear-guard receives its printed power until end of turn. No cost, target, optional payment, or once-per-turn restriction is printed. Only card-specific definitions with verified source references are trusted by the server."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-9696:1",
+      "cardId": "cfa-9696",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your vanguard with \"Overlord\" in its card name attacks, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "vanguard",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Overlord"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact grammar cross-checked against Bushiroad's official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-BT05%2F002EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-named-vanguard-attack-power-turn-v1",
+        "review": "Exact Rear-Guard AUTO template. It becomes eligible only when this controller's own Vanguard attacks and its card name matches the printed requirement. The exact source rear-guard receives its printed power until end of turn. No cost, target, optional payment, or once-per-turn restriction is printed. Only card-specific definitions with verified source references are trusted by the server."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-493:0",
+      "cardId": "cfa-493",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: During your main phase, when an opponent’s rear-guard is put into the drop zone, this unit gets power +3000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.retired",
+        "subject": "different-card",
+        "circles": [],
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "subjectControllerRelation": "opponent",
+        "requiredPhase": "main",
+        "turnRelation": "controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact text verified against Bushiroad's official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=TD02%2F016EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-opponent-rearguard-drop-main-phase-power-turn-v1",
+        "review": "Exact RC AUTO template. During this controller's Main Phase, only a different, opponent-controlled Rear-Guard card instance that is retired into Drop qualifies. A friendly card, a card from another zone, a non-retirement move, another phase, or the ability source itself does not qualify. The exact source receives the printed power until turn end."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-506:0",
+      "cardId": "cfa-506",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: During your main phase, when an opponent’s rear-guard is put into the drop zone, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.retired",
+        "subject": "different-card",
+        "circles": [],
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "subjectControllerRelation": "opponent",
+        "requiredPhase": "main",
+        "turnRelation": "controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact text verified against Bushiroad's official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=BT05%2F040EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-opponent-rearguard-drop-main-phase-power-turn-v1",
+        "review": "Exact RC AUTO template. During this controller's Main Phase, only a different, opponent-controlled Rear-Guard card instance that is retired into Drop qualifies. A friendly card, a card from another zone, a non-retirement move, another phase, or the ability source itself does not qualify. The exact source receives the printed power until turn end."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-507:0",
+      "cardId": "cfa-507",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: During your main phase, when an opponent’s rear-guard is put into the drop zone, this unit gets power +3000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.retired",
+        "subject": "different-card",
+        "circles": [],
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "subjectControllerRelation": "opponent",
+        "requiredPhase": "main",
+        "turnRelation": "controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact text verified against Bushiroad's official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=TD02%2F010EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-opponent-rearguard-drop-main-phase-power-turn-v1",
+        "review": "Exact RC AUTO template. During this controller's Main Phase, only a different, opponent-controlled Rear-Guard card instance that is retired into Drop qualifies. A friendly card, a card from another zone, a non-retirement move, another phase, or the ability source itself does not qualify. The exact source receives the printed power until turn end."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-2661:1",
+      "cardId": "cfa-2661",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: During your turn, when your G unit Stride, choose one of your vanguards, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.stridden",
+        "subject": "stride-source",
+        "circles": [
+          "vanguard"
+        ],
+        "destinationLocation": "vanguard",
+        "requiredPhase": "stride",
+        "requiredTimingWindow": "normal-stride",
+        "turnRelation": "controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact text verified against Bushiroad's official card lists",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=G-SD01%2F002EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-own-g-unit-stride-choose-vanguard-power-turn-v1",
+        "review": "Exact VC AUTO template. It triggers only when this exact card was a Vanguard source at the moment its controller strides a G unit during that controller's turn. The trigger event records the pre-Stride Vanguard instance even after it becomes a heart. The controller chooses a currently controlled Vanguard and grants it +5000 until turn end. It has no cost, optional payment, or usage restriction."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-2668:1",
+      "cardId": "cfa-2668",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: During your turn, when your G unit Stride, choose one of your vanguards, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.stridden",
+        "subject": "stride-source",
+        "circles": [
+          "vanguard"
+        ],
+        "destinationLocation": "vanguard",
+        "requiredPhase": "stride",
+        "requiredTimingWindow": "normal-stride",
+        "turnRelation": "controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact text verified against Bushiroad's official card lists",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=PR%2F0186EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-own-g-unit-stride-choose-vanguard-power-turn-v1",
+        "review": "Exact VC AUTO template. It triggers only when this exact card was a Vanguard source at the moment its controller strides a G unit during that controller's turn. The trigger event records the pre-Stride Vanguard instance even after it becomes a heart. The controller chooses a currently controlled Vanguard and grants it +5000 until turn end. It has no cost, optional payment, or usage restriction."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-3102:1",
+      "cardId": "cfa-3102",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: During your turn, when your G unit Stride, choose one of your vanguards, and it gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.stridden",
+        "subject": "stride-source",
+        "circles": [
+          "vanguard"
+        ],
+        "destinationLocation": "vanguard",
+        "requiredPhase": "stride",
+        "requiredTimingWindow": "normal-stride",
+        "turnRelation": "controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact text verified against Bushiroad's official card lists",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=G-BT04%2F029EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-own-g-unit-stride-choose-vanguard-power-turn-v1",
+        "review": "Exact VC AUTO template. It triggers only when this exact card was a Vanguard source at the moment its controller strides a G unit during that controller's turn. The trigger event records the pre-Stride Vanguard instance even after it becomes a heart. The controller chooses a currently controlled Vanguard and grants it +5000 until turn end. It has no cost, optional payment, or usage restriction."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-6666:0",
+      "cardId": "cfa-6666",
+      "cardName": "Golden Dragon, Spear-X Dragon",
+      "kind": "ACT",
+      "printedText": "ACT [G zone] Unite: If your vanguard is grade 3, COST [Counter Blast 2 & discard a card from your hand], and Stride this card on your VC from face down.",
+      "activationWindow": "stride",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-at-least",
+          "count": 3
+        },
+        {
+          "type": "controller-can-stride"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 2
+        },
+        {
+          "type": "discard",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "V-SS01/011EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS01%2F011EN",
+        "patternId": "act-gzone-unite-stride-v1",
+        "review": "Exact official ACT. In the Stride step, this controller may pay Counter-Blast 2 and discard one card, then Stride this exact face-down G-zone unit. The controller must meet the standard Stride grade and once-per-turn timing requirements. The discarded card is recorded as an ability cost, not silently relabeled as the normal grade-sum Stride cost."
+      }
+    },
+    {
+      "id": "cfa-12202:1",
+      "cardId": "cfa-12202",
+      "kind": "AUTO",
+      "printedText": "AUTO [Drop] Ritual 3 (Active if there are three or more grade 1 cards in your drop): At the end of your turn, if you have a vanguard with \"Luard\" in its card name, COST [bind two cards with the same card name as this card from drop], and Counter Charge 1.",
+      "optional": false,
+      "requiredLocation": [
+        "drop"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "turn.ended",
+        "subject": "controller",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-drop-grade-count-at-least",
+          "grade": 1,
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Luard"
+        }
+      ],
+      "costs": [
+        {
+          "type": "bind-same-name-from-drop",
+          "count": 2
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=217&sort=no&view=text",
+        "patternId": "auto-drop-ritual-three-end-turn-bind-same-name-counter-charge-v1",
+        "review": "Exact mandatory Abyssal Owl AUTO. The source must be this instance in its controller's Drop when that controller ends their turn; Ritual 3 counts grade 1 cards in that Drop and the Vanguard must contain Luard. The controller must bind two cards sharing this source's card name from that same Drop (including the source when selected), then Counter Charge 1 resolves."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-479:0",
+      "cardId": "cfa-479",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When another of your «Dark Irregulars» is placed on RC, you may Soul Charge 1.",
+      "optional": true,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditions": [
+        {
+          "type": "event-subject-has-clan",
+          "value": "Dark Irregulars"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "any",
+        "circles": [
+          "rear-guard"
+        ],
+        "excludeSourceAsSubject": true,
+        "subjectControllerRelation": "source-controller"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT03%2F043EN",
+        "patternId": "auto-vc-another-clan-rearguard-placement-soul-charge-one-v1",
+        "review": "Exact Decadent Succubus AUTO checked against Bushiroad's official card list. While this exact source remains on VC, another Dark Irregulars card controlled by the same player must actually enter an RC; the Vanguard controller may decline or Soul Charge one. The source itself, unrelated clans, other circles, and opponent-controlled placements do not qualify."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-763:0",
+      "cardId": "cfa-763",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When another of your «Tachikaze» is placed on RC, you may Soul Charge 1.",
+      "optional": true,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditions": [
+        {
+          "type": "event-subject-has-clan",
+          "value": "Tachikaze"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "any",
+        "circles": [
+          "rear-guard"
+        ],
+        "excludeSourceAsSubject": true,
+        "subjectControllerRelation": "source-controller"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-vc-another-clan-rearguard-placement-soul-charge-one-v1",
+        "review": "Exact catalog-text family from the 2025-05-09 Cardfight Area snapshot. While this exact source remains on VC, another card of the printed clan controlled by the same player must actually enter an RC; the Vanguard controller may decline or Soul Charge one. Official individual-card text was not retrieved for this entry, so whole-card verification remains pending."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-809:0",
+      "cardId": "cfa-809",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When another of your «Pale Moon» is placed on RC, you may Soul Charge 1.",
+      "optional": true,
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditions": [
+        {
+          "type": "event-subject-has-clan",
+          "value": "Pale Moon"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "any",
+        "circles": [
+          "rear-guard"
+        ],
+        "excludeSourceAsSubject": true,
+        "subjectControllerRelation": "source-controller"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-vc-another-clan-rearguard-placement-soul-charge-one-v1",
+        "review": "Exact catalog-text family from the 2025-05-09 Cardfight Area snapshot. While this exact source remains on VC, another card of the printed clan controlled by the same player must actually enter an RC; the Vanguard controller may decline or Soul Charge one. Official individual-card text was not retrieved for this entry, so whole-card verification remains pending."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-12760:0",
+      "cardId": "cfa-12760",
+      "kind": "AUTO",
+      "printedText": "AUTO [Order Zone]: At the beginning of your battle phase, choose one of your back row rear-guards, and it gets \"Boost\" until end of turn.",
+      "requiredLocation": [
+        "order"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "phase.changed",
+        "subject": "controller",
+        "circles": [],
+        "requiredPhase": "battle",
+        "requiredTimingWindow": "phase-start",
+        "turnRelation": "controller"
+      },
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialCardNumber": "DZ-SS01/017EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS01%2F017EN",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-order-zone-battle-phase-grant-back-row-boost-v1",
+        "review": "Exact Order Zone AUTO for Dust Storm Killing Field, confirmed against Bushiroad's card list. At the start of its controller's Battle Phase, while this exact face-up Order remains in that player's Order Zone, that player chooses one of their back-row Rear-Guards and grants it Boost through turn end. The chosen instance must still be a friendly back-row Rear-Guard when the private choice resolves; no target means the ability is consumed without a prompt."
+      },
+      "effects": [
+        {
+          "op": "grant-temporary-boost",
+          "target": "chosen",
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "rear-guard",
+            "row": "back"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12762:0",
+      "cardId": "cfa-12762",
+      "kind": "AUTO",
+      "printedText": "AUTO [Order Zone]: At the beginning of your battle phase, choose one of your back row rear-guards, and it gets \"Boost\" until end of turn.",
+      "requiredLocation": [
+        "order"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "phase.changed",
+        "subject": "controller",
+        "circles": [],
+        "requiredPhase": "battle",
+        "requiredTimingWindow": "phase-start",
+        "turnRelation": "controller"
+      },
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialCardNumber": "DZ-SS01/019EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS01%2F019EN",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-order-zone-battle-phase-grant-back-row-boost-v1",
+        "review": "Exact Order Zone AUTO for Game of Underworld, confirmed against Bushiroad's card list. At the start of its controller's Battle Phase, while this exact face-up Order remains in that player's Order Zone, that player chooses one of their back-row Rear-Guards and grants it Boost through turn end. The chosen instance must still be a friendly back-row Rear-Guard when the private choice resolves; no target means the ability is consumed without a prompt."
+      },
+      "effects": [
+        {
+          "op": "grant-temporary-boost",
+          "target": "chosen",
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "rear-guard",
+            "row": "back"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-12764:0",
+      "cardId": "cfa-12764",
+      "kind": "AUTO",
+      "printedText": "AUTO [Order Zone]: At the beginning of your battle phase, choose one of your back row rear-guards, and it gets \"Boost\" until end of turn.",
+      "requiredLocation": [
+        "order"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "phase.changed",
+        "subject": "controller",
+        "circles": [],
+        "requiredPhase": "battle",
+        "requiredTimingWindow": "phase-start",
+        "turnRelation": "controller"
+      },
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-03",
+        "officialCardNumber": "DZ-SS01/027EN",
+        "officialReference": "https://cf-vanguard.com/cardlist/?cardno=DZ-SS01%2F027",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-order-zone-battle-phase-grant-back-row-boost-v1",
+        "review": "Exact Order Zone AUTO for Only My Stage!, confirmed against Bushiroad's card list. At the start of its controller's Battle Phase, while this exact face-up Order remains in that player's Order Zone, that player chooses one of their back-row Rear-Guards and grants it Boost through turn end. The chosen instance must still be a friendly back-row Rear-Guard when the private choice resolves; no target means the ability is consumed without a prompt."
+      },
+      "effects": [
+        {
+          "op": "grant-temporary-boost",
+          "target": "chosen",
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "rear-guard",
+            "row": "back"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-10769:0",
+      "cardId": "cfa-10769",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When your vanguard with \"Avantgarda\" in its card name attacks, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "vanguard",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Avantgarda"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot; exact grammar cross-checked against Bushiroad's official card list",
+        "snapshotDate": "2026-11-03",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-SS12%2F063EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-rc-named-vanguard-attack-power-turn-v1",
+        "review": "Exact Rear-Guard AUTO template. It becomes eligible only when this controller's own Vanguard attacks and its card name matches the printed requirement. The exact source rear-guard receives its printed power until end of turn. No cost, target, optional payment, or once-per-turn restriction is printed. Only card-specific definitions with verified source references are trusted by the server."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-10780:0",
+      "cardId": "cfa-10780",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Blue Sky Knight, Altmile\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card with the same card name as this unit face up], and get two Imaginary Gift:Force.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Blue Sky Knight, Altmile",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/002EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F002EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F002EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Force",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11106:0",
+      "cardId": "cfa-11106",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Supremacy Dragon, Claret Sword Dragon\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card with the same card name as this unit face up], and get two Imaginary Gift:Force.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Supremacy Dragon, Claret Sword Dragon",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/005EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F005EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F005EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Force",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11108:0",
+      "cardId": "cfa-11108",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Sunrise Ray Knight, Gurguit\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Accel.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Sunrise Ray Knight, Gurguit",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/006EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F006EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F006EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Accel",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11110:0",
+      "cardId": "cfa-11110",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Mythic Beast, Fenrir\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Force.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Mythic Beast, Fenrir",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/007EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F007EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F007EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Force",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11112:0",
+      "cardId": "cfa-11112",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Dragonic Blademaster\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Force.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Dragonic Blademaster",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F008EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F008EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Force",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11116:0",
+      "cardId": "cfa-11116",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Emperor Dragon, Gaia Emperor\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Accel.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Emperor Dragon, Gaia Emperor",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/010EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F010EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F010EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Accel",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11118:0",
+      "cardId": "cfa-11118",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Stealth Rogue of Revelation, Yasuie\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Accel.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Stealth Rogue of Revelation, Yasuie",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/011EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F011EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F011EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Accel",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11120:0",
+      "cardId": "cfa-11120",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Dragonic Vanquisher\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card with the same card name as this unit face up], and get two Imaginary Gift:Accel.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Dragonic Vanquisher",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/012EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F012EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F012EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Accel",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11122:0",
+      "cardId": "cfa-11122",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Exxtreme Battler, Victor\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Accel.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Exxtreme Battler, Victor",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/013EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F013EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F013EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Accel",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11124:0",
+      "cardId": "cfa-11124",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Great Cosmic Hero, Grandgallop\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Force.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Great Cosmic Hero, Grandgallop",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/014EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F014EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F014EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Force",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11126:0",
+      "cardId": "cfa-11126",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Alter Ego Messiah\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Force.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Alter Ego Messiah",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/015EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F015EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F015EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Force",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11128:0",
+      "cardId": "cfa-11128",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Exceptional Expertise, Rising Nova\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Force.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Exceptional Expertise, Rising Nova",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/016EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F016EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F016EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Force",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11132:0",
+      "cardId": "cfa-11132",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Masked Magician, Harri\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Accel.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Masked Magician, Harri",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/018EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F018EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F018EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Accel",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11136:0",
+      "cardId": "cfa-11136",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Miracle Voice, Lauris\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Force.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Miracle Voice, Lauris",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/021EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F021EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F021EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Force",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11138:0",
+      "cardId": "cfa-11138",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"One Who Surpasses the Storm, Thavas\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Accel.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "One Who Surpasses the Storm, Thavas",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/022EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F022EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F022EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Accel",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11142:0",
+      "cardId": "cfa-11142",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Famous Professor, Bigbelly\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Accel.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Famous Professor, Bigbelly",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/024EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F024EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F024EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Accel",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11144:0",
+      "cardId": "cfa-11144",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Ranunculus Flower Maiden, Ahsha\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card from G zone with the same card name as this unit face up], and get two Imaginary Gift:Force.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Ranunculus Flower Maiden, Ahsha",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "G-TD03/001EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-TD03%2F001EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=G-TD03%2F001EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Force",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-11146:0",
+      "cardId": "cfa-11146",
+      "kind": "ACT",
+      "printedText": "ACT [G Zone]: If your vanguard is a grade 3 \"Chronojet Dragon\", and you did not get an Imaginary Gift this fight, COST [choose one or more cards from hand with the sum of their grades being 3 or greater, and discard them], and Stride this card on your VC from face down. Then, COST [turn a card with the same card name as this unit face up], and get two Imaginary Gift:Force.",
+      "requiredLocation": [
+        "g-zone"
+      ],
+      "activationWindow": "stride",
+      "optional": false,
+      "conditions": [
+        {
+          "type": "controller-vanguard-grade-equals",
+          "count": 3
+        },
+        {
+          "type": "controller-vanguard-name-contains",
+          "value": "Chronojet Dragon",
+          "exact": true
+        },
+        {
+          "type": "controller-has-no-imaginary-gift-this-fight"
+        },
+        {
+          "type": "controller-can-stride"
+        },
+        {
+          "type": "controller-has-same-name-face-down-g-unit-in-g-zone"
+        }
+      ],
+      "costs": [
+        {
+          "type": "discard-grade-sum",
+          "minimumGrade": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PV01/019EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F019EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F019EN"
+        ],
+        "patternId": "act-gzone-named-vanguard-double-imaginary-gift-stride-v1",
+        "review": "Exact 18-card G-zone ACT family. Requires the controller's exact grade-3 named Vanguard, no Imaginary Gift acquired this fight, a legal Stride timing window, and another face-down same-name G Unit in G zone. The controller discards a hand selection with total grade at least 3, Strides this exact source, turns one other same-name G Unit face up, then chooses and receives two printed Force or Accel gifts."
+      },
+      "effects": [
+        {
+          "op": "stride-source-from-g-zone",
+          "target": "source",
+          "requireFaceDown": true
+        },
+        {
+          "op": "flip-same-name-g-zone-face-up",
+          "target": "selected-g-zone-card",
+          "requireFaceDown": true
+        },
+        {
+          "op": "grant-imaginary-gifts",
+          "target": "controller",
+          "giftType": "Force",
+          "count": 2
+        }
+      ]
     }
   ];
-  const quintupletMemoryAutoIds = ["cfa-11526", "cfa-11545", "cfa-11558", "cfa-11607", "cfa-11671"];
-  const quintupletMemoryAutoText = "AUTO: When this unit is placed on RC during your main phase, if you have a <Quintuplet> vanguard, look at the top three cards of your deck, choose up to one <Quintuplet> from among them, put it into memory, and shuffle the deck.";
-  for (const cardId of quintupletMemoryAutoIds) definitions.push({
-    id: `${cardId}:0`, cardId, kind: "AUTO", printedText: quintupletMemoryAutoText,
-    requiredLocation: [],
-    trigger: { status: "recognized-trigger", eventType: "card.placed", subject: "event-subject", circles: ["rear-guard"], requiredPhase: "main", turnRelation: "controller" },
-    conditions: [{ type: "controller-vanguard-has-race", value: "Quintuplet" }],
-    conditionsReviewed: true, costs: [], costsReviewed: true, optional: false, choicesReviewed: true,
-    source: { dataset: "Bushiroad official card list", snapshotDate: "2026-10-30", officialReference: "https://en.cf-vanguard.com/cardlist/", rulesReference: "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf", patternId: "auto-rc-main-phase-race-top-three-memory-v1", review: "Exact shared AUTO on five Quintuplet units. It triggers only when this exact card enters an RC during its controller's Main Phase while that controller has a Vanguard with race Quintuplet. The controller privately chooses zero or one matching card among the top three; a chosen card enters the existing Order Zone, which Comprehensive Rules 4.52 §17.14.1 identifies as memory for effects, then the remaining looked cards are shuffled back. Only this AUTO is represented; each card's separate CONT ability is reviewed independently." },
-    effects: [{ op: "put-top-up-to-one-filtered-in-order-zone", target: "controller", lookCount: 3, maximum: 1, filter: { race: "Quintuplet" }, destination: "memory", shuffle: true }]
-  });
-  const clanCounterBlastAttackPowerCards = [
-    ["cfa-1140", "Genesis"], ["cfa-1159", "Royal Paladin"],
-    ["cfa-1170", "Narukami"], ["cfa-1187", "Spike Brothers"]
-  ];
-  for (const [cardId, clan] of clanCounterBlastAttackPowerCards) definitions.push({
-    id: `${cardId}:0`, cardId, kind: "AUTO",
-    printedText: `AUTO [VC/RC]: [Counter Blast 1 - «${clan}»] When this unit attacks, if you have a «${clan}» vanguard, you may pay the cost. If you do, this unit gets power +4000 until the end of that battle.`,
-    optional: true, requiredLocation: ["vanguard", "rear-guard"],
-    trigger: { status: "recognized-trigger", eventType: "unit.attacked", subject: "source", turnRelation: "any", circles: ["vanguard", "rear-guard"] },
-    conditions: [{ type: "controller-vanguard-has-clan", value: clan }],
-    conditionsReviewed: true,
-    costs: [{ type: "counter-blast", count: 1, filter: { clan } }],
-    costsReviewed: true, choicesReviewed: true,
-    source: { dataset: "Cardfight Area snapshot", snapshotDate: "2025-05-09", patternId: "auto-own-attack-clan-counter-blast-power-battle-v1", review: "Exact AUTO. This exact source attacks from VC or RC, its controller has the printed-clan Vanguard, may pay one Counter Blast using a face-up damage card of the printed clan, and gives only this source +4000 for that battle." },
-    effects: [{ op: "modify-power", target: "source", amount: 4000, duration: "battle" }]
-  });
-  const namedVanguardConditionalBoostTexts = [
-    ["cfa-12062", 'CONT [RC]: If you have a vanguard with "Drajeweled" in its card name, this unit gets "Boost".'],
-    ["cfa-12719", 'CONT [RC]: If you have a vanguard with "FLДMMe-Glam" in its card name, this unit gets "Boost".'],
-    ["cfa-13689", 'CONT [RC]: If you have a vanguard with "Argo Siren" in its card name, this unit gets "Boost".'],
-    ["cfa-7528", 'CONT [RC]: If you have a vanguard with "Blaster" in its card name, this unit gets "Boost".']
-  ];
-  for (const [cardId, printedText] of namedVanguardConditionalBoostTexts) {
-    const definition = root?.VanguardAbilityEngine?.compileContinuousNamedVanguardKeywordGrantDefinition?.(cardId, `${cardId}:1`, "CONT", printedText);
-    if (definition) definitions.push(definition);
-  }
-  const dragontreeGcShieldIds = ["cfa-13498", "cfa-13566", "cfa-13607", "cfa-13609", "cfa-13638"];
-  const dragontreeGcShieldText = 'AUTO: When this unit is put on GC, if your RC has a Dragontree marker, until end of that battle, this unit gets "AUTO: When this unit is retired from GC, you may put this card into soul." and shield +5000.';
-  for (const cardId of dragontreeGcShieldIds) {
-    const definition = root?.VanguardAbilityEngine?.compileDragontreeGcRetireToSoulShieldDefinition?.(cardId, `${cardId}:0`, "AUTO", dragontreeGcShieldText);
-    if (definition) definitions.push(definition);
-  }
-  const gcOpponentGradeShieldIds = ["cfa-11079", "cfa-11080", "cfa-11082", "cfa-11083", "cfa-11085", "cfa-11086", "cfa-11088", "cfa-11089", "cfa-11091", "cfa-11092"];
-  const gcOpponentGradeShieldText = "CONT [GC]: If your opponent’s vanguard is grade 3 or greater, this unit gets shield +5000.";
-  for (const cardId of gcOpponentGradeShieldIds) {
-    const definition = root?.VanguardAbilityEngine?.compileGuardianCircleOpponentGradeShieldDefinition?.(cardId, `${cardId}:1`, "CONT", gcOpponentGradeShieldText);
-    if (definition) definitions.push(definition);
-  }
-  const sameNameDropCallTargets = [["cfa-8541", "Honebami Toushirou"], ["cfa-8571", "Chiganemaru"], ["cfa-8577", "Chiyoganemaru"], ["cfa-8585", "Namazuo Toushirou"]];
-  const endPhaseRcNamedSearchTargets = [["cfa-273", "Ruler Chameleon"], ["cfa-284", "Pencil Squire, Hammsuke"], ["cfa-301", "Pencil Knight, Hammsuke"], ["cfa-309", "Pencil Hero, Hammsuke"]];
-  for (const [cardId, targetName] of endPhaseRcNamedSearchTargets) {
-    const printedText = `AUTO: [Counter Blast 1] During your end phase, when this unit is put into the drop zone from RC, if you have a «Great Nature» vanguard, you may pay the cost. If you do, search your deck for up to one card name "${targetName}", reveal it to your opponent, put it into your hand, and shuffle your deck.`;
-    const definition = root?.VanguardAbilityEngine?.compileEndPhaseRcNamedSearchDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
-    if (definition) definitions.push(definition);
-  }
-  for (const [cardId, targetName] of sameNameDropCallTargets) {
-    const printedText = `AUTO: When this unit is placed on RC from hand, COST [Counter Blast 1], choose a "${targetName}" from your drop, and call it to an open RC.`;
-    const definition = root?.VanguardAbilityEngine?.compileAutoRcPlacementNamedDropCallDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
-    if (definition) definitions.push(definition);
-  }
-  const attackStepPowerCriticalCards = [
-    ["cfa-2007", "cfa-2007:1", "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 15000 or greater, this unit gets critical +1 until end of that battle."],
-    ["cfa-254", "cfa-254:0", "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 13000 or greater, this unit gets critical +1 until end of that battle."],
-    ["cfa-260", "cfa-260:1", "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 15000 or greater, this unit gets critical +1 until end of that battle."],
-    ["cfa-263", "cfa-263:0", "AUTO [VC]: At the beginning of your attack step, if this unit’s power is 14000 or greater, this unit gets critical +1 until end of that battle."]
-  ];
-  for (const [cardId, abilityId, printedText] of attackStepPowerCriticalCards) {
-    const definition = root?.VanguardAbilityEngine?.compileOwnAttackStepPowerCriticalDefinition?.(cardId, abilityId, "AUTO", printedText);
-    if (definition) definitions.push(definition);
-  }
-  const rodeUponNamedVanguardCrestTexts = [
-    ["cfa-10475", 'AUTO: When this unit is placed by riding from "Chrono Dran", draw a card, and you get a "Chronojet Dragon" crest.\n\n(You will be prompted to get the crest upon ride.)'],
-    ["cfa-10764", 'AUTO: When this unit is placed by riding from "Neon Messiah", draw a card, and you get a "Alter Ego Messiah" crest.\n\n(You will be prompted to get the crest upon ride.)'],
-    ["cfa-12185", 'AUTO: When this unit is placed by riding from "Dragprince, Rute", draw a card, and you get a "Dragheart, Luard" crest.\n\n(You will be prompted to get the crest upon ride.)'],
-    ["cfa-13174", 'AUTO: When this unit is placed by riding from "Undying Departed, Grenache", draw a card, and you get a "Vampire Princess of Night Fog, Nightrose" crest.\n\n(You will be prompted to get the crest upon ride.)'],
-    ["cfa-13188", 'AUTO: When this unit is placed by riding from "Happiness Collector", draw a card, and you get a "Masked Magician, Harri" crest.\n\n(You will be prompted to get the crest upon ride.)']
-  ];
-  for (const [cardId, printedText] of rodeUponNamedVanguardCrestTexts) {
-    const definition = root?.VanguardAbilityEngine?.compileRodeUponNamedVanguardDrawCrestDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
-    if (definition) definitions.push(definition);
-  }
-  const rideSourceTopSevenSearchCards = [
-    ["cfa-274", "Bringer of Knowledge, Lox", "Guardian of Truth, Lox", "Law Official, Lox", "card name"],
-    ["cfa-743", "Military Dragon, Raptor Sergeant", "Military Dragon, Raptor Colonel", "Military Dragon, Raptor Captain", "card name"],
-    ["cfa-948", "Arboros Dragon, Branch", "Arboros Dragon, Sephirot", "Arboros Dragon, Timber", "card name"],
-    ["cfa-974", "Eye of Destruction, Zeal", "Galactic Beast, Zeal", "Devourer of Planets, Zeal", "card name"]
-  ];
-  for (const [cardId, riderName, firstTargetName, secondTargetName, targetWording] of rideSourceTopSevenSearchCards) {
-    const printedText = `AUTO: When a card named "${riderName}" rides this unit, look at up to seven cards from the top of your deck, search for up to one ${targetWording} "${firstTargetName}" or "${secondTargetName}" from among them, reveal it to your opponent, put it into your hand, and shuffle your deck.`;
-    const definition = root?.VanguardAbilityEngine?.compileRideSourceTopSevenTwoNameSearchDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
-    if (definition) definitions.push(definition);
-  }
-  const crestFrontRowGZonePowerTexts = [
-    ["cfa-10476", 'CONT: During your turn, if you have a grade 3 or greater vanguard with "Chronojet" in its card name, all of your front row units get power +5000 for each face up card in your G Zone.'],
-    ["cfa-10668", 'CONT: During your turn, if you have a grade 3 or greater vanguard with "Messiah" in its card name, all of your front row units get power +5000 for each face up card in your G zone.'],
-    ["cfa-12183", 'CONT: During your turn, if you have a grade 3 or greater vanguard with "Luard" in its card name, all of your front row units get power +5000 for each face up card in your G zone.'],
-    ["cfa-13177", 'CONT: During your turn, if you have a grade 3 or greater vanguard with "Nightrose" in its card name, all of your front row units get power +5000 for each face up card in your G zone.'],
-    ["cfa-13186", 'CONT: During your turn, if you have a grade 3 or greater vanguard with "Harri" in its card name, all of your front row units get power +5000 for each face up card in your G zone.']
-  ];
-  for (const [cardId, printedText] of crestFrontRowGZonePowerTexts) {
-    const definition = root?.VanguardAbilityEngine?.compileCrestFrontRowFaceUpGZonePowerDefinition?.(cardId, `${cardId}:2`, "CONT", printedText);    if (definition) definitions.push(definition);
-  }
-  const breakRideCardIds = ["cfa-1251", "cfa-1671", "cfa-1879", "cfa-1945", "cfa-1954"];
-  for (const cardId of breakRideCardIds) {
-    const spec = root?.VanguardAbilityEngine?.getBreakRideSpec?.(cardId);
-    if (!spec) continue;
-    const printedText = `AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «${spec.clan}» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and "${spec.abilityText}".`;
-    const definition = root?.VanguardAbilityEngine?.compileBreakRideAbilityDefinition?.(cardId, `${cardId}:0`, "AUTO", printedText);
-    if (definition) definitions.push(definition);
-  }
-  const pacificaSoulText = 'ACT [Soul]: [Counter Blast 1 & Choose a unit named "Top Idol, Pacifica" from your RC, and put it into your soul] Put this card into your hand, choose up to one of your «Bermuda Triangle» rear-guards, and return it to your hand.';
-  const pacificaSoulDefinition = root?.VanguardAbilityEngine?.compilePacificaSoulCycleDefinition?.("cfa-1954", "cfa-1954:1", "ACT", pacificaSoulText);
-  if (pacificaSoulDefinition) definitions.push(pacificaSoulDefinition);
   if (root?.VanguardAbilityEngine) root.VanguardAbilityEngine.registerAbilityDefinitions(definitions);
   if (typeof module === "object" && module.exports) module.exports = definitions;
 })(typeof globalThis === "undefined" ? this : globalThis);

@@ -38,7 +38,7 @@ function fixture(ability, side = 'human', { emptyDeck = false, stolenBooster = f
   const event = Engine.createGameEvent(state, {
     type: 'attack.hit', actingPlayerId: ownerId, turnPlayerId: ownerId,
     sourceCardInstanceId: attacker.uid, sourceOwnerPlayerId: ownerId, sourceControllerPlayerId: ownerId,
-    attackingUnitInstanceId: attacker.uid, boosterCardInstanceId: source.uid, boostedCardInstanceId: source.uid,
+    attackingUnitInstanceId: attacker.uid, boosterCardInstanceId: source.uid, boostedCardInstanceId: attacker.uid,
     cardInstanceId: defender.uid, subjectCardInstanceId: defender.uid, subjectOwnerPlayerId: otherId, subjectControllerPlayerId: otherId,
     targetCardInstanceIds: [defender.uid], targetLocation: 'vanguard', battleId, phase: 'battle', timingWindow: 'attack-hit'
   });
@@ -108,7 +108,8 @@ test('a missing deck resolves the optional ability without moving the booster or
 test('a different booster, different battle, unrelated attacker, or foreign player cannot trigger or resolve it', () => {
   const ability = family[0];
   for (const patch of [
-    { boosterCardInstanceId: 'different-booster', boostedCardInstanceId: 'different-booster' },
+    { boosterCardInstanceId: 'different-booster' },
+    { boostedCardInstanceId: 'different-booster' },
     { attackingUnitInstanceId: 'different-attacker', sourceCardInstanceId: 'different-attacker' },
     { battleId: 'other-battle' },
     { actingPlayerId: 'player-guest', turnPlayerId: 'player-guest' }

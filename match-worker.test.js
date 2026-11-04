@@ -644,10 +644,13 @@ test("trusted Stride rejects insufficient payment atomically, then strides for t
   assert.deepEqual(state.players.bot.gDeck, []);
   assert.deepEqual(state.players.bot.drop.map(card => card.uid), [gradeTwo.uid, gradeOne.uid]);
   assert.equal(state.stridePerformed, true);
-  assert.deepEqual(resolved.events.map(event => event.type), ["card.discarded", "card.discarded", "card.placed"]);
+  assert.deepEqual(resolved.events.map(event => event.type), ["card.discarded", "card.discarded", "card.placed", "card.stridden"]);
   const placement = resolved.events.at(-1);
+  assert.equal(placement.type, "card.stridden");
   assert.equal(placement.subjectCardInstanceId, stride.uid);
   assert.equal(placement.currentLocation, "vanguard");
+  assert.equal(placement.isGUnitStride, true);
+  assert.deepEqual(placement.strideSources.map(source => source.cardInstanceId), [oldVanguard.uid]);
 });
 
 test("reviewed face-up G-zone CONT grants free Stride independently to either player",()=>{

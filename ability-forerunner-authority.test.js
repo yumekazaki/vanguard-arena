@@ -84,6 +84,33 @@ test("Forerunner AUTO queues only for the exact ridden source when clans match; 
   }
 });
 
+test("Forerunner may call onto an occupied unlocked circle and retires that exact unit for either player", () => {
+  for (const side of ["human", "bot"]) {
+    const f = fixture({ side });
+    const displaced = {
+      uid: `occupied-${side}`, cardId: "cfa-45", type: "Unit", ownerPlayerId: f.playerId,
+      controllerPlayerId: f.playerId, zone: "rear-guard", circle: "rear-left", rested: true
+    };
+    f.player.rear[0] = displaced;
+    assert.equal(discover(f).queued.length, 1);
+
+    const result = decision(f, true, `forerunner-replacement-${side}`);
+
+    assert.equal(result.ok, true, result.reason);
+    assert.equal(f.player.rear[0]?.uid, f.source.uid);
+    assert.equal(f.player.drop.find(card => card.uid === displaced.uid), displaced);
+    assert.equal(displaced.zone, "drop");
+    assert.equal(displaced.circle, null);
+    const retired = result.events.find(event => event.type === "card.retired" && event.cardInstanceId === displaced.uid);
+    assert.ok(retired, `${side}: replacement retirement event is emitted`);
+    assert.equal(retired.actingPlayerId, f.playerId);
+    assert.equal(retired.abilitySourceInstanceId, f.source.uid);
+    assert.equal(retired.subjectOwnerPlayerId, f.playerId);
+    assert.equal(retired.previousLocation, "rear-left");
+    assert.equal(retired.currentLocation, "drop");
+  }
+});
+
 test("Forerunner rejects mismatched or missing source/rider clan metadata and unrelated ride targets", () => {
   for (const options of [
     { riderClan: "Kagero" },

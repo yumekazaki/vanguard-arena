@@ -8,6 +8,27 @@ engine.registerAbilityDefinitions(require("../ability-definitions.js"));
 const serverReducer = require("../ability-server-reducer.js");
 const { loadCatalog, auditCatalog } = require("./audit-ability-catalog.js");
 const { sourceValidationDigest } = require("./source-validation-digest.js");
+const SINGLE_ABILITY_GENERIC_REMAINING = "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass.";
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function referencesExactAbilityInTests({ ability, abilities, cardId, abilityId, testSources }) {
+  if (testSources.some(source => source.includes(abilityId))) return true;
+
+  // A sole-skill card has a deterministic ability ID (cardId:0). Some focused
+  // family tests parse that card from an explicit card-ID list and select the
+  // sole matching reviewed mechanic without spelling out the synthesized ID.
+  // Accept that equivalent exact reference only when one cited test file
+  // contains the exact quoted card ID, parses abilities, and has runnable
+  // assertions. This does not apply to cards with siblings or nonzero indexes.
+  if (abilities.length !== 1 || abilityId !== `${cardId}:0` || String(ability.cardId) !== cardId) return false;
+  const exactQuotedCardId = new RegExp(`([\"'\x60])${escapeRegExp(cardId)}\\1`);
+  return testSources.some(source => exactQuotedCardId.test(source) &&
+    /\bparseCardAbilities(?:Cached)?\s*\(/.test(source) &&
+    /\btest\s*\(/.test(source) && /\bassert\./.test(source));
+}
 
 function suiteIsFresh(root, manifest) {
   const suite = manifest?.latestFullSuite;
@@ -37,29 +58,36 @@ function assessCardPromotion({ card, abilities, recordsByAbility, invalidAbility
         !Array.isArray(record.testFiles) || !record.testFiles.length ||
         !Array.isArray(record.testCases) || !record.testCases.length) reasons.push(`${abilityId}:missing-passing-ability-evidence`);
     const remainingWork = String(record?.remaining || "").trim();
-    if (remainingWork) {
+    // This exact note is generated as a blanket sibling-ability warning. When
+    // the parser finds exactly one printed ability, there are no sibling
+    // abilities left to verify; all the normal exact-definition, test, rules,
+    // cost, timing, and multiplayer gates below still apply. Never waive any
+    // card-specific or live-play blocker here.
+    const genericSingleAbilityNote = abilities.length === 1 && remainingWork === SINGLE_ABILITY_GENERIC_REMAINING;
+    if (remainingWork && !genericSingleAbilityNote) {
       reasons.push(`${abilityId}:unresolved-remaining-work`);
       if (/live browser|live match|manual online gameplay|real match still/i.test(remainingWork)) {
         reasons.push(`${abilityId}:explicit-live-gameplay-gap`);
       }
     }
 
-    let sources = "", exactAbilityReferenced = false;
+    const testSources = [];
     for (const file of record?.testFiles || []) {
       try {
         const source = readFile(file);
-        sources += `\n${source}`;
-        if (source.includes(abilityId)) exactAbilityReferenced = true;
+        testSources.push(source);
       } catch {
         reasons.push(`${abilityId}:missing-test-file:${String(file)}`);
       }
     }
+    const exactAbilityReferenced = referencesExactAbilityInTests({ ability, abilities, cardId, abilityId, testSources });
     if (!exactAbilityReferenced) reasons.push(`${abilityId}:tests-do-not-reference-exact-ability-id`);
 
     if (["AUTO", "ACT"].includes(ability.kind)) {
       const trusted = isTrustedServerAbility ? isTrustedServerAbility(ability) :
         serverReducer.hasTrustedServerAbilityDefinition?.(ability, engine) && serverReducer.supportsServerAbilityEffects?.(ability);
       if (trusted !== true) reasons.push(`${abilityId}:missing-authoritative-server-definition`);
+      const sources = testSources.join("\n");
       const testsHost = /\bhost\b/i.test(sources);
       const testsJoiner = /\bguest\b|\bjoin(?:ed|ing) player\b/i.test(sources) || /both\s+(?:players|seats)\b/i.test(sources);
       if (!testsHost || !testsJoiner) reasons.push(`${abilityId}:missing-two-player-seat-coverage`);

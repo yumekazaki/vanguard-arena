@@ -94,3 +94,24 @@ test("illegal circle, insufficient Generation Break, unavailable Counter Blast, 
   assert.equal(rejected.ok, false);
   assert.equal(JSON.stringify(wrongActor), before);
 });
+
+test("a locked source cannot activate, pay its cost, move to Soul, or draw for either player", () => {
+  for (const side of ["human", "bot"]) {
+    const state = stateFor({ side });
+    const source = state.players[side].rear[3];
+    source.locked = true;
+    const before = JSON.stringify(state);
+    const result = activate(state, side);
+    assert.equal(result.ok, false);
+    assert.match(String(result.reason), /source-locked/);
+    assert.equal(JSON.stringify(state), before);
+
+    const isLockedState = stateFor({ side });
+    isLockedState.players[side].rear[3].isLocked = true;
+    const beforeIsLocked = JSON.stringify(isLockedState);
+    const isLockedResult = activate(isLockedState, side);
+    assert.equal(isLockedResult.ok, false);
+    assert.match(String(isLockedResult.reason), /source-locked/);
+    assert.equal(JSON.stringify(isLockedState), beforeIsLocked);
+  }
+});

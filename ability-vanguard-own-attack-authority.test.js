@@ -66,8 +66,8 @@ function resolve(f, auth = f.side === "human" ? "auth-host" : "auth-guest") {
     payload: { accept: true, selection: { instanceUid: f.source.uid, abilityId: f.ability.id } } }, seats, Engine);
 }
 
-test("all 69 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount", () => {
-  assert.equal(reviewed.length, 69);
+test("all 70 exact own-Vanguard-attack power definitions are trusted with their printed circle, target, and amount", () => {
+  assert.equal(reviewed.length, 70);
   for (const id of ["cfa-11776:1", "cfa-11777:1", "cfa-3406:0"]) {
     const ability = reviewed.find(item => item.ability.id === id)?.ability;
     assert.ok(ability, `${id} pronoun-form definition is included`);

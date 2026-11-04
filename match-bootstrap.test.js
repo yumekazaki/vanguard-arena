@@ -193,6 +193,30 @@ test("real Heart-pounding Dreams reprints enforce their exact eight-copy deck re
   assert.equal(Bootstrap.deckCopyLimitForCard(realCards.get("cfa-7513"), deck, lookup, Engine), 8);
 });
 
+test("real Record of Ragnarok trigger cards allow eight same-name copies across prints", () => {
+  const realCards = new Map(loadCatalog().map(card => [String(card.id), card]));
+  const ids = ["cfa-9656", "cfa-9657", "cfa-9660", "cfa-9661"];
+  for (const id of ids) {
+    const card = realCards.get(id);
+    assert.ok(card, `${id} is in the catalog`);
+    catalog[id] = card;
+    const ability = Engine.parseCardAbilities(card).find(item => item.definition?.source?.patternId === "cont-named-deck-copy-limit-v1");
+    assert.ok(ability, `${id} compiles the printed deck restriction`);
+    assert.equal(ability.kind, "CONT", `${id} remains a passive deck-building ability`);
+  }
+  try {
+    const legal = legalDeck();
+    legal.cards["trigger-1"] = 0;
+    legal.cards["trigger-2"] = 0;
+    legal.cards["cfa-9656"] = 4;
+    legal.cards["cfa-9660"] = 4;
+    assert.equal(Bootstrap.deckCopyLimitForCard(realCards.get("cfa-9656"), legal, cardById, Engine), 8);
+    assert.deepEqual(Bootstrap.validateDecklist(legal, cardById, Engine), { ok: true, mainCount: 50, gCount: 0, starterCardId: "starter", format: "premium" });
+  } finally {
+    for (const id of ids) delete catalog[id];
+  }
+});
+
 test("named CONT deck limit also enforces printed nine-copy exceptions", () => {
   const text = `CONT: You may have up to nine "Ryu’s Buddies" in a deck.`;
   catalog["nine-copy-a"] = { id: "nine-copy-a", name: "Ryu’s Buddies", grade: 1, type: "Unit", text };

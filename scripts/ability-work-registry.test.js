@@ -29,6 +29,15 @@ test("registry assigns every ability once, preserves dependencies/evidence, and 
   assert.notEqual(result.records.find(record => record.abilityId === "cfa-2000:0").batchId, "ABILITY-0001", "new registry generations do not collide with legacy claim refs");
   assert.deepEqual(result.records.find(record => record.abilityId === "cfa-11110:1").dependencies, ["continuous-test"]);
   assert.equal(result.records.find(record => record.abilityId === "cfa-11110:1").verification.evidenceStatus, "tests-passing");
+  const batchMembership = new Map();
+  for (const batch of result.batches) for (const abilityId of batch.abilityIds) {
+    batchMembership.set(abilityId, (batchMembership.get(abilityId) || 0) + 1);
+  }
+  assert.deepEqual([...batchMembership.keys()].sort(), queue.items.map(item => item.abilityId).sort(), "every queued ability belongs to a batch");
+  assert.ok([...batchMembership.values()].every(count => count === 1), "batch ownership never overlaps");
+  const primaryBatch = result.batches.find(batch => batch.batchId === "PRIMARY-GZONE-STRIDE");
+  assert.deepEqual(primaryBatch.abilityIds, ["cfa-11110:0", "cfa-11110:1"]);
+  assert.equal(primaryBatch.abilityIds.includes("cfa-2000:0"), false, "worker assignment is not duplicated into primary G-Zone scope");
   assert.throws(() => buildRegistry({ ...queue, items: [...queue.items, queue.items[0]] }, { baselineCommit: BASELINE }), /duplicate ability ID/);
 });
 

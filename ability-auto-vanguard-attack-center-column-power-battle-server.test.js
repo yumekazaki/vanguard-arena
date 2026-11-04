@@ -22,8 +22,8 @@ function fixture(ability, side='human', { center=true }={}) {
 }
 function decide(f,abilityId,actorAuthUid=f.side==='human'?seats.hostAuthUid:seats.guestAuthUid){return Reducer.applyAbilityDecision(f.state,{actorAuthUid,actionId:`center-power-${f.source.uid}`,expectedStateVersion:f.state.stateVersion,payload:{type:'ability-response',accept:true,selection:{instanceUid:f.source.uid,abilityId}}},seats,Engine);}
 
-test('all fifteen catalog Vanguard AUTO abilities retain exact center-column or middle-column and attack conditions',()=>{
-  assert.equal(family.length,15);
+test('all sixteen catalog Vanguard AUTO abilities retain exact center-column or middle-column and attack conditions',()=>{
+  assert.equal(family.length,16);
   for(const ability of family){assert.ok(Engine.getReviewedAbilityDefinitionsForCard(ability.cardId).some(d=>d.id===ability.id),ability.id);assert.equal(ability.definition.source.patternId,PATTERN);assert.deepEqual(ability.requiredLocation,['vanguard']);assert.deepEqual(ability.conditions,[{type:'controller-has-center-column-rear-guard'}]);assert.equal(ability.trigger.eventType,'unit.attacked');assert.equal(ability.trigger.targetLocation,'vanguard');assert.equal(ability.definition.effects[0].amount,3000);assert.equal(Reducer.supportsServerAbilityEffects(ability),true,ability.id);}
 });
 test('both seats resolve only the exact Vanguard attack with their own center Rear-Guard',()=>{

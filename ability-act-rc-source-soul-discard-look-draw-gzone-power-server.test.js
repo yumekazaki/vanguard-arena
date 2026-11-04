@@ -7,9 +7,10 @@ Engine.registerAbilityDefinitions(require("./ability-definitions.js"));
 const Reducer = require("./ability-server-reducer.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
-const IDS_A = ["cfa-3801", "cfa-4229", "cfa-4314", "cfa-4540"];
-const IDS_B = ["cfa-3870", "cfa-4060", "cfa-4074", "cfa-4097"];
+const IDS_A = ["cfa-3801", "cfa-4074", "cfa-4097", "cfa-4229", "cfa-4314", "cfa-4540"];
+const IDS_B = ["cfa-3870", "cfa-4060"];
 const IDS = [...IDS_A, ...IDS_B];
+const EXACT_ACT_ABILITY_IDS = ["cfa-3801:1", "cfa-3870:1", "cfa-4060:1", "cfa-4074:1", "cfa-4097:1", "cfa-4229:1", "cfa-4314:1", "cfa-4540:1"];
 const PATTERN = "act-rc-source-soul-normal-discard-look-draw-gzone-power-v1";
 const TEXT_A = "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, and draw a card. If the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.";
 const TEXT_B = "ACT [RC]: [Put this unit into your soul & Choose a normal unit from your hand, and discard it] Look at the top card of your deck, put it on the top or bottom of your deck, draw a card, and if the number of face up cards in your G zone is one or more, choose one of your units, and it gets power +5000 until end of turn.";
@@ -57,8 +58,10 @@ function activate(f, { actorAuthUid = f.side === "human" ? seats.hostAuthUid : s
 
 test("all eight cards retain their exact two printed ACT variants and share one reviewed definition", () => {
   assert.equal(IDS.length, 8);
+  assert.deepEqual(IDS.map(id => `${id}:1`).sort(), EXACT_ACT_ABILITY_IDS.slice().sort());
   for (const id of IDS) {
     const f = fixture(id);
+    assert.ok(EXACT_ACT_ABILITY_IDS.includes(f.ability.id), `exact ACT ability ID ${f.ability.id}`);
     assert.equal(f.ability.kind, "ACT", id);
     assert.equal(f.ability.printedText, IDS_A.includes(id) ? TEXT_A : TEXT_B, id);
     assert.equal(f.ability.definition.source.patternId, PATTERN, id);
@@ -73,6 +76,15 @@ test("all eight cards retain their exact two printed ACT variants and share one 
       { op: "modify-power-target", target: "chosen", amount: 5000, duration: "turn", targetFilter: { controller: "source-controller", cardType: "unit" }, condition: { op: "controller-face-up-g-zone-count-at-least", count: 1 } }
     ], id);
     assert.equal(Reducer.supportsServerAbilityEffects(f.ability), true, id);
+  }
+  for (const [id, officialReference] of Object.entries({
+    "cfa-4074": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT08%2F093EN",
+    "cfa-4097": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT08%2F071EN"
+  })) {
+    const ability = fixture(id).ability;
+    assert.equal(ability.printedText, TEXT_A, `${id}: official printed-text variant`);
+    assert.equal(ability.definition.source.dataset, "Bushiroad official card list", `${id}: text provenance`);
+    assert.equal(ability.definition.source.officialReference, officialReference, `${id}: direct official card reference`);
   }
 });
 

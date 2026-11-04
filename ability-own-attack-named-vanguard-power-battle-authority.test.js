@@ -30,24 +30,30 @@ function fixture({ cardId = "cfa-27", side = "bot", vanguardName, sourceZone = "
   const source = { uid: "source", cardId: card.id, cardName: card.name, ownerPlayerId: ownerId, controllerPlayerId: ownerId, power: 10000, unitCard: true };
   const vanguard = { uid: "friendly-vg", cardId: "friendly-vg", name: vanguardName ?? `Test ${conditionName} Vanguard`, cardName: vanguardName ?? `Test ${conditionName} Vanguard`, ownerPlayerId: ownerId, controllerPlayerId: ownerId, grade: 3 };
   const opponentVanguard = { uid: "opponent-vg", cardId: "opponent-vg", name: "Opponent Vanguard", cardName: "Opponent Vanguard", ownerPlayerId: opponentId, controllerPlayerId: opponentId, grade: 3 };
+  const opponentRear = { uid: "opponent-rear", cardId: "opponent-rear-card", name: "Opponent Rear-Guard", cardName: "Opponent Rear-Guard", ownerPlayerId: opponentId, controllerPlayerId: opponentId, grade: 2 };
   const rear = [source, null, null, null, null];
   const state = { matchId: "own-attack-named-vg-regression", stateVersion: 0, turn: 4, side, phase: 5, processedActionIds: [], players: {
-    human: { playerId: "host", vanguard: side === "human" ? vanguard : opponentVanguard, rear: side === "human" ? rear : [null, null, null, null, null], hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [] },
-    bot: { playerId: "guest", vanguard: side === "bot" ? vanguard : opponentVanguard, rear: side === "bot" ? rear : [null, null, null, null, null], hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [] }
+    human: { playerId: "host", vanguard: side === "human" ? vanguard : opponentVanguard, rear: side === "human" ? rear : targetZone === "rear-guard" ? [opponentRear, null, null, null, null] : [null, null, null, null, null], hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [] },
+    bot: { playerId: "guest", vanguard: side === "bot" ? vanguard : opponentVanguard, rear: side === "bot" ? rear : targetZone === "rear-guard" ? [opponentRear, null, null, null, null] : [null, null, null, null, null], hand: [], soul: [], drop: [], deck: [], damage: [], bind: [], orders: [], guardCircle: [] }
   } };
   if (sourceZone === "vanguard") {
     state.players[side].vanguard = source;
     state.players[side].rear[0] = null;
   }
   const currentCircle = sourceZone === "vanguard" ? "vanguard" : sourceZone;
-  const targetUid = targetZone === "vanguard" ? opponentVanguard.uid : "opponent-rear";
-  state.pendingAttack = { battleId: "own-attack-battle", attackerSide: side, attackerUid: attackerUid === "source" ? source.uid : attackerUid, attackerZone: currentCircle, targetUid, targetZone, power: 10000, critical: 1 };
+  const unrelatedAttacker = attackerUid === "source" ? null : { uid: attackerUid, cardId: "unrelated-attacker", ownerPlayerId: ownerId, controllerPlayerId: ownerId, grade: 2, unitCard: true };
+  if (unrelatedAttacker) state.players[side].rear[1] = unrelatedAttacker;
+  const attackLocation = unrelatedAttacker ? "rear-right" : currentCircle;
+  const targetUid = targetZone === "vanguard" ? opponentVanguard.uid : opponentRear.uid;
+  state.pendingAttack = { battleId: "own-attack-battle", attackerSide: side, attackerPlayerId: ownerId,
+    attackerUid: attackerUid === "source" ? source.uid : attackerUid, attackerZone: unrelatedAttacker ? "rear-right" : currentCircle,
+    defenderSide: opponentSide, defenderPlayerId: opponentId, targetUid, targetZone, power: 10000, critical: 1 };
   const event = Engine.createGameEvent(state, {
     type: "unit.attacked", actingPlayerId: ownerId, turnPlayerId: ownerId,
-    sourceCardInstanceId: attackerUid === "source" ? source.uid : attackerUid, sourceControllerPlayerId: ownerId,
-    subjectCardInstanceId: attackerUid === "source" ? source.uid : attackerUid, subjectControllerPlayerId: ownerId,
+    sourceCardInstanceId: attackerUid === "source" ? source.uid : attackerUid, sourceOwnerPlayerId: ownerId, sourceControllerPlayerId: ownerId,
+    subjectCardInstanceId: attackerUid === "source" ? source.uid : attackerUid, subjectOwnerPlayerId: ownerId, subjectControllerPlayerId: ownerId,
     attackingCardInstanceIds: [attackerUid === "source" ? source.uid : attackerUid],
-    targetCardInstanceIds: [targetUid], targetLocation: targetZone, currentLocation: currentCircle,
+    targetCardInstanceIds: [targetUid], targetLocation: targetZone, currentLocation: attackLocation,
     battleId: "own-attack-battle", phase: "battle", timingWindow: "attack-declared"
   });
   return { state, event, source, ability, side, ownerId, conditionName };
