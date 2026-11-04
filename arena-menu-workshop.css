@@ -176,3 +176,86 @@
   .arena-title-fighter img { animation: arena-fighter-float 5s ease-in-out infinite alternate; }
   @keyframes arena-fighter-float { to { transform: translateY(-7px); } }
 }
+/* The featured fighter also controls the atmosphere behind the navigation. */
+#match-empty:not(.hidden) {
+  --scene-ink: #030a22;
+  --scene-light: #1744aa;
+  --scene-metal: #ffe098;
+  --scene-duration: 420ms;
+  --scene-ease: ease-in-out;
+  --scene-entrance: translateX(20px) rotate(-2deg);
+  --scene-motion: arena-cards-drift 12s linear infinite;
+  --scene-particles:
+    repeating-linear-gradient(90deg,#ffe09880 0 2px,transparent 2px 14px) 12% 20% / 14px 22px no-repeat,
+    repeating-linear-gradient(90deg,#ffe09880 0 2px,transparent 2px 14px) 83% 66% / 14px 22px no-repeat,
+    repeating-linear-gradient(90deg,#ffe09880 0 2px,transparent 2px 14px) 58% 12% / 14px 22px no-repeat;
+  background: linear-gradient(90deg,var(--scene-ink),transparent 85%),
+    radial-gradient(ellipse at 72% 55%,var(--scene-light),var(--scene-ink) 80%);
+  border-color: color-mix(in srgb,var(--scene-metal) 50%,var(--scene-ink));
+}
+#match-empty:has(.theme-oracle:hover),
+#match-empty:not(:has(.fighter-option:hover)):has(.theme-oracle:focus-visible) {
+  --scene-ink: #180d2d;
+  --scene-light: #65399a;
+  --scene-metal: #e4ddff;
+  --scene-duration: 560ms;
+  --scene-entrance: translateY(12px) scale(.96);
+  --scene-motion: arena-oracle-drift 16s ease-in-out infinite alternate;
+  --scene-particles: radial-gradient(circle,transparent 46%,#e4ddff85 49% 53%,transparent 57%) 0 0 / 117px 103px,
+    conic-gradient(from 45deg,transparent 0 20%,#ded0ff65 21% 28%,transparent 29% 70%,#ded0ff65 71% 78%,transparent 79%) 0 0 / 117px 103px;
+}
+#match-empty:has(.theme-nova:hover),
+#match-empty:not(:has(.fighter-option:hover)):has(.theme-nova:focus-visible) {
+  --scene-ink: #241207;
+  --scene-light: #9b4113;
+  --scene-metal: #ffe965;
+  --scene-duration: 240ms;
+  --scene-ease: cubic-bezier(.18,.82,.26,1.18);
+  --scene-entrance: translate(-24px,10px) scale(.94);
+  --scene-motion: arena-nova-surge 2s ease-out infinite;
+  --scene-particles: repeating-linear-gradient(148deg,transparent 0 66px,#ffe96577 67px 69px,transparent 70px 134px);
+}
+#match-empty:has(.theme-kagero:hover),
+#match-empty:not(:has(.fighter-option:hover)):has(.theme-kagero:focus-visible) {
+  --scene-ink: #0b0206;
+  --scene-light: #6e0c19;
+  --scene-metal: #ff757b;
+  --scene-duration: 170ms;
+  --scene-ease: cubic-bezier(.2,.8,.2,1);
+  --scene-entrance: translateX(38px) skewX(-6deg);
+  --scene-motion: arena-kagero-rise 5s linear infinite;
+  --scene-particles: radial-gradient(ellipse at 50% 100%,#ff480f84,transparent 65%) 0 100% / 93px 65% repeat-x,
+    radial-gradient(circle,#ff9c65 1px,transparent 2px) 0 0 / 53px 67px;
+}
+#match-empty .fighter-menu-heading h1 em { color: var(--scene-metal); }
+#match-empty .fighter-menu .fighter-option .fighter-option-copy,
+#match-empty .lobby-library {
+  background: linear-gradient(105deg,color-mix(in srgb,var(--scene-light) 35%,var(--scene-ink)),var(--scene-ink));
+}
+#match-empty .arena-title-stage::before {
+  inset: 0;
+  background: var(--scene-particles);
+  animation: var(--scene-motion);
+}
+#match-empty .arena-title-stage::after {
+  background: linear-gradient(90deg,var(--scene-ink),transparent 45%),
+    linear-gradient(0deg,var(--scene-ink),transparent 33%);
+}
+#match-empty .arena-title-fighter {
+  transition-duration: var(--scene-duration);
+  transition-timing-function: var(--scene-ease);
+}
+#match-empty .arena-title-fighter:not([hidden]) { --portrait-shadow: color-mix(in srgb,var(--scene-metal) 45%,transparent); }
+#match-empty .arena-title-fighter img { filter: drop-shadow(0 0 24px var(--portrait-shadow)); }
+#match-empty .arena-title-fighter span { background: var(--scene-ink); color: var(--scene-metal); }
+@media (prefers-reduced-motion: no-preference) {
+  #match-empty .arena-title-fighter { transform: var(--scene-entrance); }
+}
+@keyframes arena-cards-drift { from { transform: translateY(10px) rotate(-8deg); } to { transform: translateY(-22px) rotate(3deg); } }
+@keyframes arena-oracle-drift { to { transform: translate(22px,-16px); } }
+@keyframes arena-nova-surge { from { opacity: .65; transform: translateX(-30px); } to { opacity: .2; transform: translateX(20px); } }
+@keyframes arena-kagero-rise { from { opacity: .65; transform: translateY(8%); } to { opacity: .15; transform: translateY(-9%); } }
+@media (prefers-reduced-motion: reduce) {
+  #match-empty .arena-title-stage::before { animation: none; }
+  #match-empty .arena-title-fighter { transition: none; }
+}
