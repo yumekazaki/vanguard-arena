@@ -1,0 +1,10 @@
+/* Keep all artwork inside the existing zone boundaries. */
+#match-layout .zone-has-art { background-image:linear-gradient(0deg,#03081680,transparent 55%),var(--zone-art)!important; background-size:100% 100%!important; background-position:center!important; background-repeat:no-repeat!important; overflow:hidden; }
+#match-layout .zone-has-art>small,#match-layout .zone-has-art>b,#match-layout .zone-has-art>span { position:relative; z-index:1; padding:2px 4px; border-radius:3px; background:#061025d9; color:#fff; text-shadow:0 1px 3px #000; }
+#match-layout .player-line .gdeck-pile-frame { display:grid; grid-template-columns:1fr 1fr; gap:3px; padding:3px; border:1px solid #94cfff; overflow:hidden; }
+#match-layout .player-line .gdeck-pile-frame>.gdeck-button,#match-layout .player-line .gdeck-pile-frame>.gdeck-face-up { position:relative; inset:auto; width:100%; height:100%; min-width:0; margin:0; padding:3px 1px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; border:1px solid #9ecfff80; border-radius:4px; background:#101b38; color:#fff; box-shadow:none; cursor:pointer; overflow:hidden; }
+#match-layout .gdeck-pile-frame small { font:clamp(4px,.45vw,7px) var(--mono); white-space:nowrap; }
+#match-layout .gdeck-pile-frame b { font:700 12px var(--mono); }
+#match-layout .gdeck-pile-frame.is-ride-deck { grid-template-columns:1fr; }
+#match-layout .gdeck-face-up[hidden] { display:none!important; }
+#match-layout .gdeck-pile-frame button:focus-visible { outline:2px solid #fff; outline-offset:-3px; }
