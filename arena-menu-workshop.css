@@ -322,3 +322,17 @@
   #match-empty .arena-stage-ace { width: 29%; padding: 3px; top: 23%; }
   #match-empty .arena-stage-ace figcaption { font-size: 9px; }
 }
+/* Match the title lettering across the lobby and its navigation. */
+#match-empty:not(.hidden),
+#match-empty:not(.hidden) :is(button, p, small, figcaption, .eyebrow),
+body:has(#view-play.active-view #match-empty:not(.hidden)) :is(.main-nav button, .topbar-right button, .topbar-right .local-pill, .brand-wordmark small, .app-footer) {
+  font-family: ArenaDisplay, Impact, sans-serif;
+  font-style: italic;
+  font-weight: 900;
+}
+#match-empty:not(.hidden) .fighter-option .fighter-description,
+#match-empty:not(.hidden) .lobby-library p {
+  font-size: 14px;
+  letter-spacing: .02em;
+}
+#match-empty:not(.hidden) .fighter-option .fighter-kicker { font-size: 11px; }
