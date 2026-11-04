@@ -5,7 +5,7 @@
 - Repository: https://github.com/yumekazaki/vanguard-arena
 - Local project: `C:\Users\yumek\Documents\Codex\2026-10-24\ne\work\vanguard-arena`
 - Collaboration branch: `codex/standard-ride-deck` (not the GitHub Pages publishing branch)
-- Current local baseline: `320008f138b9fccfc1dea30b2ebc2b542aef927f` on `codex/standard-ride-deck`, tracking `origin/codex/standard-ride-deck` and 15 commits ahead. The checkout also contains uncommitted implementation, test, catalog, and registry changes. These changes have not been pushed; review them before publishing.
+- Current integration checkpoint: `b8f8c4d9f` on `codex/standard-ride-deck`, pushed to the shared remote branch. It contains the integrated ability-engine checkpoint `27f9aa5e8` and merges live `main` through `0c382fb3d`, preserving its newer player-portrait, menu, mobile, G-zone, and joined-player fixes. The checkout is clean. This is not a Pages deployment; the main-branch review and CI check are still pending.
 - Registry baseline: `320008f138b9fccfc1dea30b2ebc2b542aef927f`
 - Exact queue: `ability-work-registry.jsonl`; batch status and dependencies: `ability-work-batches.json`; ownership: `ability-work-assignments.json`; counts and baseline: `ability-work-registry-manifest.json`.
 - `codex/standard-ride-deck` is the shared collaboration branch; it is separate from the GitHub Pages publishing branch. Check its latest commit before creating worker checkouts.
@@ -23,7 +23,7 @@
 - Sentinel keyword parsing now treats the printed four-copy reminder as a deck-construction restriction, not an activation choice. All 410 Sentinel CONT records still remain passive, and the catalog regression now confirms none is left with an unreviewed choice classification. Focused Sentinel/catalog checks passed 118/118; the full suite above passed after the fix.
 - A hot regression that repeatedly searched the full card catalog for legal/illegal targets now caches the two examples each filter needs. Its expensive assertion fell from 53.20 seconds in the prior full-suite log to 0.45 seconds in the latest full-suite log; all assertions remain and the full suite passes.
 - A read-only catalog audit found 140 gauge-related ability IDs on 96 cards. All 140 remain unreviewed; 10 are already reserved. The equip-gauge family lacks an authoritative attached-card model and must not be reported as implemented based on the catalog classification.
-- This local checkpoint has not been pushed or deployed. Live authoritative online multiplayer validation remains outstanding. Browser matches still use a host-relay path for some actions; reducer tests do not prove live multiplayer authority.
+- The integration checkpoint is pushed to the collaboration branch but not deployed. Live authoritative online multiplayer validation remains outstanding. Browser matches still use a host-relay path for some actions; reducer tests do not prove live multiplayer authority.
 
 ## Current assignment status
 
