@@ -1,19 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
   <defs>
     <pattern id="cells" width="108" height="62" patternUnits="userSpaceOnUse">
-      <path d="M18 2h36l16 29-16 29H18L2 31Z M72-29h36l16 29-16 29H72L56 0Z M72 33h36l16 29-16 29H72L56 62Z" fill="#133c33" fill-opacity=".68" stroke="#4ca98c" stroke-opacity=".25"/>
+      <path d="M18 2h36l16 29-16 29H18L2 31Z M72-29h36l16 29-16 29H72L56 0Z M72 33h36l16 29-16 29H72L56 62Z" fill="none" stroke="#235bff" stroke-width="1.4"/>
     </pattern>
-    <radialGradient id="light">
-      <stop stop-color="#163e35"/>
-      <stop offset="1" stop-color="#030c12"/>
-    </radialGradient>
-    <g id="traces" fill="none">
-      <path d="M0 140h155l96 85h194l56 47h125l48 46h92l48-46h125l56-47h194l96-85h155M0 159h149l95 85h192l58 47h122l49 46h110l49-46h122l58-47h192l95-85h149M0 290h195l61 59h133l84 75h178l34 26h70l34-26h178l84-75h133l61-59h195" stroke="#217d96" stroke-width="5" opacity=".5"/>
-      <path d="M0 140h155l96 85h194l56 47h125l48 46h92l48-46h125l56-47h194l96-85h155M0 290h195l61 59h133l84 75h178l34 26h70l34-26h178l84-75h133l61-59h195" stroke="#92dcfc" stroke-width="1.5" opacity=".72"/>
-    </g>
-  </defs>
-  <path fill="url(#light)" d="M0 0h1440v900H0z"/>
+    </defs>
+  <path fill="#000" d="M0 0h1440v900H0z"/>
   <path fill="url(#cells)" d="M0 0h1440v900H0z"/>
-  <use href="#traces"/>
-  <use href="#traces" transform="translate(0 900) scale(1 -1)"/>
 </svg>

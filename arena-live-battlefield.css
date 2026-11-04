@@ -1,14 +1,13 @@
 /* Battlefield finish only. The existing mat, cards and controls keep their geometry. */
 #match-layout #game-table {
-  background: #071714 url("./assets/ui/arena-live-circuit.svg") center / 100% 100% no-repeat;
+  background: #000 url("./assets/ui/arena-live-circuit.svg?v=black-blue") center / 100% 100% no-repeat;
   box-shadow: inset 0 0 0 1px #b7e8e0a0, inset 0 0 70px #000b, 0 20px 56px #02080ca0;
 }
 #match-layout #game-table .mat-half { background: transparent !important; }
-#match-layout #game-table .mat-half img { opacity: .06 !important; }
+#match-layout #game-table .mat-half img { opacity: 0 !important; }
 #match-layout #game-table .table-glow {
   pointer-events: none;
-  background: linear-gradient(115deg, transparent 25%, #7aeaff1b 49%, transparent 71%),
-    radial-gradient(ellipse at center,#32af9d30,transparent 68%);
+  background: none;
 }
 #match-layout #game-table .field-zone { --ring: #c9ee80; }
 #match-layout #game-table .opponent-side .field-zone { --ring: #ff8188; }
