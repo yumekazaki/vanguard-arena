@@ -184,11 +184,8 @@
   --scene-duration: 420ms;
   --scene-ease: ease-in-out;
   --scene-entrance: translateX(20px) rotate(-2deg);
-  --scene-motion: arena-cards-drift 12s linear infinite;
-  --scene-particles:
-    repeating-linear-gradient(90deg,#ffe09880 0 2px,transparent 2px 14px) 12% 20% / 14px 22px no-repeat,
-    repeating-linear-gradient(90deg,#ffe09880 0 2px,transparent 2px 14px) 83% 66% / 14px 22px no-repeat,
-    repeating-linear-gradient(90deg,#ffe09880 0 2px,transparent 2px 14px) 58% 12% / 14px 22px no-repeat;
+  --scene-motion: arena-cards-drift 9s linear infinite;
+  --scene-particles: url("assets/ui/royal-menu-particles.svg") 0 0 / 260px 225px repeat;
   background: linear-gradient(90deg,var(--scene-ink),transparent 85%),
     radial-gradient(ellipse at 72% 55%,var(--scene-light),var(--scene-ink) 80%);
   border-color: color-mix(in srgb,var(--scene-metal) 50%,var(--scene-ink));
@@ -200,9 +197,8 @@
   --scene-metal: #e4ddff;
   --scene-duration: 560ms;
   --scene-entrance: translateY(12px) scale(.96);
-  --scene-motion: arena-oracle-drift 16s ease-in-out infinite alternate;
-  --scene-particles: radial-gradient(circle,transparent 46%,#e4ddff85 49% 53%,transparent 57%) 0 0 / 117px 103px,
-    conic-gradient(from 45deg,transparent 0 20%,#ded0ff65 21% 28%,transparent 29% 70%,#ded0ff65 71% 78%,transparent 79%) 0 0 / 117px 103px;
+  --scene-motion: arena-oracle-drift 8s linear infinite;
+  --scene-particles: url("assets/ui/oracle-menu-particles.svg") 0 0 / 196px 174px repeat;
 }
 #match-empty:has(.theme-nova:hover),
 #match-empty:not(:has(.fighter-option:hover)):has(.theme-nova:focus-visible) {
@@ -251,8 +247,12 @@
 @media (prefers-reduced-motion: no-preference) {
   #match-empty .arena-title-fighter { transform: var(--scene-entrance); }
 }
-@keyframes arena-cards-drift { from { transform: translateY(10px) rotate(-8deg); } to { transform: translateY(-22px) rotate(3deg); } }
-@keyframes arena-oracle-drift { to { transform: translate(22px,-16px); } }
+@keyframes arena-cards-drift { to { background-position: 0 -225px; } }
+@keyframes arena-oracle-drift {
+  0%, 100% { opacity: .6; }
+  50% { opacity: .9; }
+  100% { background-position: 196px -174px; }
+}
 @keyframes arena-nova-surge { from { opacity: .65; transform: translateX(-30px); } to { opacity: .2; transform: translateX(20px); } }
 @keyframes arena-kagero-rise { from { opacity: .65; transform: translateY(8%); } to { opacity: .15; transform: translateY(-9%); } }
 @media (prefers-reduced-motion: reduce) {
