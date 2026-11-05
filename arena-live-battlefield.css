@@ -93,3 +93,44 @@
   #match-layout #game-table .opponent-line > :is(.deck-zone,.drop-zone,.gdeck-pile-frame) { transform-origin: left center; }
   #match-layout #game-table .bind-zone-button { min-width: 68px; }
 }
+/* Ambient energy stays beneath the cards and never intercepts input. */
+#match-layout #game-table .table-glow { overflow: hidden; }
+#match-layout #game-table .table-glow::before,
+#match-layout #game-table .table-glow::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  opacity: .22;
+}
+#match-layout #game-table .table-glow::before {
+  inset: -30%;
+  background: linear-gradient(115deg,transparent 40%,#387bff38 49%,#8bcfff55 50%,transparent 58%);
+}
+#match-layout #game-table .table-glow::after {
+  inset: -12%;
+  background: radial-gradient(circle,#75bcff 1px,transparent 2px) 0 0 / 139px 113px,
+    radial-gradient(circle,#4686ff 1px,transparent 2px) 47px 33px / 197px 173px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #match-layout #game-table .table-glow { animation: none; opacity: .65; }
+  #match-layout #game-table .table-glow::before { animation: arena-field-sweep 14s ease-in-out infinite; }
+  #match-layout #game-table .table-glow::after { animation: arena-field-sparks 18s linear infinite; }
+  #match-layout #game-table .field-zone::before { animation: arena-field-ring 5s ease-in-out infinite; }
+  #match-layout #game-table .opponent-side .field-zone::before { animation-delay: -2.5s; }
+  @keyframes arena-field-sweep {
+    0%,100% { transform: translateX(-25%); opacity: .08; }
+    50% { transform: translateX(25%); opacity: .35; }
+  }
+  @keyframes arena-field-sparks {
+    from { transform: translateY(0); }
+    to { transform: translateY(-113px); }
+  }
+  @keyframes arena-field-ring {
+    0%,100% { opacity: .7; }
+    50% { opacity: 1; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #match-layout #game-table .table-glow::before,
+  #match-layout #game-table .table-glow::after { display: none; }
+}
