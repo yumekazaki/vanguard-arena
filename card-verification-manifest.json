@@ -84447,8 +84447,59 @@
           "ability-auto-order-zone-attacked-bind-ABILITY-76D8A0B8-0057.test.js"
         ]
       }
+    },
+    {
+      "cardId": "cfa-750",
+      "abilityId": "cfa-750:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-tachikaze-rearguard-drop-power-server.test.js"
+      ],
+      "testCases": [
+        "the three exact BT03 abilities retain separate IDs, sources, and common structured rules",
+        "each ability resolves from VC or RC for its controller, from both moved and retired events, for either seat",
+        "wrong subject clan, controller, origin, destination, turn, or identity cannot activate",
+        "controller identity is used separately from ownership for the qualifying rear-guard",
+        "the exact source and event are claimed once; later qualifying events stack, then expire at turn end"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-761",
+      "abilityId": "cfa-761:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-tachikaze-rearguard-drop-power-server.test.js"
+      ],
+      "testCases": [
+        "the three exact BT03 abilities retain separate IDs, sources, and common structured rules",
+        "each ability resolves from VC or RC for its controller, from both moved and retired events, for either seat",
+        "wrong subject clan, controller, origin, destination, turn, or identity cannot activate",
+        "controller identity is used separately from ownership for the qualifying rear-guard",
+        "the exact source and event are claimed once; later qualifying events stack, then expire at turn end"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
+    },
+    {
+      "cardId": "cfa-770",
+      "abilityId": "cfa-770:0",
+      "status": "tests-passing",
+      "testFiles": [
+        "ability-auto-tachikaze-rearguard-drop-power-server.test.js"
+      ],
+      "testCases": [
+        "the three exact BT03 abilities retain separate IDs, sources, and common structured rules",
+        "each ability resolves from VC or RC for its controller, from both moved and retired events, for either seat",
+        "wrong subject clan, controller, origin, destination, turn, or identity cannot activate",
+        "controller identity is used separately from ownership for the qualifying rear-guard",
+        "the exact source and event are claimed once; later qualifying events stack, then expire at turn end"
+      ],
+      "fullyVerified": false,
+      "remaining": "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     }
   ],
   "generatedAt": "2026-11-04T15:19:40.000Z",
-  "evidenceUpdatedAt": "2026-11-06T07:18:57.074Z"
+  "evidenceUpdatedAt": "2026-11-06T08:02:35.461Z"
 }
