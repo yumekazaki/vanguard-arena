@@ -3519,8 +3519,8 @@
     {
       "batchId": "ABILITY-76D8A0B8-0057",
       "status": "in-progress",
-      "workerOwner": "codex-worker-order-zone-0057",
-      "reason": "Atomic GitHub claim confirmed; assigned in an isolated worker worktree.",
+      "workerOwner": "primary-session/order-zone-0057-remainder",
+      "reason": "The worker contribution for cfa-12754, cfa-12756, and cfa-12758 is integrated and fully verified. The remaining assigned IDs are retained for primary-session review; this keeps all unprocessed card work reserved without leaving a completed worker as owner.",
       "abilityIds": [
         "cfa-12729:0",
         "cfa-12729:1",
@@ -3556,19 +3556,19 @@
         "cfa-12752:1",
         "cfa-12752:2",
         "cfa-12753:0",
-        "cfa-12754:0",
         "cfa-12755:0",
         "cfa-12755:1",
-        "cfa-12756:0",
         "cfa-12757:0",
         "cfa-12757:1",
-        "cfa-12758:0",
         "cfa-1275:0",
         "cfa-1275:1",
         "cfa-1275:2"
       ],
-      "claimRef": "refs/heads/claims/ABILITY-76D8A0B8-0057",
-      "claimCommit": "5f63e3407a7c89a6ffb65f5da2d5d2401eed9c24"
+      "priorClaim": {
+        "workerOwner": "codex-worker-order-zone-0057",
+        "claimRef": "refs/heads/claims/ABILITY-76D8A0B8-0057",
+        "claimCommit": "5f63e3407a7c89a6ffb65f5da2d5d2401eed9c24"
+      }
     },
     {
       "batchId": "ABILITY-76D8A0B8-0058",
