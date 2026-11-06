@@ -28,11 +28,37 @@ function dependenciesForAbility({ ability, definition, missingRequirements, miss
   return dependencies.sort((a, b) => a.id.localeCompare(b.id));
 }
 
+function scanContributionAbilityReservations(root) {
+  const directory = path.join(root, "ability-contributions");
+  const reservations = new Map();
+  if (!fs.existsSync(directory)) return reservations;
+  const files = fs.readdirSync(directory, { withFileTypes: true })
+    .filter(entry => entry.isFile() && entry.name.endsWith(".js"))
+    .map(entry => path.join(directory, entry.name))
+    .sort((a, b) => a.localeCompare(b));
+  const abilityIdPattern = /[\"'`](cfa-\d+:\d+)[\"'`]/g;
+  for (const file of files) {
+    // Contributions are source files and may register proposed definitions as a
+    // require-time side effect. Read them as text; never execute them while
+    // building the task queue.
+    const source = fs.readFileSync(file, "utf8");
+    const contributionPath = path.relative(root, file).split(path.sep).join("/");
+    for (const match of source.matchAll(abilityIdPattern)) {
+      const abilityId = match[1];
+      let paths = reservations.get(abilityId);
+      if (!paths) reservations.set(abilityId, paths = new Set());
+      paths.add(contributionPath);
+    }
+  }
+  return new Map([...reservations].map(([abilityId, filesForAbility]) => [abilityId, [...filesForAbility].sort()]));
+}
+
 function buildAbilityWorkQueue(cards, manifest, root = path.resolve(__dirname, "..")) {
   if (!Array.isArray(cards) || !manifest || !Array.isArray(manifest.records)) throw new TypeError("A card catalog and verification manifest are required.");
   const audit = auditCatalog(cards);
   const invalid = new Map(audit.invalidCompiled.map(item => [item.abilityId, item.reasons]));
   const evidence = new Map(manifest.records.map(record => [record.abilityId, record]));
+  const contributionReservations = scanContributionAbilityReservations(root);
   const suite = manifest.latestFullSuite || null;
   const suiteFresh = Boolean(suite?.status === "passed" && suite.passed === suite.tests && suite.validationInputDigest === sourceValidationDigest(root));
   const parsedByCard = new Map(cards.map(card => [String(card.id || ""), engine.parseCardAbilitiesCached(card)]));
@@ -111,6 +137,7 @@ function buildAbilityWorkQueue(cards, manifest, root = path.resolve(__dirname, "
         mechanicGroup: candidateKey,
         mechanicGroupType: reviewedPattern ? "reviewed-mechanic" : "unreviewed-similarity-candidate",
         evidence: record ? { status: record.status, testFiles: record.testFiles || [], testCases: record.testCases || [] } : null,
+        primaryReviewContributionFiles: contributionReservations.get(ability.id) || [],
         validationErrors: badDefinitionReasons,
         missingEffectHandlers: missingHandlers,
         missingServerEffectHandlers: missingServerHandlers,
@@ -219,4 +246,4 @@ function main(argv = process.argv.slice(2)) {
 }
 
 if (require.main === module) main();
-module.exports = { buildAbilityWorkQueue, validationSourceDigest: sourceValidationDigest, dependenciesForAbility, writeQueueFile };
+module.exports = { buildAbilityWorkQueue, validationSourceDigest: sourceValidationDigest, dependenciesForAbility, scanContributionAbilityReservations, writeQueueFile };

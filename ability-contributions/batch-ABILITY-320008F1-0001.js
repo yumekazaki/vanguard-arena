@@ -61,6 +61,37 @@ const definitions = [
       { op: "continuous-power", target: "source", amount: 10000, duration: "continuous", condition: { op: "all", conditions: [{ op: "controller-turn" }, { op: "soul-has-card-name", name: "Spectral Duke Dragon" }] } },
       { op: "continuous-critical", target: "source", amount: 1, duration: "continuous", condition: { op: "all", conditions: [{ op: "controller-turn" }, { op: "soul-has-card-name", name: "Spectral Duke Dragon" }, { op: "opponent-vanguard-grade-at-least", grade: 3 }] } }
     ]
+  },
+  {
+    id: "cfa-1001:0",
+    cardId: "cfa-1001",
+    kind: "AUTO",
+    printedText: "AUTO [RC]: During your battle phase, when this unit becomes stand, this unit gets power +3000 until end of turn.",
+    requiredLocation: ["rear-guard"],
+    trigger: {
+      status: "recognized-trigger",
+      eventType: "unit.stood",
+      subject: "event-subject",
+      circles: ["rear-guard"],
+      requiredPhase: "battle",
+      turnRelation: "controller",
+      subjectControllerRelation: "source-controller"
+    },
+    conditions: [],
+    conditionsReviewed: true,
+    costs: [],
+    costsReviewed: true,
+    choicesReviewed: true,
+    optional: false,
+    source: {
+      dataset: "Bushiroad official card list",
+      snapshotDate: "2026-11-04",
+      officialCardNumber: "BT09/031EN",
+      officialReference: "https://en.cf-vanguard.com/cardlist/?cardno=BT09%2F031EN",
+      patternId: "auto-rc-battle-phase-stand-source-power-turn-v1",
+      review: "Official BT09/031EN text confirmed. The source must be the exact Rear-Guard instance named as the subject of a unit.stood event, controlled by the turn player during that player's battle phase. Only that source receives +3000 until turn end; standing another unit, a Vanguard, or standing during another phase does not qualify."
+    },
+    effects: [{ op: "modify-power", target: "source", amount: 3000, duration: "turn" }]
   }
 ];
 
@@ -110,13 +141,13 @@ Object.defineProperty(definitions, "audit", {
     status: "partially-integrated-remainder-explicitly-unsupported",
     dataset: "Cardfight Area card database snapshot",
     catalogSnapshotDate: "2025-05-09",
-    officialTextVerifiedAbilityIds: Object.freeze(["cfa-10016:0", "cfa-100:1"]),
+    officialTextVerifiedAbilityIds: Object.freeze(["cfa-10016:0", "cfa-100:1", "cfa-1001:0"]),
     abilityIds,
     implementedAbilityIds: Object.freeze([...implementedIds]),
     alreadySupportedAbilityIds,
     cards,
     unsupportedSiblings,
-    provenanceNote: "The two executable definitions were checked against the linked official Bushiroad card-list entries. Unsupported sibling text is preserved from the local catalog snapshot and is not marked as officially verified; no whole card is claimed complete."
+    provenanceNote: "The three executable definitions were checked against the linked official Bushiroad card-list entries. Unsupported sibling text is preserved from the local catalog snapshot and is not marked as officially verified; no whole card is claimed complete."
   })
 });
 Object.defineProperty(definitions, "unsupportedSiblings", { enumerable: false, value: unsupportedSiblings });

@@ -36,8 +36,9 @@ function fixture({ card = cards[0], side = "bot", eventType = "card.ridden", tim
   const rider = instance(riderDefinition, `${side}-incoming-rider`, ownerId);
   const previousVanguard = instance(previousDefinition, `${side}-previous-vanguard`, ownerId);
   const drawn = instance(definition("cfa-3"), `${side}-drawn-card`, ownerId);
+  const deckRemainder = instance(definition("cfa-4"), `${side}-deck-remainder`, ownerId);
   const opponentVanguard = instance(definition("cfa-3"), `${opponentSide}-vanguard`, opponentId);
-  const owner = { playerId: ownerId, vanguard: rider, rear: [null, null, null, null, null], hand: [], deck: [drawn], soul: [previousVanguard], drop: [], damage: [], bind: [], orders: [], crests: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] };
+  const owner = { playerId: ownerId, vanguard: rider, rear: [null, null, null, null, null], hand: [], deck: [deckRemainder, drawn], soul: [previousVanguard], drop: [], damage: [], bind: [], orders: [], crests: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] };
   const opponent = { playerId: opponentId, vanguard: opponentVanguard, rear: [null, null, null, null, null], hand: [], deck: [], soul: [], drop: [], damage: [], bind: [], orders: [], crests: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] };
   const players = side === "human" ? { human: owner, bot: opponent } : { human: opponent, bot: owner };
   const state = { matchId: "ride-crest-match", stateVersion: 7, eventSequence: 0, turn: 1, side, firstSide: side, phase: 2, players, processedEventIds: [], processedAbilityTriggers: [], processedActionIds: [], pendingAbilities: [], pendingAttack: null };
@@ -55,7 +56,7 @@ function fixture({ card = cards[0], side = "bot", eventType = "card.ridden", tim
     phase: "ride", timingWindow
   });
   const authUid = side === "human" ? seats.hostAuthUid : seats.guestAuthUid;
-  return { state, event, ability, side, owner, opponent, rider, previousVanguard, ownerId, authUid, card, previousDefinition };
+  return { state, event, ability, side, owner, opponent, rider, previousVanguard, deckRemainder, ownerId, authUid, card, previousDefinition };
 }
 function discover(f) { return Reducer.discoverAutoTriggers(f.state, [f.event], Engine); }
 function resolve(f, authUid = f.authUid, actionId = `ride-crest-${f.side}`) {
@@ -102,7 +103,7 @@ test("host and joining player independently draw and receive the actual named Cr
 
     const result = resolve(f);
     assert.equal(result.ok, true, `${card.cardId}/${side}: ${result.reason}`);
-    assert.equal(f.owner.deck.length, 0);
+    assert.deepEqual(f.owner.deck, [f.deckRemainder]);
     assert.equal(f.owner.hand[0].uid, `${side}-drawn-card`);
     assert.equal(f.owner.hand[0].ownerPlayerId, f.ownerId);
     assert.equal(f.owner.crests.length, 1);

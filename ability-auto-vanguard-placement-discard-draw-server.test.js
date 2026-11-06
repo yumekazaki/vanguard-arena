@@ -27,11 +27,12 @@ function fixture(cardId = IDS[0], side = "human", { hand = true } = {}) {
   const source = makeCard(`source-${side}-${++sequence}`, cardId, ownerId);
   const discard = makeCard(`discard-${side}-${sequence}`, "cfa-3", ownerId);
   const drawn = makeCard(`draw-${side}-${sequence}`, "cfa-2", ownerId);
+  const continuation = makeCard(`continuation-${side}-${sequence}`, "cfa-4", ownerId);
   const player = id => ({ playerId: id, vanguard: null, rear: Array(5).fill(null), hand: [], deck: [], soul: [], drop: [], damage: [], bind: [], orders: [], guardCircle: [], triggerZone: [], gDeck: [], gZone: [] });
   const players = { human: player("host-player"), bot: player("guest-player") };
   players[side].vanguard = source;
   players[side].hand = hand ? [discard] : [];
-  players[side].deck = [drawn];
+  players[side].deck = [continuation, drawn];
   const other = side === "human" ? "bot" : "human";
   players[other].vanguard = makeCard(`opponent-vg-${side}-${sequence}`, "cfa-3", opponentId);
   const state = { matchId: "vanguard-placement-discard-draw", stateVersion: 1, eventSequence: 0, turn: 3, phase: "main", side, processedEventIds: [], processedActionIds: [], processedAbilityTriggers: [], pendingAbilities: [], pendingAbility: null, pendingTrigger: null, players };
@@ -41,7 +42,7 @@ function fixture(cardId = IDS[0], side = "human", { hand = true } = {}) {
     cardInstanceId: source.uid, subjectCardInstanceId: source.uid, subjectOwnerPlayerId: ownerId, subjectControllerPlayerId: ownerId,
     previousLocation: "hand", currentLocation: "vanguard", circle: "vanguard", phase: "main", timingWindow: "ride-resolution"
   });
-  return { state, ability, event, source, discard, drawn, side, ownerId };
+  return { state, ability, event, source, discard, drawn, continuation, side, ownerId };
 }
 
 function discover(f, event = f.event) { return Reducer.discoverAutoTriggers(f.state, [event], Engine); }
@@ -77,6 +78,7 @@ test("the exact Vanguard controller on either seat pays one discard before drawi
     const result = respond(f, { discard: [f.discard.uid] });
     assert.equal(result.ok, true, result.reason);
     assert.deepEqual(f.state.players[side].hand, [f.drawn]);
+    assert.deepEqual(f.state.players[side].deck, [f.continuation]);
     assert.deepEqual(f.state.players[side].drop, [f.discard]);
     assert.deepEqual(result.events.map(event => event.type), ["card.discarded", "card.drawn"]);
   }

@@ -8,7 +8,7 @@ const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const PATTERN = "auto-boosted-clan-vanguard-hit-return-source-hand-v1";
 
-test("all nine clan-specific boosted-hit return abilities require the exact booster, attacker, clan, and Vanguard hit", () => {
+test("all twelve clan-specific boosted-hit return abilities require the exact booster, attacker, clan, and Vanguard hit", () => {
   const matches = [];
   for (const card of loadCatalog()) for (const ability of Engine.parseCardAbilitiesCached(card)) {
     if (ability.definition?.source?.patternId !== PATTERN) continue;
@@ -23,7 +23,7 @@ test("all nine clan-specific boosted-hit return abilities require the exact boos
     assert.deepEqual(ability.costs, []);
     assert.deepEqual(ability.effects, [{ op: "move-source-to-hand", target: "source", from: "rear-guard" }]);
   }
-  assert.equal(matches.length, 9);
+  assert.equal(matches.length, 12);
   const ability = matches.find(item => item.trigger.boostedUnitClan === "Nova Grappler") || matches[0];
   const event = Engine.createGameEvent({ matchId: "boosted-clan-hit" }, {
     type: "attack.hit", actingPlayerId: "player-a", turnPlayerId: "player-a", sourceCardInstanceId: "attacker",

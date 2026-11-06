@@ -273,7 +273,9 @@ test("player setup creates its identity before stamping deck instances", () => {
 test("online player and spectator snapshots omit unrelated private skill decisions", () => {
   const source = fs.readFileSync("app.js", "utf8");
   assert.match(source, /projectPendingAbilitiesForSide\(snapshot,"human"\)/);
-  assert.match(source, /publicMatch\.pendingAbility = null; publicMatch\.pendingAbilities = \[\]/);
+  assert.match(source, /publicMatch\.pendingAbility = null/);
+  assert.match(source, /publicMatch\.pendingEffectChoice\s*=\s*null/);
+  assert.match(source, /publicMatch\.pendingAbilities = \[\]/);
 });
 test("application offers an explicit order choice for simultaneous AUTO abilities", () => {
   const source = fs.readFileSync("app.js", "utf8");
@@ -2778,7 +2780,7 @@ test("boosted battle close-step AUTO matches the exact booster and retains the b
  const real=parseCardAbilities(require("./scripts/audit-ability-catalog.js").loadCatalog().find(card=>card.id==="cfa-11230"))[0];assert.equal(real.definition?.source?.patternId,"auto-boosted-battle-close-source-to-soul-power-v1");assert.deepEqual(real.costs,[{type:"source-to-soul",count:1}]);assert.equal(eventMatchesAbilityTrigger(real,"battleEnd",event,"booster-a","rear-left","vanguard","p1"),true);
 });
 
-test("battle close-step scheduler waits until hit and damage check abilities finish",()=>{const app=fs.readFileSync("app.js","utf8"),start=app.indexOf("function resolvePendingBattleEnd("),end=app.indexOf("function finishAttack(",start),scheduler=app.slice(start,end);assert.ok(scheduler.includes("match.pendingHitResolution"));assert.ok(scheduler.includes("match.pendingTrigger"));assert.ok(scheduler.includes("match.pendingDamageQueue"));assert.ok(scheduler.includes("queueAbilityPrompts(\"battleEnd\""));assert.ok(app.includes("resolvePendingBattleEnd();if(match.pendingAbility||match.pendingAbilities?.length)"));});
+test("battle close-step scheduler waits until hit and damage check abilities finish",()=>{const app=fs.readFileSync("app.js","utf8"),start=app.indexOf("function resolvePendingBattleEnd("),end=app.indexOf("function finishAttack(",start),scheduler=app.slice(start,end);assert.ok(scheduler.includes("match.pendingHitResolution"));assert.ok(scheduler.includes("match.pendingTrigger"));assert.ok(scheduler.includes("match.pendingDamageQueue"));assert.ok(scheduler.includes("queueAbilityPrompts(\"battleEnd\""));assert.match(app,/resolvePendingBattleEnd\(\);if\(match\.pendingAbility\|\|match\.pendingEffectChoice\|\|match\.pendingAbilities\?\.length\)/);});
 
 
 test("remote actions are rejected during damage, hit, and battle-close resolution windows",()=>{const base={matchId:"close-step",stateVersion:3,players:{human:{playerId:"host"},bot:{playerId:"guest"}}},request={type:"action",action:"endTurn",actionId:"close-action",matchId:"close-step",actorPlayerId:"guest",expectedStateVersion:3};for(const window of [{pendingHitResolution:{battleId:"b1"}},{pendingBattleEnd:{battleId:"b1"}},{pendingTrigger:{type:"drive"}},{pendingDamageQueue:[{type:"damage-check"}]}])assert.deepEqual(validateRemoteActionRequest({...base,...window},request,"guest"),{ok:false,reason:"resolution-in-progress"})});
@@ -2786,7 +2788,7 @@ test("remote actions are rejected during damage, hit, and battle-close resolutio
 
 test("drawn-card AUTO matching retains the exact event subject after it leaves hand",()=>{
  const ability=parseCardAbilities({id:"drawn-auto",text:"AUTO [Hand]: When this card is drawn, draw a card."})[0];assert.equal(ability.trigger?.eventType,"card.drawn");assert.equal(ability.trigger?.subject,"event-subject");const event=createGameEvent({matchId:"drawn-source"},{type:"card.drawn",actingPlayerId:"p1",turnPlayerId:"p1",sourceCardInstanceId:"drawn-copy",sourceControllerPlayerId:"p1",subjectCardInstanceId:"drawn-copy",subjectControllerPlayerId:"p1",previousLocation:"deck",currentLocation:"hand"});assert.equal(eventMatchesAbilityTrigger(ability,"draw",event,"drawn-copy","hand","hand","p1"),true);assert.equal(eventMatchesAbilityTrigger(ability,"draw",event,"another-copy","hand","hand","p1"),false);assert.equal(eventMatchesAbilityTrigger(ability,"draw",event,"drawn-copy","deck","hand","p1"),false);
- const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("eventName===\"draw\")movedInstance=findMatchInstance(subjectUid)"));assert.ok(app.includes("eventName===\"draw\"?(eventContext.currentLocation||\"hand\")"));assert.ok(app.includes("const drawn=findMatchInstance(event.cardInstanceId)"));
+ const app=fs.readFileSync("app.js","utf8");assert.ok(app.includes("eventName===\"draw\")movedInstance=findMatchInstance(subjectUid)"));assert.ok(app.includes("eventName===\"draw\"?(eventContext.currentLocation||\"hand\")"));assert.match(app,/drawn=findMatchInstance\(event\.cardInstanceId\)/);
 });
 
 

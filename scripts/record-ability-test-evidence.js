@@ -54,7 +54,7 @@ function recordPassingEvidence(root, abilityIds, testFiles) {
   for (const file of absoluteFiles) if (!fs.existsSync(file)) throw new Error(`Missing test file: ${path.relative(root, file)}`);
   const run = spawnSync(process.execPath, ["--test", "--test-reporter=tap", ...absoluteFiles], { cwd: root, encoding: "utf8", windowsHide: true });
   if (run.status !== 0) throw new Error(`Evidence tests failed (exit ${run.status}).\n${run.stdout || ""}\n${run.stderr || ""}`);
-  const testCases = [...`${run.stdout || ""}\n${run.stderr || ""}`.matchAll(/^ok \d+ - (.+)$/gm)].map(match => match[1].trim());
+  const testCases = [...`${run.stdout || ""}\n${run.stderr || ""}`.matchAll(/^\s*ok \d+ - (.+)$/gm)].map(match => match[1].trim());
   if (!testCases.length) throw new Error("Test command passed but did not report any passing TAP cases.");
 
   const abilityById = resolveTrustedAbilities(root, abilityIds);
@@ -62,17 +62,18 @@ function recordPassingEvidence(root, abilityIds, testFiles) {
   const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
   if (!Array.isArray(manifest.records)) throw new Error("Verification manifest has no record array.");
   const now = new Date().toISOString();
+  const testSource = absoluteFiles.map(file => fs.readFileSync(file, "utf8")).join("\n");
   for (const abilityId of abilityIds) {
     const ability = abilityById.get(abilityId);
     const cardId = String(ability.cardId);
-    const testSource = absoluteFiles.map(file => fs.readFileSync(file, "utf8")).join("\n");
-    if (!testSource.includes(cardId)) throw new Error(`No test reference found for ${abilityId}.`);
+    const matchingCases = testCases.filter(testCase => testCase === abilityId || testCase.startsWith(`${abilityId} `));
+    if (!testSource.includes(cardId) && !matchingCases.length) throw new Error(`No exact card or ability test reference found for ${abilityId}.`);
     const record = {
       cardId,
       abilityId,
       status: "tests-passing",
       testFiles: testFiles.map(file => file.replace(/\\/g, "/")),
-      testCases,
+      testCases: matchingCases.length ? matchingCases : testCases,
       fullyVerified: false,
       remaining: "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass."
     };

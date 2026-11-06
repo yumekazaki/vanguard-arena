@@ -65,3 +65,22 @@ test("same-column Resist is rechecked before a previously offered effect can pay
  assert.ok(f.opponent.rear.some(card=>card?.uid===f.target.uid));
  assert.ok(f.own.damage.every(card=>card.faceDown===false));
 });
+
+test("standalone Resist blocks opponent target prompts and is rechecked before paying costs for either seat",()=>{
+ for(const side of ["human","bot"]){
+  const noTarget=fixture("cfa-1201",side),protectedUnit=instance("cfa-10989",`peaker-${side}`,noTarget.opponent.playerId,{zone:"rear-guard",circle:"rear-left"});
+  noTarget.target=protectedUnit;noTarget.opponent.rear=[protectedUnit,null,null,null,null];
+  const blocked=Reducer.discoverAutoTriggers(noTarget.state,[noTarget.event],Engine);
+  assert.equal(blocked.queued.length,0,`${side} should not be prompted when Peaker is the only target`);
+  assert.equal(noTarget.state.pendingAbility,null);
+
+  const late=fixture("cfa-1201",side),offered=Reducer.discoverAutoTriggers(late.state,[late.event],Engine);
+  assert.equal(offered.queued.length,1);
+  const latePeaker=instance("cfa-10989",`late-peaker-${side}`,late.opponent.playerId,{zone:"rear-guard",circle:"rear-left"});
+  late.target=latePeaker;late.opponent.rear=[latePeaker,null,null,null,null];
+  const before=JSON.stringify(late.state),result=decide(late);
+  assert.equal(result.ok,false,`${side} must fail the current Resist target check`);
+  assert.equal(result.reason,"placed-retire-cost-or-target-unavailable");
+  assert.equal(JSON.stringify(late.state),before,"rejected target must not pay Counter-Blast or mutate game state");
+ }
+});

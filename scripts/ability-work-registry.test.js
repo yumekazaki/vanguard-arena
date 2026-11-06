@@ -5,7 +5,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { execFileSync, spawn } = require("node:child_process");
-const { buildRegistry } = require("./build-ability-work-registry.js");
+const { buildRegistry, writeRegistry } = require("./build-ability-work-registry.js");
 const { claimBatch } = require("./claim-ability-batch.js");
 
 const BASELINE = "0123456789abcdef0123456789abcdef01234567";
@@ -72,6 +72,93 @@ test("active worker assignments reserve every ability on each assigned card and 
   ] }), /unknown ability/);
 });
 
+test("unintegrated contribution IDs are reserved exactly while same-card siblings remain claimable", () => {
+  const queue = { validationEvidenceFresh: false, items: [
+    { abilityId: "cfa-5000:0", cardId: "cfa-5000", kind: "AUTO", printedText: "AUTO contributed ability", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"], primaryReviewContributionFiles: ["ability-contributions/batch-TEST-0001.js"] },
+    { abilityId: "cfa-5000:1", cardId: "cfa-5000", kind: "ACT", printedText: "ACT unassigned sibling", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] },
+    { abilityId: "cfa-5001:0", cardId: "cfa-5001", kind: "AUTO", printedText: "AUTO other card", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] }
+  ] };
+  const result = buildRegistry(queue, { baselineCommit: BASELINE, cardsPerBatch: 1 });
+  const contributed = result.records.find(record => record.abilityId === "cfa-5000:0");
+  const sibling = result.records.find(record => record.abilityId === "cfa-5000:1");
+  assert.equal(contributed.assignmentStatus, "reserved");
+  assert.equal(contributed.workerOwner, "primary-session");
+  assert.equal(contributed.implementationStatus, "unreviewed", "contribution presence is not compilation or verification evidence");
+  assert.deepEqual(contributed.contributionFiles, ["ability-contributions/batch-TEST-0001.js"]);
+  assert.equal(sibling.assignmentStatus, "available");
+  assert.equal(sibling.implementationStatus, "unreviewed");
+  const primary = result.batches.find(batch => batch.batchId === "PRIMARY-CONTRIBUTION-REVIEW");
+  assert.deepEqual(primary.abilityIds, ["cfa-5000:0"], "only the exact contributed ability is reserved");
+  assert.ok(result.batches.filter(batch => batch.status === "available").every(batch => !batch.abilityIds.includes("cfa-5000:0")));
+  assert.ok(result.batches.some(batch => batch.status === "available" && batch.abilityIds.includes("cfa-5000:1")),
+    "a non-contributed sibling remains available to claim");
+  assert.equal(result.registry.counts.contributionReviewReservations, 1);
+  assert.equal(result.registry.counts.availableAbilities, 2);
+});
+
+test("an existing worker assignment takes precedence over a contribution reservation", () => {
+  const queue = { validationEvidenceFresh: false, items: [
+    { abilityId: "cfa-5100:0", cardId: "cfa-5100", kind: "AUTO", printedText: "AUTO contributed", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"], primaryReviewContributionFiles: ["ability-contributions/batch-TEST-0002.js"] },
+    { abilityId: "cfa-5100:1", cardId: "cfa-5100", kind: "ACT", printedText: "ACT assigned sibling", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] }
+  ] };
+  const assignment = { batchId: "PRIMARY-EXISTING-ASSIGNMENT", status: "in-progress", workerOwner: "worker-existing", abilityIds: ["cfa-5100:1"] };
+  const result = buildRegistry(queue, { baselineCommit: BASELINE, assignments: [assignment] });
+  assert.equal(result.records.find(record => record.abilityId === "cfa-5100:0").batchId, assignment.batchId);
+  assert.equal(result.records.find(record => record.abilityId === "cfa-5100:1").batchId, assignment.batchId);
+  assert.equal(result.batches.some(batch => batch.batchId === "PRIMARY-CONTRIBUTION-REVIEW"), false,
+    "the existing card assignment already owns both IDs and is not rewritten or duplicated");
+});
+
+test("registry generation closes stale-queue contribution IDs without changing their verification status", () => {
+  const root = fs.mkdtempSync(path.join(__dirname, ".ability-registry-contribution-test-"));
+  try {
+    fs.mkdirSync(path.join(root, ".card-pipeline"), { recursive: true });
+    fs.mkdirSync(path.join(root, "ability-contributions"), { recursive: true });
+    fs.writeFileSync(path.join(root, ".card-pipeline", "ability-work-queue.json"), JSON.stringify({ validationEvidenceFresh: false, items: [
+      { abilityId: "cfa-5200:0", cardId: "cfa-5200", kind: "AUTO", printedText: "AUTO contributed", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] },
+      { abilityId: "cfa-5200:1", cardId: "cfa-5200", kind: "ACT", printedText: "ACT sibling", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] }
+    ] }));
+    fs.writeFileSync(path.join(root, "ability-contributions", "batch-TEST-0003.js"), `module.exports = [{ id: "cfa-5200:0" }];\n`);
+    writeRegistry(root, { baselineCommit: BASELINE, cardsPerBatch: 1 });
+
+    const batches = JSON.parse(fs.readFileSync(path.join(root, "ability-work-batches.json"), "utf8"));
+    const registryRecords = fs.readFileSync(path.join(root, "ability-work-registry.jsonl"), "utf8").trim().split(/\r?\n/).map(JSON.parse);
+    assert.deepEqual(batches.batches.find(batch => batch.batchId === "PRIMARY-CONTRIBUTION-REVIEW").abilityIds, ["cfa-5200:0"]);
+    assert.ok(batches.batches.filter(batch => batch.status === "available").every(batch => !batch.abilityIds.includes("cfa-5200:0")));
+    assert.ok(batches.batches.some(batch => batch.status === "available" && batch.abilityIds.includes("cfa-5200:1")));
+    assert.equal(registryRecords.find(record => record.abilityId === "cfa-5200:0").implementationStatus, "unreviewed");
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("completed abilities are removed from an active batch without losing its remaining reservation", () => {
+  const queue = { validationEvidenceFresh: true, items: [
+    { abilityId: "cfa-1001:1", cardId: "cfa-1001", kind: "AUTO", printedText: "AUTO remaining sibling", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] }
+  ] };
+  const assignment = { batchId: "PRIMARY-COMPLETED-SIBLING", status: "in-progress", workerOwner: "primary-session",
+    reason: "One ability was verified; continue the unverified siblings.", abilityIds: ["cfa-1001:0", "cfa-1001:1"] };
+  const result = buildRegistry(queue, { baselineCommit: BASELINE, assignments: [assignment], completedAbilityIds: ["cfa-1001:0"] });
+  assert.equal(result.registry.counts.activeAssignments, 1);
+  assert.equal(result.registry.counts.reservedAbilities, 1);
+  assert.equal(result.records.find(record => record.abilityId === "cfa-1001:1").assignmentStatus, "in-progress");
+  const batch = result.batches.find(item => item.batchId === assignment.batchId);
+  assert.deepEqual(batch.abilityIds, ["cfa-1001:1"]);
+  assert.deepEqual(batch.focusAbilityIds, ["cfa-1001:1"]);
+});
+
+test("a fully completed assignment is omitted from active registry output", () => {
+  const queue = { validationEvidenceFresh: true, items: [
+    { abilityId: "cfa-1001:1", cardId: "cfa-1001", kind: "AUTO", printedText: "Other work", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] }
+  ] };
+  const result = buildRegistry(queue, { baselineCommit: BASELINE, assignments: [{
+    batchId: "PRIMARY-COMPLETED", status: "reserved", workerOwner: "primary-session", abilityIds: ["cfa-1001:0"]
+  }], completedAbilityIds: new Set(["cfa-1001:0"]) });
+  assert.equal(result.registry.counts.activeAssignments, 0);
+  assert.equal(result.registry.counts.reservedAbilities, 0);
+  assert.equal(result.batches.some(batch => batch.batchId === "PRIMARY-COMPLETED"), false);
+});
+
 test("candidate mechanic families group intact cards for triage without treating similarity as verified equivalence", () => {
   const queue = { validationEvidenceFresh: false, items: [
     ...["cfa-3000", "cfa-3001", "cfa-3002"].flatMap((cardId, index) => [
@@ -115,6 +202,57 @@ test("generated candidate and normal batch IDs skip IDs already reserved by atom
   });
   assert.equal(normal.batches.filter(batch => batch.batchId === "ABILITY-01234567-0001").length, 1);
   assert.ok(normal.batches.some(batch => batch.batchId === "ABILITY-01234567-0002" && batch.status === "available"));
+});
+
+test("unclaimed work batch IDs survive baseline changes when exact ability membership is unchanged", () => {
+  const queue = { validationEvidenceFresh: false, items: [
+    ...["cfa-3000", "cfa-3001"].map(cardId => ({
+      abilityId: `${cardId}:0`, cardId, kind: "AUTO", printedText: "AUTO candidate", effects: [], dependencies: [],
+      workFlags: ["unsupported-or-unreviewed"], mechanicGroup: "candidate-call-from-drop", mechanicGroupType: "unreviewed-similarity-candidate"
+    })),
+    { abilityId: "cfa-4000:0", cardId: "cfa-4000", kind: "ACT", printedText: "ACT", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"] }
+  ] };
+  const first = buildRegistry(queue, { baselineCommit: BASELINE, cardsPerBatch: 1, minMechanicGroupCards: 2 });
+  const NEXT_BASELINE = "fedcba9876543210fedcba9876543210fedcba98";
+  const rebuilt = buildRegistry(queue, {
+    baselineCommit: NEXT_BASELINE, cardsPerBatch: 1, minMechanicGroupCards: 2, previousBatches: first.batches
+  });
+  assert.deepEqual(
+    rebuilt.batches.map(batch => batch.batchId).sort(),
+    first.batches.map(batch => batch.batchId).sort(),
+    "a commit alone must not invalidate available task claims"
+  );
+
+  const extended = buildRegistry({ ...queue, items: [...queue.items, {
+    abilityId: "cfa-4001:0", cardId: "cfa-4001", kind: "ACT", printedText: "ACT new", effects: [], dependencies: [], workFlags: ["unsupported-or-unreviewed"]
+  }] }, {
+    baselineCommit: NEXT_BASELINE, cardsPerBatch: 1, minMechanicGroupCards: 2, previousBatches: first.batches
+  });
+  for (const previous of first.batches) {
+    const current = extended.batches.find(batch =>
+      (batch.candidateMechanicGroup || "") === (previous.candidateMechanicGroup || "") &&
+      JSON.stringify([...batch.abilityIds].sort()) === JSON.stringify([...previous.abilityIds].sort()));
+    assert.equal(current?.batchId, previous.batchId, "unchanged tasks keep their ID when unrelated work is added");
+  }
+  assert.ok(extended.batches.some(batch => batch.batchId.startsWith(`ABILITY-${NEXT_BASELINE.slice(0, 8).toUpperCase()}-`)));
+});
+
+test("reusing a prior batch ID cannot collide with a different newly generated batch", () => {
+  const queue = { validationEvidenceFresh: false, items: ["cfa-7100", "cfa-7101"].map(cardId => ({
+    abilityId: `${cardId}:0`, cardId, kind: "ACT", printedText: "ACT", effects: [], dependencies: [],
+    workFlags: ["unsupported-or-unreviewed"]
+  })) };
+  const collidingPreviousId = `ABILITY-${BASELINE.slice(0, 8).toUpperCase()}-0002`;
+  const previousBatches = [{
+    batchId: collidingPreviousId, status: "available", workerOwner: null,
+    abilityIds: ["cfa-7100:0"], cardIds: ["cfa-7100"]
+  }];
+  const result = buildRegistry(queue, { baselineCommit: BASELINE, cardsPerBatch: 1, previousBatches });
+  const ids = result.batches.map(batch => batch.batchId);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.ok(ids.includes(`ABILITY-${BASELINE.slice(0, 8).toUpperCase()}-0001`));
+  assert.ok(ids.includes(collidingPreviousId));
+  assert.equal(result.batches.find(batch => batch.abilityIds.includes("cfa-7101:0"))?.batchId, collidingPreviousId);
 });
 
 test("candidate-family IDs cannot collide with active worker assignments or create ambiguous claims", () => {

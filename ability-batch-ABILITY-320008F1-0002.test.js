@@ -34,11 +34,11 @@ test("ABILITY-320008F1-0002 accounts for the exact reserved assignment", () => {
   assert.deepEqual(audit.abilityIds, [...assignment.abilityIds, ...(assignment.verifiedAbilityIds || [])].sort());
   assert.equal(new Set(audit.abilityIds).size, 43);
   assert.equal(audit.cards.length, 25);
-  assert.equal(contribution.length, 0, "audit-only batch does not emit partial definitions");
-  assert.deepEqual(audit.implementedAbilityIds, []);
+  assert.equal(contribution.length, 2, "the two complete stand-trigger definitions are emitted");
+  assert.deepEqual(audit.implementedAbilityIds, ["cfa-10025:1", "cfa-10026:1"]);
   assert.equal(audit.alreadySupportedAbilityIds.length, 9);
-  assert.equal(audit.unsupportedSiblings.length, 34);
-  assert.equal(unsupportedById.size, 34, "unsupported records have unique IDs");
+  assert.equal(audit.unsupportedSiblings.length, 32);
+  assert.equal(unsupportedById.size, 32, "unsupported records have unique IDs");
   assert.deepEqual(
     new Set(audit.cards.map(card => card.cardId)),
     new Set([...assignment.abilityIds, ...(assignment.verifiedAbilityIds || [])].map(id => id.slice(0, id.lastIndexOf(":"))))
@@ -57,6 +57,11 @@ test("every assigned record preserves its exact catalog card, ability ID, kind, 
       assert.equal(record.catalogPrintedText, ability.printedText, `${abilityId} exact catalog text`);
       assert.equal(record.officialPrintedText, null, `${abilityId} is not falsely labeled official-text checked`);
       assert.ok(record.blocker.length > 40, `${abilityId} has a concrete dependency/blocker`);
+    } else if (audit.implementedAbilityIds.includes(abilityId)) {
+      const record = contribution.find(item => item.id === abilityId);
+      assert.ok(record, `${abilityId} has a new compiled definition`);
+      assert.equal(record.printedText, ability.printedText, `${abilityId} exact catalog text`);
+      assert.deepEqual(record, ability.definition, `${abilityId} production and contribution definitions match`);
     } else {
       const record = audit.supportedProductionDefinitions.find(item => item.abilityId === abilityId);
       assert.ok(record, `${abilityId} has a production-support record`);

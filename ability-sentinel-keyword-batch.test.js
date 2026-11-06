@@ -8,7 +8,7 @@ const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const PATTERN_ID = "cont-sentinel-keyword-v1";
 
-test("all 410 catalog Sentinel keywords remain passive CONT keywords, never manual activations", () => {
+test("all 410 catalog Sentinel keywords remain passive CONT keywords, never manual activations", async t => {
   const matches = [];
   for (const card of loadCatalog()) {
     for (const ability of Engine.parseCardAbilitiesCached(card)) {
@@ -18,14 +18,16 @@ test("all 410 catalog Sentinel keywords remain passive CONT keywords, never manu
   }
   assert.equal(matches.length, 410);
   for (const { card, ability } of matches) {
-    assert.equal(ability.kind, "CONT", card.id);
-    assert.equal(ability.trigger, null, card.id);
-    assert.deepEqual(ability.definition.keywords, ["sentinel"], card.id);
-    assert.equal(ability.definition.choicesReviewed, true, card.id);
-    assert.notEqual(ability.choiceStatus, "needs-review", card.id);
-    assert.equal(ability.definition.effects, undefined, card.id);
-    assert.equal(Engine.hasAbilityKeyword([ability], "sentinel"), true, card.id);
-    assert.equal(Engine.hasAbilityKeyword(card, "sentinel"), true, card.id);
-    assert.equal(Engine.isManuallyActivatable(ability), false, card.id);
+    await t.test(ability.id, () => {
+      assert.equal(ability.kind, "CONT", card.id);
+      assert.equal(ability.trigger, null, card.id);
+      assert.deepEqual(ability.definition.keywords, ["sentinel"], card.id);
+      assert.equal(ability.definition.choicesReviewed, true, card.id);
+      assert.notEqual(ability.choiceStatus, "needs-review", card.id);
+      assert.equal(ability.definition.effects, undefined, card.id);
+      assert.equal(Engine.hasAbilityKeyword([ability], "sentinel"), true, card.id);
+      assert.equal(Engine.hasAbilityKeyword(card, "sentinel"), true, card.id);
+      assert.equal(Engine.isManuallyActivatable(ability), false, card.id);
+    });
   }
 });

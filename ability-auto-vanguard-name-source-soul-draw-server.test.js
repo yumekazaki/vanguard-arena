@@ -22,15 +22,16 @@ function fixture(cardId="cfa-3842",side="human",{wrongName=false}={}){
   const vanguard=make(wrongName?"cfa-14047":VANGUARDS[expectedName],`vg-${side}`,ownId,{zone:"vanguard",circle:"vanguard"});
   const opponentVanguard=make("cfa-14047",`opponent-vg-${side}`,otherId,{zone:"vanguard",circle:"vanguard"});
   const drawn=make("cfa-3",`draw-${side}`,ownId,{zone:"deck"});
+  const continuation=make("cfa-4",`continuation-${side}`,ownId,{zone:"deck"});
   const player=(playerId,vg,rear,deck)=>({playerId,vanguard:vg,rear,hand:[],deck,damage:[],soul:[],drop:[],bind:[],orders:[],crests:[],extra:[],gDeck:[],gZone:[],triggerZone:[],guardCircle:[]});
-  const own=player(ownId,vanguard,[source,null,null,null,null],[drawn]);
+  const own=player(ownId,vanguard,[source,null,null,null,null],[continuation,drawn]);
   const opponent=player(otherId,opponentVanguard,[null,null,null,null,null],[]);
   const battleId=`battle-name-soul-${side}`;
   const state={matchId:"vanguard-name-source-soul",stateVersion:9,processedActionIds:[],processedEventIds:[],processedAbilityTriggers:[],pendingAbilities:[],turn:7,phase:5,side,players:{human:side==="human"?own:opponent,bot:side==="bot"?own:opponent},pendingAttack:{battleId,attackerSide:side,attackerPlayerId:ownId,attackerUid:vanguard.uid,attackerZone:"vanguard",defenderSide:otherSide,defenderPlayerId:otherId,targetUid:opponentVanguard.uid,targetZone:"vanguard",power:13000,targetPower:13000,critical:1,guardCards:[],defenderDone:false,driveChecksRemaining:0,driveCountPrompt:false}};
   const event=Engine.createGameEvent(state,{type:"unit.attacked",actingPlayerId:ownId,turnPlayerId:ownId,sourceCardInstanceId:vanguard.uid,sourceOwnerPlayerId:ownId,sourceControllerPlayerId:ownId,cardInstanceId:vanguard.uid,subjectCardInstanceId:vanguard.uid,subjectOwnerPlayerId:ownId,subjectControllerPlayerId:ownId,attackingCardInstanceIds:[vanguard.uid],previousLocation:"vanguard",currentLocation:"vanguard",targetCardInstanceIds:[opponentVanguard.uid],targetLocation:"vanguard",battleId,phase:"battle",timingWindow:"attack-declared"});
   const ability=Engine.parseCardAbilitiesCached(def(cardId)).find(item=>item.id===`${cardId}:0`);
   assert.ok(ability,`${cardId} ability parsed`);
-  return{state,event,source,vanguard,opponentVanguard,drawn,ability,side,own,otherSide,otherId,expectedName};
+  return{state,event,source,vanguard,opponentVanguard,drawn,continuation,ability,side,own,otherSide,otherId,expectedName};
 }
 function discover(f,event=f.event){return Reducer.discoverAutoTriggers(f.state,[event],Engine)}
 function resolve(f,{actor=authFor(f.side),accept=true,effectUid=f.vanguard.uid,actionId=`resolve-${f.side}`}={}){
@@ -57,7 +58,7 @@ test("all four abilities resolve for either seat: source to Soul, draw one, then
   for(const cardId of Object.keys(FAMILY))for(const side of ["human","bot"]){
     const f=fixture(cardId,side),found=discover(f);assert.equal(found.queued.length,1,`${cardId}/${side}`);assert.equal(f.state.pendingAbility.side,side);
     const result=resolve(f);assert.equal(result.ok,true,`${cardId}/${side}: ${result.reason}`);
-    assert.equal(f.own.rear.includes(f.source),false);assert.equal(f.own.soul.at(-1).uid,f.source.uid);assert.equal(f.own.hand.at(-1).uid,f.drawn.uid);assert.equal(f.own.deck.length,0);
+    assert.equal(f.own.rear.includes(f.source),false);assert.equal(f.own.soul.at(-1).uid,f.source.uid);assert.equal(f.own.hand.at(-1).uid,f.drawn.uid);assert.deepEqual(f.own.deck,[f.continuation]);
     assert.equal(f.state.pendingAttack.power,18000);assert.equal(f.vanguard.turnPowerBoost||0,0,"battle power does not persist on the card");
     assert.deepEqual(result.events.filter(event=>event.type==="card.moved"&&event.cardInstanceId===f.source.uid).map(event=>[event.previousLocation,event.currentLocation]),[["rear-left","soul"]]);
     assert.ok(result.events.some(event=>event.type==="card.drawn"&&event.cardInstanceId===f.drawn.uid));

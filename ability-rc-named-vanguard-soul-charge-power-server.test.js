@@ -23,7 +23,7 @@ function fixture(cardId, name, amount, ownerSide = "bot", vanguardName = `${name
   const source = card(`source-${ownerSide}`, cardId, ownerId, definition.name, { zone: "rear-guard", circle: "rear-left", turnPowerBoost: 0 });
   const vanguard = card(`vg-${ownerSide}`, "cfa-3", ownerId, vanguardName, { grade: 3, zone: "vanguard", circle: "vanguard" });
   const enemyVanguard = card(`vg-${opponentSide}`, "cfa-3", opponentId, "Opponent Vanguard", { grade: 3, zone: "vanguard", circle: "vanguard" });
-  const deck = [card(`top-${ownerSide}`, "cfa-2", ownerId, "Deck top", { zone: "deck" })];
+  const deck = [card(`spare-${ownerSide}`, "cfa-2", ownerId, "Deck spare", { zone: "deck" }), card(`top-${ownerSide}`, "cfa-2", ownerId, "Deck top", { zone: "deck" })];
   const players = {
     human: { playerId: "player-host", vanguard: ownerSide === "human" ? vanguard : enemyVanguard, rear: ownerSide === "human" ? [source] : [], hand: [], soul: [], drop: [], deck: ownerSide === "human" ? deck : [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] },
     bot: { playerId: "player-guest", vanguard: ownerSide === "bot" ? vanguard : enemyVanguard, rear: ownerSide === "bot" ? [source] : [], hand: [], soul: [], drop: [], deck: ownerSide === "bot" ? deck : [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] }
@@ -56,7 +56,7 @@ test("four exact abilities retain printed Vanguard name, Soul Charge, source pow
 
 test("each exact source resolves Soul Charge then its power for its own controller on both seats", () => {
   for (const [cardId, name, amount] of FAMILY) for (const ownerSide of ["human", "bot"]) {
-    const f = fixture(cardId, name, amount, ownerSide), topUid = f.deck[0].uid;
+    const f = fixture(cardId, name, amount, ownerSide), topUid = f.deck.at(-1).uid;
     assert.equal(discover(f).queued.length, 1, cardId);
     assert.equal(f.state.pendingAbility.side, ownerSide);
     const result = resolve(f);

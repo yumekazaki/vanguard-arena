@@ -24,8 +24,9 @@ function fixture({ family = FAMILY[0], side = "bot" } = {}) {
   const topDefinition = CATALOG.find(card => /unit/i.test(String(card.type)) && card.id !== cardId);
   assert.ok(topDefinition, "catalog has a card to draw");
   const top = { uid: `top-${side}`, cardId: topDefinition.id, ownerPlayerId: ownId, controllerPlayerId: ownId };
+  const deckRemainder = { ...top, uid: `remaining-${side}` };
   const own = player(ownId), opponent = player(opponentId);
-  own.drop.push(source); own.deck.push(top);
+  own.drop.push(source); own.deck.push(deckRemainder, top);
   const state = { matchId: `stride-cost-draw-${side}-${cardId}`, stateVersion: 1, turn: 4,
     side: side === "human" ? "bot" : "human", phase: 3, eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [],
     processedActionIds: [], pendingAbility: null, pendingAbilities: [], pendingTrigger: null,
@@ -35,7 +36,7 @@ function fixture({ family = FAMILY[0], side = "bot" } = {}) {
     cardInstanceId: source.uid, subjectCardInstanceId: source.uid, subjectOwnerPlayerId: ownId,
     subjectControllerPlayerId: ownId, previousLocation: "hand", currentLocation: "drop",
     discardReason: "stride-cost", phase: "stride", timingWindow: "stride-cost" });
-  return { state, ability, source, top, side, ownId, opponentId, event };
+  return { state, ability, source, top, deckRemainder, side, ownId, opponentId, event };
 }
 
 function discover(f, event = f.event) { return Reducer.discoverAutoTriggers(f.state, [event], Engine); }
@@ -72,10 +73,10 @@ test("host and joining player each resolve their own exact Stride-cost draw", ()
       assert.equal(f.state.pendingAbility.triggerControllerPlayerId, f.ownId);
       const forged = decide(f, side === "human" ? SEATS.guestAuthUid : SEATS.hostAuthUid);
       assert.equal(forged.ok, false, `${side}:${family[0]} forged actor`);
-      assert.equal(f.state.players[side].deck.length, 1);
+      assert.equal(f.state.players[side].deck.length, 2);
       const resolved = decide(f);
       assert.equal(resolved.ok, true, resolved.reason);
-      assert.equal(f.state.players[side].deck.length, 0);
+      assert.deepEqual(f.state.players[side].deck, [f.deckRemainder]);
       assert.equal(f.state.players[side].hand[0].uid, f.top.uid);
       assert.equal(f.state.players[side === "human" ? "bot" : "human"].hand.length, 0);
       assert.equal(decide(f).reason, "duplicate-action");

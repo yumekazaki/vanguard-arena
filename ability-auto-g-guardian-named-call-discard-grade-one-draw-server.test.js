@@ -39,13 +39,14 @@ function fixture({ family = FAMILY[0], side = "bot", eligibleCost = true } = {})
     type: gradeOne.type, grade: Number(eligibleCost ? gradeOne.grade : gradeTwo.grade), ownerPlayerId: ownId, controllerPlayerId: ownId };
   const deckTop = { uid: `deck-top-${side}`, cardId: deckTopDefinition.id, cardName: deckTopDefinition.name,
     type: deckTopDefinition.type, grade: Number(deckTopDefinition.grade), ownerPlayerId: ownId, controllerPlayerId: ownId };
+  const deckRemainder = { ...deckTop, uid: `deck-remainder-${side}` };
   const calledGUnit = { uid: `called-${side}-${cardId}`, cardId: calledId || "synthetic-lozenge-apex", cardName: calledName,
     type: "G Unit", grade: 4, ownerPlayerId: ownId, controllerPlayerId: ownId, circle: "guardian" };
   const own = player(ownId), opponent = player(opponentId);
   own.vanguard = { uid: `vg-${side}`, cardId: "cfa-1", cardName: "Test Vanguard", grade: 3, ownerPlayerId: ownId, controllerPlayerId: ownId, unitCard: true };
   own.drop.push(source);
   own.hand.push(discard);
-  own.deck.push(deckTop);
+  own.deck.push(deckRemainder, deckTop);
   own.guardCircle.push(calledGUnit);
   const state = { matchId: `g-guardian-named-call-${side}-${cardId}`, stateVersion: 1, turn: 4,
     side: side === "human" ? "bot" : "human", phase: 5, eventSequence: 0, processedEventIds: [],
@@ -57,7 +58,7 @@ function fixture({ family = FAMILY[0], side = "bot", eligibleCost = true } = {})
     subjectOwnerPlayerId: ownId, subjectControllerPlayerId: ownId, previousLocation: "hand", currentLocation: "drop",
     discardReason: "g-guardian-cost", timingWindow: "g-guardian-cost", calledGUnitCardId: calledGUnit.cardId,
     calledGUnitInstanceId: calledGUnit.uid, calledGUnitCardName: calledName, calledGUnitPreviousLocation: "g-deck" });
-  return { state, ability, source, discard, deckTop, calledGUnit, side, ownId, opponentId, calledName, calledId, event };
+  return { state, ability, source, discard, deckTop, deckRemainder, calledGUnit, side, ownId, opponentId, calledName, calledId, event };
 }
 
 function discover(f, event = f.event) { return Reducer.discoverAutoTriggers(f.state, [event], Engine); }
@@ -97,12 +98,12 @@ test("host and joining player each receive and resolve only their own named G-Gu
     const forged = decide(f, { actor: side === "human" ? SEATS.guestAuthUid : SEATS.hostAuthUid, actionId: `forged-${side}` });
     assert.equal(forged.ok, false);
     assert.equal(f.state.players[side].hand.length, 1);
-    assert.equal(f.state.players[side].deck.length, 1);
+    assert.equal(f.state.players[side].deck.length, 2);
     const resolved = decide(f);
     assert.equal(resolved.ok, true, resolved.reason);
     assert.equal(f.state.players[side].hand.length, 1);
     assert.equal(f.state.players[side].hand[0].uid, f.deckTop.uid);
-    assert.equal(f.state.players[side].deck.length, 0);
+    assert.deepEqual(f.state.players[side].deck, [f.deckRemainder]);
     assert.equal(f.state.players[side === "human" ? "bot" : "human"].hand.length, 0);
     assert.equal(f.state.pendingAbility, null);
     assert.equal(decide(f).reason, "duplicate-action");

@@ -23,9 +23,9 @@ function engineContext(deckCount, { drawCount = 1, sequence = false } = {}) {
   return { player, events, callbackResults, context, effects };
 }
 
-test('effect draws succeed through the last available card and deck out only on a short draw', () => {
+test('effect draws take as many cards as possible and flag deck-out whenever the deck is empty', () => {
   for (const [deckCount, drawCount, expectedDrawn, deckedOut] of [
-    [0, 1, 0, true], [1, 1, 1, false], [1, 2, 1, true], [2, 2, 2, false]
+    [0, 1, 0, true], [1, 1, 1, true], [1, 2, 1, true], [2, 2, 2, true], [2, 1, 1, false], [3, 2, 2, false]
   ]) {
     const f = engineContext(deckCount, { drawCount });
     const result = Engine.resolveEffectProgram(f.effects, Engine.EFFECT_HANDLERS, f.context);
@@ -39,19 +39,20 @@ test('effect draws succeed through the last available card and deck out only on 
   }
 });
 
-test('deck-out commits the partial draw, preserves earlier costs, and stops later effects', () => {
+test('deck-out commits the partial draw, preserves earlier costs, resolves later effects, then checks loss', () => {
   const f = engineContext(1, { drawCount: 2, sequence: true });
   const result = Engine.resolveEffectProgram(f.effects, Engine.EFFECT_HANDLERS, f.context, draft => {
     draft.player.soul.push(card('paid-source'));
     return true;
   });
   assert.equal(result.ok, true);
-  assert.equal(result.applied, 1);
+  assert.equal(result.applied, 2);
   assert.equal(result.results[0], 1);
+  assert.equal(result.results[1], 1);
   assert.equal(result.deckOut.drawn, 1);
   assert.equal(f.player.soul.some(item => item.uid === 'paid-source'), true);
   assert.equal(f.player.hand.length, 1);
-  assert.equal(f.player.damage[0].faceDown, true, 'the following Counter Charge did not resolve after deck-out');
+  assert.equal(f.player.damage[0].faceDown, false, 'the next effect resolves before the deck-out check timing');
   assert.equal(f.events.filter(event => event.type === 'card.drawn').length, 1);
 });
 

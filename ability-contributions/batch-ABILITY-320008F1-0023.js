@@ -25,11 +25,40 @@ const alreadySupportedAbilityIds = Object.freeze([
   "cfa-10622:0", "cfa-1062:0", "cfa-1062:1"
 ]);
 
-// No new definition is proposed. Although the catalog has multiple effects
-// made of familiar operations, none has both a verified exact official text
-// and an already-authorized complete client/server handler for that exact
-// trigger, cost, target, timing, and resolution sequence.
-const proposedDefinitions = Object.freeze([]);
+// This is a composition of existing handlers only: exact booster identity at
+// battle close, the existing Minerva name condition, and the source-to-hand
+// effect. It adds no new engine operation or server behavior.
+const proposedDefinitions = Object.freeze([
+  Object.freeze({
+    id: "cfa-10602:0",
+    cardId: "cfa-10602",
+    kind: "AUTO",
+    printedText: "AUTO [RC]: At the end of the battle this unit boosted, if you have a vanguard with \"Minerva\" in its card name, you may return this unit to your hand.",
+    requiredLocation: ["rear-guard"],
+    optional: true,
+    trigger: Object.freeze({
+      status: "recognized-trigger",
+      eventType: "battle.close-step",
+      subject: "booster",
+      requiredTimingWindow: "battle-close-step",
+      turnRelation: "controller"
+    }),
+    conditions: Object.freeze([{ type: "controller-vanguard-name-contains", value: "Minerva" }]),
+    conditionsReviewed: true,
+    costs: Object.freeze([]),
+    costsReviewed: true,
+    choicesReviewed: true,
+    source: Object.freeze({
+      dataset: "Bushiroad official card list",
+      snapshotDate: "2026-11-04",
+      officialCardNumber: "D-BT08/084EN",
+      officialReference: "https://en.cf-vanguard.com/cardlist/?cardno=D-BT08%2F084EN",
+      patternId: "auto-boosted-close-minerva-return-source-hand-v1",
+      review: "Official D-BT08/084EN text confirmed. At battle close, only the exact Rear-Guard that boosted in that battle is eligible, and only if its controller has a Vanguard with Minerva in its name; the optional effect returns that source card to its controller's hand."
+    }),
+    effects: Object.freeze([{ op: "move-source-to-hand", target: "source", from: "rear-guard" }])
+  })
+]);
 
 const officialReferences = Object.freeze({
   "cfa-10603": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT08%2F008EN",
@@ -67,12 +96,11 @@ const verifiedOfficialAbilities = Object.freeze([
 ]);
 
 const blockerById = Object.freeze({
-  "cfa-10602:0": "The exact source must have boosted in the specific battle, and the return is optional at that battle's end under a Minerva-name condition. No reviewed source-boost battle-close handler returns this source from RC to hand.",
   "cfa-10602:1": "The ability checks this source being put on GC and a grade-3 Regalia in its controller's Soul, then changes this guardian's shield for that battle. The exact named-Soul shield condition is not an authorized server-side GC modifier for this card.",
   "cfa-10603:0": "This battle-close AUTO has two ordered costs: Soul Blast 1 before choosing a Vanguard for power, then moving this source to Soul before Counter Charge 1. No reviewed atomic resolver validates both steps and prevents partial application.",
   "cfa-10604:0": "The trigger is another one of the controller's rear-guards being retired by a card ability during the controller's turn, with a per-instance once-per-turn limit. The engine does not yet authorize this exact broad retirement-cause trigger and usage scope.",
   "cfa-10605:0": "The trigger is another unit standing specifically by a card ability; the source then pays Soul Blast 1 and gets power. No validated stand event carries the cause and exact other-unit identity needed by this definition.",
-  "cfa-10606:0": "Exact RC placement must be combined with the Vanguard's Glitter keyword, Soul Charge 1, and a source power modifier. There is no reviewed server-authorized definition for this exact placement-and-two-effect program.",
+  "cfa-10606:0": "Exact RC placement must be combined with the Glitter Vanguard condition, Soul Charge 1, and source power +5000. The generic effect program prevalidates Soul Charge against deck size and rejects the whole sequence when the deck is empty, so it cannot safely preserve the following power instruction in that boundary state.",
   "cfa-10607:0": "The source itself must boost a Glitter unit, and its power increase lasts only for that battle. No reviewed boost trigger definition checks both the booster instance and the boosted unit's Glitter keyword.",
   "cfa-10608:0": "This exact card must move from deck into Soul due to a card ability during its controller's turn; then a Glitter condition and Vanguard target choice apply. The event pipeline does not authorize this exact origin, cause, turn, and target sequence.",
   "cfa-10609:0": "This has the same broad stand-by-ability event and Soul Blast cost as a similar card, but requires this exact source instance and its own once-per-turn record. No reviewed stand-cause trigger program currently enforces that combination.",
@@ -97,7 +125,7 @@ const blockerById = Object.freeze({
   "cfa-10624:0": "This once-per-turn ACT binds one or more Soul cards as cost and grants a temporary dynamic card-name alias based on qualifying face-up Stealth cards in Bind. Multi-card bind cost plus dynamic name grants are unsupported.",
   "cfa-10624:1": "This once-per-turn ACT pays Counter Blast and moves two Rear-Guards to Soul, then searches for up to two cards matching this source's name, calls them, modifies both, and shuffles. The source-name multi-search and atomic two-card cost/call sequence are not authorized.",
   "cfa-10624:2": "This VC CONT grants back-row attack permission to same-name Stealth Rear-Guards only while the opponent's Vanguard is grade 3 or greater. The continuous evaluator does not implement this dynamic attack-location permission.",
-  "cfa-10625:0": "This GC CONT requires a card name containing Overlord in Soul and adds shield. The existing generic shield evaluator has no reviewed Soul-name condition for this source/card ID.",
+  "cfa-10625:0": "This GC CONT requires a card name containing Overlord in Soul and adds shield. Although the generic continuous evaluator supports this name predicate, the authoritative GC shield contexts do not pass Soul card names, so the server would calculate no bonus during guard resolution; that requires a shared reducer context change outside this batch.",
   "cfa-10625:1": "ACT requires an opponent grade-3 Vanguard, retiring this source as cost, selecting a grade-3 Overlord from Drop, and moving that target to Soul. The filtered Drop target and cost-retire-to-soul effect are not an authorized transaction.",
   "cfa-10627:0": "The continuous bonus starts on the sixth or later battle of the controller's turn. The live continuous evaluator does not expose a reviewed current-turn battle-count condition for a Rear-Guard source.",
   "cfa-10628:0": "Bushiroad confirms the two-card Order Zone condition and opponent-turn activity, but continuous conditions only authorize selected predicates; the generic order-zone count currently appears in a specific AUTO guard rule and is not implemented for continuous power.",
@@ -113,7 +141,7 @@ if (JSON.stringify([...assignment.abilityIds].sort()) !== JSON.stringify([...abi
   throw new Error(`Contribution ability IDs differ from the reserved ${batchId} assignment.`);
 }
 
-const supportedSet = new Set(alreadySupportedAbilityIds);
+const supportedSet = new Set([...alreadySupportedAbilityIds, ...proposedDefinitions.map(definition => definition.id)]);
 const officialById = new Map(verifiedOfficialAbilities.map(item => [item.abilityId, item]));
 const unsupportedAbilities = Object.freeze(abilityIds.filter(abilityId => !supportedSet.has(abilityId)).map(abilityId => {
   const cardId = abilityId.slice(0, abilityId.lastIndexOf(":"));

@@ -6,7 +6,7 @@
   if (root) root.VanguardMatchStateProjection = api;
 })(typeof globalThis === "undefined" ? this : globalThis, function createMatchStateProjection() {
   const PRIVATE_ZONES = Object.freeze(["hand", "deck", "gDeck"]);
-  const OWNER_ONLY_PENDING = Object.freeze(["pendingAbility", "pendingStride", "pendingProtectGuard", "pendingTrigger", "pendingCrest", "pendingGAssist"]);
+  const OWNER_ONLY_PENDING = Object.freeze(["pendingAbility", "pendingEffectChoice", "pendingStride", "pendingProtectGuard", "pendingTrigger", "pendingCrest", "pendingGAssist"]);
 
   function hidePrivateZones(match, sides, zones = PRIVATE_ZONES) {
     if (!match || !match.players || !Array.isArray(sides) || !Array.isArray(zones)) return match;
@@ -40,6 +40,7 @@
   function pendingOwnerSide(key, value) {
     if (!value || typeof value !== "object") return null;
     if (key === "pendingAbility") return value.side || null;
+    if (key === "pendingEffectChoice") return value.chooserSide || null;
     if (key === "pendingStride" || key === "pendingProtectGuard") return value.ownerSide || value.side || null;
     return value.side || value.ownerSide || null;
   }
@@ -55,7 +56,7 @@
     }
     for (const key of OWNER_ONLY_PENDING) {
       const owner = pendingOwnerSide(key, projected[key]);
-      if (owner && owner !== ownSide) projected[key] = null;
+      if (projected[key] && (!owner || owner !== ownSide)) projected[key] = null;
     }
     if (Array.isArray(projected.pendingAbilities)) {
       projected.pendingAbilities = projected.pendingAbilities.filter(item => {

@@ -11,6 +11,8 @@ const PATTERN = "cont-rc-controlled-rearguard-named-unit-power-v1";
 const catalog = loadCatalog();
 const EXPECTED = new Map([
   ["cfa-10432:0", ["Archangel of Solitude-concealing Music, Sandalphon", 5000, "exact", true]],
+  ["cfa-10680:0", ["Bulky Saw Stag", 10000, "exact", true]],
+  ["cfa-10681:0", ["Burly Axe Beetle", 10000, "exact", true]],
   ["cfa-11278:0", ["Taroutachi", 10000, "contains", true]],
   ["cfa-12610:1", ["Grhy", 5000, "contains", true]],
   ["cfa-13350:0", ["Aundra", 5000, "contains", true]],
@@ -37,7 +39,7 @@ function conditionFor([name, , matchType, duringTurn]) {
   return duringTurn ? { op: "all", conditions: [{ op: "controller-turn" }, nameCondition] } : nameCondition;
 }
 
-test("fourteen exact Rear-Guard CONT abilities preserve their name match, turn gate, and power", () => {
+test("sixteen exact Rear-Guard CONT abilities preserve their name match, turn gate, and power", () => {
   const audit = auditCatalog(catalog), found = new Map();
   for (const card of catalog) for (const ability of Engine.parseCardAbilitiesCached(card)) {
     if (ability.definition?.source?.patternId === PATTERN) found.set(ability.id, ability);

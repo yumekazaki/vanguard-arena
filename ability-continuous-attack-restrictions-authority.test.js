@@ -14,6 +14,7 @@ const reviewed = pattern => catalog.flatMap(definition => Engine.parseCardAbilit
 const lords = reviewed("cont-lord-attack-restriction-v1");
 const restraints = reviewed("cont-vc-rc-restraint-cannot-attack-v1");
 const rearGuardRestraints = reviewed("cont-rc-restraint-cannot-attack-v1");
+const rearGuardTargetRestrictions = reviewed("cont-vc-rc-cannot-attack-rear-guard-v1");
 const allClans = reviewed("cont-all-clans-and-nations-v1");
 function card(definition, uid, playerId, extra = {}) {
   return { uid, cardId: String(definition.id), cardName: definition.name, type: definition.type || "Unit", unitCard: true,
@@ -23,7 +24,7 @@ function card(definition, uid, playerId, extra = {}) {
 }
 const findCard = id => { const found = catalog.find(definition => String(definition.id) === String(id)); assert.ok(found); return found; };
 
-function attackFixture({ side = "bot", sourceDefinition = lords[0].definition, location = "vanguard", allyDefinition, foreignDefinition } = {}) {
+function attackFixture({ side = "bot", sourceDefinition = lords[0].definition, location = "vanguard", targetZone = "vanguard", allyDefinition, foreignDefinition } = {}) {
   const ownerId = side === "human" ? "player-host" : "player-guest", opponentSide = side === "human" ? "bot" : "human";
   const opponentId = side === "human" ? "player-guest" : "player-host";
   const source = card(sourceDefinition, `${side}-source`, ownerId);
@@ -33,15 +34,23 @@ function attackFixture({ side = "bot", sourceDefinition = lords[0].definition, l
   if (allyDefinition) rear[1] = card(allyDefinition, `${side}-ally`, ownerId);
   if (foreignDefinition) rear[2] = card(foreignDefinition, `${side}-foreign`, ownerId);
   const target = card(findCard("cfa-3"), `${opponentSide}-target`, opponentId, { grade: 3 });
+  const opponentVanguard = targetZone === "vanguard" ? target : card(findCard("cfa-3"), `${opponentSide}-vanguard`, opponentId, { grade: 3 });
+  const opponentRear = Array(6).fill(null);
+  if (targetZone !== "vanguard") {
+    const targetIndex = targetZone === "rear-left" ? 0 : targetZone === "rear-right" ? 1 : targetZone.startsWith("accel-") ? 4 + Number(targetZone.slice(6)) : -1;
+    assert.ok(Number.isInteger(targetIndex) && targetIndex >= 0 && targetIndex < opponentRear.length, `fixture target zone ${targetZone}`);
+    opponentRear[targetIndex] = target;
+  }
   const own = { playerId: ownerId, vanguard: ownVanguard, rear, guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [], gDeck: [], gZone: [], triggerZone: [] };
-  const opponent = { playerId: opponentId, vanguard: target, rear: Array(5).fill(null), guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [], gDeck: [], gZone: [], triggerZone: [] };
+  const opponent = { playerId: opponentId, vanguard: opponentVanguard, rear: opponentRear, guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [], gDeck: [], gZone: [], triggerZone: [] };
   const state = { matchId: `continuous-attack-${side}-${location}`, stateVersion: 0, processedActionIds: [], processedAbilityTriggers: [],
     turn: 3, side, phase: 5, firstTurnComplete: true, pendingAttack: null, pendingAbility: null, pendingAbilities: [],
     players: side === "human" ? { human: own, bot: opponent } : { human: opponent, bot: own } };
   const auth = side === "human" ? seats.hostAuthUid : seats.guestAuthUid;
+  const before = JSON.stringify(state);
   const result = Reducer.applyGameAction(state, { actorAuthUid: auth, actionId: `attack-${side}-${location}`, expectedStateVersion: 0,
     payload: { action: "attack", attackerCardInstanceId: source.uid, targetCardInstanceId: target.uid } }, seats, Engine);
-  return { state, result, source, target, owner: own, auth };
+  return { state, result, source, target, owner: own, auth, before };
 }
 
 test("all real Lord, All Clans and Nations, and Restraint definitions are registered and retain their exact rules", () => {
@@ -101,5 +110,31 @@ test("RC-only Restraint blocks its own Rear-Guard attack for either seat but is 
     assert.equal(blocked.result.reason, "unit-with-restraint-cannot-attack");
     const inactive = attackFixture({ side, sourceDefinition: item.definition, location: "vanguard" });
     assert.equal(inactive.result.ok, true, `${side}/${item.definition.id} moved to VC`);
+  }
+});
+
+test("Djinn of the Lightning Spark, Flare, and Flash can attack Vanguard but cannot target any Rear-Guard Circle", () => {
+  assert.equal(rearGuardTargetRestrictions.length, 3);
+  assert.equal(rearGuardTargetRestrictions.map(item => item.ability.id).sort().join(","), "cfa-839:0,cfa-856:0,cfa-868:0");
+  for (const item of rearGuardTargetRestrictions) {
+    assert.equal(item.ability.kind, "CONT");
+    assert.equal(item.ability.definition.continuousRestrictions[0].type, "cannot-attack-rear-guard");
+    const wholeCardAbilities = Engine.parseCardAbilitiesCached(item.definition);
+    assert.equal(wholeCardAbilities.length, 3, `${item.definition.id} has three printed skills`);
+    assert.ok(wholeCardAbilities.every(ability => ability.definition), `${item.definition.id} has all three abilities compiled`);
+    for (const side of ["human", "bot"]) for (const location of ["vanguard", "rear-left"]) {
+      const allowed = attackFixture({ side, sourceDefinition: item.definition, location, targetZone: "vanguard" });
+      assert.equal(allowed.result.ok, true, `${side}/${item.definition.id} on ${location} may attack Vanguard`);
+      for (const targetZone of ["rear-left", "accel-1"]) {
+        const blocked = attackFixture({ side, sourceDefinition: item.definition, location, targetZone });
+        assert.equal(blocked.result.ok, false, `${side}/${item.definition.id} on ${location} cannot target ${targetZone}`);
+        assert.equal(blocked.result.reason, "unit-cannot-attack-rear-guard");
+        assert.equal(JSON.stringify(blocked.state), blocked.before, "illegal target rejection does not mutate the match");
+      }
+    }
+  }
+  for (const side of ["human", "bot"]) {
+    const unrelated = attackFixture({ side, sourceDefinition: findCard("cfa-3"), location: "rear-left", targetZone: "rear-left" });
+    assert.equal(unrelated.result.ok, true, `${side}: a different attacker can target a Rear-Guard`);
   }
 });

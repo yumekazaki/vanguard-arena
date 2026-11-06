@@ -62,3 +62,121 @@ test("integrator accepts a generated registry work-unit ID and preserves exact c
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("integrator accepts audit records that carry a proposedDefinitions array", () => {
+  const scratch = path.join(path.resolve(__dirname, ".."), ".card-pipeline");
+  fs.mkdirSync(scratch, { recursive: true });
+  const root = fs.mkdtempSync(path.join(scratch, "ability-proposed-contribution-integration-"));
+  const workUnitId = "ABILITY-6E4A0DC1-0002";
+  const definition = {
+    id: "cfa-10003:1",
+    cardId: "cfa-10003",
+    kind: "ACT",
+    printedText: "ACT [RC]: exact proposed definition.",
+    requiredLocation: ["rear-guard"],
+    choicesReviewed: true,
+    costsReviewed: true,
+    source: { patternId: "test-proposed-contribution-v1" },
+    effects: [{ op: "draw", count: 1 }]
+  };
+  try {
+    fs.mkdirSync(path.join(root, "ability-contributions"), { recursive: true });
+    fs.mkdirSync(path.join(root, "assets", "cards"), { recursive: true });
+    fs.writeFileSync(path.join(root, "ability-contributions", `batch-${workUnitId}.js`), `module.exports = { batchId: ${JSON.stringify(workUnitId)}, proposedDefinitions: ${JSON.stringify([definition])} };\n`);
+    fs.writeFileSync(path.join(root, "ability-work-registry.jsonl"), `${JSON.stringify({ abilityId: definition.id, cardId: definition.cardId, batchId: workUnitId })}\n`);
+    fs.writeFileSync(path.join(root, "assets", "cards", "catalog-data.js"), `window.CARD_CATALOG = ${JSON.stringify([{ id: definition.cardId, text: definition.printedText }])};\n`);
+    fs.writeFileSync(path.join(root, "ability-definitions.js"), `const definitions = []; module.exports = definitions;\n`);
+
+    const result = integrateContribution(root, workUnitId);
+    assert.deepEqual(result.integratedAbilityIds, [definition.id]);
+    delete require.cache[require.resolve(path.join(root, "ability-definitions.js"))];
+    assert.deepEqual(require(path.join(root, "ability-definitions.js")).map(item => item.id), [definition.id]);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("integrator accepts a scoped CONT definition expressed through continuousEffects", () => {
+  const scratch = path.join(path.resolve(__dirname, ".."), ".card-pipeline");
+  fs.mkdirSync(scratch, { recursive: true });
+  const root = fs.mkdtempSync(path.join(scratch, "ability-continuous-contribution-integration-"));
+  const workUnitId = "PRIMARY-CONT-TEST-0001";
+  const definition = {
+    id: "cfa-10003:2",
+    cardId: "cfa-10003",
+    kind: "CONT",
+    printedText: "CONT [RC]: Test continuous Resist condition.",
+    requiredLocation: ["rear-guard"],
+    source: { patternId: "test-continuous-effect-v1" },
+    continuousEffects: [{ type: "grant-keyword", target: "source", keyword: "resist", duration: "continuous", condition: { op: "controller-vanguard-name-contains", value: "Thavas" } }]
+  };
+  try {
+    fs.mkdirSync(path.join(root, "ability-contributions"), { recursive: true });
+    fs.mkdirSync(path.join(root, "assets", "cards"), { recursive: true });
+    fs.writeFileSync(path.join(root, "ability-contributions", `batch-${workUnitId}.js`), `module.exports = ${JSON.stringify([definition], null, 2)};\n`);
+    fs.writeFileSync(path.join(root, "ability-work-registry.jsonl"), `${JSON.stringify({ abilityId: definition.id, cardId: definition.cardId, batchId: workUnitId })}\n`);
+    fs.writeFileSync(path.join(root, "assets", "cards", "catalog-data.js"), `window.CARD_CATALOG = ${JSON.stringify([{ id: definition.cardId, text: definition.printedText }])};\n`);
+    fs.writeFileSync(path.join(root, "ability-definitions.js"), "const definitions = []; module.exports = definitions;\n");
+
+    const result = integrateContribution(root, workUnitId);
+    assert.deepEqual(result.integratedAbilityIds, [definition.id]);
+    delete require.cache[require.resolve(path.join(root, "ability-definitions.js"))];
+    const integrated = require(path.join(root, "ability-definitions.js"));
+    assert.equal(integrated[0].kind, "CONT");
+    assert.equal(integrated[0].effects, undefined, "CONT behavior is represented by continuousEffects, not an invented resolving effect");
+    assert.deepEqual(integrated[0].continuousEffects, definition.continuousEffects);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("integrator skips byte-equivalent previously integrated definitions and appends only new batch entries", () => {
+  const scratch = path.join(path.resolve(__dirname, ".."), ".card-pipeline");
+  fs.mkdirSync(scratch, { recursive: true });
+  const root = fs.mkdtempSync(path.join(scratch, "ability-idempotent-contribution-integration-"));
+  const workUnitId = "PRIMARY-IDEMPOTENT-TEST-0001";
+  const already = {
+    id: "cfa-10003:0", cardId: "cfa-10003", kind: "ACT",
+    printedText: "ACT [RC]: exact existing contribution.", requiredLocation: ["rear-guard"],
+    choicesReviewed: true, costsReviewed: true, source: { patternId: "test-existing-contribution-v1" },
+    effects: [{ op: "draw", count: 1 }]
+  };
+  const fresh = {
+    id: "cfa-10003:1", cardId: "cfa-10003", kind: "ACT",
+    printedText: "ACT [RC]: exact new contribution.", requiredLocation: ["rear-guard"],
+    choicesReviewed: true, costsReviewed: true, source: { patternId: "test-new-contribution-v1" },
+    effects: [{ op: "draw", count: 1 }]
+  };
+  const selectedFresh = {
+    id: "cfa-10003:2", cardId: "cfa-10003", kind: "ACT",
+    printedText: "ACT [RC]: exact selectively integrated contribution.", requiredLocation: ["rear-guard"],
+    choicesReviewed: true, costsReviewed: true, source: { patternId: "test-selective-contribution-v1" },
+    effects: [{ op: "draw", count: 1 }]
+  };
+  try {
+    fs.mkdirSync(path.join(root, "ability-contributions"), { recursive: true });
+    fs.mkdirSync(path.join(root, "assets", "cards"), { recursive: true });
+    fs.writeFileSync(path.join(root, "ability-contributions", `batch-${workUnitId}.js`), `module.exports = ${JSON.stringify([already, fresh], null, 2)};\n`);
+    fs.writeFileSync(path.join(root, "ability-work-registry.jsonl"), [already, fresh, selectedFresh].map(definition => JSON.stringify({ abilityId: definition.id, cardId: definition.cardId, batchId: workUnitId })).join("\n") + "\n");
+    fs.writeFileSync(path.join(root, "assets", "cards", "catalog-data.js"), `window.CARD_CATALOG = ${JSON.stringify([{ id: "cfa-10003", text: `${already.printedText} ${fresh.printedText} ${selectedFresh.printedText}` }])};\n`);
+    fs.writeFileSync(path.join(root, "ability-definitions.js"), `const definitions = [${JSON.stringify(already)}]; module.exports = definitions;\n`);
+
+    const result = integrateContribution(root, workUnitId);
+    assert.deepEqual(result.integratedAbilityIds, [fresh.id]);
+    assert.deepEqual(result.alreadyPresentAbilityIds, [already.id]);
+    delete require.cache[require.resolve(path.join(root, "ability-definitions.js"))];
+    assert.deepEqual(require(path.join(root, "ability-definitions.js")).map(item => item.id), [already.id, fresh.id]);
+
+    const contributionFile = path.join(root, "ability-contributions", `batch-${workUnitId}.js`);
+    fs.writeFileSync(contributionFile, `module.exports = ${JSON.stringify([{ ...already, effects: [{ op: "draw", count: 2 }] }, selectedFresh])};\n`);
+    const selectedResult = integrateContribution(root, workUnitId, { abilityIds: [selectedFresh.id] });
+    assert.deepEqual(selectedResult.integratedAbilityIds, [selectedFresh.id]);
+    delete require.cache[require.resolve(path.join(root, "ability-definitions.js"))];
+    assert.deepEqual(require(path.join(root, "ability-definitions.js")).map(item => item.id), [already.id, fresh.id, selectedFresh.id]);
+
+    fs.writeFileSync(contributionFile, `module.exports = ${JSON.stringify([{ ...already, effects: [{ op: "draw", count: 2 }] }])};\n`);
+    assert.throws(() => integrateContribution(root, workUnitId), /Conflicting definition already exists/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});

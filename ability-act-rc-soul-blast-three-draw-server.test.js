@@ -17,7 +17,10 @@ function setup(side = "bot", soulCount = 3) {
   const source = { uid: `source-${side}`, cardId: FAMILY[0].cardId, ownerPlayerId: playerId, controllerPlayerId: playerId, zone: "rear-guard", circle: "rear-left" };
   const player = { playerId, vanguard: { uid: `vg-${side}`, cardId: "cfa-3", grade: 3, ownerPlayerId: playerId, controllerPlayerId: playerId },
     rear: [source, null, null, null, null], soul: Array.from({ length: soulCount }, (_, i) => ({ uid: `soul-${side}-${i}`, cardId: "cfa-3", ownerPlayerId: playerId, controllerPlayerId: playerId })),
-    drop: [], damage: [], hand: [], deck: [{ uid: `deck-${side}`, cardId: "cfa-3", ownerPlayerId: playerId, controllerPlayerId: playerId }], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [] };
+    drop: [], damage: [], hand: [], deck: [
+      { uid: `remaining-${side}`, cardId: "cfa-3", ownerPlayerId: playerId, controllerPlayerId: playerId },
+      { uid: `deck-${side}`, cardId: "cfa-3", ownerPlayerId: playerId, controllerPlayerId: playerId }
+    ], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [] };
   const opponentId = side === "bot" ? "host-player" : "guest-player";
   const opponent = { playerId: opponentId, vanguard: { uid: `vg-op-${side}`, cardId: "cfa-3", grade: 3, ownerPlayerId: opponentId, controllerPlayerId: opponentId }, rear: Array(5).fill(null), soul: [], drop: [], damage: [], hand: [], deck: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [] };
   return { state: { matchId: "soul-blast-three-draw", stateVersion: 2, processedActionIds: [], turn: 3, phase: 4, side,
@@ -51,6 +54,7 @@ test("host and joining player independently pay their own Soul Blast and draw", 
     assert.equal(state.players[side].soul.length, 0);
     assert.equal(state.players[side].drop.length, 3);
     assert.equal(state.players[side].hand.length, 1);
+    assert.equal(state.players[side].deck.length, 1);
     assert.equal(state.players[side === "bot" ? "human" : "bot"].soul.length, 0);
   }
 });

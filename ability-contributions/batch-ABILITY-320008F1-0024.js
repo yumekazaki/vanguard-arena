@@ -21,10 +21,12 @@ const abilityIds = Object.freeze([
   "cfa-1066:0", "cfa-1066:1"
 ]);
 
-// These six are already compiled and admitted by the server's exact ability
-// guards. The batch does not broaden their definitions or server allowlists.
+// These abilities are compiled and admitted by their runtime handlers. Prosper's
+// effect-placement Soul Charge and Mouldy Shooter's paired power/shield CONT were
+// integrated later in primary batches; this audit keeps its original ownership
+// record but reflects current support accurately.
 const alreadySupportedAbilityIds = Object.freeze([
-  "cfa-10635:1", "cfa-10636:1", "cfa-10639:0", "cfa-10662:0", "cfa-1066:0", "cfa-1066:1"
+  "cfa-10630:0", "cfa-10635:1", "cfa-10636:1", "cfa-10639:0", "cfa-10656:0", "cfa-10662:0", "cfa-1066:0", "cfa-1066:1"
 ]);
 const proposedDefinitions = Object.freeze([]);
 
@@ -33,7 +35,6 @@ const proposedDefinitions = Object.freeze([]);
 const verifiedOfficialAbilities = Object.freeze([]);
 
 const blockerById = Object.freeze({
-  "cfa-10630:0": "The trigger is restricted to this exact unit being placed on RC by another card ability. Current placement events do not retain a trusted causal-effect identity for this distinction; optional Soul Charge 1 therefore cannot be authorized from the exact event.",
   "cfa-10630:1": "The source itself must boost, the controller must have a Lianorn vanguard, and only a unit in the source's column gets battle-independent power through turn end. No trusted resolver combines the exact boost source, column target, named-vanguard check, and temporary power.",
   "cfa-10631:0": "This Soul CONT changes this card's grade while the controller did not ride that turn. The continuous evaluator does not maintain ride-history state and apply a grade modifier to this exact Soul instance.",
   "cfa-10631:1": "This Soul AUTO is tied to the controller's grade-3-or-greater vanguard attack, the no-ride-this-turn condition, and binding this exact Soul card as cost before granting +5000 to the front row. The combined event, ride-history condition, source bind, and row-wide modifier are not supported.",
@@ -52,8 +53,8 @@ const blockerById = Object.freeze({
   "cfa-10642:0": "This back-row-center CONT under Majesty Lord Blaster grants two separate abilities: an end-of-battle-on-boost AUTO that pays Counter Blast and calls two differently named Soul cards into one column, and a CONT granting Boost to grade-2 rear-guards when the opponent has grade 3+. Granted nested abilities, the matching boosted battle, paired calls, and dynamic keyword grant are not modeled as this program.",
   "cfa-10643:0": "This is a cost-replacement rule: when a Blaster vanguard ability would retire this source, it may count as two rear-guards. The rules engine has no reviewed replacement-cost handler that changes the count of this exact source during payment validation.",
   "cfa-10643:1": "The trigger must identify this source being retired specifically as a Blaster-vanguard ability cost, check the opponent's grade, then grant a temporary once-per-turn attack AUTO to a chosen Blaster Dark. That granted ability adds a discard cost, repeated drive checks, and self-retirement; cost-cause identity and nested granted drive-check resolution are unsupported.",
+  
   "cfa-10655:0": "The ACT pays Soul Blast 1, privately inspects the top card and returns it to its original position, then grants +2000 to this source for the turn. A reviewed peek-without-moving/restoring-order effect is not available.",
-  "cfa-10656:0": "This continuous effect applies in either RC or GC, even on the opponent's turn, and simultaneously changes power and shield under a Flagburg-vanguard condition. No trusted definition implements this exact two-zone, cross-turn pair of modifiers.",
   "cfa-10657:0": "The Deck/Hand CONT condition compares this card's name with a different Sylvan Horned Beast under a grade-2-or-greater vanguard and reduces this card's grade. The evaluator does not apply continuous grade changes to a specific card in hidden Deck/Hand zones with this name comparison.",
   "cfa-10657:1": "This RC CONT grants +10000 only if the controller's Magnolia vanguard was placed this turn. The engine does not retain and revalidate this exact named-vanguard placement history for the source's continuous power.",
   "cfa-10658:0": "The Drop AUTO is limited to Magnolia vanguard placement during Ride Phase, absence of another Goildoat in Soul, and putting this exact Drop card into Soul as cost before choosing a vanguard for +5000. Ride-specific placement history and the source-zone cost/target sequence are not supported together.",

@@ -31,7 +31,7 @@ function fixture(cardId = IDS[0], side = "human", { deck = true } = {}) {
   const drawn = { uid: `draw-${cardId}-${side}`, cardId: "cfa-3", ownerPlayerId: playerId, controllerPlayerId: playerId };
   const own = player(playerId), other = player(opponentId);
   own.rear[0] = source;
-  if (deck) own.deck.push(drawn);
+  if (deck) own.deck.push({ uid: `remaining-${cardId}-${side}`, cardId: "cfa-4", ownerPlayerId: playerId, controllerPlayerId: playerId }, drawn);
   const state = { matchId: `act-source-soul-draw-${cardId}-${side}`, stateVersion: 1, eventSequence: 0, processedActionIds: [], processedAbilityTriggers: [], turn: 2, side, phase: 4, pendingAbility: null, pendingAbilities: [], pendingTrigger: null, pendingAttack: null, players: side === "human" ? { human: own, bot: other } : { human: other, bot: own } };
   return { card: definition, ability, source, drawn, own, other, side, state };
 }

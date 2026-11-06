@@ -4,9 +4,33 @@ const Engine = require("../ability-engine.js");
 Engine.registerAbilityDefinitions(require("../ability-definitions.js"));
 const { loadCatalog } = require("../scripts/audit-ability-catalog.js");
 
-// Audit-only contribution: no new definitions are emitted because all
-// previously unsupported abilities require mechanics not trusted end-to-end.
-const contribution = [];
+const standAbilityDefinitions = Object.freeze([
+  {
+    id: "cfa-10025:1", cardId: "cfa-10025", kind: "AUTO",
+    printedText: "AUTO [RC] 1/Turn: When this unit stand by your card’s ability, this unit gets power +5000 until end of turn.",
+    requiredLocation: ["rear-guard"],
+    trigger: { status: "recognized-trigger", eventType: "unit.stood", subject: "event-subject", circles: ["rear-guard"], subjectControllerRelation: "source-controller", effectCause: "card-ability", effectSourceControllerRelation: "source-controller" },
+    conditions: [], conditionsReviewed: true, costs: [], costsReviewed: true, choicesReviewed: true,
+    optional: false, once: true,
+    usageRestriction: { type: "once-per-turn", scope: "ability-instance", reset: "turn" },
+    consumeUsageOnTrigger: true,
+    source: { dataset: "Bushiroad official card information", snapshotDate: "2026-11-04", officialCardNumber: "D-VS05/072EN", officialReference: "https://en.cf-vanguard.com/deckrecipe/detail/d-vs05-aqua-force", patternId: "auto-rc-stand-by-card-ability-power-turn-v1", review: "Official Ripple deck recipe confirms Rising Ripple, Pavroth gains +5000 when stood by a card ability. Eligibility requires this exact Rear-Guard instance to be the unit stood by an ability controlled by the same player; a rule-based stand or an opponent's effect does not qualify. The once-per-turn restriction is per card instance and ability, and power expires at turn end." },
+    effects: [{ op: "modify-power", target: "source", amount: 5000, duration: "turn" }]
+  },
+  {
+    id: "cfa-10026:1", cardId: "cfa-10026", kind: "AUTO",
+    printedText: "AUTO [RC] 1/Turn: When this unit stand by your card’s ability, this unit gets power +5000 until end of turn.",
+    requiredLocation: ["rear-guard"],
+    trigger: { status: "recognized-trigger", eventType: "unit.stood", subject: "event-subject", circles: ["rear-guard"], subjectControllerRelation: "source-controller", effectCause: "card-ability", effectSourceControllerRelation: "source-controller" },
+    conditions: [], conditionsReviewed: true, costs: [], costsReviewed: true, choicesReviewed: true,
+    optional: false, once: true,
+    usageRestriction: { type: "once-per-turn", scope: "ability-instance", reset: "turn" },
+    consumeUsageOnTrigger: true,
+    source: { dataset: "Bushiroad official card text and errata", snapshotDate: "2026-11-04", officialCardNumber: "D-VS05/073EN", officialReference: "https://en.cf-vanguard.com/dvs0506-errata-list/", patternId: "auto-rc-stand-by-card-ability-power-turn-v1", review: "Official errata confirms Silent Ripple, Sotirio's wording is stood by your card's abilities, and the official Ripple deck recipe confirms +5000 until end of turn. Eligibility requires this exact Rear-Guard instance to be the unit stood by an ability controlled by the same player; a rule-based stand or an opponent's effect does not qualify. The once-per-turn restriction is per card instance." },
+    effects: [{ op: "modify-power", target: "source", amount: 5000, duration: "turn" }]
+  }
+]);
+const contribution = [...standAbilityDefinitions];
 const abilityIds = Object.freeze([
   "cfa-10023:0", "cfa-10023:1", "cfa-10024:0", "cfa-10024:1", "cfa-10025:0", "cfa-10025:1",
   "cfa-10026:0", "cfa-10026:1", "cfa-10030:0", "cfa-10032:0", "cfa-10032:1", "cfa-10033:0",
@@ -21,6 +45,8 @@ const supportedIds = Object.freeze([
   "cfa-1004:1", "cfa-1004:2", "cfa-10030:0", "cfa-10032:0", "cfa-10032:1",
   "cfa-10033:0", "cfa-10040:0", "cfa-10040:1", "cfa-10048:0"
 ]);
+const implementedIds = Object.freeze(standAbilityDefinitions.map(definition => definition.id));
+const completedIds = new Set([...supportedIds, ...implementedIds]);
 
 const blockerById = Object.freeze({
   "cfa-10023:0": "The controller-turn CONT must count all locked cards and apply +5000 per locked card to every controlled Battle Sister unit. No reviewed continuous handler evaluates this locked-card count together with the name-filtered cross-unit modifier.",
@@ -28,9 +54,7 @@ const blockerById = Object.freeze({
   "cfa-10024:0": "Requires a once-per-turn VC ACT, Soul-Blast 1, looking at exactly five deck cards, choosing up to one and calling it to a legal RC, then shuffling. No reviewed handler supports this exact look-five/call/shuffle sequence and usage restriction.",
   "cfa-10024:1": "The exact Vanguard must attack while the controller has no standing front-row units; then Counter-Blast 1, stand a chosen rear-guard, conditionally stand all rear-guards at four or more damage, and grant +5000 until turn end to each unit stood if the specified Rising Ripple is in soul. The event, combined cost, stood-unit set, damage branch, and soul condition are not supported together.",
   "cfa-10025:0": "Requires this exact VC/RC source to attack, Soul-Blast 1, search the top seven for the exact Genovious name, reveal/add it and shuffle; when the source is on RC it must also move itself into soul at that battle's end. No reviewed handler combines exact source-attack matching, filtered top-seven search, and delayed self-movement.",
-  "cfa-10025:1": "Requires the exact RC source to be stood by one of its controller's card abilities, once per turn, and gain +5000 until end of turn. Trusted events do not carry and validate the exact stand-source ability provenance plus per-instance usage restriction.",
   "cfa-10026:0": "Requires this exact card instance to be placed on VC, then a top-seven search for up to one exact Genovious or Pavroth, reveal/add, and shuffle. No reviewed handler supports this VC-only placement trigger and two-name filtered search.",
-  "cfa-10026:1": "Requires the exact RC source to be stood by one of its controller's card abilities, once per turn, and gain +5000 until end of turn. Trusted events do not carry and validate the exact stand-source ability provenance plus per-instance usage restriction.",
   "cfa-10034:0": "Requires exact RC placement while the controller's Vanguard is Chronotiger Rebellion, Counter-Blast 1, bind the entire hand, return those exact cards at turn end, and if at least three were bound grant a temporary opponent-guardian shield reduction. The engine lacks this bound-card snapshot/delayed-return and conditional shield-effect sequence.",
   "cfa-10035:0": "Requires Soul-Blast 1, both players drawing, and at grade 3+ both players privately selecting a hand card to call; opponent call-trigger AUTO abilities must be suppressed for that call. Independent private choices, sequential resolution, and exact event suppression are not supported by one trusted effect program.",
   "cfa-10036:0": "Requires Soul-Blast 1 plus discarding a Я-named card, then looking at seven cards, choosing up to two differently named Star-vader cards, revealing/adding them and shuffling. The exact Я name filter, distinct-name choice, and combined paid-search sequence are not supported.",
@@ -69,7 +93,7 @@ const cards = Object.freeze(cardIds.map(cardId => {
 }));
 const parsedById = new Map();
 for (const cardId of cardIds) for (const ability of Engine.parseCardAbilitiesCached(cardsById.get(cardId))) parsedById.set(ability.id, ability);
-const unsupportedSiblings = Object.freeze(abilityIds.filter(id => !supportedIds.includes(id)).map(abilityId => {
+const unsupportedSiblings = Object.freeze(abilityIds.filter(id => !completedIds.has(id)).map(abilityId => {
   const ability = parsedById.get(abilityId);
   if (!ability || !blockerById[abilityId]) throw new Error(`Missing parsed text or blocker for ${abilityId}`);
   return Object.freeze({ abilityId, kind: ability.kind, catalogPrintedText: ability.printedText, officialPrintedText: null, blocker: blockerById[abilityId] });
@@ -84,12 +108,12 @@ if (!parsedById.get("cfa-10050:0")?.printedText.includes(hiddenRevolDressText)) 
 
 const audit = Object.freeze({
   batchId: "ABILITY-320008F1-0002",
-  status: "audit-only-no-new-definitions",
+  status: "two-reviewed-stand-trigger-definitions",
   dataset: "Cardfight Area local card catalog snapshot",
   catalogSnapshotDate: "2025-05-09",
   officialTextChecked: false,
   abilityIds,
-  implementedAbilityIds: Object.freeze([]),
+  implementedAbilityIds: implementedIds,
   alreadySupportedAbilityIds: supportedIds,
   supportedProductionDefinitions,
   cards,
@@ -99,7 +123,7 @@ const audit = Object.freeze({
     parsedAbilityId: "cfa-10050:0",
     note: "The local parser includes the separate RevolDress AUTO text inside the CONT block's printedText and does not emit a separate ability record/ID. It remains unsupported; do not treat the embedded AUTO as part of the ride-name alias effect."
   })]),
-  provenanceNote: "Ability text is copied exactly from the local Cardfight Area catalog snapshot dated 2025-05-09. This audit did not independently verify official printed text; officialPrintedText is null for every unsupported record. Existing production definitions are identified separately and are not reimplemented here."
+  provenanceNote: "Ability text is copied exactly from the local Cardfight Area catalog snapshot dated 2025-05-09. The two compiled stand-trigger abilities were checked against Bushiroad's official Ripple deck recipe and, for Silent Ripple, Sotirio, the D-VS05 errata list. Other unsupported records remain unverified against official text; their officialPrintedText is null. Existing production definitions are identified separately and are not reimplemented here."
 });
 
 Object.defineProperty(contribution, "audit", { enumerable: false, value: audit });

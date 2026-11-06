@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "completedAssignments": [
+    {
+      "batchId": "PRIMARY-AUTO-VC-STRIDE-POWER-3",
+      "status": "completed",
+      "workerOwner": "primary-session/stride-power-audit",
+      "reason": "All six assigned abilities passed ability-level regressions; all abilities on cfa-2661, cfa-2668, and cfa-3102 passed the strict whole-card promotion gate.",
+      "abilityIds": [
+        "cfa-2661:0",
+        "cfa-2661:1",
+        "cfa-2668:0",
+        "cfa-2668:1",
+        "cfa-3102:0",
+        "cfa-3102:1"
+      ],
+      "completedAt": "2026-11-04T10:42:03.585Z",
+      "verifiedCardIds": [
+        "cfa-2661",
+        "cfa-2668",
+        "cfa-3102"
+      ],
+      "verification": {
+        "fullSuite": "2158/2158 passed",
+        "testFiles": [
+          "ability-act-temporary-vanguard-ability-server.test.js",
+          "ability-auto-vanguard-hit-gb-counterblast-server.test.js",
+          "ability-auto-vanguard-stride-power-server.test.js"
+        ],
+        "fullyVerifiedAbilities": 6
+      }
+    }
+  ]
+}

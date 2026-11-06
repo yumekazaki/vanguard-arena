@@ -8,10 +8,10 @@ const Reducer = require("./ability-server-reducer.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 const catalog = loadCatalog();
 const PATTERN = "cont-rc-during-turn-power-per-dragontree-marker-v1";
-const CARDS = ["cfa-11916", "cfa-11951", "cfa-11956", "cfa-12032", "cfa-12058"];
+const CARDS = ["cfa-10756", "cfa-11916", "cfa-11951", "cfa-11956", "cfa-12032", "cfa-12058"];
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 
-test("five real Dragontree-marker CONT abilities compile with their exact Rear-Guard scope", () => {
+test("six real Dragontree-marker CONT abilities compile with their exact Rear-Guard scope", () => {
   const found = [];
   for (const card of catalog) for (const ability of Engine.parseCardAbilitiesCached(card)) {
     if (ability.definition?.source?.patternId === PATTERN) found.push(ability);
@@ -35,7 +35,7 @@ test("power scales by the controller's Rear-Guard Dragontree markers only", () =
   assert.equal(evaluate({ isControllerTurn: true }), 0, "missing marker state fails closed");
 });
 
-test("authoritative attack power uses only the acting player's Rear-Guard markers for all five cards", () => {
+test("authoritative attack power uses only the acting player's Rear-Guard markers for all six cards", () => {
   for (const side of ["human", "bot"]) for (const cardId of CARDS) {
     const card = catalog.find(value => value.id === cardId);
     const source = { uid: `source-${side}-${cardId}`, cardId, cardName: card.name, type: "Normal Unit", unitCard: true, grade: Number(card.grade), power: Number(card.power), critical: 1, ownerPlayerId: side === "human" ? "host" : "guest", controllerPlayerId: side === "human" ? "host" : "guest" };

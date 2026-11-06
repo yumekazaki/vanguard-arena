@@ -17,7 +17,7 @@ function makeState({ grade = 3, name = "Chronojet Dragon", attackerSide = "bot" 
   const source = { uid: "guest-cost-unit", cardId: "cfa-10781", cardName: "Heart Thump Worker", grade: 1, ownerPlayerId: "guest", controllerPlayerId: "guest", power: 8000 };
   const attacker = { uid: `${attackerPlayerId}-chronojet-vanguard`, cardId: "chronojet-vanguard", type: "Unit", cardName: name, grade, clan: "Gear Chronicle", clans: ["Gear Chronicle"], ownerPlayerId: attackerPlayerId, controllerPlayerId: attackerPlayerId, power: 13000, critical: 1 };
   const target = { uid: `${defenderSide}-vanguard`, cardId: `${defenderSide}-vanguard-card`, type: "Unit", cardName: "Opponent Vanguard", grade: 3, ownerPlayerId: defenderSide === "human" ? "host" : "guest", controllerPlayerId: defenderSide === "human" ? "host" : "guest", power: 13000, critical: 1 };
-  const player = (playerId, vanguard, rear = []) => ({ playerId, vanguard, rear, hand: [], soul: [], damage: [], drop: [], bind: [], orders: [], guardCircle: [], deck: [{ uid: "drawn-card", cardId: "drawn-card" }], gDeck: [], gZone: [] });
+  const player = (playerId, vanguard, rear = []) => ({ playerId, vanguard, rear, hand: [], soul: [], damage: [], drop: [], bind: [], orders: [], guardCircle: [], deck: [{ uid: `${playerId}-continuation-card`, cardId: "continuation-card" }, { uid: "drawn-card", cardId: "drawn-card" }], gDeck: [], gZone: [] });
   const state = { matchId: "chronojet-attack", stateVersion: 3, eventSequence: 0, turn: 5, side: attackerSide, phase: 5, processedAbilityTriggers: [], players: { human: player("host", attackerSide === "human" ? attacker : target), bot: player("guest", attackerSide === "bot" ? attacker : target, [source]) } };
   state.pendingAttack = { battleId: "chronojet-battle", attackerUid: attacker.uid, attackerPlayerId, attackerSide, attackerZone: "vanguard", defenderSide, targetUid: target.uid, targetZone: "vanguard", power: 13000, targetPower: 13000, critical: 1, boostUid: null };
   if (attackerSide === "bot") state.pendingAttack.boostUid = null;
@@ -81,5 +81,6 @@ test("the joining player may decline the printed COST, or pay it and resolve dra
   assert.equal(result.ok, true, result.reason);
   assert.ok(accepted.state.players.bot.soul.some(card => card.uid === accepted.source.uid));
   assert.equal(accepted.state.players.bot.hand[0].uid, "drawn-card");
+  assert.equal(accepted.state.players.bot.deck[0].uid, "guest-continuation-card");
   assert.equal(accepted.state.pendingAttack.power, 18000);
 });

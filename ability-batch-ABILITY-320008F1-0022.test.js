@@ -4,92 +4,124 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const Engine = require("./ability-engine.js");
 Engine.registerAbilityDefinitions(require("./ability-definitions.js"));
+const Reducer = require("./ability-server-reducer.js");
+const contribution = require("./ability-contributions/batch-ABILITY-320008F1-0022.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
-const audit = require("./ability-contributions/batch-ABILITY-320008F1-0022.js");
 
-const cards = new Map(loadCatalog().map(card => [String(card.id), card]));
-const parsed = new Map();
-for (const card of cards.values()) {
-  for (const ability of Engine.parseCardAbilitiesCached(card)) parsed.set(ability.id, ability);
+const catalog = loadCatalog();
+const catalogById = new Map(catalog.map(card => [String(card.id), card]));
+const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
+Engine.registerAbilityDefinitions(contribution.proposedDefinitions);
+
+function instance(cardId, uid, playerId, overrides = {}) {
+  const card = catalogById.get(String(cardId));
+  return { uid, cardId: String(cardId), cardName: card?.name, type: card?.type || "Unit", grade: Number(card?.grade),
+    power: Number(card?.power || 0), unitCard: true, ownerPlayerId: playerId, controllerPlayerId: playerId, ...overrides };
 }
 
-test("all 40 reserved IDs have exact local text and a compiled or specifically blocked result", () => {
-  const assignment = require("./ability-work-batches.json").batches.find(batch => batch.batchId === audit.batchId);
-  assert.ok(assignment);
-  assert.deepEqual([...assignment.abilityIds].sort(), [...audit.abilityIds].sort());
-  assert.equal(audit.abilityIds.length, 40);
-  assert.equal(new Set(audit.abilityIds).size, 40);
-  assert.deepEqual(audit.alreadySupportedAbilityIds, ["cfa-1058:1", "cfa-1059:0", "cfa-106:0"]);
-  assert.deepEqual(audit.proposedDefinitions, []);
-  assert.deepEqual(audit.verifiedOfficialAbilities, []);
+function fixture(side = "human", sourceOrigin = "bind") {
+  const ownerId = side === "human" ? "player-host" : "player-guest";
+  const opponentSide = side === "human" ? "bot" : "human";
+  const opponentId = opponentSide === "human" ? "player-host" : "player-guest";
+  const source = instance("cfa-10584", `jakumetsu-${side}`, ownerId);
+  const own = { playerId: ownerId, vanguard: instance("cfa-3", `own-vg-${side}`, ownerId), rear: Array(5).fill(null),
+    soul: [], deck: [], hand: [], drop: [], bind: [], damage: [], orders: [], guardCircle: [], triggerZone: [], gDeck: [], gZone: [] };
+  const opponent = { playerId: opponentId, vanguard: instance("cfa-4", `opponent-vg-${side}`, opponentId), rear: Array(5).fill(null),
+    soul: [], deck: [], hand: [], drop: [], bind: [], damage: [], orders: [], guardCircle: [], triggerZone: [], gDeck: [], gZone: [] };
+  own.rear[0] = source;
+  const state = { matchId: `jakumetsu-${side}-${sourceOrigin}`, stateVersion: 1, turn: 2, side, phase: 4,
+    eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], processedActionIds: [], pendingAbilities: [], pendingAbility: null,
+    pendingTrigger: null, players: side === "human" ? { human: own, bot: opponent } : { human: opponent, bot: own } };
+  const event = Engine.createGameEvent(state, { type: "card.placed", actingPlayerId: ownerId, turnPlayerId: ownerId,
+    sourceCardInstanceId: source.uid, sourceOwnerPlayerId: ownerId, sourceControllerPlayerId: ownerId,
+    cardInstanceId: source.uid, subjectCardInstanceId: source.uid, subjectOwnerPlayerId: ownerId, subjectControllerPlayerId: ownerId,
+    previousLocation: sourceOrigin, currentLocation: "rear-left", circle: "rear-left", phase: "main", timingWindow: "effect-card-placement" });
+  return { state, source, side, ownerId, opponentId, event, sourceOrigin };
+}
 
-  const supported = new Set(audit.alreadySupportedAbilityIds);
-  const blocked = new Map(audit.unsupportedSiblings.map(item => [item.abilityId, item]));
-  assert.equal(blocked.size, 37);
-  for (const abilityId of audit.abilityIds) {
-    const ability = parsed.get(abilityId);
-    assert.ok(ability, `missing exact parsed ability ${abilityId}`);
-    const cardId = abilityId.slice(0, abilityId.lastIndexOf(":"));
-    assert.equal(ability.cardId, cardId, abilityId);
-    assert.equal(typeof ability.printedText, "string");
-    if (supported.has(abilityId)) {
-      assert.ok(ability.definition, `${abilityId} should remain compiled`);
-      assert.equal(ability.definition.id, abilityId);
-      assert.equal(ability.definition.cardId, cardId);
-      assert.equal(ability.definition.printedText, ability.printedText);
-    } else {
-      assert.equal(ability.definition, null, `${abilityId} must stay unsupported`);
-      assert.equal(blocked.get(abilityId)?.catalogPrintedText, ability.printedText);
-      assert.ok(blocked.get(abilityId)?.blocker.length > 50, abilityId);
-    }
+function resolve(f) {
+  return Reducer.applyAbilityDecision(f.state, { actorAuthUid: f.side === "human" ? seats.hostAuthUid : seats.guestAuthUid,
+    actionId: `resolve-jakumetsu-${f.side}`, expectedStateVersion: f.state.stateVersion,
+    payload: { type: "ability-response", accept: true, selection: { instanceUid: f.source.uid, abilityId: "cfa-10584:0" } } }, seats, Engine);
+}
+
+function findAbility() {
+  const card = catalogById.get("cfa-10584");
+  return Engine.parseCardAbilitiesCached(card).find(item => item.id === "cfa-10584:0");
+}
+
+test("batch 0022 preserves all 40 audit IDs while excluding fully verified abilities from the active queue", () => {
+  const batch = require("./ability-work-batches.json").batches.find(item => item.batchId === contribution.batchId);
+  const verification = require("./card-verification-manifest.json");
+  const fullyVerifiedIds = new Set(verification.records
+    .filter(record => record.status === "fully-verified" && record.fullyVerified === true)
+    .map(record => record.abilityId));
+  const outstandingIds = contribution.abilityIds.filter(id => !fullyVerifiedIds.has(id));
+  const verifiedIds = contribution.abilityIds.filter(id => fullyVerifiedIds.has(id));
+  assert.ok(batch);
+  assert.deepEqual([...outstandingIds].sort(), [...batch.abilityIds].sort());
+  assert.deepEqual(verifiedIds.sort(), ["cfa-10586:0", "cfa-10593:0"]);
+  assert.equal(contribution.abilityIds.length, 40);
+  assert.equal(new Set(contribution.abilityIds).size, 40);
+  assert.deepEqual(contribution.alreadySupportedAbilityIds, ["cfa-1058:1", "cfa-1059:0", "cfa-106:0"]);
+  assert.deepEqual(contribution.implementedAbilityIds, ["cfa-10584:0", "cfa-10584:1", "cfa-10586:0", "cfa-10593:0"]);
+  assert.equal(contribution.unsupportedSiblings.length, 33);
+  assert.deepEqual(contribution.verifiedOfficialAbilities, []);
+  for (const item of contribution.unsupportedSiblings) {
+    assert.equal(item.officialPrintedText, null, item.abilityId);
+    assert.equal(item.officialReference, null, item.abilityId);
+    assert.ok(item.blocker.length > 75, item.abilityId);
   }
-  assert.deepEqual([...blocked.keys()].sort(), audit.abilityIds.filter(id => !supported.has(id)).sort());
 });
 
-test("Fantasy Petal Storm Shirayuki Lord restriction is continuous and location-scoped", () => {
-  const ability = parsed.get("cfa-1058:1");
-  assert.equal(ability.kind, "CONT");
-  assert.equal(ability.definition.continuousRestrictions[0].type, "lord");
-  const evaluate = (location, controlledUnits) => Engine.evaluateContinuousRestrictions([ability], {
-    location,
-    sourceCard: { id: "cfa-1058", clans: ["Murakumo"] },
-    sourceInstanceId: "shirayuki-instance",
-    controlledUnits
-  });
-  assert.equal(evaluate("vanguard", []).legal, true);
-  assert.equal(evaluate("rear-guard", [{ uid: "same-clan", card: { clan: "Murakumo" } }]).legal, true);
-  assert.equal(evaluate("vanguard", [{ uid: "foreign", card: { clan: "Kagero" } }]).legal, false);
-  assert.equal(evaluate("guardian", [{ uid: "foreign", card: { clan: "Kagero" } }]).legal, true);
+test("Jakumetsu Arcs definition preserves its exact bind-to-RC trigger and end-of-turn power effect", () => {
+  const card = catalogById.get("cfa-10584");
+  const parsed = findAbility();
+  const definition = contribution.proposedDefinitions[0];
+  assert.equal(card.name, "Stealth Dragon, Jakumetsu Arcs");
+  assert.equal(parsed.printedText, definition.printedText);
+  assert.equal(parsed.id, "cfa-10584:0");
+  assert.deepEqual(parsed.requiredLocation, ["rear-guard"]);
+  assert.equal(parsed.trigger.eventType, "card.placed");
+  assert.equal(parsed.trigger.subject, "source");
+  assert.deepEqual(parsed.trigger.circles, ["rear-guard"]);
+  assert.equal(parsed.trigger.sourceLocation, "bind");
+  assert.deepEqual(parsed.costs, []);
+  assert.equal(parsed.canDecline, false);
+  assert.deepEqual(parsed.definition.effects, [{ op: "modify-power", target: "source", amount: 5000, duration: "turn" }]);
+  assert.equal(Reducer.hasTrustedServerAbilityDefinition(parsed, Engine), true);
+  assert.equal(Reducer.supportsServerAbilityEffects(parsed), true);
 });
 
-test("Tamamo Limit Break trigger matches only its own Vanguard attack on a Vanguard", () => {
-  const ability = parsed.get("cfa-1059:0");
-  const event = {
-    type: "unit.attacked",
-    subjectCardInstanceId: "tamamo-instance",
-    attackingCardInstanceIds: ["tamamo-instance"],
-    targetLocation: "vanguard",
-    battleId: "battle-1"
-  };
-  assert.equal(Engine.eventMatchesAbilityTrigger(ability, "attack", event, "tamamo-instance", "vanguard", "vanguard", "p1"), true);
-  assert.equal(Engine.eventMatchesAbilityTrigger(ability, "attack", event, "other-vanguard", "vanguard", "vanguard", "p1"), false);
-  assert.equal(Engine.eventMatchesAbilityTrigger(ability, "attack", { ...event, targetLocation: "rear-guard" }, "tamamo-instance", "vanguard", "vanguard", "p1"), false);
-  assert.equal(Engine.eventMatchesAbilityTrigger(ability, "attack", event, "tamamo-instance", "rear-guard", "vanguard", "p1"), false);
-  assert.equal(Engine.evaluateAbilityConditions(ability, { damageCount: 4 }), true);
-  assert.equal(Engine.evaluateAbilityConditions(ability, { damageCount: 3 }), false);
+test("either online player can resolve the exact source's Bind Zone call AUTO", () => {
+  for (const side of ["human", "bot"]) {
+    const f = fixture(side);
+    const discovered = Reducer.discoverAutoTriggers(f.state, [f.event], Engine);
+    assert.equal(discovered.queued.length, 1, `${side}: ${JSON.stringify(discovered.skipped)}`);
+    assert.equal(f.state.pendingAbility.side, side);
+    assert.equal(f.state.pendingAbility.instance.uid, f.source.uid);
+    assert.equal(f.state.pendingAbility.ability.id, "cfa-10584:0");
+    const result = resolve(f);
+    assert.equal(result.ok, true, `${side}: ${result.reason}`);
+    assert.equal(f.source.turnPowerBoost, 5000);
+    assert.equal(f.source.battlePowerBoost || 0, 0);
+  }
 });
 
-test("Blaujunger named-rider trigger checks the ridden source instance and exact rider name", () => {
-  const ability = parsed.get("cfa-106:0");
-  const event = {
-    type: "card.ridden",
-    subjectCardInstanceId: "blaupanzer-instance",
-    sourceCardInstanceId: "blaupanzer-instance",
-    sourceCardName: "Blaupanzer",
-    targetCardInstanceIds: ["blaujunger-instance"]
-  };
-  assert.equal(Engine.eventMatchesAbilityTrigger(ability, "ride", event, "blaujunger-instance", "vanguard", "vanguard", "p1"), true);
-  assert.equal(Engine.eventMatchesAbilityTrigger(ability, "ride", event, "different-blaujunger", "vanguard", "vanguard", "p1"), false);
-  assert.equal(Engine.eventMatchesAbilityTrigger(ability, "ride", { ...event, sourceCardName: "Blaukluger" }, "blaujunger-instance", "vanguard", "vanguard", "p1"), false);
-  assert.equal(Engine.eventMatchesAbilityTrigger(ability, "ride", { ...event, targetCardInstanceIds: ["different-instance"] }, "blaujunger-instance", "vanguard", "vanguard", "p1"), false);
+test("wrong prior zone, circle, unrelated source, and wrong controller cannot trigger it", () => {
+  for (const origin of ["hand", "deck", "drop", "soul"]) {
+    const f = fixture("human", origin);
+    assert.equal(Reducer.discoverAutoTriggers(f.state, [f.event], Engine).queued.length, 0, origin);
+  }
+  const wrongController = fixture("human");
+  wrongController.source.controllerPlayerId = wrongController.opponentId;
+  assert.equal(Reducer.discoverAutoTriggers(wrongController.state, [wrongController.event], Engine).queued.length, 0);
+  const unrelated = fixture("human");
+  const wrongSourceEvent = Engine.createGameEvent(unrelated.state, { ...unrelated.event, sourceCardInstanceId: "unrelated",
+    cardInstanceId: "unrelated", subjectCardInstanceId: "unrelated", eventId: undefined, sequence: undefined });
+  assert.equal(Reducer.discoverAutoTriggers(unrelated.state, [wrongSourceEvent], Engine).queued.length, 0);
+  const wrongCircle = fixture("human");
+  const wrongCircleEvent = Engine.createGameEvent(wrongCircle.state, { ...wrongCircle.event, currentLocation: "vanguard",
+    circle: "vanguard", eventId: undefined, sequence: undefined });
+  assert.equal(Reducer.discoverAutoTriggers(wrongCircle.state, [wrongCircleEvent], Engine).queued.length, 0);
 });

@@ -26,11 +26,22 @@ function readQueueFile(queueFile) {
   return JSON.parse(text);
 }
 
-function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicGroupCards = 4, assignments = [] } = {}) {
+function abilityBatchIdentity(batch) {
+  if (!batch || !Array.isArray(batch.abilityIds) || !batch.abilityIds.length) return null;
+  return JSON.stringify([
+    String(batch.candidateMechanicGroup || ""),
+    [...new Set(batch.abilityIds.map(String))].sort()
+  ]);
+}
+
+function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicGroupCards = 4, assignments = [], previousBatches = [], completedAbilityIds = [] } = {}) {
   if (!queue || !Array.isArray(queue.items) || !baselineCommit || !/^[0-9a-f]{40}$/i.test(baselineCommit)) throw new TypeError("A work queue and full baseline commit SHA are required.");
   if (!Number.isInteger(cardsPerBatch) || cardsPerBatch < 1 || cardsPerBatch > 100) throw new RangeError("cardsPerBatch must be between 1 and 100.");
   if (!Number.isInteger(minMechanicGroupCards) || minMechanicGroupCards < 2 || minMechanicGroupCards > 100) throw new RangeError("minMechanicGroupCards must be between 2 and 100.");
   if (!Array.isArray(assignments)) throw new TypeError("Assignments must be an array.");
+  if (!Array.isArray(previousBatches)) throw new TypeError("Previous batches must be an array.");
+  const completed = new Set(completedAbilityIds instanceof Set ? [...completedAbilityIds].map(String) : Array.isArray(completedAbilityIds) ? completedAbilityIds.map(String) : []);
+  if (!(completedAbilityIds instanceof Set) && !Array.isArray(completedAbilityIds)) throw new TypeError("Completed ability IDs must be an array or Set.");
 
   const byCard = new Map(), seen = new Set();
   for (const item of queue.items) {
@@ -52,8 +63,14 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
     }
     if (assignedBatchIds.has(assignment.batchId)) throw new Error(`Batch ID ${assignment.batchId} is assigned more than once.`);
     assignedBatchIds.add(assignment.batchId);
-    const focusAbilityIds = [...new Set(assignment.abilityIds.map(String))];
-    if (focusAbilityIds.length !== assignment.abilityIds.length) throw new Error(`Assignment ${assignment.batchId} contains duplicate ability IDs.`);
+    const originalAbilityIds = [...new Set(assignment.abilityIds.map(String))];
+    if (originalAbilityIds.length !== assignment.abilityIds.length) throw new Error(`Assignment ${assignment.batchId} contains duplicate ability IDs.`);
+    const focusAbilityIds = originalAbilityIds.filter(id => {
+      if (queueByAbility.has(id)) return true;
+      if (completed.has(id)) return false;
+      throw new Error(`Assignment ${assignment.batchId} references unknown ability ${id}.`);
+    });
+    if (!focusAbilityIds.length) continue;
     const cardIds = [...new Set(focusAbilityIds.map(id => {
       const item = queueByAbility.get(id);
       if (!item) throw new Error(`Assignment ${assignment.batchId} references unknown ability ${id}.`);
@@ -83,7 +100,16 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
   const reservedCards = new Set(primaryReservedCards);
   for (const cardId of assignedCards.keys()) reservedCards.add(cardId);
   const primaryReservedRows = queue.items.filter(item => primaryReservedCards.has(String(item.cardId)));
-  const allReservedRows = queue.items.filter(item => reservedCards.has(String(item.cardId)));
+  const contributionFilesByAbility = new Map();
+  for (const item of queue.items) {
+    if (!Array.isArray(item.primaryReviewContributionFiles) || !item.primaryReviewContributionFiles.length) continue;
+    const cardId = String(item.cardId);
+    if (reservedCards.has(cardId) || assignedCards.has(cardId) || completed.has(item.abilityId)) continue;
+    contributionFilesByAbility.set(item.abilityId, [...new Set(item.primaryReviewContributionFiles.map(String))].sort());
+  }
+  const contributionReservedIds = new Set(contributionFilesByAbility.keys());
+  const contributionReservedRows = queue.items.filter(item => contributionReservedIds.has(item.abilityId));
+  const allReservedRows = queue.items.filter(item => reservedCards.has(String(item.cardId)) || contributionReservedIds.has(item.abilityId));
   const batches = [...assignmentBatches];
   if (primaryReservedCards.size) batches.push({
     batchId: "PRIMARY-GZONE-STRIDE",
@@ -94,10 +120,26 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
     abilityIds: primaryReservedRows.map(item => item.abilityId).sort(),
     dependencies: [...new Set(primaryReservedRows.flatMap(item => (item.dependencies || []).map(dep => dep.id)))].sort()
   });
+  if (contributionReservedRows.length) {
+    let batchId = "PRIMARY-CONTRIBUTION-REVIEW";
+    let suffix = 1;
+    while (assignedBatchIds.has(batchId)) batchId = `PRIMARY-CONTRIBUTION-REVIEW-${String(suffix++).padStart(3, "0")}`;
+    batches.push({
+      batchId,
+      status: "reserved",
+      workerOwner: "primary-session",
+      reason: "Exact ability IDs already present in unintegrated contribution files; reserved for primary review. Contribution presence does not imply compilation, passing tests, or verification.",
+      cardIds: [...new Set(contributionReservedRows.map(item => String(item.cardId)))].sort((a, b) => a.localeCompare(b)),
+      abilityIds: contributionReservedRows.map(item => item.abilityId).sort(),
+      focusAbilityIds: contributionReservedRows.map(item => item.abilityId).sort(),
+      contributionFiles: [...new Set(contributionReservedRows.flatMap(item => contributionFilesByAbility.get(item.abilityId) || []))].sort(),
+      dependencies: [...new Set(contributionReservedRows.flatMap(item => (item.dependencies || []).map(dep => dep.id)))].sort()
+    });
+  }
   const candidateCardsByGroup = new Map();
   for (const [cardId, cardItems] of byCard) {
     if (reservedCards.has(cardId)) continue;
-    const groups = new Set(cardItems.filter(item => item.workFlags?.includes("unsupported-or-unreviewed") &&
+    const groups = new Set(cardItems.filter(item => !contributionReservedIds.has(item.abilityId) && item.workFlags?.includes("unsupported-or-unreviewed") &&
       item.mechanicGroupType === "unreviewed-similarity-candidate" && typeof item.mechanicGroup === "string")
       .map(item => item.mechanicGroup));
     for (const mechanicGroup of groups) {
@@ -125,7 +167,7 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
       const cardIds = eligibleCards.slice(offset, offset + cardsPerBatch);
       if (!cardIds.length) continue;
       cardIds.forEach(cardId => familyAssignedCards.add(cardId));
-      const rows = cardIds.flatMap(cardId => byCard.get(cardId));
+      const rows = cardIds.flatMap(cardId => byCard.get(cardId).filter(item => !contributionReservedIds.has(item.abilityId)));
       const focusedAbilityIds = rows.filter(item => item.mechanicGroup === mechanicGroup).map(item => item.abilityId).sort();
       batches.push({
         batchId: nextFamilyBatchId(),
@@ -141,11 +183,12 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
     }
   }
 
-  const normalCards = [...byCard.keys()].filter(cardId => !reservedCards.has(cardId) && !familyAssignedCards.has(cardId)).sort((a, b) => a.localeCompare(b));
+  const normalCards = [...byCard.keys()].filter(cardId => !reservedCards.has(cardId) && !familyAssignedCards.has(cardId) &&
+    byCard.get(cardId).some(item => !contributionReservedIds.has(item.abilityId))).sort((a, b) => a.localeCompare(b));
   let normalBatchSequence = 1;
   for (let index = 0; index < normalCards.length; index += cardsPerBatch) {
     const cardIds = normalCards.slice(index, index + cardsPerBatch);
-    const rows = cardIds.flatMap(cardId => byCard.get(cardId));
+    const rows = cardIds.flatMap(cardId => byCard.get(cardId).filter(item => !contributionReservedIds.has(item.abilityId)));
     let batchId;
     do { batchId = `ABILITY-${baselineCommit.slice(0, 8).toUpperCase()}-${String(normalBatchSequence++).padStart(4, "0")}`; }
     while (usedBatchIds.has(batchId));
@@ -160,13 +203,40 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
     });
   }
 
+  // Keep an unclaimed task's identity when the next build produces the same exact
+  // work item. Baseline SHAs change on every merge; using them as the sole identity
+  // used to invalidate open task links and local contribution manifests on refresh.
+  const previousAvailableByIdentity = new Map();
+  for (const previous of previousBatches) {
+    if (previous?.status !== "available" || previous.workerOwner != null || typeof previous.batchId !== "string") continue;
+    const identity = abilityBatchIdentity(previous);
+    if (!identity) continue;
+    const matches = previousAvailableByIdentity.get(identity) || [];
+    matches.push(previous.batchId);
+    previousAvailableByIdentity.set(identity, matches);
+  }
+  const generatedBatchIds = new Set(batches.map(batch => batch.batchId));
+  const reusedPreviousIds = new Set();
+  for (const batch of batches) {
+    if (batch.status !== "available" || batch.workerOwner != null) continue;
+    const matches = previousAvailableByIdentity.get(abilityBatchIdentity(batch));
+    const previousId = matches?.shift();
+    // A prior ID may now be the deterministic ID of a different newly generated
+    // batch. Reusing it would create an ambiguous registry even though the prior
+    // identity matched this batch. Keep the new ID in that case.
+    if (!previousId || reusedPreviousIds.has(previousId) ||
+        previousId !== batch.batchId && generatedBatchIds.has(previousId) || assignedBatchIds.has(previousId)) continue;
+    batch.batchId = previousId;
+    reusedPreviousIds.add(previousId);
+  }
+
   const uniqueBatchIds = new Set();
   for (const batch of batches) {
     if (uniqueBatchIds.has(batch.batchId)) throw new Error(`Duplicate batch ID ${batch.batchId}; batch claims would be ambiguous.`);
     uniqueBatchIds.add(batch.batchId);
   }
 
-  const batchForCard = new Map(batches.flatMap(batch => batch.cardIds.map(cardId => [cardId, batch.batchId])));
+  const batchForAbility = new Map(batches.flatMap(batch => batch.abilityIds.map(abilityId => [abilityId, batch.batchId])));
   const records = queue.items.map(item => {
     const verification = item.evidence || null;
     const implementationStatus = item.workFlags?.includes("failing-validation") ? "validation-failed"
@@ -175,8 +245,8 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
       : verification?.status === "tests-passing" ? "tests-passing"
       : item.effects?.length ? "compiled-unverified" : "unreviewed";
     const assignment = assignedCards.get(String(item.cardId));
-    const primaryReserved = reservedCards.has(String(item.cardId)) && !assignment;
-    const reserved = Boolean(assignment || primaryReserved);
+    const contributionReserved = contributionReservedIds.has(item.abilityId) && !assignment;
+    const primaryReserved = (reservedCards.has(String(item.cardId)) || contributionReserved) && !assignment;
     return {
       abilityId: item.abilityId,
       cardId: String(item.cardId),
@@ -186,7 +256,8 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
       implementationStatus,
       assignmentStatus: assignment?.status || (primaryReserved ? "reserved" : "available"),
       workerOwner: assignment?.workerOwner || (primaryReserved ? "primary-session" : null),
-      batchId: assignment?.batchId || batchForCard.get(String(item.cardId)),
+      batchId: assignment?.batchId || batchForAbility.get(item.abilityId),
+      contributionFiles: contributionFilesByAbility.get(item.abilityId) || [],
       dependencies: [...new Set((item.dependencies || []).map(dep => dep.id))].sort(),
       verification: {
         evidenceStatus: verification?.status || "none",
@@ -211,7 +282,8 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
         uniqueAbilityIds: seen.size,
         reservedAbilities: allReservedRows.length,
         availableAbilities: records.length - allReservedRows.length,
-        reservedCards: reservedCards.size,
+        reservedCards: new Set([...reservedCards, ...contributionReservedRows.map(item => String(item.cardId))]).size,
+        contributionReviewReservations: contributionReservedRows.length,
         activeAssignments: assignmentBatches.length,
         availableBatches: batches.filter(batch => batch.status === "available").length,
         validationEvidenceFresh: queue.validationEvidenceFresh === true
@@ -227,8 +299,29 @@ function buildRegistry(queue, { baselineCommit, cardsPerBatch = 25, minMechanicG
 function writeRegistry(root, { baselineCommit, cardsPerBatch = 25, queuePath } = {}) {
   const queueFile = queuePath || path.join(root, ".card-pipeline", "ability-work-queue.json");
   const assignmentsPath = path.join(root, "ability-work-assignments.json");
+  const batchesPath = path.join(root, "ability-work-batches.json");
   const assignments = fs.existsSync(assignmentsPath) ? JSON.parse(fs.readFileSync(assignmentsPath, "utf8")).assignments : [];
-  const built = buildRegistry(readQueueFile(queueFile), { baselineCommit, cardsPerBatch, assignments });
+  const previousBatches = fs.existsSync(batchesPath) ? JSON.parse(fs.readFileSync(batchesPath, "utf8")).batches : [];
+  const verificationManifestPath = path.join(root, "card-verification-manifest.json");
+  const verificationManifest = fs.existsSync(verificationManifestPath) ? JSON.parse(fs.readFileSync(verificationManifestPath, "utf8")) : null;
+  const completedAbilityIds = Array.isArray(verificationManifest?.records)
+    ? verificationManifest.records.filter(record => record?.status === "fully-verified" && record?.fullyVerified === true).map(record => String(record.abilityId))
+    : [];
+  const queue = readQueueFile(queueFile);
+  // Re-scan on registry generation too, so a previously generated queue cannot
+  // accidentally reopen work already present in a contribution file.
+  const contributionReservations = require("./build-ability-work-queue.js").scanContributionAbilityReservations(root);
+  const currentQueue = {
+    ...queue,
+    items: queue.items.map(item => ({
+      ...item,
+      primaryReviewContributionFiles: [...new Set([
+        ...(Array.isArray(item.primaryReviewContributionFiles) ? item.primaryReviewContributionFiles : []),
+        ...(contributionReservations.get(item.abilityId) || [])
+      ])].sort()
+    }))
+  };
+  const built = buildRegistry(currentQueue, { baselineCommit, cardsPerBatch, assignments, previousBatches, completedAbilityIds });
   const manifest = { ...built.registry, generatedAt: new Date().toISOString() };
   atomicWrite(path.join(root, "ability-work-registry.jsonl"), built.records.map(record => JSON.stringify(record)).join("\n") + "\n");
   atomicWrite(path.join(root, "ability-work-batches.json"), JSON.stringify({ ...manifest, batches: built.batches }, null, 2) + "\n");

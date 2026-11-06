@@ -9,7 +9,7 @@ const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const PATTERN = "auto-own-vanguard-hit-clan-rear-guards-draw-v1";
 
-test("all nine clan-count attack-hit abilities keep the exact attacker, hit target, and other-unit threshold", () => {
+test("all ten clan-count attack-hit abilities keep the exact attacker, hit target, and other-unit threshold", () => {
   const matches = [];
   for (const card of loadCatalog()) for (const ability of Engine.parseCardAbilitiesCached(card)) {
     if (ability.definition?.source?.patternId !== PATTERN) continue;
@@ -22,7 +22,7 @@ test("all nine clan-count attack-hit abilities keep the exact attacker, hit targ
     assert.equal(ability.canDecline, false);
     assert.deepEqual(ability.effects, [{ op: "draw", count: 1 }]);
   }
-  assert.equal(matches.length, 9);
+  assert.equal(matches.length, 10);
 });
 
 test("trusted hit event uses its attacker source, excludes that source from clan count, and prompts the joining player", () => {

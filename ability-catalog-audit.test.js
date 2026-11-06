@@ -801,9 +801,9 @@ test("all real G-Guardian discard AUTO variants preserve their exact payment rea
  assert.equal(matches,48);
 });
 
-test("all 15 clan-conditioned attack-hit draw abilities share the strict paid-draw compiler",()=>{
+test("all 18 clan-conditioned attack-hit draw abilities share the strict paid-draw compiler",()=>{
  const cards=loadCatalog(),report=auditCatalog(cards),matches=[];
- assert.equal(report.patterns["auto-own-attack-hit-counter-blast-draw-v1"],15);
+ assert.equal(report.patterns["auto-own-attack-hit-counter-blast-draw-v1"],18);
  for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card)){
   if(ability.definition?.source?.patternId!=="auto-own-attack-hit-counter-blast-draw-v1")continue;
   matches.push({card,ability});
@@ -820,7 +820,7 @@ test("all 15 clan-conditioned attack-hit draw abilities share the strict paid-dr
   assert.deepEqual(ability.definition.effects,[{op:"draw",count:1}],card.id);
   assert.equal(ability.canDecline,true,card.id);
  }
- assert.equal(matches.length,15);
+ assert.equal(matches.length,18);
  const sample=matches[0],uid=`${sample.card.id}:copy-a`,event=engine.createGameEvent({matchId:"attack-hit-family"},{type:"attack.hit",actingPlayerId:"p1",sourceCardInstanceId:uid,sourceControllerPlayerId:"p1",targetLocation:"vanguard",battleId:"battle-a"});
  assert.equal(engine.eventMatchesAbilityTrigger(sample.ability,"hit",event,uid,"vanguard","vanguard","p1"),true);
  assert.equal(engine.eventMatchesAbilityTrigger(sample.ability,"hit",event,uid,"rear-left","rear-left","p1"),true);

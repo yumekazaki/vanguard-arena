@@ -13,7 +13,7 @@ test("trusted manual activation enforces once-per-game use across turns", () => 
   Engine.registerAbilityDefinitions([{ id: abilityId, cardId, kind: "ACT", printedText, effects: [{ op: "draw", count: 1 }] }]);
 
   const source = { uid: "leader-copy", cardId, ownerPlayerId: "player-a", controllerPlayerId: "player-a", unitCard: true };
-  const playerA = { playerId: "player-a", vanguard: source, rear: [], deck: [{ uid: "top-card", cardId: "drawn" }], hand: [], damage: [], drop: [], soul: [], bind: [], usedAbilities: [] };
+  const playerA = { playerId: "player-a", vanguard: source, rear: [], deck: [{ uid: "spare-card", cardId: "drawn" }, { uid: "top-card", cardId: "drawn" }], hand: [], damage: [], drop: [], soul: [], bind: [], usedAbilities: [] };
   const playerB = { playerId: "player-b", vanguard: { uid: "opponent-vanguard", cardId: "opponent", ownerPlayerId: "player-b", controllerPlayerId: "player-b", grade: 3 }, rear: [], deck: [], hand: [], damage: [], drop: [], soul: [], bind: [] };
   const state = { matchId: "usage-room", stateVersion: 1, processedActionIds: [], eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], turn: 1, side: "host", phase: 4, players: { host: playerA, guest: playerB } };
   const seats = { hostAuthUid: "auth-a", guestAuthUid: "auth-b", hostSide: "host", guestSide: "guest" };
@@ -22,6 +22,7 @@ test("trusted manual activation enforces once-per-game use across turns", () => 
   const first = Reducer.applyManualAbilityActivation(state, command("first-use"), seats, Engine);
   assert.equal(first.ok, true, JSON.stringify(first));
   assert.deepEqual(playerA.hand.map(card => card.uid), ["top-card"]);
+  assert.equal(playerA.deck.length, 1, "the successful draw leaves the match playable");
   assert.equal(playerA.usedAbilities.length, 1);
 
   state.turn = 18;

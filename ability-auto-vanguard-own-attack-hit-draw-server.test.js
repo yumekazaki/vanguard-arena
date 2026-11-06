@@ -39,8 +39,9 @@ function fixture(cardId = IDS[0], side = "human") {
     targetCardInstanceIds: [target.uid], targetLocation: "vanguard", attackingUnitInstanceId: source.uid,
     battleId, phase: "battle", timingWindow: "attack-hit" });
   const drawn = card(`draw-${n}`, "cfa-2", ownerId);
-  players[side].deck = [drawn];
-  return { state, ability, event, source, target, drawn, side, ownerId, defenderId, battleId };
+  const continuation = card(`continuation-${n}`, "cfa-4", ownerId);
+  players[side].deck = [continuation, drawn];
+  return { state, ability, event, source, target, drawn, continuation, side, ownerId, defenderId, battleId };
 }
 function discover(f, event = f.event) { return Reducer.discoverAutoTriggers(f.state, [event], Engine); }
 function resolve(f, { auth = f.side === "human" ? seats.hostAuthUid : seats.guestAuthUid, event = f.event } = {}) {
@@ -77,7 +78,7 @@ test("the Vanguard owner resolves their own hit draw from either online seat", (
     const result = resolve(f);
     assert.equal(result.ok, true, result.reason);
     assert.deepEqual(f.state.players[side].hand, [f.drawn]);
-    assert.equal(f.state.players[side].deck.length, 0);
+    assert.deepEqual(f.state.players[side].deck, [f.continuation]);
     assert.deepEqual(result.events.map(event => event.type), ["card.drawn"]);
   }
 });
@@ -107,7 +108,7 @@ test("another unit hitting, bad battle metadata, stale source, forged definition
   const result = resolve(proxy, { auth: seats.hostAuthUid });
   assert.equal(result.ok, false);
   assert.equal(proxy.state.players.bot.hand.length, 0);
-  assert.deepEqual(proxy.state.players.bot.deck, [proxy.drawn]);
+  assert.deepEqual(proxy.state.players.bot.deck, [proxy.continuation, proxy.drawn]);
 
   const f = fixture();
   for (const mutate of [

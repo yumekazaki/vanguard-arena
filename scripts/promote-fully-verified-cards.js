@@ -14,8 +14,17 @@ function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function referencesExactAbilityInTests({ ability, abilities, cardId, abilityId, testSources }) {
+function referencesExactAbilityInTests({ ability, abilities, cardId, abilityId, testCases = [], testSources }) {
   if (testSources.some(source => source.includes(abilityId))) return true;
+
+  // Data-driven family tests can provide exact per-ability TAP subtest names.
+  // Trust that mapping only when the cited test parses each catalog card and
+  // names the exact parsed ability ID as its nested test case.
+  if (testCases.includes(abilityId) && testSources.some(source =>
+    /\bloadCatalog\s*\(/.test(source) &&
+    /\bparseCardAbilities(?:Cached)?\s*\(\s*card\s*\)/.test(source) &&
+    /\bawait\s+t\.test\s*\(\s*ability\.id\b/.test(source) &&
+    /\bassert\./.test(source))) return true;
 
   // A sole-skill card has a deterministic ability ID (cardId:0). Some focused
   // family tests parse that card from an explicit card-ID list and select the
@@ -80,7 +89,7 @@ function assessCardPromotion({ card, abilities, recordsByAbility, invalidAbility
         reasons.push(`${abilityId}:missing-test-file:${String(file)}`);
       }
     }
-    const exactAbilityReferenced = referencesExactAbilityInTests({ ability, abilities, cardId, abilityId, testSources });
+    const exactAbilityReferenced = referencesExactAbilityInTests({ ability, abilities, cardId, abilityId, testCases: record?.testCases || [], testSources });
     if (!exactAbilityReferenced) reasons.push(`${abilityId}:tests-do-not-reference-exact-ability-id`);
 
     if (["AUTO", "ACT"].includes(ability.kind)) {

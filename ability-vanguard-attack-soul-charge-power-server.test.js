@@ -20,9 +20,10 @@ function fixture(cardId = IDS[0], side = "human", { attackerUid = null, targetZo
   const source = { uid: `attack-source-${side}`, cardId, cardName: card.name, ownerPlayerId: playerId, controllerPlayerId: playerId, unitCard: true, grade: 3, power: 10000 };
   const opponentVanguard = { uid: `opponent-vanguard-${side}`, cardId: "opponent-vanguard", cardName: "Opponent Vanguard", ownerPlayerId: opponentId, controllerPlayerId: opponentId, unitCard: true, grade: 3, power: 13000 };
   const top = { uid: `attack-soul-top-${side}`, cardId: "soul-charge-top", ownerPlayerId: playerId, controllerPlayerId: playerId };
+  const continuation = { uid: `attack-soul-continuation-${side}`, cardId: "soul-charge-continuation", ownerPlayerId: playerId, controllerPlayerId: playerId };
   const players = {
-    human: { playerId: "player-host", vanguard: side === "human" ? source : opponentVanguard, rear: [], deck: side === "human" ? [top] : [], hand: [], soul: [], drop: [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [] },
-    bot: { playerId: "player-guest", vanguard: side === "bot" ? source : opponentVanguard, rear: [], deck: side === "bot" ? [top] : [], hand: [], soul: [], drop: [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [] }
+    human: { playerId: "player-host", vanguard: side === "human" ? source : opponentVanguard, rear: [], deck: side === "human" ? [continuation, top] : [], hand: [], soul: [], drop: [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [] },
+    bot: { playerId: "player-guest", vanguard: side === "bot" ? source : opponentVanguard, rear: [], deck: side === "bot" ? [continuation, top] : [], hand: [], soul: [], drop: [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [] }
   };
   const attack = { battleId: `battle-${side}`, attackerUid: attackerUid || source.uid, attackerSide: side, attackerZone: "vanguard", defenderSide: side === "human" ? "bot" : "human", targetUid: opponentVanguard.uid, targetZone: targetZone, power: 10000, targetPower: 13000, critical: 1, guardCards: [] };
   const state = { matchId: "vanguard-attack-soul-charge-test", stateVersion: 1, turn: 3, side, phase: 5, eventSequence: 0, processedEventIds: [], processedAbilityTriggers: [], pendingAbilities: [], pendingAbility: null, pendingAttack: attack, players };
@@ -35,7 +36,7 @@ function fixture(cardId = IDS[0], side = "human", { attackerUid = null, targetZo
     previousLocation: "vanguard", currentLocation: "vanguard", targetCardInstanceIds: [opponentVanguard.uid], targetLocation: targetZone,
     battleId: attack.battleId, phase: "battle", timingWindow: "attack-declared"
   });
-  return { state, event, ability, source, opponentVanguard, top, side, playerId };
+  return { state, event, ability, source, opponentVanguard, top, continuation, side, playerId };
 }
 
 test("the three real catalog abilities compile to ordered Soul Charge then battle power effects", () => {
@@ -66,6 +67,7 @@ test("the exact attacking Vanguard's controller Soul Charges then gets +1000 for
     }, seats, Engine);
     assert.equal(result.ok, true, result.reason);
     assert.equal(f.state.players[side].soul[0]?.uid, f.top.uid);
+    assert.equal(f.state.players[side].deck[0]?.uid, f.continuation.uid);
     assert.equal(f.state.pendingAttack.power, 11000);
     assert.equal(f.source.power, 10000);
   }

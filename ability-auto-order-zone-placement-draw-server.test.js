@@ -29,7 +29,7 @@ function fixture(cardId = IDS[0], side = "human", { emptyDeck = false } = {}) {
   const empty = id => ({ playerId: id, vanguard: null, rear: Array(5).fill(null), hand: [], soul: [], drop: [], damage: [], deck: [], bind: [], orders: [], guardCircle: [], triggerZone: [], gDeck: [], gZone: [] });
   const players = { human: empty("host-player"), bot: empty("guest-player") };
   players[side].orders = [source];
-  players[side].deck = emptyDeck ? [] : [drawn];
+  players[side].deck = emptyDeck ? [] : [card("cfa-4", `remaining-${cardId}-${side}`, ownerId), drawn];
   players[otherSide].vanguard = card("cfa-3", `opponent-vanguard-${side}`, otherId, { zone: "vanguard", circle: "vanguard" });
   const state = { matchId: "order-zone-placement-draw", stateVersion: 1, turn: 4, phase: "main", side, eventSequence: 0, processedEventIds: [], processedActionIds: [], processedAbilityTriggers: [], pendingAbilities: [], pendingAbility: null, pendingTrigger: null, players };
   const event = Engine.createGameEvent(state, {

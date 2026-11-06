@@ -104,6 +104,25 @@ test("a sole printed ability may be linked by exact card ID when its cited test 
   assert.equal(assessCardPromotion(sibling).reasons.includes("cfa-1:0:tests-do-not-reference-exact-ability-id"), true);
 });
 
+test("a data-driven family test may link evidence through an exact per-ability TAP case", () => {
+  const source = [
+    "for (const card of loadCatalog()) {",
+    "  for (const ability of Engine.parseCardAbilitiesCached(card)) {",
+    "    await t.test(ability.id, () => assert.equal(ability.definition.id, ability.id));",
+    "  }",
+    "}"
+  ].join("\n");
+  const single = fixture("CONT", source);
+  single.recordsByAbility.get("cfa-1:0").testCases = ["cfa-1:0"];
+  single.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_GENERIC_REMAINING;
+  assert.equal(assessCardPromotion(single).eligible, true);
+
+  const unrelatedCase = fixture("CONT", source);
+  unrelatedCase.recordsByAbility.get("cfa-1:0").testCases = ["cfa-2:0"];
+  unrelatedCase.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_GENERIC_REMAINING;
+  assert.equal(assessCardPromotion(unrelatedCase).reasons.includes("cfa-1:0:tests-do-not-reference-exact-ability-id"), true);
+});
+
 test("the exact generic warning still blocks cards with any additional printed ability", () => {
   const multi = fixture();
   const second = {

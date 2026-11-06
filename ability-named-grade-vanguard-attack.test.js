@@ -40,7 +40,7 @@ test("the joining player's qualifying Vanguard attack privately queues only thei
     pendingAttack: { attackerUid: "guest-vanguard", attackerSide: "bot", attackerPlayerId: "guest", attackerZone: "vanguard",
       defenderSide: "human", defenderPlayerId: "host", targetUid: "host-vanguard", targetZone: "vanguard", power: 18000, battleId: "guest-battle" }, processedAbilityTriggers: [], players: {
       human: { playerId: "host", vanguard: { uid: "host-vanguard", grade: 3, cardName: "Other Dragon", controllerPlayerId: "host" }, rear: [], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [] },
-      bot: { playerId: "guest", vanguard, rear: [source], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [{ uid: "guest-draw", cardId: "draw-card" }] }
+      bot: { playerId: "guest", vanguard, rear: [source], guardCircle: [], orders: [], drop: [], hand: [], soul: [], bind: [], damage: [], deck: [{ uid: "guest-continuation", cardId: "continuation-card" }, { uid: "guest-draw", cardId: "draw-card" }] }
     }
   };
   const event = Engine.createGameEvent(state, {
@@ -67,6 +67,7 @@ test("the joining player's qualifying Vanguard attack privately queues only thei
   assert.equal(state.players.bot.rear[0], null);
   assert.equal(state.players.bot.soul[0].uid, source.uid);
   assert.equal(state.players.bot.hand[0].uid, "guest-draw");
+  assert.equal(state.players.bot.deck[0].uid, "guest-continuation");
   assert.equal(state.pendingAttack.power, 23000);
 
   state.pendingAbility = null;

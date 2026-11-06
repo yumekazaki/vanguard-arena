@@ -24,9 +24,10 @@ function fixture(cardId = IDS[0], side = "human") {
   const cbCard = { uid: `cb-${side}`, cardId: `cb-${side}`, ownerPlayerId: playerId, controllerPlayerId: playerId, faceDown: false };
   const soulCard = { uid: `soul-${side}`, cardId: `soul-${side}`, ownerPlayerId: playerId, controllerPlayerId: playerId };
   const drawnCard = { uid: `draw-${side}`, cardId: `draw-${side}`, ownerPlayerId: playerId, controllerPlayerId: playerId };
+  const spareCard = { uid: `spare-${side}`, cardId: `spare-${side}`, ownerPlayerId: playerId, controllerPlayerId: playerId };
   const players = {
-    human: { playerId: "player-host", vanguard: null, rear: [], hand: side === "human" ? [source] : [], damage: side === "human" ? [cbCard] : [], soul: side === "human" ? [soulCard] : [], deck: side === "human" ? [drawnCard] : [], drop: [], bind: [], orders: [], crests: [], extra: [], guardCircle: [], gDeck: [], gZone: [], removed: [] },
-    bot: { playerId: "player-guest", vanguard: null, rear: [], hand: side === "bot" ? [source] : [], damage: side === "bot" ? [cbCard] : [], soul: side === "bot" ? [soulCard] : [], deck: side === "bot" ? [drawnCard] : [], drop: [], bind: [], orders: [], crests: [], extra: [], guardCircle: [], gDeck: [], gZone: [], removed: [] }
+    human: { playerId: "player-host", vanguard: null, rear: [], hand: side === "human" ? [source] : [], damage: side === "human" ? [cbCard] : [], soul: side === "human" ? [soulCard] : [], deck: side === "human" ? [spareCard, drawnCard] : [], drop: [], bind: [], orders: [], crests: [], extra: [], guardCircle: [], gDeck: [], gZone: [], removed: [] },
+    bot: { playerId: "player-guest", vanguard: null, rear: [], hand: side === "bot" ? [source] : [], damage: side === "bot" ? [cbCard] : [], soul: side === "bot" ? [soulCard] : [], deck: side === "bot" ? [spareCard, drawnCard] : [], drop: [], bind: [], orders: [], crests: [], extra: [], guardCircle: [], gDeck: [], gZone: [], removed: [] }
   };
   const state = { matchId: "return-to-hand-test", stateVersion: 1, eventSequence: 0, turn: 2, side, phase: 4, processedActionIds: [], processedEventIds: [], processedAbilityTriggers: [], pendingAbility: null, pendingAbilities: [], players };
   const event = Engine.createGameEvent(state, {
@@ -119,7 +120,7 @@ test("decline does not pay either cost or draw, and host cannot proxy the joinin
   assert.equal(declineResult.ok, true, declineResult.reason);
   assert.equal(declined.state.players.human.damage[0].faceDown, false);
   assert.equal(declined.state.players.human.soul.length, 1);
-  assert.equal(declined.state.players.human.deck.length, 1);
+  assert.equal(declined.state.players.human.deck.length, 2);
   assert.equal(declined.state.players.human.hand.length, 1);
 
   const joined = fixture(IDS[0], "bot");
@@ -129,7 +130,7 @@ test("decline does not pay either cost or draw, and host cannot proxy the joinin
   assert.equal(joined.state.pendingAbility.instance.uid, joined.source.uid, "the joiner's own decision remains pending");
   assert.equal(joined.state.players.bot.damage[0].faceDown, false);
   assert.equal(joined.state.players.bot.soul.length, 1);
-  assert.equal(joined.state.players.bot.deck.length, 1);
+  assert.equal(joined.state.players.bot.deck.length, 2);
 });
 
 test("invalid cost choices reject without partial payment or drawing; duplicate event discovery queues once", () => {
@@ -141,5 +142,5 @@ test("invalid cost choices reject without partial payment or drawing; duplicate 
   assert.equal(f.state.players.bot.damage[0].faceDown, false);
   assert.equal(f.state.players.bot.soul.length, 1);
   assert.equal(f.state.players.bot.drop.length, 0);
-  assert.equal(f.state.players.bot.deck.length, 1);
+  assert.equal(f.state.players.bot.deck.length, 2);
 });

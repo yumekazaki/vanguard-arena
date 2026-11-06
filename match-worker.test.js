@@ -425,7 +425,7 @@ test("joining player privately resolves its reviewed clan-conditioned own-attack
   state.players.bot.rear=[attacker];state.players.bot.damage=[{uid:"damage-a",faceDown:false},{uid:"damage-b",faceDown:false}];state.players.bot.deck=[draw];
   state.players.human.vanguard={uid:"host-vanguard",cardId:"host-vg",type:"Unit",grade:3,unitCard:true,ownerPlayerId:"host-player",controllerPlayerId:"host-player"};
   state.pendingAttack={battleId:"vaha-battle",attackerUid:attacker.uid,attackerSide:"bot",attackerPlayerId:"guest-player",attackerZone:"rear-left",defenderSide:"human",defenderPlayerId:"host-player",targetUid:state.players.human.vanguard.uid,targetZone:"vanguard",power:20000,targetPower:13000,critical:1,boostUid:null};
-  const event=Engine.createGameEvent(state,{type:"attack.hit",actingPlayerId:"guest-player",turnPlayerId:"guest-player",sourceCardInstanceId:attacker.uid,sourceOwnerPlayerId:"guest-player",sourceControllerPlayerId:"guest-player",cardInstanceId:state.players.human.vanguard.uid,subjectCardInstanceId:state.players.human.vanguard.uid,subjectOwnerPlayerId:"host-player",subjectControllerPlayerId:"host-player",attackingUnitInstanceId:attacker.uid,attackingCardInstanceIds:[attacker.uid],targetCardInstanceIds:[state.players.human.vanguard.uid],targetLocation:"vanguard",battleId:"vaha-battle",phase:"battle",timingWindow:"attack-hit"});
+  const event=Engine.createGameEvent(state,{type:"attack.hit",actingPlayerId:"guest-player",turnPlayerId:"guest-player",sourceCardInstanceId:attacker.uid,sourceOwnerPlayerId:"guest-player",sourceControllerPlayerId:"guest-player",cardInstanceId:state.players.human.vanguard.uid,subjectCardInstanceId:state.players.human.vanguard.uid,subjectOwnerPlayerId:"host-player",subjectControllerPlayerId:"host-player",attackingUnitInstanceId:attacker.uid,attackingCardInstanceIds:[attacker.uid],targetCardInstanceIds:[state.players.human.vanguard.uid],targetLocation:"vanguard",currentLocation:"rear-left",battleId:"vaha-battle",phase:"battle",timingWindow:"attack-hit"});
   const discovered=Reducer.discoverAutoTriggers(state,[event],Engine);
   assert.equal(discovered.queued.length,1);
   assert.equal(state.pendingAbility.side,"bot");
@@ -1367,7 +1367,10 @@ test("Stand Trigger prevents the selected rearguard from performing drive checks
     defenderSide: "human", targetUid: "target", targetZone: "vanguard", power: 10000, targetPower: 10000,
     defenderDone: true, driveChecksComplete: true, driveCountChosen: true
   };
-  claim.state.pendingTrigger = { side: "bot", kind: "stand", stage: "stand-target", power: 10000, turnOwner: "bot", battleId: "stand-trigger-battle" };
+  const checkedStandTrigger = { uid: "stand-trigger-card", cardId: "cfa-5", triggerType: "stand", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
+  claim.state.players.bot.triggerZone = [checkedStandTrigger];
+  claim.state.pendingCheckCard = { side: "bot", uid: checkedStandTrigger.uid, checkKind: "drive", battleId: "stand-trigger-battle" };
+  claim.state.pendingTrigger = { side: "bot", uid: checkedStandTrigger.uid, checkName: "drive", kind: "stand", stage: "stand-target", power: 10000, turnOwner: "bot", battleId: "stand-trigger-battle" };
   const apply = (id, payload) => Reducer.applyGameAction(claim.state, {
     actorAuthUid: "auth-guest", actionId: id, expectedStateVersion: claim.state.stateVersion,
     payload: { type: "game-action", ...payload }
@@ -1814,6 +1817,7 @@ test("authoritative End-phase action waits for end-turn AUTO before switching pl
   claim.state.pendingAttack = null; claim.state.pendingAbility = null; claim.state.pendingAbilities = [];
   claim.state.players.bot.vanguard = { uid: "end-turn-source", cardId, ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" };
   claim.state.players.bot.deck.push({ uid: "end-turn-soul", cardId: "soul-card", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" });
+  claim.state.players.bot.deck.push({ uid: "end-turn-soul-spare", cardId: "soul-card", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" });
   claim.payload = { type: "game-action", action: "endTurn" };
   const outcome = Reducer.applyGameAction(claim.state, {
     actorAuthUid: claim.actorAuthUid, actionId: claim.actionId,
@@ -1833,6 +1837,7 @@ test("authoritative End-phase action waits for end-turn AUTO before switching pl
   }, Worker.seatMapping(claim), Engine);
   assert.equal(decision.ok, true, decision.reason);
   assert.equal(claim.state.players.bot.soul.length, 1);
+  assert.equal(claim.state.players.bot.deck.length, 1);
   assert.equal(claim.state.side, "human");
   assert.equal(claim.state.turn, 3);
   assert.ok(decision.events.some(event => event.type === "turn.started"));

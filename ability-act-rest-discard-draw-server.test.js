@@ -23,16 +23,16 @@ function fixture(cardId = IDS[0], side = "human", zone = "rear-guard", { withDis
   const ability = Engine.parseCardAbilitiesCached(row).find(item => item.id === `${cardId}:0`);
   assert.ok(ability, `compiled exact ability ${cardId}:0`);
   const n = ++sequence, owner = side === "human" ? "host-player" : "guest-player", opponent = side === "human" ? "guest-player" : "host-player";
-  const source = card(`source-${n}`, cardId, owner), discarded = card(`discard-${n}`, "cfa-3", owner), drawn = card(`draw-${n}`, "cfa-4", owner);
+  const source = card(`source-${n}`, cardId, owner), discarded = card(`discard-${n}`, "cfa-3", owner), drawn = card(`draw-${n}`, "cfa-4", owner), remaining = card(`remaining-${n}`, "cfa-3", owner);
   const player = id => ({ playerId: id, vanguard: null, rear: Array(5).fill(null), hand: [], deck: [], soul: [], drop: [], damage: [], bind: [], orders: [], guardCircle: [], triggerZone: [], gDeck: [], gZone: [] });
   const players = { human: player("host-player"), bot: player("guest-player") }, own = players[side], other = players[side === "human" ? "bot" : "human"];
   if (zone === "vanguard") own.vanguard = source;
   else { source.circle = "rear-left"; own.rear[0] = source; }
   if (withDiscard) own.hand.push(discarded);
-  if (withDraw) own.deck.push(drawn);
+  if (withDraw) own.deck.push(remaining, drawn);
   const state = { matchId: "act-rest-discard-draw", stateVersion: 1, eventSequence: 0, processedActionIds: [], turn: 2, side, phase: 4,
     pendingAbility: null, pendingAbilities: [], pendingTrigger: null, pendingAttack: null, players };
-  return { row, ability, source, discarded, drawn, own, other, side, state };
+  return { row, ability, source, discarded, drawn, remaining, own, other, side, state };
 }
 function activate(f, auth = f.side === "human" ? seats.hostAuthUid : seats.guestAuthUid, discardIds = [f.discarded.uid]) {
   return Reducer.applyManualAbilityActivation(f.state, { actorAuthUid: auth, actionId: `act-rest-draw-${f.source.uid}-${f.state.stateVersion}`,
@@ -60,6 +60,7 @@ test("the controller can activate the ability on either seat from VC or RC, payi
     assert.equal(result.ok, true, `${id}/${side}/${zone}: ${result.reason}`);
     assert.equal(f.source.rested, true);
     assert.deepEqual(f.own.hand, [f.drawn]);
+    assert.deepEqual(f.own.deck, [f.remaining]);
     assert.deepEqual(f.own.drop, [f.discarded]);
     assert.equal(f.other.hand.length, 0);
     assert.deepEqual(result.events.map(event => event.type), ["card.discarded", "card.drawn"]);

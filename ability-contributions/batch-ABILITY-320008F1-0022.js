@@ -1,119 +1,166 @@
 "use strict";
 
-// Audit-only contribution for batch 0022. No new ability is compiled here:
-// the catalog is a local Cardfight Area snapshot and this batch has no official
-// Bushiroad card references attached to its entries. Existing compiled
-// definitions are reported separately from text that still needs review.
+// Batch 0022 review. Exact Jakumetsu Arcs AUTOs and one Set Order-count AUTO
+// use strict source events and validated instance movement. Other unsupported siblings remain explicit.
 const Engine = require("../ability-engine.js");
 Engine.registerAbilityDefinitions(require("../ability-definitions.js"));
+const Reducer = require("../ability-server-reducer.js");
 const { loadCatalog } = require("../scripts/audit-ability-catalog.js");
-const fs = require("node:fs");
-const path = require("node:path");
 
+const batchId = "ABILITY-320008F1-0022";
+const workerOwner = "agent-batch-0022";
 const abilityIds = Object.freeze([
-  "cfa-10577:0", "cfa-10578:0", "cfa-10580:0", "cfa-10580:1", "cfa-10581:0",
-  "cfa-10581:1", "cfa-10582:0", "cfa-10582:1", "cfa-10583:0", "cfa-10584:0",
-  "cfa-10584:1", "cfa-10585:0", "cfa-10585:1", "cfa-10586:0", "cfa-10587:0",
-  "cfa-10589:0", "cfa-1058:0", "cfa-1058:1", "cfa-10590:0", "cfa-10590:1",
-  "cfa-10591:0", "cfa-10591:1", "cfa-10592:0", "cfa-10593:0", "cfa-10594:0",
-  "cfa-10595:0", "cfa-10597:0", "cfa-10599:0", "cfa-10599:1", "cfa-1059:0",
-  "cfa-1059:1", "cfa-10600:0", "cfa-10600:1", "cfa-10601:0", "cfa-10601:1",
-  "cfa-10601:2", "cfa-1060:0", "cfa-1060:1", "cfa-1060:2", "cfa-106:0"
+  "cfa-10577:0", "cfa-10578:0", "cfa-10580:0", "cfa-10580:1", "cfa-10581:0", "cfa-10581:1",
+  "cfa-10582:0", "cfa-10582:1", "cfa-10583:0", "cfa-10584:0", "cfa-10584:1", "cfa-10585:0",
+  "cfa-10585:1", "cfa-10586:0", "cfa-10587:0", "cfa-10589:0", "cfa-1058:0", "cfa-1058:1",
+  "cfa-10590:0", "cfa-10590:1", "cfa-10591:0", "cfa-10591:1", "cfa-10592:0", "cfa-10593:0",
+  "cfa-10594:0", "cfa-10595:0", "cfa-10597:0", "cfa-10599:0", "cfa-10599:1", "cfa-1059:0",
+  "cfa-1059:1", "cfa-10600:0", "cfa-10600:1", "cfa-10601:0", "cfa-10601:1", "cfa-10601:2",
+  "cfa-1060:0", "cfa-1060:1", "cfa-1060:2", "cfa-106:0"
 ]);
 
 const alreadySupportedAbilityIds = Object.freeze(["cfa-1058:1", "cfa-1059:0", "cfa-106:0"]);
-const proposedDefinitions = Object.freeze([]);
-const officialReferences = Object.freeze({});
-const verifiedOfficialAbilities = Object.freeze([]);
+const implementedAbilityIds = Object.freeze(["cfa-10584:0", "cfa-10584:1", "cfa-10586:0", "cfa-10593:0"]);
+const definitionText = "AUTO: When this unit is placed on RC from bind zone, this unit gets power +5000 until end of turn.";
+const cardsById = new Map(loadCatalog().map(card => [String(card.id), card]));
+const dubthachCard = cardsById.get("cfa-10593");
+const dubthachDefinition = dubthachCard && Engine.parseCardAbilitiesCached(dubthachCard).find(ability => ability.id === "cfa-10593:0")?.definition;
+if (!dubthachDefinition || dubthachDefinition.source?.patternId !== "auto-rc-deck-placement-by-vanguard-ability-boost-power-turn-v1") {
+  throw new Error("Dubthach's exact deck-placement AUTO did not compile through the reviewed Vanguard ability pattern.");
+}
+const proposedDefinitions = Object.freeze([Object.freeze({
+  id: "cfa-10584:0",
+  cardId: "cfa-10584",
+  kind: "AUTO",
+  printedText: definitionText,
+  requiredLocation: ["rear-guard"],
+  trigger: { status: "recognized-trigger", eventType: "card.placed", subject: "source", circles: ["rear-guard"], sourceLocation: "bind" },
+  conditions: [],
+  costs: [],
+  optional: false,
+  conditionsReviewed: true,
+  costsReviewed: true,
+  choicesReviewed: true,
+  source: {
+      dataset: "Bushiroad official card list",
+      snapshotDate: "2026-11-03",
+      officialCardNumber: "D-BT08/017EN",
+      officialReference: "https://en.cf-vanguard.com/cardlist/?cardno=D-BT08%2F017EN",
+    patternId: "auto-bind-zone-placement-source-power-turn-v1",
+      review: "Official card-list text confirmed. Only this exact card instance placed from the Bind Zone onto a Rear-Guard Circle triggers; its controller gives it +5000 until end of turn. The second, attack-triggered AUTO on the card is outside this definition and remains separately audited."
+  },
+  effects: [{ op: "modify-power", target: "source", amount: 5000, duration: "turn" }]
+}), Object.freeze({
+  id: "cfa-10584:1",
+  cardId: "cfa-10584",
+  kind: "AUTO",
+  printedText: "AUTO [RC]: When this unit attacks, COST [Soul Blast 1], choose a card from your opponent’s bind zone, and put it on the bottom of their deck.",
+  requiredLocation: ["rear-guard"],
+  trigger: { status: "recognized-trigger", eventType: "unit.attacked", subject: "source", circles: [] },
+  conditions: [],
+  costs: [{ type: "soul-blast", count: 1 }],
+  optional: true,
+  conditionsReviewed: true,
+  costsReviewed: true,
+  choicesReviewed: true,
+  source: {
+    dataset: "Bushiroad official card list",
+    snapshotDate: "2026-11-04",
+    officialCardNumber: "D-BT08/017EN",
+    officialReference: "https://en.cf-vanguard.com/cardlist/?cardno=D-BT08%2F017EN",
+    patternId: "auto-rc-own-attack-opponent-bind-zone-to-own-deck-bottom-v1",
+    review: "Official card-list text confirmed. This exact Rear-Guard's own unit.attacked event creates the AUTO. Its controller may pay Soul Blast 1; on payment, they choose a card physically in the opponent's Bind Zone and put that exact instance on the bottom of that zone controller's Deck. No prompt is offered if the cost or a legal Bind Zone target is unavailable."
+  },
+  effects: [{ op: "put-target-to-zone-controller-deck-bottom", target: "chosen", destination: "target-zone-controller-deck-bottom", targetFilter: { controller: "opponent", zone: "bind" } }]
+}), Object.freeze({
+  id: "cfa-10586:0",
+  cardId: "cfa-10586",
+  kind: "AUTO",
+  printedText: "AUTO: When this unit is placed on RC, if your order zone has two or more set orders, you may Soul Charge 1.",
+  requiredLocation: ["rear-guard"],
+  trigger: { status: "recognized-trigger", eventType: "card.placed", subject: "source", circles: ["rear-guard"] },
+  conditions: [{ type: "controller-set-order-count-at-least", count: 2 }],
+  costs: [],
+  optional: true,
+  canDecline: true,
+  conditionsReviewed: true,
+  costsReviewed: true,
+  choicesReviewed: true,
+  source: {
+    dataset: "Bushiroad official card list",
+    snapshotDate: "2026-11-04",
+    officialCardNumber: "D-BT08/042EN",
+    officialReference: "https://en.cf-vanguard.com/cardlist/?cardno=D-BT08%2F042EN",
+    rulesReference: "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+    patternId: "auto-rc-placement-set-order-count-optional-soul-charge-v1",
+    review: "Official card-list wording confirmed. The AUTO is eligible only when this exact instance is placed from a non-circle zone onto an RC and its controller's own Order Zone currently contains at least two Set Order cards. The controller may decline; accepting resolves Soul Charge 1. Ordinary orders and the opponent's Set Orders do not count."
+  },
+  effects: [{ op: "soul-charge", count: 1 }]
+}), Object.freeze(dubthachDefinition)]);
 
 const blockerById = Object.freeze({
-  "cfa-10577:0": "The trigger requires this exact card to move from RC into Soul, checks four face-down damage cards, then binds that same card as a cost before Counter Charging. The current handlers do not validate the source movement, damage condition, and bind cost as one atomic resolution.",
-  "cfa-10578:0": "This hand-to-RC placement AUTO pays Counter Blast, searches the top five, filters out names already in Soul, and moves the selected card into Soul. The filtered search-to-Soul transaction and cost validation are not available as a trusted combined handler.",
-  "cfa-10580:0": "The VC placement AUTO searches the top five for up to two Stealth normal units, reveals the chosen cards, puts one into Soul, binds the remainder, and shuffles. The engine does not yet validate this multi-card choice and split-zone resolution in order.",
-  "cfa-10580:1": "This manual ACT is usable from Bind Zone only, checks the current Vanguard's grade and Stealth name, pays Soul Blast 1, and calls this exact bound instance. Bind Zone action timing and atomic source-zone/cost/call validation are not supported together.",
-  "cfa-10581:0": "The VC placement AUTO shares the top-five Stealth selection, but puts one chosen card into Soul and calls the rest to RC. The ordered multi-target selection, reveal, Soul movement, filtered calls, and shuffle have no trusted combined effect program.",
-  "cfa-10581:1": "This manual ACT is usable from Bind Zone, requires a grade 2 or greater Stealth Vanguard, pays Soul Blast 1, and calls this exact instance. Bind Zone activation timing and source/cost/call validation are not implemented together.",
-  "cfa-10582:0": "The once-per-turn ACT binds two Stealth cards from Soul, selects two opposing RCs, binds every card there, and schedules those cards to return to the opponent's hand at end of turn. Multi-source costs, two-target selection, mass movement, and delayed return are unsupported as a single legal sequence.",
-  "cfa-10582:1": "This VC attack AUTO pays Counter Blast and moves two of its controller's rear-guards to Soul, calls a Stealth card from Bind Zone, then conditionally powers the called instance. The exact attack event, multi-card cost, filtered call, and conditional target effect are not validated together.",
-  "cfa-10583:0": "After hand-to-RC placement it pays Counter Blast and gives the opponent a choice to bottom-deck a card from their Bind Zone; only if they decline does it permit a filtered Stealth call from the controller's Bind Zone. Opponent-private choice and dependent follow-up resolution are not supported as this exact effect.",
-  "cfa-10584:0": "This AUTO requires this exact card to enter RC from Bind Zone, then grants it +5000 until turn end. Existing placement triggers do not authorize this exact Bind-to-RC origin and matching source instance for the modifier.",
-  "cfa-10584:1": "This source-specific RC attack AUTO pays Soul Blast 1, chooses an opponent's bound card, and puts that card on the bottom of their deck. Opponent Bind Zone target selection and bottom-deck movement are not a trusted combined handler.",
-  "cfa-10585:0": "The placement AUTO must be caused by a card ability, checks whether the Vanguard is Tamayura or Shojodoji, pays Soul Blast 1, and draws. The engine does not preserve and validate the exact placement cause alongside the archetype condition and cost.",
-  "cfa-10585:1": "This CONT checks whether at least two cards moved from RC into Soul during the current turn, then grants this unit +10000. The engine does not currently maintain this exact turn-scoped movement count for continuous evaluation.",
-  "cfa-10586:0": "The placement AUTO checks for at least two Set Orders in Order Zone and optionally Soul Charges 1. The dynamic Order Zone count and optional Soul Charge prompt are not represented by a reviewed definition for this text.",
-  "cfa-10587:0": "On its own RC attack it pays Soul Blast 1 and asks the opponent to bind three cards from Drop; if fewer than three are bound, this source gains power for the battle. The opponent's private multi-card choice and dependent count result are not resolved by a trusted handler.",
-  "cfa-10589:0": "This RC placement AUTO discards a hand card, counts distinct Research names in Order Zone to determine a variable top-deck look, selects a card, and shuffles. Dynamic look count, discard cost, and search resolution are not modeled as this exact sequence.",
-  "cfa-1058:0": "The legacy Limit Break ability opens at the beginning of the guard step when this Vanguard is attacked, may pay Counter Blast and discard a same-name card, then selects that attacking unit for -20000 this battle. The guard-step response window and chosen attacker modifier are not a trusted effect path.",
-  "cfa-10590:0": "This CONT combines an Order Zone threshold, the Eva Glitter condition, power while on RC, and shield while on GC (including the opponent's turn). The required conjunction and location-specific power/shield evaluation are not compiled for this exact text.",
-  "cfa-10590:1": "This CONT changes the attack's target set only if this unit was called by an ability this turn and three Research cards are in Order Zone. The game does not model this continuous multi-unit attack rule or preserve the required call-cause history.",
-  "cfa-10591:0": "The RC placement AUTO pays Soul Blast 1, searches the top seven for a Set Order, reveals and adds it to hand, then shuffles. This exact cost plus typed top-deck search transaction is not supported by a trusted definition.",
-  "cfa-10591:1": "Once per turn, this rear-guard responds only when another unit is placed on RC by a card ability, then gains Boost until turn end. Ability-caused placement identity and a temporary keyword grant are not handled together for this trigger.",
-  "cfa-10592:0": "At battle close, this exact unit must have attacked while boosted and the controller must have three or more face-down damage cards; it then moves itself to Soul and Counter Charges. The per-battle boost association, damage condition, and self-movement cost are not validated together.",
-  "cfa-10593:0": "This AUTO requires this exact unit to be placed on RC from Deck by a Vanguard ability, then grants Boost and +5000 until end of turn. The engine does not preserve the placement origin and causing ability identity for both effects.",
-  "cfa-10594:0": "This source's attack power is based on the number of pairs of Research cards in Order Zone at battle timing. The exact dynamic scaling formula and battle-duration modifier are not compiled for this ability.",
-  "cfa-10595:0": "This AUTO triggers only when a Research is put into Order Zone, then retires this exact source as a cost and Counter Charges. Research identity, self-retirement cost authorization, and the resulting resource effect lack a reviewed combined handler.",
-  "cfa-10597:0": "The RC placement AUTO requires a single-clan Vanguard, pays Soul Blast 1 and a hand discard, then selects a Drop card whose only clan matches the Vanguard and returns it to hand. The clan predicate and two-part cost/filtered target transaction are unsupported together.",
-  "cfa-10599:0": "The ride-upon AUTO requires a Genesis-only rider, looks at the top five, chooses up to two cards into Soul, and shuffles. Rider-clan validation and filtered multi-card ride-trigger resolution are not a trusted combined effect.",
-  "cfa-10599:1": "This card must move from Soul to Drop, check for a Minerva Vanguard, call itself to a back-row RC, and optionally Soul Charge after the call. The movement-cause condition, self-call, and dependent optional effect are not supported together.",
-  "cfa-1059:1": "The VC ACT pays Counter Blast, chooses a grade 2+ Murakumo rear-guard, searches and calls its same-name copy, then schedules that exact called copy to bottom-deck at turn end. Filtered copy selection and delayed instance-specific movement are not implemented together.",
-  "cfa-10600:0": "The ride-upon AUTO requires a Genesis-only rider, looks at the top five, selects up to two cards into Soul, and shuffles. The engine lacks a trusted definition covering the rider-clan condition and multi-card resolution.",
-  "cfa-10600:1": "This AUTO requires this card to move from Soul to Drop during its controller's turn, checks for a Minerva Vanguard, pays Counter Blast 1, and calls this instance to RC. The zone-transition cause, timing, and paid self-call are not validated together.",
-  "cfa-10601:0": "This VC CONT checks controller-turn timing and for a grade 3 Regalia in Soul, then grants +5000 to every front-row unit. The Soul filter and multi-target continuous power application are not supported as this exact definition.",
-  "cfa-10601:1": "This once-per-turn VC ACT pays Soul Blast 1, privately inspects the top card, then chooses to leave it on top or move it into Soul. The private reveal/choice and mutually exclusive destination are not represented by a trusted effect handler.",
-  "cfa-10601:2": "After this source's attack ends, once per turn and only against a grade 3+ Vanguard, it pays Counter Blast 1, Soul Blasts 3, and discards a Genesis-only card before standing and losing one Drive until turn end. Battle-close timing, filtered discard cost, and atomic restand/Drive change are not supported together.",
-  "cfa-1060:0": "This AUTO triggers only when this exact card enters RC from Deck, then may pay Counter Blast 1 to retire an opposing grade 2+ front-row rear-guard. The Deck-origin event, optional payment prompt, and validated opposing target are not compiled together.",
-  "cfa-1060:1": "This AUTO retires this exact rear-guard at the end of the battle in which it was attacked. The engine does not yet resolve this source-specific attacked-battle close timing as a supported effect.",
-  "cfa-1060:2": "This CONT changes the card's clan identity to include Gold Paladin. Dynamic clan identity affects other rules and card filters; no reviewed identity-modifier definition supports it."
+  "cfa-10577:0": "This AUTO requires this source to move from RC into Soul, at least four face-down damage cards, then binds that same Soul instance and Counter Charges. The event pipeline does not expose a trusted bind-from-Soul action with the source's prior RC location and face-down damage count as one exact trigger resolution.",
+  "cfa-10578:0": "This hand-to-RC AUTO pays Counter Blast 1 and searches a variable top-five set for a card whose name differs from every Soul card, then moves that card to Soul and shuffles. The shared search handler does not support the Soul-name exclusion plus Deck-to-Soul destination as this exact sequence.",
+  "cfa-10580:0": "This Vanguard placement AUTO looks at five cards, filters Normal Units with Stealth in their names, reveals up to two, puts one chosen card into Soul, binds the other revealed card, and shuffles. The resolver lacks this ordered multi-zone selection and split destination program.",
+  "cfa-10580:1": "This Bind Zone ACT requires a grade 1+ Stealth Vanguard, Soul Blast 1, then calls this exact Bind Zone instance to a legal RC. The available manual activation flow does not provide a trusted Bind Zone source activation and call for this ability.",
+  "cfa-10581:0": "This Vanguard placement AUTO looks at five cards, filters Normal Units with Stealth in their names, reveals up to two, puts one chosen card into Soul, calls the remaining revealed cards to RC, and shuffles. The resolver does not support the exact split between one Soul card and the remaining calls.",
+  "cfa-10581:1": "This Bind Zone ACT requires a grade 2+ Stealth Vanguard, Soul Blast 1, then calls this exact Bind Zone instance to a legal RC. The current manual ability source-zone and call validation do not cover it.",
+  "cfa-10582:0": "This once-per-turn Vanguard ACT binds two named Soul cards as cost, selects two opponent circles and binds every card there, then returns those exact cards to the opponent's hand at turn end. It needs circle selection, multiple-card binding, and delayed opponent-owned returns not implemented as one trusted effect.",
+  "cfa-10582:1": "This Vanguard attack AUTO requires an attack on Vanguard, Counter Blast 1, and moving two friendly Rear-Guards into Soul as cost, then calls a named card from Bind and conditionally grants it power. The source-cost move, Bind search/call, and exact Vanguard target condition are unsupported together.",
+  "cfa-10583:0": "This hand-placement AUTO pays Counter Blast 1 and lets the opponent choose a card in their Bind Zone to put on Deck bottom; if that does not happen, it calls a grade/name-filtered friendly Bind card. Opponent-owned target selection and the conditional fallback call are not supported together.",
+  "cfa-10585:0": "This placement AUTO only triggers when another card ability placed this source on RC, checks for a Tamayura or Shojodoji Vanguard, pays Soul Blast 1, and draws. The structured placement event does not retain a trusted causal ability-source identity for this exact restriction.",
+  "cfa-10585:1": "This RC CONT depends on a turn-history count of cards moved from RC to Soul being at least two, then grants this source +10000. The authoritative state does not track and continuously evaluate that exact movement history.",
+  "cfa-10587:0": "This attack AUTO pays Soul Blast 1, has the opponent choose up to three Drop cards to bind, and grants +10000 only if fewer than three were bound. The opponent-owned multi-card choice and count-dependent branch are not represented in a trusted effect program.",
+  "cfa-10589:0": "This RC placement AUTO discards a card, looks at a number of cards equal to distinct Research cards in the Order Zone, selects one into hand, and shuffles. Dynamic look count, distinct-name counting, and the discard/search sequence are not supported together.",
+  "cfa-1058:0": "This Limit Break AUTO activates at the guard step when this Vanguard is attacked, optionally pays Counter Blast 1 and discards a same-name hand card, then selects an attacker for -20000 through battle. The exact guard-step timing, named discard cost, and opposing attacker modifier are not supported by a trusted handler.",
+  "cfa-10590:0": "This RC/GC CONT grants both +5000 power and +5000 shield, including on the opponent's turn, when the Order Zone has at least three Set Orders. The continuous evaluator does not support this exact set-order threshold and paired power/shield scope.",
+  "cfa-10590:1": "This CONT changes attack legality so the unit battles every opposing front-row unit, but only if it was placed by an ability this turn and three Research cards are in the Order Zone. The battle target-selection rules do not implement this continuous multi-target attack condition.",
+  "cfa-10591:0": "This RC placement AUTO pays Soul Blast 1 and privately searches the top seven for up to one Set Order to reveal and add to hand, then shuffles. The top-search operation is guarded to exact reviewed ability families and this card's filter is not admitted.",
+  "cfa-10591:1": "This once-per-turn AUTO reacts when another unit is placed on RC by a card ability and grants this source Boost until turn end. The event lacks validated ability-causation data for the placement condition and no reviewed temporary keyword grant matches this ability.",
+  "cfa-10592:0": "This end-of-battle AUTO requires this source to attack while boosted and at least three face-down damage cards, then moves the source to Soul and Counter Charges. The delayed exact boosted battle, damage-state condition, source cost movement, and resource effect are unsupported together.",
+  "cfa-10594:0": "This RC own-attack AUTO grants +5000 for every two Research cards in the Order Zone until battle end. The source-power-per-count operation is restricted to reviewed count families and has no validated distinct Research-card threshold for this ability.",
+  "cfa-10595:0": "This AUTO triggers when a Research card enters the Order Zone, retires this source as cost, and Counter Charges. The event pipeline does not identify Research card type on Order Zone entry in a trusted trigger, and no exact source-retire cost definition exists.",
+  "cfa-10597:0": "This RC placement AUTO checks the Vanguard has exactly one clan, pays Soul Blast 1 and discards a card, then returns a Drop card with only that clan to hand. The effect resolver cannot validate this combined clan-identity filter and Drop-to-hand target.",
+  "cfa-10599:0": "This ride AUTO requires the riding unit to have only Genesis as its clan, then privately looks at five cards and places up to two chosen cards into Soul before shuffling. The rider's exact clan identity and up-to-two top-five Soul selection are not supported together.",
+  "cfa-10599:1": "This AUTO triggers when the source moves from Soul to Drop, checks a Minerva Vanguard, calls this exact source to back-row RC, and optionally Soul Charges if called. The moved-card event and conditional call outcome are not supported as a trusted sequence.",
+  "cfa-1059:1": "This Vanguard ACT pays Counter Blast 1, chooses a grade 2+ Murakumo Rear-Guard, searches and calls a same-name copy, shuffles, and schedules that exact called card to Deck bottom at turn end. The same-name search/call and instance-specific delayed return are not supported together.",
+  "cfa-10600:0": "This ride AUTO requires the rider to have only Genesis as its clan, then privately looks at five cards and places up to two chosen cards into Soul before shuffling. The exact rider clan filter and multi-card selection are not covered by an existing trusted definition.",
+  "cfa-10600:1": "This AUTO triggers when a card moves from Soul to Drop during the controller's turn, checks for Minerva, pays Counter Blast 1, and calls the exact source to RC. Current movement events do not retain enough trusted source-zone and turn timing data for this costed call.",
+  "cfa-10601:0": "This Vanguard CONT grants +5000 to every front-row unit on the controller's turn if Soul contains a Grade 3 Regalia card. The continuous evaluator lacks a matching grade-and-name Soul predicate paired with the row-wide modifier.",
+  "cfa-10601:1": "This once-per-turn Vanguard ACT pays Soul Blast 1, privately looks at the top card, and lets the player choose whether to return it to the top or put it into Soul. The resolver does not expose a private inspect-and-choose-top-or-Soul effect.",
+  "cfa-10601:2": "This once-per-turn Vanguard AUTO resolves after its attack against a Grade 3+ Vanguard, pays Counter Blast 1, Soul Blast 3, and a Genesis-only discard, then stands this Vanguard and reduces its Drive through turn end. Exact close-step timing, clan-filtered discard, and drive modifier are not handled together.",
+  "cfa-1060:0": "This Deck-placement AUTO optionally pays Counter Blast 1, then retires an opponent front-row Rear-Guard of grade 2 or greater. The current trusted placement-retirement definition does not match this card's Deck origin, optional cost, and exact target filter.",
+  "cfa-1060:1": "This AUTO triggers at the end of a battle in which this exact Rear-Guard was attacked, then retires it. The event system does not expose a trusted end-of-battle event for the attacked Rear-Guard source instance.",
+  "cfa-1060:2": "This CONT treats the card as also belonging to Gold Paladin. The game does not model a reviewed continuous clan-identity alias for this card instance."
 });
 
-const catalog = loadCatalog();
-const byCard = new Map(catalog.map(card => [String(card.id), card]));
-const assignment = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "ability-work-assignments.json"), "utf8"))
-  .completedAssignments.find(batch => batch.batchId === "ABILITY-320008F1-0022" && batch.auditOnly === true);
-if (!assignment) throw new Error("Completed audit ABILITY-320008F1-0022 is missing from the assignment history.");
-if (JSON.stringify([...assignment.abilityIds].sort()) !== JSON.stringify([...abilityIds].sort())) {
-  throw new Error("Contribution ability IDs differ from the reserved assignment.");
-}
-
+const newIds = new Set(implementedAbilityIds);
 const supportedSet = new Set(alreadySupportedAbilityIds);
-const unsupportedSiblings = Object.freeze(abilityIds.filter(id => !supportedSet.has(id)).map(abilityId => {
+const unsupportedSiblings = Object.freeze(abilityIds.filter(id => !newIds.has(id) && !supportedSet.has(id)).map(abilityId => {
   const cardId = abilityId.slice(0, abilityId.lastIndexOf(":"));
-  const card = byCard.get(cardId);
+  const card = cardsById.get(cardId);
   const ability = card && Engine.parseCardAbilitiesCached(card).find(item => item.id === abilityId);
-  if (!ability || !blockerById[abilityId]) throw new Error(`Missing exact catalog ability or blocker: ${abilityId}`);
-  return Object.freeze({
-    abilityId,
-    cardName: card.name,
-    kind: ability.kind,
-    catalogPrintedText: ability.printedText,
-    officialPrintedText: null,
-    officialReference: null,
-    blocker: blockerById[abilityId]
-  });
+  if (!ability || ability.definition || !blockerById[abilityId]) throw new Error(`Expected exact unsupported ability and blocker: ${abilityId}`);
+  return Object.freeze({ abilityId, cardName: card.name, kind: ability.kind, catalogPrintedText: ability.printedText,
+    officialPrintedText: null, officialReference: null, blocker: blockerById[abilityId] });
 }));
 
-const supportedDefinitions = Object.freeze(alreadySupportedAbilityIds.map(abilityId => {
+const supportedDefinitions = Object.freeze([...alreadySupportedAbilityIds, ...implementedAbilityIds].map(abilityId => {
   const cardId = abilityId.slice(0, abilityId.lastIndexOf(":"));
-  const card = byCard.get(cardId);
-  const ability = card && Engine.parseCardAbilitiesCached(card).find(item => item.id === abilityId);
-  if (!ability?.definition) throw new Error(`Expected existing production definition missing: ${abilityId}`);
-  return Object.freeze({
-    abilityId,
-    cardName: card.name,
-    kind: ability.kind,
-    printedText: ability.printedText,
-    definitionSource: ability.definition.source?.patternId || "compiled keyword definition",
-    officialPrintedText: null,
-    officialReference: null
-  });
+  const card = cardsById.get(cardId);
+  const isNew = newIds.has(abilityId);
+  const base = Engine.parseCardAbilitiesCached(card).find(item => item.id === abilityId);
+  const definition = isNew ? proposedDefinitions.find(item => item.id === abilityId) : null;
+  const ability = isNew ? { ...base, definition, trigger: definition.trigger, conditions: definition.conditions, costs: definition.costs,
+    requiredLocation: definition.requiredLocation, canDecline: definition.optional === true, conditionStatus: "modeled",
+    costStatus: definition.costs?.length ? "supported-cost" : "no-cost", choiceStatus: "modeled", effects: definition.effects } : base;
+  if (!ability?.definition || (isNew ? !Reducer.supportsServerAbilityEffects(ability) : !Reducer.hasTrustedServerAbilityDefinition(ability, Engine)) ||
+      (ability.kind === "AUTO" && !Reducer.supportsServerAbilityEffects(ability))) throw new Error(`Expected server-supported exact ability: ${abilityId}`);
+  return Object.freeze({ abilityId, cardName: card.name, kind: ability.kind, printedText: ability.printedText,
+    definitionSource: ability.definition.source?.patternId || "compiled definition", serverHandlerSupported: true,
+    handlerSurface: ability.kind === "CONT" ? "authoritative continuous restriction evaluator" : "authoritative ability resolver",
+    officialPrintedText: null, officialReference: null });
 }));
 
-module.exports = Object.freeze({
-  batchId: "ABILITY-320008F1-0022",
-  abilityIds,
-  alreadySupportedAbilityIds,
-  supportedDefinitions,
-  proposedDefinitions,
-  unsupportedSiblings,
-  verifiedOfficialAbilities
-});
+module.exports = Object.freeze({ batchId, workerOwner, abilityIds, alreadySupportedAbilityIds, implementedAbilityIds,
+  proposedDefinitions, supportedDefinitions, unsupportedSiblings, verifiedOfficialAbilities: Object.freeze([]) });

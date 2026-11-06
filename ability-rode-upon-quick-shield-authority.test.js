@@ -22,7 +22,7 @@ function makeState({ side = "bot", opponentGrade = 1, sourceCardId = "cfa-5673",
     bot: makePlayer("guest-player", side === "bot" ? rider : { uid: "opp-vg", cardId: "opp-vg-card", grade: opponentGrade, type: "Unit", unitCard: true, ownerPlayerId: "guest-player", controllerPlayerId: "guest-player" }),
   };
   players[side].soul.push(oldVanguard);
-  players[side].deck.push({ uid: "draw-top", cardId: "normal-card", ownerPlayerId: actorPlayerId, controllerPlayerId: actorPlayerId });
+  players[side].deck.push({ uid: "draw-spare", cardId: "normal-card", ownerPlayerId: actorPlayerId, controllerPlayerId: actorPlayerId }, { uid: "draw-top", cardId: "normal-card", ownerPlayerId: actorPlayerId, controllerPlayerId: actorPlayerId });
   const state = { matchId: "quick-shield-match", stateVersion: 8, processedActionIds: [], eventSequence: 0, side, phase: 2, turn: 1, players, pendingAttack: null, pendingAbility: null, pendingAbilities: [], pendingTrigger: null, pendingTurnEnd: null };
   const rideEvent = Engine.createGameEvent(state, {
     eventId: "ride-event-1", type: eventType, actingPlayerId: actorPlayerId, turnPlayerId: actorPlayerId,
@@ -100,7 +100,7 @@ test("host and joining player each receive and resolve only their own ridden Van
     const result = answerPending(fixture);
     assert.equal(result.ok, true, result.reason);
     const actor = fixture.state.players[side], opponent = fixture.state.players[side === "human" ? "bot" : "human"];
-    assert.equal(actor.deck.length, 0);
+    assert.equal(actor.deck.length, 1);
     assert.ok(actor.hand.some(card => card.uid === "draw-top"));
     const token = actor.hand.find(card => card.cardId === "token-quick-shield");
     assert.ok(token);

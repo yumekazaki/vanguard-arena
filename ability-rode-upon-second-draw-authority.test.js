@@ -29,6 +29,7 @@ function fixture({ cardId = "cfa-8287", side = "bot", wentSecond = true, eventTy
   const rider = card(cardDefinition("cfa-3"), `${side}-new-rider`, ownerId, { grade: 1 });
   const opponentVanguard = card(cardDefinition("cfa-3"), `${opponentSide}-vanguard`, opponentId, { grade: 3 });
   const owner = { playerId: ownerId, vanguard: rider, rear: [null, null, null, null, null], hand: [], deck: [{ uid: `${side}-draw`, cardId: "normal-card", ownerPlayerId: ownerId, controllerPlayerId: ownerId }], soul: [oldVanguard], drop: [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] };
+  owner.deck.unshift({ uid: `${side}-draw-spare`, cardId: "normal-card", ownerPlayerId: ownerId, controllerPlayerId: ownerId });
   const opponent = { playerId: opponentId, vanguard: opponentVanguard, rear: [null, null, null, null, null], hand: [], deck: [], soul: [], drop: [], damage: [], bind: [], orders: [], guardCircle: [], gDeck: [], gZone: [], triggerZone: [] };
   const players = side === "human" ? { human: owner, bot: opponent } : { human: opponent, bot: owner };
   const state = { matchId: "ride-draw-match", stateVersion: 3, eventSequence: 0, turn: 1, side, firstSide: wentSecond ? opponentSide : side, phase: 2, players, processedEventIds: [], processedAbilityTriggers: [], processedActionIds: [], pendingAbilities: [], pendingAttack: null };
@@ -105,7 +106,7 @@ test("every single-skill ride-draw card triggers only for its controller going s
 
     const first = fixture({ cardId: definition.id, side, wentSecond: false });
     assert.equal(discover(first).queued.length, 0, `${definition.id}/${side}/first`);
-    assert.equal(first.owner.deck.length, 1);
+    assert.equal(first.owner.deck.length, 2);
     assert.equal(first.owner.hand.length, 0);
   }
 });
@@ -118,7 +119,7 @@ test("both host and joining player draw only from their exact prior Vanguard aft
     assert.equal(f.state.pendingAbility.instance.uid, f.oldVanguard.uid);
     const result = resolve(f);
     assert.equal(result.ok, true, result.reason);
-    assert.equal(f.owner.deck.length, 0);
+    assert.equal(f.owner.deck.length, 1);
     assert.equal(f.owner.hand[0].uid, `${side}-draw`);
     assert.equal(f.owner.hand[0].ownerPlayerId, f.ownerId);
     assert.equal(f.opponent.hand.length, 0);
@@ -149,5 +150,5 @@ test("the condition is rechecked at resolution and the host cannot resolve the j
   const proxy = resolve(joined, seats.hostAuthUid);
   assert.equal(proxy.ok, false);
   assert.equal(proxy.reason, "source-not-controlled");
-  assert.equal(joined.owner.deck.length, 1);
+  assert.equal(joined.owner.deck.length, 2);
 });

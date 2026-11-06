@@ -5,7 +5,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { loadCatalog } = require("./audit-ability-catalog.js");
-const { buildAbilityWorkQueue, writeQueueFile } = require("./build-ability-work-queue.js");
+const { buildAbilityWorkQueue, scanContributionAbilityReservations, writeQueueFile } = require("./build-ability-work-queue.js");
 const { readQueueFile } = require("./build-ability-work-registry.js");
 
 test("work queue can be atomically stored compressed and read by the registry builder", () => {
@@ -28,6 +28,22 @@ test("work queue can be atomically stored compressed and read by the registry bu
   }
 });
 
+test("contribution reservation scan reads exact IDs as text without executing worker files", () => {
+  const root = fs.mkdtempSync(path.join(__dirname, ".ability-contribution-scan-test-"));
+  try {
+    const directory = path.join(root, "ability-contributions");
+    fs.mkdirSync(directory);
+    fs.writeFileSync(path.join(directory, "batch-TEST-0001.js"), `throw new Error("contribution files must not execute");\nmodule.exports = ["cfa-7000:0", "cfa-7000:1"];\n`);
+    fs.writeFileSync(path.join(directory, "notes.txt"), `"cfa-7000:2"`);
+    const reservations = scanContributionAbilityReservations(root);
+    assert.deepEqual(reservations.get("cfa-7000:0"), ["ability-contributions/batch-TEST-0001.js"]);
+    assert.deepEqual(reservations.get("cfa-7000:1"), ["ability-contributions/batch-TEST-0001.js"]);
+    assert.equal(reservations.has("cfa-7000:2"), false, "only contribution JavaScript files are scanned");
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("central work queue covers unverified abilities and separates reviewed mechanics from similarity candidates", () => {
   const cards = loadCatalog();
   const result = buildAbilityWorkQueue(cards, {
@@ -44,6 +60,11 @@ test("central work queue covers unverified abilities and separates reviewed mech
   const reviewed = result.items.find(item => item.abilityId === "cfa-5289:0");
   assert.ok(reviewed);
   assert.equal(reviewed.mechanicGroupType, "reviewed-mechanic");
+  const contributed = result.items.find(item => item.abilityId === "cfa-10680:0");
+  assert.ok(contributed?.primaryReviewContributionFiles.includes("ability-contributions/batch-ABILITY-320008F1-0025.js"));
+  assert.ok(contributed.workFlags.includes("missing-regression-evidence"), "a contribution file alone must not supply passing evidence");
+  assert.equal(contributed.evidence, null);
+  assert.equal(result.counts.fullyVerifiedAbilities, 0, "contribution files do not count as verified abilities");
   assert.deepEqual(reviewed.missingServerEffectHandlers, []);
   assert.ok(reviewed.workFlags.includes("full-suite-evidence-stale"));
   assert.ok(reviewed.workFlags.includes("card-level-verification-incomplete"));

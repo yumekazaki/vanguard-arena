@@ -95,14 +95,19 @@ test("server permits a conditional grade-two booster only for the correct contro
   }
 });
 
-test("different conditional grants remain unresolved instead of being treated as Boost", () => {
-  for (const [id, expectedText] of [
-    ["cfa-5264:0", "this unit gets \"CONT [RC]: Resist\""],
-    ["cfa-5349:1", "this unit gets \"ACT [RC] 1/Turn:"]
-  ]) {
-    const card = cards.find(item => item.id === id.split(":")[0]);
-    const ability = Engine.parseCardAbilitiesCached(card).find(item => item.id === id);
-    assert.ok(ability.printedText.includes(expectedText), id);
-    assert.equal(ability.definition, null, `${id} is intentionally unsupported by the Boost compiler`);
-  }
+test("different conditional grants keep their own semantics instead of being treated as Boost", () => {
+  const resistCard = cards.find(item => item.id === "cfa-5264");
+  const resist = Engine.parseCardAbilitiesCached(resistCard).find(item => item.id === "cfa-5264:0");
+  assert.ok(resist.printedText.includes('this unit gets "CONT [RC]: Resist"'));
+  assert.equal(resist.kind, "CONT");
+  assert.deepEqual(resist.definition?.continuousEffects, [{
+    type: "grant-keyword", target: "source", keyword: "resist", duration: "continuous",
+    condition: { op: "controller-vanguard-card-name-contains", name: "Thavas" }
+  }]);
+  assert.equal(Engine.isManuallyActivatable(resist), false);
+
+  const bagwormCard = cards.find(item => item.id === "cfa-5349");
+  const bagworm = Engine.parseCardAbilitiesCached(bagwormCard).find(item => item.id === "cfa-5349:1");
+  assert.ok(bagworm.printedText.includes('this unit gets "ACT [RC] 1/Turn:'));
+  assert.equal(bagworm.definition, null, "the granted Soul Charge/rest ability is still unsupported by the Boost compiler");
 });
