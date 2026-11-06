@@ -1458,7 +1458,7 @@
     const abilityId = String(ability?.id || "");
     if (!cardId || !abilityId || !engine) return false;
     if ((engine.getReviewedAbilityDefinitionsForCard?.(cardId) || []).some(definition => definition?.id === abilityId)) return true;
-    return isExactApatheticUsurperEndTurnSoulChargeAbility(ability) || isExactNamedImaginaryGiftStrideAbility(ability,engine) || isExactLahbartDragontreeMarkerDrawAbility(ability) || isExactPaidOwnVanguardAttackPowerAbility(ability, engine) || isExactOwnAttackHitTopFiveSearchAbility(ability, engine) || isExactRcFromDeckSoulBlastDrawAbility(ability, engine) || isExactSourcePowerPerCountAbility(ability) || isExactRetireRearGuardAttackAbility(ability) || isExactDragontreeGcShieldAbility(ability) || isExactDragontreeGcGrantedRetireAbility(ability) || isExactGlitterPlacementAbility(ability) || isExactOwnBoostSoulChargeAbility(ability) || isExactBoostedClanVanguardHitSoulChargeAbility(ability) || isExactTemporaryGrantedAbility(ability,engine) || isExactRideFromGradeOneQuintupletMemoryAbility(ability) || isExactRcToSoulCounterBlastDrawAbility(ability);
+    return isExactOrderZoneAttackedBindAbility(ability) || isExactApatheticUsurperEndTurnSoulChargeAbility(ability) || isExactNamedImaginaryGiftStrideAbility(ability,engine) || isExactLahbartDragontreeMarkerDrawAbility(ability) || isExactPaidOwnVanguardAttackPowerAbility(ability, engine) || isExactOwnAttackHitTopFiveSearchAbility(ability, engine) || isExactRcFromDeckSoulBlastDrawAbility(ability, engine) || isExactSourcePowerPerCountAbility(ability) || isExactRetireRearGuardAttackAbility(ability) || isExactDragontreeGcShieldAbility(ability) || isExactDragontreeGcGrantedRetireAbility(ability) || isExactGlitterPlacementAbility(ability) || isExactOwnBoostSoulChargeAbility(ability) || isExactBoostedClanVanguardHitSoulChargeAbility(ability) || isExactTemporaryGrantedAbility(ability,engine) || isExactRideFromGradeOneQuintupletMemoryAbility(ability) || isExactRcToSoulCounterBlastDrawAbility(ability);
   }
   function paidOwnVanguardAttackPowerEventMatches(state, ability, source, located, event, actorPlayerId, engine) {
     const attack = state?.pendingAttack, side = located?.side, player = side && state.players?.[side];
@@ -1942,6 +1942,7 @@
   SERVER_EFFECT_OPS.add("search-deck-up-to-one-filtered-to-memory");
   SERVER_EFFECT_OPS.add("search-top-up-to-one-filtered-to-memory");
   SERVER_EFFECT_OPS.add("grant-battle-gc-retire-to-soul");
+  SERVER_EFFECT_OPS.add("move-rearguard-to-guardian-bind-instead");
   SERVER_EFFECT_OPS.add("continuous-power-per-face-up-g-zone-card");
   SERVER_EFFECT_OPS.add("source-power-per-count");
   SERVER_EFFECT_OPS.add("grant-vanguard-break-ride-ability");
@@ -3174,6 +3175,31 @@
     return Boolean(isExactOrderZoneBattlePhaseBackRowBoostAbility(ability)&&source?.uid&&located&&!located.ambiguous&&located.zone==="order"&&located.side===side&&located.controllerPlayerId===controllerPlayerId&&
       player?.playerId===controllerPlayerId&&state.side===side&&Number(state.phase)===5&&player.orders?.some(card=>card?.uid===source.uid)&&source.faceUp!==false&&source.faceDown!==true&&
       event?.eventId&&event.type==="phase.changed"&&event.phase==="battle"&&event.timingWindow==="phase-start"&&event.before?.phase!=="battle"&&event.after?.phase==="battle"&&event.actingPlayerId===controllerPlayerId&&event.turnPlayerId===controllerPlayerId);
+  }
+  const ORDER_ZONE_ATTACK_BIND_CARDS=Object.freeze({"cfa-12754":{cardNumber:"DZ-SS01/025EN"},"cfa-12756":{cardNumber:"DZ-SS01/021EN"},"cfa-12758":{cardNumber:"DZ-SS01/023EN"}});
+  const ORDER_ZONE_ATTACK_BIND_TEXT='AUTO [Order Zone] 1/Turn: When your unit is attacked, choose one of your rear-guards not being attacked, move it to GC, and it gets "[CONT]: When this unit would be retired from GC, bind it instead of retiring." until end of that battle.';
+  function isExactOrderZoneAttackedBindAbility(ability){
+    const definition=ability?.definition,cardId=String(ability?.cardId||""),spec=ORDER_ZONE_ATTACK_BIND_CARDS[cardId],expectedTrigger={status:"recognized-trigger",eventType:"attack.declared",subject:"any",subjectControllerRelation:"source-controller",turnRelation:"opponent",requiredPhase:"battle",requiredTimingWindow:"attack-declared",circles:[]},effect={op:"move-rearguard-to-guardian-bind-instead",target:"chosen",targetFilter:{controller:"source-controller",cardType:"unit",zone:"rear-guard",notBeingAttacked:true},destination:"guardian",duration:"battle",replacement:"bind-instead-of-retiring"};
+    const officialReference=spec?`https://en.cf-vanguard.com/cardlist/?cardno=${encodeURIComponent(spec.cardNumber)}`:null;
+    const triggerMatches=trigger=>trigger?.status===expectedTrigger.status&&trigger?.eventType===expectedTrigger.eventType&&trigger?.subject===expectedTrigger.subject&&trigger?.subjectControllerRelation===expectedTrigger.subjectControllerRelation&&trigger?.turnRelation===expectedTrigger.turnRelation&&trigger?.requiredPhase===expectedTrigger.requiredPhase&&trigger?.requiredTimingWindow===expectedTrigger.requiredTimingWindow&&JSON.stringify(trigger?.circles||[])===JSON.stringify(expectedTrigger.circles);
+    return Boolean(spec&&ability?.id===`${cardId}:0`&&ability.cardId===cardId&&ability.kind==="AUTO"&&definition?.id===ability.id&&definition.cardId===cardId&&definition.kind==="AUTO"&&
+      String(ability.printedText||ability.raw||"").replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/\s+/g," ").trim()===ORDER_ZONE_ATTACK_BIND_TEXT&&
+      String(definition.printedText||"").replace(/[’‘]/g,"'").replace(/[“”]/g,'"').replace(/\s+/g," ").trim()===ORDER_ZONE_ATTACK_BIND_TEXT&&
+      definition.source?.dataset==="Bushiroad official card list"&&definition.source?.officialCardNumber===spec.cardNumber&&definition.source?.officialReference===officialReference&&definition.source?.patternId==="auto-order-zone-attacked-rearguard-to-guardian-bind-v1"&&
+      JSON.stringify(ability.requiredLocation||[])===JSON.stringify(["order"])&&JSON.stringify(definition.requiredLocation)===JSON.stringify(["order"])&&triggerMatches(ability.trigger)&&triggerMatches(definition.trigger)&&
+      !(ability.conditions||[]).length&&!(ability.costs||[]).length&&ability.once===true&&ability.usageRestriction?.type==="once-per-turn"&&ability.usageRestriction.scope==="ability-instance"&&ability.usageRestriction.reset==="turn"&&ability.canDecline!==true&&
+      definition.once===true&&definition.consumeUsageOnTrigger===true&&definition.usageRestriction?.type==="once-per-turn"&&definition.usageRestriction.scope==="ability-instance"&&definition.usageRestriction.reset==="turn"&&definition.conditionsReviewed===true&&definition.costsReviewed===true&&definition.choicesReviewed===true&&definition.optional===false&&
+      JSON.stringify(definition.conditions)===JSON.stringify([])&&JSON.stringify(definition.costs)===JSON.stringify([])&&JSON.stringify(definition.effects)===JSON.stringify([effect]));
+  }
+  function orderZoneAttackedBindEventMatches(state,ability,source,located,event,controllerPlayerId,side,engine){
+    const attack=state?.pendingAttack,player=state?.players?.[side],attacker=attack&&engine?.locateCardInstance?.(state,attack.attackerUid),target=attack&&engine?.locateCardInstance?.(state,attack.targetUid);
+    return Boolean(isExactOrderZoneAttackedBindAbility(ability)&&source?.uid&&located&&!located.ambiguous&&located.zone==="order"&&located.side===side&&located.controllerPlayerId===controllerPlayerId&&
+      player?.playerId===controllerPlayerId&&player.orders?.filter(card=>card?.uid===source.uid).length===1&&source.faceUp!==false&&source.faceDown!==true&&
+      attack?.battleId&&attack.defenderSide===side&&attack.attackerSide!==side&&attack.attackerPlayerId===state.players?.[attack.attackerSide]?.playerId&&attack.targetUid&&attack.targetUid!==source.uid&&
+      attacker&&!attacker.ambiguous&&attacker.side===attack.attackerSide&&attacker.controllerPlayerId===attack.attackerPlayerId&&target&&!target.ambiguous&&target.side===side&&target.controllerPlayerId===controllerPlayerId&&
+      state.side===attack.attackerSide&&Number(state.phase)===5&&event?.eventId&&event.type==="attack.declared"&&event.battleId===attack.battleId&&event.phase==="battle"&&event.timingWindow==="attack-declared"&&
+      event.sourceCardInstanceId===attack.attackerUid&&event.sourceControllerPlayerId===attack.attackerPlayerId&&event.actingPlayerId===attack.attackerPlayerId&&event.turnPlayerId===attack.attackerPlayerId&&
+      event.subjectCardInstanceId===attack.targetUid&&event.subjectControllerPlayerId===controllerPlayerId&&event.currentLocation===attack.targetZone&&event.targetLocation===attack.targetZone&&JSON.stringify(event.targetCardInstanceIds||[])===JSON.stringify([attack.targetUid])&&event.attackingUnitInstanceId===attack.attackerUid);
   }
   const ACT_CB_SOURCE_POWER_DURING_TURN = new Map([
     ["cfa-130", [0, "Oasis Girl", 1, 1000]], ["cfa-518", [0, "Iron Tail Dragon", 1, 1000]],
@@ -4593,6 +4619,8 @@
     if (patternId === "auto-rc-own-attack-opponent-grade-no-rearguards-power-battle-v1" && !isExactEnmouOpponentBoardEmptyAttackPowerAbility(ability)) return false;
     if(patternId==="act-gzone-named-vanguard-double-imaginary-gift-stride-v1"&&!isExactNamedImaginaryGiftStrideAbility(ability))return false;
     if (patternId === "auto-order-zone-battle-phase-grant-back-row-boost-v1" && !isExactOrderZoneBattlePhaseBackRowBoostAbility(ability)) return false;
+    if (patternId === "auto-order-zone-attacked-rearguard-to-guardian-bind-v1" && !isExactOrderZoneAttackedBindAbility(ability)) return false;
+    if (effects.some(step=>step?.op==="move-rearguard-to-guardian-bind-instead")&&!isExactOrderZoneAttackedBindAbility(ability))return false;
     if (patternId === "act-gzone-unite-stride-v1" && !isExactGZoneUniteStrideAbility(ability)) return false;
     if ((patternId === "auto-rc-own-attack-power-per-count-battle-v1" || effects.some(step => step?.op === "source-power-per-count")) && !isExactSourcePowerPerCountAbility(ability)) return false;
     if (patternId === "auto-rc-named-vanguard-attack-power-turn-v1" && !isExactRcNamedVanguardAttackPowerAbility(ability)) return false;
@@ -5240,6 +5268,7 @@
       const instances = [...[player?.vanguard, ...(player?.rear || [])].filter(Boolean), ...(bindZoneTarget ? (player?.bind || []) : [])];
       for (const candidate of instances) {
         if (bindZoneTarget && !(player?.bind || []).some(card => card?.uid === candidate?.uid)) continue;
+        if (step?.op === "move-rearguard-to-guardian-bind-instead" && (candidate?.locked === true || candidate?.isLocked === true)) continue;
         if (step?.op === "stand-target" && step.allowAlreadyStanding !== true && candidate?.rested !== true) continue;
         const located = engine.locateCardInstance(state, candidate.uid);
         if (!located || located.ambiguous || (bindZoneTarget ? located.zone !== "bind" : !["vanguard", "rear-guard"].includes(located.zone))) continue;
@@ -5253,6 +5282,7 @@
           targetZoneControllerPlayerId: zoneControllerPlayerId,
           targetOwnerPlayerId: located.ownerPlayerId,
           opponentPlayerId,
+          isBeingAttacked: state.pendingAttack?.targetUid === candidate?.uid,
           targetActiveKeywords: serverGrantedContinuousKeywords(state,located,engine)
         };
         if (engine.matchesTargetFilter(step.targetFilter || {}, context)) return true;
@@ -5438,7 +5468,7 @@
     const step = (pending?.ability?.definition?.effects || []).find(effect =>
       ((effect?.op === "modify-power-target" && ["chosen", "boosted-unit"].includes(effect.target)) ||
       (effect?.op === "grant-temporary-boost" && effect.target === "chosen") ||
-      (["retire-target", "put-target-to-owner-deck-bottom", "put-target-to-zone-controller-deck-bottom", "rest-target", "stand-target", "unlock-target", "protect-target"].includes(effect?.op) && effect.target === "chosen") ||
+      (["retire-target", "put-target-to-owner-deck-bottom", "put-target-to-zone-controller-deck-bottom", "rest-target", "stand-target", "unlock-target", "protect-target", "move-rearguard-to-guardian-bind-instead"].includes(effect?.op) && effect.target === "chosen") ||
       effect?.op === "g-guardian-grade-three-replacement-choice") &&
       engine.evaluateEffectCondition?.(effect.condition, { controllerFaceUpGZoneCount }) !== false);
     if (!step) return { ok: true, context: { target: source, targetInPlay: true } };
@@ -5458,6 +5488,15 @@
       return { ok: true, context: { target: null, targetInPlay: false, noLegalTarget: true, effectChoice: selection?.effectChoice } };
     }
     const event = pending.eventContext?.gameEvent;
+    if (step.op === "move-rearguard-to-guardian-bind-instead") {
+      const locatedSource = engine.locateCardInstance(state, source?.uid);
+      const actorSide = Object.keys(state.players || {}).find(key => state.players[key]?.playerId === actorPlayerId);
+      if (!isExactOrderZoneAttackedBindAbility(pending?.ability) ||
+          !orderZoneAttackedBindEventMatches(state, pending.ability, source, locatedSource, event, actorPlayerId, actorSide, engine)) {
+        return { ok: false, reason: "order-zone-attack-battle-context-invalid" };
+      }
+      if (typeof selection?.targetUid !== "string") return { ok: false, reason: "missing-ability-target" };
+    }
     let targetUid = step.target === "boosted-unit" ? event?.boostedCardInstanceId : selection?.targetUid;
     const selectedChoice = step.op === "g-guardian-grade-three-replacement-choice"
       ? step.choices?.find(choice => choice.id === selection?.effectChoice)
@@ -5488,6 +5527,7 @@
     const located = targetUid ? engine.locateCardInstance(state, targetUid) : null;
     const bindZoneTarget = step.op === "put-target-to-zone-controller-deck-bottom" && isExactJakumetsuArcsOpponentBindDeckAbility(pending?.ability);
     if (!located || located.ambiguous || (bindZoneTarget ? located.zone !== "bind" : !["vanguard", "rear-guard"].includes(located.zone))) return { ok: false, reason: "invalid-ability-target" };
+    if (step.op === "move-rearguard-to-guardian-bind-instead" && (located.instance?.locked === true || located.instance?.isLocked === true)) return { ok: false, reason: "ability-target-is-locked" };
     const opponentPlayerId = Object.values(state.players || {}).find(player => player && player.playerId !== actorPlayerId)?.playerId || null;
     const targetZone = located.circle || located.zone;
     const targetCard = serverCardDefinition(located.instance);
@@ -6174,6 +6214,8 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
           const located = engine.locateCardInstance(state, instance.uid);
           if (!located || located.ambiguous) continue;
           const definitions = [...engine.getReviewedAbilityDefinitionsForCard(instance.cardId)];
+          const compiledOrderAttackBind=engine.compileOrderZoneAttackedBindInsteadDefinition?.(String(instance.cardId),`${instance.cardId}:0`,"AUTO",ORDER_ZONE_ATTACK_BIND_TEXT);
+          if(compiledOrderAttackBind&&!definitions.some(definition=>definition.id===compiledOrderAttackBind.id))definitions.push(compiledOrderAttackBind);
           for (const grant of instance.temporaryGrantedAbilities || []) {
             const granted = engine.createBreakRideGrantedAbility?.(grant, instance, state.turn) || engine.createTemporaryGrantedAbility?.(grant, instance, state.turn);
             if (granted?.definition && !definitions.some(definition => definition.id === granted.id)) definitions.push(granted.definition);
@@ -6201,7 +6243,7 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
             if (!parsed) continue;
             const familyCandidate = { ...parsed, id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsed.requiredLocation, trigger: definition.trigger || parsed.trigger, conditions: definition.conditions || parsed.conditions, costs: definition.costs || parsed.costs, canDecline: definition.optional === true || parsed.canDecline };
             const ability = { ...parsed, canDecline: definition.optional === true || parsed.canDecline,
-              ...(isExactBoostSetOrderCounterChargeAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactHollowPlacementAbility(familyCandidate) || isExactClanPlacementDamageReturnAbility(familyCandidate) || isExactOtherHandDiscardReturnAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactEndTurnAttackDrawAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactAttackedUnboostedProtectAbility(familyCandidate) || isExactPersonaShieldTicketAbility(familyCandidate) || definition.source?.patternId === "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1" ? { canDecline: false } : {}), id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsed.requiredLocation, requiredCircle: definition.requiredCircle || parsed.requiredCircle || [], trigger: definition.trigger ? { ...parsed.trigger, ...definition.trigger, circles: definition.trigger.circles || parsed.trigger?.circles || [] } : parsed.trigger, conditions: definition.conditions || parsed.conditions, conditionStatus: definition.conditions?.length ? "modeled" : definition.conditionsReviewed === true ? "no-explicit-condition-detected" : parsed.conditionStatus, costs: definition.costs || parsed.costs, costAlternatives: definition.costAlternatives || parsed.costAlternatives, costStatus: definition.costAlternatives?.length ? "supported-cost" : definition.costs?.length ? "supported-cost" : definition.costsReviewed === true ? "no-cost" : definition.costs ? "supported-cost" : parsed.costStatus, choiceStatus: definition.choicesReviewed === true ? "modeled" : parsed.choiceStatus, effects: definition.effects, once: definition.once === true || parsed.once, usageRestriction: resolveUsageRestriction(definition, parsed) };
+              ...(isExactBoostSetOrderCounterChargeAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactHollowPlacementAbility(familyCandidate) || isExactClanPlacementDamageReturnAbility(familyCandidate) || isExactOtherHandDiscardReturnAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactEndTurnAttackDrawAbility(familyCandidate) ? { canDecline: true } : {}), ...(isExactAttackedUnboostedProtectAbility(familyCandidate) || isExactPersonaShieldTicketAbility(familyCandidate) || definition.source?.patternId === "auto-gc-dragontree-grant-retire-to-soul-shield-battle-v1" ? { canDecline: false } : {}), id: definition.id, cardId: String(definition.cardId), definition, requiredLocation: definition.requiredLocation || parsed.requiredLocation, requiredCircle: definition.requiredCircle || parsed.requiredCircle || [], trigger: definition.trigger ? { ...parsed.trigger, ...definition.trigger, circles: definition.trigger.circles || parsed.trigger?.circles || [] } : parsed.trigger, conditions: definition.conditions || parsed.conditions, conditionStatus: definition.conditions?.length ? "modeled" : definition.conditionsReviewed === true ? "no-explicit-condition-detected" : parsed.conditionStatus, costs: definition.costs || parsed.costs, costAlternatives: definition.costAlternatives || parsed.costAlternatives, costStatus: definition.costAlternatives?.length ? "supported-cost" : definition.costs?.length ? "supported-cost" : definition.costsReviewed === true ? "no-cost" : definition.costs ? "supported-cost" : parsed.costStatus, choiceStatus: definition.choicesReviewed === true ? "modeled" : parsed.choiceStatus, effects: definition.effects, once: definition.once === true || parsed.once, consumeUsageOnTrigger: definition.consumeUsageOnTrigger === true, usageRestriction: resolveUsageRestriction(definition, parsed) };
             if(definition.source?.patternId==="auto-dragontree-gc-granted-retire-to-soul-v1"){ability.canDecline=true;if(!dragontreeGcGrantedRetireEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,side,engine))continue;}
             if (event.attackHitOverride === true && (ability.trigger?.eventType !== "attack.hit" || ability.trigger?.subject !== "source" ||
                 instance.uid !== attackingInstanceUidFromEvent(event) || located.zone !== "vanguard" || !hasActiveMissedAttackHitCONT(state, instance, located, engine))) continue;
@@ -6400,7 +6442,15 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
                 continue;
               }
             }
-            const suppression=serverAbilitySuppression(state,located,"AUTO",engine);
+                        if(ability.definition?.source?.patternId==="auto-order-zone-attacked-rearguard-to-guardian-bind-v1"){
+              if(!orderZoneAttackedBindEventMatches(state,ability,located.instance,located,event,located.controllerPlayerId,side,engine))continue;
+              const targetEffect=ability.definition.effects[0];
+              if(!hasLegalReviewedTarget(state,located.instance,located.controllerPlayerId,targetEffect,engine)){
+                if(engine.claimAbilityTrigger(state,event.eventId,instance.uid,ability.id))skipped.push({eventId:event.eventId,cardInstanceId:instance.uid,abilityId:ability.id,reason:"no-legal-unattacked-rear-guard"});
+                continue;
+              }
+            }
+const suppression=serverAbilitySuppression(state,located,"AUTO",engine);
             if(suppression.suppressed){if(engine.claimAbilityTrigger(state,event.eventId,instance.uid,ability.id))skipped.push({eventId:event.eventId,cardInstanceId:instance.uid,abilityId:ability.id,reason:"continuous-ability-suppression"});continue;}
             if(isExactEndPhaseRcNamedSearchAbility(ability)&&(!endPhaseRcNamedSearchEventMatches(state,ability,located.instance,located,event,engine)||!endPhaseRcNamedSearchConditionMatches(state,ability,event,located,engine)))continue;
             if(ability.definition?.source?.patternId==="auto-rc-placement-counter-blast-call-named-drop-to-open-rearguard-v1"){
@@ -6920,6 +6970,33 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
   function closePendingBattle(state, actorPlayerId, engine, events) {
     const attack = state.pendingAttack;
     if (!attack || attack.closing) return false;
+    const defender = state.players?.[attack.defenderSide];
+    if (defender && Array.isArray(defender.guardCircle) && Array.isArray(attack.guardCards)) {
+      for (const guard of attack.guardCards) {
+        if (guard?.gcBindInsteadOfRetireBattleId !== attack.battleId) continue;
+        const guardIndex = defender.guardCircle.findIndex(card => card?.uid === guard?.uid);
+        if (guardIndex < 0) continue;
+        const [resolvedGuard] = defender.guardCircle.splice(guardIndex, 1);
+        const replacementSourceUid = resolvedGuard.gcBindInsteadOfRetireAbilitySourceUid || null;
+        defender.bind ||= [];
+        defender.bind.push(resolvedGuard);
+        resolvedGuard.zone = "bind"; resolvedGuard.circle = null; resolvedGuard.position = null;
+        resolvedGuard.faceUp = true; resolvedGuard.rested = false;
+        delete resolvedGuard.gcBindInsteadOfRetireBattleId; delete resolvedGuard.gcBindInsteadOfRetireAbilitySourceUid;
+        events.push(engine.createGameEvent(state, {
+          type: "card.bound", actingPlayerId: actorPlayerId,
+          turnPlayerId: state.players?.[state.side]?.playerId || actorPlayerId,
+          sourceCardInstanceId: resolvedGuard.uid, sourceOwnerPlayerId: resolvedGuard.ownerPlayerId || defender.playerId,
+          sourceControllerPlayerId: resolvedGuard.controllerPlayerId || defender.playerId,
+          cardInstanceId: resolvedGuard.uid, subjectCardInstanceId: resolvedGuard.uid,
+          subjectOwnerPlayerId: resolvedGuard.ownerPlayerId || defender.playerId,
+          subjectControllerPlayerId: resolvedGuard.controllerPlayerId || defender.playerId,
+          previousLocation: "guardian", currentLocation: "bind", circle: "guardian", battleId: attack.battleId,
+          phase: "battle", reason: "battle-bind-instead-of-retire", abilitySourceInstanceId: replacementSourceUid,
+          timingWindow: "guardian-bind-replacement"
+        }));
+      }
+    }
     const participantIds = [attack.attackerUid, attack.boostUid, attack.targetUid].filter(Boolean);
     for (const item of engine.retireChargingUnitsAtBattleEnd?.(state.players, attack.battleId, participantIds) || []) {
       events.push(engine.createGameEvent(state, {
@@ -8849,7 +8926,7 @@ sourceHasNotStoodThisTurn: located.instance.stoodTurnKey !== `${state.turn}:${lo
       harmonyTurnKey: exactHarmonyAbility ? triggerContext.harmonyTurnKey : null,
       cardDefinitionForInstance: serverCardDefinition,
       shuffleDeck: secureShuffle,
-      shieldValueForInstance: card => serverGuardianShieldValue(state, side, card, engine),
+      shieldValueForInstance: (card, location) => serverGuardianShieldValue(state, side, card, engine, location),
       revelationTopUid: selection.revelationTopUid,
       personaShieldTicketUid,
       createPersonaShieldTicket: (uid, ownerPlayerId) => {

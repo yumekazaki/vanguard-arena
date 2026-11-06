@@ -2346,7 +2346,7 @@ test("real The Turbogust Type 1 only prevents a hit when its own RC is attacked 
   const boostedAttack={targetUid:"turbogust-copy",boostUid:"booster",perfectGuard:false};
   assert.equal(resolveEffectProgram(ability.effects,EFFECT_HANDLERS,{...context,match:{pendingAttack:boostedAttack}}).ok,false);
   const app=fs.readFileSync("app.js","utf8");
-  assert.equal((app.match(/boostUid:match\.pendingAttack\.boostUid,battleId:match\.pendingAttack\.battleId,timingWindow:\"attack-declared\"/g)||[]).length,2);
+  assert.equal((app.match(/boostUid:match\.pendingAttack\.boostUid,battleId:match\.pendingAttack\.battleId,phase:\"battle\",timingWindow:\"attack-declared\"/g)||[]).length,2);
 });
 
 test("real Dark Shield, Mac Lir preserves its clan-filtered Sentinel discard and protection target",()=>{

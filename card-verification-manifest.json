@@ -3,14 +3,14 @@
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "latestFullSuite": {
     "status": "passed",
-    "tests": 2869,
-    "passed": 2869,
+    "tests": 2875,
+    "passed": 2875,
     "failed": 0,
-    "durationMilliseconds": 648163.1035,
-    "completedAt": "2026-11-06T06:13:16.140Z",
-    "validationInputDigest": "09831c718a4b6610cc6d632b27fc31a2e1d30edb53b7fd13f49b942231997b3a",
-    "command": "node --test --test-concurrency=4 --test-reporter=tap",
-    "logFile": ".card-pipeline/validation-logs/full-suite-2026-11-06-post-regression-fixes.tap"
+    "durationMilliseconds": 740760.0003,
+    "completedAt": "2026-11-06T07:16:37.745Z",
+    "validationInputDigest": "16149ec2fa367bceec8584024f6d87e9782b600040f7657a333cf13ff5bcc803",
+    "command": "node --test",
+    "logFile": ".card-pipeline/validation-logs/full-suite-2026-11-06-post-order-zone-bind-final.tap"
   },
   "records": [
     {
@@ -84360,8 +84360,95 @@
           "ability-auto-rc-to-soul-counter-blast-draw-server.test.js"
         ]
       }
+    },
+    {
+      "cardId": "cfa-12754",
+      "abilityId": "cfa-12754:0",
+      "status": "fully-verified",
+      "testFiles": [
+        "ability-auto-order-zone-attacked-bind-ABILITY-76D8A0B8-0057.test.js"
+      ],
+      "testCases": [
+        "the three Festival Booster orders compile only to the exact Bushiroad AUTO and shared reviewed effect",
+        "the correct host or joining player receives their Order AUTO when an opponent attacks their unit",
+        "host and joining player resolve their own choice and bind the selected Rear-Guard after battle",
+        "the attacked unit cannot be selected as the Rear-Guard to move",
+        "the once-per-turn Order does not trigger again, and it does not queue without an eligible Rear-Guard",
+        "stale or forged attack metadata cannot trigger the Order effect"
+      ],
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-11-06T07:18:57.074Z",
+        "validationInputDigest": "16149ec2fa367bceec8584024f6d87e9782b600040f7657a333cf13ff5bcc803",
+        "printedAbilityIds": [
+          "cfa-12754:0"
+        ],
+        "testFiles": [
+          "ability-auto-order-zone-attacked-bind-ABILITY-76D8A0B8-0057.test.js"
+        ]
+      }
+    },
+    {
+      "cardId": "cfa-12756",
+      "abilityId": "cfa-12756:0",
+      "status": "fully-verified",
+      "testFiles": [
+        "ability-auto-order-zone-attacked-bind-ABILITY-76D8A0B8-0057.test.js"
+      ],
+      "testCases": [
+        "the three Festival Booster orders compile only to the exact Bushiroad AUTO and shared reviewed effect",
+        "the correct host or joining player receives their Order AUTO when an opponent attacks their unit",
+        "host and joining player resolve their own choice and bind the selected Rear-Guard after battle",
+        "the attacked unit cannot be selected as the Rear-Guard to move",
+        "the once-per-turn Order does not trigger again, and it does not queue without an eligible Rear-Guard",
+        "stale or forged attack metadata cannot trigger the Order effect"
+      ],
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-11-06T07:18:57.074Z",
+        "validationInputDigest": "16149ec2fa367bceec8584024f6d87e9782b600040f7657a333cf13ff5bcc803",
+        "printedAbilityIds": [
+          "cfa-12756:0"
+        ],
+        "testFiles": [
+          "ability-auto-order-zone-attacked-bind-ABILITY-76D8A0B8-0057.test.js"
+        ]
+      }
+    },
+    {
+      "cardId": "cfa-12758",
+      "abilityId": "cfa-12758:0",
+      "status": "fully-verified",
+      "testFiles": [
+        "ability-auto-order-zone-attacked-bind-ABILITY-76D8A0B8-0057.test.js"
+      ],
+      "testCases": [
+        "the three Festival Booster orders compile only to the exact Bushiroad AUTO and shared reviewed effect",
+        "the correct host or joining player receives their Order AUTO when an opponent attacks their unit",
+        "host and joining player resolve their own choice and bind the selected Rear-Guard after battle",
+        "the attacked unit cannot be selected as the Rear-Guard to move",
+        "the once-per-turn Order does not trigger again, and it does not queue without an eligible Rear-Guard",
+        "stale or forged attack metadata cannot trigger the Order effect"
+      ],
+      "fullyVerified": true,
+      "remaining": null,
+      "fullCardVerification": {
+        "method": "automatic-complete-card-gate-v1",
+        "verifiedAt": "2026-11-06T07:18:57.074Z",
+        "validationInputDigest": "16149ec2fa367bceec8584024f6d87e9782b600040f7657a333cf13ff5bcc803",
+        "printedAbilityIds": [
+          "cfa-12758:0"
+        ],
+        "testFiles": [
+          "ability-auto-order-zone-attacked-bind-ABILITY-76D8A0B8-0057.test.js"
+        ]
+      }
     }
   ],
   "generatedAt": "2026-11-04T15:19:40.000Z",
-  "evidenceUpdatedAt": "2026-11-06T06:14:54.751Z"
+  "evidenceUpdatedAt": "2026-11-06T07:18:57.074Z"
 }
