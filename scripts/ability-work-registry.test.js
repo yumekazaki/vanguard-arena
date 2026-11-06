@@ -110,7 +110,9 @@ test("an existing worker assignment takes precedence over a contribution reserva
 });
 
 test("registry generation closes stale-queue contribution IDs without changing their verification status", () => {
-  const root = fs.mkdtempSync(path.join(__dirname, ".ability-registry-contribution-test-"));
+  const fixtureRoot = path.resolve(__dirname, "..", ".card-pipeline");
+  fs.mkdirSync(fixtureRoot, { recursive: true });
+  const root = fs.mkdtempSync(path.join(fixtureRoot, "ability-registry-contribution-test-"));
   try {
     fs.mkdirSync(path.join(root, ".card-pipeline"), { recursive: true });
     fs.mkdirSync(path.join(root, "ability-contributions"), { recursive: true });
