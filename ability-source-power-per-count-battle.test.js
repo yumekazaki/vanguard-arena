@@ -7,7 +7,7 @@ const Reducer = require('./ability-server-reducer.js');
 const { loadCatalog } = require('./scripts/audit-ability-catalog.js');
 
 const PATTERN = 'auto-rc-own-attack-power-per-count-battle-v1';
-const TARGET_IDS = ['cfa-13049', 'cfa-13057', 'cfa-13060', 'cfa-13071', 'cfa-13083', 'cfa-13113'];
+const TARGET_IDS = ['cfa-13049', 'cfa-13057', 'cfa-13060', 'cfa-13071', 'cfa-13083', 'cfa-13113', 'cfa-12058'];
 const catalog = loadCatalog();
 const cards = new Map(catalog.map(card => [String(card.id), card]));
 const family = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card).filter(ability => TARGET_IDS.includes(String(ability.cardId)) && ability.definition?.source?.patternId === PATTERN));
@@ -63,7 +63,7 @@ function seedCount(f, countBy) {
 }
 
 test('the exact real-card family compiles only its own-attack per-count AUTO abilities', () => {
-  assert.equal(family.length, 6);
+  assert.equal(family.length, 7);
   for (const id of TARGET_IDS) {
     const ability = family.find(item => item.cardId === id);
     assert.ok(ability, id);
@@ -76,12 +76,15 @@ test('the exact real-card family compiles only its own-attack per-count AUTO abi
   }
 });
 
-test('the catalog-compiled open-RC count ability is trusted by the authoritative server', () => {
+test('Wastelander Dragon has an explicit authoritative definition with source-review status retained', () => {
   const card = cards.get('cfa-12058');
   assert.ok(card, 'Wastelander Dragon must exist in the audited card snapshot');
   const ability = Engine.parseCardAbilitiesCached(card).find(item => item.id === 'cfa-12058:2');
   assert.ok(ability, 'expected exact Rear-Guard attack ability');
+  assert.equal(ability.printedText, "AUTO [RC]: When this unit attacks, this unit gets power +2000 until end of that battle for each of your opponent’s open RC.");
   assert.equal(ability.definition?.source?.patternId, PATTERN);
+  assert.equal(ability.definition?.source?.officialCardNumber, 'D-BT13/057EN');
+  assert.equal(ability.definition?.source?.officialTextVerified, false);
   assert.equal(Reducer.supportsServerAbilityEffects(ability), true);
   assert.equal(Reducer.hasTrustedServerAbilityDefinition(ability, Engine), true);
 });

@@ -1,10 +1,17 @@
 "use strict";
 
-// Audit-only contribution: every assigned ability depends on equip-gauge
-// state or an effect sequence not represented by the current engine. Do not
-// emit partial definitions or expose these as executable skills.
+// Audit-only contribution: the shared drive-check Equip Gauge AUTO is now
+// implemented in the central engine. Keep the remaining Ancient Dragon
+// effects explicitly blocked until their separate costs/effect sequences are
+// reviewed and implemented.
 const contribution = [];
 const sourceByCard = Object.freeze({
+  "cfa-8980": {
+    name: "Ancient Dragon, Spinodriver",
+    cardNumber: "D-VS02/029EN",
+    officialReference: "https://en.cf-vanguard.com/cardlist/?cardno=D-VS02%2F029EN",
+    officialTextStatus: "Exact drive-check Equip Gauge text verified against the official card list; the separate attack/rode-upon effect remains unsupported."
+  },
   "cfa-10017": {
     name: "Ancient Dragon, Babyrex",
     cardNumber: "D-VS06/030EN",
@@ -34,20 +41,20 @@ const sourceByCard = Object.freeze({
 
 const unsupportedSiblings = Object.freeze([
   {
+    abilityId: "cfa-8980:0",
+    kind: "AUTO",
+    catalogPrintedText: "AUTO: When this unit attacks from VC or is rode upon, COST [Counter Blast 1 & retire two rear-guards], get an Imaginary Gift:Accel, draw a card, choose a card from your hand, and call it to RC. Then, choose two of your units, and they get power +5000 until end of turn.",
+    officialPrintedText: null,
+    officialSummary: null,
+    blocker: "This combines two distinct timing routes (the exact Vanguard's attack and being rode upon), Counter-Blast and two-rear-guard costs, an Imaginary Gift, draw, a hand-to-RC call, and two separate power targets. Each route and sequential choice needs its own official-text and timing validation; the equip-gauge drive-check support does not cover this ability."
+  },
+  {
     abilityId: "cfa-10017:0",
     kind: "AUTO",
     catalogPrintedText: "AUTO: When this unit with equip gauge is retired from RC by the ability of a card with \"Ancient Dragon\" in its card name, COST [Soul Blast 1 & bind this card], search your deck for up to one grade 3 card, call it to RC, and shuffle your deck.",
     officialPrintedText: null,
     officialSummary: "Official deck recipe: when Babyrex with an equip gauge is retired by an Ancient Dragon ability, Soul-Blast 1 and bind it to call up to one grade 3 from the deck.",
-    blocker: "Requires the exact source instance to have an equip gauge when retired from RC by an ability whose source card name contains Ancient Dragon; then Soul-Blast 1, bind this exact retired card from Drop, privately search up to one grade 3, call it to a legal RC, and shuffle. Equip gauges, effect-source provenance for the retiring ability, bind-from-drop payment, and this ordered search/call sequence are not modeled together."
-  },
-  {
-    abilityId: "cfa-10017:1",
-    kind: "AUTO",
-    catalogPrintedText: "AUTO [RC] 1/Turn: When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
-    officialPrintedText: null,
-    officialSummary: "Official deck recipe confirms Babyrex gains a face-down equip gauge when a trigger unit is revealed during its controller's drive check.",
-    blocker: "The drive-check event must belong to this unit's controller, reveal a trigger unit, and match this exact source instance on RC; the per-instance once-per-turn restriction then moves the next top-deck card face down under it. The engine has no equip-gauge card state/zone or effect handler, and this ability's trigger is not compiled."
+    blocker: "Requires the exact source instance to have an equip gauge when retired from RC by an ability whose source card name contains Ancient Dragon; then Soul-Blast 1, bind this exact retired card from Drop, privately search up to one grade 3, call it to a legal RC, and shuffle. Equip-gauge state is now represented, but effect-source provenance, bind-from-drop payment, and this ordered search/call sequence remain unmodeled."
   },
   {
     abilityId: "cfa-10018:0",
@@ -64,40 +71,19 @@ const unsupportedSiblings = Object.freeze([
     blocker: "Requires the exact VC/RC source instance to be the attacker in the battle that just closed, then the controller pays Counter-Blast 1 and retires one of their Rear-Guards before drawing. There is no exact compiler for this battle-close trigger plus combined resource and retire cost; generic draw/retire operations do not validate the ordered cost or exact battle/source."
   },
   {
-    abilityId: "cfa-10018:2",
-    kind: "AUTO",
-    catalogPrintedText: "AUTO [RC] 1/Turn: When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
-    officialPrintedText: "[AUTO](RC)[1/turn]:When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
-    blocker: "The drive-check event must belong to this unit's controller, reveal a trigger unit, and match this exact source instance on RC; the per-instance once-per-turn restriction then moves the next top-deck card face down under it. The engine has no equip-gauge card state/zone or effect handler, and this ability's trigger is not compiled."
-  },
-  {
     abilityId: "cfa-8981:0",
     kind: "AUTO",
     catalogPrintedText: "AUTO [VC/RC]: When this unit attacks, COST [Soul Blast 1 & retire a rear-guard], until end of that battle, this unit gets power +10000, and power +5000 for each of this unit’s equip gauges.",
     officialPrintedText: "[AUTO](VC/RC):When this unit attacks, [COST][Soul-Blast 1 & retire a rear-guard], and until end of that battle, this unit gets [Power] +10000, and gets [Power] +5000 for each of this unit's equip gauge.",
-    blocker: "The exact VC/RC source instance must attack; the controller pays Soul-Blast 1 and retires one Rear-Guard, then the source gets +10000 plus +5000 per equip gauge until that battle ends. The engine recognizes an own-attack trigger candidate but has no equip-gauge count and the combined cost is marked needs-review; the computed power and cost cannot be resolved safely."
-  },
-  {
-    abilityId: "cfa-8981:1",
-    kind: "AUTO",
-    catalogPrintedText: "AUTO [RC] 1/Turn: When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
-    officialPrintedText: "[AUTO](RC)[1/turn]:When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
-    blocker: "The drive-check event must belong to this unit's controller, reveal a trigger unit, and match this exact source instance on RC; the per-instance once-per-turn restriction then moves the next top-deck card face down under it. The engine has no equip-gauge card state/zone or effect handler, and this ability's trigger is not compiled."
+    blocker: "The exact VC/RC source instance must attack; the controller pays Soul-Blast 1 and retires one Rear-Guard, then the source gets +10000 plus +5000 per equip gauge until that battle ends. Equip-gauge state exists, but per-gauge power calculation and the combined cost still need an exact trusted handler."
   },
   {
     abilityId: "cfa-8982:0",
     kind: "AUTO",
     catalogPrintedText: "AUTO: If this card has an equip gauge, this cost is reduced by Counter Blast 1. When this unit is retired from RC by a card’s ability, COST [Counter Blast 1], and call this card to an open RC as rest. (The equip gauge it had is put into your drop when retired and called.)",
     officialPrintedText: "[AUTO]:If this unit has an equip gauge, this cost is reduced by [Counter-Blast 1]. When this unit is retired from (RC) by a card's ability, [COST][Counter-Blast 1], and call this unit to an open (RC) as [Rest]. (The equip gauge it had is put into the drop when retired even if you call it.)",
-    blocker: "Must record whether the exact Iguanogorg source had an equip gauge at retirement, match a card-ability retirement from RC (not an ordinary move/retire), reduce the Counter-Blast cost from one to zero if gauged, move the gauge(s) to Drop, and call this exact card to an open RC rested. The engine has neither gauge state nor a validated conditional cost plus retire-event provenance/call sequence."
+    blocker: "Must record whether the exact Iguanogorg source had an equip gauge at retirement, match a card-ability retirement from RC (not an ordinary move/retire), reduce the Counter-Blast cost from one to zero if gauged, move the gauge(s) to Drop, and call this exact card to an open RC rested. Gauge state exists, but the conditional cost, retire-event provenance, and ordered call sequence remain unsupported."
   },
-  {
-    abilityId: "cfa-8982:1",
-    kind: "AUTO",
-    catalogPrintedText: "AUTO [RC] 1/Turn: When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
-    officialPrintedText: "[AUTO](RC)[1/turn]:When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
-    blocker: "The drive-check event must belong to this unit's controller, reveal a trigger unit, and match this exact source instance on RC; the per-instance once-per-turn restriction then moves the next top-deck card face down under it. The engine has no equip-gauge card state/zone or effect handler, and this ability's trigger is not compiled."
-  }
 ]);
 
 const cards = Object.freeze(Object.entries(sourceByCard).map(([cardId, info]) => Object.freeze({ cardId, ...info })));
@@ -106,17 +92,20 @@ Object.defineProperty(contribution, "audit", {
   enumerable: false,
   value: Object.freeze({
     batchId: "CANDIDATE-320008F1-0002",
-    status: "audit-only-blocked-on-equip-gauge-state-and-effects",
+    status: "partial-equip-gauge-family-implemented-with-sibling-effects-unresolved",
     dataset: "Cardfight Area card database snapshot plus Bushiroad official card-list references",
     catalogSnapshotDate: "2025-05-09",
     abilityIds: Object.freeze(unsupportedSiblings.map(item => item.abilityId)),
-    implementedAbilityIds: Object.freeze([]),
+    assignedAbilityIds: Object.freeze(["cfa-10017:0","cfa-10017:1","cfa-10018:0","cfa-10018:1","cfa-10018:2","cfa-8980:0","cfa-8980:1","cfa-8981:0","cfa-8981:1","cfa-8982:0","cfa-8982:1"]),
+    implementedAbilityIds: Object.freeze(["cfa-10017:1","cfa-10018:2","cfa-8980:1","cfa-8981:1","cfa-8982:1"]),
+    abilityEvidenceIds: Object.freeze(["cfa-10018:2","cfa-8980:1","cfa-8981:1","cfa-8982:1"]),
+    exactTextReviewPendingAbilityIds: Object.freeze(["cfa-10017:1"]),
     alreadySupportedAbilityIds: Object.freeze([]),
     cards,
     unsupportedSiblings,
     sharedMechanic: "equip-gauge-drive-check-v1",
-    sharedMechanicBlocker: "No equip-gauge property, card location, mutation operation, event identity, or cleanup behavior is present in the current ability engine/reducer. All four drive-check gauge abilities and the dependent gauge-count abilities therefore remain unsupported.",
-    provenanceNote: "Exact official card-list text was checked for D-VS06/029EN and D-VS02/030EN; D-VS02/031EN was checked in the official card-list search result; the official D-VS06/030EN detail route is linked from the verified Tyrannolegend page but was not fetchable in the available source cache, so Babyrex uses catalog text plus the official Tachikaze deck-recipe summary and is not marked text-verified.",
+    sharedMechanicBlocker: "The once-per-turn drive-check Equip Gauge family is implemented for all five matching catalog cards. Four exact texts have official card-list confirmation; Babyrex remains pending exact card-text confirmation. Separate Equip Gauge consumers and sibling effects remain unsupported.",
+    provenanceNote: "Exact official card-list text was checked for D-VS02/029EN, D-VS06/029EN, D-VS02/030EN, and D-VS02/031EN; the official D-VS06/030EN detail route was not fetchable in the source cache. Babyrex uses the catalog wording and official Tachikaze deck-recipe summary, passes the mechanics tests, but is not marked exact-text verified.",
     officialReferences: Object.freeze([
       "https://en.cf-vanguard.com/cardlist/?cardno=D-VS06%2F029EN",
       "https://en.cf-vanguard.com/cardlist/?cardno=D-VS06%2F030EN",

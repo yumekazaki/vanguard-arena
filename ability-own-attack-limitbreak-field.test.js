@@ -9,7 +9,7 @@ const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const PATTERN = "auto-own-attack-clan-limit-break-field-power-battle-v1";
 
-test("the 13 own-attack clan Limit Break abilities preserve source circle, clan, amount, and battle duration", () => {
+test("the 16 own-attack clan Limit Break abilities preserve source circle, clan, amount, and battle duration", () => {
   const matches = [];
   for (const card of loadCatalog()) for (const ability of Engine.parseCardAbilitiesCached(card)) {
     if (ability.definition?.source?.patternId !== PATTERN) continue;
@@ -20,7 +20,7 @@ test("the 13 own-attack clan Limit Break abilities preserve source circle, clan,
     assert.deepEqual(ability.conditions, [{ type: "controller-field-has-clan-limit-break", clan: ability.conditions[0].clan, count: 4 }]);
     assert.deepEqual(ability.effects, [{ op: "modify-power", target: "source", amount: 3000, duration: "battle" }]);
   }
-  assert.equal(matches.length, 13);
+  assert.equal(matches.length, 16);
 });
 
 test("the field Limit Break condition requires a matching clan instance and the exact attacking source", () => {

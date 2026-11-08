@@ -30,8 +30,8 @@ function decide(f, abilityId, options = {}) {
   const selection = { instanceUid: f.source.uid, abilityId, costSelections: { sb: options.soulCostUid ? [options.soulCostUid] : [] }, ...(options.payCost === false ? { payCost: false } : {}) };
   return Reducer.applyAbilityDecision(f.state, { actorAuthUid, actionId: options.actionId || `ride-discard-${f.source.uid}`, expectedStateVersion: f.state.stateVersion, payload: { type: 'ability-response', accept: true, selection } }, seats, Engine);
 }
-test('all 15 Ride-phase discard definitions are trusted with exact source, owner turn, costs, and draw order', () => {
-  assert.equal(family.length, 15);
+test('all 17 Ride-phase discard definitions are trusted with exact source, owner turn, costs, and draw order', () => {
+  assert.equal(family.length, 17);
   for (const ability of family) {
     assert.ok(Engine.getReviewedAbilityDefinitionsForCard(ability.cardId).some(entry => entry.id === ability.id), ability.id);
     assert.equal(ability.trigger.eventType, 'card.discarded');
@@ -42,6 +42,25 @@ test('all 15 Ride-phase discard definitions are trusted with exact source, owner
     assert.deepEqual(ability.costs, [{ type: 'soul-blast', count: 1 }, { type: 'source-to-bottom-deck', count: 1 }]);
     assert.deepEqual(ability.definition.effects, [{ op: 'draw', count: 1 }]);
     assert.equal(Reducer.supportsServerAbilityEffects(ability), true, ability.id);
+  }
+});
+test('the two exact wording variants compile into the shared handler without absorbing the separately reserved copy', () => {
+  const variants = family.filter(ability => ['cfa-12029', 'cfa-13484'].includes(String(ability.cardId)));
+  assert.equal(JSON.stringify(variants.map(ability => ability.id).sort()), JSON.stringify(['cfa-12029:1', 'cfa-13484:1']));
+  for (const ability of variants) {
+    assert.equal(ability.printedText, 'AUTO: When this card is discarded during your ride phase, COST [Soul Blast 1 & put this card on the bottom of deck], and draw a card.');
+    assert.equal(ability.trigger.sourceLocation, 'hand');
+    assert.equal(ability.trigger.turnRelation, 'controller');
+  }
+  assert.equal(family.some(ability => ability.cardId === 'cfa-10856'), false);
+});
+test('each wording variant still requires its exact hand-to-drop discard during its controller\'s Ride Phase', () => {
+  const variants = family.filter(ability => ['cfa-12029', 'cfa-13484'].includes(String(ability.cardId)));
+  for (const ability of variants) for (const side of ['human', 'bot']) {
+    const wrongSource = fixture(ability, side);
+    assert.equal(Reducer.discoverAutoTriggers(wrongSource.state, [{ ...wrongSource.event, previousLocation: 'rear-left' }], Engine).queued.length, 0, `${ability.id}/${side}/wrong-source`);
+    const wrongTurn = fixture(ability, side, { turnSide: side === 'human' ? 'bot' : 'human' });
+    assert.equal(Reducer.discoverAutoTriggers(wrongTurn.state, [wrongTurn.event], Engine).queued.length, 0, `${ability.id}/${side}/wrong-turn`);
   }
 });
 test('the exact discarded source controller pays Soul Blast, returns that source to deck bottom, then draws for either seat', () => {

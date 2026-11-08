@@ -4,6 +4,26 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const { assessCardPromotion } = require("./promote-fully-verified-cards.js");
 const SINGLE_ABILITY_GENERIC_REMAINING = "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass.";
+const SINGLE_ABILITY_SENTINEL_REMAINING = "No card-specific ability remains: the sole printed Sentinel CONT, card metadata, deck copy limit, bootstrap keyword state, and both authoritative player-seat guard paths are covered.";
+
+const SENTINEL_WHOLE_CARD_SOURCE = [
+  'const CARD_IDS = ["cfa-1"];',
+  "for (const cardId of CARD_IDS) {",
+  "  const abilities = Engine.parseCardAbilitiesCached(card);",
+  '  assert.equal(ability.kind, "CONT");',
+  '  assert.equal(card.type, "Trigger");',
+  '  assert.equal(Number(card.grade), 0);',
+  '  assert.equal(String(card.trigger).toLowerCase(), "critical");',
+  '  assert.equal(Number(card.shield), 30000);',
+  '  assert.equal(Bootstrap.validateDecklist(fourSentinelDeck).ok, true, "four Sentinels are permitted");',
+  '  assert.equal(Bootstrap.validateDecklist(fiveSentinelDeck).ok, false, "a fifth Sentinel is rejected");',
+  '  for (const defenderSide of ["human", "bot"]) {',
+  "    const result = Reducer.applyGameAction(state, action, seats, Engine);",
+  "    assert.equal(result.ok, true);",
+  "  }",
+  '  test("cfa-1 Sentinel exact ability", () => assert.equal(true, true));',
+  "}"
+].join("\n");
 
 function fixture(kind = "CONT", source = "test cfa-1:0") {
   const ability = {
@@ -66,6 +86,14 @@ test("any nonempty remaining-work note blocks whole-card promotion", () => {
   assert.deepEqual(result.reasons, ["cfa-1:0:unresolved-remaining-work"]);
 });
 
+test("whole-card verification is blocked when the structured definition says official text is still unconfirmed", () => {
+  const pending = fixture();
+  pending.abilities[0].definition.source = { officialTextVerified: false };
+  const result = assessCardPromotion(pending);
+  assert.equal(result.eligible, false);
+  assert.deepEqual(result.reasons, ["cfa-1:0:official-card-text-unverified"]);
+});
+
 test("the exact generic sibling warning does not block a fully evidenced single-ability card", () => {
   const single = fixture();
   single.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_GENERIC_REMAINING;
@@ -102,6 +130,40 @@ test("a sole printed ability may be linked by exact card ID when its cited test 
     remaining: SINGLE_ABILITY_GENERIC_REMAINING
   });
   assert.equal(assessCardPromotion(sibling).reasons.includes("cfa-1:0:tests-do-not-reference-exact-ability-id"), true);
+});
+
+test("the exact Sentinel remaining-work note is waived only by whole-card and both-seat coverage", () => {
+  const sentinel = fixture("CONT", SENTINEL_WHOLE_CARD_SOURCE);
+  const ability = sentinel.abilities[0];
+  ability.definition.source = { patternId: "cont-sentinel-keyword-v1" };
+  ability.definition.keywords = ["sentinel"];
+  ability.definition.effects = [];
+  sentinel.recordsByAbility.get("cfa-1:0").testFiles = ["ability-sentinel-whole-card-batch.test.js"];
+  sentinel.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_SENTINEL_REMAINING;
+  assert.equal(assessCardPromotion(sentinel).eligible, true);
+
+  const wrongPattern = fixture("CONT", SENTINEL_WHOLE_CARD_SOURCE);
+  wrongPattern.abilities[0].definition.source = { patternId: "cont-unrelated-keyword-v1" };
+  wrongPattern.abilities[0].definition.keywords = ["sentinel"];
+  wrongPattern.recordsByAbility.get("cfa-1:0").testFiles = ["ability-sentinel-whole-card-batch.test.js"];
+  wrongPattern.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_SENTINEL_REMAINING;
+  assert.equal(assessCardPromotion(wrongPattern).reasons.includes("cfa-1:0:unresolved-remaining-work"), true);
+
+  const oneSeatOnly = fixture("CONT", SENTINEL_WHOLE_CARD_SOURCE.replace('for (const defenderSide of ["human", "bot"]) {', 'for (const defenderSide of ["human"]) {'));
+  oneSeatOnly.abilities[0].definition.source = { patternId: "cont-sentinel-keyword-v1" };
+  oneSeatOnly.abilities[0].definition.keywords = ["sentinel"];
+  oneSeatOnly.abilities[0].definition.effects = [];
+  oneSeatOnly.recordsByAbility.get("cfa-1:0").testFiles = ["ability-sentinel-whole-card-batch.test.js"];
+  oneSeatOnly.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_SENTINEL_REMAINING;
+  assert.equal(assessCardPromotion(oneSeatOnly).reasons.includes("cfa-1:0:unresolved-remaining-work"), true);
+
+  const unlistedCard = fixture("CONT", SENTINEL_WHOLE_CARD_SOURCE.replace('const CARD_IDS = ["cfa-1"];', 'const CARD_IDS = ["cfa-2"];'));
+  unlistedCard.abilities[0].definition.source = { patternId: "cont-sentinel-keyword-v1" };
+  unlistedCard.abilities[0].definition.keywords = ["sentinel"];
+  unlistedCard.abilities[0].definition.effects = [];
+  unlistedCard.recordsByAbility.get("cfa-1:0").testFiles = ["ability-sentinel-whole-card-batch.test.js"];
+  unlistedCard.recordsByAbility.get("cfa-1:0").remaining = SINGLE_ABILITY_SENTINEL_REMAINING;
+  assert.equal(assessCardPromotion(unlistedCard).reasons.includes("cfa-1:0:unresolved-remaining-work"), true);
 });
 
 test("a data-driven family test may link evidence through an exact per-ability TAP case", () => {

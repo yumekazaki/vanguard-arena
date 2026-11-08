@@ -12,6 +12,7 @@ const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: 
 const BATCH = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
   .filter(ability => ability.definition?.source?.patternId === "auto-gc-protect-then-conditional-discard-v1")
   .map(ability => ({ cardId: String(card.id), abilityId: ability.id })));
+const D_SERIES_SENTINEL_CARD_IDS = ["cfa-11624", "cfa-12227"];
 
 function definition(cardId) {
   const card = catalog.find(item => String(item.id) === String(cardId));
@@ -86,6 +87,22 @@ test("all 63 conditional Guardian Circle abilities independently resolve for bot
     assert.equal(fixture.state.pendingAttack.perfectGuard, true, `${cardId}:${ownerSide}`);
     assert.equal(own.drop.some(card => card.uid === selectedUid), true, `${cardId}:${ownerSide}`);
     assert.equal(own.hand.length, 1, `${cardId}:${ownerSide}`);
+  }
+});
+
+test("D-series Sentinel guardian abilities resolve for the exact host or joining player", () => {
+  for (const cardId of D_SERIES_SENTINEL_CARD_IDS) for (const ownerSide of ["human", "bot"]) {
+    const fixture = setup(cardId, ownerSide);
+    assert.equal(fixture.ability.id, `${cardId}:1`);
+    const selectedUid = fixture.ownHand[0].uid;
+    const opponentHandBefore = fixture.state.players[ownerSide === "human" ? "bot" : "human"].hand.map(card => card.uid);
+    const result = resolve(fixture, { effectDiscardUid: selectedUid }, `d-series-${cardId}-${ownerSide}`);
+    assert.equal(result.ok, true, `${cardId}:${ownerSide}: ${result.reason}`);
+    const own = fixture.state.players[ownerSide];
+    const opponent = fixture.state.players[ownerSide === "human" ? "bot" : "human"];
+    assert.equal(fixture.state.pendingAttack.perfectGuard, true, `${cardId}:${ownerSide} protects the attacked unit`);
+    assert.equal(own.drop.some(card => card.uid === selectedUid), true, `${cardId}:${ownerSide} discards from its controller's hand`);
+    assert.deepEqual(opponent.hand.map(card => card.uid), opponentHandBefore, `${cardId}:${ownerSide} leaves the other player's hand unchanged`);
   }
 });
 

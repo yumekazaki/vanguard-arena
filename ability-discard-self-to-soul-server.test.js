@@ -7,7 +7,7 @@ Engine.registerAbilityDefinitions(require("./ability-definitions.js"));
 const Reducer = require("./ability-server-reducer.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
-const IDS = ["cfa-10174", "cfa-6865", "cfa-8590"];
+const IDS = ["cfa-10174", "cfa-6865", "cfa-8590", "cfa-12815", "cfa-13992"];
 const catalog = loadCatalog();
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 
@@ -32,7 +32,7 @@ function fixture(cardId = IDS[0], side = "human", turnPlayerOverride = null) {
   return { state, event, ability, source, side, playerId, opponentId };
 }
 
-test("three catalog records compile as optional self-discard-to-Soul AUTO abilities", () => {
+test("five catalog records compile as optional self-discard-to-Soul AUTO abilities", () => {
   for (const cardId of IDS) {
     const ability = Engine.parseCardAbilitiesCached(catalog.find(item => item.id === cardId)).find(item => item.id === `${cardId}:0`);
     assert.equal(ability.definition?.source?.patternId, "auto-hand-discard-self-optional-to-soul-v1", cardId);
@@ -46,9 +46,25 @@ test("three catalog records compile as optional self-discard-to-Soul AUTO abilit
   }
 });
 
+test("Daimariner and Flauros match official printings with the omitted possessive wording", () => {
+  const expected = {
+    "cfa-12815": { number: "DZ-BT03/031EN", reference: "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=227&s_param=d-Brandt+Gate&sort=no&view=text" },
+    "cfa-13992": { number: "DZ-SS11/008EN", reference: "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS11%2F008EN&cnt=&expansion=250&view=text" }
+  };
+  for (const [cardId, source] of Object.entries(expected)) {
+    const ability = Engine.parseCardAbilitiesCached(catalog.find(item => item.id === cardId)).find(item => item.id === `${cardId}:0`);
+    assert.equal(ability.printedText, "AUTO: When this card is discarded from hand during your turn, you may put this card into soul.");
+    assert.equal(ability.definition.source.dataset, "Bushiroad official card list");
+    assert.equal(ability.definition.source.officialTextVerified, true);
+    assert.equal(ability.definition.source.officialCardNumber, source.number);
+    assert.equal(ability.definition.source.officialReference, source.reference);
+    assert.equal(Reducer.hasTrustedServerAbilityDefinition(ability, Engine), true);
+  }
+});
+
 test("the discarded card's controller alone chooses whether that exact card moves to Soul", () => {
-  for (const side of ["human", "bot"]) {
-    const f = fixture(IDS[0], side);
+  for (const cardId of IDS) for (const side of ["human", "bot"]) {
+    const f = fixture(cardId, side);
     assert.equal(Reducer.discoverAutoTriggers(f.state, [f.event], Engine).queued.length, 1);
     assert.equal(f.state.pendingAbility.side, side);
     const result = Reducer.applyAbilityDecision(f.state, {
@@ -64,29 +80,33 @@ test("the discarded card's controller alone chooses whether that exact card move
 });
 
 test("decline, an opponent turn, another discarded card, and host proxying cannot resolve it", () => {
-  const declined = fixture();
-  assert.equal(Reducer.discoverAutoTriggers(declined.state, [declined.event], Engine).queued.length, 1);
-  const declineResult = Reducer.applyAbilityDecision(declined.state, {
-    actorAuthUid: seats.hostAuthUid, actionId: "declined-discard-self-to-soul", expectedStateVersion: declined.state.stateVersion,
-    payload: { type: "ability-response", accept: false, selection: { instanceUid: declined.source.uid, abilityId: declined.ability.id } }
-  }, seats, Engine);
-  assert.equal(declineResult.ok, true, declineResult.reason);
-  assert.ok(declined.state.players.human.drop.some(card => card.uid === declined.source.uid));
-  assert.equal(declined.state.players.human.soul.length, 0);
+  for (const cardId of IDS) {
+    const declined = fixture(cardId);
+    assert.equal(Reducer.discoverAutoTriggers(declined.state, [declined.event], Engine).queued.length, 1, cardId);
+    const declineResult = Reducer.applyAbilityDecision(declined.state, {
+      actorAuthUid: seats.hostAuthUid, actionId: `declined-${cardId}`, expectedStateVersion: declined.state.stateVersion,
+      payload: { type: "ability-response", accept: false, selection: { instanceUid: declined.source.uid, abilityId: declined.ability.id } }
+    }, seats, Engine);
+    assert.equal(declineResult.ok, true, declineResult.reason);
+    assert.ok(declined.state.players.human.drop.some(card => card.uid === declined.source.uid));
+    assert.equal(declined.state.players.human.soul.length, 0);
 
-  const opponentTurn = fixture(IDS[0], "human", "player-guest");
-  assert.equal(Reducer.discoverAutoTriggers(opponentTurn.state, [opponentTurn.event], Engine).queued.length, 0);
+    const opponentTurn = fixture(cardId, "human", "player-guest");
+    assert.equal(Reducer.discoverAutoTriggers(opponentTurn.state, [opponentTurn.event], Engine).queued.length, 0, `${cardId} during opponent's turn`);
 
-  const unrelated = fixture();
-  const otherDiscard = Engine.createGameEvent(unrelated.state, { ...unrelated.event, eventId: "other-discarded-card", cardInstanceId: "unrelated-card", subjectCardInstanceId: "unrelated-card" });
-  assert.equal(Reducer.discoverAutoTriggers(unrelated.state, [otherDiscard], Engine).queued.length, 0);
+    const unrelated = fixture(cardId);
+    const otherDiscard = Engine.createGameEvent(unrelated.state, { ...unrelated.event, eventId: `other-${cardId}`, cardInstanceId: "unrelated-card", subjectCardInstanceId: "unrelated-card" });
+    assert.equal(Reducer.discoverAutoTriggers(unrelated.state, [otherDiscard], Engine).queued.length, 0, `${cardId} when another instance is discarded`);
+    const wrongOrigin = Engine.createGameEvent(unrelated.state, { ...unrelated.event, eventId: `wrong-origin-${cardId}`, previousLocation: "soul" });
+    assert.equal(Reducer.discoverAutoTriggers(unrelated.state, [wrongOrigin], Engine).queued.length, 0, `${cardId} when the card was not discarded from hand`);
 
-  const guest = fixture(IDS[0], "bot");
-  assert.equal(Reducer.discoverAutoTriggers(guest.state, [guest.event], Engine).queued.length, 1);
-  const forged = Reducer.applyAbilityDecision(guest.state, {
-    actorAuthUid: seats.hostAuthUid, actionId: "host-forges-guest-discard-trigger", expectedStateVersion: guest.state.stateVersion,
-    payload: { type: "ability-response", accept: true, selection: { instanceUid: guest.source.uid, abilityId: guest.ability.id } }
-  }, seats, Engine);
-  assert.equal(forged.ok, false);
-  assert.ok(guest.state.players.bot.drop.some(card => card.uid === guest.source.uid));
+    const guest = fixture(cardId, "bot");
+    assert.equal(Reducer.discoverAutoTriggers(guest.state, [guest.event], Engine).queued.length, 1, cardId);
+    const forged = Reducer.applyAbilityDecision(guest.state, {
+      actorAuthUid: seats.hostAuthUid, actionId: `host-forges-${cardId}`, expectedStateVersion: guest.state.stateVersion,
+      payload: { type: "ability-response", accept: true, selection: { instanceUid: guest.source.uid, abilityId: guest.ability.id } }
+    }, seats, Engine);
+    assert.equal(forged.ok, false, `${cardId}: the host cannot decide for the guest`);
+    assert.ok(guest.state.players.bot.drop.some(card => card.uid === guest.source.uid));
+  }
 });

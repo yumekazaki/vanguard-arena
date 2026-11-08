@@ -1,48 +1,59 @@
 {
-  "generatedAt": "2026-11-06T07:19:26.779Z",
+  "generatedAt": "2026-11-08T04:09:15.648Z",
   "catalogSnapshot": "Cardfight Area snapshot 2025-05-09",
   "catalogSource": "scripts/audit-ability-catalog.js (local catalog file or committed HEAD snapshot)",
   "cards": {
     "imported": 14022,
     "parsed": 14022,
     "withAbilities": 11841,
-    "withAtLeastOneCompiledAbility": 3759,
-    "withAllAbilityBlocksCompiledAndAuditValid": 2149,
-    "withUnsupportedAbilityBlocks": 9692,
-    "withUnmodeledRequirements": 9692,
-    "withExplicitPassingRegressionEvidence": 2893,
-    "fullyVerified": 849
+    "withAtLeastOneCompiledAbility": 3848,
+    "withAllAbilityBlocksCompiledAndAuditValid": 2208,
+    "withUnsupportedAbilityBlocks": 9633,
+    "withUnmodeledRequirements": 9633,
+    "withExplicitPassingRegressionEvidence": 2900,
+    "fullyVerified": 935
   },
   "abilities": {
     "parsed": 17254,
-    "compiled": 4646,
-    "unsupportedOrUnreviewed": 12608,
+    "compiled": 4765,
+    "unsupportedOrUnreviewed": 12489,
     "invalidCompiled": 0,
-    "patterns": 361,
-    "compiledPercent": 26.93
+    "patterns": 398,
+    "compiledPercent": 27.62
   },
   "verification": {
     "manifest": "card-verification-manifest.json",
-    "manifestRecords": 4616,
-    "passingTestCases": 17440,
+    "manifestRecords": 4747,
+    "passingTestCases": 19894,
     "latestFullSuite": {
+      "command": "node --test --test-reporter=tap",
       "status": "passed",
-      "tests": 2875,
-      "passed": 2875,
+      "tests": 3202,
+      "passed": 3202,
       "failed": 0,
-      "durationMilliseconds": 740760.0003,
-      "completedAt": "2026-11-06T07:16:37.745Z",
-      "validationInputDigest": "16149ec2fa367bceec8584024f6d87e9782b600040f7657a333cf13ff5bcc803",
-      "command": "node --test",
-      "logFile": ".card-pipeline/validation-logs/full-suite-2026-11-06-post-order-zone-bind-final.tap"
+      "durationMilliseconds": 581284.2202,
+      "recordedAt": "2026-11-08T04:08:04.327Z",
+      "completedAt": "2026-11-08T04:08:04.327Z",
+      "validationInputDigest": "b9b05e488d01f49e6d7f138b09467c38b903510fe06c251c1be5b905abe13664",
+      "capturedTerminalSummary": [
+        "1..2698",
+        "# tests 3202",
+        "# suites 0",
+        "# pass 3202",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 581284.2202"
+      ]
     },
     "validationEvidenceFresh": true,
     "fullyVerifiedRequiresAllPrintedAbilitiesAndRulesEvidence": true,
     "note": "Aggregate parsing or a passing pattern test does not make a whole card fully verified. Only explicit manifest records count as regression evidence; zero fully verified cards is reported when no complete card-level evidence exists."
   },
   "workflow": {
-    "catalogLoadMilliseconds": 179.5,
-    "fullCatalogParseAndAuditMilliseconds": 7523.5,
+    "catalogLoadMilliseconds": 156.5,
+    "fullCatalogParseAndAuditMilliseconds": 6593.3,
     "repeatedAuditsOfTheSameCatalogUseTheExistingDigestCache": true,
     "parseCacheExperiment": "Rejected JSON-clone-per-call caching after three full catalog parse passes measured about 9.5 seconds uncached versus 12.1 seconds with cloning. Adopted immutable per-card snapshots with definition-revision invalidation: the same three passes measured about 9.5 seconds uncached versus 3.82 seconds cached; cache-hit passes were about 2.5 milliseconds each.",
     "measuredBottlenecks": [
@@ -56,11 +67,11 @@
         "area": "Unbounded all-in-one verification feedback",
         "evidence": "Full Node suite measured 245.62 seconds before the cache and 37.96 seconds after it.",
         "optimization": "Run focused rule/worker checks per ability batch and reserve the full suite for milestones.",
-        "result": "Latest full suite: 2875/2875 passed in 740.76 seconds."
+        "result": "Latest full suite: 3202/3202 passed in 581.28 seconds."
       },
       {
         "area": "Manual card semantics and validation backlog",
-        "evidence": "12608 ability blocks remain unsupported or unreviewed; 9692 cards contain at least one such block. Repository history has no per-stage time logs to substantiate the reported 22 hours.",
+        "evidence": "12489 ability blocks remain unsupported or unreviewed; 9633 cards contain at least one such block. Repository history has no per-stage time logs to substantiate the reported 22 hours.",
         "optimization": "Process exact recurring templates in reusable batches; preserve per-card evidence and leave ambiguous text unreviewed.",
         "result": "Reusable Soul-count power and critical patterns plus signed continuous power adjustments cover the current verified examples; per-card evidence stays partial until the other printed abilities are implemented."
       }

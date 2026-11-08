@@ -10,6 +10,13 @@ const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 const catalog = loadCatalog();
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 const BREAK_RIDES = ["cfa-1251", "cfa-1671", "cfa-1879", "cfa-1945", "cfa-1954"];
+const OFFICIAL_BREAK_RIDE_SOURCES = Object.freeze({
+  "cfa-1251": { cardNumber: "BT11/005EN", reference: "https://en.cf-vanguard.com/cardlist/?cardno=BT11%2F005EN" },
+  "cfa-1671": { cardNumber: "EB08/003EN", reference: "https://en.cf-vanguard.com/cardlist/?cardno=EB08%2F003EN&expansion=37&view=text" },
+  "cfa-1879": { cardNumber: "BT15/004EN", reference: "https://en.cf-vanguard.com/cardlist/?cardno=BT15%2F004EN" },
+  "cfa-1945": { cardNumber: "EB10/003EN-W", reference: "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=41&sort=no&view=text" },
+  "cfa-1954": { cardNumber: "PR/0215EN", reference: "https://en.cf-vanguard.com/cardlist/?cardno=PR%2F0215EN" }
+});
 const cardDef = id => catalog.find(card => String(card.id) === String(id));
 const namedCard = name => catalog.find(card => String(card.name).toLowerCase() === String(name).toLowerCase());
 const clanUnit = (clan, { grade, excludeId } = {}) => catalog.find(card => String(card.id) !== String(excludeId) && card.clan === clan && /unit/i.test(String(card.type)) && (grade == null || Number(card.grade) === grade));
@@ -70,9 +77,16 @@ test("the five exact Limit Break ride abilities and every printed sibling compil
       assert.equal(parsed[index].implementationStatus, "structured-effect-definition", `${id}:${index} structured ability`);
     }
     const breakRide = parsed[0];
+    const officialSource = OFFICIAL_BREAK_RIDE_SOURCES[id];
     assert.equal(breakRide.definition.source.patternId, "auto-limit-break-clan-break-ride-grant-v1");
+    assert.equal(breakRide.definition.source.officialTextVerified, true, `${id} official printed text checked`);
+    assert.equal(breakRide.definition.source.officialCardNumber, officialSource.cardNumber, `${id} official printing`);
+    assert.equal(breakRide.definition.source.officialReference, officialSource.reference, `${id} source link`);
+    assert.deepEqual(breakRide.requiredLocation, ["vanguard"], `${id} must be ridden from VC`);
     assert.equal(breakRide.trigger.eventType, "card.ridden");
     assert.equal(breakRide.trigger.subject, "ridden-unit");
+    assert.deepEqual(breakRide.conditions, [{ type: "limit-break-active", count: 4 }]);
+    assert.deepEqual(breakRide.definition.effects, [{ op: "grant-vanguard-break-ride-ability", target: "controller", parentCardId: id, parentAbilityId: `${id}:0`, amount: 10000 }]);
     assert.equal(Reducer.supportsServerAbilityEffects(breakRide), true, `${id} parent implementation`);
     const tampered = structuredClone(breakRide);
     tampered.definition.effects[0].amount = 5000;

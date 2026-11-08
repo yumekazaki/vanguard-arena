@@ -2,6 +2,49 @@
   "schemaVersion": 1,
   "assignments": [
     {
+      "batchId": "PRIMARY-SINGLE-ABILITY-OFFICIAL-SOURCE-5",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Local primary-session verification batch for five currently available sole-ability cards: cfa-2:0, cfa-394:0, cfa-28:0, cfa-128:0, and cfa-133:0. Official Bushiroad printings have been located; exact text metadata and source-instance/two-seat tests are being refreshed before the strict whole-card gate. This local reservation is not published.",
+      "abilityIds": [
+        "cfa-2:0",
+        "cfa-394:0",
+        "cfa-28:0",
+        "cfa-128:0",
+        "cfa-133:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-RC-ATTACK-HIT-SOUL-CHARGE-2",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Keyword-triaged exact-text family. The shared source-identity and hit-validation handler is implemented for cfa-8404:0 and cfa-13158:1; focused regressions pass. Selfish Engraver has official text confirmation; cfa-13158 remains local-catalog-only. Both cards retain other unverified abilities, so this is ability-level progress only. Reservation is local and unpublished.",
+      "abilityIds": [
+        "cfa-8404:0",
+        "cfa-13158:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-CONT-NAMED-STRIDE-GRADE-BOOST-3",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "The exact Hand CONT family cfa-3622:0, cfa-4405:0, and cfa-5067:1 is implemented with per-card Vanguard-name fragments and +1/+1/+2 grade. Client and authoritative server require hand location and an active Stride payment; focused catalog and reducer tests pass. Official wording is confirmed for cfa-3622 and cfa-4405; cfa-5067 text confirmation remains pending. No sibling abilities or cards were promoted.",
+      "abilityIds": [
+        "cfa-3622:0",
+        "cfa-4405:0",
+        "cfa-5067:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-CONT-VC-RC-NAMED-TURN-POWER-1",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Primary-only review of cfa-7812 after keyword triage. The reusable exact VC/RC own-turn named-Vanguard power mechanic now has focused reducer tests for both seats; keep this card reserved until official wording and whole-card evidence are confirmed. This local reservation has not been published to the shared registry.",
+      "abilityIds": [
+        "cfa-7812:0"
+      ]
+    },
+    {
       "batchId": "PRIMARY-ORDER-SEARCH-NAME-AUTO",
       "status": "reserved",
       "workerOwner": "primary-session",
@@ -96,20 +139,20 @@
       "batchId": "PRIMARY-AUTO-ATTACK-STEP-VANGUARD-CRITICAL-4",
       "status": "reserved",
       "workerOwner": "primary-session",
-      "reason": "Implementation integrated locally; the 1640/1640 full regression suite passes. Keep all cards reserved for ability-level review, fresh evidence, and live online verification; this does not mark whole cards complete.",
+      "reason": "cfa-260:0 and cfa-260:1 passed strict whole-card verification; cfa-2007:0 remains unsupported and cfa-2007:1 has ability-level evidence only. Keep the remaining card assigned to the primary session.",
       "sourceBatchId": "FAMILY-48B551B6-0012",
       "abilityIds": [
         "cfa-2007:0",
-        "cfa-2007:1",
-        "cfa-260:0",
-        "cfa-260:1"
+        "cfa-2007:1"
       ],
       "verifiedAbilityIds": [
         "cfa-254:0",
-        "cfa-263:0"
+        "cfa-263:0",
+        "cfa-260:0",
+        "cfa-260:1"
       ],
-      "lastReconciledAt": "2026-11-02T14:27:34.836Z",
-      "lastReconciliationReason": "Removed only abilities promoted by the strict whole-card verification gate."
+      "lastReconciledAt": "2026-11-07T10:44:37.000Z",
+      "lastReconciliationReason": "Moved cfa-260:0 and cfa-260:1 to verifiedAbilityIds after strict gate promotion; retained only cfa-2007 ability IDs for primary follow-up."
     },
     {
       "batchId": "FAMILY-CBF8AB56-0001",
@@ -440,13 +483,15 @@
       "batchId": "CANDIDATE-320008F1-0002",
       "status": "reserved",
       "workerOwner": "primary-session",
-      "reason": "Worker audit complete: all 9 abilities remain unsupported pending shared equip-gauge or precise placement/battle handlers; tests pass 5/5. Reserved for primary follow-up; not marked verified.",
+      "reason": "Primary-session retains all 11 ability rows on these five Ancient Dragon cards. The shared drive-check Equip Gauge AUTO is implemented for all five matching IDs. Exact official card text and ability-level evidence are recorded for cfa-8980:1, cfa-8981:1, cfa-8982:1, and cfa-10018:2. Babyrex cfa-10017:1 remains exact-text review pending despite the official deck-recipe cross-check. Six sibling abilities remain unsupported/unreviewed; no whole card is promoted.",
       "abilityIds": [
         "cfa-10017:0",
         "cfa-10017:1",
         "cfa-10018:0",
         "cfa-10018:1",
         "cfa-10018:2",
+        "cfa-8980:0",
+        "cfa-8980:1",
         "cfa-8981:0",
         "cfa-8981:1",
         "cfa-8982:0",
@@ -1520,8 +1565,9 @@
       "batchId": "PRIMARY-CONT-ORDER-GRADE-BOOST-2",
       "status": "reserved",
       "workerOwner": "primary-session",
-      "reason": "Strict whole-card gate promoted cfa-9042:0 as fully verified using fresh full-suite evidence; it is removed from outstanding work. cfa-9115:1 remains reserved for primary review because its card-level sibling coverage is incomplete.",
+      "reason": "Both Refablishment Dock abilities now have exact source records and focused host/joiner server regression coverage. Keep the card reserved until the fresh full-suite gate and manual online browser match check pass.",
       "abilityIds": [
+        "cfa-9115:0",
         "cfa-9115:1"
       ]
     },
@@ -1540,7 +1586,7 @@
       "batchId": "AUDIT-AUTO-BOOSTED-HIT-CB-RETURN-DECK-3",
       "status": "reserved",
       "workerOwner": "primary-session",
-      "reason": "Read-only rules audit completed. Conditional Counter-Charge then source-to-deck/shuffle requires a new sequential effect and trigger-time identity checks; implementation is pending primary review.",
+      "reason": "Implemented the exact three-card optional AUTO family for cfa-11783:0, cfa-11784:0, and cfa-11785:0. It only prompts the controller of the exact Rear-Guard booster after that battle hits; the selected face-down damage is Counter-Charged and that same source returns to its owner's shuffled deck atomically. Host/joiner, either opposing target circle, invalid source/damage, no-damage, decline, and forged-player regression cases pass 6/6. Text remains local-catalog-only pending official confirmation; whole cards remain unverified.",
       "abilityIds": [
         "cfa-11783:0",
         "cfa-11784:0",
@@ -3683,6 +3729,419 @@
         "cfa-3252:0",
         "cfa-3261:0"
       ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-TURN-DISCARD-SELF-CALL-REST-3",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Exact official-source own-turn discard AUTO family is implemented with a shared rested-call handler and tests for exact card instance, owner turn, optional response, legal circles, duplicate suppression, and independent host/joiner resolution. Reserve the full cards while sibling abilities and browser-level online resolution are reviewed.",
+      "abilityIds": [
+        "cfa-7314:0",
+        "cfa-9026:0",
+        "cfa-9450:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-VC-RC-HIT-CLAN-POWER-3",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Generalized the existing exact own-attack-hit clan-power handler to the matching VC/RC wording and added controller-specific host/joiner resolution coverage. Keep the cards reserved until the full suite is fresh and a real online match confirms both seats.",
+      "abilityIds": [
+        "cfa-259:0",
+        "cfa-555:0",
+        "cfa-692:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-CONT-RIDE-ON-SOURCE-CONFLICT",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "sourceBatchId": "ABILITY-9AF100EA-0353",
+      "reason": "Hold pending primary-source review: the local catalog text for Mephisto E, Faust VIII specifies a grade 3 Vanguard with Faust VII, while available card-text evidence for this card indicates Faust VIII. Keep the ability unsupported until the exact official English wording is confirmed.",
+      "abilityIds": [
+        "cfa-9748:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-CREST-LB-ORIGINAL-POWER",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Implement and validate the shared Crest CONT that sets eligible Grade 3 Limit Break 4 original power to 13000; exact card IDs and other abilities on these cards remain separate work.",
+      "abilityIds": [
+        "cfa-12577:1",
+        "cfa-12580:1",
+        "cfa-12591:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-GENERATION-BREAK-RC-PLACEMENT-POWER-2",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "The exact Generation Break 1 RC placement +4000 handler is implemented and passes focused plus full-suite regressions. Night Sky Eagle official English text remains unconfirmed, so keep its ability reserved for source verification and do not promote the card. Steam Maiden, Merianna is fully verified and is no longer queued.",
+      "abilityIds": [
+        "cfa-2950:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-RC-PLACEMENT-OPTIONAL-SOUL-CHARGE-TWO",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Keyword-indexed exact optional RC placement Soul Charge 2 family. Compiled and added strict authoritative player/event checks with focused host/joiner tests. Exact text remains local-catalog-only; do not promote to fully verified until an authoritative card source is confirmed.",
+      "abilityIds": [
+        "cfa-11778:0",
+        "cfa-11780:0"
+      ],
+      "reservation": "local-unpublished"
+    },
+    {
+      "batchId": "PRIMARY-BOOST-BATTLE-END-SOUL-DRAW-SUZUME",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "The cfa-13400:1 boost AUTO now has exact Japanese Bushiroad card-list confirmation with the matching English Shenryi text as a cross-reference, a trusted authoritative server definition, and passing host/joiner and delayed-cost tests under a fresh 3,119-test suite. Keep the card reserved: cfa-13400:0 is a separate CONT name-alias ability, and the whole-card gate has not passed. Continue exact source and card-level verification for the alias; do not count this card complete yet.",
+      "abilityIds": [
+        "cfa-13400:0",
+        "cfa-13400:1"
+      ],
+      "cardIds": [
+        "cfa-13400"
+      ],
+      "focusAbilityIds": [
+        "cfa-13400:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-DISCARD-SELF-SOUL-DAIMARINER-FLAUROS",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Exact shared optional self-discard AUTO; official Bushiroad text confirmed for both cards. Implementing and validating through the existing source-instance discard-to-Soul handler. Ability-level scope only; sibling abilities and whole-card gates remain open. Local reservation only; not published.",
+      "abilityIds": [
+        "cfa-12815:0",
+        "cfa-13992:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-CONT-FINAL-RUSH-RC-POWER-3",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Official text confirmed for all three cards. No authoritative Final Rush status/operator exists in current client/server continuous evaluation; retain as a shared-state prerequisite batch. No definitions/tests added. Local reservation only.",
+      "abilityIds": [
+        "cfa-8240:1",
+        "cfa-8241:1",
+        "cfa-9084:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-VC-SOULBLAST-HAND-CALL-POWER-3",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Official original English source unavailable for this older family; authoritative generic call-from-hand effect is also missing. Keep reserved until primary text and shared server/client call operation exist. No definitions/tests added. Local reservation only.",
+      "abilityIds": [
+        "cfa-2545:1",
+        "cfa-2587:1",
+        "cfa-2596:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-RC-G3-COUNT-OWN-ATTACK-POWER-2",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Official text confirmed for Alden only; Moon Dragon Damar lacks primary-source confirmation. Generic count of all controller grade-3 field units is absent (current helper is clan-specific). Keep reserved. No edits/tests. Local reservation only.",
+      "abilityIds": [
+        "cfa-12555:2",
+        "cfa-8281:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-ENERGYBLAST-MASQUE-SEARCH-2",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Exact official AUTO family for Pegas Dyeshach and Torikei Qimrud: RC placement, Energy Blast 3, optional hidden-zone search up to one Masque of Hydragrum, reveal/add to hand, shuffle. Implementing through existing energy-cost and same-name search operations with exact server validation and both-seat/source tests. Ability-level scope; sibling ACT abilities remain unverified.",
+      "abilityIds": [
+        "cfa-13489:0",
+        "cfa-13624:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-RC-NOVA-GRAPPLER-COUNTER-CHARGE-2",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Exact official EB08 Counter Charge 1 AUTO pair. Implementing only when the exact source card is placed on RC under a Nova Grappler Vanguard; sibling abilities remain out of scope.",
+      "abilityIds": [
+        "cfa-125:0",
+        "cfa-146:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-MAHMUD-VANGUARD-HIT-RETIRE-1",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Existing exact server ability implementation; assigning isolated regression coverage to confirm original printing and correct target ownership for both seats.",
+      "abilityIds": [
+        "cfa-2497:0"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-WASTELAND-DRAGON-OPEN-RC-POWER-1",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Existing exact per-count battle power resolver. Adding a card-specific event/source regression for the opponent open Rear-Guard count; official original card text remains pending, so this is ability-level evidence only.",
+      "abilityIds": [
+        "cfa-12058:2"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-CONT-RESIST-VC-RC-GC-2",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Keyword-guided exact Resist family slice. The shared compiler preserves each printed VC/RC/GC selector and blocks opponent targeting only while the unit is in a listed circle. Official Bushiroad wording is recorded for cfa-3195:1 and cfa-3255:1; focused regressions and the fresh 3,102/3,102 full suite pass. Do not promote either whole card while sibling abilities remain unverified. cfa-3262:1 stays out of scope pending official text confirmation.",
+      "abilityIds": [
+        "cfa-3195:1",
+        "cfa-3255:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-OWN-ATTACK-POWER-BATTLE-3",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Keyword-guided exact AUTO own-Vanguard-attack power family. Official Bushiroad wording has been confirmed for the three assigned printings. The shared handler and both-seat/source identity regression already exist; this assignment records ability-level source and test evidence only. Do not mark cards fully verified while their other printed abilities remain unreviewed.",
+      "abilityIds": [
+        "cfa-523:1",
+        "cfa-1246:1",
+        "cfa-1256:1"
+      ]
+    },
+    {
+      "batchId": "ABILITY-9AF100EA-0224",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Source audit report is complete and 5 cards were fully verified. Primary session now owns the remaining unverified abilities; completed cards are omitted from the rebuilt queue.",
+      "abilityIds": [
+        "cfa-5895:0",
+        "cfa-5895:1",
+        "cfa-5896:0",
+        "cfa-5896:1",
+        "cfa-5897:0",
+        "cfa-5898:0",
+        "cfa-5899:0",
+        "cfa-5900:0",
+        "cfa-5902:0",
+        "cfa-5903:0",
+        "cfa-5904:0",
+        "cfa-5904:1",
+        "cfa-5906:0",
+        "cfa-5907:0",
+        "cfa-5908:0",
+        "cfa-5908:1",
+        "cfa-590:0",
+        "cfa-5910:0",
+        "cfa-5910:1",
+        "cfa-5911:0",
+        "cfa-5912:0",
+        "cfa-5912:1",
+        "cfa-5913:0",
+        "cfa-5914:0",
+        "cfa-5915:0",
+        "cfa-5916:0",
+        "cfa-5916:1",
+        "cfa-5916:2",
+        "cfa-5917:0",
+        "cfa-5917:1",
+        "cfa-5918:0",
+        "cfa-5918:1",
+        "cfa-5919:0",
+        "cfa-5919:1",
+        "cfa-591:0",
+        "cfa-59:0"
+      ]
+    },
+    {
+      "batchId": "ABILITY-9AF100EA-0229",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Source audit report is complete and 4 cards were fully verified. Two source-ambiguous cards remain open. Primary session now owns the unverified remainder; completed cards are omitted from the rebuilt queue.",
+      "abilityIds": [
+        "cfa-6038:0",
+        "cfa-6038:1",
+        "cfa-6039:0",
+        "cfa-6040:0",
+        "cfa-6040:1",
+        "cfa-6041:0",
+        "cfa-6042:0",
+        "cfa-6042:1",
+        "cfa-6042:2",
+        "cfa-6043:0",
+        "cfa-6043:1",
+        "cfa-6044:0",
+        "cfa-6044:1",
+        "cfa-6052:0",
+        "cfa-6052:1",
+        "cfa-6053:0",
+        "cfa-6053:1",
+        "cfa-6054:0",
+        "cfa-6055:0",
+        "cfa-6056:0",
+        "cfa-605:0",
+        "cfa-6063:0",
+        "cfa-6063:1",
+        "cfa-6064:0",
+        "cfa-6064:1",
+        "cfa-6065:0",
+        "cfa-6066:0",
+        "cfa-606:0",
+        "cfa-6072:0",
+        "cfa-6072:1",
+        "cfa-6073:0",
+        "cfa-6074:0",
+        "cfa-6075:0",
+        "cfa-6076:0",
+        "cfa-6077:0",
+        "cfa-6078:0"
+      ]
+    },
+    {
+      "batchId": "ABILITY-9AF100EA-0235",
+      "status": "reserved",
+      "workerOwner": "primary-session",
+      "reason": "Source audit report is complete and 6 cards were fully verified. Primary session now owns the remaining unverified abilities; completed cards are omitted from the rebuilt queue.",
+      "abilityIds": [
+        "cfa-6217:0",
+        "cfa-6217:1",
+        "cfa-6218:0",
+        "cfa-6218:1",
+        "cfa-6219:0",
+        "cfa-6220:0",
+        "cfa-6221:0",
+        "cfa-6222:0",
+        "cfa-6223:0",
+        "cfa-6225:0",
+        "cfa-6226:0",
+        "cfa-6227:0",
+        "cfa-6227:1",
+        "cfa-622:0",
+        "cfa-622:1",
+        "cfa-6230:0",
+        "cfa-6230:1",
+        "cfa-6237:0",
+        "cfa-6238:0",
+        "cfa-6238:1",
+        "cfa-6239:0",
+        "cfa-6239:1",
+        "cfa-623:0",
+        "cfa-6240:0",
+        "cfa-6241:0",
+        "cfa-6242:0",
+        "cfa-6243:0",
+        "cfa-6244:0",
+        "cfa-6244:1",
+        "cfa-6245:0",
+        "cfa-6245:1",
+        "cfa-6251:0",
+        "cfa-6251:1",
+        "cfa-6256:0",
+        "cfa-6256:1",
+        "cfa-626:0",
+        "cfa-626:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-SENTINEL-GC-PROTECT-3",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Exact three-card family source review: V-BT01 Barri, V-BT01 Iseult, and V-TD02 Guard Griffin. Verify both CONT Sentinel and GC protect AUTO from official Bushiroad text; add card-specific source/test evidence and run strict whole-card gate. Local only.",
+      "abilityIds": [
+        "cfa-5707:0",
+        "cfa-5707:1",
+        "cfa-5708:0",
+        "cfa-5708:1",
+        "cfa-5724:0",
+        "cfa-5724:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-SENTINEL-DPR-538-708",
+      "workerOwner": "primary-session",
+      "cardIds": [
+        "cfa-11624",
+        "cfa-12227"
+      ],
+      "abilityIds": [
+        "cfa-11624:1",
+        "cfa-11624:0",
+        "cfa-12227:1",
+        "cfa-12227:0"
+      ],
+      "status": "in-progress",
+      "assignedAt": "2026-11-08T04:21:03.894Z",
+      "reason": "Verify official Bushiroad Japanese source and validated English text for D-PR/538 and D-PR/708; add card-specific source and test evidence. Local only."
+    },
+    {
+      "batchId": "SOURCE-AUDIT-SENTINEL-DZ-A",
+      "workerOwner": "source_audit_0224",
+      "cardIds": [
+        "cfa-12125",
+        "cfa-12176",
+        "cfa-12255",
+        "cfa-12342"
+      ],
+      "abilityIds": [
+        "cfa-12125:1",
+        "cfa-12125:0",
+        "cfa-12176:1",
+        "cfa-12176:0",
+        "cfa-12255:1",
+        "cfa-12255:0",
+        "cfa-12342:1",
+        "cfa-12342:0"
+      ],
+      "status": "in-progress",
+      "assignedAt": "2026-11-08T04:21:03.894Z",
+      "reason": "Audit official Bushiroad sources for all printed abilities and card profile on the four assigned Sentinel cards. Write a JSON evidence report under .card-pipeline/source-audits only; do not edit tracked files or mark abilities verified."
+    },
+    {
+      "batchId": "SOURCE-AUDIT-SENTINEL-DZ-B",
+      "workerOwner": "source_audit_0229",
+      "cardIds": [
+        "cfa-12379",
+        "cfa-12380",
+        "cfa-12395",
+        "cfa-12414"
+      ],
+      "abilityIds": [
+        "cfa-12379:1",
+        "cfa-12379:0",
+        "cfa-12380:1",
+        "cfa-12380:0",
+        "cfa-12395:1",
+        "cfa-12395:0",
+        "cfa-12414:1",
+        "cfa-12414:0"
+      ],
+      "status": "in-progress",
+      "assignedAt": "2026-11-08T04:21:03.894Z",
+      "reason": "Audit official Bushiroad sources for all printed abilities and card profile on the four assigned Sentinel cards. Write a JSON evidence report under .card-pipeline/source-audits only; do not edit tracked files or mark abilities verified."
+    },
+    {
+      "batchId": "SOURCE-AUDIT-SENTINEL-DZ-C",
+      "workerOwner": "source_audit_0235",
+      "cardIds": [
+        "cfa-12415",
+        "cfa-12416",
+        "cfa-12417",
+        "cfa-12418"
+      ],
+      "abilityIds": [
+        "cfa-12415:1",
+        "cfa-12415:0",
+        "cfa-12416:1",
+        "cfa-12416:0",
+        "cfa-12417:1",
+        "cfa-12417:0",
+        "cfa-12418:1",
+        "cfa-12418:0"
+      ],
+      "status": "in-progress",
+      "assignedAt": "2026-11-08T04:21:03.894Z",
+      "reason": "Audit official Bushiroad sources for all printed abilities and card profile on the four assigned Sentinel cards. Write a JSON evidence report under .card-pipeline/source-audits only; do not edit tracked files or mark abilities verified."
     }
   ],
   "completedAssignments": [
@@ -4336,6 +4795,479 @@
         "familyCases": 5,
         "fullSuite": 2033,
         "fullSuitePassed": 2033
+      }
+    },
+    {
+      "batchId": "STARHOLDER-DRAGON-ATTACK-HIT-CC2",
+      "status": "completed",
+      "workerOwner": "primary-session",
+      "reason": "Exact official AUTO, authoritative hit identity, host/joiner regression, and strict whole-card gate passed after the fresh 2885/2885 suite.",
+      "abilityIds": [
+        "cfa-3370:0"
+      ],
+      "completedAt": "2026-11-06T09:57:48.201Z",
+      "verifiedAbilityIds": [
+        "cfa-3370:0"
+      ],
+      "verifiedCardIds": [
+        "cfa-3370"
+      ],
+      "verificationMethod": "automatic-complete-card-gate-v1",
+      "validationInputDigest": "e803d6dcac71c4c9917b7410b6c5710b1016d1a7e6092e9638044b5779852529",
+      "testFiles": [
+        "ability-starholder-dragon-attack-hit-counter-charge.test.js"
+      ],
+      "testResults": {
+        "focusedTests": 5,
+        "focusedPassed": 5,
+        "fullSuiteTests": 2885,
+        "fullSuitePassed": 2885,
+        "fullSuiteFailed": 0,
+        "fullSuiteDurationMilliseconds": 622453.0789
+      }
+    },
+    {
+      "batchId": "PRIMARY-AUTO-GC-NAMED-CB-CALL-TOP-FIVE-3",
+      "status": "in-progress",
+      "workerOwner": "primary-session",
+      "reason": "Implement the exact optional Guardian Circle placement AUTO family for Rooibos, Amon's Vallation, Bufstare, and Atar. Preserve each printed Counter-Blast card-name filter, require the exact source to enter GC from hand during guard placement, call five deck-top cards rested, and keep whole-card verification incomplete because the other abilities on these cards are separate.",
+      "abilityIds": [
+        "cfa-4791:1",
+        "cfa-4903:1",
+        "cfa-4910:1"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-BOOST-POWER-SOUL-DRAW-BATTLE-END-2",
+      "status": "completed",
+      "workerOwner": "primary-session",
+      "reason": "Both assigned exact boost abilities passed strict whole-card verification with official card text and both-seat server tests; the separate Suzume text remains outside this batch.",
+      "abilityIds": [
+        "cfa-12036:0",
+        "cfa-13328:0"
+      ],
+      "verifiedAbilityIds": [
+        "cfa-12036:0",
+        "cfa-13328:0"
+      ],
+      "verifiedCardIds": [
+        "cfa-12036",
+        "cfa-13328"
+      ],
+      "completedAt": "2026-11-06T18:01:20.859Z",
+      "reconciledAt": "2026-11-07T11:15:40.913Z"
+    },
+    {
+      "batchId": "PRIMARY-AUTO-OWN-ATTACK-HIT-CLAN-SOUL-CHARGE-3",
+      "status": "completed",
+      "workerOwner": "primary-session",
+      "reason": "All three assigned exact clan-gated own-attack-hit abilities passed strict whole-card verification with both-seat server tests.",
+      "abilityIds": [
+        "cfa-467:0",
+        "cfa-535:0",
+        "cfa-811:0"
+      ],
+      "verifiedAbilityIds": [
+        "cfa-467:0",
+        "cfa-535:0",
+        "cfa-811:0"
+      ],
+      "verifiedCardIds": [
+        "cfa-467",
+        "cfa-535",
+        "cfa-811"
+      ],
+      "completedAt": "2026-11-06T16:46:20.480Z",
+      "reconciledAt": "2026-11-07T11:15:40.913Z"
+    },
+    {
+      "batchId": "PRIMARY-CONT-CREST-LIMIT-BREAK-THREE",
+      "status": "completed",
+      "workerOwner": "primary-session",
+      "reason": "Exact official ability text is compiled and the ability-specific regressions pass for both player seats; the fresh full suite passes. This closes only the assigned ability batch; sibling abilities remain incomplete, so none of these cards is fully verified.",
+      "abilityIds": [
+        "cfa-12577:2",
+        "cfa-12580:2",
+        "cfa-12591:2"
+      ],
+      "completedAt": "2026-11-07T14:29:47.574Z",
+      "verifiedAbilityIds": [
+        "cfa-12577:2",
+        "cfa-12580:2",
+        "cfa-12591:2"
+      ],
+      "validationInputDigest": "b9544ee4cfd2d227be672a1467459d8ca7f9853dcbf1f86ede4d10b3805d0c37",
+      "testFiles": [
+        "ability-cont-crest-limit-break-enabler.test.js"
+      ],
+      "testCases": [
+        "the three official Crest entries compile as passive Crest-zone Limit Break enablers",
+        "only the controller's active Crest or Rear-Guard enabler changes the Vanguard Limit Break condition",
+        "the server condition builder rejects a locked or opponent-controlled enabler"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-CONT-RC-RESIST-EXACT-TEXT-2",
+      "status": "completed",
+      "workerOwner": "primary-session",
+      "reason": "Exact official ability text is compiled and the ability-specific regressions pass for both player seats; the fresh full suite passes. This closes only the assigned ability batch; sibling abilities remain incomplete, so none of these cards is fully verified.",
+      "abilityIds": [
+        "cfa-3088:1",
+        "cfa-4205:1"
+      ],
+      "completedAt": "2026-11-07T14:29:47.574Z",
+      "verifiedAbilityIds": [
+        "cfa-3088:1",
+        "cfa-4205:1"
+      ],
+      "validationInputDigest": "b9544ee4cfd2d227be672a1467459d8ca7f9853dcbf1f86ede4d10b3805d0c37",
+      "testFiles": [
+        "ability-cont-rc-opponent-card-effect-resist.test.js"
+      ],
+      "testCases": [
+        "cfa-3088:1 and cfa-4205:1 compile the exact official RC-only Resist wording",
+        "both player seats block only opponent choices of their exact rear-guard targets"
+      ]
+    },
+    {
+      "batchId": "PRIMARY-AUTO-DUDLEY-BATTLE-PHASE-PLACEMENT-POWER-2",
+      "status": "completed",
+      "workerOwner": "primary-session",
+      "reason": "Both exact official AUTO abilities are implemented in the shared runtime registry and pass source-instance, Battle Phase, Rear-Guard entry, Spike Brothers Vanguard, optional Counter Blast, player-seat, and replay checks. The fresh full suite and strict whole-card gate passed; both single-ability cards are fully verified locally.",
+      "abilityIds": [
+        "cfa-607:0",
+        "cfa-614:0"
+      ],
+      "verifiedAbilityIds": [
+        "cfa-607:0",
+        "cfa-614:0"
+      ],
+      "verifiedCardIds": [
+        "cfa-607",
+        "cfa-614"
+      ],
+      "validationInputDigest": "91b38b6865c834d53ee5cc720be814831702022595a1b5a2eb76067017bafc40",
+      "testFiles": [
+        "ability-auto-dudley-battle-phase-placement-power.test.js"
+      ],
+      "testCases": [
+        "Dudley Daisy and Dudley Douglass retain the official Counter-Blast and Battle Phase wording",
+        "the host and joining player each receive and resolve only their own legal Battle Phase placement AUTO",
+        "the optional Counter Blast may be declined without changing power or damage",
+        "wrong phase, circle, source, clan, controller, or unavailable cost cannot trigger the effect",
+        "a repeated placement event cannot queue the same AUTO twice"
+      ],
+      "testResults": {
+        "focusedCases": 5,
+        "fullSuiteTests": 3050,
+        "fullSuiteFailures": 0,
+        "strictGatePromotedCards": 2,
+        "strictGatePromotedAbilities": 2
+      },
+      "completedAt": "2026-11-07T15:03:37.042Z"
+    },
+    {
+      "batchId": "PRIMARY-AUTO-GB-OWN-ATTACK-CB-POWER-3",
+      "status": "completed",
+      "workerOwner": "primary-session",
+      "reason": "All three exact official Generation Break own-attack Counter-Blast abilities passed focused multiplayer regressions, the fresh full suite, and the strict whole-card gate. All three single-ability cards are locally fully verified.",
+      "abilityIds": [
+        "cfa-3377:0",
+        "cfa-3393:0",
+        "cfa-3650:0"
+      ],
+      "testFiles": [
+        "ability-auto-gb-own-attack-counter-blast-power-battle.test.js"
+      ],
+      "verifiedAbilityIds": [
+        "cfa-3377:0",
+        "cfa-3393:0",
+        "cfa-3650:0"
+      ],
+      "verifiedCardIds": [
+        "cfa-3377",
+        "cfa-3393",
+        "cfa-3650"
+      ],
+      "validationInputDigest": "81b4f9f97595045ca8a7df84fd8cf0703ff7d4307b2351be8cc7708d16b79212",
+      "testCases": [
+        "the exact three-card official family keeps its GB, Counter Blast, optionality, and battle power",
+        "host and joining player may each resolve their own attack AUTO from VC or RC",
+        "declining resolves cleanly without paying or granting power",
+        "Generation Break and Counter Blast are mandatory for eligibility and rechecked at resolution",
+        "other attackers, wrong source identity, invalid battle timing, and forged controller data cannot trigger",
+        "an invalid Counter Blast target is rejected atomically and the opponent cannot answer for the source controller",
+        "duplicate attack events and duplicate decisions do not apply the battle modifier twice"
+      ],
+      "testResults": {
+        "focusedCases": 7,
+        "fullSuiteTests": 3057,
+        "fullSuiteFailures": 0,
+        "strictGatePromotedCards": 3,
+        "strictGatePromotedAbilities": 3
+      },
+      "completedAt": "2026-11-07T15:33:06.665Z"
+    },
+    {
+      "batchId": "PRIMARY-AUTO-OWN-ATTACK-G3-ROYAL-PALADIN-2",
+      "status": "completed",
+      "workerOwner": "primary-session",
+      "reason": "The exact official Palamedes AUTO family passed the ability-specific host/joiner, exact-source attack, circle, live grade-and-clan count, condition revalidation, and duplicate-event regressions; the fresh full suite and strict whole-card gate passed. Both single-ability cards are locally fully verified.",
+      "abilityIds": [
+        "cfa-679:0",
+        "cfa-696:0"
+      ],
+      "verifiedAbilityIds": [
+        "cfa-679:0",
+        "cfa-696:0"
+      ],
+      "verifiedCardIds": [
+        "cfa-679",
+        "cfa-696"
+      ],
+      "validationInputDigest": "0d352a717aca8ae730dd45504efdc303e040388692e25d4013c5b16df346e210",
+      "testFiles": [
+        "ability-auto-own-attack-field-grade-clan-count-power-server.test.js"
+      ],
+      "testCases": [
+        "exact official text and battle-only +3000 power for both Palamedes abilities",
+        "host and joining player resolve their own exact-source attacks from VC or RC",
+        "the qualifying grade 3 Royal Paladin count includes the source only when it is grade 3 and excludes locked cards",
+        "wrong source, wrong circle, wrong opposing target, stale condition, and duplicate events are rejected"
+      ],
+      "testResults": {
+        "focusedCases": 4,
+        "fullSuiteTests": 3061,
+        "fullSuiteFailures": 0,
+        "strictGatePromotedCards": 2,
+        "strictGatePromotedAbilities": 2
+      },
+      "completedAt": "2026-11-07T15:59:03.369Z"
+    },
+    {
+      "batchId": "PRIMARY-AUTO-OWN-ATTACK-OTHER-SEEKER-1",
+      "status": "completed",
+      "workerOwner": "primary-session",
+      "reason": "Heaven Arrow Seeker, Lunate (BT16/062EN) passed exact official-text, source identity, Vanguard-target, four-other-Seeker field-count, battle-power, host/joiner, stale-condition, and duplicate-event checks; the fresh full suite and strict whole-card gate passed. Morvi remains out of scope because I could not verify its text through an official card listing.",
+      "abilityIds": [
+        "cfa-2149:0"
+      ],
+      "testFiles": [
+        "ability-auto-own-attack-other-named-units-power-battle-server.test.js"
+      ],
+      "verifiedAbilityIds": [
+        "cfa-2149:0"
+      ],
+      "verifiedCardIds": [
+        "cfa-2149"
+      ],
+      "validationInputDigest": "fe47bee937b1e002189eea24f6d204678a608452d4b2d4891f04c9c5bbb8f909",
+      "testCases": [
+        "Lunate uses the official vanguard-attack wording and an exact four-other-Seeker condition",
+        "the exact attacking Lunate gains battle power for either player from VC or RC",
+        "four other matching units are required; the source and locked units do not count",
+        "a rear-guard attack does not trigger it; unrelated sources and stale conditions are rejected"
+      ],
+      "testResults": {
+        "focusedCases": 4,
+        "fullSuiteTests": 3065,
+        "fullSuiteFailures": 0,
+        "strictGatePromotedCards": 1,
+        "strictGatePromotedAbilities": 1
+      },
+      "completedAt": "2026-11-07T16:23:41.412Z"
+    },
+    {
+      "batchId": "PRIMARY-SENTINEL-OFFICIAL-SOURCE-BATCH-8",
+      "status": "completed",
+      "workerOwner": "primary-session",
+      "reason": "Eight exact Sentinel cards passed official-source verification; all 16 printed abilities passed focused and host/joiner regressions, the fresh 3,119-test full suite passed, and the current strict whole-card assessment still qualifies all eight. No website publication was performed.",
+      "abilityIds": [
+        "cfa-11933:0",
+        "cfa-11933:1",
+        "cfa-12005:0",
+        "cfa-12005:1",
+        "cfa-12188:0",
+        "cfa-12188:1",
+        "cfa-1222:0",
+        "cfa-1222:1",
+        "cfa-12413:0",
+        "cfa-12413:1",
+        "cfa-12830:0",
+        "cfa-12830:1",
+        "cfa-8342:0",
+        "cfa-8342:1",
+        "cfa-8370:0",
+        "cfa-8370:1"
+      ],
+      "testFiles": [
+        "ability-batch-gc-sentinel-protection.test.js",
+        "ability-catalog-audit.test.js",
+        "ability-conditional-discard-guardian-server.test.js",
+        "ability-engine.test.js",
+        "ability-gc-sentinel-protect-batch-server.test.js",
+        "ability-protect-target-server.test.js",
+        "ability-sentinel-keyword-batch.test.js",
+        "ability-sentinel-official-source-batch.test.js"
+      ],
+      "verifiedAbilityIds": [
+        "cfa-11933:0",
+        "cfa-11933:1",
+        "cfa-12005:0",
+        "cfa-12005:1",
+        "cfa-12188:0",
+        "cfa-12188:1",
+        "cfa-1222:0",
+        "cfa-1222:1",
+        "cfa-12413:0",
+        "cfa-12413:1",
+        "cfa-12830:0",
+        "cfa-12830:1",
+        "cfa-8342:0",
+        "cfa-8342:1",
+        "cfa-8370:0",
+        "cfa-8370:1"
+      ],
+      "verifiedCardIds": [
+        "cfa-11933",
+        "cfa-12005",
+        "cfa-12188",
+        "cfa-1222",
+        "cfa-12413",
+        "cfa-12830",
+        "cfa-8342",
+        "cfa-8370"
+      ],
+      "validationInputDigest": "19579f31c849b528bc3204305770864bd3990e7c2192b582bff422d1bf234919",
+      "testCases": [
+        "Guardian Sentinel activation rejects wrong source, circle, clan payment/target, or opponent decision without mutation",
+        "all 28 Sentinel Guardian abilities preserve their printed text, individual source, clan filters, and cost semantics",
+        "all 28 Sentinel skills bind their prompt, cost, and protection effect to the owning player",
+        "all 28 exact catalog Guardian Sentinel skills are trusted and preserve their individual filters and costs",
+        "all 410 catalog Sentinel keywords remain passive CONT keywords, never manual activations",
+        "all 63 conditional Guardian Circle abilities independently resolve for both online players",
+        "all 63 exact conditional Guardian Circle definitions are trusted in production",
+        "all 73 exact filtered Guardian protect abilities resolve for their owning host and joining player",
+        "all conditional-discard Guardian Circle protection variants compile to exact ordered effects",
+        "all exact Guardian Circle discard protection variants compile with attacked-target validation",
+        "all standalone Sentinel keyword reminder variants compile as structured CONT keywords",
+        "below the hand threshold resolves protection and skips the conditional discard",
+        "cfa-11933:0",
+        "cfa-11933:1",
+        "cfa-12005:0",
+        "cfa-12005:1",
+        "cfa-12188:0",
+        "cfa-12188:1",
+        "cfa-1222:0",
+        "cfa-1222:1",
+        "cfa-12413:0",
+        "cfa-12413:1",
+        "cfa-12830:0",
+        "cfa-12830:1",
+        "cfa-8342:0",
+        "cfa-8342:1",
+        "cfa-8370:0",
+        "cfa-8370:1",
+        "filtered clan and race Guardian costs and targets reject mismatches without partial payment",
+        "host and joining player each resolve this family using only their own hand",
+        "host and joining player resolve every Guardian Sentinel ability using their own matching hand card",
+        "host cannot resolve the joining player's family or discard from their hand",
+        "missing, foreign, and stale conditional discard selections reject without partial effects",
+        "optional Guardian Sentinel can decline without paying; mandatory variant requires its discard",
+        "standalone Sentinel is represented as a CONT keyword and never as a manual skill",
+        "wrong source instances, non-Guardian placements, and repeated events cannot create duplicate prompts"
+      ],
+      "testResults": {
+        "focusedCases": 455,
+        "fullSuiteTests": 3119,
+        "fullSuiteFailures": 0,
+        "strictGatePromotedCards": 8,
+        "strictGatePromotedAbilities": 16,
+        "strictGateReassessedCards": 8
+      },
+      "completedAt": "2026-11-08T00:40:14.270Z"
+    },
+    {
+      "batchId": "ABILITY-9AF100EA-VSS03-A",
+      "status": "completed",
+      "workerOwner": "source-audit-ability-9af100ea-0224",
+      "reason": "Official V-SS03 text was audited, exact ability definitions and both-seat resolution coverage were integrated, and all assigned abilities passed the current full-card promotion gate.",
+      "abilityIds": [
+        "cfa-5739:0",
+        "cfa-5739:1",
+        "cfa-6125:0",
+        "cfa-6125:1",
+        "cfa-6004:0",
+        "cfa-6004:1",
+        "cfa-6127:0",
+        "cfa-6127:1"
+      ],
+      "sourceAuditReport": ".card-pipeline/source-audits/ABILITY-9AF100EA-VSS03-A.json",
+      "testFiles": [
+        "ability-sentinel-official-source-batch.test.js",
+        "ability-protect-target-server.test.js"
+      ],
+      "testResults": {
+        "focusedTests": 96,
+        "fullSuiteTests": 3202,
+        "fullSuitePassed": 3202,
+        "fullSuiteFailed": 0
+      }
+    },
+    {
+      "batchId": "ABILITY-9AF100EA-VSS03-B",
+      "status": "completed",
+      "workerOwner": "source-audit-ability-9af100ea-0229",
+      "reason": "Official V-SS03 text was audited, exact ability definitions and both-seat resolution coverage were integrated, and all assigned abilities passed the current full-card promotion gate.",
+      "abilityIds": [
+        "cfa-6340:0",
+        "cfa-6340:1",
+        "cfa-5841:0",
+        "cfa-5841:1",
+        "cfa-6373:0",
+        "cfa-6373:1",
+        "cfa-5780:0",
+        "cfa-5780:1"
+      ],
+      "sourceAuditReport": ".card-pipeline/source-audits/ABILITY-9AF100EA-VSS03-B.json",
+      "testFiles": [
+        "ability-sentinel-official-source-batch.test.js",
+        "ability-protect-target-server.test.js"
+      ],
+      "testResults": {
+        "focusedTests": 96,
+        "fullSuiteTests": 3202,
+        "fullSuitePassed": 3202,
+        "fullSuiteFailed": 0
+      }
+    },
+    {
+      "batchId": "ABILITY-9AF100EA-VSS03-C",
+      "status": "completed",
+      "workerOwner": "source-audit-ability-9af100ea-0235",
+      "reason": "Official V-SS03 text was audited, exact ability definitions and both-seat resolution coverage were integrated, and all assigned abilities passed the current full-card promotion gate.",
+      "abilityIds": [
+        "cfa-5920:0",
+        "cfa-5920:1",
+        "cfa-6481:0",
+        "cfa-6481:1",
+        "cfa-5842:0",
+        "cfa-5842:1",
+        "cfa-6613:0",
+        "cfa-6613:1",
+        "cfa-5840:0",
+        "cfa-5840:1"
+      ],
+      "sourceAuditReport": ".card-pipeline/source-audits/ABILITY-9AF100EA-VSS03-C.json",
+      "testFiles": [
+        "ability-sentinel-official-source-batch.test.js",
+        "ability-protect-target-server.test.js"
+      ],
+      "testResults": {
+        "focusedTests": 96,
+        "fullSuiteTests": 3202,
+        "fullSuitePassed": 3202,
+        "fullSuiteFailed": 0
       }
     }
   ]

@@ -5,7 +5,15 @@
   if (typeof module === "object" && module.exports) module.exports = api;
   if (root) root.VanguardMatchWorkerCore = api;
 })(typeof globalThis === "undefined" ? this : globalThis, function createWorkerCore() {
-  const CARD_ZONES = Object.freeze(["deck", "hand", "damage", "drop", "soul", "bind", "rear", "orders", "crests", "guardCircle", "extra", "gDeck", "gZone", "removed"]);
+  const CARD_ZONES = Object.freeze(["deck", "hand", "damage", "drop", "soul", "bind", "equipGauges", "rear", "orders", "crests", "guardCircle", "extra", "gDeck", "gZone", "removed"]);
+
+  function normalizeCanonicalMatchState(state) {
+    if (!state || typeof state !== "object" || Array.isArray(state) || !state.players || typeof state.players !== "object" || Array.isArray(state.players)) return state;
+    for (const player of Object.values(state.players)) {
+      if (player && typeof player === "object" && !Array.isArray(player) && player.equipGauges === undefined) player.equipGauges = [];
+    }
+    return state;
+  }
 
   function validateCanonicalMatchState(state, expectedVersion, seats) {
     if (!state || typeof state !== "object" || Array.isArray(state) || typeof state.matchId !== "string" || !state.matchId) return { ok: false, reason: "invalid-canonical-match" };
@@ -17,9 +25,12 @@
     if (playerIds.some(id => typeof id !== "string" || !id) || new Set(playerIds).size !== playerIds.length) return { ok: false, reason: "invalid-player-identities" };
     const knownPlayers = new Set(playerIds), seenInstances = new Set();
     for (const [side, player] of playerEntries) {
-      for (const zone of CARD_ZONES) if (!Array.isArray(player[zone])) return { ok: false, reason: "missing-card-zone", side, zone };
+      for (const zone of CARD_ZONES) {
+        if (zone === "equipGauges" && player[zone] === undefined) continue;
+        if (!Array.isArray(player[zone])) return { ok: false, reason: zone === "equipGauges" ? "invalid-card-zone" : "missing-card-zone", side, zone };
+      }
       if (player.triggerZone !== undefined && !Array.isArray(player.triggerZone)) return { ok: false, reason: "invalid-card-zone", side, zone: "triggerZone" };
-      const instances = [player.vanguard, player.vanguard?.legionMate, ...CARD_ZONES.flatMap(zone => player[zone]), ...(player.triggerZone || [])];
+      const instances = [player.vanguard, player.vanguard?.legionMate, ...CARD_ZONES.flatMap(zone => Array.isArray(player[zone]) ? player[zone] : []), ...(player.triggerZone || [])];
       if (player.vanguard?.legionMateInstanceId !== undefined && player.vanguard.legionMateInstanceId !== player.vanguard?.legionMate?.uid) return { ok: false, reason: "legion-mate-link-mismatch", uid: player.vanguard.uid };
       if (player.vanguard?.legionMate && player.vanguard.legionMate.legionLeaderInstanceId !== player.vanguard.uid) return { ok: false, reason: "legion-leader-link-mismatch", uid: player.vanguard.legionMate.uid };
       for (const instance of instances) {
@@ -40,6 +51,16 @@
         seenInstances.add(instance.uid);
         if (typeof instance.ownerPlayerId !== "string" || !knownPlayers.has(instance.ownerPlayerId)) return { ok: false, reason: "invalid-card-owner", uid: instance.uid };
         if (typeof instance.controllerPlayerId !== "string" || !knownPlayers.has(instance.controllerPlayerId)) return { ok: false, reason: "invalid-card-controller", uid: instance.uid };
+      }
+      const fieldSources = [player.vanguard, ...(Array.isArray(player.rear) ? player.rear : [])]
+        .filter(instance => instance && instance.controllerPlayerId === player.playerId);
+      const fieldSourceIds = new Set(fieldSources.map(instance => instance.uid));
+      for (const gauge of player.equipGauges || []) {
+        if (!gauge || typeof gauge !== "object" || Array.isArray(gauge)) return { ok: false, reason: "invalid-card-instance", side };
+        if (gauge.faceDown !== true) return { ok: false, reason: "invalid-equip-gauge-face-state", uid: gauge.uid };
+        if (typeof gauge.attachedToInstanceId !== "string" || !gauge.attachedToInstanceId || gauge.attachedToInstanceId.length > 180 || gauge.attachedToInstanceId === gauge.uid || !fieldSourceIds.has(gauge.attachedToInstanceId)) {
+          return { ok: false, reason: "invalid-equip-gauge-attachment", uid: gauge.uid };
+        }
       }
     }
     return { ok: true, cardCount: seenInstances.size };
@@ -71,6 +92,7 @@
     const seats = seatMapping(claim);
     if (!seats) outcome = { ok: false, reason: "canonical-seat-mapping-missing" };
     else {
+      normalizeCanonicalMatchState(claim.state);
       const validState = validateCanonicalMatchState(claim.state, claim.expectedStateVersion, seats);
       if (!validState.ok) outcome = { ok: false, reason: validState.reason };
     }
@@ -118,5 +140,5 @@
     return { processed: true, accepted: outcome.ok === true, result, stateVersion: completed.stateVersion };
   }
 
-  return Object.freeze({ processRoomAction, seatMapping, validateCanonicalMatchState, isRoomSeatAuthUid });
+  return Object.freeze({ processRoomAction, seatMapping, normalizeCanonicalMatchState, validateCanonicalMatchState, isRoomSeatAuthUid });
 });

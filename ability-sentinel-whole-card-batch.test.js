@@ -11,15 +11,18 @@ const Reducer = require("./ability-server-reducer.js");
 const CARD_IDS = [
   "cfa-11867", "cfa-12137", "cfa-12725", "cfa-7450", "cfa-7452", "cfa-7454", "cfa-7616", "cfa-7618", "cfa-7619",
   "cfa-7630", "cfa-7776", "cfa-7778", "cfa-7782", "cfa-7784", "cfa-7852", "cfa-7859", "cfa-7863", "cfa-7866",
-  "cfa-7919", "cfa-7928", "cfa-7933", "cfa-7934", "cfa-8034", "cfa-8035", "cfa-8042", "cfa-8044", "cfa-8116"
+  "cfa-7919", "cfa-7928", "cfa-7933", "cfa-7934", "cfa-8034", "cfa-8035", "cfa-8042", "cfa-8044", "cfa-8116",
+  "cfa-11624", "cfa-12227"
 ];
+const TRIGGER_CARD_IDS = CARD_IDS.filter(cardId => !["cfa-11624", "cfa-12227"].includes(cardId));
 const SENTINEL_PATTERN = "cont-sentinel-keyword-v1";
 
 test("27 single-skill Sentinel Critical Triggers have complete card and passive-keyword definitions", () => {
   const catalog = loadCatalog();
   assert.equal(new Set(CARD_IDS).size, CARD_IDS.length);
 
-  for (const cardId of CARD_IDS) {
+  assert.equal(TRIGGER_CARD_IDS.length, 27);
+  for (const cardId of TRIGGER_CARD_IDS) {
     const card = catalog.find(row => row.id === cardId);
     assert.ok(card, `${cardId} exists in the imported catalog`);
     assert.equal(card.type, "Trigger", cardId);
@@ -59,22 +62,25 @@ test("each verified Sentinel trigger enters both player decks as a Sentinel and 
   const playerDeck = sentinelCardIds => {
     const sentinelIds = new Set(sentinelCardIds.map(String));
     const sentinels = sentinelCardIds.map(cardId => byId.get(String(cardId)));
-    const chosenTriggers = triggerFillers.filter(card => !sentinelIds.has(String(card.id))).slice(0, 16 - sentinelIds.size);
+    const sentinelTriggerCount = sentinels.filter(card => card.trigger).length;
+    const sentinelUnitCount = sentinels.length - sentinelTriggerCount;
+    const chosenTriggers = triggerFillers.filter(card => !sentinelIds.has(String(card.id))).slice(0, 16 - sentinelTriggerCount);
     const triggerNames = new Set([...sentinels, ...chosenTriggers].map(nameKey));
-    const units = [starter, ...unitFillers.filter(card => card.id !== starter.id && !sentinelIds.has(String(card.id)) && !triggerNames.has(nameKey(card)))].slice(0, 34);
-    assert.equal(units.length, 34);
+    const units = [starter, ...unitFillers.filter(card => card.id !== starter.id && !sentinelIds.has(String(card.id)) && !triggerNames.has(nameKey(card)))].slice(0, 34 - sentinelUnitCount);
+    assert.equal(units.length, 34 - sentinelUnitCount);
+    assert.equal(sentinelTriggerCount + chosenTriggers.length, 16);
     const cards = Object.fromEntries([...sentinels.map(card => [String(card.id), 1]), ...chosenTriggers.map(card => [String(card.id), 1]), ...units.map(card => [String(card.id), 1])]);
     assert.equal(Object.values(cards).reduce((sum, count) => sum + count, 0), 50);
     return { name: "Sentinel regression", format: "premium", starterCardId: starter.id, cards };
   };
-  const fourSentinelDeck = playerDeck(sentinelTriggers.slice(0, 4).map(card => card.id));
+  const fourSentinelDeck = playerDeck([sentinelTriggers[0].id, sentinelTriggers[1].id, "cfa-11624", "cfa-12227"]);
   assert.equal(Bootstrap.validateDecklist(fourSentinelDeck, cardId => byId.get(String(cardId)), Engine).ok, true, "four Sentinels are permitted");
-  const fiveSentinelDeck = playerDeck(sentinelTriggers.slice(0, 5).map(card => card.id));
+  const fiveSentinelDeck = playerDeck([sentinelTriggers[0].id, sentinelTriggers[1].id, sentinelTriggers[2].id, "cfa-11624", "cfa-12227"]);
   assert.deepEqual(Bootstrap.validateDecklist(fiveSentinelDeck, cardId => byId.get(String(cardId)), Engine), {
     ok: false, reason: "deck-restriction-exceeded", heals: 0, overs: 0, sentinels: 5, regalis: 0
   }, "a fifth Sentinel is rejected by the actual deck validator");
   let id = 0;
-  for (const sentinelCardId of CARD_IDS) {
+  for (const sentinelCardId of TRIGGER_CARD_IDS) {
     const deck = playerDeck([sentinelCardId]);
     const created = Bootstrap.createInitialMatchState({
       hostDeck: deck, guestDeck: deck,
@@ -122,5 +128,29 @@ test("each verified Sentinel trigger enters both player decks as a Sentinel and 
       assert.equal(attacker.drop.length, 0, `${sentinelCardId}:${defenderSide} cannot charge the opponent for guarding`);
       state.pendingAttack = null;
     }
+  }
+});
+
+test("D-series Sentinel cards retain both exact passive and Guardian Circle abilities", () => {
+  const catalog = loadCatalog();
+  for (const cardId of ["cfa-11624", "cfa-12227"]) {
+    const card = catalog.find(row => row.id === cardId);
+    assert.ok(card, `${cardId} exists`);
+    assert.equal(Number(card.grade), 1, cardId);
+    assert.equal(Number(card.power), 6000, cardId);
+    assert.equal(Number(card.shield), 0, cardId);
+    const abilities = Engine.parseCardAbilitiesCached(card);
+    assert.equal(abilities.length, 2, `${cardId} has both printed abilities represented`);
+    const sentinel = abilities.find(ability => ability.kind === "CONT");
+    assert.ok(sentinel, `${cardId} has its Sentinel CONT`);
+    assert.equal(sentinel.printedText, "CONT: Sentinel.", cardId);
+    assert.deepEqual(sentinel.definition?.keywords, ["sentinel"], cardId);
+    assert.equal(sentinel.trigger, null, cardId);
+    assert.equal(Engine.isManuallyActivatable(sentinel), false, cardId);
+    const guardian = abilities.find(ability => ability.kind === "AUTO");
+    assert.ok(guardian, `${cardId} has its Guardian Circle AUTO`);
+    assert.equal(guardian.definition?.source?.patternId, "auto-gc-protect-then-conditional-discard-v1", cardId);
+    assert.equal(guardian.trigger?.eventType, "card.placed", cardId);
+    assert.deepEqual(guardian.trigger?.circles, ["guardian"], cardId);
   }
 });

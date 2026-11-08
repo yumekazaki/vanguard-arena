@@ -7,7 +7,7 @@ Engine.registerAbilityDefinitions(require("./ability-definitions.js"));
 const Reducer=require("./ability-server-reducer.js");
 const {loadCatalog}=require("./scripts/audit-ability-catalog.js");
 const catalog=loadCatalog();
-const entries=[["cfa-7110",0],["cfa-7812",1],["cfa-7813",1],["cfa-7814",1],["cfa-7815",1],["cfa-7816",1],["cfa-7817",1]];
+const entries=["cfa-7110:0","cfa-7812:1","cfa-7813:1","cfa-7814:1","cfa-7815:1","cfa-7816:1","cfa-7817:1"];
 const text="AUTO [VC/RC] 1/Turn: When your drive check reveals a front trigger, you may have this unit get critical +1 until end of turn.";
 const seats={hostAuthUid:"auth-host",guestAuthUid:"auth-guest",hostSide:"human",guestSide:"bot"};
 let sequence=0;
@@ -36,7 +36,7 @@ function auth(side){return side==="human"?"auth-host":"auth-guest";}
 function resolve(f,accept=true,actionId=`resolve-${f.event.eventId}`){return Reducer.applyAbilityDecision(f.state,{actorAuthUid:auth(f.side),actionId,expectedStateVersion:f.state.stateVersion,payload:{accept,selection:{instanceUid:f.source.uid,abilityId:f.ability.id,costSelections:{cb:[],sb:[],discard:[],reveal:[]}}}},seats,Engine);}
 
 test("all seven catalog abilities have the exact trusted optional once-per-turn definition",()=>{
-  for(const [id,index] of entries){const card=catalog.find(item=>item.id===id),ability=Engine.parseCardAbilitiesCached(card).find(item=>item.id===`${id}:${index}`);assert.equal(ability.printedText,text,id);assert.equal(ability.definition.source.patternId,"auto-drive-check-front-trigger-critical-turn-v1",id);assert.equal(Reducer.supportsServerAbilityEffects(ability),true,id);}
+  for(const abilityId of entries){const id=abilityId.split(":")[0],card=catalog.find(item=>item.id===id),ability=Engine.parseCardAbilitiesCached(card).find(item=>item.id===abilityId);assert.equal(ability.printedText,text,abilityId);assert.equal(ability.definition.source.patternId,"auto-drive-check-front-trigger-critical-turn-v1",abilityId);assert.equal(Reducer.supportsServerAbilityEffects(ability),true,abilityId);}
 });
 
 test("both seats resolve only their own authentic front drive-check AUTO",()=>{

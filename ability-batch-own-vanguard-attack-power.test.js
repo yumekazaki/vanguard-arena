@@ -8,6 +8,11 @@ const Reducer = require("./ability-server-reducer.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const PATTERN = "auto-own-attack-vanguard-power-battle-v1";
+const OFFICIAL_TEXT_SOURCES = Object.freeze({
+  "cfa-523:1": { cardNumber: "BT04/018EN", reference: "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=15&view=text" },
+  "cfa-1246:1": { cardNumber: "BT11/007EN", reference: "https://en.cf-vanguard.com/cardlist/?cardno=BT11%2F007EN&expansion=28&view=text" },
+  "cfa-1256:1": { cardNumber: "BT11/001EN", reference: "https://en.cf-vanguard.com/cardlist/?cardno=BT11%2F001EN" }
+});
 const catalog = loadCatalog();
 const cards = new Map(catalog.map(card => [String(card.id), card]));
 const family = catalog.flatMap(card => Engine.parseCardAbilitiesCached(card)
@@ -69,6 +74,12 @@ test("all 70 source-specific Vanguard attack AUTO definitions preserve exact pri
     assert.equal(ability.kind, "AUTO", ability.id);
     assert.ok(card.text.includes(ability.printedText), `${ability.id}: printed text is preserved`);
     assert.equal(ability.definition.source.patternId, PATTERN, ability.id);
+    const officialSource = OFFICIAL_TEXT_SOURCES[ability.id];
+    if (officialSource) {
+      assert.equal(ability.definition.source.officialTextVerified, true, `${ability.id}: official text reviewed`);
+      assert.equal(ability.definition.source.officialCardNumber, officialSource.cardNumber, `${ability.id}: printing`);
+      assert.equal(ability.definition.source.officialReference, officialSource.reference, `${ability.id}: source link`);
+    }
     assert.equal(ability.trigger.eventType, "unit.attacked", ability.id);
     assert.equal(ability.trigger.subject, "source", ability.id);
     assert.equal(ability.trigger.targetLocation, "vanguard", ability.id);

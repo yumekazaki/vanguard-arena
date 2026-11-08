@@ -51,7 +51,7 @@ function fixture(cardId, side = "human", options = {}) {
 }
 function attack(f) { return Reducer.applyGameAction(f.state, f.command, seats, Engine); }
 
-test("five catalog blocks compile only their exact CONT ability; other card abilities stay independently audited", () => {
+test("five Crest catalog blocks compile their exact CONT abilities while other card abilities stay independently audited", () => {
   const ids = [...family.keys()];
   let blockCount = 0;
   for (const id of ids) {
@@ -59,7 +59,7 @@ test("five catalog blocks compile only their exact CONT ability; other card abil
     assert.equal(abilities.length, 4, `${id} has four source ability blocks`);
     blockCount += abilities.length;
     const matches = abilities.filter(ability => ability.definition?.source?.patternId === pattern);
-    assert.equal(matches.length, 1, `${id} only compiles the :2 ability`);
+    assert.equal(matches.length, 1, id + " only compiles the :2 front-row ability");
     const ability = matches[0];
     assert.equal(ability.id, `${id}:2`);
     assert.equal(ability.kind, "CONT");
@@ -71,10 +71,10 @@ test("five catalog blocks compile only their exact CONT ability; other card abil
       { op: "controller-vanguard-card-name-contains", name: family.get(id).name }
     ] });
     assert.equal(Reducer.supportsServerAbilityEffects(ability), true, id);
-    for (const other of abilities.filter(value => value.id !== ability.id)) {
-      assert.notEqual(other.definition?.source?.patternId, pattern);
-      assert.equal(Boolean(other.definition), false, `${other.id} remains independently unsupported pending its own review`);
-    }
+    assert.equal(abilities[0].definition?.source?.patternId, "cont-crest-grade-three-named-ride-restriction-v1", id + ":0 ride restriction");
+    assert.equal(abilities[1].definition?.source?.patternId, "cont-crest-set-grade-three-named-original-power-v1", id + ":1 original power");
+    assert.equal(abilities[3].kind, "AUTO");
+    assert.equal(Boolean(abilities[3].definition), false, id + ":3 AUTO remains independently unsupported pending its own review");
   }
   assert.equal(blockCount, 20);
   const audit = auditCatalog(catalog);
@@ -86,7 +86,7 @@ test("the exact crest continuously grants power per distinct face-up G-zone card
   for (const cardId of family.keys()) for (const side of ["human", "bot"]) {
     const f = fixture(cardId, side), result = attack(f);
     assert.equal(result.ok, true, `${cardId}/${side}: ${result.reason}`);
-    assert.equal(f.state.pendingAttack.power, Number(f.vanguard.power) + 10000, `${cardId}/${side}`);
+    assert.equal(f.state.pendingAttack.power, 13000 + 10000, cardId + "/" + side + ": original power and G-zone modifier are both applied");
     assert.equal(f.state.pendingAttack.targetPower, Number(f.opponent.vanguard.power), `${cardId}/${side} does not affect opposing units`);
   }
 });
@@ -142,7 +142,7 @@ test("virtual crest tokens resolve only to their matching reviewed source card",
 test("a Stride heart name satisfies the named-Vanguard condition, but an unrelated heart does not", () => {
   const valid = fixture("cfa-10476", "human", { vanguardId: "cfa-2455", strideHeartId: "cfa-2480" });
   assert.equal(attack(valid).ok, true);
-  assert.equal(valid.state.pendingAttack.power, Number(valid.vanguard.power) + 10000);
+  assert.equal(valid.state.pendingAttack.power, Number(valid.vanguard.power) + 12000);
   const invalid = fixture("cfa-10476", "human", { vanguardId: "cfa-2455", strideHeartId: "cfa-3280" });
   assert.equal(attack(invalid).ok, true);
   assert.equal(invalid.state.pendingAttack.power, Number(invalid.vanguard.power));

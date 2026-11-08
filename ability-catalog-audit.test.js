@@ -234,6 +234,13 @@ test("all exact Hand CONT Stride grade-boost matches remain supported and valid"
   assert.deepEqual(report.invalidCompiled,[]);
 });
 
+test("the exact named-Vanguard Hand Stride grade family preserves its three card-specific conditions",()=>{
+  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");
+  const report=auditCatalog(loadCatalog());
+  assert.equal(report.patterns["cont-hand-stride-cost-named-vanguard-grade-boost-v1"],3);
+  assert.deepEqual(report.invalidCompiled,[]);
+});
+
 
 test("all 34 exact Hand CONT Stride grade-three replacement matches remain supported",()=>{
   const {loadCatalog}=require("./scripts/audit-ability-catalog.js");
@@ -415,7 +422,7 @@ test("all seven Kiwame Crest same-name ride restrictions compile as passive rule
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js"),cards=loadCatalog(),expected=["cfa-11213","cfa-11214","cfa-11215","cfa-11216","cfa-11241","cfa-11244","cfa-11254"],matches=[];
  for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card))if(ability.raw==="You cannot ride a unit with a different card name from your vanguard.")matches.push({card,ability});
  assert.deepEqual(matches.map(item=>item.card.id).sort(),expected.sort());
- for(const {card,ability} of matches){assert.equal(ability.kind,"CONT",card.id);assert.equal(ability.definition?.source?.patternId,"cont-crest-ride-same-name-vanguard-v1",card.id);assert.deepEqual(ability.definition?.continuousRestrictions,[{type:"ride-same-name-as-vanguard"}],card.id);assert.deepEqual(ability.requiredLocation,[],card.id);}
+ for(const {card,ability} of matches){assert.equal(ability.kind,"CONT",card.id);assert.equal(ability.definition?.source?.patternId,"cont-crest-ride-same-name-vanguard-v1",card.id);assert.deepEqual(ability.definition?.continuousRestrictions,[{type:"ride-same-name-as-vanguard"}],card.id);assert.deepEqual(ability.requiredLocation,["crest"],card.id);}
 });
 
 test("all six real Restraint CONT abilities compile to circle-scoped passive attack restrictions",()=>{
@@ -458,10 +465,10 @@ test("exact standalone Resist CONT variants compile and remain target-protective
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const report=auditCatalog(loadCatalog());assert.equal(report.patterns["cont-resist-keyword-v1"],25);assert.deepEqual(report.invalidCompiled,[]);for(const card of loadCatalog())for(const ability of parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="cont-resist-keyword-v1"){assert.equal(ability.kind,"CONT");assert.deepEqual(ability.definition.keywords,["resist"]);assert.equal(ability.trigger,null);assert.equal(ability.effects,null)}
 });
 
-test("all seven exact RC cannot-be-chosen CONT catalog abilities are location-scoped passive Resist",()=>{
- const cards=loadCatalog(),report=auditCatalog(cards);assert.equal(report.patterns["cont-rc-cannot-be-chosen-by-opponent-v1"],7);assert.deepEqual(report.invalidCompiled,[]);let count=0;
- for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="cont-rc-cannot-be-chosen-by-opponent-v1"){count++;assert.equal(ability.kind,"CONT");assert.deepEqual(ability.requiredLocation,["rear-guard"]);assert.deepEqual(ability.definition.keywords,["resist"]);assert.equal(ability.trigger,null);assert.equal(ability.effects,null)}
- assert.equal(count,7);
+test("all nine exact RC cannot-be-chosen CONT catalog abilities are location-scoped passive Resist",()=>{
+ const cards=loadCatalog(),report=auditCatalog(cards);assert.equal(report.patterns["cont-rc-cannot-be-chosen-by-opponent-v1"],9);assert.deepEqual(report.invalidCompiled,[]);let count=0;const compiledIds=new Set();
+ for(const card of cards)for(const ability of engine.parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="cont-rc-cannot-be-chosen-by-opponent-v1"){count++;compiledIds.add(ability.id);assert.equal(ability.kind,"CONT");assert.deepEqual(ability.requiredLocation,["rear-guard"]);assert.deepEqual(ability.definition.keywords,["resist"]);assert.equal(ability.trigger,null);assert.equal(ability.effects,null)}
+ assert.equal(count,9);assert.ok(compiledIds.has("cfa-3088:1"));assert.ok(compiledIds.has("cfa-4205:1"));
 });
 
 test("all four GC Generation Break shield CONT catalog abilities use a live GB threshold",()=>{
@@ -491,8 +498,8 @@ test("the exact opponent/controller Vanguard grade CONT power families compile a
 test("all exact Counter-Blast GC top-deck calling abilities compile as a source-specific optional AUTO",()=>{
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const cards=loadCatalog(),report=auditCatalog(cards);assert.equal(report.patterns["auto-gc-counter-blast-call-top-to-guardian-v1"],16);assert.deepEqual(report.invalidCompiled,[]);let count=0;for(const card of cards)for(const ability of parseCardAbilitiesCached(card)){if(ability.definition?.source?.patternId!=="auto-gc-counter-blast-call-top-to-guardian-v1")continue;count++;assert.equal(ability.trigger?.eventType,"card.placed");assert.equal(ability.trigger?.subject,"source");assert.equal(ability.trigger?.sourceLocation,"hand");assert.deepEqual(ability.trigger?.circles,["guardian"]);assert.deepEqual(ability.costs,[{type:"counter-blast",count:1}]);assert.equal(ability.definition.effects[0]?.count,5);assert.equal(ability.canDecline,true)}assert.equal(count,16);
 });
-test("all 15 exact Ride Phase discard Soul-Blast bottom-deck draw abilities compile with both structured costs",()=>{
- const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const cards=loadCatalog(),report=auditCatalog(cards);assert.equal(report.patterns["auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1"],15);assert.deepEqual(report.invalidCompiled,[]);let count=0;for(const card of cards)for(const ability of parseCardAbilitiesCached(card)){if(ability.definition?.source?.patternId!=="auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1")continue;count++;assert.equal(ability.trigger?.eventType,"card.discarded");assert.equal(ability.trigger?.subject,"source");assert.equal(ability.trigger?.sourceLocation,"hand");assert.equal(ability.trigger?.requiredPhase,"ride");assert.deepEqual(ability.costs,[{type:"soul-blast",count:1},{type:"source-to-bottom-deck",count:1}]);assert.deepEqual(ability.definition.effects,[{op:"draw",count:1}])}assert.equal(count,15);
+test("all 17 exact Ride Phase discard Soul-Blast bottom-deck draw abilities compile with both structured costs",()=>{
+ const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const cards=loadCatalog(),report=auditCatalog(cards);assert.equal(report.patterns["auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1"],17);assert.deepEqual(report.invalidCompiled,[]);let count=0;for(const card of cards)for(const ability of parseCardAbilitiesCached(card)){if(ability.definition?.source?.patternId!=="auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1")continue;count++;assert.equal(ability.trigger?.eventType,"card.discarded");assert.equal(ability.trigger?.subject,"source");assert.equal(ability.trigger?.sourceLocation,"hand");assert.equal(ability.trigger?.requiredPhase,"ride");assert.deepEqual(ability.costs,[{type:"soul-blast",count:1},{type:"source-to-bottom-deck",count:1}]);assert.deepEqual(ability.definition.effects,[{op:"draw",count:1}])}assert.equal(count,17);
 });
 test("all seven current-attacker second-attack GC shield abilities compile with the turn counter condition",()=>{
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const cards=loadCatalog(),report=auditCatalog(cards);assert.equal(report.patterns["auto-gc-opponent-second-attack-shield-v1"],7);assert.deepEqual(report.invalidCompiled,[]);let count=0;for(const card of cards)for(const ability of parseCardAbilitiesCached(card)){if(ability.definition?.source?.patternId!=="auto-gc-opponent-second-attack-shield-v1")continue;count++;assert.equal(ability.trigger?.eventType,"card.placed");assert.equal(ability.trigger?.subject,"source");assert.deepEqual(ability.trigger?.circles,["guardian"]);assert.deepEqual(ability.conditions,[{type:"opponent-attacking-unit-attacked-at-least",count:2}]);assert.equal(ability.conditionStatus,"modeled");assert.deepEqual(ability.definition.effects,[{op:"modify-shield-source",target:"source",amount:15000,duration:"battle"}])}assert.equal(count,7);
@@ -648,11 +655,11 @@ test("all nine unconditional intercept shield abilities compile with Guardian Ci
  assert.deepEqual(report.invalidCompiled,[]);
 });
 
-test("18 clan-gated intercept shield abilities preserve the required Vanguard clan",()=>{
+test("19 clan-gated intercept shield abilities preserve the required Vanguard clan",()=>{
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const cards=loadCatalog(),report=auditCatalog(cards),matches=[];
  for(const card of cards)for(const ability of parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="auto-intercept-clan-vanguard-shield-battle-v1")matches.push({card,ability});
- const ids=["cfa-25","cfa-95","cfa-151","cfa-212","cfa-297","cfa-345","cfa-375","cfa-533","cfa-580","cfa-618","cfa-677","cfa-722","cfa-862","cfa-1076","cfa-1104","cfa-1462","cfa-1470","cfa-1683"];
- assert.equal(report.patterns["auto-intercept-clan-vanguard-shield-battle-v1"],18);assert.deepEqual(matches.map(item=>item.card.id).sort(),ids.sort());
+ const ids=["cfa-25","cfa-95","cfa-151","cfa-212","cfa-297","cfa-345","cfa-375","cfa-423","cfa-533","cfa-580","cfa-618","cfa-677","cfa-722","cfa-862","cfa-1076","cfa-1104","cfa-1462","cfa-1470","cfa-1683"];
+ assert.equal(report.patterns["auto-intercept-clan-vanguard-shield-battle-v1"],19);assert.deepEqual(matches.map(item=>item.card.id).sort(),ids.sort());
  for(const {ability} of matches){assert.equal(ability.trigger?.eventType,"card.placed");assert.deepEqual(ability.trigger?.circles,["guardian"]);assert.equal(ability.trigger?.sourceLocation,"rear-guard");assert.equal(ability.conditions.length,1);assert.equal(ability.conditions[0].type,"controller-vanguard-has-clan");assert.deepEqual(ability.effects,[{op:"modify-shield-source",target:"source",amount:5000,duration:"battle"}]);assert.equal(ability.conditionStatus,"modeled")}
  assert.deepEqual(report.invalidCompiled,[]);
 });
@@ -666,19 +673,19 @@ test("nine structured state conditions compile as exact battle-scoped Intercept 
  assert.deepEqual(report.invalidCompiled,[]);
 });
 
-test("four controller-Vanguard-attacked Intercept cards require the actual defended Vanguard",()=>{
+test("five controller-Vanguard-attacked Intercept cards require the actual defended Vanguard",()=>{
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const cards=loadCatalog(),report=auditCatalog(cards),matches=[];
  for(const card of cards)for(const ability of parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="auto-intercept-controller-vanguard-attacked-shield-battle-v1")matches.push({card,ability});
- assert.equal(report.patterns["auto-intercept-controller-vanguard-attacked-shield-battle-v1"],4);assert.deepEqual(matches.map(item=>item.card.id).sort(),["cfa-4353","cfa-4483","cfa-4534","cfa-5184"]);
+ assert.equal(report.patterns["auto-intercept-controller-vanguard-attacked-shield-battle-v1"],5);assert.deepEqual(matches.map(item=>item.card.id).sort(),["cfa-3909","cfa-4353","cfa-4483","cfa-4534","cfa-5184"]);
  for(const {ability} of matches){assert.equal(ability.trigger?.eventType,"card.placed");assert.equal(ability.trigger?.subject,"source");assert.deepEqual(ability.trigger?.circles,["guardian"]);assert.equal(ability.trigger?.sourceLocation,"rear-guard");assert.deepEqual(ability.conditions,[{type:"controller-vanguard-is-attacked-unit"}]);assert.deepEqual(ability.effects,[{op:"modify-shield-source",target:"source",amount:5000,duration:"battle"}]);assert.equal(ability.conditionStatus,"modeled")}
  assert.deepEqual(report.invalidCompiled,[]);
 });
 
-test("seven Generation Break Intercept shield abilities require GB1",()=>{
+test("nine Generation Break Intercept shield abilities require GB1",()=>{
  const {loadCatalog}=require("./scripts/audit-ability-catalog.js");const {parseCardAbilitiesCached}=require("./ability-engine.js");const cards=loadCatalog(),report=auditCatalog(cards),matches=[];
  for(const card of cards)for(const ability of parseCardAbilitiesCached(card))if(ability.definition?.source?.patternId==="auto-intercept-generation-break-shield-battle-v1")matches.push({card,ability});
- assert.equal(report.patterns["auto-intercept-generation-break-shield-battle-v1"],7);assert.deepEqual(matches.map(item=>item.card.id).sort(),["cfa-3651","cfa-4157","cfa-4357","cfa-4446","cfa-4459","cfa-4873","cfa-4972"]);
- for(const {ability} of matches){assert.equal(ability.kind,"AUTO");assert.equal(ability.gb,1);assert.equal(ability.trigger?.eventType,"card.placed");assert.equal(ability.trigger?.subject,"source");assert.deepEqual(ability.trigger?.circles,["guardian"]);assert.equal(ability.trigger?.sourceLocation,"rear-guard");assert.deepEqual(ability.effects,[{op:"modify-shield-source",target:"source",amount:ability.effects[0].amount,duration:"battle"}]);assert.equal(ability.costStatus,"no-cost")}
+ assert.equal(report.patterns["auto-intercept-generation-break-shield-battle-v1"],9);assert.deepEqual(matches.map(item=>item.card.id).sort(),["cfa-3396","cfa-3651","cfa-3713","cfa-4157","cfa-4357","cfa-4446","cfa-4459","cfa-4873","cfa-4972"]);
+ for(const {ability} of matches){assert.equal(ability.kind,"AUTO");assert.equal(ability.gb,1);assert.equal(ability.trigger?.eventType,"card.placed");assert.equal(ability.trigger?.subject,"source");assert.deepEqual(ability.trigger?.circles,["guardian"]);assert.equal(ability.trigger?.sourceLocation,"rear-guard");assert.deepEqual(ability.effects,[{op:"modify-shield-source",target:"source",amount:ability.effects[0].amount,duration:"battle"}]);assert.equal(ability.costStatus,"no-cost");if(["cfa-3396","cfa-3713"].includes(ability.cardId)){assert.deepEqual(ability.conditions,[{type:"generation-break",count:1}])}if(ability.cardId==="cfa-3396"){assert.equal(ability.definition.source.officialTextVerified,true);assert.equal(ability.definition.source.officialCardNumber,"G-TD06/008EN")}if(ability.cardId==="cfa-3713"){assert.equal(ability.definition.source.officialTextVerified,true);assert.equal(ability.definition.source.officialCardNumber,"G-SD02/008EN")}}
  assert.deepEqual(report.invalidCompiled,[]);
 });
 

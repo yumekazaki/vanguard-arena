@@ -46,6 +46,61 @@ test("spectator projection hides both players' private zones and preserves face-
   }
 });
 
+test("opponent face-down gauge identities are hidden while counts and source attachments remain public", () => {
+  const state = fixture();
+  state.players.human.rear[0].equipGauges = [
+    { uid: "host-gauge-1", cardId: "host-private-gauge", faceDown: true, attachedToInstanceId: "public-field" }
+  ];
+  state.players.bot.rear[0].equipGauges = [
+    { uid: "guest-gauge-1", cardId: "guest-private-gauge", name: "Secret Trigger", faceDown: true, attachedToInstanceId: "public-field-2", privateNote: "must not leak" },
+    { uid: "guest-gauge-2", cardId: "guest-public-gauge", name: "Face-up card", faceUp: true, attachedToInstanceId: "public-field-2" },
+    { uid: "guest-gauge-3", cardId: "implicit-down-gauge", attachedToInstanceId: "public-field-2" }
+  ];
+  state.players.bot.equipGaugeCards = [
+    { uid: "guest-unattached-gauge", cardId: "another-secret", faceDown: true }
+  ];
+  state.players.bot.rear[0].divineGauges = [
+    { uid: "other-gauge-system", cardId: "leave-this-system-alone", faceDown: true }
+  ];
+
+  const host = Projection.projectForPlayer(state, "player-host");
+  const opponentGauges = host.players.bot.rear[0].equipGauges;
+  assert.equal(opponentGauges.length, 3, "the opponent's gauge count is public");
+  assert.equal(opponentGauges[0].cardId, null);
+  assert.equal(opponentGauges[0].name, undefined);
+  assert.equal(opponentGauges[0].privateNote, undefined);
+  assert.equal(opponentGauges[0].attachedToInstanceId, "public-field-2");
+  assert.equal(opponentGauges[1].cardId, "guest-public-gauge", "face-up gauge identities remain public");
+  assert.equal(opponentGauges[2].cardId, null, "gauge cards without an explicit face-up flag default to hidden");
+  assert.equal(host.players.bot.equipGaugeCards.length, 1);
+  assert.equal(host.players.bot.equipGaugeCards[0].cardId, null);
+  assert.equal(host.players.bot.equipGaugeCards[0].attachedToInstanceId, undefined);
+  assert.equal(host.players.bot.rear[0].divineGauges[0].cardId, "leave-this-system-alone", "the Equip Gauge projection does not change other gauge systems");
+  assert.equal(host.players.human.rear[0].equipGauges[0].cardId, "host-private-gauge", "the owner retains their own gauge identity");
+  assert.equal(state.players.bot.rear[0].equipGauges[0].cardId, "guest-private-gauge", "projection must not mutate canonical state");
+});
+
+test("the gauge redactor preserves face-down gauge array slots in nested field structures", () => {
+  const state = fixture();
+  state.players.bot.field = {
+    units: [{
+      uid: "target-unit",
+      equipGauge: [
+        { uid: "gauge-a", cardId: "secret-a", faceDown: true, attachedToInstanceId: "target-unit" },
+        { uid: "gauge-b", cardId: "secret-b", faceDown: false, attachedToInstanceId: "target-unit" }
+      ],
+      visibleGaugeCount: 2
+    }]
+  };
+  const view = Projection.projectForPlayer(state, "player-host");
+  const unit = view.players.bot.field.units[0];
+  assert.equal(unit.equipGauge.length, 2);
+  assert.equal(unit.equipGauge[0].cardId, null);
+  assert.equal(unit.equipGauge[0].attachedToInstanceId, "target-unit");
+  assert.equal(unit.equipGauge[1].cardId, "secret-b", "explicitly face-up cards remain visible");
+  assert.equal(unit.visibleGaugeCount, 2, "public gauge counts remain unchanged");
+});
+
 test("only approved private zones can be redacted and snapshot paths use the projection", () => {
   const state = fixture();
   Projection.hidePrivateZones(state, ["bot"], ["hand", "rear"]);

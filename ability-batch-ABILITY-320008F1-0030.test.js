@@ -98,7 +98,7 @@ test("official Bushiroad source reviews are recorded, including the catalog/offi
 
 test("regression suites already exercise the exact supported batch cards through shared verified mechanics", () => {
   const checks = [
-    ["ability-auto-ride-phase-discard-soul-blast-bottom-deck-draw-server.test.js", /all 15 Ride-phase discard definitions/],
+    ["ability-auto-ride-phase-discard-soul-blast-bottom-deck-draw-server.test.js", /all 17 Ride-phase discard definitions/],
     ["ability-conditional-discard-guardian-server.test.js", /all 63 exact conditional Guardian Circle definitions/],
     ["ability-candidate-320008f1-0007-named-vanguard-ride-restriction.test.js", /cfa-10847/],
     ["ability-drive-trigger-unit-power-server.test.js", /cfa-10857/],

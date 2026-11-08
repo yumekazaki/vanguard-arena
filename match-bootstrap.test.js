@@ -36,6 +36,7 @@ test("initial server state validates both submitted legal decks and creates uniq
   assert.equal(state.players.bot.human, false);
   for (const side of ["human", "bot"]) {
     const player = state.players[side];
+    assert.deepEqual(player.equipGauges, []);
     assert.equal(player.hand.length, 5);
     assert.equal(player.deck.length, 44);
     assert.equal(player.vanguard.cardId, "starter");

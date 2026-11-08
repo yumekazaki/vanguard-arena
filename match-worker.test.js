@@ -255,6 +255,61 @@ test("canonical state validation rejects version drift, duplicate instances, and
   assert.equal(Worker.validateCanonicalMatchState(invalidLegionMate.state, 2, Worker.seatMapping(invalidLegionMate)).reason, "invalid-legion-mate-instance");
 });
 
+test("canonical state validates face-down equip gauges attached to a controlled on-field instance", () => {
+  const claim = claimedCommand(), player = claim.state.players.bot, source = player.rear[0];
+  player.equipGauges = [{
+    uid: "equip-gauge-1", cardId: "gauge-card", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player",
+    faceDown: true, attachedToInstanceId: source.uid
+  }];
+  const result = Worker.validateCanonicalMatchState(claim.state, 2, Worker.seatMapping(claim));
+  assert.deepEqual(result, { ok: true, cardCount: 3 });
+  assert.equal(player.equipGauges[0].ownerPlayerId, "guest-player");
+  assert.equal(player.equipGauges[0].controllerPlayerId, "guest-player");
+
+  const faceUp = claimedCommand(), faceUpPlayer = faceUp.state.players.bot;
+  faceUpPlayer.equipGauges = [{ uid: "equip-gauge-face-up", cardId: "gauge-card", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player", faceDown: false, attachedToInstanceId: faceUpPlayer.rear[0].uid }];
+  assert.equal(Worker.validateCanonicalMatchState(faceUp.state, 2, Worker.seatMapping(faceUp)).reason, "invalid-equip-gauge-face-state");
+
+  const unattached = claimedCommand();
+  unattached.state.players.bot.equipGauges = [{ uid: "equip-gauge-unattached", cardId: "gauge-card", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player", faceDown: true, attachedToInstanceId: "missing-source" }];
+  assert.equal(Worker.validateCanonicalMatchState(unattached.state, 2, Worker.seatMapping(unattached)).reason, "invalid-equip-gauge-attachment");
+
+  const wrongController = claimedCommand(), wrongControllerPlayer = wrongController.state.players.bot;
+  wrongControllerPlayer.rear[0].controllerPlayerId = "host-player";
+  wrongControllerPlayer.equipGauges = [{ uid: "equip-gauge-wrong-controller", cardId: "gauge-card", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player", faceDown: true, attachedToInstanceId: wrongControllerPlayer.rear[0].uid }];
+  assert.equal(Worker.validateCanonicalMatchState(wrongController.state, 2, Worker.seatMapping(wrongController)).reason, "invalid-equip-gauge-attachment");
+
+  const duplicate = claimedCommand(), duplicatePlayer = duplicate.state.players.bot;
+  duplicatePlayer.equipGauges = [{ uid: duplicatePlayer.rear[0].uid, cardId: "gauge-card", ownerPlayerId: "guest-player", controllerPlayerId: "guest-player", faceDown: true, attachedToInstanceId: duplicatePlayer.rear[0].uid }];
+  assert.equal(Worker.validateCanonicalMatchState(duplicate.state, 2, Worker.seatMapping(duplicate)).reason, "duplicate-card-instance-id");
+});
+
+test("legacy canonical states without equip-gauge arrays normalize to empty zones before reduction", async () => {
+  const claim = claimedCommand();
+  assert.equal(Worker.validateCanonicalMatchState(claim.state, 2, Worker.seatMapping(claim)).ok, true, "legacy state remains valid before migration");
+  assert.equal(Object.hasOwn(claim.state.players.human, "equipGauges"), false);
+  const { calls, rpc } = rpcFor(claim);
+  const reducer = {
+    applyEngorgeDecision(state) {
+      assert.deepEqual(state.players.human.equipGauges, []);
+      assert.deepEqual(state.players.bot.equipGauges, []);
+      return { ok: true, state, events: [] };
+    }
+  };
+  const result = await Worker.processRoomAction("0123456789ABCDEF", { rpc, engine: Engine, reducer });
+  assert.equal(result.accepted, true);
+  assert.deepEqual(calls[1].args.p_next_state.players.human.equipGauges, []);
+  assert.deepEqual(calls[1].args.p_next_state.players.bot.equipGauges, []);
+});
+
+test("canonical state rejects a malformed equip-gauge zone", () => {
+  const claim = claimedCommand();
+  claim.state.players.bot.equipGauges = {};
+  assert.equal(Worker.validateCanonicalMatchState(claim.state, 2, Worker.seatMapping(claim)).reason, "invalid-card-zone");
+  claim.state.players.bot.equipGauges = [null];
+  assert.equal(Worker.validateCanonicalMatchState(claim.state, 2, Worker.seatMapping(claim)).reason, "invalid-card-instance");
+});
+
 test("worker rejects a malformed canonical state without passing it to the reducer", async () => {
   const claim = claimedCommand();
   claim.state.players.human.rear = [{ ...claim.state.players.bot.rear[0] }];

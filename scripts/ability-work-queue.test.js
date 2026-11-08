@@ -81,7 +81,13 @@ test("central work queue covers unverified abilities and separates reviewed mech
   assert.ok(candidate.dependencies.some(dependency => dependency.type === "candidate-review" && dependency.shared === false));
   assert.ok(candidate.dependencies.some(dependency => dependency.id === `whole-card-evidence:${candidate.cardId}`));
   assert.deepEqual(result.items.filter(item => item.missingTrustedDefinition).map(item => item.abilityId), [],
-    "every compiled AUTO/ACT in this fixture must pass the exact trusted-server definition gate");
+    "Suzume's official Japanese printing and matching English Shenryi effect are now verified against primary sources");
+  const officialSuzumeBoost = result.items.find(item => item.abilityId === "cfa-13400:1");
+  assert.ok(officialSuzumeBoost);
+  assert.equal(officialSuzumeBoost.mechanicGroupType, "reviewed-mechanic");
+  assert.equal(officialSuzumeBoost.missingTrustedDefinition, false);
+  assert.ok(!officialSuzumeBoost.workFlags.includes("missing-trusted-server-definition"));
+  assert.deepEqual(officialSuzumeBoost.missingRequirements, [], "the trigger, OR condition, timing, and effect sequence are structurally reviewed");
   const unconfirmedNamedVanguard = result.items.find(item => item.abilityId === "cfa-10769:0");
   assert.ok(unconfirmedNamedVanguard);
   assert.equal(unconfirmedNamedVanguard.missingTrustedDefinition, false,
@@ -117,5 +123,12 @@ test("central work queue covers unverified abilities and separates reviewed mech
     assert.ok(crestPower, `expected the exact face-up G-zone CONT ${abilityId}`);
     assert.deepEqual(crestPower.missingEffectHandlers, [], `continuous evaluator handles ${abilityId}`);
     assert.deepEqual(crestPower.missingServerEffectHandlers, [], `trusted server handles ${abilityId}`);
+  }
+  for (const abilityId of ["cfa-10476:1", "cfa-10668:1", "cfa-12182:1", "cfa-12183:1", "cfa-12577:1", "cfa-12580:1", "cfa-12591:1", "cfa-13177:1", "cfa-13186:1"]) {
+    const crestPowerSet = result.items.find(item => item.abilityId === abilityId);
+    assert.ok(crestPowerSet, `expected the exact Crest original-power-set CONT ${abilityId}`);
+    assert.deepEqual(crestPowerSet.missingEffectHandlers, [], `the custom continuous evaluator handles ${abilityId}`);
+    assert.deepEqual(crestPowerSet.missingServerEffectHandlers, [], `the trusted server evaluator handles ${abilityId}`);
+    assert.equal(crestPowerSet.missingTrustedDefinition, false, `the exact definition is trusted for ${abilityId}`);
   }
 });

@@ -2,6 +2,8 @@
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 const Engine = require("./ability-engine.js");
 Engine.registerAbilityDefinitions(require("./ability-definitions.js"));
 const Reducer = require("./ability-server-reducer.js");
@@ -105,4 +107,16 @@ test("structured Intercept conditions are rechecked on resolution and the host c
   const proxy = resolve(joined, seats.hostAuthUid);
   assert.equal(proxy.ok, false);
   assert.equal(proxy.reason, "source-not-controlled");
+});
+
+test("client intercept matcher recognizes the exact source event rather than literal backslash text", () => {
+  const app = fs.readFileSync(path.join(__dirname, "app.js"), "utf8");
+  const matcher = String.raw`if(/\bwhen this unit intercepts\b/i.test(String(raw||"")))`;
+  const doubleEscapedMatcher = String.raw`if(/\\bwhen this unit intercepts\\b/i.test(String(raw||"")))`;
+  assert.ok(app.includes(matcher), "client source must use actual regex word boundaries");
+  assert.ok(!app.includes(doubleEscapedMatcher), "client source must not search for literal backslash-b");
+
+  const interceptEvent = { type: "card.placed", sourceCardInstanceId: "guard-1", subjectCardInstanceId: "guard-1" };
+  assert.equal(Engine.eventSubjectMatches(interceptEvent, "guard-1", "source"), true);
+  assert.equal(Engine.eventSubjectMatches(interceptEvent, "guard-2", "source"), false);
 });

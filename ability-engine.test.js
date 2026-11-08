@@ -253,7 +253,7 @@ test("both Order Zone hand actions emit placement events for the moved instance"
 test("intercept placement carries the source circle and current battle into its AUTO event",()=>{
  const app=fs.readFileSync("app.js","utf8"),start=app.indexOf("function interceptWith(uid)"),end=app.indexOf("function moveRearCardToZone",start),branch=app.slice(start,end);
  assert.ok(start>=0);assert.match(branch,/previousLocation:index<5\?\["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right"\]\[index\]:"accel-"\+\(index-4\)/);assert.match(branch,/currentLocation:"guardian"/);assert.match(branch,/battleId:match\.pendingAttack\?\.battleId/);assert.match(branch,/targetUid:match\.pendingAttack\?\.targetUid/);assert.match(branch,/targetZone:match\.pendingAttack\?\.targetZone/);
- assert.match(app,/function placeAbilityMatchesSubject\(raw,source,context\)\{if\(\/\\\\bwhen this unit intercepts/);
+ assert.match(app,/function placeAbilityMatchesSubject\(raw,source,context\)\{if\(\/\\bwhen this unit intercepts/);
 });
 
 test("instance location is derived from the owning match zone and duplicate placement is surfaced",()=>{
@@ -1969,6 +1969,8 @@ test("Generation Break counts only face-up G units on Vanguard and in the G zone
   const player = { vanguard: { cardId: "stride" }, gZone: [{ uid: "zone-up", cardId: "g-unit", faceUp: true }, { uid: "zone-down", cardId: "g-unit", faceUp: false }, { uid: "zone-non-g", cardId: "normal", faceUp: true }], gDeck: [{ uid: "deck-up", cardId: "g-unit", faceUp: true }], rear: [{ uid: "rear-g", cardId: "g-unit" }] };
   const isGUnit = instance => instance.cardId === "stride" || instance.cardId === "g-unit";
   assert.equal(require("./ability-engine.js").countGenerationBreakUnits(player, isGUnit), 2);
+  assert.equal(require("./ability-engine.js").countGenerationBreakUnits({ vanguard: { cardId: "stride", faceDown: true }, gZone: [{ cardId: "g-unit", faceUp: true }] }, isGUnit), 1);
+  assert.equal(require("./ability-engine.js").countGenerationBreakUnits({ vanguard: { cardId: "stride", faceUp: false }, gZone: [] }, isGUnit), 0);
   assert.equal(require("./ability-engine.js").countGenerationBreakUnits({ gZone: [{ cardId: "g-unit", faceUp: true }, { cardId: "normal", faceUp: true }], vanguard: { cardId: "normal" }, rear: [{ cardId: "g-unit" }] }, isGUnit), 1);
   const app = fs.readFileSync("app.js", "utf8");
   assert.match(app, /countGenerationBreakUnits\(p,instance=>isGDeckCard/);
@@ -2889,7 +2891,7 @@ test("Resist CONT is a passive keyword that rejects opponent targeting but allow
   const card={id:"test-resist",name:"Test Unit",type:"Normal Unit",text:"CONT [VC/RC/GC]: Resist (This unit cannot be chosen by the effects of your opponent’s cards.)"};
   const ability=parseCardAbilities(card)[0];
   assert.equal(ability.kind,"CONT");assert.deepEqual(ability.definition?.keywords,["resist"]);assert.equal(hasAbilityKeyword(card,"resist"),true);
-  const target={source:{uid:"source"},target:{uid:"target"},targetCard:card,targetControllerPlayerId:"defender",sourceControllerPlayerId:"attacker"};
+  const target={source:{uid:"source"},target:{uid:"target"},targetCard:card,targetZone:"rear-left",targetControllerPlayerId:"defender",sourceControllerPlayerId:"attacker"};
   assert.equal(matchesTargetFilter({},target),false);assert.equal(matchesTargetFilter({}, {...target,sourceControllerPlayerId:"defender"}),true);assert.equal(matchesTargetFilter({}, {...target,sourceControllerPlayerId:undefined}),false);
   assert.equal(matchesTargetFilter({}, {...target,targetCard:{id:"plain",text:""}}),true);
 });
@@ -2899,7 +2901,7 @@ test("exact RC cannot-be-chosen CONT protects only the Rear-Guard copy from oppo
   const ability=parseCardAbilities(card)[0];
   assert.equal(ability.definition?.source?.patternId,"cont-rc-cannot-be-chosen-by-opponent-v1");
   assert.deepEqual(ability.requiredLocation,["rear-guard"]);assert.deepEqual(ability.definition?.keywords,["resist"]);assert.equal(isManuallyActivatable(ability),false);
-  const target={source:{uid:"attacker"},target:{uid:"protected"},targetCard:card,targetControllerPlayerId:"defender",sourceControllerPlayerId:"attacker"};
+  const target={source:{uid:"attacker"},target:{uid:"protected"},targetCard:card,targetZone:"rear-left",targetControllerPlayerId:"defender",sourceControllerPlayerId:"attacker"};
   assert.equal(matchesTargetFilter({},target),false);
   assert.equal(matchesTargetFilter({}, {...target,targetZone:"rear-left"}),false);
   assert.equal(matchesTargetFilter({}, {...target,targetZone:"vanguard"}),true);

@@ -6,8 +6,8 @@ Engine.registerAbilityDefinitions(require('./ability-definitions.js'));
 const Reducer = require('./ability-server-reducer.js');
 const { loadCatalog } = require('./scripts/audit-ability-catalog.js');
 
-const IDS = [['cfa-4353', 1], ['cfa-4483', 2], ['cfa-4534', 1], ['cfa-5184', 1]];
-const TEXT = "AUTO: When this unit intercepts during the battle that your vanguard was attacked, this unit gets shield +5000 until end of that battle.";
+const IDS = [['cfa-3909', 2], ['cfa-4353', 1], ['cfa-4483', 2], ['cfa-4534', 1], ['cfa-5184', 1]];
+const TEXT = id => `AUTO: When this unit intercepts during the battle that your vanguard ${id === 'cfa-3909' ? 'is' : 'was'} attacked, this unit gets shield +5000 until end of that battle.`;
 const seats = { hostAuthUid: 'auth-host', guestAuthUid: 'auth-guest', hostSide: 'human', guestSide: 'bot' };
 const cards = new Map(loadCatalog().map(card => [String(card.id), card]));
 function instance(id, uid, playerId, extra = {}) {
@@ -33,10 +33,10 @@ function resolve(f, actionId, actorAuthUid = f.side === 'human' ? seats.hostAuth
   return Reducer.applyAbilityDecision(f.state, { actorAuthUid, actionId, expectedStateVersion: f.state.stateVersion, payload: { accept: true, selection: { instanceUid: f.source.uid, abilityId: f.ability.id } } }, seats, Engine);
 }
 
-test('all four attacked-Vanguard Intercept abilities have exact trusted definitions', () => {
+test('all five attacked-Vanguard Intercept abilities have exact trusted definitions', () => {
   for (const [id, index] of IDS) {
     const f = fixture(id, index);
-    assert.equal(f.ability.printedText, TEXT);
+    assert.equal(f.ability.printedText, TEXT(id));
     assert.deepEqual(f.ability.conditions, [{ type: 'controller-vanguard-is-attacked-unit' }]);
     assert.deepEqual(f.ability.definition.effects, [{ op: 'modify-shield-source', target: 'source', amount: 5000, duration: 'battle' }]);
     assert.equal(Reducer.supportsServerAbilityEffects(f.ability), true, f.ability.id);

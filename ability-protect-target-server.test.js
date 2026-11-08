@@ -165,6 +165,39 @@ test("all 92 exact generic Guardian discard-and-protect abilities are registered
   }
 });
 
+test("official V-Premium Sentinel cards resolve their own GC protect AUTO for host and joining controller", () => {
+  const cardIds = [
+    "cfa-5707", "cfa-5708", "cfa-5724",
+    "cfa-5895", "cfa-5896", "cfa-5904", "cfa-5918", "cfa-5919",
+    "cfa-6043", "cfa-6044", "cfa-6052", "cfa-6063",
+    "cfa-6227", "cfa-6230", "cfa-6244", "cfa-6245", "cfa-6251", "cfa-6256",
+    "cfa-5739", "cfa-6125", "cfa-6004", "cfa-6127", "cfa-6340", "cfa-5841",
+    "cfa-6373", "cfa-5780", "cfa-5920", "cfa-6481", "cfa-5842", "cfa-6613", "cfa-5840"
+  ];
+  for (const cardId of cardIds) for (const ownerSide of ["human", "bot"]) {
+    const abilityId = `${cardId}:1`;
+    const fixture = setup(cardId, { abilityId, ownerSide, attackTargetUid: `${ownerSide}-${cardId}-target` });
+    const actorAuthUid = ownerSide === "human" ? "auth-host" : "auth-guest";
+    const result = decide(fixture, actorAuthUid, { targetUid: fixture.target.uid }, `resolve-${abilityId}-${ownerSide}`);
+
+    assert.equal(result.ok, true, `${abilityId} (${ownerSide}): ${result.reason || ""}`);
+    assert.equal(fixture.state.pendingAbility, null, `${abilityId} resolves instead of remaining pending`);
+    assert.equal(fixture.state.pendingAttack.perfectGuard, true, abilityId);
+    assert.equal(fixture.state.pendingAttack.blocked, true, abilityId);
+    assert.deepEqual(fixture.state.players[ownerSide].drop.map(card => card.uid), [fixture.discard.uid], abilityId);
+    assert.deepEqual(fixture.state.players[ownerSide === "human" ? "bot" : "human"].drop, [], abilityId);
+  }
+});
+
+test("the host cannot choose or pay for a joining player's V-Premium Sentinel AUTO", () => {
+  const fixture = setup("cfa-5707", { abilityId: "cfa-5707:1", ownerSide: "bot" });
+  const before = JSON.stringify(fixture.state);
+  const result = decide(fixture, "auth-host", { targetUid: fixture.target.uid }, "host-proxy-v-premium-sentinel");
+  assert.equal(result.ok, false);
+  assert.equal(result.reason, "source-not-controlled");
+  assert.equal(JSON.stringify(fixture.state), before, "a rejected proxy request does not mutate costs or effects");
+});
+
 test("all 76 exact filtered Guardian protect abilities resolve for their owning host and joining player", () => {
   const family = [];
   for (const definition of catalog) for (const ability of Engine.parseCardAbilitiesCached(definition)) {

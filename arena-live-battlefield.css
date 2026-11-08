@@ -30,6 +30,24 @@
     inset 0 0 12px color-mix(in srgb,var(--ring) 38%,transparent);
 }
 #match-layout #game-table .field-zone > span { color: #ecf7f3; text-shadow: 0 1px 4px #000; }
+#match-layout #game-table .field-card .equip-gauge-badge {
+  position: absolute;
+  z-index: 5;
+  top: 30px;
+  left: 3px;
+  max-width: calc(100% - 6px);
+  padding: 2px 4px;
+  overflow: hidden;
+  border: 1px solid #8de4f2;
+  border-radius: 5px;
+  background: #082735ed;
+  box-shadow: 0 1px 6px #000b, 0 0 8px #41cce955;
+  color: #e1fbff;
+  font: 800 clamp(6px,.58vw,8px)/1.15 var(--mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
 #match-layout #game-table .player-line :is(.deck-zone,.drop-zone,.gdeck-button) {
   border-color: #c8d9df;
   box-shadow: 0 0 0 1px #637f89, 0 3px 10px #000a, inset 0 0 0 2px #d4faff24;

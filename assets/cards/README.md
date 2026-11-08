@@ -27,3 +27,12 @@ node assets/cards/import-cards.js
 
 The source data is community-maintained and is not a Bushiroad API. Keep the attribution and source date with this project. Card text and images belong to their respective rights holders; publish them only as permitted.
 
+
+
+## Official English release additions through November 8, 2026
+
+`official-catalog-data.js` adds 2,524 card definitions missing from the site catalog after comparing it with Bushiroad’s official English card list and released products. The checked release window is May 10, 2025 through November 8, 2026; the latest released booster included is DZ-BT16, Parallactic Dawn (October 30, 2026). Announced products after November 8 are excluded. Six October–November 2026 promo cards absent from the searchable card list were transcribed from their official Bushiroad card images and retain links to that artwork.
+
+The supplement keeps official card numbers, text, card properties, product/release metadata, and official artwork URLs. It is loaded after the existing catalog instead of rebuilding or replacing `catalog-data.js`. Ninety-two official entries have no rules-text string in the source listing; they remain blank rather than receiving invented text.
+
+Adding card data does not mean every new card ability has an implemented or verified effect handler. Ability support remains tracked separately in the rules engine. Official artwork is linked from Bushiroad’s site rather than copied into this repository; retain the existing rights and attribution notes above.

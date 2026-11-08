@@ -14,7 +14,16 @@ const FAMILY = new Map([
   ["cfa-2142", { index: 0, name: "Brawler, Headband of Greed", circle: "vanguard/rear-guard", power: 3000 }],
   ["cfa-2151", { index: 0, name: "Seeker, Gigantech Driver", circle: "vanguard/rear-guard", power: 3000 }],
   ["cfa-2341", { index: 0, name: "Liberator, Feather Lion", circle: "vanguard/rear-guard", power: 3000 }],
-  ["cfa-2353", { index: 0, name: "Star-vader, Metal Griffin", circle: "vanguard/rear-guard", power: 3000 }]
+  ["cfa-2353", { index: 0, name: "Star-vader, Metal Griffin", circle: "vanguard/rear-guard", power: 3000 }],
+  ["cfa-2438", { index: 0, name: "Star-vader, Grand Baboon", circle: "vanguard/rear-guard", power: 3000 }]
+]);
+const OFFICIAL_TEXT_CARD_NUMBERS = new Map([
+  ["cfa-1984", "BT16/005EN"],
+  ["cfa-2119", "BT17/102EN"],
+  ["cfa-2137", "BT17/087EN"],
+  ["cfa-2142", "BT16/087EN"],
+  ["cfa-2353", "BT17/116EN"],
+  ["cfa-2438", "BT17/123EN"]
 ]);
 const catalog = loadCatalog();
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
@@ -74,7 +83,7 @@ function choose(f, options = {}) {
   }, seats, Engine);
 }
 
-test("seven catalog abilities preserve exact text, ability index, circle scope, SB cost, and battle power", () => {
+test("eight catalog abilities preserve exact text, ability index, circle scope, SB cost, and battle power", () => {
   for (const [cardId, spec] of FAMILY) {
     const f = fixture(cardId, "human", spec.circle === "vanguard" ? "vanguard" : "rear-guard");
     assert.equal(f.ability.id, `${cardId}:${spec.index}`);
@@ -88,6 +97,12 @@ test("seven catalog abilities preserve exact text, ability index, circle scope, 
     assert.deepEqual(f.ability.costs, [{ type: "soul-blast", count: 1 }]);
     assert.deepEqual(f.ability.definition.effects, [{ op: "modify-power", target: "source", amount: 3000, duration: "battle" }]);
     assert.equal(f.ability.canDecline, true);
+    const officialCardNumber = OFFICIAL_TEXT_CARD_NUMBERS.get(cardId);
+    if (officialCardNumber) {
+      assert.equal(f.ability.definition.source.officialCardNumber, officialCardNumber);
+      assert.equal(f.ability.definition.source.officialTextVerified, true);
+      assert.match(f.ability.definition.source.officialReference, /^https:\/\/en\.cf-vanguard\.com\/cardlist\//);
+    }
   }
 });
 
@@ -105,6 +120,16 @@ test("host and joiner can each pay their own Soul Blast for a Vanguard attack an
   }
   const vcOnlyRear = fixture("cfa-1984", "human", "rear-guard");
   assert.equal(discover(vcOnlyRear).queued.length, 0);
+});
+
+test("Grand Baboon does not trigger when its attack targets a Rear-Guard", () => {
+  const f = fixture("cfa-2438", "human", "rear-guard");
+  const rearGuardTarget = { uid: "opp-rear", cardId: "opponent-unit", ownerPlayerId: "player-guest", controllerPlayerId: "player-guest", unitCard: true };
+  f.state.players.bot.rear[0] = rearGuardTarget;
+  f.state.pendingAttack.targetUid = rearGuardTarget.uid;
+  f.state.pendingAttack.targetZone = "rear-left";
+  f.event = { ...f.event, targetCardInstanceIds: [rearGuardTarget.uid], targetLocation: "rear-left" };
+  assert.equal(discover(f).queued.length, 0);
 });
 
 test("declining the optional cost resolves without payment or power change", () => {

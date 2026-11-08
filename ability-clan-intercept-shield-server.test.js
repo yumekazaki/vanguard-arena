@@ -8,7 +8,7 @@ const Reducer = require("./ability-server-reducer.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const PATTERN = "auto-intercept-clan-vanguard-shield-battle-v1";
-const CARD_IDS = ["cfa-1076", "cfa-1104", "cfa-1462", "cfa-1470", "cfa-151", "cfa-1683", "cfa-212", "cfa-25", "cfa-297", "cfa-345", "cfa-375", "cfa-533", "cfa-580", "cfa-618", "cfa-677", "cfa-722", "cfa-862", "cfa-95"];
+const CARD_IDS = ["cfa-1076", "cfa-1104", "cfa-1462", "cfa-1470", "cfa-151", "cfa-1683", "cfa-212", "cfa-25", "cfa-297", "cfa-345", "cfa-375", "cfa-423", "cfa-533", "cfa-580", "cfa-618", "cfa-677", "cfa-722", "cfa-862", "cfa-95"];
 const catalog = loadCatalog();
 const seats = { hostAuthUid: "auth-host", guestAuthUid: "auth-guest", hostSide: "human", guestSide: "bot" };
 const card = id => { const found = catalog.find(item => String(item.id) === id); assert.ok(found, `catalog card ${id}`); return found; };
@@ -40,10 +40,10 @@ function decide(fixture, authUid = fixture.ownerAuth) {
   return Reducer.applyAbilityDecision(fixture.state, { actorAuthUid: authUid, actionId: `resolve-clan-intercept-${fixture.side}`, expectedStateVersion: fixture.state.stateVersion, payload: { type: "ability-response", accept: true, selection: { instanceUid: fixture.source.uid, abilityId: fixture.ability.id } } }, seats, Engine);
 }
 
-test("all 18 clan-qualified Intercept definitions are exact and server-gated", () => {
+test("all 19 clan-qualified Intercept definitions are exact and server-gated", () => {
   const family = [];
   for (const definition of catalog) for (const ability of Engine.parseCardAbilitiesCached(definition)) if (ability.definition?.source?.patternId === PATTERN) family.push(ability);
-  assert.equal(family.length, 18);
+  assert.equal(family.length, 19);
   assert.deepEqual(family.map(ability => ability.cardId).sort(), CARD_IDS.slice().sort());
   assert.ok(family.every(ability => Engine.getReviewedAbilityDefinitionsForCard(ability.cardId).some(entry => entry.id === ability.id)), "every family ability is trusted in the production registry");
   assert.ok(family.every(ability => Reducer.supportsServerAbilityEffects(ability)));
@@ -54,6 +54,10 @@ test("all 18 clan-qualified Intercept definitions are exact and server-gated", (
     const altered = structuredClone(ability); altered.definition.effects[0].amount = 10000;
     assert.equal(Reducer.supportsServerAbilityEffects(altered), false, ability.id);
   }
+  const securityGuardian = Engine.parseCardAbilitiesCached(card("cfa-423")).find(ability => ability.id === "cfa-423:0");
+  assert.equal(securityGuardian.definition.source.officialTextVerified, true);
+  assert.equal(securityGuardian.definition.source.officialCardNumber, "TD04/005EN");
+  assert.equal(securityGuardian.definition.source.officialCardText, "[AUTO]:When this unit intercepts ([Intercept]), if you have an <Oracle Think Tank> vanguard, this unit gets [Shield] +5000 until end of that battle.");
   assert.equal(Reducer.supportsServerEffectOperation("modify-shield-source"), false);
 });
 

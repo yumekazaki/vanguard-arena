@@ -3,27 +3,30 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const Engine = require("./ability-engine.js");
+const Reducer = require("./ability-server-reducer.js");
 const { loadCatalog } = require("./scripts/audit-ability-catalog.js");
 
 const contribution = require("./ability-contributions/batch-CANDIDATE-320008F1-0002.js");
 const catalog = loadCatalog();
 const cardsById = new Map(catalog.map(card => [String(card.id), card]));
 const expected = [
-  "cfa-10017:0", "cfa-10017:1",
-  "cfa-10018:0", "cfa-10018:1", "cfa-10018:2",
-  "cfa-8981:0", "cfa-8981:1",
-  "cfa-8982:0", "cfa-8982:1"
+  "cfa-8980:0", "cfa-10017:0",
+  "cfa-10018:0", "cfa-10018:1",
+  "cfa-8981:0", "cfa-8982:0"
 ];
 
-test("the audit covers exactly all nine abilities on the assigned Ancient Dragon cards", () => {
+test("the audit keeps all six unresolved Ancient Dragon sibling abilities explicit", () => {
   assert.equal(contribution.length, 0, "no unsupported definition may enter the executable registry");
   assert.equal(contribution.audit.batchId, "CANDIDATE-320008F1-0002");
-  assert.equal(contribution.audit.status, "audit-only-blocked-on-equip-gauge-state-and-effects");
+  assert.equal(contribution.audit.status, "partial-equip-gauge-family-implemented-with-sibling-effects-unresolved");
   assert.deepEqual(contribution.audit.abilityIds.slice().sort(), expected.slice().sort());
   assert.deepEqual(contribution.audit.unsupportedSiblings.map(item => item.abilityId).sort(), expected.slice().sort());
-  assert.deepEqual(contribution.audit.implementedAbilityIds, []);
+  assert.equal(contribution.audit.assignedAbilityIds.length, 11);
+  assert.deepEqual(contribution.audit.implementedAbilityIds.slice().sort(), ["cfa-10017:1", "cfa-10018:2", "cfa-8980:1", "cfa-8981:1", "cfa-8982:1"].sort());
+  assert.deepEqual(contribution.audit.abilityEvidenceIds.slice().sort(), ["cfa-10018:2", "cfa-8980:1", "cfa-8981:1", "cfa-8982:1"].sort());
+  assert.deepEqual(contribution.audit.exactTextReviewPendingAbilityIds, ["cfa-10017:1"]);
   assert.deepEqual(contribution.audit.alreadySupportedAbilityIds, []);
-  assert.equal(contribution.audit.cards.length, 4);
+  assert.equal(contribution.audit.cards.length, 5);
   for (const record of contribution.audit.cards) {
     assert.equal(cardsById.get(record.cardId)?.name, record.name);
     assert.match(record.officialReference, /^https:\/\/en\.cf-vanguard\.com\//);
@@ -49,19 +52,18 @@ test("all catalog source identities and texts are preserved, with unsupported tr
   }
 });
 
-test("the shared engine has no equip-gauge effect handler; all four drive-check gauge abilities remain unexecutable", () => {
-  assert.equal(Object.keys(Engine.EFFECT_HANDLERS).some(name => /equip.?gauge/i.test(name)), false);
-  const gaugeIds = ["cfa-10017:1", "cfa-10018:2", "cfa-8981:1", "cfa-8982:1"];
+test("the shared engine compiles the exact drive-check Equip Gauge family and leaves its siblings unsupported", () => {
+  assert.equal(Object.keys(Engine.EFFECT_HANDLERS).includes("attach-top-card-as-equip-gauge"), true);
+  const gaugeIds = contribution.audit.implementedAbilityIds;
   for (const id of gaugeIds) {
-    const item = contribution.unsupportedSiblings.find(candidate => candidate.abilityId === id);
     const card = cardsById.get(id.split(":")[0]);
     const parsed = Engine.parseCardAbilities(card).find(ability => ability.id === id);
+    assert.equal(parsed.definition?.source?.patternId, "auto-rc-drive-trigger-equip-gauge-v1");
+    assert.equal(Reducer.supportsServerAbilityEffects(parsed), true, `${id} has an authoritative effect handler`);
     assert.ok(parsed.once, `${id} has its per-turn usage restriction in catalog text`);
     assert.equal(parsed.usageRestriction?.type, "once-per-turn");
-    assert.equal(Engine.autoAbilityReadiness(parsed).ok, false);
-    assert.match(item.blocker, /drive-check event|drive check/i);
-    assert.match(item.blocker, /equip-gauge|equip gauge/i);
   }
+  assert.equal(Engine.parseCardAbilities(cardsById.get("cfa-10017")).find(ability => ability.id === "cfa-10017:1").definition.source.officialTextVerified, false);
 });
 
 test("a Dinocrowd attack event identifies only that exact source instance for both seats", () => {
@@ -101,5 +103,5 @@ test("official references and Tyrannolegend errata disclose the catalog text lim
   assert.match(contribution.audit.errataNote, /official D-VS06 Tyrannolegend text and errata/);
   const babyrex = contribution.unsupportedSiblings.find(item => item.abilityId === "cfa-10017:0");
   assert.equal(babyrex.officialPrintedText, null, "do not claim direct card-text verification when the source page was unavailable");
-  assert.match(contribution.audit.provenanceNote, /not marked text-verified/);
+  assert.match(contribution.audit.provenanceNote, /not marked exact-text verified/);
 });

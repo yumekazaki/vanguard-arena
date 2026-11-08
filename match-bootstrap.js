@@ -155,7 +155,7 @@
     shuffleInPlace(main, random);
     shuffleInPlace(gDeck, random);
     return {
-      playerId, name: String(name || "Player").slice(0, 24), format, rideDeck, deck: main.slice(5), hand: main.slice(0, 5), damage: [], drop: [], soul: [], bind: [],
+      playerId, name: String(name || "Player").slice(0, 24), format, rideDeck, deck: main.slice(5), hand: main.slice(0, 5), damage: [], drop: [], soul: [], bind: [], equipGauges: [],
       vanguard, rodeGradeThreePlusThisFight: false, opponentTriggerRevealedThisTurn: false, rear: Array(DEFAULT_REAR_ZONES).fill(null),
       accelZones: 0, accelTypes: [], giftZones: [], orders: [], crests: [], guardCircle: [], triggerZone: [], extra: [], gDeck, gZone: [], removed: [],
       quickShields: 0, protectMarkers: 0, gifts: 0, human: Boolean(human)

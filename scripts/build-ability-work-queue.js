@@ -11,7 +11,7 @@ const { candidatePatternKey } = require("./unsupported-ability-patterns.js");
 const { sourceValidationDigest } = require("./source-validation-digest.js");
 const CONTINUOUS_EFFECT_OPS = new Set([
   "continuous-power", "continuous-critical", "continuous-shield", "continuous-grade",
-  "continuous-power-per-soul-card", "continuous-power-adjustment", "continuous-power-per-clan-rearguard", "continuous-power-per-dragontree-marker", "continuous-power-per-controller-rearguard", "continuous-power-per-named-face-up-damage-card", "continuous-power-per-face-up-g-zone-card"
+  "continuous-power-per-soul-card", "continuous-power-adjustment", "continuous-power-per-clan-rearguard", "continuous-power-per-dragontree-marker", "continuous-power-per-controller-rearguard", "continuous-power-per-named-face-up-damage-card", "continuous-power-per-face-up-g-zone-card", "continuous-original-power-set"
 ]);
 
 function dependenciesForAbility({ ability, definition, missingRequirements, missingHandlers, missingServerHandlers, missingTrustedDefinition, hasTests, suiteFresh, mechanicGroup }) {

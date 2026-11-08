@@ -9,6 +9,7 @@ const serverReducer = require("../ability-server-reducer.js");
 const { loadCatalog, auditCatalog } = require("./audit-ability-catalog.js");
 const { sourceValidationDigest } = require("./source-validation-digest.js");
 const SINGLE_ABILITY_GENERIC_REMAINING = "Ability-level regression evidence only; whole-card verification requires every other printed ability and relevant rules interactions to pass.";
+const SINGLE_ABILITY_SENTINEL_REMAINING = "No card-specific ability remains: the sole printed Sentinel CONT, card metadata, deck copy limit, bootstrap keyword state, and both authoritative player-seat guard paths are covered.";
 
 function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -39,6 +40,23 @@ function referencesExactAbilityInTests({ ability, abilities, cardId, abilityId, 
     /\btest\s*\(/.test(source) && /\bassert\./.test(source));
 }
 
+function hasCompleteSentinelCardEvidence({ ability, abilities, cardId, remainingWork, testFiles, testSources }) {
+  if (remainingWork !== SINGLE_ABILITY_SENTINEL_REMAINING || abilities.length !== 1 ||
+      ability?.kind !== "CONT" || ability.definition?.source?.patternId !== "cont-sentinel-keyword-v1" ||
+      JSON.stringify(ability.definition?.keywords || []) !== JSON.stringify(["sentinel"]) ||
+      (ability.definition?.effects || []).length !== 0 ||
+      !testFiles.some(file => path.basename(String(file)) === "ability-sentinel-whole-card-batch.test.js")) return false;
+  const exactCardId = new RegExp(`([\"'\\x60])${escapeRegExp(cardId)}\\1`);
+  return testSources.some(source => exactCardId.test(source) &&
+    /const CARD_IDS\s*=\s*\[/.test(source) &&
+    /for\s*\(const cardId of CARD_IDS\)/.test(source) &&
+    /Engine\.parseCardAbilitiesCached\(card\)/.test(source) &&
+    /four Sentinels are permitted/.test(source) &&
+    /a fifth Sentinel is rejected/.test(source) &&
+    /for\s*\(const defenderSide of \["human", "bot"\]\)/.test(source) &&
+    /Reducer\.applyGameAction\(/.test(source));
+}
+
 function suiteIsFresh(root, manifest) {
   const suite = manifest?.latestFullSuite;
   return Boolean(suite?.status === "passed" && suite.failed === 0 && suite.passed === suite.tests &&
@@ -62,24 +80,11 @@ function assessCardPromotion({ card, abilities, recordsByAbility, invalidAbility
         ability.definition.printedText !== ability.printedText) reasons.push(`${abilityId || "unknown"}:missing-exact-structured-definition`);
     if (invalidAbilityIds.has(abilityId)) reasons.push(`${abilityId}:catalog-audit-failed`);
     if (ability.conditionStatus === "needs-review" || ability.costStatus === "needs-review" || ability.choiceStatus === "needs-review") reasons.push(`${abilityId}:unmodeled-requirement`);
+    if (ability.definition?.source?.officialTextVerified === false) reasons.push(`${abilityId}:official-card-text-unverified`);
     if (ability.kind === "AUTO" && ability.trigger?.status !== "recognized-trigger") reasons.push(`${abilityId}:unrecognized-trigger`);
     if (!record || !["tests-passing", "fully-verified"].includes(record.status) ||
         !Array.isArray(record.testFiles) || !record.testFiles.length ||
         !Array.isArray(record.testCases) || !record.testCases.length) reasons.push(`${abilityId}:missing-passing-ability-evidence`);
-    const remainingWork = String(record?.remaining || "").trim();
-    // This exact note is generated as a blanket sibling-ability warning. When
-    // the parser finds exactly one printed ability, there are no sibling
-    // abilities left to verify; all the normal exact-definition, test, rules,
-    // cost, timing, and multiplayer gates below still apply. Never waive any
-    // card-specific or live-play blocker here.
-    const genericSingleAbilityNote = abilities.length === 1 && remainingWork === SINGLE_ABILITY_GENERIC_REMAINING;
-    if (remainingWork && !genericSingleAbilityNote) {
-      reasons.push(`${abilityId}:unresolved-remaining-work`);
-      if (/live browser|live match|manual online gameplay|real match still/i.test(remainingWork)) {
-        reasons.push(`${abilityId}:explicit-live-gameplay-gap`);
-      }
-    }
-
     const testSources = [];
     for (const file of record?.testFiles || []) {
       try {
@@ -89,6 +94,21 @@ function assessCardPromotion({ card, abilities, recordsByAbility, invalidAbility
         reasons.push(`${abilityId}:missing-test-file:${String(file)}`);
       }
     }
+    const remainingWork = String(record?.remaining || "").trim();
+    // This exact note is generated as a blanket sibling-ability warning. When
+    // the parser finds exactly one printed ability, there are no sibling
+    // abilities left to verify; all the normal exact-definition, test, rules,
+    // cost, timing, and multiplayer gates below still apply. Never waive any
+    // card-specific or live-play blocker here.
+    const genericSingleAbilityNote = abilities.length === 1 && remainingWork === SINGLE_ABILITY_GENERIC_REMAINING;
+    const completeSentinelCardEvidence = hasCompleteSentinelCardEvidence({ ability, abilities, cardId, remainingWork, testFiles: record?.testFiles || [], testSources });
+    if (remainingWork && !genericSingleAbilityNote && !completeSentinelCardEvidence) {
+      reasons.push(`${abilityId}:unresolved-remaining-work`);
+      if (/live browser|live match|manual online gameplay|real match still/i.test(remainingWork)) {
+        reasons.push(`${abilityId}:explicit-live-gameplay-gap`);
+      }
+    }
+
     const exactAbilityReferenced = referencesExactAbilityInTests({ ability, abilities, cardId, abilityId, testCases: record?.testCases || [], testSources });
     if (!exactAbilityReferenced) reasons.push(`${abilityId}:tests-do-not-reference-exact-ability-id`);
 

@@ -50,6 +50,7 @@ test("each exact card counts as grade 3 only from hand during its controller's S
 
 test("the live Stride legality path evaluates the selected hand card only while paying Stride", () => {
   const app = fs.readFileSync("app.js", "utf8");
-  assert.match(app, /evaluateStrideCostGrade\(cardAbilities\(card\),\{location:"hand",isPayingStrideCost\}\)/);
-  assert.match(app, /strideGrade\(instance,isPayingStrideCost=false\)/);
+  assert.match(app, /evaluateStrideCostGrade\(cardAbilities\(card\),\{location:"hand",isPayingStrideCost,controllerVanguardCardNames\}\)/);
+  assert.match(app, /strideGrade\(instance,isPayingStrideCost=false,player=match\?/);
+  assert.match(app, /strideGrade\(item,true,player\)/, "the practice bot checks the bot Vanguard's name");
 });

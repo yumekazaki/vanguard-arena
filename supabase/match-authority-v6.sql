@@ -1,6 +1,60 @@
 -- Keep opponent-owned effect choices private in seat-scoped snapshots.
 -- Run after match-authority-v1.sql through match-authority-v5.sql.
 
+-- Recursively redact identities in face-down gauge card arrays while preserving
+-- their public count and the link to the public unit they are attached to.
+CREATE OR REPLACE FUNCTION public.redact_match_equip_gauge_projection(p_value jsonb, p_side text, p_parent_key text)
+RETURNS jsonb
+LANGUAGE plpgsql IMMUTABLE SET search_path = '' AS $$
+DECLARE
+  result jsonb;
+  child record;
+BEGIN
+  IF jsonb_typeof(p_value) = 'object' THEN
+    result := '{}'::jsonb;
+    FOR child IN SELECT key, value FROM jsonb_each(p_value) LOOP
+      result := jsonb_set(
+        result,
+        ARRAY[child.key],
+        public.redact_match_equip_gauge_projection(child.value, p_side, child.key),
+        true
+      );
+    END LOOP;
+    RETURN result;
+  ELSIF jsonb_typeof(p_value) = 'array' THEN
+    IF coalesce(p_parent_key, '') ~* 'equip(ped)?[_ -]?gauges?' THEN
+      SELECT coalesce(jsonb_agg(
+        CASE
+          WHEN jsonb_typeof(item) = 'object'
+            AND (item->>'faceUp' = 'true' OR item->>'faceDown' = 'false')
+          THEN public.redact_match_equip_gauge_projection(item, p_side, NULL)
+          ELSE jsonb_build_object(
+            'uid', 'hidden-' || p_side || '-' || coalesce(p_parent_key, 'gauge') || '-' || coalesce(item->>'attachedToInstanceId', 'unattached') || '-' || (ordinality - 1),
+            'cardId', NULL,
+            'faceDown', true
+          ) || CASE
+            WHEN jsonb_typeof(item) = 'object' AND item ? 'attachedToInstanceId'
+              THEN jsonb_build_object('attachedToInstanceId', item->'attachedToInstanceId')
+            ELSE '{}'::jsonb
+          END
+        END ORDER BY ordinality
+      ), '[]'::jsonb)
+      INTO result
+      FROM jsonb_array_elements(p_value) WITH ORDINALITY AS gauges(item, ordinality);
+      RETURN result;
+    END IF;
+
+    SELECT coalesce(jsonb_agg(
+      public.redact_match_equip_gauge_projection(item, p_side, NULL) ORDER BY ordinality
+    ), '[]'::jsonb)
+    INTO result
+    FROM jsonb_array_elements(p_value) WITH ORDINALITY AS items(item, ordinality);
+    RETURN result;
+  END IF;
+  RETURN p_value;
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION public.get_match_state_for_player(p_room_code text)
 RETURNS jsonb
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
@@ -34,6 +88,7 @@ BEGIN
     opponent := jsonb_set(opponent, ARRAY[zone_name], public.redact_match_card_array(opponent -> (zone_name), opponent_side, zone_name, true), true);
   END LOOP;
   opponent := jsonb_set(opponent, '{damage}', public.redact_match_card_array(opponent->'damage', opponent_side, 'damage', false), true);
+  opponent := public.redact_match_equip_gauge_projection(opponent, opponent_side, NULL);
   players := jsonb_set(players, ARRAY[opponent_side], opponent, true);
   projected := jsonb_set(canonical.state, '{players}', players, true);
 
@@ -64,3 +119,4 @@ $$;
 
 REVOKE ALL ON FUNCTION public.get_match_state_for_player(text) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.get_match_state_for_player(text) TO authenticated;
+REVOKE ALL ON FUNCTION public.redact_match_equip_gauge_projection(jsonb, text, text) FROM PUBLIC, anon, authenticated, service_role;

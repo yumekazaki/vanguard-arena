@@ -1,6 +1,237 @@
 (function registerCuratedAbilityBatch(root) {
   const definitions =   [
     {
+      "id": "cfa-11783:0",
+      "cardId": "cfa-11783",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When the attack it boosted hits, you may Counter Charge 1. If you do, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "booster",
+        "requiresBoostedBattle": true
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "cardTextVerification": "local-catalog-only",
+        "patternId": "auto-boosted-attack-hit-counter-charge-return-source-v1",
+        "review": "Exact repeated-text ability for Mint & Sonya Sweat16! Vanguard. Local catalog wording is used pending primary-source confirmation. The exact booster may Counter Charge one face-down card in its controller's damage zone; if chosen, that source returns to its owner's deck and the deck is shuffled."
+      },
+      "effects": [
+        {
+          "op": "counter-charge-and-return-source-to-deck",
+          "target": "source",
+          "count": 1,
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11784:0",
+      "cardId": "cfa-11784",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When the attack it boosted hits, you may Counter Charge 1. If you do, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "booster",
+        "requiresBoostedBattle": true
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "cardTextVerification": "local-catalog-only",
+        "patternId": "auto-boosted-attack-hit-counter-charge-return-source-v1",
+        "review": "Exact repeated-text ability for Music & Phet Sweat16! Vanguard. Local catalog wording is used pending primary-source confirmation. The exact booster may Counter Charge one face-down card in its controller's damage zone; if chosen, that source returns to its owner's deck and the deck is shuffled."
+      },
+      "effects": [
+        {
+          "op": "counter-charge-and-return-source-to-deck",
+          "target": "source",
+          "count": 1,
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11785:0",
+      "cardId": "cfa-11785",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When the attack it boosted hits, you may Counter Charge 1. If you do, return this unit to your deck, and shuffle your deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "booster",
+        "requiresBoostedBattle": true
+      },
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "cardTextVerification": "local-catalog-only",
+        "patternId": "auto-boosted-attack-hit-counter-charge-return-source-v1",
+        "review": "Exact repeated-text ability for Ning & Ant Sweat16! Vanguard. Local catalog wording is used pending primary-source confirmation. The exact booster may Counter Charge one face-down card in its controller's damage zone; if chosen, that source returns to its owner's deck and the deck is shuffled."
+      },
+      "effects": [
+        {
+          "op": "counter-charge-and-return-source-to-deck",
+          "target": "source",
+          "count": 1,
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-3622:0",
+      "cardId": "cfa-3622",
+      "kind": "CONT",
+      "printedText": "CONT [Hand]: While you are paying the cost for Stride, if you have a vanguard with \"Maiden of\" in its card name, this card gets grade +1.",
+      "requiredLocation": [
+        "hand"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=PR%2F0429EN",
+        "officialTextVerified": true,
+        "patternId": "cont-hand-stride-cost-named-vanguard-grade-boost-v1",
+        "review": "Bushiroad's official PR/0429EN text confirms the Maiden of Vanguard-name condition, Stride-payment window, Hand location, and +1 grade."
+      },
+      "effects": [
+        {
+          "op": "continuous-grade",
+          "target": "source",
+          "amount": 1,
+          "duration": "stride-payment",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "paying-stride-cost"
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Maiden of"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-4405:0",
+      "cardId": "cfa-4405",
+      "kind": "CONT",
+      "printedText": "CONT [Hand]: While you are paying the cost for Stride, if you have a vanguard with \"Alfred\" in its card name, this card gets grade +1.",
+      "requiredLocation": [
+        "hand"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-CHB01%2F027EN&expansion=91&s_param=Royal+Paladin&view=text",
+        "officialTextVerified": true,
+        "patternId": "cont-hand-stride-cost-named-vanguard-grade-boost-v1",
+        "review": "Bushiroad's official G-CHB01/027EN text confirms the Alfred Vanguard-name condition, Stride-payment window, Hand location, and +1 grade."
+      },
+      "effects": [
+        {
+          "op": "continuous-grade",
+          "target": "source",
+          "amount": 1,
+          "duration": "stride-payment",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "paying-stride-cost"
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Alfred"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-5067:1",
+      "cardId": "cfa-5067",
+      "kind": "CONT",
+      "printedText": "CONT [Hand]: While you are paying the cost for Stride, if you have a vanguard with \"Eradicator\" in its card name, this card gets grade +2.",
+      "requiredLocation": [
+        "hand"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=101&sort=no&view=text",
+        "cardTextVerification": "local-catalog-plus-secondary-source",
+        "patternId": "cont-hand-stride-cost-named-vanguard-grade-boost-v1",
+        "review": "The local catalog and secondary card listing agree on Eradicator and +2 grade. Direct Bushiroad card text remains unconfirmed; keep this ability out of fully verified counts until primary-source confirmation."
+      },
+      "effects": [
+        {
+          "op": "continuous-grade",
+          "target": "source",
+          "amount": 2,
+          "duration": "stride-payment",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "paying-stride-cost"
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Eradicator"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "cfa-10916:0",
       "cardId": "cfa-10916",
       "kind": "AUTO",
@@ -3293,16 +3524,61 @@
       "kind": "AUTO",
       "printedText": "AUTO: When this unit is placed on VC or RC, if you have an <Oracle Think Tank> vanguard, look at the top card of your deck, and put that card on the top or the bottom of your deck.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
-        "cardNumber": "cfa-2",
-        "review": "printed text; placement circles, Vanguard clan requirement, and chosen deck position modeled"
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialTextVerified": true,
+        "officialCardNumber": "BT01/007EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT01%2F007EN",
+        "officialCardText": "[AUTO]:When this unit is placed on (VC) or (RC), if you have an <Oracle Think Tank> vanguard, look at the top card of your deck, and put that card on the top or the bottom of your deck.",
+        "patternId": "auto-placement-clan-top-deck-order-v1",
+        "review": "The official BT01 printing confirms this mandatory AUTO on either VC or RC. The controller must have an Oracle Think Tank vanguard and chooses whether the exact top card stays on top or moves to the bottom. No cost, once-per-turn restriction, or optional activation is printed."
       },
+      "trigger": { "status": "recognized-trigger", "eventType": "card.placed", "subject": "source", "circles": ["vanguard", "rear-guard"] },
+      "conditions": [{ "type": "controller-vanguard-has-clan", "value": "Oracle Think Tank" }],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
       "effects": [
         {
           "op": "reorder-deck-card",
           "target": "chosen",
-          "destination": "player-choice"
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-394:0",
+      "cardId": "cfa-394",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC or RC, if you have an «Oracle Think Tank» vanguard, look at the top card of your deck, and put that card on the top or the bottom of your deck.",
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialTextVerified": true,
+        "officialCardNumber": "EB05/015EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=25&sort=no&view=text",
+        "officialCardText": "[AUTO]:When this unit is placed on (VC) or (RC), if you have an <Oracle Think Tank> vanguard, look at the top card of your deck, and put that card on the top or the bottom of your deck.",
+        "patternId": "auto-placement-clan-top-deck-order-v1",
+        "review": "The official EB05/015EN listing confirms the same mandatory AUTO. The catalog renders the Oracle Think Tank clan icon with guillemets; this is typographic formatting only. The controller must have an Oracle Think Tank vanguard and chooses the position of the exact top card. No cost, once-per-turn restriction, or optional activation is printed."
+      },
+      "trigger": { "status": "recognized-trigger", "eventType": "card.placed", "subject": "source", "circles": ["vanguard", "rear-guard"] },
+      "conditions": [{ "type": "controller-vanguard-has-clan", "value": "Oracle Think Tank" }],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "reorder-deck-card",
+          "target": "chosen",
+          "destination": "player-choice",
+          "requireTopCard": true,
+          "allowEmptyDeck": true
         }
       ]
     },
@@ -3899,10 +4175,14 @@
         "subject": "source"
       },
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialTextVerified": true,
+        "officialCardNumber": "BT05/017EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT05%2F017EN",
+        "officialCardText": "[AUTO](VC/RC):[Counter-Blast 2] When this unit's attack hits, if you have a <Shadow Paladin> vanguard, you may pay the cost. If you do, draw a card.",
         "patternId": "auto-own-attack-hit-counter-blast-draw-v1",
-        "review": "Exact AUTO family: this exact source unit's attack must hit; printed VC/RC restriction, Counter Blast amount, optional payment, printed Vanguard-clan condition, and one-card draw are preserved."
+        "review": "Official BT05/017EN confirms the exact own-unit attack-hit condition, VC/RC locations, optional Counter Blast 2, Shadow Paladin Vanguard condition, and one-card draw. Catalog apostrophe and clan-symbol typography are normalized from the official listing."
       },
       "effects": [
         {
@@ -7058,6 +7338,47 @@
       ]
     },
     {
+      "id": "cfa-12029:1",
+      "cardId": "cfa-12029",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded during your ride phase, COST [Soul Blast 1 & put this card on the bottom of deck], and draw a card.",
+      "requiredLocation": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "source",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        },
+        {
+          "type": "source-to-bottom-deck",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1",
+        "review": "Exact Ride Phase discard trigger. Requires this exact instance to be discarded from hand during its controller's Ride Phase, pays Soul Blast 1 and returns that source from Drop to deck bottom as costs before drawing one card."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
+        }
+      ]
+    },
+    {
       "id": "cfa-12030:0",
       "cardId": "cfa-12030",
       "kind": "CONT",
@@ -7605,6 +7926,47 @@
         {
           "name": "card-name-alias",
           "value": "Spiral Cutie Angel"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13484:1",
+      "cardId": "cfa-13484",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded during your ride phase, COST [Soul Blast 1 & put this card on the bottom of deck], and draw a card.",
+      "requiredLocation": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "source",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "requiredPhase": "ride",
+        "turnRelation": "controller"
+      },
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 1
+        },
+        {
+          "type": "source-to-bottom-deck",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-ride-phase-discard-soul-blast-bottom-deck-draw-v1",
+        "review": "Exact Ride Phase discard trigger. Requires this exact instance to be discarded from hand during its controller's Ride Phase, pays Soul Blast 1 and returns that source from Drop to deck bottom as costs before drawing one card."
+      },
+      "effects": [
+        {
+          "op": "draw",
+          "count": 1
         }
       ]
     },
@@ -44946,15 +45308,19 @@
         }
       ]
     },
-    {
+        {
       "id": "cfa-523:1",
       "cardId": "cfa-523",
       "kind": "AUTO",
       "printedText": "AUTO [VC]: When this unit attacks a vanguard, this unit gets power +2000 until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT04/018EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=15&view=text",
+        "officialTextVerified": true,
         "patternId": "auto-own-attack-vanguard-power-battle-v1",
-        "review": "Exact own-attack-to-Vanguard wording, including legacy omitted AUTO labels and common end-of-battle phrasing; source identity, printed circle, Vanguard target, and battle duration are validated."
+        "review": "Exact BT04/018EN official AUTO text confirms that only this unit's own Vanguard attack gives it +2000 until that battle ends. Circle, target, power, and duration match the printed text."
       },
       "effects": [
         {
@@ -45098,15 +45464,19 @@
         }
       ]
     },
-    {
+        {
       "id": "cfa-1246:1",
       "cardId": "cfa-1246",
       "kind": "AUTO",
       "printedText": "AUTO [VC]: When this unit attacks a vanguard, this unit gets power +2000 until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT11/007EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT11%2F007EN&expansion=28&view=text",
+        "officialTextVerified": true,
         "patternId": "auto-own-attack-vanguard-power-battle-v1",
-        "review": "Exact own-attack-to-Vanguard wording, including legacy omitted AUTO labels and common end-of-battle phrasing; source identity, printed circle, Vanguard target, and battle duration are validated."
+        "review": "Exact BT11/007EN official AUTO text confirms that only this unit's own Vanguard attack gives it +2000 until that battle ends. Circle, target, power, and duration match the printed text."
       },
       "effects": [
         {
@@ -45117,15 +45487,19 @@
         }
       ]
     },
-    {
+        {
       "id": "cfa-1256:1",
       "cardId": "cfa-1256",
       "kind": "AUTO",
       "printedText": "AUTO [VC]: When this unit attacks a vanguard, this unit gets power +2000 until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT11/001EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT11%2F001EN",
+        "officialTextVerified": true,
         "patternId": "auto-own-attack-vanguard-power-battle-v1",
-        "review": "Exact own-attack-to-Vanguard wording, including legacy omitted AUTO labels and common end-of-battle phrasing; source identity, printed circle, Vanguard target, and battle duration are validated."
+        "review": "Exact BT11/001EN official AUTO text confirms that only this unit's own Vanguard attack gives it +2000 until that battle ends. Circle, target, power, and duration match the printed text."
       },
       "effects": [
         {
@@ -57512,8 +57886,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [Discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT01 Unite! Team Q4",
+        "officialCardNumber": "V-BT01/021EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=111&sort=no&view=text",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -57535,8 +57914,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [Discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT01 Unite! Team Q4",
+        "officialCardNumber": "V-BT01/015EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=111&sort=no&view=text",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -57558,8 +57942,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [Discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-TD02 Toshiki Kai",
+        "officialCardNumber": "V-TD02/007EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-TD02%2F007EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -57581,10 +57970,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [Discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/002EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F002EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -57604,10 +57998,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/012EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F012EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -57696,10 +58095,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/022EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F022EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -57719,10 +58123,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/009EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F009EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -57742,10 +58151,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/015EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F015EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -57788,8 +58202,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB01 The Destructive Roar",
+        "officialCardNumber": "V-EB01/028EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB01%2F028EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [Cost][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -57811,8 +58230,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB01 The Destructive Roar",
+        "officialCardNumber": "V-EB01/023EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB01%2F023EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [Cost][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -57834,8 +58258,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-TD03 Leon Soryu",
+        "officialCardNumber": "V-TD03/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-TD03%2F008EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -57857,8 +58286,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/021EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F021EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -57880,8 +58314,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/019EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F019EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -57903,10 +58342,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/013EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F013EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -57995,10 +58439,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/004EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F004EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -58018,8 +58467,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT02 Strongest! Team AL4",
+        "officialCardNumber": "V-BT02/018EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-BT02%2F018EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -58041,8 +58495,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT02 Strongest! Team AL4",
+        "officialCardNumber": "V-BT02/031EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-BT02%2F031EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -58064,8 +58523,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT02 Strongest! Team AL4",
+        "officialCardNumber": "V-BT02/024EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=118&sort=no&view=text",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -58110,8 +58574,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT02 Strongest! Team AL4",
+        "officialCardNumber": "V-BT02/021EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?clan=&grade%5B0%5D=all&keyword=nightmareland&keyword_type%5B0%5D=all&kind%5B0%5D=all&nation=&power_from=&power_to=&rare=&regulation=V&trigger%5B0%5D=all&view=text",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -58156,10 +58625,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/003EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F003EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -58179,10 +58653,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/005EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F005EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -58271,8 +58750,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/026EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F026EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -58294,8 +58778,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/022EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F022EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -58317,8 +58806,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/017EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F017EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -58340,8 +58834,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/030EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F030EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -58363,8 +58862,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/014EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F014EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -58386,8 +58890,13 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/012EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F012EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
         "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
       },
@@ -58432,10 +58941,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F008EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -58455,10 +58969,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/011EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F011EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -58524,10 +59043,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/014EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F014EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -58570,10 +59094,15 @@
       "kind": "AUTO",
       "printedText": "AUTO [GC]: When placed, COST [discard a card from your hand], and one of your units cannot be hit until end of that battle.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/020EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F020EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[AUTO](GC):When placed, [COST][discard a card from your hand], and one of your units cannot be hit until end of that battle.",
         "patternId": "auto-gc-when-placed-discard-protect-unit-v1",
-        "review": "Exact [GC] shorthand template in 92 catalog records. Trigger requires this source instance to enter Guardian Circle; the controller pays one discard and selects a friendly unit for battle-duration protection."
+        "review": "The AUTO triggers only when this exact card instance is placed on a Guardian Circle. Its controller discards one card and chooses a friendly unit for battle-duration protection."
       },
       "effects": [
         {
@@ -59905,8 +60434,11 @@
       "kind": "CONT",
       "printedText": "CONT [VC]: If you have a card named \"Enigman Wave\" in your soul, this unit gets power +1000.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT04/004EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT04%2F004EN&expansion=15&view=image",
+        "officialTextVerified": true,
         "patternId": "cont-named-soul-card-power-v1",
         "review": "Exact CONT wording: checks the controller's Soul for the exact printed card name, any printed own-turn restriction, and only the printed Vanguard or Rear-guard circle."
       },
@@ -69399,6 +69931,160 @@
       ]
     },
     {
+      "id": "cfa-1576:0",
+      "cardId": "cfa-1576",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Soul Blast 2] When this unit is placed on RC, if you have an «Oracle Think Tank» vanguard, you may pay the cost. If you do, choose up to two cards from your damage zone, and turn them face up. (Counter Charge 2)",
+      "optional": true,
+      "canDecline": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Oracle Think Tank"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 2
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list and source catalog",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "EB07/027EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB07%2F027EN",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/howto/question/?id=term",
+        "patternId": "auto-rc-placement-clan-soul-blast-counter-charge-two-v1",
+        "review": "Exact clan-gated RC placement AUTO from the catalog snapshot. Only this card instance's placement on an RC can trigger it, and the controller's Vanguard must have the printed Oracle Think Tank clan. The controller may decline; accepting pays Soul Blast 2, then chooses up to two face-down Damage cards to turn face up. Official card-list text was confirmed for this printing: pending direct card-list text confirmation."
+      },
+      "effects": [
+        {
+          "op": "counter-charge-up-to",
+          "target": "controller",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-1914:0",
+      "cardId": "cfa-1914",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Soul Blast 2] When this unit is placed on RC, if you have an «Aqua Force» vanguard, you may pay the cost. If you do, choose up to two cards from your damage zone, and turn them face up. (Counter Charge 2)",
+      "optional": true,
+      "canDecline": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Aqua Force"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 2
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list and source catalog",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "BT15/089EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT15%2F089EN",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/howto/question/?id=term",
+        "patternId": "auto-rc-placement-clan-soul-blast-counter-charge-two-v1",
+        "review": "Exact clan-gated RC placement AUTO from the catalog snapshot. Only this card instance's placement on an RC can trigger it, and the controller's Vanguard must have the printed Aqua Force clan. The controller may decline; accepting pays Soul Blast 2, then chooses up to two face-down Damage cards to turn face up. Official card-list text was confirmed for this printing: pending direct card-list text confirmation."
+      },
+      "effects": [
+        {
+          "op": "counter-charge-up-to",
+          "target": "controller",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-1966:0",
+      "cardId": "cfa-1966",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Soul Blast 2] When this unit is placed on RC, if you have an «Bermuda Triangle» vanguard, you may pay the cost. If you do, choose up to two cards from your damage zone, and turn them face up. (Counter Charge 2)",
+      "optional": true,
+      "canDecline": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Bermuda Triangle"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 2
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list and source catalog",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "EB10/026EN-W",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB10%2F026EN-W",
+        "officialTextVerified": true,
+        "officialPrintedText": "[AUTO]: [Soul-Blast 2] When this unit is placed on (RC), if you have a <Bermuda Triangle> vanguard, you may pay the cost. If you do, choose up to two cards from your damage zone, and turn those cards face up.",
+        "rulesReference": "https://en.cf-vanguard.com/howto/question/?id=term",
+        "patternId": "auto-rc-placement-clan-soul-blast-counter-charge-two-v1",
+        "review": "Exact clan-gated RC placement AUTO from the catalog snapshot. Only this card instance's placement on an RC can trigger it, and the controller's Vanguard must have the printed Bermuda Triangle clan. The controller may decline; accepting pays Soul Blast 2, then chooses up to two face-down Damage cards to turn face up. Official card-list text was confirmed for this printing: yes."
+      },
+      "effects": [
+        {
+          "op": "counter-charge-up-to",
+          "target": "controller",
+          "count": 2
+        }
+      ]
+    },
+    {
       "id": "cfa-2920:0",
       "cardId": "cfa-2920",
       "kind": "AUTO",
@@ -72001,10 +72687,14 @@
       ],
       "choicesReviewed": true,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialTextVerified": true,
+        "officialCardNumber": "EB01/009EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB01%2F009EN",
+        "officialCardText": "[ACT](RC):[Rest] this unit] Choose another of your <Nova Grappler>, and that unit gets [Power] +2000 until end of turn.",
         "patternId": "act-rest-source-other-clan-unit-power-v1",
-        "review": "Exact ACT wording. The source must be on RC and rest as cost; target must be a different friendly Unit of the printed clan anywhere on the field (including VC), and only the printed turn power is applied."
+        "review": "Official EB01/009EN confirms the Rear-Guard ACT, Rest cost, another Nova Grappler target, and +2000 until end of turn. Catalog clan-symbol formatting is normalized from the official listing."
       },
       "effects": [
         {
@@ -87023,10 +87713,20 @@
       "kind": "AUTO",
       "printedText": "AUTO: When this unit is put on GC, choose one of your units, and it cannot be hit until end of that battle. If your hand has two or more cards, choose a card from your hand, and discard it.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "D-series promotional cards",
+        "officialCardNumber": "D-PR/538",
+        "officialPrintName": "どこヴァン！ねお2023",
+        "officialReference": "https://cf-vanguard.com/cardlist/?cardno=D-PR%2F538",
+        "officialLanguage": "Japanese",
+        "officialOriginalText": "〖自〗：このユニットが(G)に置かれた時、あなたのユニットを１枚選び、そのバトル中、ヒットされない。あなたの手札が２枚以上なら、手札から１枚選び、捨てる。",
+        "officialTextVerified": true,
+        "officialAbilityText": "〖自〗：このユニットが(G)に置かれた時、あなたのユニットを１枚選び、そのバトル中、ヒットされない。あなたの手札が２枚以上なら、手札から１枚選び、捨てる。",
+        "validatedTranslation": "AUTO: When this unit is put on GC, choose one of your units, and it cannot be hit until end of that battle. If your hand has two or more cards, choose a card from your hand, and discard it.",
+        "translationReview": "Checked against the official Japanese original; the translation preserves the event, controller, target, duration, threshold, and required discard.",
         "patternId": "auto-gc-protect-then-conditional-discard-v1",
-        "review": "Exact catalog AUTO validated against the conditional Guardian Circle protection template: protect the exact attacked friendly unit for this battle, then discard one from this controller’s hand only when their hand has at least two cards."
+        "review": "The official Japanese card-list text confirms the Guardian Circle placement trigger, selecting one of the controller's units for battle-duration hit protection, followed by discarding one card only when that controller has at least two cards in hand. There is no printed cost or once-per-turn restriction."
       },
       "effects": [
         {
@@ -87295,10 +87995,20 @@
       "kind": "AUTO",
       "printedText": "AUTO: When this unit is put on GC, choose one of your units, and it cannot be hit until end of that battle. If your hand has two or more cards, choose a card from your hand, and discard it.",
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "D-series promotional cards",
+        "officialCardNumber": "D-PR/708",
+        "officialPrintName": "カードファイト!! ヴァンガード will+Dress 最終回記念",
+        "officialReference": "https://cf-vanguard.com/cardlist/?cardno=D-PR%2F708",
+        "officialLanguage": "Japanese",
+        "officialOriginalText": "〖自〗：このユニットが(G)に置かれた時、あなたのユニットを１枚選び、そのバトル中、ヒットされない。あなたの手札が２枚以上なら、手札から１枚選び、捨てる。",
+        "officialTextVerified": true,
+        "officialAbilityText": "〖自〗：このユニットが(G)に置かれた時、あなたのユニットを１枚選び、そのバトル中、ヒットされない。あなたの手札が２枚以上なら、手札から１枚選び、捨てる。",
+        "validatedTranslation": "AUTO: When this unit is put on GC, choose one of your units, and it cannot be hit until end of that battle. If your hand has two or more cards, choose a card from your hand, and discard it.",
+        "translationReview": "Checked against the official Japanese original; the translation preserves the event, controller, target, duration, threshold, and required discard.",
         "patternId": "auto-gc-protect-then-conditional-discard-v1",
-        "review": "Exact catalog AUTO validated against the conditional Guardian Circle protection template: protect the exact attacked friendly unit for this battle, then discard one from this controller’s hand only when their hand has at least two cards."
+        "review": "The official Japanese card-list text confirms the Guardian Circle placement trigger, selecting one of the controller's units for battle-duration hit protection, followed by discarding one card only when that controller has at least two cards in hand. There is no printed cost or once-per-turn restriction."
       },
       "effects": [
         {
@@ -100700,6 +101410,49 @@
       ]
     },
     {
+      "id": "cfa-7812:0",
+      "cardId": "cfa-7812",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, if you have a vanguard with \"Ancient Dragon\" in its card name, this unit gets power +5000.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "V-BT10/062EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-BT10%2F062EN",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-vc-rc-own-turn-named-vanguard-power-v1",
+        "review": "The local catalog wording is modeled as an exact VC/RC CONT. Its controller-turn restriction and Vanguard-name substring are evaluated continuously; the source receives only the printed power while it remains on VC or RC. The official card-list entry could not be retrieved during this pass, so this is ability-level implementation evidence and not card-text or whole-card verification."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "controller-vanguard-card-name-contains",
+                "name": "Ancient Dragon"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "cfa-7812:1",
       "cardId": "cfa-7812",
       "kind": "AUTO",
@@ -101233,8 +101986,8 @@
       "choicesReviewed": true,
       "optional": false,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
         "cardNumber": "cfa-13707",
         "patternId": "auto-hand-rc-or-ride-deck-discard-persona-shield-ticket-v1",
         "review": "Exact six-card AUTO. It triggers for this exact card placed on RC from hand by normal call or a non-Unit card ability, or for this exact card discarded as the Ride Deck ride cost. The controller may reveal one Persona Ride card from their own Ride Deck. Soul Blast 1 and one Persona Shield ticket are required only if that reveal happened or their authoritative Vanguard has Persona Ride."
@@ -101581,6 +102334,9 @@
         "dataset": "Cardfight Area snapshot",
         "snapshotDate": "2025-05-09",
         "cardNumber": "cfa-1984",
+        "officialCardNumber": "BT16/005EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT16%2F005EN",
+        "officialTextVerified": true,
         "patternId": "auto-own-attack-soul-blast-power-battle-v1",
         "review": "Exact optional Soul-Blast own-attack AUTO for Brawler, Big Bang Knuckle Dragon. Only this source instance attacking the opponent's Vanguard may pay Soul Blast 1 for +3000 power during that battle."
       },
@@ -101621,6 +102377,9 @@
         "dataset": "Cardfight Area snapshot",
         "snapshotDate": "2025-05-09",
         "cardNumber": "cfa-2119",
+        "officialCardNumber": "BT17/102EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT17%2F102EN",
+        "officialTextVerified": true,
         "patternId": "auto-own-attack-soul-blast-power-battle-v1",
         "review": "Exact optional Soul-Blast own-attack AUTO for Metalborg, Sandstorm. Only this source instance attacking the opponent's Vanguard may pay Soul Blast 1 for +3000 power during that battle."
       },
@@ -101661,6 +102420,9 @@
         "dataset": "Cardfight Area snapshot",
         "snapshotDate": "2025-05-09",
         "cardNumber": "cfa-2137",
+        "officialCardNumber": "BT17/087EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT17%2F087EN",
+        "officialTextVerified": true,
         "patternId": "auto-own-attack-soul-blast-power-battle-v1",
         "review": "Exact optional Soul-Blast own-attack AUTO for Nobody From Olmeca. Only this source instance attacking the opponent's Vanguard may pay Soul Blast 1 for +3000 power during that battle."
       },
@@ -101701,6 +102463,9 @@
         "dataset": "Cardfight Area snapshot",
         "snapshotDate": "2025-05-09",
         "cardNumber": "cfa-2142",
+        "officialCardNumber": "BT16/087EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT16%2F087EN",
+        "officialTextVerified": true,
         "patternId": "auto-own-attack-soul-blast-power-battle-v1",
         "review": "Exact optional Soul-Blast own-attack AUTO for Brawler, Headband of Greed. Only this source instance attacking the opponent's Vanguard may pay Soul Blast 1 for +3000 power during that battle."
       },
@@ -101821,6 +102586,9 @@
         "dataset": "Cardfight Area snapshot",
         "snapshotDate": "2025-05-09",
         "cardNumber": "cfa-2353",
+        "officialCardNumber": "BT17/116EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT17%2F116EN&expansion=50&s_param=Link+Joker&view=text",
+        "officialTextVerified": true,
         "patternId": "auto-own-attack-soul-blast-power-battle-v1",
         "review": "Exact optional Soul-Blast own-attack AUTO for Star-vader, Metal Griffin. Only this source instance attacking the opponent's Vanguard may pay Soul Blast 1 for +3000 power during that battle."
       },
@@ -102602,9 +103370,11 @@
       "source": {
         "dataset": "Cardfight Area snapshot",
         "snapshotDate": "2025-05-09",
-        "cardNumber": "cfa-9115",
+        "cardNumber": "D-BT03/093EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT03%2F093EN",
+        "rulesReference": "https://en.cf-vanguard.com/howto/",
         "patternId": "auto-order-zone-placement-draw-v1",
-        "review": "Exact Set Order AUTO. Its own card instance entering its controller's Order Zone is required; unrelated placements and the other printed abilities on these Order cards are handled independently."
+        "review": "Exact Set Order AUTO checked against Bushiroad D-BT03/093EN. Its own card instance entering its controller's Order Zone is required; unrelated placements and the other printed abilities on these Order cards are handled independently."
       },
       "effects": [
         {
@@ -103716,11 +104486,15 @@
       "costsReviewed": true,
       "choicesReviewed": true,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
         "cardNumber": "cfa-3651",
         "patternId": "auto-intercept-generation-break-shield-battle-v1",
-        "review": "Exact Generation Break 1 intercept AUTO: this specific unit must move from RC to GC to intercept, the controller must have a face-up G unit in the G zone for GB1, and the printed battle-duration shield increase applies to this guardian. Other printed abilities remain separate."
+        "review": "Bushiroad's G-TD08/008EN listing confirms the exact Generation Break 1 Intercept trigger and +10000 Shield for this battle. The server accepts this shared mechanic only for source-verified entries.",
+        "officialTextVerified": true,
+        "officialCardNumber": "G-TD08/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-TD08%2F008EN&expansion=73&view=text",
+        "officialCardText": "[AUTO][Generation Break 1](This ability is active if you have one or more face up G units in total on your (VC) or G zone):When this unit intercepts ([Intercept]), this unit gets [Shield] +10000 until end of that battle."
       },
       "effects": [
         {
@@ -103751,11 +104525,15 @@
       "costsReviewed": true,
       "choicesReviewed": true,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
         "cardNumber": "cfa-4157",
         "patternId": "auto-intercept-generation-break-shield-battle-v1",
-        "review": "Exact Generation Break 1 intercept AUTO: this specific unit must move from RC to GC to intercept, the controller must have a face-up G unit in the G zone for GB1, and the printed battle-duration shield increase applies to this guardian. Other printed abilities remain separate."
+        "review": "Bushiroad's G-TD09/008EN listing confirms the exact Generation Break 1 Intercept trigger and +10000 Shield for this battle. The server accepts this shared mechanic only for source-verified entries.",
+        "officialTextVerified": true,
+        "officialCardNumber": "G-TD09/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=82&sort=no&view=text",
+        "officialCardText": "[AUTO][Generation Break 1](This ability is active if you have one or more face up G units in total on your (VC) or G zone):When this unit intercepts ([Intercept]), this unit gets [Shield] +10000 until end of that battle."
       },
       "effects": [
         {
@@ -103786,11 +104564,15 @@
       "costsReviewed": true,
       "choicesReviewed": true,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
         "cardNumber": "cfa-4357",
         "patternId": "auto-intercept-generation-break-shield-battle-v1",
-        "review": "Exact Generation Break 1 intercept AUTO: this specific unit must move from RC to GC to intercept, the controller must have a face-up G unit in the G zone for GB1, and the printed battle-duration shield increase applies to this guardian. Other printed abilities remain separate."
+        "review": "Bushiroad's G-TD10/008EN listing confirms the exact Generation Break 1 Intercept trigger and +10000 Shield for this battle. The server accepts this shared mechanic only for source-verified entries.",
+        "officialTextVerified": true,
+        "officialCardNumber": "G-TD10/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-TD10%2F008EN",
+        "officialCardText": "[AUTO][Generation Break 1](This ability is active if you have one or more face up G units in total on your (VC) or G zone):When this unit intercepts ([Intercept]), this unit gets [Shield] +10000 until end of that battle."
       },
       "effects": [
         {
@@ -103821,11 +104603,15 @@
       "costsReviewed": true,
       "choicesReviewed": true,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
         "cardNumber": "cfa-4446",
         "patternId": "auto-intercept-generation-break-shield-battle-v1",
-        "review": "Exact Generation Break 1 intercept AUTO: this specific unit must move from RC to GC to intercept, the controller must have a face-up G unit in the G zone for GB1, and the printed battle-duration shield increase applies to this guardian. Other printed abilities remain separate."
+        "review": "Bushiroad's G-TD12/008EN listing confirms the exact Generation Break 1 Intercept trigger and +10000 Shield for this battle. The server accepts this shared mechanic only for source-verified entries.",
+        "officialTextVerified": true,
+        "officialCardNumber": "G-TD12/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=90&sort=no&view=text",
+        "officialCardText": "[AUTO][Generation Break 1](This ability is active if you have one or more face up G units in total on your (VC) or G zone):When this unit intercepts ([Intercept]), this unit gets [Shield] +10000 until end of that battle."
       },
       "effects": [
         {
@@ -103856,11 +104642,15 @@
       "costsReviewed": true,
       "choicesReviewed": true,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
         "cardNumber": "cfa-4459",
         "patternId": "auto-intercept-generation-break-shield-battle-v1",
-        "review": "Exact Generation Break 1 intercept AUTO: this specific unit must move from RC to GC to intercept, the controller must have a face-up G unit in the G zone for GB1, and the printed battle-duration shield increase applies to this guardian. Other printed abilities remain separate."
+        "review": "Bushiroad's G-TD11/008EN listing confirms the exact Generation Break 1 Intercept trigger and +10000 Shield for this battle. The server accepts this shared mechanic only for source-verified entries.",
+        "officialTextVerified": true,
+        "officialCardNumber": "G-TD11/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=89&sort=no&view=text",
+        "officialCardText": "[AUTO][Generation Break 1](This ability is active if you have one or more face up G units in total on your (VC) or G zone):When this unit intercepts ([Intercept]), this unit gets [Shield] +10000 until end of that battle."
       },
       "effects": [
         {
@@ -103891,11 +104681,15 @@
       "costsReviewed": true,
       "choicesReviewed": true,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
         "cardNumber": "cfa-4873",
         "patternId": "auto-intercept-generation-break-shield-battle-v1",
-        "review": "Exact Generation Break 1 intercept AUTO: this specific unit must move from RC to GC to intercept, the controller must have a face-up G unit in the G zone for GB1, and the printed battle-duration shield increase applies to this guardian. Other printed abilities remain separate."
+        "review": "Bushiroad's G-TD13/009EN listing confirms the exact Generation Break 1 Intercept trigger and +10000 Shield for this battle. The server accepts this shared mechanic only for source-verified entries.",
+        "officialTextVerified": true,
+        "officialCardNumber": "G-TD13/009EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=99&view=text",
+        "officialCardText": "[AUTO][Generation Break 1](This ability is active if you have one or more face up G units in total on your (VC) or G zone):When this unit intercepts ([Intercept]), this unit gets [Shield] +10000 until end of that battle."
       },
       "effects": [
         {
@@ -105879,11 +106673,14 @@
         "revealedClan": "Nova Grappler"
       },
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
-        "cardNumber": "cfa-128",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialTextVerified": true,
+        "officialCardNumber": "EB04/015EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB04%2F015EN",
+        "officialCardText": "[AUTO](RC):When your vanguard's drive check reveals a grade 3 <Nova Grappler>, [Stand] this unit.",
         "patternId": "auto-rc-vanguard-drive-check-grade-clan-stand-source-v1",
-        "review": "Exact Rear-Guard AUTO wording. Only the controller's Vanguard drive check revealing an authoritative grade 3 Nova Grappler stands this exact source unit."
+        "review": "Official EB04/015EN confirms this Rear-Guard AUTO. Only the controller's Vanguard drive check revealing an authoritative grade 3 Nova Grappler stands this exact source instance; the Bushiroad Q&A explicitly excludes damage checks."
       },
       "effects": [
         {
@@ -108546,11 +109343,15 @@
       "choicesReviewed": true,
       "optional": false,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
-        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+      "dataset": "Bushiroad official card text update and current card list",
+      "snapshotDate": "2026-11-07",
+      "officialCardNumber": "G-BT01/030EN",
+      "officialReference": "https://en.cf-vanguard.com/information/pv01-card-ability-update/",
+      "officialPrintedText": "[AUTO](VC):When this unit's attack hits a vanguard, choose one of your opponent's rear-guards, and retire it.",
+      "officialTextVerified": true,
+      "relatedOfficialPrinting": "https://en.cf-vanguard.com/cardlist/?cardno=D-PV01%2F008EN&keyword=D-PV01&keyword_type=&view=text",
         "patternId": "auto-vanguard-own-attack-hit-opponent-rear-retire-v1",
-        "review": "Exact Vanguard AUTO wording. The exact Vanguard must attack and hit the opposing Vanguard; its controller chooses one opposing Rear-Guard to retire. When paired with the exact missed-attack CONT on that same Vanguard, the AUTO may resolve only for that source's missed Vanguard attack."
+      "review": "Exact Vanguard AUTO verified against Bushiroad's official text correction for the original G-BT01/030EN printing and its current reprint. The exact Vanguard must attack and hit the opposing Vanguard; its controller chooses one opposing Rear-Guard to retire. When paired with the exact missed-attack CONT on that same Vanguard, the AUTO may resolve only for that source's missed Vanguard attack."
       },
       "effects": [
         {
@@ -115745,9 +116546,11 @@
       "choicesReviewed": true,
       "optional": false,
       "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
-        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT04/004EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT04%2F004EN&expansion=15&view=image",
+        "officialTextVerified": true,
         "rulesReference": "Comprehensive Rules 4.52 §10.4.1.2; Official FAQ Q52",
         "patternId": "auto-attack-step-source-power-critical-battle-v1",
         "review": "Exact printed-template family. At the beginning of each modeled battle attack step, the source's own power is read from the authoritative pre-boost event snapshot; a booster or a different unit's power cannot satisfy the threshold. The AUTO belongs to the controller's attack step and applies critical to this exact source through that battle only."
@@ -116363,231 +117166,246 @@
         }
       ]
     },
-    {
-      "id": "cfa-1251:0",
-      "cardId": "cfa-1251",
-      "kind": "AUTO",
-      "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Kagero» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Choose three cards from your hand, and discard them] At the end of the battle that this unit attacked, if this unit has not become stand during that turn, you may pay the cost. If you do, stand this unit.\".",
-      "requiredLocation": [
-        "vanguard"
-      ],
-      "trigger": {
-        "status": "recognized-trigger",
-        "eventType": "card.ridden",
-        "subject": "ridden-unit",
-        "circles": [
-          "vanguard"
-        ],
-        "riderClan": "Kagero"
-      },
-      "conditions": [
-        {
-          "type": "limit-break-active",
-          "count": 4
-        }
-      ],
-      "conditionsReviewed": true,
-      "costs": [],
-      "costsReviewed": true,
-      "choicesReviewed": true,
-      "optional": false,
-      "effects": [
-        {
-          "op": "grant-vanguard-break-ride-ability",
-          "target": "controller",
-          "parentCardId": "cfa-1251",
-          "parentAbilityId": "cfa-1251:0",
-          "amount": 10000
-        }
-      ],
-      "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
-        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
-        "patternId": "auto-limit-break-clan-break-ride-grant-v1",
-        "review": "Exact catalog text for this five-card Limit Break break-ride family. The old Vanguard's exact ridden instance must be the event target, a same-clan Rider must be the current Vanguard under the same controller, the ride must move the old source from VC to Soul, and the controller must have at least four Damage. Resolution grants +10000 and only this rider instance receives this source card's exact quoted AUTO until the current turn ends. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
-      }
-    },
-    {
-      "id": "cfa-1671:0",
-      "cardId": "cfa-1671",
-      "kind": "AUTO",
-      "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Nova Grappler» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Counter Blast 1] When this unit attacks a vanguard, you may pay the cost. If you do, stand all of your «Nova Grappler» rear-guards.\".",
-      "requiredLocation": [
-        "vanguard"
-      ],
-      "trigger": {
-        "status": "recognized-trigger",
-        "eventType": "card.ridden",
-        "subject": "ridden-unit",
-        "circles": [
-          "vanguard"
-        ],
-        "riderClan": "Nova Grappler"
-      },
-      "conditions": [
-        {
-          "type": "limit-break-active",
-          "count": 4
-        }
-      ],
-      "conditionsReviewed": true,
-      "costs": [],
-      "costsReviewed": true,
-      "choicesReviewed": true,
-      "optional": false,
-      "effects": [
-        {
-          "op": "grant-vanguard-break-ride-ability",
-          "target": "controller",
-          "parentCardId": "cfa-1671",
-          "parentAbilityId": "cfa-1671:0",
-          "amount": 10000
-        }
-      ],
-      "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
-        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
-        "patternId": "auto-limit-break-clan-break-ride-grant-v1",
-        "review": "Exact catalog text for this five-card Limit Break break-ride family. The old Vanguard's exact ridden instance must be the event target, a same-clan Rider must be the current Vanguard under the same controller, the ride must move the old source from VC to Soul, and the controller must have at least four Damage. Resolution grants +10000 and only this rider instance receives this source card's exact quoted AUTO until the current turn ends. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
-      }
-    },
-    {
-      "id": "cfa-1879:0",
-      "cardId": "cfa-1879",
-      "kind": "AUTO",
-      "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Kagero» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Counter Blast 1 & Choose one «Kagero» from your hand, and discard it] At the end of the battle that this unit attacked a rear-guard, you may pay the cost. If you do, stand this unit. This ability cannot be used for the rest of that turn. (This ability cannot be used even if the cost is not paid.)\".",
-      "requiredLocation": [
-        "vanguard"
-      ],
-      "trigger": {
-        "status": "recognized-trigger",
-        "eventType": "card.ridden",
-        "subject": "ridden-unit",
-        "circles": [
-          "vanguard"
-        ],
-        "riderClan": "Kagero"
-      },
-      "conditions": [
-        {
-          "type": "limit-break-active",
-          "count": 4
-        }
-      ],
-      "conditionsReviewed": true,
-      "costs": [],
-      "costsReviewed": true,
-      "choicesReviewed": true,
-      "optional": false,
-      "effects": [
-        {
-          "op": "grant-vanguard-break-ride-ability",
-          "target": "controller",
-          "parentCardId": "cfa-1879",
-          "parentAbilityId": "cfa-1879:0",
-          "amount": 10000
-        }
-      ],
-      "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
-        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
-        "patternId": "auto-limit-break-clan-break-ride-grant-v1",
-        "review": "Exact catalog text for this five-card Limit Break break-ride family. The old Vanguard's exact ridden instance must be the event target, a same-clan Rider must be the current Vanguard under the same controller, the ride must move the old source from VC to Soul, and the controller must have at least four Damage. Resolution grants +10000 and only this rider instance receives this source card's exact quoted AUTO until the current turn ends. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
-      }
-    },
-    {
-      "id": "cfa-1945:0",
-      "cardId": "cfa-1945",
-      "kind": "AUTO",
-      "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Bermuda Triangle» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Counter Blast 1] When this unit attacks a vanguard, you may pay the cost. If you do, return all of your «Bermuda Triangle» rear-guards to your hand, then choose up to two «Bermuda Triangle» from your hand, and call them to separate RC.\".",
-      "requiredLocation": [
-        "vanguard"
-      ],
-      "trigger": {
-        "status": "recognized-trigger",
-        "eventType": "card.ridden",
-        "subject": "ridden-unit",
-        "circles": [
-          "vanguard"
-        ],
-        "riderClan": "Bermuda Triangle"
-      },
-      "conditions": [
-        {
-          "type": "limit-break-active",
-          "count": 4
-        }
-      ],
-      "conditionsReviewed": true,
-      "costs": [],
-      "costsReviewed": true,
-      "choicesReviewed": true,
-      "optional": false,
-      "effects": [
-        {
-          "op": "grant-vanguard-break-ride-ability",
-          "target": "controller",
-          "parentCardId": "cfa-1945",
-          "parentAbilityId": "cfa-1945:0",
-          "amount": 10000
-        }
-      ],
-      "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
-        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
-        "patternId": "auto-limit-break-clan-break-ride-grant-v1",
-        "review": "Exact catalog text for this five-card Limit Break break-ride family. The old Vanguard's exact ridden instance must be the event target, a same-clan Rider must be the current Vanguard under the same controller, the ride must move the old source from VC to Soul, and the controller must have at least four Damage. Resolution grants +10000 and only this rider instance receives this source card's exact quoted AUTO until the current turn ends. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
-      }
-    },
-    {
-      "id": "cfa-1954:0",
-      "cardId": "cfa-1954",
-      "kind": "AUTO",
-      "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Bermuda Triangle» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: When your «Bermuda Triangle» is returned to your hand from RC, search your deck for up to one «Bermuda Triangle», call it to RC, and shuffle your deck. This ability cannot be used for the rest of that turn.\".",
-      "requiredLocation": [
-        "vanguard"
-      ],
-      "trigger": {
-        "status": "recognized-trigger",
-        "eventType": "card.ridden",
-        "subject": "ridden-unit",
-        "circles": [
-          "vanguard"
-        ],
-        "riderClan": "Bermuda Triangle"
-      },
-      "conditions": [
-        {
-          "type": "limit-break-active",
-          "count": 4
-        }
-      ],
-      "conditionsReviewed": true,
-      "costs": [],
-      "costsReviewed": true,
-      "choicesReviewed": true,
-      "optional": false,
-      "effects": [
-        {
-          "op": "grant-vanguard-break-ride-ability",
-          "target": "controller",
-          "parentCardId": "cfa-1954",
-          "parentAbilityId": "cfa-1954:0",
-          "amount": 10000
-        }
-      ],
-      "source": {
-        "dataset": "Cardfight Area snapshot",
-        "snapshotDate": "2025-05-09",
-        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
-        "patternId": "auto-limit-break-clan-break-ride-grant-v1",
-        "review": "Exact catalog text for this five-card Limit Break break-ride family. The old Vanguard's exact ridden instance must be the event target, a same-clan Rider must be the current Vanguard under the same controller, the ride must move the old source from VC to Soul, and the controller must have at least four Damage. Resolution grants +10000 and only this rider instance receives this source card's exact quoted AUTO until the current turn ends. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
-      }
-    },
+                {
+          "id": "cfa-1251:0",
+          "cardId": "cfa-1251",
+          "kind": "AUTO",
+          "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Kagero» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Choose three cards from your hand, and discard them] At the end of the battle that this unit attacked, if this unit has not become stand during that turn, you may pay the cost. If you do, stand this unit.\".",
+          "requiredLocation": [
+            "vanguard"
+          ],
+          "trigger": {
+            "status": "recognized-trigger",
+            "eventType": "card.ridden",
+            "subject": "ridden-unit",
+            "circles": [
+              "vanguard"
+            ],
+            "riderClan": "Kagero"
+          },
+          "conditions": [
+            {
+              "type": "limit-break-active",
+              "count": 4
+            }
+          ],
+          "conditionsReviewed": true,
+          "costs": [],
+          "costsReviewed": true,
+          "choicesReviewed": true,
+          "optional": false,
+          "effects": [
+            {
+              "op": "grant-vanguard-break-ride-ability",
+              "target": "controller",
+              "parentCardId": "cfa-1251",
+              "parentAbilityId": "cfa-1251:0",
+              "amount": 10000
+            }
+          ],
+          "source": {
+            "dataset": "Bushiroad official card list",
+            "snapshotDate": "2026-11-07",
+            "officialCardNumber": "BT11/005EN",
+            "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT11%2F005EN",
+            "officialTextVerified": true,
+            "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+            "patternId": "auto-limit-break-clan-break-ride-grant-v1",
+            "review": "Exact BT11/005EN Limit Break ride ability and its quoted AUTO checked against Bushiroad's official card list. Only the exact source instance ridden from VC triggers, by a same-controller rider of the printed clan, while that controller has four or more damage. The rider gains +10000 and receives this card's distinct quoted AUTO through turn end; each quoted effect is modeled separately in BREAK_RIDE_SPECS. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
+          }
+        },
+                {
+          "id": "cfa-1671:0",
+          "cardId": "cfa-1671",
+          "kind": "AUTO",
+          "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Nova Grappler» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Counter Blast 1] When this unit attacks a vanguard, you may pay the cost. If you do, stand all of your «Nova Grappler» rear-guards.\".",
+          "requiredLocation": [
+            "vanguard"
+          ],
+          "trigger": {
+            "status": "recognized-trigger",
+            "eventType": "card.ridden",
+            "subject": "ridden-unit",
+            "circles": [
+              "vanguard"
+            ],
+            "riderClan": "Nova Grappler"
+          },
+          "conditions": [
+            {
+              "type": "limit-break-active",
+              "count": 4
+            }
+          ],
+          "conditionsReviewed": true,
+          "costs": [],
+          "costsReviewed": true,
+          "choicesReviewed": true,
+          "optional": false,
+          "effects": [
+            {
+              "op": "grant-vanguard-break-ride-ability",
+              "target": "controller",
+              "parentCardId": "cfa-1671",
+              "parentAbilityId": "cfa-1671:0",
+              "amount": 10000
+            }
+          ],
+          "source": {
+            "dataset": "Bushiroad official card list",
+            "snapshotDate": "2026-11-07",
+            "officialCardNumber": "EB08/003EN",
+            "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB08%2F003EN&expansion=37&view=text",
+            "officialTextVerified": true,
+            "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+            "patternId": "auto-limit-break-clan-break-ride-grant-v1",
+            "review": "Exact EB08/003EN Limit Break ride ability and its quoted AUTO checked against Bushiroad's official card list. Only the exact source instance ridden from VC triggers, by a same-controller rider of the printed clan, while that controller has four or more damage. The rider gains +10000 and receives this card's distinct quoted AUTO through turn end; each quoted effect is modeled separately in BREAK_RIDE_SPECS. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
+          }
+        },
+                {
+          "id": "cfa-1879:0",
+          "cardId": "cfa-1879",
+          "kind": "AUTO",
+          "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Kagero» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Counter Blast 1 & Choose one «Kagero» from your hand, and discard it] At the end of the battle that this unit attacked a rear-guard, you may pay the cost. If you do, stand this unit. This ability cannot be used for the rest of that turn. (This ability cannot be used even if the cost is not paid.)\".",
+          "requiredLocation": [
+            "vanguard"
+          ],
+          "trigger": {
+            "status": "recognized-trigger",
+            "eventType": "card.ridden",
+            "subject": "ridden-unit",
+            "circles": [
+              "vanguard"
+            ],
+            "riderClan": "Kagero"
+          },
+          "conditions": [
+            {
+              "type": "limit-break-active",
+              "count": 4
+            }
+          ],
+          "conditionsReviewed": true,
+          "costs": [],
+          "costsReviewed": true,
+          "choicesReviewed": true,
+          "optional": false,
+          "effects": [
+            {
+              "op": "grant-vanguard-break-ride-ability",
+              "target": "controller",
+              "parentCardId": "cfa-1879",
+              "parentAbilityId": "cfa-1879:0",
+              "amount": 10000
+            }
+          ],
+          "source": {
+            "dataset": "Bushiroad official card list",
+            "snapshotDate": "2026-11-07",
+            "officialCardNumber": "BT15/004EN",
+            "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT15%2F004EN",
+            "officialTextVerified": true,
+            "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+            "patternId": "auto-limit-break-clan-break-ride-grant-v1",
+            "review": "Exact BT15/004EN Limit Break ride ability and its quoted AUTO checked against Bushiroad's official card list. Only the exact source instance ridden from VC triggers, by a same-controller rider of the printed clan, while that controller has four or more damage. The rider gains +10000 and receives this card's distinct quoted AUTO through turn end; each quoted effect is modeled separately in BREAK_RIDE_SPECS. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
+          }
+        },
+                {
+          "id": "cfa-1945:0",
+          "cardId": "cfa-1945",
+          "kind": "AUTO",
+          "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Bermuda Triangle» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: [Counter Blast 1] When this unit attacks a vanguard, you may pay the cost. If you do, return all of your «Bermuda Triangle» rear-guards to your hand, then choose up to two «Bermuda Triangle» from your hand, and call them to separate RC.\".",
+          "requiredLocation": [
+            "vanguard"
+          ],
+          "trigger": {
+            "status": "recognized-trigger",
+            "eventType": "card.ridden",
+            "subject": "ridden-unit",
+            "circles": [
+              "vanguard"
+            ],
+            "riderClan": "Bermuda Triangle"
+          },
+          "conditions": [
+            {
+              "type": "limit-break-active",
+              "count": 4
+            }
+          ],
+          "conditionsReviewed": true,
+          "costs": [],
+          "costsReviewed": true,
+          "choicesReviewed": true,
+          "optional": false,
+          "effects": [
+            {
+              "op": "grant-vanguard-break-ride-ability",
+              "target": "controller",
+              "parentCardId": "cfa-1945",
+              "parentAbilityId": "cfa-1945:0",
+              "amount": 10000
+            }
+          ],
+          "source": {
+            "dataset": "Bushiroad official card list",
+            "snapshotDate": "2026-11-07",
+            "officialCardNumber": "EB10/003EN-W",
+            "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=41&sort=no&view=text",
+            "officialTextVerified": true,
+            "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+            "patternId": "auto-limit-break-clan-break-ride-grant-v1",
+            "review": "Exact EB10/003EN-W Limit Break ride ability and its quoted AUTO checked against Bushiroad's official card list. Only the exact source instance ridden from VC triggers, by a same-controller rider of the printed clan, while that controller has four or more damage. The rider gains +10000 and receives this card's distinct quoted AUTO through turn end; each quoted effect is modeled separately in BREAK_RIDE_SPECS. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
+          }
+        },
+                {
+          "id": "cfa-1954:0",
+          "cardId": "cfa-1954",
+          "kind": "AUTO",
+          "printedText": "AUTO Limit Break 4 (This ability is active if you have four or more damage): When a «Bermuda Triangle» rides this unit, choose your vanguard, and until end of turn, that unit gets power +10000 and \"AUTO [VC]: When your «Bermuda Triangle» is returned to your hand from RC, search your deck for up to one «Bermuda Triangle», call it to RC, and shuffle your deck. This ability cannot be used for the rest of that turn.\".",
+          "requiredLocation": [
+            "vanguard"
+          ],
+          "trigger": {
+            "status": "recognized-trigger",
+            "eventType": "card.ridden",
+            "subject": "ridden-unit",
+            "circles": [
+              "vanguard"
+            ],
+            "riderClan": "Bermuda Triangle"
+          },
+          "conditions": [
+            {
+              "type": "limit-break-active",
+              "count": 4
+            }
+          ],
+          "conditionsReviewed": true,
+          "costs": [],
+          "costsReviewed": true,
+          "choicesReviewed": true,
+          "optional": false,
+          "effects": [
+            {
+              "op": "grant-vanguard-break-ride-ability",
+              "target": "controller",
+              "parentCardId": "cfa-1954",
+              "parentAbilityId": "cfa-1954:0",
+              "amount": 10000
+            }
+          ],
+          "source": {
+            "dataset": "Bushiroad official card list",
+            "snapshotDate": "2026-11-07",
+            "officialCardNumber": "PR/0215EN",
+            "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=PR%2F0215EN",
+            "officialTextVerified": true,
+            "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+            "patternId": "auto-limit-break-clan-break-ride-grant-v1",
+            "review": "Exact PR/0215EN Limit Break ride ability and its quoted AUTO checked against Bushiroad's official card list. Only the exact source instance ridden from VC triggers, by a same-controller rider of the printed clan, while that controller has four or more damage. The rider gains +10000 and receives this card's distinct quoted AUTO through turn end; each quoted effect is modeled separately in BREAK_RIDE_SPECS. Comprehensive Rules 4.52 §11.9.6.1.4 preserves the ridden card's triggered ability through resolution."
+          }
+        },
     {
       "id": "cfa-1954:1",
       "cardId": "cfa-1954",
@@ -118489,6 +119307,48 @@
       ]
     },
     {
+      "id": "cfa-12058:2",
+      "cardId": "cfa-12058",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit attacks, this unit gets power +2000 until end of that battle for each of your opponent’s open RC.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "D-BT13/057EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT13%2F057EN",
+        "officialTextVerified": false,
+        "patternId": "auto-rc-own-attack-power-per-count-battle-v1",
+        "review": "Exact catalog text and existing reusable battle-count resolver. The exact source must attack from its own RC; count only the opponent’s open Rear-Guard Circles at resolution and apply +2000 per circle for this battle. An official primary card-text lookup remains pending."
+      },
+      "effects": [
+        {
+          "op": "source-power-per-count",
+          "target": "source",
+          "amountPerCount": 2000,
+          "duration": "battle",
+          "countBy": "opponent-open-rear-guards",
+          "divisor": 1
+        }
+      ]
+    },
+    {
       "id": "cfa-13049:0",
       "cardId": "cfa-13049",
       "kind": "CONT",
@@ -119561,6 +120421,81 @@
       "effects": [
         {
           "op": "soul-charge",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-8404:0",
+      "cardId": "cfa-8404",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit’s attack hits, Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "D-BT01/069EN",
+          "D-PR/731EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-BT01%2F069EN",
+        "officialTextVerified": true,
+        "patternId": "auto-rc-own-attack-hit-soul-charge-one-v1",
+        "review": "Official Selfish Engraver wording matches the catalog. Only this source instance's own Rear-Guard attack can trigger; the text does not restrict which opposing unit is hit. The controller Soul Charges one card."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-13158:1",
+      "cardId": "cfa-13158",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit’s attack hits, Soul Charge 1.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardTextVerification": "local-catalog-only",
+        "patternId": "auto-rc-own-attack-hit-soul-charge-one-v1",
+        "review": "The imported text is identical to Selfish Engraver's confirmed AUTO. Apply the same exact source and hit checks, but keep direct official text confirmation pending for this alternate card record."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
           "count": 1
         }
       ]
@@ -127103,6 +128038,10544 @@
           "target": "source",
           "amount": 1000,
           "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-3370:0",
+      "cardId": "cfa-3370",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC] Generation Break 1: When this unit’s attack hits a vanguard, Counter Charge 2.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": [],
+        "requiredTimingWindow": "attack-hit",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "G-BT05/071EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT05%2F071EN",
+        "patternId": "auto-rc-gb-own-attack-hit-counter-charge-two-v1",
+        "review": "Official text is AUTO [RC] Generation Break 1: only this Rear-Guard instance’s own attack hitting a vanguard qualifies; the controller then Counter-Charges 2. The generic authoritative attack.hit matcher binds the source instance to the battle attacker and the vanguard target. Generation Break is rechecked from the controller’s current face-up G units, and the existing Counter-Charge handler flips up to two selected face-down damage cards for the source controller."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-7314:0",
+      "cardId": "cfa-7314",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded from hand during your turn, you may call this card to RC as rest.",
+      "optional": true,
+      "requiredLocation": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "source",
+        "circles": [],
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-turn"
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card source",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumbers": [
+          "V-EB13/051EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB13%2F051EN",
+        "patternId": "auto-turn-discard-source-call-rested-v1",
+        "review": "Exact optional own-hand discard AUTO. The exact source must move from its controller's hand to Drop while that same controller is the turn player. The controller may call that exact instance from Drop rested to a legal Rear-Guard Circle; unrelated discards, copies, turns, and zones do not qualify."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "rest"
+        }
+      ]
+    },
+    {
+      "id": "cfa-9026:0",
+      "cardId": "cfa-9026",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded from hand during your turn, you may call this card to RC as rest.",
+      "optional": true,
+      "requiredLocation": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "source",
+        "circles": [],
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-turn"
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card source",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumbers": [
+          "D-VS02/059EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS02%2F059EN",
+        "patternId": "auto-turn-discard-source-call-rested-v1",
+        "review": "Exact optional own-hand discard AUTO. The exact source must move from its controller's hand to Drop while that same controller is the turn player. The controller may call that exact instance from Drop rested to a legal Rear-Guard Circle; unrelated discards, copies, turns, and zones do not qualify."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "rest"
+        }
+      ]
+    },
+    {
+      "id": "cfa-9450:0",
+      "cardId": "cfa-9450",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded from hand during your turn, you may call this card to RC as rest.",
+      "optional": true,
+      "requiredLocation": [],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "source",
+        "circles": [],
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-turn"
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card source",
+        "snapshotDate": "2026-11-06",
+        "officialReference": "https://en.cf-vanguard.com/information/v_special_series_03_04_v_clan_collection_vol-3_vol-4/",
+        "patternId": "auto-turn-discard-source-call-rested-v1",
+        "review": "Exact optional own-hand discard AUTO. The exact source must move from its controller's hand to Drop while that same controller is the turn player. The controller may call that exact instance from Drop rested to a legal Rear-Guard Circle; unrelated discards, copies, turns, and zones do not qualify."
+      },
+      "effects": [
+        {
+          "op": "call-source-from-drop-rested",
+          "target": "source",
+          "position": "rest"
+        }
+      ]
+    },
+    {
+      "id": "cfa-259:0",
+      "cardId": "cfa-259",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit’s attack hits a vanguard, choose one of your «Dimension Police», and that unit gets power +3000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "cardTextVerification": "pending-official-source",
+        "patternId": "auto-vc-rc-own-attack-hit-clan-power-turn-v1",
+        "review": "Catalog text only; the card's official text has not been located. The exact source instance, VC/RC location, Vanguard hit, clan target, and end-of-turn power effect are covered by regression tests. Do not promote whole-card verification until the card-text source is checked."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 3000,
+          "duration": "turn",
+          "noOpIfNoLegalTargets": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "clan": "Dimension Police"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-555:0",
+      "cardId": "cfa-555",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit’s attack hits a vanguard, choose one of your «Kagero», and that unit gets power +3000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumbers": [
+          "BT04/070EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/howto/question/?id=rule",
+        "officialTextVerification": "card-identity-only",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vc-rc-own-attack-hit-clan-power-turn-v1",
+        "review": "Official Q&A confirms this card's identity and BT04/070EN number, but not this ability's wording. The catalog text's source identity, VC/RC location, Vanguard-hit condition, Kagero target, and end-of-turn power effect are regression-tested; exact official text comparison remains pending."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 3000,
+          "duration": "turn",
+          "noOpIfNoLegalTargets": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "clan": "Kagero"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-692:0",
+      "cardId": "cfa-692",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit’s attack hits a vanguard, choose one of your «Royal Paladin», and that unit gets power +3000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "choicesReviewed": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "targetLocation": "vanguard",
+        "circles": []
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumbers": [
+          "BT05/063EN"
+        ],
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT05%2F063EN",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "cardTextVerification": "confirmed",
+        "patternId": "auto-vc-rc-own-attack-hit-clan-power-turn-v1",
+        "review": "Official card list confirms BT05/063EN wording. Only this exact source instance's VC/RC attack hitting the opposing Vanguard qualifies; its controller chooses a friendly Royal Paladin and applies +3000 until end of turn."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 3000,
+          "duration": "turn",
+          "noOpIfNoLegalTargets": true,
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "clan": "Royal Paladin"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-15:0",
+      "cardId": "cfa-15",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-55:0",
+      "cardId": "cfa-55",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-89:0",
+      "cardId": "cfa-89",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-137:0",
+      "cardId": "cfa-137",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-189:0",
+      "cardId": "cfa-189",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-239:0",
+      "cardId": "cfa-239",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-277:0",
+      "cardId": "cfa-277",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-331:0",
+      "cardId": "cfa-331",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-370:0",
+      "cardId": "cfa-370",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-393:0",
+      "cardId": "cfa-393",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You can only have up to four cards with Sentinel in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-460:0",
+      "cardId": "cfa-460",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-521:0",
+      "cardId": "cfa-521",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-572:0",
+      "cardId": "cfa-572",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-603:0",
+      "cardId": "cfa-603",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-645:0",
+      "cardId": "cfa-645",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-716:0",
+      "cardId": "cfa-716",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-746:0",
+      "cardId": "cfa-746",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-791:0",
+      "cardId": "cfa-791",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-850:0",
+      "cardId": "cfa-850",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-883:0",
+      "cardId": "cfa-883",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1129:0",
+      "cardId": "cfa-1129",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1145:0",
+      "cardId": "cfa-1145",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You can only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1173:0",
+      "cardId": "cfa-1173",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1222:0",
+      "cardId": "cfa-1222",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1283:0",
+      "cardId": "cfa-1283",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You can only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1304:0",
+      "cardId": "cfa-1304",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1325:0",
+      "cardId": "cfa-1325",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1413:0",
+      "cardId": "cfa-1413",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1435:0",
+      "cardId": "cfa-1435",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1469:0",
+      "cardId": "cfa-1469",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1499:0",
+      "cardId": "cfa-1499",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1543:0",
+      "cardId": "cfa-1543",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1553:0",
+      "cardId": "cfa-1553",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1573:0",
+      "cardId": "cfa-1573",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1605:0",
+      "cardId": "cfa-1605",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1667:0",
+      "cardId": "cfa-1667",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1721:0",
+      "cardId": "cfa-1721",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1738:0",
+      "cardId": "cfa-1738",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1741:0",
+      "cardId": "cfa-1741",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1752:0",
+      "cardId": "cfa-1752",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1760:0",
+      "cardId": "cfa-1760",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1803:0",
+      "cardId": "cfa-1803",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1873:0",
+      "cardId": "cfa-1873",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1875:0",
+      "cardId": "cfa-1875",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1878:0",
+      "cardId": "cfa-1878",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1885:0",
+      "cardId": "cfa-1885",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1951:0",
+      "cardId": "cfa-1951",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1964:0",
+      "cardId": "cfa-1964",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1987:0",
+      "cardId": "cfa-1987",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-1996:0",
+      "cardId": "cfa-1996",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2069:0",
+      "cardId": "cfa-2069",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2077:0",
+      "cardId": "cfa-2077",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2088:0",
+      "cardId": "cfa-2088",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2097:0",
+      "cardId": "cfa-2097",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2156:0",
+      "cardId": "cfa-2156",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2169:0",
+      "cardId": "cfa-2169",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2178:0",
+      "cardId": "cfa-2178",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2241:0",
+      "cardId": "cfa-2241",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2302:0",
+      "cardId": "cfa-2302",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2303:0",
+      "cardId": "cfa-2303",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2304:0",
+      "cardId": "cfa-2304",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2305:0",
+      "cardId": "cfa-2305",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2364:0",
+      "cardId": "cfa-2364",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2389:0",
+      "cardId": "cfa-2389",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2403:0",
+      "cardId": "cfa-2403",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2436:0",
+      "cardId": "cfa-2436",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2459:0",
+      "cardId": "cfa-2459",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2470:0",
+      "cardId": "cfa-2470",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2549:0",
+      "cardId": "cfa-2549",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2564:0",
+      "cardId": "cfa-2564",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2578:0",
+      "cardId": "cfa-2578",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2590:0",
+      "cardId": "cfa-2590",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2597:0",
+      "cardId": "cfa-2597",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2605:0",
+      "cardId": "cfa-2605",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2611:0",
+      "cardId": "cfa-2611",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2629:0",
+      "cardId": "cfa-2629",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2633:0",
+      "cardId": "cfa-2633",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2646:0",
+      "cardId": "cfa-2646",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2692:0",
+      "cardId": "cfa-2692",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2744:0",
+      "cardId": "cfa-2744",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2774:0",
+      "cardId": "cfa-2774",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2841:0",
+      "cardId": "cfa-2841",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2926:0",
+      "cardId": "cfa-2926",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2939:0",
+      "cardId": "cfa-2939",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2947:0",
+      "cardId": "cfa-2947",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2959:0",
+      "cardId": "cfa-2959",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2973:0",
+      "cardId": "cfa-2973",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-2990:0",
+      "cardId": "cfa-2990",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3014:0",
+      "cardId": "cfa-3014",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3065:0",
+      "cardId": "cfa-3065",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3091:0",
+      "cardId": "cfa-3091",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3092:0",
+      "cardId": "cfa-3092",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3131:0",
+      "cardId": "cfa-3131",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3137:0",
+      "cardId": "cfa-3137",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3138:0",
+      "cardId": "cfa-3138",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3145:0",
+      "cardId": "cfa-3145",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3219:0",
+      "cardId": "cfa-3219",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3259:0",
+      "cardId": "cfa-3259",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3325:0",
+      "cardId": "cfa-3325",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3383:0",
+      "cardId": "cfa-3383",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3391:0",
+      "cardId": "cfa-3391",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3398:0",
+      "cardId": "cfa-3398",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3437:0",
+      "cardId": "cfa-3437",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3491:0",
+      "cardId": "cfa-3491",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3492:0",
+      "cardId": "cfa-3492",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3513:0",
+      "cardId": "cfa-3513",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3514:0",
+      "cardId": "cfa-3514",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3525:0",
+      "cardId": "cfa-3525",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3531:0",
+      "cardId": "cfa-3531",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3545:0",
+      "cardId": "cfa-3545",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3571:0",
+      "cardId": "cfa-3571",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3585:0",
+      "cardId": "cfa-3585",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3635:0",
+      "cardId": "cfa-3635",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3653:0",
+      "cardId": "cfa-3653",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3701:0",
+      "cardId": "cfa-3701",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3715:0",
+      "cardId": "cfa-3715",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3727:0",
+      "cardId": "cfa-3727",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3782:0",
+      "cardId": "cfa-3782",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3791:0",
+      "cardId": "cfa-3791",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3814:0",
+      "cardId": "cfa-3814",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3851:0",
+      "cardId": "cfa-3851",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3861:0",
+      "cardId": "cfa-3861",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3913:0",
+      "cardId": "cfa-3913",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3919:0",
+      "cardId": "cfa-3919",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3933:0",
+      "cardId": "cfa-3933",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3939:0",
+      "cardId": "cfa-3939",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3953:0",
+      "cardId": "cfa-3953",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-3991:0",
+      "cardId": "cfa-3991",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4020:0",
+      "cardId": "cfa-4020",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4036:0",
+      "cardId": "cfa-4036",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4045:0",
+      "cardId": "cfa-4045",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4049:0",
+      "cardId": "cfa-4049",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4055:0",
+      "cardId": "cfa-4055",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4118:0",
+      "cardId": "cfa-4118",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4119:0",
+      "cardId": "cfa-4119",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4159:0",
+      "cardId": "cfa-4159",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4187:0",
+      "cardId": "cfa-4187",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4191:0",
+      "cardId": "cfa-4191",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4212:0",
+      "cardId": "cfa-4212",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4213:0",
+      "cardId": "cfa-4213",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4227:0",
+      "cardId": "cfa-4227",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4285:0",
+      "cardId": "cfa-4285",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4321:0",
+      "cardId": "cfa-4321",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4335:0",
+      "cardId": "cfa-4335",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4339:0",
+      "cardId": "cfa-4339",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4367:0",
+      "cardId": "cfa-4367",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4404:0",
+      "cardId": "cfa-4404",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4413:0",
+      "cardId": "cfa-4413",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4448:0",
+      "cardId": "cfa-4448",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4461:0",
+      "cardId": "cfa-4461",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4507:0",
+      "cardId": "cfa-4507",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4531:0",
+      "cardId": "cfa-4531",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4574:0",
+      "cardId": "cfa-4574",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4590:0",
+      "cardId": "cfa-4590",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4609:0",
+      "cardId": "cfa-4609",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4633:0",
+      "cardId": "cfa-4633",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4663:0",
+      "cardId": "cfa-4663",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4680:0",
+      "cardId": "cfa-4680",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4711:0",
+      "cardId": "cfa-4711",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4791:0",
+      "cardId": "cfa-4791",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4801:0",
+      "cardId": "cfa-4801",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4819:0",
+      "cardId": "cfa-4819",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4843:0",
+      "cardId": "cfa-4843",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4849:0",
+      "cardId": "cfa-4849",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4850:0",
+      "cardId": "cfa-4850",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4867:0",
+      "cardId": "cfa-4867",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4903:0",
+      "cardId": "cfa-4903",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4908:0",
+      "cardId": "cfa-4908",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4910:0",
+      "cardId": "cfa-4910",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4933:0",
+      "cardId": "cfa-4933",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4951:0",
+      "cardId": "cfa-4951",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-4987:0",
+      "cardId": "cfa-4987",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5062:0",
+      "cardId": "cfa-5062",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5065:0",
+      "cardId": "cfa-5065",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5078:0",
+      "cardId": "cfa-5078",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5099:0",
+      "cardId": "cfa-5099",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5115:0",
+      "cardId": "cfa-5115",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5156:0",
+      "cardId": "cfa-5156",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5164:0",
+      "cardId": "cfa-5164",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5198:0",
+      "cardId": "cfa-5198",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5208:0",
+      "cardId": "cfa-5208",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5219:0",
+      "cardId": "cfa-5219",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5274:0",
+      "cardId": "cfa-5274",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5280:0",
+      "cardId": "cfa-5280",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5288:0",
+      "cardId": "cfa-5288",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5332:0",
+      "cardId": "cfa-5332",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5348:0",
+      "cardId": "cfa-5348",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5351:0",
+      "cardId": "cfa-5351",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5354:0",
+      "cardId": "cfa-5354",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5357:0",
+      "cardId": "cfa-5357",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5370:0",
+      "cardId": "cfa-5370",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5402:0",
+      "cardId": "cfa-5402",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5409:0",
+      "cardId": "cfa-5409",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5429:0",
+      "cardId": "cfa-5429",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5436:0",
+      "cardId": "cfa-5436",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5451:0",
+      "cardId": "cfa-5451",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5541:0",
+      "cardId": "cfa-5541",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5554:0",
+      "cardId": "cfa-5554",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5600:0",
+      "cardId": "cfa-5600",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5641:0",
+      "cardId": "cfa-5641",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5656:0",
+      "cardId": "cfa-5656",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5678:0",
+      "cardId": "cfa-5678",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5707:0",
+      "cardId": "cfa-5707",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT01 Unite! Team Q4",
+        "officialCardNumber": "V-BT01/021EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=111&sort=no&view=text",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5708:0",
+      "cardId": "cfa-5708",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT01 Unite! Team Q4",
+        "officialCardNumber": "V-BT01/015EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=111&sort=no&view=text",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5724:0",
+      "cardId": "cfa-5724",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-TD02 Toshiki Kai",
+        "officialCardNumber": "V-TD02/007EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-TD02%2F007EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5739:0",
+      "cardId": "cfa-5739",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/002EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F002EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5742:0",
+      "cardId": "cfa-5742",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5780:0",
+      "cardId": "cfa-5780",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/012EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F012EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5811:0",
+      "cardId": "cfa-5811",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5813:0",
+      "cardId": "cfa-5813",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5819:0",
+      "cardId": "cfa-5819",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5840:0",
+      "cardId": "cfa-5840",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/022EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F022EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5841:0",
+      "cardId": "cfa-5841",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/009EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F009EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5842:0",
+      "cardId": "cfa-5842",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/015EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F015EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5892:0",
+      "cardId": "cfa-5892",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5895:0",
+      "cardId": "cfa-5895",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB01 The Destructive Roar",
+        "officialCardNumber": "V-EB01/028EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB01%2F028EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5896:0",
+      "cardId": "cfa-5896",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB01 The Destructive Roar",
+        "officialCardNumber": "V-EB01/023EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB01%2F023EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5904:0",
+      "cardId": "cfa-5904",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-TD03 Leon Soryu",
+        "officialCardNumber": "V-TD03/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-TD03%2F008EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5918:0",
+      "cardId": "cfa-5918",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/021EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F021EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5919:0",
+      "cardId": "cfa-5919",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/019EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F019EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5920:0",
+      "cardId": "cfa-5920",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/013EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F013EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5945:0",
+      "cardId": "cfa-5945",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5954:0",
+      "cardId": "cfa-5954",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-5979:0",
+      "cardId": "cfa-5979",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6004:0",
+      "cardId": "cfa-6004",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/004EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F004EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6043:0",
+      "cardId": "cfa-6043",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT02 Strongest! Team AL4",
+        "officialCardNumber": "V-BT02/018EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-BT02%2F018EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6044:0",
+      "cardId": "cfa-6044",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT02 Strongest! Team AL4",
+        "officialCardNumber": "V-BT02/031EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-BT02%2F031EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6052:0",
+      "cardId": "cfa-6052",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT02 Strongest! Team AL4",
+        "officialCardNumber": "V-BT02/024EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=118&sort=no&view=text",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6053:0",
+      "cardId": "cfa-6053",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6063:0",
+      "cardId": "cfa-6063",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-BT02 Strongest! Team AL4",
+        "officialCardNumber": "V-BT02/021EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?clan=&grade%5B0%5D=all&keyword=nightmareland&keyword_type%5B0%5D=all&kind%5B0%5D=all&nation=&power_from=&power_to=&rare=&regulation=V&trigger%5B0%5D=all&view=text",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6064:0",
+      "cardId": "cfa-6064",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6125:0",
+      "cardId": "cfa-6125",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/003EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F003EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6126:0",
+      "cardId": "cfa-6126",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6127:0",
+      "cardId": "cfa-6127",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/005EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F005EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6153:0",
+      "cardId": "cfa-6153",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6183:0",
+      "cardId": "cfa-6183",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6189:0",
+      "cardId": "cfa-6189",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6227:0",
+      "cardId": "cfa-6227",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/026EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F026EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6230:0",
+      "cardId": "cfa-6230",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/022EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F022EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6244:0",
+      "cardId": "cfa-6244",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/017EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F017EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6245:0",
+      "cardId": "cfa-6245",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/030EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F030EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6251:0",
+      "cardId": "cfa-6251",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/014EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F014EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6256:0",
+      "cardId": "cfa-6256",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-EB04 The Answer of Truth",
+        "officialCardNumber": "V-EB04/012EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-EB04%2F012EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6272:0",
+      "cardId": "cfa-6272",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6310:0",
+      "cardId": "cfa-6310",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6340:0",
+      "cardId": "cfa-6340",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F008EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6373:0",
+      "cardId": "cfa-6373",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/011EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F011EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6381:0",
+      "cardId": "cfa-6381",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6432:0",
+      "cardId": "cfa-6432",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6481:0",
+      "cardId": "cfa-6481",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/014EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F014EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6500:0",
+      "cardId": "cfa-6500",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6613:0",
+      "cardId": "cfa-6613",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "V-SS03 Festival Collection",
+        "officialCardNumber": "V-SS03/020EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-SS03%2F020EN",
+        "officialTextVerified": true,
+        "officialAbilityText": "[CONT]:Sentinel (You may only have up to four cards with \"[CONT]:Sentinel\" in a deck.)",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Sentinel CONT grants a passive keyword and deck construction limit. It is not a manual activation or an AUTO trigger."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6743:0",
+      "cardId": "cfa-6743",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6744:0",
+      "cardId": "cfa-6744",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6745:0",
+      "cardId": "cfa-6745",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6799:0",
+      "cardId": "cfa-6799",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6805:0",
+      "cardId": "cfa-6805",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6810:0",
+      "cardId": "cfa-6810",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6870:0",
+      "cardId": "cfa-6870",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6874:0",
+      "cardId": "cfa-6874",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6875:0",
+      "cardId": "cfa-6875",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6972:0",
+      "cardId": "cfa-6972",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6973:0",
+      "cardId": "cfa-6973",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6974:0",
+      "cardId": "cfa-6974",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-6975:0",
+      "cardId": "cfa-6975",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7018:0",
+      "cardId": "cfa-7018",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7022:0",
+      "cardId": "cfa-7022",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7029:0",
+      "cardId": "cfa-7029",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7121:0",
+      "cardId": "cfa-7121",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7131:0",
+      "cardId": "cfa-7131",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7140:0",
+      "cardId": "cfa-7140",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7182:0",
+      "cardId": "cfa-7182",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7190:0",
+      "cardId": "cfa-7190",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7197:0",
+      "cardId": "cfa-7197",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7217:0",
+      "cardId": "cfa-7217",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7359:0",
+      "cardId": "cfa-7359",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7450:0",
+      "cardId": "cfa-7450",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7452:0",
+      "cardId": "cfa-7452",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7454:0",
+      "cardId": "cfa-7454",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7594:0",
+      "cardId": "cfa-7594",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7616:0",
+      "cardId": "cfa-7616",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7618:0",
+      "cardId": "cfa-7618",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7619:0",
+      "cardId": "cfa-7619",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7630:0",
+      "cardId": "cfa-7630",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7776:0",
+      "cardId": "cfa-7776",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7778:0",
+      "cardId": "cfa-7778",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7782:0",
+      "cardId": "cfa-7782",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7784:0",
+      "cardId": "cfa-7784",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7852:0",
+      "cardId": "cfa-7852",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7859:0",
+      "cardId": "cfa-7859",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7863:0",
+      "cardId": "cfa-7863",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7866:0",
+      "cardId": "cfa-7866",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7919:0",
+      "cardId": "cfa-7919",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7928:0",
+      "cardId": "cfa-7928",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7933:0",
+      "cardId": "cfa-7933",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-7934:0",
+      "cardId": "cfa-7934",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8034:0",
+      "cardId": "cfa-8034",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8035:0",
+      "cardId": "cfa-8035",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8042:0",
+      "cardId": "cfa-8042",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8044:0",
+      "cardId": "cfa-8044",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8116:0",
+      "cardId": "cfa-8116",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8234:0",
+      "cardId": "cfa-8234",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8254:0",
+      "cardId": "cfa-8254",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8335:0",
+      "cardId": "cfa-8335",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8342:0",
+      "cardId": "cfa-8342",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8357:0",
+      "cardId": "cfa-8357",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8359:0",
+      "cardId": "cfa-8359",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8361:0",
+      "cardId": "cfa-8361",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8364:0",
+      "cardId": "cfa-8364",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8370:0",
+      "cardId": "cfa-8370",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8372:0",
+      "cardId": "cfa-8372",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8481:0",
+      "cardId": "cfa-8481",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8495:0",
+      "cardId": "cfa-8495",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8781:0",
+      "cardId": "cfa-8781",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8800:0",
+      "cardId": "cfa-8800",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8850:0",
+      "cardId": "cfa-8850",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8851:0",
+      "cardId": "cfa-8851",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8852:0",
+      "cardId": "cfa-8852",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8853:0",
+      "cardId": "cfa-8853",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8854:0",
+      "cardId": "cfa-8854",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-8924:0",
+      "cardId": "cfa-8924",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-9154:0",
+      "cardId": "cfa-9154",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-9164:0",
+      "cardId": "cfa-9164",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-9675:0",
+      "cardId": "cfa-9675",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-9905:0",
+      "cardId": "cfa-9905",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-9909:0",
+      "cardId": "cfa-9909",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-9910:0",
+      "cardId": "cfa-9910",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10032:0",
+      "cardId": "cfa-10032",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10040:0",
+      "cardId": "cfa-10040",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10087:0",
+      "cardId": "cfa-10087",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"CONT: Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10186:0",
+      "cardId": "cfa-10186",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10191:0",
+      "cardId": "cfa-10191",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10196:0",
+      "cardId": "cfa-10196",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10201:0",
+      "cardId": "cfa-10201",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10206:0",
+      "cardId": "cfa-10206",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10445:0",
+      "cardId": "cfa-10445",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"CONT: Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10472:0",
+      "cardId": "cfa-10472",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10543:0",
+      "cardId": "cfa-10543",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-10844:0",
+      "cardId": "cfa-10844",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11306:0",
+      "cardId": "cfa-11306",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11314:0",
+      "cardId": "cfa-11314",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11322:0",
+      "cardId": "cfa-11322",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11330:0",
+      "cardId": "cfa-11330",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11338:0",
+      "cardId": "cfa-11338",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11356:0",
+      "cardId": "cfa-11356",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11380:0",
+      "cardId": "cfa-11380",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11405:0",
+      "cardId": "cfa-11405",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11410:0",
+      "cardId": "cfa-11410",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11421:0",
+      "cardId": "cfa-11421",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11452:0",
+      "cardId": "cfa-11452",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11453:0",
+      "cardId": "cfa-11453",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11489:0",
+      "cardId": "cfa-11489",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11511:0",
+      "cardId": "cfa-11511",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11570:0",
+      "cardId": "cfa-11570",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11586:0",
+      "cardId": "cfa-11586",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11591:0",
+      "cardId": "cfa-11591",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11595:0",
+      "cardId": "cfa-11595",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11624:0",
+      "cardId": "cfa-11624",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "D-series promotional cards",
+        "officialCardNumber": "D-PR/538",
+        "officialPrintName": "どこヴァン！ねお2023",
+        "officialReference": "https://cf-vanguard.com/cardlist/?cardno=D-PR%2F538",
+        "officialLanguage": "Japanese",
+        "officialOriginalText": "〖永〗：守護者",
+        "officialTextVerified": true,
+        "officialAbilityText": "〖永〗：守護者",
+        "validatedTranslation": "CONT: Sentinel.",
+        "translationReview": "Checked against the official Japanese original; the translation preserves the event, controller, target, duration, threshold, and required discard.",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Japanese D-series card-list text identifies this as a passive Guardian/Sentinel CONT. The local English transcript is checked against the original; the keyword is not an AUTO trigger or manual activation."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11634:0",
+      "cardId": "cfa-11634",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11637:0",
+      "cardId": "cfa-11637",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11640:0",
+      "cardId": "cfa-11640",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11648:0",
+      "cardId": "cfa-11648",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11752:0",
+      "cardId": "cfa-11752",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11753:0",
+      "cardId": "cfa-11753",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11813:0",
+      "cardId": "cfa-11813",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11865:0",
+      "cardId": "cfa-11865",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11867:0",
+      "cardId": "cfa-11867",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11898:0",
+      "cardId": "cfa-11898",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11933:0",
+      "cardId": "cfa-11933",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12005:0",
+      "cardId": "cfa-12005",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12085:0",
+      "cardId": "cfa-12085",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12125:0",
+      "cardId": "cfa-12125",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12137:0",
+      "cardId": "cfa-12137",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12176:0",
+      "cardId": "cfa-12176",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12188:0",
+      "cardId": "cfa-12188",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"CONT: Sentinel\" in a deck)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12227:0",
+      "cardId": "cfa-12227",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialSet": "D-series promotional cards",
+        "officialCardNumber": "D-PR/708",
+        "officialPrintName": "カードファイト!! ヴァンガード will+Dress 最終回記念",
+        "officialReference": "https://cf-vanguard.com/cardlist/?cardno=D-PR%2F708",
+        "officialLanguage": "Japanese",
+        "officialOriginalText": "〖永〗：守護者",
+        "officialTextVerified": true,
+        "officialAbilityText": "〖永〗：守護者",
+        "validatedTranslation": "CONT: Sentinel.",
+        "translationReview": "Checked against the official Japanese original; the translation preserves the event, controller, target, duration, threshold, and required discard.",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "The official Japanese D-series card-list text identifies this as a passive Guardian/Sentinel CONT. The local English transcript is checked against the original; the keyword is not an AUTO trigger or manual activation."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12255:0",
+      "cardId": "cfa-12255",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12342:0",
+      "cardId": "cfa-12342",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12379:0",
+      "cardId": "cfa-12379",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12380:0",
+      "cardId": "cfa-12380",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12395:0",
+      "cardId": "cfa-12395",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12413:0",
+      "cardId": "cfa-12413",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12414:0",
+      "cardId": "cfa-12414",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12415:0",
+      "cardId": "cfa-12415",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12416:0",
+      "cardId": "cfa-12416",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12417:0",
+      "cardId": "cfa-12417",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12418:0",
+      "cardId": "cfa-12418",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12532:1",
+      "cardId": "cfa-12532",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12554:1",
+      "cardId": "cfa-12554",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12725:0",
+      "cardId": "cfa-12725",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12752:1",
+      "cardId": "cfa-12752",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12797:0",
+      "cardId": "cfa-12797",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"CONT: Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12830:0",
+      "cardId": "cfa-12830",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-12908:0",
+      "cardId": "cfa-12908",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13037:0",
+      "cardId": "cfa-13037",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13082:0",
+      "cardId": "cfa-13082",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13199:0",
+      "cardId": "cfa-13199",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13206:0",
+      "cardId": "cfa-13206",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13316:0",
+      "cardId": "cfa-13316",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13373:0",
+      "cardId": "cfa-13373",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13401:0",
+      "cardId": "cfa-13401",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13404:0",
+      "cardId": "cfa-13404",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13405:0",
+      "cardId": "cfa-13405",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13406:0",
+      "cardId": "cfa-13406",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13407:0",
+      "cardId": "cfa-13407",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13408:0",
+      "cardId": "cfa-13408",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13515:1",
+      "cardId": "cfa-13515",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel (You may only have up to four cards with \"CONT: Sentinel\" in a deck.)",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13941:0",
+      "cardId": "cfa-13941",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13977:0",
+      "cardId": "cfa-13977",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-13984:0",
+      "cardId": "cfa-13984",
+      "kind": "CONT",
+      "printedText": "CONT: Sentinel.",
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "cont-sentinel-keyword-v1",
+        "review": "Exact standalone Sentinel keyword and four-copy reminder variants compile as a CONT keyword; the deck-limit reminder is a construction restriction, not an activation choice, and no manual activation or effect prompt is created."
+      },
+      "keywords": [
+        "sentinel"
+      ]
+    },
+    {
+      "id": "cfa-11524:0",
+      "cardId": "cfa-11524",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to two <Quintuplet> from among them, reveal them, choose a card from among the revealed cards, put it into hand, put the rest of the revealed cards into memory, and shuffle the deck.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-BT02/EX01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT02%2FEX01EN",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-placement-top-seven-two-quintuplets-to-hand-memory-v1",
+        "review": "The local catalog text matches this five-card family. The official card-list page is recorded, but this card's entry was not retrievable for text comparison during this pass; keep this ability compiled and tested, but unverified pending primary-text confirmation. Resolution follows the common exact text verified on the four companion Bushiroad entries."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-two-filtered-one-to-hand-rest-to-memory",
+          "target": "controller",
+          "lookCount": 7,
+          "maximum": 2,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11544:0",
+      "cardId": "cfa-11544",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to two <Quintuplet> from among them, reveal them, choose a card from among the revealed cards, put it into hand, put the rest of the revealed cards into memory, and shuffle the deck.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-BT02/EX03EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT02%2FEX03EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-placement-top-seven-two-quintuplets-to-hand-memory-v1",
+        "review": "Exact shared AUTO checked against this card's Bushiroad official card-list entry. Only placement of this exact source instance on VC triggers it. The controller may choose zero, one, or two matching Quintuplets from the top seven. If any are selected, they are revealed and one is chosen for hand; any other selected card goes to the Order Zone as Memory. The remaining looked-at cards are shuffled back. If zero are selected, no card is moved by the subsequent choice instructions, and the looked-at cards are shuffled back, consistent with Comprehensive Rules 4.52 sections 1.3.2 and 1.3.5.1."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-two-filtered-one-to-hand-rest-to-memory",
+          "target": "controller",
+          "lookCount": 7,
+          "maximum": 2,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11556:0",
+      "cardId": "cfa-11556",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to two <Quintuplet> from among them, reveal them, choose a card from among the revealed cards, put it into hand, put the rest of the revealed cards into memory, and shuffle the deck.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-BT02/EX05EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT02%2FEX05EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-placement-top-seven-two-quintuplets-to-hand-memory-v1",
+        "review": "Exact shared AUTO checked against this card's Bushiroad official card-list entry. Only placement of this exact source instance on VC triggers it. The controller may choose zero, one, or two matching Quintuplets from the top seven. If any are selected, they are revealed and one is chosen for hand; any other selected card goes to the Order Zone as Memory. The remaining looked-at cards are shuffled back. If zero are selected, no card is moved by the subsequent choice instructions, and the looked-at cards are shuffled back, consistent with Comprehensive Rules 4.52 sections 1.3.2 and 1.3.5.1."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-two-filtered-one-to-hand-rest-to-memory",
+          "target": "controller",
+          "lookCount": 7,
+          "maximum": 2,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11605:0",
+      "cardId": "cfa-11605",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to two <Quintuplet> from among them, reveal them, choose a card from among the revealed cards, put it into hand, put the rest of the revealed cards into memory, and shuffle the deck.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-BT02/EX07EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT02%2FEX07EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-placement-top-seven-two-quintuplets-to-hand-memory-v1",
+        "review": "Exact shared AUTO checked against this card's Bushiroad official card-list entry. Only placement of this exact source instance on VC triggers it. The controller may choose zero, one, or two matching Quintuplets from the top seven. If any are selected, they are revealed and one is chosen for hand; any other selected card goes to the Order Zone as Memory. The remaining looked-at cards are shuffled back. If zero are selected, no card is moved by the subsequent choice instructions, and the looked-at cards are shuffled back, consistent with Comprehensive Rules 4.52 sections 1.3.2 and 1.3.5.1."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-two-filtered-one-to-hand-rest-to-memory",
+          "target": "controller",
+          "lookCount": 7,
+          "maximum": 2,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11669:0",
+      "cardId": "cfa-11669",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on VC, look at the top seven cards of your deck, choose up to two <Quintuplet> from among them, reveal them, choose a card from among the revealed cards, put it into hand, put the rest of the revealed cards into memory, and shuffle the deck.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ]
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-BT02/EX09EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT02%2FEX09EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-placement-top-seven-two-quintuplets-to-hand-memory-v1",
+        "review": "Exact shared AUTO checked against this card's Bushiroad official card-list entry. Only placement of this exact source instance on VC triggers it. The controller may choose zero, one, or two matching Quintuplets from the top seven. If any are selected, they are revealed and one is chosen for hand; any other selected card goes to the Order Zone as Memory. The remaining looked-at cards are shuffled back. If zero are selected, no card is moved by the subsequent choice instructions, and the looked-at cards are shuffled back, consistent with Comprehensive Rules 4.52 sections 1.3.2 and 1.3.5.1."
+      },
+      "effects": [
+        {
+          "op": "search-top-up-to-two-filtered-one-to-hand-rest-to-memory",
+          "target": "controller",
+          "lookCount": 7,
+          "maximum": 2,
+          "filter": {
+            "race": "Quintuplet"
+          },
+          "destination": "memory",
+          "shuffle": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-12577:1",
+      "cardId": "cfa-12577",
+      "kind": "CONT",
+      "printedText": "CONT: The original power of your grade 3 cards with the Limit Break 4 ability become 13000. (Including heart cards)",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card text",
+        "snapshotDate": "2026-11-06",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.43.pdf",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.43.pdf"
+        ],
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.43.pdf",
+        "patternId": "cont-crest-set-grade-three-limit-break-original-power-v1",
+        "review": "Bushiroad primary text confirms this exact Crest CONT. While the exact Crest instance is in its controller's Crest zone, the controller's grade 3 cards with a Limit Break 4 ability have original power 13000, including any stride heart. The calculation changes original power only; other modifiers remain separate."
+      },
+      "effects": [
+        {
+          "op": "continuous-original-power-set",
+          "target": "controller-grade-three-limit-break-cards",
+          "power": 13000,
+          "grade": 3,
+          "duration": "continuous",
+          "includeHeartCards": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-12580:1",
+      "cardId": "cfa-12580",
+      "kind": "CONT",
+      "printedText": "CONT: The original power of your grade 3 cards with the Limit Break 4 ability become 13000. (Including heart cards)",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card text",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-PS01/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-PS01%2FT01EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-PS01%2FT01EN"
+        ],
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.43.pdf",
+        "patternId": "cont-crest-set-grade-three-limit-break-original-power-v1",
+        "review": "Bushiroad primary text confirms this exact Crest CONT. While the exact Crest instance is in its controller's Crest zone, the controller's grade 3 cards with a Limit Break 4 ability have original power 13000, including any stride heart. The calculation changes original power only; other modifiers remain separate."
+      },
+      "effects": [
+        {
+          "op": "continuous-original-power-set",
+          "target": "controller-grade-three-limit-break-cards",
+          "power": 13000,
+          "grade": 3,
+          "duration": "continuous",
+          "includeHeartCards": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-12591:1",
+      "cardId": "cfa-12591",
+      "kind": "CONT",
+      "printedText": "CONT: The original power of your grade 3 cards with the Limit Break 4 ability become 13000. (Including heart cards)",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card text",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-PS02/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-PS02%2FT01EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=DZ-PS02%2FT01EN"
+        ],
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.43.pdf",
+        "patternId": "cont-crest-set-grade-three-limit-break-original-power-v1",
+        "review": "Bushiroad primary text confirms this exact Crest CONT. While the exact Crest instance is in its controller's Crest zone, the controller's grade 3 cards with a Limit Break 4 ability have original power 13000, including any stride heart. The calculation changes original power only; other modifiers remain separate."
+      },
+      "effects": [
+        {
+          "op": "continuous-original-power-set",
+          "target": "controller-grade-three-limit-break-cards",
+          "power": 13000,
+          "grade": 3,
+          "duration": "continuous",
+          "includeHeartCards": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-10668:1",
+      "cardId": "cfa-10668",
+      "kind": "CONT",
+      "printedText": "CONT: The original power of your grade 3 cards with \"Messiah\" in their card names become 13000. (Including heart cards)",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-SS04/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-SS04%2FT01EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-set-grade-three-named-original-power-v1",
+        "review": "Official card-list text verified for this exact Crest. Its CONT sets the original power of the controller's Grade 3 cards with \"Messiah\" in their names to 13000, including matching Heart cards. This ability has no Limit Break requirement."
+      },
+      "effects": [
+        {
+          "op": "continuous-original-power-set",
+          "target": "controller-grade-three-named-cards",
+          "cardNameContains": "Messiah",
+          "power": 13000,
+          "grade": 3,
+          "duration": "continuous",
+          "includeHeartCards": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-12182:1",
+      "cardId": "cfa-12182",
+      "kind": "CONT",
+      "printedText": "CONT: The original power of your grade 3 cards with \"Demon Stealth Dragon, Shiranui\" in their card names become 13000. (Including heart cards)",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-SS09/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-SS09%2FT01EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-set-grade-three-named-original-power-v1",
+        "review": "Official card-list text verified for this exact Crest. Its CONT sets the original power of the controller's Grade 3 cards with \"Demon Stealth Dragon, Shiranui\" in their names to 13000, including matching Heart cards. This ability has no Limit Break requirement."
+      },
+      "effects": [
+        {
+          "op": "continuous-original-power-set",
+          "target": "controller-grade-three-named-cards",
+          "cardNameContains": "Demon Stealth Dragon, Shiranui",
+          "power": 13000,
+          "grade": 3,
+          "duration": "continuous",
+          "includeHeartCards": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-12183:1",
+      "cardId": "cfa-12183",
+      "kind": "CONT",
+      "printedText": "CONT: The original power of your grade 3 cards with \"Luard\" in their card names become 13000. (Including heart cards)",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-SS10/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-SS10%2FT01EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-set-grade-three-named-original-power-v1",
+        "review": "Official card-list text verified for this exact Crest. Its CONT sets the original power of the controller's Grade 3 cards with \"Luard\" in their names to 13000, including matching Heart cards. This ability has no Limit Break requirement."
+      },
+      "effects": [
+        {
+          "op": "continuous-original-power-set",
+          "target": "controller-grade-three-named-cards",
+          "cardNameContains": "Luard",
+          "power": 13000,
+          "grade": 3,
+          "duration": "continuous",
+          "includeHeartCards": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-13177:1",
+      "cardId": "cfa-13177",
+      "kind": "CONT",
+      "printedText": "CONT: The original power of your grade 3 cards with \"Nightrose\" in their card names become 13000. (Including heart cards)",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-SS03/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS03%2FT01EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-set-grade-three-named-original-power-v1",
+        "review": "Official card-list text verified for this exact Crest. Its CONT sets the original power of the controller's Grade 3 cards with \"Nightrose\" in their names to 13000, including matching Heart cards. This ability has no Limit Break requirement."
+      },
+      "effects": [
+        {
+          "op": "continuous-original-power-set",
+          "target": "controller-grade-three-named-cards",
+          "cardNameContains": "Nightrose",
+          "power": 13000,
+          "grade": 3,
+          "duration": "continuous",
+          "includeHeartCards": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-13186:1",
+      "cardId": "cfa-13186",
+      "kind": "CONT",
+      "printedText": "CONT: The original power of your grade 3 cards with \"Harri\" in their card names become 13000. (Including heart cards)",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-SS02/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS02%2FT01EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-set-grade-three-named-original-power-v1",
+        "review": "Official card-list text verified for this exact Crest. Its CONT sets the original power of the controller's Grade 3 cards with \"Harri\" in their names to 13000, including matching Heart cards. This ability has no Limit Break requirement."
+      },
+      "effects": [
+        {
+          "op": "continuous-original-power-set",
+          "target": "controller-grade-three-named-cards",
+          "cardNameContains": "Harri",
+          "power": 13000,
+          "grade": 3,
+          "duration": "continuous",
+          "includeHeartCards": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-10476:1",
+      "cardId": "cfa-10476",
+      "kind": "CONT",
+      "printedText": "CONT: The original power of your grade 3 cards with \"Chronojet\" in their card names becomes 13000. (Including Heart cards)",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official comprehensive rules",
+        "snapshotDate": "2026-11-06",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-set-grade-three-named-original-power-v1",
+        "review": "The official Bushiroad comprehensive rules reproduce this exact Chronojet Crest CONT. It sets the original power of its controller's Grade 3 cards with Chronojet in their card names to 13000, including matching Heart cards."
+      },
+      "effects": [
+        {
+          "op": "continuous-original-power-set",
+          "target": "controller-grade-three-named-cards",
+          "cardNameContains": "Chronojet",
+          "power": 13000,
+          "grade": 3,
+          "duration": "continuous",
+          "includeHeartCards": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-10668:0",
+      "cardId": "cfa-10668",
+      "kind": "CONT",
+      "printedText": "CONT: You can perform Stride, and cannot ride grade 3 or greater cards without \"Messiah\" in their card names.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-SS04/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-SS04%2FT01EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-grade-three-named-ride-restriction-v1",
+        "review": "Official Crest CONT text verified. Stride permission is retained in the printed ability and the exact ride restriction rejects this controller's Grade 3 or greater candidate rides unless the candidate name contains \"Messiah\"."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-grade-three-name-restricted",
+          "minimumGrade": 3,
+          "name": "Messiah"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12182:0",
+      "cardId": "cfa-12182",
+      "kind": "CONT",
+      "printedText": "CONT: You can perform Stride, and cannot ride grade 3 or greater cards without \"Demon Stealth Dragon, Shiranui\" in their card names.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-SS09/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-SS09%2FT01EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-grade-three-named-ride-restriction-v1",
+        "review": "Official Crest CONT text verified. Stride permission is retained in the printed ability and the exact ride restriction rejects this controller's Grade 3 or greater candidate rides unless the candidate name contains \"Demon Stealth Dragon, Shiranui\"."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-grade-three-name-restricted",
+          "minimumGrade": 3,
+          "name": "Demon Stealth Dragon, Shiranui"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12183:0",
+      "cardId": "cfa-12183",
+      "kind": "CONT",
+      "printedText": "CONT: You can perform Stride, and cannot ride grade 3 or greater cards without \"Luard\" in their card names.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-SS10/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-SS10%2FT01EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-grade-three-named-ride-restriction-v1",
+        "review": "Official Crest CONT text verified. Stride permission is retained in the printed ability and the exact ride restriction rejects this controller's Grade 3 or greater candidate rides unless the candidate name contains \"Luard\"."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-grade-three-name-restricted",
+          "minimumGrade": 3,
+          "name": "Luard"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13177:0",
+      "cardId": "cfa-13177",
+      "kind": "CONT",
+      "printedText": "CONT: You can perform Stride, and cannot ride grade 3 or greater cards without \"Nightrose\" in their card names.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-SS03/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS03%2FT01EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-grade-three-named-ride-restriction-v1",
+        "review": "Official Crest CONT text verified. Stride permission is retained in the printed ability and the exact ride restriction rejects this controller's Grade 3 or greater candidate rides unless the candidate name contains \"Nightrose\"."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-grade-three-name-restricted",
+          "minimumGrade": 3,
+          "name": "Nightrose"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13186:0",
+      "cardId": "cfa-13186",
+      "kind": "CONT",
+      "printedText": "CONT: You can perform Stride, and cannot ride grade 3 or greater cards without \"Harri\" in their card names.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-SS02/T01EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS02%2FT01EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-grade-three-named-ride-restriction-v1",
+        "review": "Official Crest CONT text verified. Stride permission is retained in the printed ability and the exact ride restriction rejects this controller's Grade 3 or greater candidate rides unless the candidate name contains \"Harri\"."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-grade-three-name-restricted",
+          "minimumGrade": 3,
+          "name": "Harri"
+        }
+      ]
+    },
+    {
+      "id": "cfa-10476:0",
+      "cardId": "cfa-10476",
+      "kind": "CONT",
+      "printedText": "CONT: You can Stride, and cannot ride any grade 3 or greater card without \"Chronojet\" in its card name.",
+      "requiredLocation": [
+        "crest"
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official comprehensive rules",
+        "snapshotDate": "2026-11-06",
+        "officialReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-crest-grade-three-named-ride-restriction-v1",
+        "review": "The official Bushiroad comprehensive rules reproduce this exact Chronojet Crest CONT. Stride permission is retained; while the Crest is in its controller's Crest zone, Grade 3 or greater candidate rides must contain Chronojet in their card names."
+      },
+      "continuousRestrictions": [
+        {
+          "type": "ride-grade-three-name-restricted",
+          "minimumGrade": 3,
+          "name": "Chronojet"
+        }
+      ]
+    },
+    {
+      "id": "cfa-467:0",
+      "cardId": "cfa-467",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit’s attack hits, if you have a «Dark Irregulars» vanguard, you may Soul Charge 1.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Dark Irregulars"
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "canDecline": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "BT01/071EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=5&s_param=Dark+Irregulars&sort=&view=text",
+        "officialTextVerified": true,
+        "patternId": "auto-own-attack-hit-clan-soul-charge-one-v1",
+        "review": "Blue Dust's wording and card number match the Bushiroad official card list. Its exact VC or RC instance must make its own attack hit; the controller must still have a Dark Irregulars Vanguard when resolving the optional Soul Charge 1. The printed wording does not restrict which opposing unit is hit."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-535:0",
+      "cardId": "cfa-535",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit’s attack hits, if you have a «Kagero» vanguard, you may Soul Charge 1.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Kagero"
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "canDecline": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardTextVerification": "secondary-source-cross-check",
+        "reference": "https://cardfight.fandom.com/wiki/Flame_Edge_Dragon",
+        "patternId": "auto-own-attack-hit-clan-soul-charge-one-v1",
+        "review": "The local catalog wording and clan condition match the cited archival card reference; primary Bushiroad text confirmation is pending. The exact VC or RC source must make its own attack hit, and the controller must still have the printed-clan Vanguard when resolving the optional Soul Charge 1. The printed wording does not restrict which opposing unit is hit."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-811:0",
+      "cardId": "cfa-811",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit’s attack hits, if you have a «Pale Moon» vanguard, you may Soul Charge 1.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Pale Moon"
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "canDecline": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "cardTextVerification": "secondary-source-cross-check",
+        "reference": "https://cardfight.fandom.com/wiki/Hungry_Clown",
+        "patternId": "auto-own-attack-hit-clan-soul-charge-one-v1",
+        "review": "The local catalog wording and clan condition match the cited archival card reference; primary Bushiroad text confirmation is pending. The exact VC or RC source must make its own attack hit, and the controller must still have the printed-clan Vanguard when resolving the optional Soul Charge 1. The printed wording does not restrict which opposing unit is hit."
+      },
+      "effects": [
+        {
+          "op": "soul-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-4791:1",
+      "cardId": "cfa-4791",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1-card with \"Witch\" in its card name] When this unit is placed on GC from hand, you may pay the cost. If you do, call five cards from the top of your deck to GC.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1,
+          "filter": {
+            "cardNameContains": "Witch"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "G-BT11/031EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT11%2F031EN",
+        "officialTextVerified": true,
+        "patternId": "auto-gc-named-counter-blast-call-top-five-v1",
+        "review": "Exact optional Sentinel AUTO checked against this card's Bushiroad official card-list entry. The exact source instance must be placed on Guardian Circle from hand during the defending player's guard-placement window. Its controller may Counter-Blast one face-up damage card whose name contains the printed fragment, then call the top five deck cards to Guardian Circle at rest; no clan condition or deck-card filter is added."
+      },
+      "effects": [
+        {
+          "op": "call-top-to-guardian",
+          "target": "controller",
+          "count": 5,
+          "destination": "guardian",
+          "position": "rest"
+        }
+      ]
+    },
+    {
+      "id": "cfa-4903:1",
+      "cardId": "cfa-4903",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1-card with \"Amon\" in its card name] When this unit is placed on GC from hand, you may pay the cost. If you do, call five cards from the top of your deck to GC.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1,
+          "filter": {
+            "cardNameContains": "Amon"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "G-BT11/044EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT11%2F044EN",
+        "officialTextVerified": true,
+        "patternId": "auto-gc-named-counter-blast-call-top-five-v1",
+        "review": "Exact optional Sentinel AUTO checked against this card's Bushiroad official card-list entry. The exact source instance must be placed on Guardian Circle from hand during the defending player's guard-placement window. Its controller may Counter-Blast one face-up damage card whose name contains the printed fragment, then call the top five deck cards to Guardian Circle at rest; no clan condition or deck-card filter is added."
+      },
+      "effects": [
+        {
+          "op": "call-top-to-guardian",
+          "target": "controller",
+          "count": 5,
+          "destination": "guardian",
+          "position": "rest"
+        }
+      ]
+    },
+    {
+      "id": "cfa-4910:1",
+      "cardId": "cfa-4910",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1-card with \"Seal Dragon\" in its card name] When this unit is placed on GC from hand, you may pay the cost. If you do, call five cards from the top of your deck to GC.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "hand"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1,
+          "filter": {
+            "cardNameContains": "Seal Dragon"
+          }
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "G-BT11/035EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT11%2F035EN",
+        "officialTextVerified": true,
+        "patternId": "auto-gc-named-counter-blast-call-top-five-v1",
+        "review": "Exact optional Sentinel AUTO checked against this card's Bushiroad official card-list entry. The exact source instance must be placed on Guardian Circle from hand during the defending player's guard-placement window. Its controller may Counter-Blast one face-up damage card whose name contains the printed fragment, then call the top five deck cards to Guardian Circle at rest; no clan condition or deck-card filter is added."
+      },
+      "effects": [
+        {
+          "op": "call-top-to-guardian",
+          "target": "controller",
+          "count": 5,
+          "destination": "guardian",
+          "position": "rest"
+        }
+      ]
+    },
+    {
+      "id": "cfa-12036:0",
+      "cardId": "cfa-12036",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts, if your opponent has one or less rear-guards, or you played an order this turn, this unit gets power +5000 until end of that battle, and at the end of that battle, COST [put this unit into soul], and draw a card.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "any-of",
+          "conditions": [
+            {
+              "type": "opponent-rear-guards-at-most",
+              "count": 1
+            },
+            {
+              "type": "order-played-this-turn"
+            }
+          ]
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "DZ-SS09/010EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS09%2F010EN",
+        "officialTextVerified": true,
+        "patternId": "auto-boost-power-and-battle-end-source-soul-draw-v1",
+        "review": "Exact AUTO [RC] text confirmed against the cited Bushiroad listing for this card. The precise Rear-Guard instance must be the booster in this battle. The condition is an OR: the opponent has at most one Rear-Guard, or this controller played an Order this turn. It receives +5000 for this battle; at that battle's close, its controller must pay by moving that same source from its Rear-Guard Circle to Soul, then draws one card."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        },
+        {
+          "op": "schedule-boosted-battle-end-source-soul-draw",
+          "target": "source",
+          "due": "battle-close-step"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13328:0",
+      "cardId": "cfa-13328",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts, if your opponent has one or less rear-guards, or you played an order this turn, this unit gets power +5000 until end of that battle, and at the end of that battle, COST [put this unit into soul], and draw a card.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.boosted",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "any-of",
+          "conditions": [
+            {
+              "type": "opponent-rear-guards-at-most",
+              "count": 1
+            },
+            {
+              "type": "order-played-this-turn"
+            }
+          ]
+        }
+      ],
+      "costs": [],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-PR/722EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PR%2F722EN",
+        "officialTextVerified": true,
+        "patternId": "auto-boost-power-and-battle-end-source-soul-draw-v1",
+        "review": "Exact AUTO [RC] text confirmed against the cited Bushiroad listing for this card. The precise Rear-Guard instance must be the booster in this battle. The condition is an OR: the opponent has at most one Rear-Guard, or this controller played an Order this turn. It receives +5000 for this battle; at that battle's close, its controller must pay by moving that same source from its Rear-Guard Circle to Soul, then draws one card."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        },
+        {
+          "op": "schedule-boosted-battle-end-source-soul-draw",
+          "target": "source",
+          "due": "battle-close-step"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13400:1",
+      "cardId": "cfa-13400",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When this unit boosts, if your opponent has one or less rear-guards, or you played an order this turn, this unit gets power +5000 until end of that battle, and at the end of that battle, COST [put this unit into soul], and draw a card.",
+      "requiredLocation": ["rear-guard"],
+      "trigger": {"status":"recognized-trigger","eventType":"unit.boosted","subject":"source","circles":[]},
+      "conditions": [{"type":"any-of","conditions":[{"type":"opponent-rear-guards-at-most","count":1},{"type":"order-played-this-turn"}]}],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "DZ-SS04/CR02",
+        "officialReference": "https://cf-vanguard.com/cardlist/?cardno=DZ-SS04%2FCR02",
+        "officialCrossReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS09%2F010EN",
+        "officialLanguage": "ja",
+        "officialTextVerified": true,
+        "patternId": "auto-boost-power-and-battle-end-source-soul-draw-v1",
+        "review": "The official Japanese Bushiroad listing for this exact Suzume printing confirms the ability text. Its CONT ability identifies it as Stealth Fiend, Shenryi; the matching English Shenryi ability is cross-checked against Bushiroad's DZ-SS09/010EN listing. The precise Rear-Guard instance must be the booster in this battle. The condition is an OR: the opponent has at most one Rear-Guard, or this controller played an Order this turn. It receives +5000 for this battle; at that battle's close, its controller must pay by moving that same source from its Rear-Guard Circle to Soul, then draws one card."
+      },
+      "effects": [
+        {"op":"modify-power","target":"source","amount":5000,"duration":"battle"},
+        {"op":"schedule-boosted-battle-end-source-soul-draw","target":"source","due":"battle-close-step"}
+      ]
+    },
+    {
+      "id": "cfa-8980:1",
+      "cardId": "cfa-8980",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC] 1/Turn: When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "drive.checked",
+        "subject": "controller",
+        "circles": [],
+        "checkKind": "drive",
+        "checkedCardHasTriggerUnit": true
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "once": true,
+      "usageRestriction": {
+        "type": "once-per-turn",
+        "scope": "ability-instance",
+        "reset": "turn"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-VS02/029EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS02%2F029EN",
+        "officialTextVerified": true,
+        "patternId": "auto-rc-drive-trigger-equip-gauge-v1",
+        "review": "Exact AUTO [RC] [1/turn] text is verified against the cited Bushiroad card-list entry. Only this controller's own drive check of a trigger unit during battle qualifies; the exact unlocked source must be on its RC. Resolve by moving the next deck card face down into the owner's Gauge Zone and associating it with this source instance. The new gauge remains attached while its unit moves between circles and goes to the owner's drop after that unit leaves a circle or is locked."
+      },
+      "effects": [
+        {
+          "op": "attach-top-card-as-equip-gauge",
+          "target": "source",
+          "from": "deck",
+          "destination": "equip-gauge",
+          "faceDown": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-8981:1",
+      "cardId": "cfa-8981",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC] 1/Turn: When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "drive.checked",
+        "subject": "controller",
+        "circles": [],
+        "checkKind": "drive",
+        "checkedCardHasTriggerUnit": true
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "once": true,
+      "usageRestriction": {
+        "type": "once-per-turn",
+        "scope": "ability-instance",
+        "reset": "turn"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-VS02/030EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS02%2F030EN",
+        "officialTextVerified": true,
+        "patternId": "auto-rc-drive-trigger-equip-gauge-v1",
+        "review": "Exact AUTO [RC] [1/turn] text is verified against the cited Bushiroad card-list entry. Only this controller's own drive check of a trigger unit during battle qualifies; the exact unlocked source must be on its RC. Resolve by moving the next deck card face down into the owner's Gauge Zone and associating it with this source instance. The new gauge remains attached while its unit moves between circles and goes to the owner's drop after that unit leaves a circle or is locked."
+      },
+      "effects": [
+        {
+          "op": "attach-top-card-as-equip-gauge",
+          "target": "source",
+          "from": "deck",
+          "destination": "equip-gauge",
+          "faceDown": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-8982:1",
+      "cardId": "cfa-8982",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC] 1/Turn: When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "drive.checked",
+        "subject": "controller",
+        "circles": [],
+        "checkKind": "drive",
+        "checkedCardHasTriggerUnit": true
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "once": true,
+      "usageRestriction": {
+        "type": "once-per-turn",
+        "scope": "ability-instance",
+        "reset": "turn"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-VS02/031EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS02%2F031EN",
+        "officialTextVerified": true,
+        "patternId": "auto-rc-drive-trigger-equip-gauge-v1",
+        "review": "Exact AUTO [RC] [1/turn] text is verified against the cited Bushiroad card-list entry. Only this controller's own drive check of a trigger unit during battle qualifies; the exact unlocked source must be on its RC. Resolve by moving the next deck card face down into the owner's Gauge Zone and associating it with this source instance. The new gauge remains attached while its unit moves between circles and goes to the owner's drop after that unit leaves a circle or is locked."
+      },
+      "effects": [
+        {
+          "op": "attach-top-card-as-equip-gauge",
+          "target": "source",
+          "from": "deck",
+          "destination": "equip-gauge",
+          "faceDown": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-10017:1",
+      "cardId": "cfa-10017",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC] 1/Turn: When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "drive.checked",
+        "subject": "controller",
+        "circles": [],
+        "checkKind": "drive",
+        "checkedCardHasTriggerUnit": true
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "once": true,
+      "usageRestriction": {
+        "type": "once-per-turn",
+        "scope": "ability-instance",
+        "reset": "turn"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot with Bushiroad official guide cross-check",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-VS06/030EN",
+        "officialReference": "https://en.cf-vanguard.com/deckrecipe/detail/d-vs06-tachikaze",
+        "officialTextVerified": false,
+        "patternId": "auto-rc-drive-trigger-equip-gauge-v1",
+        "review": "The local catalog's exact AUTO [RC] [1/turn] wording is cross-checked against Bushiroad's official deck recipe, which confirms this card gains an equip gauge when a trigger is revealed during its drive check. Keep the exact card-list text confirmation pending; do not mark this ability or whole card fully verified yet."
+      },
+      "effects": [
+        {
+          "op": "attach-top-card-as-equip-gauge",
+          "target": "source",
+          "from": "deck",
+          "destination": "equip-gauge",
+          "faceDown": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-10018:2",
+      "cardId": "cfa-10018",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC] 1/Turn: When your drive check reveals a trigger unit, put the top card of your deck face down as an equip gauge for this unit.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "drive.checked",
+        "subject": "controller",
+        "circles": [],
+        "checkKind": "drive",
+        "checkedCardHasTriggerUnit": true
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "once": true,
+      "usageRestriction": {
+        "type": "once-per-turn",
+        "scope": "ability-instance",
+        "reset": "turn"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "D-VS06/029EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-VS06%2F029EN",
+        "officialTextVerified": true,
+        "patternId": "auto-rc-drive-trigger-equip-gauge-v1",
+        "review": "Exact AUTO [RC] [1/turn] text is verified against the cited Bushiroad card-list entry. Only this controller's own drive check of a trigger unit during battle qualifies; the exact unlocked source must be on its RC. Resolve by moving the next deck card face down into the owner's Gauge Zone and associating it with this source instance. The new gauge remains attached while its unit moves between circles and goes to the owner's drop after that unit leaves a circle or is locked."
+      },
+      "effects": [
+        {
+          "op": "attach-top-card-as-equip-gauge",
+          "target": "source",
+          "from": "deck",
+          "destination": "equip-gauge",
+          "faceDown": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-1884:0",
+      "cardId": "cfa-1884",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Soul Blast 2] When this unit is placed on RC, if you have a «Kagero» vanguard, you may pay the cost. If you do, choose up to two cards from your damage zone, and turn them face up. (Counter Charge 2)",
+      "optional": true,
+      "canDecline": true,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Kagero"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 2
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list and source catalog",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "BT15/063EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT15%2F063EN",
+        "officialTextVerified": true,
+        "officialPrintedText": "[AUTO]:[Soul-Blast 2] When this unit is placed on (RC), if you have a <Kagero> vanguard, you may pay the cost. If you do, choose up to two cards from your damage zone, and turn them face up.",
+        "rulesReference": "https://en.cf-vanguard.com/howto/question/?id=term",
+        "patternId": "auto-rc-placement-clan-soul-blast-counter-charge-two-v1",
+        "review": "Exact clan-gated RC placement AUTO from the catalog snapshot. Only this card instance's placement on an RC can trigger it, and the controller's Vanguard must have the printed Kagero clan. The controller may decline; accepting pays Soul Blast 2, then chooses up to two face-down Damage cards to turn face up. Official card-list text was confirmed for this printing: yes."
+      },
+      "effects": [
+        {
+          "op": "counter-charge-up-to",
+          "target": "controller",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": "cfa-3396:0",
+      "cardId": "cfa-3396",
+      "kind": "AUTO",
+      "printedText": "AUTO Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): When this unit intercepts, this card gets shield +10000 until end of that battle.",
+      "requiredLocation": [],
+      "gb": 1,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "rear-guard"
+      },
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialTextVerified": true,
+        "officialCardNumber": "G-TD06/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=67&sort=no&view=text",
+        "officialCardText": "[AUTO][Generation Break 1](This ability is active if you have one or more face up G units in total on your (VC) or G zone):When this unit intercepts ([Intercept]), this unit gets [Shield] +10000 until end of that battle.",
+        "patternId": "auto-intercept-generation-break-shield-battle-v1",
+        "review": "Bushiroad's G-TD06/008EN listing confirms the exact Generation Break 1 Intercept trigger and +10000 Shield for this battle. The server accepts this shared mechanic only for source-verified entries."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 10000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-3713:0",
+      "cardId": "cfa-3713",
+      "kind": "AUTO",
+      "printedText": "AUTO Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): When this unit intercepts, this card gets shield +10000 until end of that battle.",
+      "requiredLocation": [],
+      "gb": 1,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "rear-guard"
+      },
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialTextVerified": true,
+        "officialCardNumber": "G-SD02/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-SD02%2F008EN",
+        "officialCardText": "[AUTO][Generation Break 1](This ability is active if you have one or more face up G units in total on your (VC) or G zone):When this unit intercepts ([Intercept]), this unit gets [Shield] +10000 until end of that battle.",
+        "patternId": "auto-intercept-generation-break-shield-battle-v1",
+        "review": "Bushiroad's G-SD02/008EN listing confirms the exact Generation Break 1 Intercept trigger and +10000 Shield for this battle. The server accepts this shared mechanic only for source-verified entries."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 10000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-423:0",
+      "cardId": "cfa-423",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit intercepts and you have an «Oracle Think Tank» vanguard, this unit gets shield +5000 until end of that battle.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Oracle Think Tank"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "rear-guard"
+      },
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-08",
+        "officialTextVerified": true,
+        "officialCardNumber": "TD04/005EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=17&sort=no&view=text",
+        "officialCardText": "[AUTO]:When this unit intercepts ([Intercept]), if you have an <Oracle Think Tank> vanguard, this unit gets [Shield] +5000 until end of that battle.",
+        "patternId": "auto-intercept-clan-vanguard-shield-battle-v1",
+        "review": "Bushiroad confirms TD04/005EN gains +5000 shield for this battle when it intercepts if its controller has an Oracle Think Tank vanguard. The local snapshot's 'and you have' phrasing is equivalent to the official 'if you have' condition; the effect remains bound to the exact source interceptor."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-3909:2",
+      "cardId": "cfa-3909",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit intercepts during the battle that your vanguard is attacked, this unit gets shield +5000 until end of that battle.",
+      "requiredLocation": [
+        "guardian"
+      ],
+      "conditions": [
+        {
+          "type": "controller-vanguard-is-attacked-unit"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "guardian"
+        ],
+        "sourceLocation": "rear-guard"
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "patternId": "auto-intercept-controller-vanguard-attacked-shield-battle-v1",
+        "review": "Exact local snapshot wording using 'is attacked'. The battle target must be this controller's exact Vanguard; the exact source must move from Rear-Guard Circle to Guardian Circle, and shield expires with that battle. Official listing confirmation is pending."
+      },
+      "effects": [
+        {
+          "op": "modify-shield-source",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5676:1",
+      "cardId": "cfa-5676",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When your opponent’s rear-guard is retired during your turn, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.retired",
+        "subject": "different-card",
+        "circles": [],
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "subjectControllerRelation": "opponent",
+        "turnRelation": "controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot cross-checked against Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "V-BT01/033EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-BT01%2F033EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=V-BT01%2F033EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vc-rc-opponent-rearguard-retired-turn-power-v1",
+        "review": "Exact three-card VC/RC AUTO family. The catalog card name matches its Bushiroad printing and the exact AUTO sentence is confirmed by that official card list entry. The source must be this exact unit instance on VC or RC when a different, opponent-controlled Rear-Guard is actually retired into Drop during the source controller's turn. The text has no Main Phase restriction, cost, choice, or once-per-turn limit, so each distinct qualifying retirement grants the source +5000 until that turn ends."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5733:0",
+      "cardId": "cfa-5733",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When your opponent’s rear-guard is retired during your turn, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.retired",
+        "subject": "different-card",
+        "circles": [],
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "subjectControllerRelation": "opponent",
+        "turnRelation": "controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot cross-checked against Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "V-BT01/035EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-BT01%2F035EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=V-BT01%2F035EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vc-rc-opponent-rearguard-retired-turn-power-v1",
+        "review": "Exact three-card VC/RC AUTO family. The catalog card name matches its Bushiroad printing and the exact AUTO sentence is confirmed by that official card list entry. The source must be this exact unit instance on VC or RC when a different, opponent-controlled Rear-Guard is actually retired into Drop during the source controller's turn. The text has no Main Phase restriction, cost, choice, or once-per-turn limit, so each distinct qualifying retirement grants the source +5000 until that turn ends."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5734:0",
+      "cardId": "cfa-5734",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When your opponent’s rear-guard is retired during your turn, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.retired",
+        "subject": "different-card",
+        "circles": [],
+        "sourceLocation": "rear-guard",
+        "destinationLocation": "drop",
+        "subjectControllerRelation": "opponent",
+        "turnRelation": "controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot cross-checked against Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "V-BT01/036EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=V-BT01%2F036EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=V-BT01%2F036EN"
+        ],
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vc-rc-opponent-rearguard-retired-turn-power-v1",
+        "review": "Exact three-card VC/RC AUTO family. The catalog card name matches its Bushiroad printing and the exact AUTO sentence is confirmed by that official card list entry. The source must be this exact unit instance on VC or RC when a different, opponent-controlled Rear-Guard is actually retired into Drop during the source controller's turn. The text has no Main Phase restriction, cost, choice, or once-per-turn limit, so each distinct qualifying retirement grants the source +5000 until that turn ends."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-996:0",
+      "cardId": "cfa-996",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: During your battle phase, when this unit becomes stand, this unit gets power +3000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.stood",
+        "subject": "event-subject",
+        "circles": [
+          "rear-guard"
+        ],
+        "requiredPhase": "battle",
+        "turnRelation": "controller",
+        "subjectControllerRelation": "source-controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT09/033EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT09%2F033EN&expansion=22&s_param=Nova+Grappler&view=image",
+        "patternId": "auto-rc-battle-phase-stand-source-power-turn-v1",
+        "review": "Exact official BT09/033EN text; shares the Yamatano Drake stand event and power operation. Eligibility is bound to this exact Rear-Guard instance becoming stood during its controller's Battle Phase; the turn-duration +3000 applies once per distinct stand event, with no once-per-turn restriction."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1608:1",
+      "cardId": "cfa-1608",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: During your battle phase, when this unit becomes stand, this unit gets power +3000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.stood",
+        "subject": "event-subject",
+        "circles": [
+          "rear-guard"
+        ],
+        "requiredPhase": "battle",
+        "turnRelation": "controller",
+        "subjectControllerRelation": "source-controller"
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Bushiroad official card list (Japanese print; catalog English translation)",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT13/065",
+        "officialReference": "https://cf-vanguard.com/cardlist/cardsearch/?expansion=42&s_clan=%E3%83%8E%E3%83%B4%E3%82%A1%E3%82%B0%E3%83%A9%E3%83%83%E3%83%97%E3%83%A9%E3%83%BC&sort=new&view=text",
+        "patternId": "auto-rc-battle-phase-stand-source-power-turn-v1",
+        "review": "Official Japanese BT13/065 text matches the catalog English translation. Shares the Yamatano Drake stand event and power operation. Eligibility is bound to this exact Rear-Guard instance becoming stood during its controller's Battle Phase; the turn-duration +3000 applies once per distinct stand event, with no once-per-turn restriction."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-34:1",
+      "cardId": "cfa-34",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: [Soul Blast 8 & Counter Blast 5] When this unit’s attack hits, you may pay the cost. If you do, retire all of your opponent’s rear-guards.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 8
+        },
+        {
+          "type": "counter-blast",
+          "count": 5
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list and official rules Q&A",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT05/036EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT05%2F036EN",
+        "rulesReference": "https://en.cf-vanguard.com/howto/question/?id=basic",
+        "patternId": "auto-own-attack-hit-soul-blast-counter-blast-retire-all-v1",
+        "review": "Exact official BT05/036EN text. The ability is optional, requires this exact VC/RC source's attack to hit, and both Soul Blast 8 and Counter Blast 5 must be paid together. On success, every opposing Rear-Guard still controlled on an unlocked RC is retired; costs are validated before any effect mutation."
+      },
+      "effects": [
+        {
+          "op": "retire-all-opponent-rearguards",
+          "target": "opponent-rear-guards"
+        }
+      ]
+    },
+    {
+      "id": "cfa-484:1",
+      "cardId": "cfa-484",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: [Soul Blast 8 & Counter Blast 5] When this unit’s attack hits, you may pay the cost. If you do, retire all of your opponent’s rear-guards.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 8
+        },
+        {
+          "type": "counter-blast",
+          "count": 5
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list and official rules Q&A",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT01/036EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=bt01%2F036en",
+        "rulesReference": "https://en.cf-vanguard.com/howto/question/?id=basic",
+        "patternId": "auto-own-attack-hit-soul-blast-counter-blast-retire-all-v1",
+        "review": "Exact official BT01/036EN text. The ability is optional, requires this exact VC/RC source's attack to hit, and both Soul Blast 8 and Counter Blast 5 must be paid together. On success, every opposing Rear-Guard still controlled on an unlocked RC is retired; costs are validated before any effect mutation."
+      },
+      "effects": [
+        {
+          "op": "retire-all-opponent-rearguards",
+          "target": "opponent-rear-guards"
+        }
+      ]
+    },
+    {
+      "id": "cfa-682:1",
+      "cardId": "cfa-682",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: [Soul Blast 8 & Counter Blast 5] When this unit’s attack hits, you may pay the cost. If you do, retire all of your opponent’s rear-guards.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "attack.hit",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "soul-blast",
+          "count": 8
+        },
+        {
+          "type": "counter-blast",
+          "count": 5
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": true,
+      "source": {
+        "dataset": "Bushiroad official card list and official rules Q&A",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT01/009EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT01%2F009EN&faq=",
+        "rulesReference": "https://en.cf-vanguard.com/howto/question/?id=basic",
+        "patternId": "auto-own-attack-hit-soul-blast-counter-blast-retire-all-v1",
+        "review": "Exact official BT01/009EN text. The ability is optional, requires this exact VC/RC source's attack to hit, and both Soul Blast 8 and Counter Blast 5 must be paid together. On success, every opposing Rear-Guard still controlled on an unlocked RC is retired; costs are validated before any effect mutation."
+      },
+      "effects": [
+        {
+          "op": "retire-all-opponent-rearguards",
+          "target": "opponent-rear-guards"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1563:1",
+      "cardId": "cfa-1563",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: During your turn, if the number of cards in your hand is four or greater, this unit gets power +2000.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot cross-checked against Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "EB07/001EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB07%2F001EN&expansion=35&view=image",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=EB07%2F001EN&expansion=35&view=image"
+        ],
+        "officialTextVerified": true,
+        "officialTextStatus": "equivalent wording: Bushiroad says four or more; the catalog says four or greater.",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-vc-own-turn-hand-size-power-v1",
+        "review": "Exact VC CONT. During this controller's turn, this exact Vanguard gets +2000 while its controller has at least four cards in hand; the continuous condition is reevaluated as hand size and turn change."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "controller-hand-size-at-least",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1933:1",
+      "cardId": "cfa-1933",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: During your turn, if the number of cards in your hand is four or greater, this unit gets power +2000.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot cross-checked against Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "FC02/005EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=FC02%2F005EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=FC02%2F005EN"
+        ],
+        "officialTextVerified": true,
+        "officialTextStatus": "equivalent wording: Bushiroad says four or more; the catalog says four or greater.",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-vc-own-turn-hand-size-power-v1",
+        "review": "Exact VC CONT. During this controller's turn, this exact Vanguard gets +2000 while its controller has at least four cards in hand; the continuous condition is reevaluated as hand size and turn change."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "controller-hand-size-at-least",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-427:0",
+      "cardId": "cfa-427",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: During your turn, if the number of cards in your hand is four or greater, this unit gets power +4000.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot cross-checked against Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "EB05/001EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB05%2F001EN&expansion=25&view=text",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=EB05%2F001EN&expansion=25&view=text"
+        ],
+        "officialTextVerified": true,
+        "officialTextStatus": "exact catalog wording confirmed by the official EB05 listing.",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-vc-own-turn-hand-size-power-v1",
+        "review": "Exact VC CONT. During this controller's turn, this exact Vanguard gets +4000 while its controller has at least four cards in hand; the continuous condition is reevaluated as hand size and turn change."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 4000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "controller-hand-size-at-least",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-429:0",
+      "cardId": "cfa-429",
+      "kind": "CONT",
+      "printedText": "CONT [VC]: During your turn, if the number of cards in your hand is four or more, this unit gets power +4000.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot cross-checked against Bushiroad official card list",
+        "snapshotDate": "2026-11-06",
+        "officialCardNumber": "EB05/004EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB05%2F004EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=EB05%2F004EN"
+        ],
+        "officialTextVerified": true,
+        "officialTextStatus": "exact wording confirmed by the official EB05 listing.",
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-vc-own-turn-hand-size-power-v1",
+        "review": "Exact VC CONT. During this controller's turn, this exact Vanguard gets +4000 while its controller has at least four cards in hand; the continuous condition is reevaluated as hand size and turn change."
+      },
+      "effects": [
+        {
+          "op": "continuous-power",
+          "target": "source",
+          "amount": 4000,
+          "duration": "continuous",
+          "condition": {
+            "op": "all",
+            "conditions": [
+              {
+                "op": "controller-turn"
+              },
+              {
+                "op": "controller-hand-size-at-least",
+                "count": 4
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-3951:2",
+      "cardId": "cfa-3951",
+      "kind": "ACT",
+      "printedText": "ACT [RC] Generation Break 1: [Counter Blast 1] This unit gets \"Boost\" until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "activationWindow": "main",
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "act-rc-generation-break-counter-blast-grant-boost-v1",
+        "review": "Exact local catalog text. Manual ACT is available only from this source unit on RC during its controller's Main Phase, with Generation Break 1 and one face-up damage card available for Counter-Blast. The source gains Boost until turn end. Official card-list text confirmation remains pending."
+      },
+      "effects": [
+        {
+          "op": "grant-temporary-boost",
+          "target": "source",
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-5092:1",
+      "cardId": "cfa-5092",
+      "kind": "ACT",
+      "printedText": "ACT [RC] Generation Break 1: [Counter Blast 1] This unit gets \"Boost\" until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "activationWindow": "main",
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area catalog snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "act-rc-generation-break-counter-blast-grant-boost-v1",
+        "review": "Exact local catalog text. Manual ACT is available only from this source unit on RC during its controller's Main Phase, with Generation Break 1 and one face-up damage card available for Counter-Blast. The source gains Boost until turn end. Official card-list text confirmation remains pending."
+      },
+      "effects": [
+        {
+          "op": "grant-temporary-boost",
+          "target": "source",
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-455:0",
+      "cardId": "cfa-455",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, this unit gets power +2000 for each card named \"Demon Bike of the Witching Hour\" in your soul.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-soul-card-count-exact-name-power-v1",
+        "review": "Exact local catalog text. During this controller's turn, this source gets +2000 for each Soul card whose full card name exactly matches Demon Bike of the Witching Hour. Similar names do not count. The official card-list wording remains unverified."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-soul-card",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "cardName": "Demon Bike of the Witching Hour",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-475:0",
+      "cardId": "cfa-475",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, this unit gets power +2000 for each card named \"Hades Carriage of the Witching Hour\" in your soul.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-soul-card-count-exact-name-power-v1",
+        "review": "Exact local catalog text. During this controller's turn, this source gets +2000 for each Soul card whose full card name exactly matches Hades Carriage of the Witching Hour. Similar names do not count. The official card-list wording remains unverified."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-soul-card",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "cardName": "Hades Carriage of the Witching Hour",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-483:0",
+      "cardId": "cfa-483",
+      "kind": "CONT",
+      "printedText": "CONT [VC/RC]: During your turn, this unit gets power +2000 for each card named \"Demon Chariot of the Witching Hour\" in your soul.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "cont-soul-card-count-exact-name-power-v1",
+        "review": "Exact local catalog text. During this controller's turn, this source gets +2000 for each Soul card whose full card name exactly matches Demon Chariot of the Witching Hour. Similar names do not count. The official card-list wording remains unverified."
+      },
+      "effects": [
+        {
+          "op": "continuous-power-per-soul-card",
+          "target": "source",
+          "amount": 2000,
+          "duration": "continuous",
+          "cardName": "Demon Chariot of the Witching Hour",
+          "condition": {
+            "op": "controller-turn"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11770:1",
+      "cardId": "cfa-11770",
+      "kind": "ACT",
+      "printedText": "ACT [VC/RC]: COST [Counter Blast 1], choose one of your units, it gets power +4000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "activationWindow": "main",
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "act-vc-rc-counter-blast-choose-friendly-unit-power-turn-v1",
+        "review": "Exact local catalog ACT text. The controller may activate this ability during Main Phase from this source on VC or RC, pay Counter Blast 1, choose one of their Units, and give it +4000 power until turn end. No once-per-turn restriction is printed. Official card-list text confirmation remains pending."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 4000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-11772:1",
+      "cardId": "cfa-11772",
+      "kind": "ACT",
+      "printedText": "ACT [VC/RC]: COST [Counter Blast 1], choose one of your units, it gets power +4000 until end of turn.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "activationWindow": "main",
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "act-vc-rc-counter-blast-choose-friendly-unit-power-turn-v1",
+        "review": "Exact local catalog ACT text. The controller may activate this ability during Main Phase from this source on VC or RC, pay Counter Blast 1, choose one of their Units, and give it +4000 power until turn end. No once-per-turn restriction is printed. Official card-list text confirmation remains pending."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 4000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-1248:0",
+      "cardId": "cfa-1248",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit attacks, if you have an «Aqua Force» vanguard or rear-guard with Limit Break 4, this unit gets power +3000 until end of that battle.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-field-has-clan-limit-break",
+          "clan": "Aqua Force",
+          "count": 4
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-limit-break-field-power-battle-v1",
+        "review": "Exact 16-record own-attack AUTO family. The exact source instance must attack from its printed VC/RC circle; another field unit controlled by that player must have the printed clan and Limit Break threshold. The printed source power lasts only for this battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1255:0",
+      "cardId": "cfa-1255",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit attacks, if you have an «Etranger» vanguard or rear-guard with Limit Break 4, this unit gets power +3000 until end of that battle.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-field-has-clan-limit-break",
+          "clan": "Etranger",
+          "count": 4
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-limit-break-field-power-battle-v1",
+        "review": "Exact 16-record own-attack AUTO family. The exact source instance must attack from its printed VC/RC circle; another field unit controlled by that player must have the printed clan and Limit Break threshold. The printed source power lasts only for this battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1374:0",
+      "cardId": "cfa-1374",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit attacks, if you have an «Angel Feather» vanguard or rear-guard with Limit Break 4, this unit gets power +3000 until end of that battle.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "controller-field-has-clan-limit-break",
+          "clan": "Angel Feather",
+          "count": 4
+        }
+      ],
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "patternId": "auto-own-attack-clan-limit-break-field-power-battle-v1",
+        "review": "Exact 16-record own-attack AUTO family. The exact source instance must attack from its printed VC/RC circle; another field unit controlled by that player must have the printed clan and Limit Break threshold. The printed source power lasts only for this battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-9214:0",
+      "cardId": "cfa-9214",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: COST [Rest this unit], choose one of your vanguards, and it gets power +5000 until end of turn.",
+      "activationWindow": "main",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": false,
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "rest-source",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "D-PR/042EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=D-PR%2F042EN",
+        "officialTextVerified": true,
+        "patternId": "act-rc-rest-source-choose-vanguard-power-turn-v1",
+        "review": "Exact ACT wording checked against the Bushiroad official card-list entry. The controller must activate this from RC, rest this exact source as cost, choose one of their own Vanguards, and grant only that Vanguard the printed power until the end of the turn."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-13430:1",
+      "cardId": "cfa-13430",
+      "kind": "ACT",
+      "printedText": "ACT [RC]: COST [rest this unit], choose one of your vanguards, and it gets power +5000 until end of turn.",
+      "activationWindow": "main",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": false,
+      "conditions": [],
+      "conditionsReviewed": true,
+      "costs": [
+        {
+          "type": "rest-source",
+          "count": 1
+        }
+      ],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialTextVerified": false,
+        "patternId": "act-rc-rest-source-choose-vanguard-power-turn-v1",
+        "review": "Exact local catalog wording. The controller must activate this from RC, rest this exact source as cost, choose one of their own Vanguards, and grant only that Vanguard the printed power until the end of the turn. Official card-list confirmation remains pending."
+      },
+      "effects": [
+        {
+          "op": "modify-power-target",
+          "target": "chosen",
+          "amount": 5000,
+          "duration": "turn",
+          "targetFilter": {
+            "controller": "source-controller",
+            "cardType": "unit",
+            "zone": "vanguard"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfa-607:0",
+      "cardId": "cfa-607",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1] During your battle phase, when this unit is placed on RC, if you have a «Spike Brothers» vanguard, you may pay the cost. If you do, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "requiredPhase": "battle",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Spike Brothers"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "EB03/009EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=10&sort=no&view=text",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=10&sort=no&view=text"
+        ],
+        "officialTextVerified": true,
+        "patternId": "auto-dudley-battle-phase-rc-placement-counter-blast-power-turn-v1",
+        "review": "Exact EB03/009EN and EB03/018EN AUTO family, confirmed against Bushiroad's official EB03 card list. The controller may pay Counter Blast 1 only when this exact source instance enters an RC during its own Battle Phase and its current Vanguard is Spike Brothers; payment grants this same unit +5000 until the turn ends."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn",
+          "noOpIfSourceNotInPlay": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-614:0",
+      "cardId": "cfa-614",
+      "kind": "AUTO",
+      "printedText": "AUTO: [Counter Blast 1] During your battle phase, when this unit is placed on RC, if you have a «Spike Brothers» vanguard, you may pay the cost. If you do, this unit gets power +5000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ],
+        "requiredPhase": "battle",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Spike Brothers"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "EB03/018EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=10&sort=no&view=text",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=10&sort=no&view=text"
+        ],
+        "officialTextVerified": true,
+        "patternId": "auto-dudley-battle-phase-rc-placement-counter-blast-power-turn-v1",
+        "review": "Exact EB03/009EN and EB03/018EN AUTO family, confirmed against Bushiroad's official EB03 card list. The controller may pay Counter Blast 1 only when this exact source instance enters an RC during its own Battle Phase and its current Vanguard is Spike Brothers; payment grants this same unit +5000 until the turn ends."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "turn",
+          "noOpIfSourceNotInPlay": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-3377:0",
+      "cardId": "cfa-3377",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): [Counter Blast 1] When this unit attacks, you may pay the cost. If you do, this unit gets power +3000 until the end of that battle.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "G-TD07/002EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-TD07%2F002EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=G-TD07%2F002EN"
+        ],
+        "officialTextVerified": true,
+        "patternId": "auto-gb-own-attack-counter-blast-power-battle-v1",
+        "review": "Exact official G-TD07/002EN and G-TD06/004EN family. This exact VC/RC source must declare an attack; its controller must meet the printed face-up G-unit Generation Break threshold and may pay the printed Counter Blast. Payment grants only this attacking source the printed power until that battle ends."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-3393:0",
+      "cardId": "cfa-3393",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC] Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): [Counter Blast 1] When this unit attacks, you may pay the cost. If you do, this unit gets power +3000 until the end of that battle.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "G-TD06/004EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-TD06%2F004EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=G-TD06%2F004EN"
+        ],
+        "officialTextVerified": true,
+        "patternId": "auto-gb-own-attack-counter-blast-power-battle-v1",
+        "review": "Exact official G-TD07/002EN and G-TD06/004EN family. This exact VC/RC source must declare an attack; its controller must meet the printed face-up G-unit Generation Break threshold and may pay the printed Counter Blast. Payment grants only this attacking source the printed power until that battle ends."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-3650:0",
+      "cardId": "cfa-3650",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC] Generation Break 1: [Counter Blast 1] When this unit attacks, you may pay the cost. If you do, this unit gets power +3000 until the end of that battle.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "optional": true,
+      "canDecline": true,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [
+        {
+          "type": "counter-blast",
+          "count": 1
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "G-TD08/003EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-TD08%2F003EN",
+        "officialReferences": [
+          "https://en.cf-vanguard.com/cardlist/?cardno=G-TD08%2F003EN"
+        ],
+        "officialTextVerified": true,
+        "patternId": "auto-gb-own-attack-counter-blast-power-battle-v1",
+        "review": "Exact official G-TD07/002EN, G-TD06/004EN, and G-TD08/003EN family. This exact VC/RC source must declare an attack; its controller must meet the printed face-up G-unit Generation Break threshold and may pay the printed Counter Blast. Payment grants only this attacking source the printed power until that battle ends."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-679:0",
+      "cardId": "cfa-679",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit attacks, if the number of grade 3 «Royal Paladin» vanguards and/or rear-guards you have is two or more, this unit gets power +3000 until end of that battle.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "optional": false,
+      "canDecline": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "controller-field-grade-clan-count-at-least",
+          "grade": 3,
+          "clan": "Royal Paladin",
+          "count": 2
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "BT03/066EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT03%2F066EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-own-attack-field-grade-clan-count-power-battle-v1",
+        "review": "Exact official BT03/066EN ability. Counts grade 3 Royal Paladin units on VC and RC; the source is included if it qualifies. The source itself must attack, and receives +3000 only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-696:0",
+      "cardId": "cfa-696",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit attacks, if the number of grade 3 «Royal Paladin» vanguards and/or rear-guards you have is two or more, this unit gets power +3000 until end of that battle.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "optional": false,
+      "canDecline": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": []
+      },
+      "conditions": [
+        {
+          "type": "controller-field-grade-clan-count-at-least",
+          "grade": 3,
+          "clan": "Royal Paladin",
+          "count": 2
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "costs": [],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "BT03/005EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT03%2F005EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-own-attack-field-grade-clan-count-power-battle-v1",
+        "review": "Exact official BT03/005EN ability. Counts grade 3 Royal Paladin units on VC and RC; the source is included if it qualifies. The source itself must attack, and receives +3000 only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-2149:0",
+      "cardId": "cfa-2149",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC/RC]: When this unit attacks a vanguard, if the number of other units you have with \"Seeker\" in its card name is four or more, this unit gets power +3000 until end of that battle.",
+      "requiredLocation": [
+        "vanguard",
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [],
+        "targetLocation": "vanguard"
+      },
+      "conditions": [
+        {
+          "type": "controller-field-other-card-name-contains-count-at-least",
+          "name": "Seeker",
+          "count": 4
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "costs": [],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "BT16/062EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT16%2F062EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-own-attack-other-named-units-power-battle-v1",
+        "review": "Exact official BT16/062EN text. The exact source must attack the opponent's Vanguard from VC or RC. Count four or more other face-up, unlocked units on the controller's VC/RC whose card names contain Seeker; exclude the attacking source instance. Give only that attacker +3000 until that battle ends."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 3000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1612:1",
+      "cardId": "cfa-1612",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC]: When this unit attacks a vanguard, if it is the fourth battle of that turn or more, this unit gets power +5000 until end of that battle.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "source",
+        "circles": [
+          "vanguard"
+        ],
+        "targetLocation": "vanguard",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "total-attack-count-this-turn-at-least",
+          "count": 4
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT13/018EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT13%2F018EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-own-vanguard-attack-fourth-battle-power-v1",
+        "review": "Exact official AUTO [VC] wording. Only this exact Vanguard source attacking the opponent's Vanguard qualifies. The current-turn attack count is recorded before trigger detection, and the condition is four or more (inclusive); Official FAQ Q627 confirms an attack at the stated ordinal is included. This source gets +5000 only for that battle."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 5000,
+          "duration": "battle"
+        }
+      ]
+    },
+    {
+      "id": "cfa-1612:0",
+      "cardId": "cfa-1612",
+      "kind": "AUTO",
+      "printedText": "AUTO [VC] Limit Break 4 (This ability is active if you have four or more damage): When one of your rear-guards attacks a vanguard, if it is the third battle of that turn or more, this unit gets power +2000 / critical +1 until end of turn.",
+      "requiredLocation": [
+        "vanguard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "unit.attacked",
+        "subject": "any",
+        "circles": [],
+        "targetLocation": "vanguard"
+      },
+      "conditions": [
+        {
+          "type": "limit-break-active",
+          "count": 4
+        },
+        {
+          "type": "total-attack-count-this-turn-at-least",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "BT13/018EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=BT13%2F018EN",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/wordpress/wp-content/uploads/Cardfight-Vanguard-Comprehensive-Rules-4.52.pdf",
+        "patternId": "auto-vanguard-own-rear-guard-third-battle-limit-break-power-critical-turn-v1",
+        "review": "Exact official BT13/018EN Limit Break AUTO. It belongs to this exact Vanguard but triggers only when one of its controller's Rear-Guards attacks the opponent's Vanguard on the third or a later battle. Both Limit Break 4 and the current-turn battle count are checked, and each qualifying event grants this Vanguard +2000 power and +1 critical until end of turn. Official FAQ Q626 confirms the critical increase on a fourth-or-later Rear-Guard attack."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 2000,
+          "duration": "turn"
+        },
+        {
+          "op": "modify-critical",
+          "target": "source",
+          "amount": 1,
+          "duration": "turn"
+        }
+      ]
+    },
+    {
+      "id": "cfa-2950:0",
+      "cardId": "cfa-2950",
+      "kind": "AUTO",
+      "printedText": "AUTO Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): When this unit is placed on RC, this unit gets power +4000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "G-BT03/049EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=G-BT03%2F049EN",
+        "officialTextVerified": false,
+        "patternId": "auto-generation-break-rc-placement-self-power-turn-v1",
+        "review": "Exact Generation Break placement template. Only the source card instance entering its controller's Rear-Guard Circle qualifies; placement on Vanguard Circle or movement from another Rear-Guard Circle does not. The controller must have the printed number of face-up G units across Vanguard Circle and G zone when the AUTO is checked, and only this source receives the printed power until turn end."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 4000,
+          "duration": "turn",
+          "noOpIfSourceNotInPlay": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-3294:0",
+      "cardId": "cfa-3294",
+      "kind": "AUTO",
+      "printedText": "AUTO Generation Break 1 (This ability is active if you have one or more face up G units in total on your VC or G zone): When this unit is placed on RC, this unit gets power +4000 until end of turn.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "conditions": [
+        {
+          "type": "generation-break",
+          "count": 1
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "canDecline": false,
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "source": {
+        "dataset": "Cardfight Area snapshot",
+        "snapshotDate": "2025-05-09",
+        "officialCardNumber": "G-TD06/006EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=67&sort=no&view=text",
+        "officialTextVerified": true,
+        "patternId": "auto-generation-break-rc-placement-self-power-turn-v1",
+        "review": "Exact Generation Break placement template. Only the source card instance entering its controller's Rear-Guard Circle qualifies; placement on Vanguard Circle or movement from another Rear-Guard Circle does not. The controller must have the printed number of face-up G units across Vanguard Circle and G zone when the AUTO is checked, and only this source receives the printed power until turn end."
+      },
+      "effects": [
+        {
+          "op": "modify-power",
+          "target": "source",
+          "amount": 4000,
+          "duration": "turn",
+          "noOpIfSourceNotInPlay": true
+        }
+      ]
+    },
+    {
+      "id": "cfa-11778:0",
+      "cardId": "cfa-11778",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When placed, you may Soul Charge 2.",
+      "optional": true,
+      "canDecline": true,
+      "requiredLocation": ["rear-guard"],
+      "trigger": {"status": "recognized-trigger", "eventType": "card.placed", "subject": "source", "circles": ["rear-guard"]},
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {"dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "officialTextVerified": false, "cardTextVerification": "local-catalog-only", "patternId": "auto-rc-placement-optional-soul-charge-two-v1", "review": "Exact optional Rear-Guard placement AUTO for Music & Ant Sweat16! Grill. Only this card instance entering an RC can trigger; its controller may decline or Soul Charge two. Official card text is not independently confirmed, so this ability remains unverified."},
+      "effects": [{"op": "soul-charge", "count": 2}]
+    },
+    {
+      "id": "cfa-11780:0",
+      "cardId": "cfa-11780",
+      "kind": "AUTO",
+      "printedText": "AUTO [RC]: When placed, you may Soul Charge 2.",
+      "optional": true,
+      "canDecline": true,
+      "requiredLocation": ["rear-guard"],
+      "trigger": {"status": "recognized-trigger", "eventType": "card.placed", "subject": "source", "circles": ["rear-guard"]},
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {"dataset": "Cardfight Area snapshot", "snapshotDate": "2025-05-09", "officialTextVerified": false, "cardTextVerification": "local-catalog-only", "patternId": "auto-rc-placement-optional-soul-charge-two-v1", "review": "Exact optional Rear-Guard placement AUTO for Manmuk & Pim Sweat16! Vanguard. Only this card instance entering an RC can trigger; its controller may decline or Soul Charge two. Official card text is not independently confirmed, so this ability remains unverified."},
+      "effects": [{"op": "soul-charge", "count": 2}]
+    },
+    {
+      "id": "cfa-12815:0",
+      "cardId": "cfa-12815",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded from hand during your turn, you may put this card into soul.",
+      "optional": true,
+      "choicesReviewed": true,
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "requiredLocation": [
+        "hand"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "event-subject",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-turn"
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "DZ-BT03/031EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=227&s_param=d-Brandt+Gate&sort=no&view=text",
+        "officialTextVerified": true,
+        "patternId": "auto-hand-discard-self-optional-to-soul-v1",
+        "review": "Official text confirms the optional self-discard AUTO. Only this exact card instance discarded from its controller’s hand to Drop during that controller’s turn becomes eligible; if its controller accepts, that same instance moves from Drop to Soul."
+      },
+      "effects": [
+        {
+          "op": "move-source-to-soul",
+          "target": "source",
+          "from": "drop"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13992:0",
+      "cardId": "cfa-13992",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this card is discarded from hand during your turn, you may put this card into soul.",
+      "optional": true,
+      "choicesReviewed": true,
+      "costsReviewed": true,
+      "conditionsReviewed": true,
+      "requiredLocation": [
+        "hand"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.discarded",
+        "subject": "event-subject",
+        "sourceLocation": "hand",
+        "destinationLocation": "drop",
+        "turnRelation": "controller"
+      },
+      "conditions": [
+        {
+          "type": "controller-turn"
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "officialCardNumber": "DZ-SS11/008EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-SS11%2F008EN&cnt=&expansion=250&view=text",
+        "officialTextVerified": true,
+        "patternId": "auto-hand-discard-self-optional-to-soul-v1",
+        "review": "Official text confirms the optional self-discard AUTO. Only this exact card instance discarded from its controller’s hand to Drop during that controller’s turn becomes eligible; if its controller accepts, that same instance moves from Drop to Soul."
+      },
+      "effects": [
+        {
+          "op": "move-source-to-soul",
+          "target": "source",
+          "from": "drop"
+        }
+      ]
+    },
+    {
+      "id": "cfa-13489:0",
+      "cardId": "cfa-13489",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Energy Blast 3], search your deck for up to one \"Masque of Hydragrum\", reveal it and put it into hand, and shuffle the deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "energy-blast",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "search-deck-same-name-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardName": "Masque of Hydragrum"
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "cardNumber": "DZ-BT06/036EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT06%2F036EN",
+        "officialTextVerified": true,
+        "patternId": "auto-rc-placement-energy-blast-masque-search-v1",
+        "review": "Exact official AUTO: only this unit's Rear-Guard placement triggers; its controller pays Energy Blast 3, searches their deck for up to one Masque of Hydragrum, reveals and adds it to hand, then shuffles."
+      }
+    },
+    {
+      "id": "cfa-13624:0",
+      "cardId": "cfa-13624",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, COST [Energy Blast 3], search your deck for up to one \"Masque of Hydragrum\", reveal it and put it into hand, and shuffle the deck.",
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "costs": [
+        {
+          "type": "energy-blast",
+          "count": 3
+        }
+      ],
+      "conditionsReviewed": true,
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "optional": false,
+      "effects": [
+        {
+          "op": "search-deck-same-name-to-hand",
+          "target": "controller",
+          "maximum": 1,
+          "cardName": "Masque of Hydragrum"
+        }
+      ],
+      "source": {
+        "dataset": "Bushiroad official card list",
+        "cardNumber": "DZ-BT06/022EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=DZ-BT06%2F022EN",
+        "officialTextVerified": true,
+        "patternId": "auto-rc-placement-energy-blast-masque-search-v1",
+        "review": "Exact official AUTO: only this unit's Rear-Guard placement triggers; its controller pays Energy Blast 3, searches their deck for up to one Masque of Hydragrum, reveals and adds it to hand, then shuffles."
+      }
+    },
+    {
+      "id": "cfa-125:0",
+      "cardId": "cfa-125",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, if you have a «Nova Grappler» vanguard, choose a card from your damage zone and turn it face up. (Counter Charge 1)",
+      "optional": false,
+      "canDecline": false,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Nova Grappler"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list and Cardfight Area snapshot",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "EB08/023EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB08%2F023EN",
+        "officialPrintedText": "[AUTO]:When this unit is placed on (RC), if you have a <Nova Grappler> vanguard, choose a card from your damage zone, and turn it face up.",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/howto/question/?id=term",
+        "patternId": "auto-rc-placement-nova-grappler-counter-charge-one-v1",
+        "review": "Mandatory AUTO: only this exact card instance being placed on a Rear-Guard Circle is the trigger; the controller must have a Nova Grappler Vanguard when the ability resolves. Choose one card in that controller's Damage Zone and turn it face up. No activation cost is printed."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "target": "controller",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cfa-146:0",
+      "cardId": "cfa-146",
+      "kind": "AUTO",
+      "printedText": "AUTO: When this unit is placed on RC, if you have a «Nova Grappler» vanguard, choose a card from your damage zone and turn it face up. (Counter Charge 1)",
+      "optional": false,
+      "canDecline": false,
+      "requiredLocation": [
+        "rear-guard"
+      ],
+      "trigger": {
+        "status": "recognized-trigger",
+        "eventType": "card.placed",
+        "subject": "source",
+        "circles": [
+          "rear-guard"
+        ]
+      },
+      "conditions": [
+        {
+          "type": "controller-vanguard-has-clan",
+          "value": "Nova Grappler"
+        }
+      ],
+      "conditionsReviewed": true,
+      "costs": [],
+      "costsReviewed": true,
+      "choicesReviewed": true,
+      "source": {
+        "dataset": "Bushiroad official card list and Cardfight Area snapshot",
+        "snapshotDate": "2026-11-07",
+        "officialCardNumber": "EB08/020EN",
+        "officialReference": "https://en.cf-vanguard.com/cardlist/?cardno=EB08%2F020EN",
+        "officialPrintedText": "[AUTO]:When this unit is placed on (RC), if you have a <Nova Grappler> vanguard, choose a card from your damage zone, and turn it face up.",
+        "officialTextVerified": true,
+        "rulesReference": "https://en.cf-vanguard.com/howto/question/?id=term",
+        "patternId": "auto-rc-placement-nova-grappler-counter-charge-one-v1",
+        "review": "Mandatory AUTO: only this exact card instance being placed on a Rear-Guard Circle is the trigger; the controller must have a Nova Grappler Vanguard when the ability resolves. Choose one card in that controller's Damage Zone and turn it face up. No activation cost is printed."
+      },
+      "effects": [
+        {
+          "op": "counter-charge",
+          "target": "controller",
+          "count": 1
         }
       ]
     }

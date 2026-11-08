@@ -1,7 +1,6 @@
 "use strict";
 
-// Audit-only batch contribution. No new effect definition is safe to add from
-// this batch against the currently trusted engine and authoritative handlers.
+// Audit-only manifest of the remaining unsupported items in this source batch.
 const Engine = require("../ability-engine.js");
 Engine.registerAbilityDefinitions(require("../ability-definitions.js"));
 const { loadCatalog } = require("../scripts/audit-ability-catalog.js");
@@ -18,8 +17,9 @@ const abilityIds = Object.freeze([
 
 const alreadySupportedAbilityIds = Object.freeze([
   "cfa-1599:0", "cfa-1599:1", "cfa-1600:0", "cfa-1602:0", "cfa-1604:0",
-  "cfa-1605:1", "cfa-1607:0", "cfa-1608:0", "cfa-160:0", "cfa-1617:0",
-  "cfa-16:0"
+  "cfa-1605:1", "cfa-1607:0", "cfa-1608:0", "cfa-1608:1", "cfa-160:0", "cfa-1612:0",
+  "cfa-1612:1",
+  "cfa-1617:0", "cfa-16:0"
 ]);
 
 const blockerById = Object.freeze({
@@ -30,13 +30,10 @@ const blockerById = Object.freeze({
   "cfa-1603:0": "The ability combines a VC-or-RC own-attack hit, a Nova Grappler Vanguard condition, Counter Blast filtered by Beast Deity name, and standing another Nova Grappler Rear-Guard. Existing on-hit stand handlers do not support this complete source/cost combination.",
   "cfa-1605:0": "Sentinel is a deck-construction restriction, but this keyword record is not accepted by the authoritative server trust check. It cannot be counted as a supported server-enforced ability from this batch.",
   "cfa-1606:0": "No trusted handler models this exact source becoming stand during the battle phase, the optional Counter Blast filtered by Beast Deity name, and standing another friendly Nova Grappler Rear-Guard.",
-  "cfa-1608:1": "No trusted exact-source stand-event handler applies this battle-phase trigger and +3000 turn-duration modifier. A standing action elsewhere must not satisfy it.",
   "cfa-1609:0": "The effect requires a grade-3 Great Nature drive-check event, selection of two Great Nature Rear-Guards, an optional temporary power grant, and delayed retirement of those exact selected units at turn end; no trusted ordered/deferred effect program covers it.",
   "cfa-160:1": "Although a related RC attack-hit stand handler exists, the authoritative handler is an exact-text/card allowlist for different IDs and 'grade 1 or less' wording. Lion Heat says 'grade 1 or lower'; the existing allowlisted handler cannot safely be reused for this unlisted definition.",
   "cfa-1610:0": "The ability needs an end-phase RC-to-Drop movement event, Counter Blast plus selection of three grade-1-or-greater Great Nature cards with a name exclusion from Drop to Deck top, then same-name Deck search/reveal/hand and shuffle. No trusted handler implements this atomic multi-cost sequence.",
   "cfa-1611:0": "No trusted handler combines placement on RC specifically from Drop, a Great Nature Vanguard condition, and a +3000 turn-duration modifier for the exact source.",
-  "cfa-1612:0": "This Limit Break ability is owned by the Vanguard but triggers from another Rear-Guard's third-or-later attack, then gives the Vanguard both power and critical until turn end. Trusted own-attack modifiers do not represent this different attacking subject or battle-count condition.",
-  "cfa-1612:1": "The Vanguard's +5000 modifier requires its own attack against a Vanguard to be the fourth-or-later battle; no trusted own-attack handler verifies that battle ordinal.",
   "cfa-1613:0": "The VC/RC source's attack modifier requires an Aqua Force Vanguard and exactly the second battle; the existing power handlers do not verify that battle ordinal.",
   "cfa-1614:0": "This on-hit effect requires a fourth-or-later battle, Counter Blast 1, then standing another Aqua Force Rear-Guard and granting that target +5000 until turn end. Existing on-hit stand handlers do not validate the battle count or full two-step target effect.",
   "cfa-1615:0": "The battle-close AUTO must stand its attacking source, apply a -5000 modifier, and consume its once-per-turn restriction when the ability is used. No trusted handler represents this complete self-stand/negative-power/use-limit sequence.",
@@ -80,7 +77,7 @@ Object.defineProperty(result, "audit", {
   enumerable: false,
   value: Object.freeze({
     batchId: "ABILITY-320008F1-0140",
-    status: "11-existing-trusted-definitions-20-unresolved",
+    status: "12-existing-trusted-definitions-19-unresolved",
     dataset: "Cardfight Area local catalog snapshot",
     catalogSnapshotDate: "2025-05-09",
     officialTextChecked: false,
@@ -92,7 +89,7 @@ Object.defineProperty(result, "audit", {
     supportedProductionDefinitions,
     fullyTestedWholeCardIds: Object.freeze([]),
     unsupportedSiblings,
-    provenanceNote: "All 31 assigned ability records were checked against exact local catalog text, the compiler output, the current engine definitions, and authoritative server trust/effect gates. Eleven already have matching trusted production definitions; this contribution adds no duplicate definition. The other 20 retain explicit blockers and are not represented by placeholders or marked verified. Official card-list text confirmation and whole-card verification were not performed."
+    provenanceNote: "All 31 assigned ability records were checked against exact local catalog text, the compiler output, the current engine definitions, and authoritative server trust/effect gates. Twelve now have matching trusted production definitions, including cfa-1608:1 from the exact shared stand-trigger family contribution. The other 19 retain explicit blockers and are not represented by placeholders or marked verified. Official card-list text confirmation and whole-card verification were not performed for the remaining audit records."
   })
 });
 Object.defineProperty(result, "unsupportedSiblings", { enumerable: false, value: unsupportedSiblings });
