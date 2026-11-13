@@ -42,21 +42,32 @@
     document.body.classList.toggle('battlefield-expanded', active);
     fullscreen.setAttribute('aria-pressed', String(active));
     fullscreen.title = active ? 'Exit full screen' : 'Full screen';
-    fullscreen.querySelector('[data-fullscreen-label]').textContent = fullscreen.title;
-    fullscreen.querySelector('[aria-hidden]').textContent = active ? '⤢' : '⛶';
+    const label = fullscreen.querySelector('[data-fullscreen-label]');
+    const icon = fullscreen.querySelector('[aria-hidden]');
+    if (label) label.textContent = fullscreen.title;
+    if (icon) icon.textContent = active ? '⤢' : '⛶';
     if (!active) window.scrollTo({ top: previousScroll });
   }
   fullscreen.addEventListener('click', async () => {
-    if (document.fullscreenElement) { await document.exitFullscreen(); return; }
+    if (document.fullscreenElement) {
+      viewportOnly = false;
+      try { await document.exitFullscreen(); } catch { syncFullscreen(); }
+      return;
+    }
     if (viewportOnly) { viewportOnly = false; syncFullscreen(); return; }
     previousScroll = window.scrollY;
+    // Apply the viewport layout synchronously; some browsers reject native fullscreen
+    // requests from embedded or permission-restricted pages.
+    viewportOnly = true;
+    syncFullscreen();
     // Fullscreen the document so existing dialogs, hand and context menus stay usable.
     try {
       if (!document.documentElement.requestFullscreen) throw new Error('Fullscreen unavailable');
       await document.documentElement.requestFullscreen();
+      viewportOnly = !document.fullscreenElement;
     } catch {
       // Browsers without native fullscreen still get an edge-to-edge battlefield.
-      viewportOnly = true;
+      viewportOnly = !document.fullscreenElement;
     }
     syncFullscreen();
   });

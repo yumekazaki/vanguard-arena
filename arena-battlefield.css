@@ -5,6 +5,11 @@
 .battlefield-tool>span[aria-hidden] { font-size:20px; line-height:1; }
 .battlefield-controls { left:12px; }
 .battlefield-fullscreen { right:12px; }
+.arena-draw-flight { position:fixed; z-index:15001; display:grid; place-items:center; width:46px; height:66px; border:2px solid #b7dcff; border-radius:7px; color:#f8fbff; background:radial-gradient(circle at 50% 35%,#456ca2 0,#1a3159 52%,#10182e 100%); box-shadow:0 0 0 2px #10203c,0 8px 24px #000a,0 0 22px #79caffbb; pointer-events:none; }
+.arena-draw-flight::before { position:absolute; inset:4px; border:1px solid #9ccaff99; border-radius:4px; content:""; }
+.arena-draw-flight>span { font:900 27px var(--display); text-shadow:0 0 12px #7dcaff; }
+.arena-draw-arrival { animation:arena-draw-arrival 520ms cubic-bezier(.18,.75,.25,1); }
+@keyframes arena-draw-arrival { 35% { filter:brightness(1.8); box-shadow:0 0 0 3px #91d7ff77,0 0 24px #6bc6ff; } 100% { filter:brightness(1); } }
 .battlefield-bottom-controls { margin:12px 0; }
 .battlefield-controls-dialog { width:min(760px,calc(100vw - 24px)); max-height:85dvh; padding:22px; border:1px solid #a5caff77; border-radius:18px; color:#f1f6ff; background:linear-gradient(140deg,#172b48,#14152d); box-shadow:0 25px 100px #0009; overflow:auto; }
 .battlefield-controls-dialog::backdrop { background:#040817b8; backdrop-filter:blur(5px); }
@@ -29,6 +34,7 @@ body.battlefield-expanded .table-column>.action-bar { position:static; margin:0;
 body.battlefield-expanded .table-column>.action-bar .button { min-height:34px; padding:5px 8px; }
 body.battlefield-expanded .table-column>.action-bar .action-buttons { max-height:18dvh; overflow:auto; }
 @media(max-width:600px) { .battlefield-tool { top:7px; padding:5px 8px; font-size:10px; } .battlefield-controls { left:7px; } .battlefield-fullscreen { right:7px; } .battlefield-controls-dialog { padding:15px; } body.battlefield-expanded .table-column>.action-bar .selected-summary { display:none; } }
+@media(prefers-reduced-motion:reduce) { .arena-draw-arrival { animation:none; } }
 
 /* Keep damage cards readable at a glance; card zoom remains available for details. */
 .damage-track .damage-card { width: clamp(28px,3.5vw,40px); height: clamp(40px,5vw,56px); border-radius: 5px; }

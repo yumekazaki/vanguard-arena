@@ -2,6 +2,7 @@
 (() => {
   "use strict";
   const beforeCards = new Map();
+  const deckOrigins = new Map();
   let previous = null;
   let phaseBannerTimer = null;
   const activeTimers = new WeakMap();
@@ -38,6 +39,12 @@
   }
   function captureBefore() {
     beforeCards.clear();
+    deckOrigins.clear();
+    for (const side of ["human", "bot"]) {
+      const deck = document.querySelector(`.${side === "human" ? "human" : "opponent"}-line .deck-zone`);
+      const rect = deck?.getBoundingClientRect();
+      if (rect?.width && rect?.height) deckOrigins.set(side, { left: rect.left, top: rect.top, width: rect.width, height: rect.height });
+    }
     const nodes = [...document.querySelectorAll("#match-layout .field-card[data-field-uid], #hand-cards [data-hand-uid]")];
     for (const node of nodes) {
       const uid = node.dataset.fieldUid || node.dataset.handUid;
@@ -81,6 +88,38 @@
     animation.onfinish = () => ghost.remove(); animation.oncancel = () => ghost.remove();
   }
   function effectAt(element, name) { if (element) transientClass(element, name, 720); }
+  function animateDraw(side, origin) {
+    if (reducedMotionEnabled()) return;
+    const destination = side === "human"
+      ? document.querySelector("#open-hand")
+      : document.querySelector(".opponent-hand-row");
+    if (!destination) return;
+    const target = destination.getBoundingClientRect();
+    if (!target.width || !target.height) return;
+    const arrival = side === "human" ? destination : document.querySelector("#bot-hand");
+    effectAt(arrival, "arena-draw-arrival");
+    if (!origin || !origin.width || !origin.height || !destination.animate) return;
+
+    const width = 46, height = 66;
+    const startX = origin.left + (origin.width - width) / 2;
+    const startY = origin.top + (origin.height - height) / 2;
+    const dx = target.left + target.width / 2 - (startX + width / 2);
+    const dy = target.top + target.height / 2 - (startY + height / 2);
+    const flight = document.createElement("div");
+    flight.className = "arena-draw-flight";
+    flight.setAttribute("aria-hidden", "true");
+    flight.innerHTML = "<span>V</span>";
+    Object.assign(flight.style, { left: `${startX}px`, top: `${startY}px` });
+    document.body.appendChild(flight);
+    const duration = window.VanguardAnimationSettings?.duration(520) ?? 520;
+    const animation = flight.animate([
+      { transform: "translate(0,0) rotate(-9deg) scale(.68)", opacity: 0 },
+      { transform: `translate(${dx * .5}px,${dy * .5}px) rotate(5deg) scale(1)`, opacity: 1, offset: .58 },
+      { transform: `translate(${dx}px,${dy}px) rotate(0deg) scale(.28)`, opacity: .12 }
+    ], { duration, easing: "cubic-bezier(.2,.78,.25,1)" });
+    animation.onfinish = () => flight.remove();
+    animation.oncancel = () => flight.remove();
+  }
   function showPhaseBanner(match) {
     const panel = document.querySelector("#phase-transition-flash");
     if (!panel) return;
@@ -106,6 +145,11 @@
     const current = readSnapshot(match), currentNodes = fields();
     if (!previous) { previous = current; beforeCards.clear(); return; }
     if (current.matchId === previous.matchId && (current.phase !== previous.phase || current.side !== previous.side)) showPhaseBanner(match);
+
+    for (const [uid, was] of previous.locations) {
+      const now = current.locations.get(uid);
+      if (was?.zone === "deck" && now?.zone === "hand" && was.side === now.side) animateDraw(now.side, deckOrigins.get(now.side));
+    }
 
     for (const node of currentNodes) {
       const uid = node.dataset.fieldUid, now = current.locations.get(uid), was = previous.locations.get(uid), origin = beforeCards.get(uid);
