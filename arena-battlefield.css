@@ -5,9 +5,18 @@
 .battlefield-tool>span[aria-hidden] { font-size:20px; line-height:1; }
 .battlefield-controls { left:12px; }
 .battlefield-fullscreen { right:12px; }
-.arena-draw-flight { position:fixed; z-index:15001; display:grid; place-items:center; width:46px; height:66px; border:2px solid #b7dcff; border-radius:7px; color:#f8fbff; background:radial-gradient(circle at 50% 35%,#456ca2 0,#1a3159 52%,#10182e 100%); box-shadow:0 0 0 2px #10203c,0 8px 24px #000a,0 0 22px #79caffbb; pointer-events:none; }
-.arena-draw-flight::before { position:absolute; inset:4px; border:1px solid #9ccaff99; border-radius:4px; content:""; }
-.arena-draw-flight>span { font:900 27px var(--display); text-shadow:0 0 12px #7dcaff; }
+.arena-draw-flight { position:fixed; z-index:15001; width:46px; height:66px; perspective:1100px; pointer-events:none; filter:drop-shadow(0 8px 20px #000b) drop-shadow(0 0 12px #79caff88); }
+.arena-draw-flight.is-revealing { width:clamp(122px,36vw,168px); height:auto; aspect-ratio:1/1.46; }
+.arena-draw-flight-inner { position:relative; width:100%; height:100%; transform-style:preserve-3d; }
+.arena-draw-back,.arena-draw-front { position:absolute; inset:0; display:grid; place-items:center; overflow:hidden; border:2px solid #b7dcff; border-radius:10px; color:#f8fbff; background:radial-gradient(circle at 50% 35%,#456ca2 0,#1a3159 52%,#10182e 100%); box-shadow:inset 0 0 0 3px #10203c,0 0 22px #79caff99; backface-visibility:hidden; }
+.arena-draw-back::before { position:absolute; inset:5px; border:1px solid #9ccaff99; border-radius:5px; content:""; }
+.arena-draw-back>span { font:900 29px var(--display); text-shadow:0 0 12px #7dcaff; }
+.arena-draw-front { transform:rotateY(180deg); background:#0b1425; }
+.arena-draw-front>img { display:block; width:100%; height:100%; object-fit:contain; }
+.arena-draw-name { position:absolute; left:4px; right:4px; bottom:5px; overflow:hidden; padding:4px 5px; border:1px solid #b7dcff66; border-radius:5px; background:#081326e8; color:#f6f9ff; font:600 9px var(--font); text-align:center; text-overflow:ellipsis; white-space:nowrap; }
+.arena-draw-fallback { padding:18px; color:#eef7ff; font:700 15px var(--display); text-align:center; }
+.arena-draw-flight.is-face-up .arena-draw-flight-inner { transform:rotateY(180deg); }
+.arena-draw-flight.is-static { filter:drop-shadow(0 0 22px #79caffcc); }
 .arena-draw-arrival { animation:arena-draw-arrival 520ms cubic-bezier(.18,.75,.25,1); }
 @keyframes arena-draw-arrival { 35% { filter:brightness(1.8); box-shadow:0 0 0 3px #91d7ff77,0 0 24px #6bc6ff; } 100% { filter:brightness(1); } }
 .battlefield-bottom-controls { margin:12px 0; }

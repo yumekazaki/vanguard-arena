@@ -88,8 +88,7 @@
     animation.onfinish = () => ghost.remove(); animation.oncancel = () => ghost.remove();
   }
   function effectAt(element, name) { if (element) transientClass(element, name, 720); }
-  function animateDraw(side, origin) {
-    if (reducedMotionEnabled()) return;
+  function animateDraw(side, origin, uid, sequence = 0) {
     const destination = side === "human"
       ? document.querySelector("#open-hand")
       : document.querySelector(".opponent-hand-row");
@@ -98,25 +97,98 @@
     if (!target.width || !target.height) return;
     const arrival = side === "human" ? destination : document.querySelector("#bot-hand");
     effectAt(arrival, "arena-draw-arrival");
-    if (!origin || !origin.width || !origin.height || !destination.animate) return;
+    if (!origin || !origin.width || !origin.height) return;
 
-    const width = 46, height = 66;
+    const isOwnerDraw = side === "human";
+    const handCard = isOwnerDraw
+      ? document.querySelector(`#hand-cards [data-hand-uid="${CSS.escape(String(uid))}"] .game-card`)
+      : null;
+    const sourceImage = handCard?.querySelector(".card-art img");
+    const cardName = handCard?.querySelector(".card-name")?.textContent?.trim() || sourceImage?.alt || "Drawn card";
+    const imageSrc = sourceImage?.getAttribute("src") || "";
+    const width = isOwnerDraw ? Math.min(168, Math.max(122, window.innerWidth * .36)) : 46;
+    const height = isOwnerDraw ? width * 1.46 : 66;
     const startX = origin.left + (origin.width - width) / 2;
     const startY = origin.top + (origin.height - height) / 2;
-    const dx = target.left + target.width / 2 - (startX + width / 2);
-    const dy = target.top + target.height / 2 - (startY + height / 2);
     const flight = document.createElement("div");
-    flight.className = "arena-draw-flight";
+    flight.className = `arena-draw-flight${isOwnerDraw ? " is-revealing" : " is-back-only"}`;
     flight.setAttribute("aria-hidden", "true");
-    flight.innerHTML = "<span>V</span>";
+    const inner = document.createElement("div");
+    inner.className = "arena-draw-flight-inner";
+    const back = document.createElement("div");
+    back.className = "arena-draw-back";
+    const logo = document.createElement("span");
+    logo.textContent = "V";
+    back.append(logo);
+    inner.append(back);
+    if (isOwnerDraw) {
+      const front = document.createElement("div");
+      front.className = "arena-draw-front";
+      if (imageSrc) {
+        const image = document.createElement("img");
+        image.src = imageSrc;
+        image.alt = "";
+        front.append(image);
+      } else {
+        const fallback = document.createElement("span");
+        fallback.className = "arena-draw-fallback";
+        fallback.textContent = cardName;
+        front.append(fallback);
+      }
+      const name = document.createElement("b");
+      name.className = "arena-draw-name";
+      name.textContent = cardName;
+      front.append(name);
+      inner.append(front);
+    }
+    flight.append(inner);
     Object.assign(flight.style, { left: `${startX}px`, top: `${startY}px` });
     document.body.appendChild(flight);
-    const duration = window.VanguardAnimationSettings?.duration(520) ?? 520;
+    if (isOwnerDraw) {
+      const centerX = window.innerWidth / 2 - width / 2 + sequence * 14;
+      const centerY = window.innerHeight / 2 - height / 2 + sequence * 12;
+      const toCenterX = centerX - startX, toCenterY = centerY - startY;
+      if (reducedMotionEnabled() || !flight.animate || !inner.animate) {
+        flight.classList.add("is-face-up", "is-static");
+        flight.style.left = `${centerX}px`;
+        flight.style.top = `${centerY}px`;
+        setTimeout(() => flight.remove(), window.VanguardAnimationSettings?.duration(1300) ?? 1300);
+        return;
+      }
+      const arrive = flight.animate([
+        { transform: "translate(0,0) rotate(-8deg) scale(.25)", opacity: .1 },
+        { transform: `translate(${toCenterX}px,${toCenterY}px) rotate(0deg) scale(1)`, opacity: 1 }
+      ], { duration: window.VanguardAnimationSettings?.duration(480) ?? 480, delay: sequence * 140, easing: "cubic-bezier(.18,.82,.22,1)", fill: "forwards" });
+      arrive.onfinish = () => {
+        const flip = inner.animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(180deg)" }], {
+          duration: window.VanguardAnimationSettings?.duration(480) ?? 480,
+          easing: "cubic-bezier(.25,.75,.25,1)", fill: "forwards"
+        });
+        flip.onfinish = () => setTimeout(() => {
+          const currentTarget = destination.getBoundingClientRect();
+          const toHandX = currentTarget.left + currentTarget.width / 2 - (centerX + width / 2);
+          const toHandY = currentTarget.top + currentTarget.height / 2 - (centerY + height / 2);
+          const collect = flight.animate([
+            { transform: `translate(${toCenterX}px,${toCenterY}px) scale(1)`, opacity: 1 },
+            { transform: `translate(${toCenterX + toHandX}px,${toCenterY + toHandY}px) scale(.2)`, opacity: .08 }
+          ], { duration: window.VanguardAnimationSettings?.duration(440) ?? 440, easing: "cubic-bezier(.35,0,.7,.35)" });
+          collect.onfinish = () => flight.remove();
+          collect.oncancel = () => flight.remove();
+        }, window.VanguardAnimationSettings?.duration(850) ?? 850);
+        flip.oncancel = () => flight.remove();
+      };
+      arrive.oncancel = () => flight.remove();
+      return;
+    }
+
+    if (reducedMotionEnabled() || !flight.animate) { flight.remove(); return; }
+    const dx = target.left + target.width / 2 - (startX + width / 2);
+    const dy = target.top + target.height / 2 - (startY + height / 2);
     const animation = flight.animate([
       { transform: "translate(0,0) rotate(-9deg) scale(.68)", opacity: 0 },
       { transform: `translate(${dx * .5}px,${dy * .5}px) rotate(5deg) scale(1)`, opacity: 1, offset: .58 },
       { transform: `translate(${dx}px,${dy}px) rotate(0deg) scale(.28)`, opacity: .12 }
-    ], { duration, easing: "cubic-bezier(.2,.78,.25,1)" });
+    ], { duration: window.VanguardAnimationSettings?.duration(520) ?? 520, delay: sequence * 100, easing: "cubic-bezier(.2,.78,.25,1)" });
     animation.onfinish = () => flight.remove();
     animation.oncancel = () => flight.remove();
   }
@@ -146,9 +218,10 @@
     if (!previous) { previous = current; beforeCards.clear(); return; }
     if (current.matchId === previous.matchId && (current.phase !== previous.phase || current.side !== previous.side)) showPhaseBanner(match);
 
+    let drawSequence = 0;
     for (const [uid, was] of previous.locations) {
       const now = current.locations.get(uid);
-      if (was?.zone === "deck" && now?.zone === "hand" && was.side === now.side) animateDraw(now.side, deckOrigins.get(now.side));
+      if (was?.zone === "deck" && now?.zone === "hand" && was.side === now.side) animateDraw(now.side, deckOrigins.get(now.side), uid, drawSequence++);
     }
 
     for (const node of currentNodes) {
