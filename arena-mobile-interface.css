@@ -189,3 +189,15 @@ body.mobile-mode #hand-drawer.is-persistent #hand-cards>.game-card-wrap {
   width: 102px; height: 149px; transform: none !important; animation: none;
 }
 body.mobile-mode #hand-drawer.is-persistent .hand-fan-scroll { max-height: calc(100% - 78px); }
+
+/* Keep battle decisions clear of the persistent hand tray on phones. */
+body.mobile-mode #attack-choice-panel,
+body.mobile-mode #battle-action-panel {
+  top: calc(var(--arena-mobile-top, 0px) + 50vh);
+  top: calc(var(--arena-mobile-top, 0px) + 50dvh);
+  bottom: auto;
+  z-index: 12001;
+  transform: translateY(-50%);
+  max-height: calc(var(--arena-mobile-height, 100dvh) - 32px);
+}
+
