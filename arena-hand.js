@@ -82,7 +82,7 @@
       if (defense.canFinish) document.dispatchEvent(new CustomEvent("arena:guard-card", { detail: { uid: card.dataset.handUid } }));
       return;
     }
-    if (event.target.closest("[data-hand-uid]") && !event.target.closest("[data-card-zoom]")) closeHand(false);
+    // Keep the drawer available after card selection so its action menu can be used without reopening it.
   }, true);
   drawer.addEventListener("keydown", event => {
     if (event.key === "Escape") { event.preventDefault(); closeHand(); }
