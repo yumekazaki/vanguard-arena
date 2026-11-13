@@ -3,7 +3,13 @@
   "use strict";
   const beforeCards = new Map();
   let previous = null;
+  let phaseBannerTimer = null;
   const activeTimers = new WeakMap();
+
+  function reducedMotionEnabled() {
+    return window.VanguardAnimationSettings?.getMode() === "reduced"
+      || window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+  }
 
   function fields() { return [...document.querySelectorAll("#match-layout .field-card[data-field-uid]")]; }
   function readLocations(match) {
@@ -19,6 +25,9 @@
   }
   function readSnapshot(match) {
     return {
+      matchId: match?.matchId || null,
+      phase: Number(match?.phase ?? -1),
+      side: match?.side || null,
       locations: readLocations(match),
       vanguards: Object.fromEntries(["human", "bot"].map(side => [side, match?.players?.[side]?.vanguard?.uid || null])),
       damage: Object.fromEntries(["human", "bot"].map(side => [side, match?.players?.[side]?.damage?.length || 0])),
@@ -43,12 +52,15 @@
     }
   }
   function transientClass(element, name, duration = 760) {
+    if (reducedMotionEnabled()) return;
+    duration = window.VanguardAnimationSettings?.duration(duration) ?? duration;
     const oldTimer = activeTimers.get(element); if (oldTimer) clearTimeout(oldTimer);
     element.classList.remove(name); void element.offsetWidth; element.classList.add(name);
     const timer = setTimeout(() => { element.classList.remove(name); activeTimers.delete(element); }, duration);
     activeTimers.set(element, timer);
   }
   function moveIntoField(element, origin, name = "arena-card-call") {
+    if (reducedMotionEnabled()) return;
     if (!origin || !element.animate) { transientClass(element, name); return; }
     const target = element.getBoundingClientRect(), dx = origin.left - target.left, dy = origin.top - target.top;
     transientClass(element, name, 620);
@@ -56,9 +68,10 @@
       { translate: `${dx}px ${dy}px`, scale: ".68", opacity: .35, filter: "brightness(1.7)" },
       { translate: "0 0", scale: "1.035", opacity: 1, filter: "brightness(1.12)", offset: .78 },
       { translate: "0 0", scale: "1", opacity: 1, filter: "brightness(1)" }
-    ], { duration: name === "arena-card-ride" || name === "arena-card-stride" ? 720 : 520, easing: "cubic-bezier(.18,.82,.22,1)" });
+    ], { duration: window.VanguardAnimationSettings?.duration(name === "arena-card-ride" || name === "arena-card-stride" ? 720 : 520) ?? (name === "arena-card-ride" || name === "arena-card-stride" ? 720 : 520), easing: "cubic-bezier(.18,.82,.22,1)" });
   }
   function ghostRetire(origin) {
+    if (reducedMotionEnabled()) return;
     if (!origin?.ghost || !origin.rect.width) return;
     const ghost = origin.ghost;
     ghost.removeAttribute("data-field-uid"); ghost.removeAttribute("data-card-id"); ghost.setAttribute("aria-hidden", "true");
@@ -68,6 +81,21 @@
     animation.onfinish = () => ghost.remove(); animation.oncancel = () => ghost.remove();
   }
   function effectAt(element, name) { if (element) transientClass(element, name, 720); }
+  function showPhaseBanner(match) {
+    const panel = document.querySelector("#phase-transition-flash");
+    if (!panel) return;
+    const phases = ["Stand", "Draw", "Ride", "Stride", "Main", "Battle", "End"];
+    const phase = phases[Number(match.phase)] || "Next";
+    const sideName = match.side === "human" ? "Your" : (match.players?.[match.side]?.name || "Opponent") + "’s";
+    panel.querySelector("b").textContent = `${sideName} ${phase} Phase`;
+    const duration = window.VanguardAnimationSettings?.duration(1050) ?? 1050;
+    panel.hidden = false;
+    panel.classList.remove("show");
+    panel.style.animationDuration = reducedMotionEnabled() ? "" : `${duration}ms`;
+    if (!reducedMotionEnabled()) { void panel.offsetWidth; panel.classList.add("show"); }
+    if (phaseBannerTimer) clearTimeout(phaseBannerTimer);
+    phaseBannerTimer = setTimeout(() => { panel.hidden = true; panel.classList.remove("show"); phaseBannerTimer = null; }, duration);
+  }
   function targetForAttack(attack) {
     if (!attack) return null;
     return document.querySelector(`#match-layout .field-card[data-field-uid="${CSS.escape(String(attack.targetUid || ""))}"]`)
@@ -77,6 +105,7 @@
     if (!match) { previous = null; beforeCards.clear(); return; }
     const current = readSnapshot(match), currentNodes = fields();
     if (!previous) { previous = current; beforeCards.clear(); return; }
+    if (current.matchId === previous.matchId && (current.phase !== previous.phase || current.side !== previous.side)) showPhaseBanner(match);
 
     for (const node of currentNodes) {
       const uid = node.dataset.fieldUid, now = current.locations.get(uid), was = previous.locations.get(uid), origin = beforeCards.get(uid);

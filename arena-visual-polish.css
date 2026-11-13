@@ -78,6 +78,16 @@ dialog::backdrop { background: #020813c9; backdrop-filter: blur(5px); }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
 
+.phase-next-action { margin: 8px 0 12px; padding: 8px 10px; border-left: 2px solid var(--arena-blue); border-radius: 0 7px 7px 0; color: #c8d9e9; background: #79caff0b; font-size: 11px; line-height: 1.45; }
+.ability-decision-badge { display: inline-flex; width: fit-content; margin: 0 0 8px; padding: 5px 9px; border: 1px solid #80c9ff55; border-radius: 999px; color: #bfe5ff; background: #4e9bcc17; font: 700 9px var(--mono); letter-spacing: .07em; }
+.quick-guide-dialog { width: min(560px, calc(100vw - 28px)); }
+.quick-guide-dialog #quick-guide-copy { min-height: 4.5em; color: #c5d6e8; line-height: 1.65; }
+.quick-guide-progress { display: flex; justify-content: center; gap: 9px; margin: 18px 0; }
+.quick-guide-dot { width: 13px; height: 13px; padding: 0; border: 1px solid #90cfff77; border-radius: 50%; background: #90cfff21; cursor: pointer; }
+.quick-guide-dot.active { border-color: #c1e8ff; background: #88ceff; box-shadow: 0 0 12px #69c0ff88; }
+.quick-guide-dialog .empty-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+@media (max-width: 600px) { .phase-next-action { font-size: 10px; } .quick-guide-dialog .empty-actions .button { min-height: 42px; flex: 1 1 120px; } }
+
 /* Stronger page-level treatment: art, controls, and all existing choices stay intact. */
 #match-empty .lobby-hero {
   border-color: #91d4ff70;
@@ -158,3 +168,21 @@ dialog::backdrop { background: #020813c9; backdrop-filter: blur(5px); }
   .library-card:hover { border-color: #9ddaff; box-shadow: 0 18px 38px #020817a6, 0 0 25px #4aaeff2b; filter: brightness(1.08); }
   .saved-deck-card:hover, .deck-grid-card:hover { border-color: #9ddaff; box-shadow: 0 16px 34px #02081788, 0 0 22px #4aaeff20; }
 }
+
+/* Phase transitions are brief, non-blocking feedback layered above the table. */
+#phase-transition-flash {
+  position: fixed; z-index: 9998; top: 12%; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  min-width: min(300px, calc(100vw - 32px)); padding: 14px 28px;
+  border: 1px solid #a9dfff9c; border-radius: 14px;
+  background: linear-gradient(120deg, #0c1836ed, #204568ed, #171845ed);
+  box-shadow: 0 12px 42px #0009, 0 0 28px #67bdff3f; color: #f5faff;
+  pointer-events: none; text-align: center;
+}
+#phase-transition-flash[hidden] { display: none !important; }
+#phase-transition-flash small { color: #9bdcff; font: 700 9px var(--mono); letter-spacing: .2em; }
+#phase-transition-flash b { font: 800 clamp(20px, 3vw, 30px) var(--display); text-shadow: 0 0 20px #78caff77; }
+#phase-transition-flash.show { animation: phase-banner-in 1.05s cubic-bezier(.18,.82,.22,1) both; }
+@keyframes phase-banner-in { 0% { opacity: 0; translate: 0 -14px; scale: .94; } 16%,82% { opacity: 1; translate: 0 0; scale: 1; } 100% { opacity: 0; translate: 0 -5px; scale: .99; } }
+@media (max-width: 600px) { #phase-transition-flash { top: 9%; padding: 12px 20px; } }
+@media (prefers-reduced-motion: reduce) { #phase-transition-flash.show { animation: none; } }
