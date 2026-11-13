@@ -29,3 +29,25 @@ body.battlefield-expanded .table-column>.action-bar { position:static; margin:0;
 body.battlefield-expanded .table-column>.action-bar .button { min-height:34px; padding:5px 8px; }
 body.battlefield-expanded .table-column>.action-bar .action-buttons { max-height:18dvh; overflow:auto; }
 @media(max-width:600px) { .battlefield-tool { top:7px; padding:5px 8px; font-size:10px; } .battlefield-controls { left:7px; } .battlefield-fullscreen { right:7px; } .battlefield-controls-dialog { padding:15px; } body.battlefield-expanded .table-column>.action-bar .selected-summary { display:none; } }
+
+/* Keep damage cards readable at a glance; card zoom remains available for details. */
+.damage-track .damage-card { width: clamp(28px,3.5vw,40px); height: clamp(40px,5vw,56px); border-radius: 5px; }
+.damage-track .damage-total { font-size: 10px; font-weight: 700; }
+.guard-shield-summary { display: flex; flex-direction: column; gap: 3px; }
+.guard-battle-comparison { display: block; color: #d4e5ff; line-height: 1.4; }
+@media(max-width:760px) {
+  .damage-track .damage-card { width: 28px; height: 40px; }
+  .damage-track .damage-total { font-size: 9px; }
+}
+
+.damage-zone-view-button { min-width: 74px; min-height: 28px; padding: 5px 8px; border-color: #89bce977; background: #10213bd9; color: #dff1ff; font: 700 8px var(--mono); }
+.damage-zone-view-button:hover { border-color: #b4dcff; background: #19385b; }
+#damage-zone-dialog .damage-zone-entry { position: relative; }
+#damage-zone-dialog .damage-zone-face-down { display: grid; justify-items: center; align-content: center; min-height: 110px; }
+.damage-card-back { display: grid; place-items: center; width: 56px; aspect-ratio: 2/3; border: 1px solid #b9aaff; border-radius: 6px; background: linear-gradient(135deg,#3b3c59,#171a29); color: #fff; }
+
+/* Drag gestures are visual hints; every released action still uses the game action pipeline. */
+.field-card.is-attack-dragging { opacity: .55; }
+.field-zone.attack-drop-hover { outline: 3px solid #ffd27b; outline-offset: 2px; filter: drop-shadow(0 0 12px #ffd27b88); }
+.field-card.boost-drop-hover { outline: 3px solid #87d9ff; outline-offset: 2px; filter: drop-shadow(0 0 12px #63c8ff88); }
+@media(prefers-reduced-motion:reduce) { .field-zone.attack-drop-hover,.field-card.boost-drop-hover { filter: none; } }

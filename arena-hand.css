@@ -53,3 +53,54 @@ body.hand-menu-open { overflow:hidden; }
 @media(max-width:600px) { #match-layout #table-message { display:none; } #match-layout .center-divider { gap:6px; padding:6px; } #match-layout .center-phase-controls { gap:6px; } #center-phase-label { font-size:9px; } .hand-drawer-tools { flex-wrap:wrap; } }
 
 body.hand-menu-open #attack-arrow-layer { visibility:hidden!important; opacity:0!important; pointer-events:none!important; }
+/* Persistent hand tray: open in active matches, collapse to a compact header on demand. */
+body #hand-drawer.is-persistent {
+  z-index: 76; left: 50%; right: auto; bottom: max(8px,env(safe-area-inset-bottom));
+  width: min(1180px,calc(100vw - 28px)); height: min(36dvh,330px); min-height: 68px; max-height: 52dvh;
+  padding: 12px 18px 10px; opacity: 1; transform: translate(-50%,0); resize: vertical;
+  overflow: auto; background: linear-gradient(145deg,#12243cf4,#0a1228f5);
+  box-shadow: 0 -8px 34px #02071688,0 0 22px #7db5ff24,inset 0 1px #fff2;
+  transition: height .18s ease, opacity .18s ease;
+}
+body #hand-drawer.is-persistent.is-expanded { display: block; }
+body #hand-drawer.is-persistent.is-collapsed {
+  height: 64px; min-height: 64px; max-height: 64px; padding: 8px 14px; resize: none; overflow: hidden;
+}
+#hand-drawer.is-persistent .hand-heading { min-height: 38px; }
+#hand-drawer.is-persistent .hand-heading .eyebrow { margin-bottom: 1px; }
+#hand-drawer.is-persistent #hand-count { font-size: 17px; }
+#hand-drawer.is-persistent .hand-fan-hint { margin: 2px 0 5px; font-size: 10px; }
+#hand-drawer.is-persistent .hand-fan-scroll { max-height: calc(100% - 94px); }
+#hand-drawer.is-persistent #hand-cards { height: 200px; min-height: 200px; }
+#hand-drawer.is-persistent #hand-cards>.game-card-wrap { top: 16px; width: var(--hand-card-width,146px); height: calc(var(--hand-card-width,146px) * 1.46); }
+#hand-drawer.is-persistent .hand-management { padding-top: 6px; }
+#hand-drawer.is-collapsed .hand-fan-hint,
+#hand-drawer.is-collapsed .hand-fan-scroll,
+#hand-drawer.is-collapsed .hand-management { display: none; }
+#hand-drawer.is-persistent .hand-close-button { min-height: 34px; }
+.hand-launcher { position: relative; z-index: 75; }
+body.hand-menu-open { overflow: hidden; }
+@media(max-width:700px) {
+  body #hand-drawer.is-persistent {
+    left: 8px; right: 8px; bottom: max(8px,env(safe-area-inset-bottom)); width: auto;
+    height: min(32dvh,250px); max-height: 42dvh; padding: 10px 10px 8px;
+    transform: none; border-radius: 16px;
+  }
+  body #hand-drawer.is-persistent.is-collapsed { left: 8px; right: 8px; height: 60px; min-height: 60px; max-height: 60px; }
+  #hand-drawer.is-persistent .hand-heading { gap: 8px; }
+  #hand-drawer.is-persistent .hand-drawer-tools { gap: 6px; }
+  #hand-drawer.is-persistent .hand-fan-scroll { max-height: calc(100% - 78px); }
+  #hand-drawer.is-persistent #hand-cards { display: flex; width: max-content !important; min-width: 100%; height: 154px; min-height: 154px; gap: 8px; padding: 6px 4px; }
+  #hand-drawer.is-persistent #hand-cards>.game-card-wrap { position: relative; left: auto; top: auto; flex: 0 0 102px; width: 102px; height: 149px; transform: none !important; animation: none; }
+  #hand-drawer.is-persistent #hand-cards .game-card { animation: none; }
+  #hand-drawer.is-persistent .hand-management>.muted-text { display: none; }
+  #hand-drawer.is-persistent .hand-management .button { min-height: 34px; font-size: 10px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  body #hand-drawer.is-persistent { transition: none; }
+}
+
+/* Direct hand-to-circle placement uses the normal validated ride/call action. */
+#hand-cards .game-card-wrap.is-dragging { opacity: .55; }
+.field-zone.drop-target-hover { outline: 3px solid #9ed8ff; outline-offset: 2px; filter: drop-shadow(0 0 12px #69baff88); }
+@media(prefers-reduced-motion:reduce) { .field-zone.drop-target-hover { filter: none; } }
