@@ -74,5 +74,8 @@
       state.panel.classList.remove('has-card');
     });
   });
-  window.ArenaInspector = { setCatalog(cards) { catalog = new Map(cards.map(card => [card.id, card])); } };
+  window.ArenaInspector = {
+    setCatalog(cards) { catalog = new Map(cards.map(card => [card.id, card])); },
+    getCard(id) { return catalog.get(id) || null; }
+  };
 })();
