@@ -1,0 +1,61 @@
+/* Additive interaction feedback. Existing menus and buttons remain the primary controls. */
+.game-table.targeting-attack .field-card.attack-target-available {
+  z-index: 8;
+  cursor: crosshair;
+  outline: 3px solid #ffe275;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px #ffe2752e, 0 0 28px #ffd65fbd, 0 8px 22px #000a;
+  animation: attack-target-pulse 1.35s ease-in-out infinite alternate;
+}
+
+.guard-circle {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 92px;
+  padding: 5px;
+  border: 1px solid #e8d6a44a;
+  border-radius: 9px;
+  background: linear-gradient(145deg, #1d2230dd, #121720e8);
+}
+
+.guard-shield-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 6px;
+  color: #ffe5a9;
+  font: 700 9px var(--mono);
+}
+
+.guard-shield-summary small { color: #c2c8d8; font: 8px var(--font); }
+.guard-cards-list { display: flex; flex-wrap: wrap; gap: 3px; }
+.guard-card { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 3px; max-width: 100%; padding: 3px 5px; border: 1px solid #e8d6a455; border-radius: 5px; background: #e8d6a411; color: #f6f1e8; font-size: 8px; }
+.guard-card b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.guard-card small { color: #ffe5a9; font: 700 8px var(--mono); white-space: nowrap; }
+
+.game-table #human-guard-circle.guard-circle-active {
+  border-color: #8ce6c0;
+  box-shadow: 0 0 0 3px #8ce6c02b, 0 0 22px #61e3b366;
+}
+
+#table-message.message-change { animation: message-arrival .38s ease-out both; }
+#check-reveal-flash.flash, #check-reveal-flash.flash #check-reveal-art, #turn-order-flash.flash { animation-duration: 1.65s; }
+
+@keyframes attack-target-pulse { from { filter: brightness(1); } to { filter: brightness(1.35); } }
+@keyframes message-arrival { from { opacity: .35; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 760px) {
+  .game-table.targeting-attack .field-card.attack-target-available { outline-width: 2px; outline-offset: 1px; }
+  .guard-circle { min-width: 78px; padding: 4px; }
+  .guard-card { padding: 2px 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-table.targeting-attack .field-card.attack-target-available,
+  #table-message.message-change,
+  #check-reveal-flash.flash,
+  #check-reveal-flash.flash #check-reveal-art,
+  #turn-order-flash.flash { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}

@@ -693,7 +693,18 @@
   }
   function addLog(message) { if (!match) return; match.log.unshift({ time: new Date(), message }); match.log = match.log.slice(0, 15); renderLog(); }
   function renderLog() { if (!match) return; $("#match-log").innerHTML = match.log.map((entry) => `<div class="log-entry"><time>${entry.time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</time><span>${escapeHtml(entry.message)}</span></div>`).join(""); }
-  function setMessage(message) { $("#table-message").textContent = message; $("#table-message").hidden = Boolean(match && message === phases[match.phase] + " phase."); }
+  function setMessage(message) {
+    const element = $("#table-message");
+    if (!element) return;
+    const nextMessage = String(message || "");
+    if (element.textContent !== nextMessage) {
+      element.textContent = nextMessage;
+      element.classList.remove("message-change");
+      void element.offsetWidth;
+      element.classList.add("message-change");
+    }
+    element.hidden = Boolean(match && nextMessage === phases[match.phase] + " phase.");
+  }
   function updateOnlineChat() {
     window.VanguardTableChat?.controller?.setSession({
       role: online.role, sessionId: online.publicRoomCode || online.roomId || "",
@@ -731,6 +742,12 @@
     $("#human-order-zone").innerHTML = renderOrderCards(you.orders, "human"); $("#bot-order-zone").innerHTML = renderOrderCards(bot.orders, "bot"); $("#human-order-count").textContent=String(you.orders?.length||0); $("#bot-order-count").textContent=String(bot.orders?.length||0); $("#human-crest-zone").innerHTML = renderCrests(you.crests); $("#bot-crest-zone").innerHTML = renderCrests(bot.crests);
     $("#human-gzone").innerHTML = renderGZone(you, true); $("#bot-gzone").innerHTML = renderGZone(bot, false);
     $("#human-guard-circle").innerHTML = renderGuardCircle(you); $("#bot-guard-circle").innerHTML = renderGuardCircle(bot);
+    const humanGuardCircle = $("#human-guard-circle");
+    if (humanGuardCircle) {
+      const canReceiveGuard = Boolean(match.pendingAttack?.defenderSide === "human" && !match.pendingAttack.defenderDone && online.role !== "watcher");
+      humanGuardCircle.classList.toggle("guard-circle-active", canReceiveGuard);
+      humanGuardCircle.title = canReceiveGuard ? "Select a hand card and press Guard, or use the Guard button." : "Guardian Circle · committed shield appears here during a battle.";
+    }
     $("#gift-count").textContent = String(you.gifts || 0);
     $(".human-line .player-title small").textContent = `YOUR SIDE · G ${you.gZone?.length || 0} · QUICK SHIELD ${you.quickShields || 0} · PROTECT ${you.protectMarkers || 0}`;
     $(".opponent-line .player-title small").textContent = `${online.role ? "OPPONENT" : "DEMO DECK"} · G ${bot.gZone?.length || 0} · QUICK SHIELD ${bot.quickShields || 0} · PROTECT ${bot.protectMarkers || 0}`;
@@ -848,7 +865,21 @@
     $("#ride-deck-cost-cards").innerHTML = player.hand.map(item => { const card = cardMap.get(item.cardId); return card ? `<button class="zone-view-card${state.costUid === item.uid ? " selected" : ""}" type="button" data-ride-deck-cost="${escapeHtml(item.uid)}">${cardImage(card)}<b>${escapeHtml(card.name)}</b><small>${state.costUid === item.uid ? "Selected · discard" : "Choose as cost"}</small></button>` : ""; }).join("") || '<p class="zone-empty-message">You need a card in hand to pay the ride cost.</p>';
     $("#ride-deck-cost-confirm").disabled = !state.costUid || !player.hand.some(item => item.uid === state.costUid); if ($("#ride-deck-dialog").open) $("#ride-deck-dialog").close(); if (!$("#ride-deck-cost-dialog").open) $("#ride-deck-cost-dialog").showModal();
   }
-  function renderGuardCircle(player) { const side=player===match?.players?.human?"human":"bot"; return (player.guardCircle || []).map((instance) => { const c = cardMap.get(instance.cardId); return c ? `<span class="zone-card guard-card" title="${escapeHtml(c.name)} · ${effectiveShieldValue(instance,side).toLocaleString()} shield">${escapeHtml(c.name)}</span>` : ""; }).join("") || '<span class="zone-empty">Empty</span>'; }
+  function renderGuardCircle(player) {
+    const side = player === match?.players?.human ? "human" : "bot";
+    const guards = player.guardCircle || [];
+    const shield = guards.reduce((total, instance) => total + effectiveShieldValue(instance, side), 0);
+    const attack = match?.pendingAttack?.defenderSide === side ? match.pendingAttack : null;
+    const needed = attack ? Number(attack.power || 0) - Number(attack.targetPower || 0) - shield : null;
+    const status = !attack ? `${guards.length} committed` : attack.perfectGuard || needed <= 0 ? "Attack stopped" : `${needed.toLocaleString()} more needed`;
+    const cards = guards.map(instance => {
+      const card = cardMap.get(instance.cardId);
+      if (!card) return "";
+      const value = effectiveShieldValue(instance, side);
+      return `<span class="guard-card" title="${escapeHtml(card.name)} · ${value.toLocaleString()} shield"><b>${escapeHtml(card.name)}</b><small>+${value.toLocaleString()}</small></span>`;
+    }).join("");
+    return `<span class="guard-shield-summary"><b>${shield.toLocaleString()} shield</b><small>${escapeHtml(status)}</small></span><span class="guard-cards-list">${cards || '<span class="zone-empty">No cards committed</span>'}</span>`;
+  }
   function renderCrests(crests = []) {
     return (crests || []).map((item) => {
       const card = cardMap.get(item.cardId);
@@ -907,7 +938,7 @@
     }
     if(field?.side==="human"&&eligibleActivatedAbilities(field).length)actions.push(["open-skills","Activate skill"]);
     $("#context-menu-title").textContent = card.name;
-    $("#context-menu-help").textContent = hand ? "Choose what to do with this card." : field?.zone === "vanguard" ? "Vanguard actions" : "Field card actions";
+    $("#context-menu-help").textContent = hand ? "Choose what to do with this card. The hand stays open after the action." : `${field?.zone === "vanguard" ? "Vanguard actions" : "Field card actions"} · right-click to rest or stand on desktop; this menu works with touch and controller navigation.`;
     $("#context-menu-actions").innerHTML = actions.map(([action, label]) => `<button class="button" type="button" data-context-action="${escapeHtml(action)}">${escapeHtml(label)}</button>`).join("");
     if (!$("#context-menu-dialog").open) $("#context-menu-dialog").showModal();
   }
@@ -1344,6 +1375,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }
   function renderAttackPrompt() {
     const panel = $("#attack-choice-panel"), setup = match?.pendingAttackSetup, attack = match?.pendingAttack;
+    $$(".game-table .field-card.attack-target-available").forEach(card => card.classList.remove("attack-target-available"));
+    $(".game-table")?.classList.remove("targeting-attack");
     if (!panel) return;
     if (attack?.driveCountPrompt && attack.attackerSide === "human" && online.role !== "watcher") {
       $("#attack-choice-title").textContent = "Choose the number of drive checks";
@@ -1376,6 +1409,14 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       });
     }
     $("#attack-choice-buttons").innerHTML = choices.map((choice) => `<button class="button button-primary" type="button" data-attack-choice="${escapeHtml(choice.value)}">${escapeHtml(choice.label)}</button>`).join("");
+    if (setup.stage === "target") {
+      const defenderSide = setup.defenderSide || flipSide(setup.attackerSide);
+      const targetIds = new Set(choices.filter(choice => choice.value.startsWith("target:")).map(choice => choice.value.slice(choice.value.lastIndexOf(":") + 1)));
+      $(".game-table")?.classList.add("targeting-attack");
+      $$(".game-table .field-card[data-field-uid]").forEach(card => {
+        if (card.dataset.side === defenderSide && targetIds.has(card.dataset.fieldUid)) card.classList.add("attack-target-available");
+      });
+    }
     panel.hidden = false;
   }
   function renderBattleActionPrompt() {
@@ -1540,7 +1581,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       flash.hidden = true;
       flash.classList.remove("flash");
       online.turnOrderAnnouncementTimer = null;
-    }, 1150);
+    }, 1650);
   }
   function renderCheckReveal() {
     const panel = $("#check-reveal-flash");
@@ -1553,7 +1594,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     $("#check-reveal-label").textContent = `${match.players[reveal.side]?.name || "A player"} · ${({ damage: "Damage check", trigger: "Trigger check", drive: "Drive check" })[reveal.checkName] || "Card revealed"}`;
     $("#check-reveal-card").innerHTML = card ? `${cardImage(card, "check-reveal-art")}<b>${escapeHtml(card.name)}</b>` : "Card revealed";
     panel.hidden = false; panel.classList.remove("flash"); void panel.offsetWidth; panel.classList.add("flash");
-    checkRevealTimer = setTimeout(() => { panel.hidden = true; panel.classList.remove("flash"); activeCheckRevealId = null; checkRevealTimer = null; renderCheckReveal(); }, 1150);
+    checkRevealTimer = setTimeout(() => { panel.hidden = true; panel.classList.remove("flash"); activeCheckRevealId = null; checkRevealTimer = null; renderCheckReveal(); }, 1650);
   }  function beginTriggerResolution(side, instance, checkName) {
     queueCheckReveal(side, instance, checkName);
     const kind = triggerKind(instance); if (!kind) return false;
@@ -3076,6 +3117,27 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#stride-cost-confirm").addEventListener("click",()=>performManualAction("stride-confirm"));
   ["#stride-cost-cancel","#stride-cost-cancel-button"].forEach((selector)=>$(selector).addEventListener("click",()=>performManualAction("stride-cancel")));
   $("#attack-choice-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
+  $(".game-table").addEventListener("click", event => {
+    const target = event.target.closest(".field-card.attack-target-available[data-field-uid]");
+    const setup = match?.pendingAttackSetup;
+    if (!target || event.target.closest("[data-card-zoom]") || setup?.stage !== "target" || online.role === "watcher") return;
+    const value = `target:${target.dataset.zone}:${target.dataset.fieldUid}`;
+    const legal = Array.from($$("#attack-choice-buttons [data-attack-choice]")).some(button => button.dataset.attackChoice === value);
+    if (!legal) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    performManualAction(`attack-choice:${value}`);
+  }, true);
+  $(".game-table").addEventListener("contextmenu", event => {
+    if (!window.matchMedia?.("(hover: hover) and (pointer: fine)").matches) return;
+    const card = event.target.closest(".field-card[data-side='human'][data-field-uid]");
+    if (!card || event.target.closest("[data-card-zoom]") || !match || online.role === "watcher" || match.ended || match.side !== "human" || match.pendingAttack || match.pendingAttackSetup || match.pendingAbility || match.pendingAbilities?.length || match.pendingTrigger) return;
+    const field = findFieldCard(card.dataset.fieldUid);
+    if (!field || field.side !== "human") return;
+    event.preventDefault();
+    match.selected = field.instance.uid;
+    performManualAction(field.instance.rested ? "stand-selected" : "rest-selected");
+  });
   $("#battle-action-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-battle-action]");if(!button)return;const action=button.dataset.battleAction;if(action==="guard")openGuardHand();else if(action==="g-guard"||action==="intercept")performManualAction(action);else performOnlineAction(action);});
   window.addEventListener("resize",renderAttackArrow);
   $("#protect-discard-list").addEventListener("click",(e)=>{const button=e.target.closest("[data-protect-cost]");if(!button)return;const marker=$("#protect-discard-dialog").dataset.markerUid;$("#protect-discard-dialog").close();performManualAction(`guard-perfect:${marker}:${button.dataset.protectCost}`);});
