@@ -22,8 +22,14 @@
   let defense = { active: false, canFinish: false };
   const done = document.querySelector("#hand-done-guarding");
   const hint = drawer.querySelector(".hand-fan-hint");
+  const handTools = drawer.querySelector(".hand-drawer-tools");
+  const launcher = opener.closest(".hand-launcher");
   const normalHint = hint.textContent;
   const preferenceKey = "vanguard-hand-tray-expanded";
+
+  // Keep one hand control: it lives in the tray header and toggles the tray open/collapsed.
+  if (handTools && opener.parentElement !== handTools) handTools.prepend(opener);
+  launcher?.remove();
 
   function readExpandedPreference() {
     try {
@@ -42,7 +48,7 @@
     const items = [...cards.querySelectorAll(".game-card-wrap")];
     const count = items.length;
     document.querySelector("#hand-button-count").textContent = String(count);
-    opener.setAttribute("aria-label", `Hand, ${count} card${count === 1 ? "" : "s"}`);
+    opener.setAttribute("aria-label", `${expanded ? "Collapse" : "Expand"} hand, ${count} card${count === 1 ? "" : "s"}`);
     if (drawer.hidden || !expanded) return;
     const width = cards.parentElement.clientWidth;
     const cardWidth = width < 600 ? 138 : 182;
@@ -79,7 +85,12 @@
     scrim.hidden = !modal;
     document.body.classList.toggle("hand-menu-open", modal);
     closer.setAttribute("aria-label", modal ? "Close hand" : persistent && expanded ? "Collapse hand" : "Expand hand");
-    closer.innerHTML = persistent && !modal ? (expanded ? 'Collapse <span aria-hidden="true">⌄</span>' : 'Expand <span aria-hidden="true">⌃</span>') : 'Close <span aria-hidden="true">×</span>';
+    closer.hidden = persistent && !modal;
+    closer.innerHTML = 'Close <span aria-hidden="true">×</span>';
+    opener.hidden = modal;
+    opener.title = expanded ? "Collapse hand" : "Expand hand";
+    const arrow = opener.querySelector(".hand-button-arrow");
+    if (arrow) arrow.textContent = expanded ? "⌄" : "⌃";
     if (done) { done.hidden = !guarding; done.disabled = !defense.canFinish; }
     hint.textContent = guarding ? "Select cards to guard with, then choose Done guarding. Closing this hand does not finish your defense." : normalHint;
     scheduleLayout();
