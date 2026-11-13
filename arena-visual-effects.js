@@ -88,7 +88,7 @@
     animation.onfinish = () => ghost.remove(); animation.oncancel = () => ghost.remove();
   }
   function effectAt(element, name) { if (element) transientClass(element, name, 720); }
-  function animateDraw(side, origin, uid, sequence = 0) {
+  function animateDraw(side, origin, uid, sequence = 0, cardDefinition = null) {
     const destination = side === "human"
       ? document.querySelector("#open-hand")
       : document.querySelector(".opponent-hand-row");
@@ -104,8 +104,8 @@
       ? document.querySelector(`#hand-cards [data-hand-uid="${CSS.escape(String(uid))}"] .game-card`)
       : null;
     const sourceImage = handCard?.querySelector(".card-art img");
-    const cardName = handCard?.querySelector(".card-name")?.textContent?.trim() || sourceImage?.alt || "Drawn card";
-    const imageSrc = sourceImage?.getAttribute("src") || "";
+    const cardName = cardDefinition?.name || handCard?.querySelector(".card-name")?.textContent?.trim() || sourceImage?.alt || "Drawn card";
+    const imageSrc = cardDefinition?.image || sourceImage?.getAttribute("src") || "";
     const width = isOwnerDraw ? Math.min(168, Math.max(122, window.innerWidth * .36)) : 46;
     const height = isOwnerDraw ? width * 1.46 : 66;
     const startX = origin.left + (origin.width - width) / 2;
@@ -221,7 +221,12 @@
     let drawSequence = 0;
     for (const [uid, was] of previous.locations) {
       const now = current.locations.get(uid);
-      if (was?.zone === "deck" && now?.zone === "hand" && was.side === now.side) animateDraw(now.side, deckOrigins.get(now.side), uid, drawSequence++);
+      if (was?.zone === "deck" && now?.zone === "hand" && was.side === now.side) {
+        const card = now.side === "human"
+          ? window.ArenaInspector?.getCard?.(match.players?.human?.hand?.find(instance => instance.uid === uid)?.cardId)
+          : null;
+        animateDraw(now.side, deckOrigins.get(now.side), uid, drawSequence++, card);
+      }
     }
 
     for (const node of currentNodes) {
