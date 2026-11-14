@@ -304,8 +304,10 @@ dialog.ride-choice-dialog::backdrop { background: #020611f5; }
 .ride-choice-card b { font-size: .88rem; line-height: 1.2; }
 .ride-choice-card small { color: #b6cce1; font-size: .76rem; }
 .ride-choice-empty { grid-column: 1/-1; margin: 0; padding: 22px; color: #b8cee4; text-align: center; }
-.ride-choice-footer { display: flex; align-items: center; justify-content: center; gap: 20px; padding-top: 12px; border-top: 1px solid #6dcfff42; }
+.ride-choice-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-top: 12px; border-top: 1px solid #6dcfff42; }
 .ride-choice-footer p { margin: 0; color: #aac1d8; }
+.ride-choice-footer-actions { display: flex; align-items: center; gap: 10px; }
+.ride-choice-footer-actions > .button[hidden] { display: none !important; }
 .ride-choice-footer .button { min-width: 160px; min-height: 48px; font-size: 1rem; font-weight: 800; }
 @keyframes ride-choice-enter { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: scale(1); } }
 @media (max-width:760px) {
@@ -322,6 +324,7 @@ dialog.ride-choice-dialog::backdrop { background: #020611f5; }
   .ride-choice-card small { font-size: .68rem; }
   .ride-choice-footer { flex-direction: column; gap: 8px; padding-top: 8px; }
   .ride-choice-footer p { font-size: .78rem; text-align: center; }
-  .ride-choice-footer .button { width: min(100%,360px); min-height: 44px; }
+  .ride-choice-footer-actions { width: min(100%,520px); justify-content: center; gap: 8px; }
+  .ride-choice-footer .button { flex: 1 1 0; width: auto; max-width: 260px; min-width: 0; min-height: 44px; padding-inline: 8px; font-size: .88rem; }
 }
 @media (prefers-reduced-motion: reduce) { dialog.ride-choice-dialog[open],.ride-choice-card { animation: none; transition: none; } }
