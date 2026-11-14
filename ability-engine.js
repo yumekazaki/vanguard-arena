@@ -4883,6 +4883,11 @@
         if(command==="g-assist-ride-bind"&&(pending.stage!=="bind"||typeof uid!=="string"||!(actor.hand||[]).some(card=>card?.uid===uid)))return{ok:false,reason:"invalid-ride-assist-bind-selection"};
         if(command==="g-assist-ride-bind-finish"&&(pending.stage!=="bind"||!Array.isArray(pending.bindUids)||pending.bindUids.length!==2||new Set(pending.bindUids).size!==2||pending.bindUids.some(cardUid=>!(actor.hand||[]).some(card=>card?.uid===cardUid))))return{ok:false,reason:"invalid-ride-assist-bind-cost"};
       }
+      if(command==="zone-move"&&args[0]==="damage"){
+        const [source,choice,uid]=args;
+        const resolutionPending=["pendingAbility","pendingAbilities","pendingTrigger","pendingAttack","pendingAttackSetup","pendingBattleEnd","pendingTurnEnd","pendingDamageQueue","pendingHitResolution","pendingDecision","pendingRide","pendingRideAssist","pendingStride","pendingGAssist","pendingProtectGuard","pendingCrest","pendingEnd","pendingOver"].some(key=>Array.isArray(state[key])?state[key].length>0:Boolean(state[key]));
+        if(source!=="damage"||!["hand","drop"].includes(choice)||typeof uid!=="string"||!(actor.damage||[]).some(card=>card?.uid===uid)||resolutionPending)return{ok:false,reason:"invalid-damage-zone-move"};
+      }
       if(command==="drive-increase"||command==="drive-decrease"){
         const target=typeof request.selected==="string"?locateCardInstance(state,request.selected):null;
         if(state.side!==actorSide||!target||target.ambiguous||target.side!==actorSide||!(["vanguard","rear-guard"].includes(target.zone))||state.pendingAttack||state.pendingAttackSetup||state.pendingAbility||(state.pendingAbilities||[]).length||state.pendingTrigger||state.pendingRideAssist)return{ok:false,reason:"invalid-drive-modifier-target"};
