@@ -18,14 +18,14 @@ function boot(saved = null) {
 }
 
 const safeStand = { side: "human", isLocalTurn: true, phase: 0, ended: false, pendingDecision: false, hasLegalDecision: false };
-test("phase assistance is opt-in and remembers the player's selection", () => {
+test("safe automatic progression is the default and manual mode is remembered", () => {
   const ui = boot();
-  assert.equal(ui.assist.getMode(), "manual");
-  assert.equal(ui.assist.shouldAdvance(safeStand), false);
-  ui.select.value = "assisted";
-  ui.select.listeners.change({ currentTarget: ui.select });
-  assert.equal(ui.store.get("vanguard-phase-progression"), "assisted");
+  assert.equal(ui.assist.getMode(), "assisted");
   assert.equal(ui.assist.shouldAdvance(safeStand), true);
+  ui.select.value = "manual";
+  ui.select.listeners.change({ currentTarget: ui.select });
+  assert.equal(ui.store.get("vanguard-phase-progression"), "manual");
+  assert.equal(ui.assist.shouldAdvance(safeStand), false);
 });
 
 test("assisted progression waits for every pending prompt and legal player choice", () => {
@@ -45,7 +45,19 @@ test("Draw may auto-advance only after its draw when G Assist and skills are una
   assert.equal(assist.shouldAdvance({ ...draw, hasLegalDecision: true }), false);
 });
 
-test("Riding, Striding, Main, Battle, and End always remain player-controlled", () => {
+test("Ride and Stride auto-continue only when no legal choice exists", () => {
   const assist = boot("assisted").assist;
-  for (const phase of [2, 3, 4, 5, 6]) assert.equal(assist.shouldAdvance({ ...safeStand, phase, drewThisTurn: true }), false);
+  assert.equal(assist.shouldAdvance({ ...safeStand, phase: 2, canRide: false }), true);
+  assert.equal(assist.shouldAdvance({ ...safeStand, phase: 2, canRide: true }), false);
+  assert.equal(assist.shouldAdvance({ ...safeStand, phase: 3, canStride: false }), true);
+  assert.equal(assist.shouldAdvance({ ...safeStand, phase: 3, canStride: true }), false);
+  assert.equal(assist.shouldAdvance({ ...safeStand, phase: 2, canRide: false, pendingDecision: true }), false);
+});
+
+test("Main and Battle stay player-controlled; End only passes when explicitly safe", () => {
+  const assist = boot("assisted").assist;
+  for (const phase of [4, 5]) assert.equal(assist.shouldAdvance({ ...safeStand, phase }), false);
+  assert.equal(assist.shouldAdvance({ ...safeStand, phase: 6 }), false);
+  assert.equal(assist.shouldAdvance({ ...safeStand, phase: 6, safeToEndTurn: true }), true);
+  assert.equal(assist.shouldAdvance({ ...safeStand, phase: 6, safeToEndTurn: true, hasLegalDecision: true }), false);
 });

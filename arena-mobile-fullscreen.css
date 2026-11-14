@@ -45,7 +45,7 @@ body.mobile-mode.battlefield-expanded #battle-action-buttons .button {
 
 /* Guard opens the hand tray; the underlying decision must not cover that tray. */
 body.mobile-mode.battlefield-expanded.hand-menu-open #attack-choice-panel,
-body.mobile-mode.battlefield-expanded.hand-menu-open #battle-action-panel {
+body.mobile-mode.battlefield-expanded.hand-menu-open #battle-action-panel:not([data-prompt-kind="finish-attack"]) {
   visibility:hidden;
   pointer-events:none;
 }

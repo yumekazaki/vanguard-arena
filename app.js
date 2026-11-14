@@ -735,14 +735,46 @@
     ];
     return sources.some(source => source && eligibleActivatedAbilities(source).length > 0);
   }
+  function hasLegalRideChoice(side = "human") {
+    const player = match?.players?.[side];
+    if (!player || match.side !== side || match.phase !== 2 || match.ridePerformed || !player.vanguard) return false;
+    const currentGrade = gradeOf(cardMap.get(player.vanguard.cardId));
+    const canRide = instance => {
+      const card = cardMap.get(instance?.cardId), grade = gradeOf(card);
+      return isUnitCard(card) && card.gDeckCard !== true && instance?.gDeckCard !== true &&
+        Number.isInteger(grade) && grade >= currentGrade && grade <= currentGrade + 1 &&
+        window.VanguardAbilityEngine.canRideCard(card, {
+          vanguardCard: cardMap.get(player.vanguard.cardId),
+          crests: (player.crests || []).map(crest => cardMap.get(crest.cardId))
+        });
+    };
+    if ((player.hand || []).some(canRide)) return true;
+    return player.format === "standard" && (player.hand || []).length > 0 && (player.rideDeck || []).some(canRide);
+  }
+  function hasLegalStrideChoice(side = "human") {
+    const player = match?.players?.[side];
+    if (!player || player.format === "standard" || match.side !== side || match.phase !== 3 || match.stridePerformed ||
+        !canStrideForSide(side, match.turnStartGrades?.[side])) return false;
+    const faceDownStrides = (player.gDeck || []).filter(instance => instance?.faceUp !== true && isStrideUnit(cardMap.get(instance.cardId)));
+    if (!faceDownStrides.length) return false;
+    const vanguardName = cardMap.get(player.vanguard?.cardId)?.name;
+    const heartName = cardMap.get(player.vanguard?.strideHeart?.cardId)?.name;
+    return faceDownStrides.some(instance => {
+      const card = cardMap.get(instance.cardId);
+      if (/Ultimate\s+Stride/i.test(String(card?.text || ""))) {
+        return (player.hand || []).some(item => [vanguardName, heartName].includes(cardMap.get(item.cardId)?.name));
+      }
+      return (player.hand || []).reduce((total, item) => total + strideGrade(item, true), 0) >= 3;
+    });
+  }
   function assistedPhaseContext() {
     if (!match) return null;
     const hasPendingChoice = Boolean(match.preMatch || match.practiceOpeningChoicePending || match.pendingAbility || match.pendingAbilities?.length || match.pendingTrigger || match.pendingAttack || match.pendingAttackSetup || match.pendingBattleEnd || match.pendingTurnEnd || match.pendingRide || match.pendingStride || match.pendingGAssist || match.pendingProtectGuard || match.pendingCrest || match.revealed?.cards?.length || match.pendingDamageQueue?.length || online.remoteRequestPending || $("#context-menu-dialog")?.open || document.querySelector("dialog[open]"));
     const hasLegalDecision = hasLegalManualAbility("human") || (match.phase === 1 && canGAssist(match.players.human));
-    return { side: match.side, isLocalTurn: match.side === "human" && online.role !== "watcher", phase: match.phase, ended: match.ended, pendingDecision: hasPendingChoice, hasLegalDecision, drewThisTurn: match.drewThisTurn === true, canGAssist: match.phase === 1 && canGAssist(match.players.human) };
+    return { side: match.side, isLocalTurn: match.side === "human" && online.role !== "watcher", phase: match.phase, ended: match.ended, pendingDecision: hasPendingChoice, hasLegalDecision, drewThisTurn: match.drewThisTurn === true, canGAssist: match.phase === 1 && canGAssist(match.players.human), canRide: match.phase === 2 && hasLegalRideChoice("human"), canStride: match.phase === 3 && hasLegalStrideChoice("human"), safeToEndTurn: match.phase === phases.length - 1 && !hasPendingChoice && !hasLegalDecision };
   }
   function scheduleAssistedPhaseAdvance() {
-    if (!match || window.VanguardPhaseAssist?.getMode() !== "assisted" || ![0, 1].includes(match.phase)) {
+    if (!match || window.VanguardPhaseAssist?.getMode() !== "assisted" || ![0, 1, 2, 3, 6].includes(match.phase)) {
       if (phaseAutoTimer) clearTimeout(phaseAutoTimer);
       phaseAutoTimer = null; phaseAutoKey = null;
       return;
@@ -781,14 +813,16 @@
     $("#opponent-deck-label").textContent = online.role ? "OPPONENT" : "DEMO DECK";
     $("#turn-label").textContent = match.side === "human" ? "YOUR TURN" : "OPPONENT TURN";
     $("#phase-label").textContent = match.side === "human" ? `${phases[match.phase]} phase` : `Practice Bot · ${phases[match.phase]} phase`;
+    const canRideChoice = match.phase === 2 && hasLegalRideChoice("human"), canStrideChoice = match.phase === 3 && hasLegalStrideChoice("human");
+    const automaticProgression = window.VanguardPhaseAssist?.getMode() === "assisted";
     const phaseHints = [
-      "Stand phase · resolve any prompts, then continue.",
-      match.drewThisTurn ? "Draw complete · resolve prompts, then continue to Ride." : "Draw phase · complete the required draw and any prompts.",
-      "Ride phase · ride if you choose and meet the rules; otherwise continue.",
-      "Stride phase · stride if eligible, or continue to Main.",
-      "Main phase · call units, use ACT skills, or move to Battle.",
+      "Stand phase · eligible units stand automatically; resolve any effects.",
+      match.drewThisTurn ? "Draw complete · resolve prompts, then continue to Ride." : "Draw phase · the required draw and its prompts resolve automatically.",
+      canRideChoice ? "Ride phase · choose a legal ride, or continue without riding." : automaticProgression ? "Ride phase · no legal ride available; continuing automatically." : "Ride phase · no legal ride available; continue when ready.",
+      canStrideChoice ? "Stride phase · choose a legal Stride, or continue without Striding." : automaticProgression ? "Stride phase · no legal Stride available; continuing automatically." : "Stride phase · no legal Stride available; continue when ready.",
+      "Main phase · call units, use ACT skills, and proceed to Battle when ready.",
       "Battle phase · finish attacks, guards, checks, and effect prompts before ending Battle.",
-      "End phase · resolve end-of-turn prompts before passing the turn."
+      "End phase · resolve end-of-turn prompts; the turn passes automatically when complete."
     ];
     $("#phase-next-action").textContent = match.side === "human"
       ? (phaseHints[match.phase] || "Resolve any prompt directed to you.")
@@ -876,7 +910,7 @@
     if (forceCrit) effectLabels.push(`+${forceCrit} CRITICAL · FORCE II`);
     const effectTag = effectLabels.length ? `<span class="turn-effect-badge">${escapeHtml(effectLabels.join(" · "))}</span>` : "";
     const shieldLabel = c.shield === null || c.shield === undefined ? "Unknown" : Number(c.shield) > 0 ? Number(c.shield).toLocaleString() : "—";
-    const field = document.createElement("div"); field.draggable = side === "human"; field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; const powerBreakdown = [`base ${Number(c.power || 0).toLocaleString()}`, heartPower ? `+${heartPower.toLocaleString()} heart` : "", Number(instance.powerBoost || 0) ? `+${Number(instance.powerBoost).toLocaleString()} persistent` : "", turnPower ? `${turnPower > 0 ? "+" : ""}${turnPower.toLocaleString()} temporary until end of turn` : "", continuousPower ? `+${continuousPower.toLocaleString()} continuous ability` : "", forcePower ? `+${forcePower.toLocaleString()} Force I for this turn` : "", guardPower ? `+${guardPower.toLocaleString()} guard shield for this attack` : ""].filter(Boolean).join(" · "); field.title = `${c.name}${heartPower ? ` · Heart: ${cardMap.get(instance.strideHeart.cardId)?.name || "Grade 3"}` : ""}\nPower: ${effectivePowerLabel}${effectiveCrit > 1 ? ` · ${effectiveCrit} critical` : ""} · Printed ${c.power === null || c.power === undefined ? "unknown" : Number(c.power).toLocaleString()} power · ${c.trigger || "No trigger"}\nShield: ${shieldLabel}\n${powerBreakdown}`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade === null || c.grade === undefined ? "?" : c.grade}`}</span>${effectTag}${guardPower ? `<span class="turn-effect-badge">+${guardPower.toLocaleString()} GUARD</span>` : ""}<span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${effectivePowerLabel}</b><span>${effectiveCrit} CRIT</span><small>SHIELD ${shieldLabel}</small></span>`;
+    const field = document.createElement("div"); field.draggable = side === "human"; field.tabIndex = 0; field.setAttribute("role", "group"); field.setAttribute("aria-label", `${c.name}, ${zone}, ${effectivePowerLabel} power, ${effectiveCrit} critical`); field.className = `field-card${match.selected === instance.uid ? " selected" : ""}${instance.rested ? " rested" : ""}${instance.locked ? " locked" : ""}`; field.dataset.fieldUid = instance.uid; field.dataset.cardId = c.id; field.dataset.side = side; field.dataset.zone = zone; field.style.borderColor = `${c.color}88`; const powerBreakdown = [`base ${Number(c.power || 0).toLocaleString()}`, heartPower ? `+${heartPower.toLocaleString()} heart` : "", Number(instance.powerBoost || 0) ? `+${Number(instance.powerBoost).toLocaleString()} persistent` : "", turnPower ? `${turnPower > 0 ? "+" : ""}${turnPower.toLocaleString()} temporary until end of turn` : "", continuousPower ? `+${continuousPower.toLocaleString()} continuous ability` : "", forcePower ? `+${forcePower.toLocaleString()} Force I for this turn` : "", guardPower ? `+${guardPower.toLocaleString()} guard shield for this attack` : ""].filter(Boolean).join(" · "); field.title = `${c.name}${heartPower ? ` · Heart: ${cardMap.get(instance.strideHeart.cardId)?.name || "Grade 3"}` : ""}\nPower: ${effectivePowerLabel}${effectiveCrit > 1 ? ` · ${effectiveCrit} critical` : ""} · Printed ${c.power === null || c.power === undefined ? "unknown" : Number(c.power).toLocaleString()} power · ${c.trigger || "No trigger"}\nShield: ${shieldLabel}\n${powerBreakdown}`; field.innerHTML = `${c.image ? `<img class="field-card-art" src="${escapeHtml(c.image)}" alt="" onerror="this.remove()">` : ""}<button class="card-zoom field-card-zoom" type="button" data-card-zoom="${escapeHtml(c.id)}" aria-label="Zoom ${escapeHtml(c.name)}" title="Zoom card">⤢</button><span class="mini-grade">${instance.locked ? "LOCKED" : `G${c.grade === null || c.grade === undefined ? "?" : c.grade}`}</span>${effectTag}${guardPower ? `<span class="turn-effect-badge">+${guardPower.toLocaleString()} GUARD</span>` : ""}<span class="field-card-name">${escapeHtml(c.name)}</span><span class="field-card-stats"><b>${effectivePowerLabel}</b><span>${effectiveCrit} CRIT</span><small>SHIELD ${shieldLabel}</small></span>`;
     if (c.image) { field.style.backgroundImage = `linear-gradient(#1118,#111c),url("${String(c.image).replace(/["\\]/g, "")}")`; field.style.backgroundSize = "cover"; }
     el.appendChild(field);
   }
@@ -1046,7 +1080,7 @@ function openDamageZone(side="human") {
     if(gGuardButton){gGuardButton.hidden=!defending;gGuardButton.disabled=!canAct;}
     const driveButton=$("[data-manual-action='drive-check']");if(driveButton){driveButton.disabled=true;driveButton.hidden=true;}
     $("#end-turn").disabled = !canAct;
-    $("#advance-phase").disabled = !canAct;
+    $("#advance-phase").disabled = !canAct || !canUseCenterPhase();
     $("#center-phase-label").textContent = phases[match.phase] + " phase";
     $("#center-next-phase").disabled = !canUseCenterPhase();
     window.VanguardHand?.syncDefense(handDefenseState());
@@ -1073,7 +1107,9 @@ function openDamageZone(side="human") {
     Object.keys(contextualActions).forEach((action) => $$(`.selected-card-actions [data-manual-action="${action}"]`).forEach((button) => { button.hidden = action === "selected-to-soul" && onHumanField && fieldCard.zone === "vanguard"; }));
     $("#manual-selection-help").textContent = onHumanHand ? "Hand card selected · choose where to move or play it." : onHumanField ? `${fieldCard.zone === "vanguard" ? "Vanguard" : "Rear-Guard"} selected · choose a card action.` : "Select a card on your hand or field to see its actions.";
     const nextPhase = match.players.human.format === "standard" && match.phase === 2 ? 4 : match.phase + 1;
-    $("#advance-phase").innerHTML = match.phase === phases.length - 1 ? `End turn <span>→</span>` : `Continue ${phases[nextPhase].toLowerCase()} phase <span>→</span>`;
+    const progressionLabel = match.phase === 4 ? "Proceed to Battle" : match.phase === 5 ? "End Battle Phase" : match.phase === phases.length - 1 ? "End turn" : match.phase === 2 && hasLegalRideChoice("human") ? "Continue without riding" : match.phase === 3 && hasLegalStrideChoice("human") ? "Continue without Striding" : `Continue to ${phases[nextPhase]}`;
+    $("#advance-phase").innerHTML = `${progressionLabel} <span>→</span>`;
+    $("#center-next-phase").innerHTML = `${progressionLabel} <span>→</span>`;
     if (match.selected) {
       const cardId = handCard?.cardId || fieldCard?.instance.cardId; const c = cardMap.get(cardId);
       $("#selection-hint").textContent = c ? `${c.name} · G${c.grade}` : "Selected";
@@ -1512,7 +1548,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function renderBattleActionPrompt() {
     const panel = $("#battle-action-panel"), attack = match?.pendingAttack, choicePanel = $("#attack-choice-panel");
     if (!panel) return;
-    if (!attack || attack.finishing || match.pendingAbility || match.pendingTrigger || match.pendingBattleEnd || match.pendingHitResolution || (match.pendingDamageQueue || []).length) { panel.hidden = true; return; }
+    if (!attack || attack.finishing || match.pendingAbility || match.pendingTrigger || match.pendingBattleEnd || match.pendingHitResolution || (match.pendingDamageQueue || []).length) { panel.dataset.promptKind = ""; panel.hidden = true; return; }
     const buttons = $("#battle-action-buttons");
     let title = "", help = "", actions = [];
     if (attack.defenderSide === "human" && !attack.defenderDone && !attack.driveCountPrompt) {
@@ -1533,9 +1569,11 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       title = "Waiting for defense";
       help = "The defending player is choosing whether and how to guard.";
     } else {
+      panel.dataset.promptKind = "";
       panel.hidden = true;
       return;
     }
+    panel.dataset.promptKind = actions.some(item => item.id === "finishAttack") ? "finish-attack" : "battle-decision";
     $("#battle-action-title").textContent = title;
     $("#battle-action-help").textContent = help;
     buttons.innerHTML = actions.map(item => '<button class="button button-primary" type="button" data-battle-action="' + item.id + '">' + item.label + '</button>').join("");
@@ -1614,7 +1652,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     const attack = match?.pendingAttack;
     if (online.role === "guest") return;
     const driveSide = attack?.attackerSide;
-    if (!attack?.awaitingDrive || !attack.defenderDone || !["human", "bot"].includes(driveSide) || match.pendingTrigger || match.pendingDamageQueue?.length) return;
+    if (!attack?.awaitingDrive || !attack.defenderDone || !["human", "bot"].includes(driveSide) || match.pendingTrigger || match.pendingAbility || match.pendingAbilities?.length || match.pendingDamageQueue?.length) return;
     if (Number(attack.driveChecksRemaining || 0) <= 0) {
       attack.awaitingDrive = false; attack.blocked = Boolean(attack.perfectGuard || !attackHits(attack));
       setMessage(`${match.players[attack.attackerSide].name} can finish the attack.`);
@@ -1624,7 +1662,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (attack.driveSequenceStarted) return;
     attack.driveSequenceStarted = true;
     setTimeout(() => {
-      if (match?.pendingAttack !== attack || match.pendingTrigger) { attack.driveSequenceStarted = false; return; }
+      if (match?.pendingAttack !== attack || match.pendingTrigger || match.pendingAbility || match.pendingAbilities?.length || match.pendingDamageQueue?.length) { attack.driveSequenceStarted = false; return; }
       const player = match.players[driveSide], top = player.deck.pop();
       attack.driveSequenceStarted = false;
       if (!top) { match.ended = true; addLog(`${player.name} lost because the deck is empty.`); setMessage("Match over — the deck is empty."); match.pendingAttack = null; renderMatch(); return; }
@@ -1789,6 +1827,15 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function continuousBoostRestriction(field){if(!field?.instance)return{legal:true,restrictions:[]};const source=cardMap.get(field.instance.cardId),location=field.zone==="vanguard"?"vanguard":"rear-guard";return window.VanguardAbilityEngine.evaluateContinuousRestrictions(cardAbilities(source),{sourceInstanceId:field.instance.uid,sourceCard:source,location,action:"boost"})}
   function canAttackFromBackRow(field) { const text=String(cardMap.get(field.instance.cardId)?.text||""); return /attack(?:s|ing)? from (?:the )?back row|back row[^.\n]*can attack/i.test(text); }
   function directlyBehind(field) { const rear=match.players[field.side].rear;if(field.zone==="vanguard")return rear[3]||null;if(field.zone==="rear-left")return rear[2]||null;if(field.zone==="rear-right")return rear[4]||null;return null; }
+  function canStartDirectAttack(field) {
+    if (!match || match.ended || online.role === "watcher" || online.applyingRemote || match.side !== "human" || match.phase !== 5 ||
+        (!match.firstTurnComplete && match.side === match.firstSide) || match.pendingAttack || match.pendingAttackSetup ||
+        match.pendingAbility || match.pendingAbilities?.length || match.pendingTrigger || field?.side !== "human") return false;
+    const instance = field.instance;
+    if (!instance || instance.rested || instance.locked || instance.cannotAttackTurnKey === `${match.turn}:${match.side}` || !continuousAttackRestriction(field).legal) return false;
+    const isFront = field.zone === "vanguard" || field.zone === "rear-left" || field.zone === "rear-right" || field.zone.startsWith("accel-");
+    return isFront || canAttackFromBackRow(field);
+  }
   function resolveHumanAttack() {
     if (!match || match.ended) { toast("Start a match before attacking."); return; }
     if (!match.firstTurnComplete && match.side === match.firstSide) { toast("The player who goes first cannot attack during their first turn."); return; }
@@ -1831,7 +1878,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     attacker.instance.rested=true;
     const attackerCard=cardMap.get(attacker.instance.cardId),isVanguardAttack=attacker.zone==="vanguard",legionMate=isVanguardAttack&&attacker.instance.legionMate?.uid&&attacker.instance.legionMate.legionLeaderInstanceId===attacker.instance.uid?attacker.instance.legionMate:null,attackingCardInstanceIds=[attacker.instance.uid,...(legionMate?[legionMate.uid]:[])];
     if(legionMate){legionMate.rested=true;legionMate.position="rest";}
-    match.pendingAttack={battleId:setup.battleId,attacker:attackerCard?.name||"unit",attackerUid:attacker.instance.uid,attackerSide:setup.attackerSide,attackerZone:attacker.zone,attackingCardInstanceIds,defenderSide,targetUid,targetRearIndex:index, targetZone:zone,boostPower:Number(setup.boostPower||0),boostUid:setup.boostUid||null,power:attackerPower(attacker,{targetZone:zone,boosterCardInstanceId:setup.boostUid||null,boostedUnitInstanceId:setup.boostUid?attacker.instance.uid:null})+(legionMate?attackerPower({instance:legionMate,side:setup.attackerSide,zone:"vanguard"},{targetZone:zone}):0)+Number(setup.boostPower||0),targetPower:attackerPower({instance:target}),critical:attackerCritical(attacker),guardCards:[],driveChecksRemaining:0,driveChecksPerformed:0,maxDriveChecks:isVanguardAttack?10:0,driveCountPrompt:false,driveCountChosen:!isVanguardAttack,awaitingDrive:false};
+    match.pendingAttack={battleId:setup.battleId,attacker:attackerCard?.name||"unit",attackerUid:attacker.instance.uid,attackerSide:setup.attackerSide,attackerZone:attacker.zone,attackingCardInstanceIds,defenderSide,targetUid,targetRearIndex:index, targetZone:zone,boostPower:Number(setup.boostPower||0),boostUid:setup.boostUid||null,power:attackerPower(attacker,{targetZone:zone,boosterCardInstanceId:setup.boostUid||null,boostedUnitInstanceId:setup.boostUid?attacker.instance.uid:null})+(legionMate?attackerPower({instance:legionMate,side:setup.attackerSide,zone:"vanguard"},{targetZone:zone}):0)+Number(setup.boostPower||0),targetPower:attackerPower({instance:target}),critical:attackerCritical(attacker),guardCards:[],driveChecksRemaining:0,driveChecksPerformed:0,maxDriveChecks:isVanguardAttack?Math.max(0,Math.min(10,getDriveValue(attackerCard,attacker))):0,driveCountPrompt:false,driveCountChosen:!isVanguardAttack,awaitingDrive:false};
     match.pendingAttack.critical+=Number(setup.battleCriticalBoost||0);
     window.VanguardAbilityEngine.recordAttackCount(match,match.players[setup.attackerSide].playerId||setup.attackerSide,attacker.instance.uid);
     match.pendingAttackSetup=null;$("#attack-prompt-dialog").close();if(setup.boostUid)queueAbilityPrompts("boost",setup.attackerSide,setup.boostUid,{zone:findFieldCard(setup.boostUid)?.zone||null,boostedUid:attacker.instance.uid});queueAbilityPrompts("attack",setup.attackerSide,attacker.instance.uid,{zone:attacker.zone,targetZone:zone,boostUid:setup.boostUid||null,attackingCardInstanceIds,battleId:match.pendingAttack.battleId});queueAbilityPrompts("attacked",defenderSide,target.uid,{zone,targetZone:zone,sourceCardInstanceId:attacker.instance.uid,attackingCardInstanceIds,actingPlayerId:match.players[setup.attackerSide].playerId,boostUid:match.pendingAttack.boostUid,battleId:match.pendingAttack.battleId,timingWindow:"attack-declared"});addLog(`${match.pendingAttack.attacker} attacked ${match.players[defenderSide].name}'s ${zone==="vanguard"?"Vanguard":"Rear-Guard"}.`);
@@ -1879,7 +1926,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if(match&&!match.pendingTrigger&&!match.pendingDamageQueue?.length&&match.pendingHitResolution){const hit=match.pendingHitResolution;match.pendingHitResolution=null;queueAbilityPrompts("hit",hit.attackerSide,hit.attackerUid,{targetZone:hit.targetZone,targetUid:hit.targetUid,boostUid:hit.boostUid,battleId:hit.battleId,timingWindow:"vanguard-hit-after-damage-checks"});resolvePendingBattleEnd();resumeAbilityQueue();}
   }
   function canUseCenterPhase() {
-    return Boolean(match && !match.ended && online.role !== "watcher" && !match.practiceOpeningChoicePending && match.side === "human" && !match.preMatch && !match.pendingAttack && !match.pendingTurnEnd && !match.pendingAbility && !match.pendingAbilities?.length && !match.pendingTrigger && !online.remoteRequestPending);
+    return Boolean(match && !match.ended && online.role !== "watcher" && !match.practiceOpeningChoicePending && match.side === "human" && !match.preMatch && !match.pendingAttack && !match.pendingAttackSetup && !match.pendingTurnEnd && !match.pendingBattleEnd && !match.pendingHitResolution && !match.pendingAbility && !match.pendingAbilities?.length && !match.pendingTrigger && !match.pendingRide && !match.pendingStride && !match.pendingGAssist && !match.pendingProtectGuard && !match.pendingCrest && !match.pendingDamageQueue?.length && !match.revealed?.cards?.length && !online.remoteRequestPending && !document.querySelector("dialog[open]"));
   }
   function handDefenseState() {
     const attack = match?.pendingAttack;
@@ -1937,15 +1984,19 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     attack.defenderDone = true;
     attack.blocked = Boolean(attack.perfectGuard || !attackHits(attack));
     if (attack.attackerZone === "vanguard" && !attack.driveCountChosen) {
-      attack.driveCountPrompt = true; attack.awaitingDrive = false;
-      setMessage(`${match.players[attack.attackerSide].name} choose the number of drive checks.`);
-      renderMatch(); return;
+      const attacker = findFieldCard(attack.attackerUid);
+      const printedAndModifiedDrive = attacker ? getDriveValue(cardMap.get(attacker.instance.cardId), attacker) : Number(attack.maxDriveChecks || 0);
+      attack.driveChecksRemaining = Math.max(0, Math.min(10, Number(printedAndModifiedDrive) || 0));
+      attack.maxDriveChecks = attack.driveChecksRemaining;
+      attack.driveCountChosen = true;
     }
     attack.driveCountPrompt = false;
     if (Number(attack.driveChecksRemaining || 0) > 0) {
       attack.awaitingDrive = true;
       setMessage(`${match.players[attack.attackerSide].name} must complete ${attack.driveChecksRemaining} Vanguard drive check${attack.driveChecksRemaining === 1 ? "" : "s"}.`);
-      renderMatch(); return;
+      renderMatch();
+      resolvePracticeAttackAfterDrives();
+      return;
     }
     setMessage(`${match.players[attack.attackerSide].name} can finish the attack.`);
     renderMatch();
@@ -2095,7 +2146,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }  function finishBotTurn(){if(!match||match.ended||match.pendingTurnEnd)return;advanceBotPhase("End");beginTurnEnd("bot")}
   function retireChargingUnitsAtBattleEnd(){const pending=match?.pendingChargeCleanup;if(!pending)return 0;match.pendingChargeCleanup=null;const retired=window.VanguardAbilityEngine.retireChargingUnitsAtBattleEnd(match.players,pending.battleId,pending.participantInstanceIds);for(const item of retired){addLog((cardMap.get(item.instance.cardId)?.name||"A charging Rear-Guard")+" was put on the bottom of its owner's deck at the end of battle.");queueMovedCardAbility(item.instance,item.side,"move",item.zone,{previousLocation:item.zone,currentLocation:"deck",battleId:item.battleId,actingPlayerId:match.players[item.side]?.playerId,timingWindow:"charge-retirement"})}return retired.length}
   function beginTurnEnd(side){const player=match?.players?.[side];if(!player||match.pendingTurnEnd)return;match.pendingTurnEnd={playerId:player.playerId,side,turn:match.turn,turnEndEventId:`${match.matchId||"match"}:turn-end:${match.turn}:${player.playerId}`};queueTurnEndEvent(side);resumeAbilityQueue();if(match?.pendingTurnEnd)renderMatch()}
-  function resumeAbilityQueue(){if(!match)return;if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}if(match.pendingTurnEnd?.endPhaseRescanPending){const pending=match.pendingTurnEnd;pending.endPhaseRescanPending=false;if(Number(pending.turn)===Number(match.turn)&&pending.playerId===match.players?.[pending.side]?.playerId)queueTurnEndEvent(pending.side,true);if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}}resolvePendingBattleEnd();if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}if(match.pendingChargeCleanup){retireChargingUnitsAtBattleEnd();if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}}if(match.pendingTurnEnd){const playerId=match.pendingTurnEnd.playerId;match.pendingTurnEnd=null;completeTurnTransition(playerId);return}if(match.resumeAfterAbility==="bot-defense"){match.resumeAfterAbility=null;practiceBotDefend();return}showNextAbilityPrompt()}
+  function resumeAbilityQueue(){if(!match)return;if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}if(match.pendingTurnEnd?.endPhaseRescanPending){const pending=match.pendingTurnEnd;pending.endPhaseRescanPending=false;if(Number(pending.turn)===Number(match.turn)&&pending.playerId===match.players?.[pending.side]?.playerId)queueTurnEndEvent(pending.side,true);if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}}resolvePendingBattleEnd();if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}if(match.pendingChargeCleanup){retireChargingUnitsAtBattleEnd();if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}}if(match.pendingTurnEnd){const playerId=match.pendingTurnEnd.playerId;match.pendingTurnEnd=null;completeTurnTransition(playerId);return}if(match.resumeAfterAbility==="bot-defense"){match.resumeAfterAbility=null;practiceBotDefend();return}showNextAbilityPrompt();if(!match.pendingAbility&&!match.pendingAbilities?.length)resolvePracticeAttackAfterDrives()}
   function retireHollowedUnitsAtTurnEnd(endingPlayerId){const seen=match.hollowRetiredThisTurn||=([]),candidates=[];for(const[side,player]of Object.entries(match.players||{}))for(let index=0;index<(player.rear||[]).length;index++){const instance=player.rear[index];if(instance?.hollowed===true&&instance.hollowedExpiry===endingPlayerId&&!seen.includes(`${match.turn}:${endingPlayerId}:${instance.uid}`))candidates.push({side,instance,zone:index<5?["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right"][index]:`accel-${index-4}`})}if(!candidates.length)return 0;for(const item of candidates)seen.push(`${match.turn}:${endingPlayerId}:${item.instance.uid}`);const retired=window.VanguardAbilityEngine.retireHollowedUnitsAtTurnEnd(match.players,endingPlayerId);for(const item of retired){addLog((cardMap.get(item.instance.cardId)?.name||"A hollowed Rear-Guard")+" was retired by Hollow at the end of the turn.");queueMovedCardAbility(item.instance,item.side,"retire",item.zone,{previousLocation:item.zone,currentLocation:"drop",actingPlayerId:endingPlayerId,turnPlayerId:endingPlayerId,timingWindow:"hollow-retirement"})}return retired.length}
   function completeTurnTransition(endingPlayerId){if(!match)return;const endingSide=["human","bot"].find(side=>match.players[side]?.playerId===endingPlayerId);if(!endingSide)return;const endingPlayer=match.players[endingSide];const hollowRetired=retireHollowedUnitsAtTurnEnd(endingPlayerId);if(hollowRetired&&(match.pendingAbility||match.pendingAbilities?.length)){match.pendingTurnEnd={playerId:endingPlayerId,side:endingSide,turn:match.turn};showNextAbilityPrompt();renderMatch();return}window.VanguardAbilityEngine.expireHarmonyAssociations(match,`${match.turn}:${endingSide}`);window.VanguardAbilityEngine.clearOpponentTriggerFacts(match.players);if(online.role){addLog(endingPlayer.name+" ended their turn.");match.firstTurnComplete=true;returnStriddenVanguard(endingSide);clearTurnBonuses(endingSide);match.ridePerformed=false;match.stridePerformed=false;match.ordersPlayedThisTurn=0;match.selected=null;match.pendingAttack=null;const nextSide=flipSide(endingSide);match.side=nextSide;match.phase=0;match.turn+=1;match.turnStartGrades||={};match.turnStartGrades[nextSide]=Number(cardMap.get(match.players[nextSide].vanguard?.cardId)?.grade??-1);match.drewThisTurn=false;queueTurnStartEvent(nextSide);standAllUnits(nextSide);setMessage(match.players[nextSide].name+"'s turn — Stand phase.");renderMatch();return}if(endingSide==="human"){addLog("You ended your turn.");match.firstTurnComplete=true;returnStriddenVanguard("human");clearTurnBonuses("human");match.ridePerformed=false;match.stridePerformed=false;match.ordersPlayedThisTurn=0;match.selected=null;renderMatch();botTurn();return}returnStriddenVanguard("bot");clearTurnBonuses("bot");match.side="human";match.phase=0;match.drewThisTurn=false;match.ridePerformed=false;match.stridePerformed=false;match.turnStartGrades||={};match.turnStartGrades.human=Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade??-1);match.ordersPlayedThisTurn=0;match.pendingAttack=null;match.selected=null;if(match.initialBotTurn)match.initialBotTurn=false;else match.turn+=1;match.firstTurnComplete=true;queueTurnStartEvent("human");standAllUnits("human");addLog("Your turn began — advance to Draw to draw a card.");setMessage("Your turn — Stand phase.");renderMatch()}
   function endTurn(){if(!match||match.ended)return;if(match.pendingTurnEnd)return;if(match.side!=="human"||match.phase!==phases.length-1||match.pendingAttack||match.pendingAbility||match.pendingAbilities?.length||match.pendingTrigger){toast("Finish the End phase after resolving pending actions.");return}beginTurnEnd("human")}  function returnStriddenVanguard(side) { const player=match?.players?.[side],unit=player?.vanguard;if(!unit?.strideHeart)return;const hearts=unit.strideHearts||[unit.strideHeart],heart=hearts.find((item)=>!isGDeckCard(cardMap.get(item.cardId))&&!isGGuardian(cardMap.get(item.cardId)))||unit.strideHeart,stride={...unit};delete stride.strideHeart;delete stride.strideHearts;const gHearts=hearts.filter((item)=>isGDeckCard(cardMap.get(item.cardId))&&!isGGuardian(cardMap.get(item.cardId)));gHearts.forEach((item)=>player.gZone.push({...item,faceUp:true,rested:false}));hearts.filter((item)=>item.uid!==heart.uid&&!gHearts.some((g)=>g.uid===item.uid)).forEach((item)=>player.soul.push(item));player.vanguard={...heart,rested:Boolean(unit.rested)};player.gZone.push({...stride,faceUp:true,rested:false});addLog(`${cardMap.get(stride.cardId)?.name||"The G Unit"} and its G-unit heart cards returned face up to the G zone; ${cardMap.get(heart.cardId)?.name||"the heart"} returned to the Vanguard circle.`); }
@@ -2103,7 +2154,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function flipTurnBonusOwners(players) { const seen=new Set();const walk=(value)=>{if(!value||typeof value!=="object"||seen.has(value))return;seen.add(value);if(value.turnPowerExpiry)value.turnPowerExpiry=flipSide(value.turnPowerExpiry);if(value.turnCriticalExpiry)value.turnCriticalExpiry=flipSide(value.turnCriticalExpiry);if(value.turnDriveExpiry)value.turnDriveExpiry=flipSide(value.turnDriveExpiry);if(value.engorgedExpiry)value.engorgedExpiry=flipSide(value.engorgedExpiry);if(value.engorgeRetiredCountExpiry)value.engorgeRetiredCountExpiry=flipSide(value.engorgeRetiredCountExpiry);Object.values(value).forEach(walk);};Object.values(players||{}).forEach(walk); }
   function advancePhase() {
     if (!match || match.ended) return;
-    if (match.side !== "human" || match.pendingAttack || match.pendingTurnEnd || match.pendingAbility || match.pendingAbilities?.length || match.pendingTrigger) { toast("Wait until it is your turn and all pending actions are resolved."); return; }
+    if (!canUseCenterPhase()) { toast("Wait until it is your turn and all pending choices, effects, and attack steps are resolved."); return; }
     if (match.phase >= phases.length - 1) { endTurn(); return; }
     const previousPhase=phases[match.phase]; match.phase += 1; if(match.players.human.format==="standard"&&match.phase===3)match.phase=4; match.selected = null; queuePhaseChangeEvent("human",previousPhase,phases[match.phase]); if(match.phase===2)chargeEnergyAtRidePhase(match.players.human);
     if (match.phase === 1 && !match.drewThisTurn) {
@@ -3227,6 +3278,22 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#stride-cost-confirm").addEventListener("click",()=>performManualAction("stride-confirm"));
   ["#stride-cost-cancel","#stride-cost-cancel-button"].forEach((selector)=>$(selector).addEventListener("click",()=>performManualAction("stride-cancel")));
   $("#attack-choice-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
+   $(".game-table").addEventListener("click", event => {
+     if (event.target.closest("[data-card-zoom]")) return;
+     const card = event.target.closest(".field-card[data-side='human'][data-field-uid]");
+     const field = card && findFieldCard(card.dataset.fieldUid);
+     if (!card || !canStartDirectAttack(field)) return;
+     event.preventDefault(); event.stopImmediatePropagation();
+     match.selected = card.dataset.fieldUid;
+     performOnlineAction("attack");
+   }, true);
+   $(".game-table").addEventListener("keydown", event => {
+     if (event.key !== "Enter" && event.key !== " ") return;
+     if (event.target.closest("button")) return;
+     const card = event.target.closest(".field-card[role='group'][data-field-uid]");
+     if (!card) return;
+     event.preventDefault(); card.click();
+   });
   $(".game-table").addEventListener("click", event => {
     const target = event.target.closest(".field-card.attack-target-available[data-field-uid]");
     const setup = match?.pendingAttackSetup;

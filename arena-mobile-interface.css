@@ -99,7 +99,7 @@ body.mobile-mode #battle-action-panel {
   animation:none;
 }
 body.mobile-mode.hand-menu-open #attack-choice-panel,
-body.mobile-mode.hand-menu-open #battle-action-panel { visibility:hidden; pointer-events:none; }
+body.mobile-mode.hand-menu-open #battle-action-panel:not([data-prompt-kind="finish-attack"]) { visibility:hidden; pointer-events:none; }
 body.mobile-mode dialog {
   position:fixed;
   inset:auto;
@@ -193,6 +193,7 @@ body.mobile-mode #hand-drawer.is-persistent .hand-fan-scroll { max-height: calc(
 /* Keep battle decisions clear of the persistent hand tray on phones. */
 body.mobile-mode #attack-choice-panel,
 body.mobile-mode #battle-action-panel {
+  position: fixed;
   top: calc(var(--arena-mobile-top, 0px) + 50vh);
   top: calc(var(--arena-mobile-top, 0px) + 50dvh);
   bottom: auto;
