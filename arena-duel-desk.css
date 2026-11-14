@@ -24,7 +24,7 @@
 
 #match-layout > .table-column {
   display: grid;
-  grid-template-rows: auto minmax(500px, min(64dvh, 740px)) auto auto auto;
+  grid-template-rows: auto minmax(520px, min(69dvh, 800px)) auto auto auto;
   align-content: start;
   gap: 9px;
   min-width: 0;
@@ -114,8 +114,8 @@ body #hand-drawer.is-persistent {
   gap: clamp(6px, .8vw, 12px);
   width: 100%;
   min-width: 100%;
-  height: 194px;
-  min-height: 194px;
+  height: 176px;
+  min-height: 176px;
   margin: 0;
   padding: 5px 6px 8px;
   overflow: visible;
@@ -138,9 +138,6 @@ body #hand-drawer.is-persistent {
 #hand-drawer.is-persistent #hand-cards .card-art img { width: 100%; height: 100%; object-fit: contain; }
 #hand-drawer.is-persistent #hand-cards .card-copy { display: none; }
 #hand-drawer.is-persistent #hand-cards .card-zoom { top: 4px; right: 4px; }
-#hand-drawer.is-persistent .hand-management { display: flex; gap: 7px; padding-top: 6px; margin-top: 5px; border-top: 1px solid #c2eaff20; }
-#hand-drawer.is-persistent .hand-management .muted-text { margin-right: auto; font-size: 9px; }
-#hand-drawer.is-persistent .hand-management .button { min-height: 30px; padding: 5px 8px; font-size: 9px; }
 .hand-launcher, .hand-scrim, .hand-close-button { display: none !important; }
 
 /* Live card details stay large, with rules text below the art and independently scrollable. */
@@ -181,14 +178,14 @@ body #hand-drawer.is-persistent {
 /* Fullscreen keeps the field and hand in distinct rows; all other controls stay reachable. */
 .battlefield-preview-toggle { display: none; }
 body.battlefield-expanded #match-layout .table-column {
-  grid-template-rows: minmax(0,1fr) minmax(210px,27dvh) auto;
+  grid-template-rows: minmax(0,1fr) auto auto;
   gap: 0;
 }
 body.battlefield-expanded .table-column > .hand-drawer {
   align-self: stretch;
-  height: 100%;
-  max-height: 27dvh;
-  padding: 6px 12px;
+  height: auto;
+  max-height: none;
+  padding: 4px 12px;
   border-radius: 0;
   overflow: hidden;
 }
@@ -219,7 +216,7 @@ body.battlefield-expanded.battlefield-preview-open #match-layout .card-inspector
 body.battlefield-expanded.battlefield-preview-open #match-layout .card-inspector .inspector-copy { max-height: min(38dvh,340px); }
 
 @media (min-width: 761px) and (max-width: 1319px) {
-  #match-layout .table-column { grid-template-rows: auto minmax(460px,min(64dvh,690px)) auto auto auto; }
+  #match-layout .table-column { grid-template-rows: auto minmax(480px,min(68dvh,740px)) auto auto auto; }
 }
 @media (max-width: 760px) {
   #match-layout {
@@ -243,12 +240,9 @@ body.battlefield-expanded.battlefield-preview-open #match-layout .card-inspector
   #hand-drawer.is-persistent .hand-fan-hint { margin-top: 4px; }
   #hand-drawer.is-persistent #hand-cards { height: 148px; min-height: 148px; gap: 8px; padding: 4px; }
   #hand-drawer.is-persistent #hand-cards > .game-card-wrap { flex-basis: min(var(--hand-card-width,92px),92px); width: min(var(--hand-card-width,92px),92px); height: 134px; }
-  #hand-drawer.is-persistent .hand-management { flex-wrap: wrap; }
-  #hand-drawer.is-persistent .hand-management .muted-text { display: none; }
-  #hand-drawer.is-persistent .hand-management .button { min-height: 34px; }
   #match-layout .game-table .player-line .deck-zone { width: clamp(42px,12vw,62px); height: clamp(62px,18vw,92px); }
-  body.battlefield-expanded #match-layout .table-column { grid-template-rows: minmax(0,1fr) minmax(190px,29dvh) auto; }
-  body.battlefield-expanded .table-column > .hand-drawer { max-height: 29dvh; padding: 5px 8px; }
+  body.battlefield-expanded #match-layout .table-column { grid-template-rows: minmax(0,1fr) auto auto; }
+  body.battlefield-expanded .table-column > .hand-drawer { max-height: none; padding: 4px 8px; }
   body.battlefield-expanded #hand-drawer.is-persistent .hand-heading { flex-wrap: nowrap; }
   body.battlefield-expanded #hand-drawer.is-persistent .hand-heading > div:first-child { width: auto; }
   body.battlefield-expanded #hand-drawer.is-persistent .selection-hint,
@@ -256,8 +250,6 @@ body.battlefield-expanded.battlefield-preview-open #match-layout .card-inspector
   body.battlefield-expanded #hand-drawer.is-persistent .hand-drawer-tools { top: 4px; right: 8px; }
   body.battlefield-expanded #hand-drawer.is-persistent #hand-cards { height: 118px; min-height: 118px; }
   body.battlefield-expanded #hand-drawer.is-persistent #hand-cards > .game-card-wrap { flex-basis: min(var(--hand-card-width,92px),74px); width: min(var(--hand-card-width,92px),74px); height: 108px; }
-  body.battlefield-expanded #hand-drawer.is-persistent .hand-management { padding-top: 3px; margin-top: 2px; }
-  body.battlefield-expanded #hand-drawer.is-persistent .hand-management .button { min-height: 28px; }
   body.battlefield-expanded .battlefield-preview-toggle { right: 152px; }
   body.battlefield-expanded .battlefield-preview-toggle [data-preview-label] { display: none; }
   body.battlefield-expanded.battlefield-preview-open #match-layout > .card-inspector { inset: 48px 8px 8px auto; width: min(320px,calc(100vw - 16px)); max-height: calc(100dvh - 56px); }

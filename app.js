@@ -1101,8 +1101,6 @@ function openDamageZone(side="human") {
     const fieldCard = findFieldCard(match.selected);
     const pending = Boolean(match.pendingAttack);
     $("#draw-card").disabled = !canAct;
-    const returnTop = $("[data-manual-action='hand-to-top']"), returnBottom = $("[data-manual-action='hand-to-bottom']");
-    [returnTop, returnBottom].forEach((button) => { if (button) button.disabled = !canAct; });
     $("#ride-card").disabled = !canAct;
     $("#call-card").disabled = !canAct;
     $("#attack-card").disabled = !canAct;
