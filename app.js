@@ -802,6 +802,9 @@
     rideDeckSection.hidden = player.format !== "standard";
     $("#ride-choice-open-deck").hidden = player.format !== "standard";
     $("#ride-choice-g-assist").hidden = !gAssistAvailable;
+    const rideChoiceActions = $(".ride-choice-footer-actions");
+    rideChoiceActions.classList.toggle("has-g-assist", gAssistAvailable);
+    rideChoiceActions.classList.toggle("has-ride-deck", player.format === "standard");
     $("#ride-choice-skip").textContent = gAssistAvailable ? "No · continue" : "Skip Ride";
     $("#ride-choice-copy").textContent = gAssistAvailable
       ? "You may ride normally, use G Assist to check the top five cards, or continue without riding."
