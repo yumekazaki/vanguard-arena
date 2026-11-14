@@ -602,7 +602,7 @@
     const chosen = deck || (builder.cards && deckCount(builder) ? builder : null);
     const readyDeck = chosen && deckCount(chosen) ? chosen : defaultDeck();
     if (chosen?.format === "standard" && deckReadyErrors(chosen).length) { toast(`Cannot start this Standard deck: ${deckReadyErrors(chosen).join("; ")}.`); return; }
-    match = { matchId: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`, stateVersion: 0, processedActionIds: [], eventSequence: 0, processedEventIds: [], players: { human: makePlayer(readyDeck, online.localName || "Player", true, selectedProfileAvatar()), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, practiceOpeningChoicePending: !onlineSetup && !online.role, practiceMulliganSelection: [], phase: 0, drewThisTurn: false, ridePerformed: false, stridePerformed: false, turnStartGrades: { human: 0, bot: 0 }, pendingStride: null, pendingRide: null, pendingProtectGuard: null, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingBattleEnd: null, pendingTrigger: null, pendingAbility: null, pendingAbilities: [], attacksByUnitTurn: Object.create(null), pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
+    match = { matchId: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`, stateVersion: 0, processedActionIds: [], eventSequence: 0, processedEventIds: [], players: { human: makePlayer(readyDeck, online.localName || "Player", true, selectedProfileAvatar()), bot: makePlayer(onlineSetup ? defaultDeck() : practiceBotDeck(), onlineSetup ? "Practice Bot" : "[MLB] Practice Bot") }, turn: 1, side: onlineSetup ? "human" : firstSide, firstSide: onlineSetup ? null : firstSide, firstTurnComplete: false, initialBotTurn: !onlineSetup && firstSide === "bot", preMatch: onlineSetup ? { stage: "roll", rolls: { human: null, bot: null }, winner: null, firstSide: null, mulliganDone: { human: false, bot: false } } : null, practiceOpeningChoicePending: !onlineSetup && !online.role, practiceMulliganSelection: [], phase: 0, drewThisTurn: false, ridePerformed: false, ridePhaseAdvancePending: false, stridePerformed: false, turnStartGrades: { human: 0, bot: 0 }, pendingStride: null, pendingRide: null, pendingProtectGuard: null, ordersPlayedThisTurn: 0, selected: null, pendingAttackSetup: null, pendingAttack: null, pendingBattleEnd: null, pendingTrigger: null, pendingAbility: null, pendingAbilities: [], attacksByUnitTurn: Object.create(null), pendingDamageQueue: [], botAttacks: [], revealed: null, checkReveals: [], log: [], ended: false, deckName: readyDeck.name };
     selectedCard = null; selectedZone = null;
     $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden");
     if (onlineSetup) setMessage("Waiting for both players to roll for first turn.");
@@ -738,9 +738,9 @@
     ];
     return sources.some(source => source && eligibleActivatedAbilities(source).length > 0);
   }
-  function hasLegalRideChoice(side = "human") {
+  function legalRideCandidates(side = "human", source = "hand") {
     const player = match?.players?.[side];
-    if (!player || match.side !== side || match.phase !== 2 || match.ridePerformed || !player.vanguard) return false;
+    if (!player || match.side !== side || match.phase !== 2 || match.ridePerformed || !player.vanguard) return [];
     const currentGrade = gradeOf(cardMap.get(player.vanguard.cardId));
     const canRide = instance => {
       const card = cardMap.get(instance?.cardId), grade = gradeOf(card);
@@ -751,8 +751,38 @@
           crests: (player.crests || []).map(crest => cardMap.get(crest.cardId))
         });
     };
-    if ((player.hand || []).some(canRide)) return true;
-    return player.format === "standard" && (player.hand || []).length > 0 && (player.rideDeck || []).some(canRide);
+    const candidates = source === "ride-deck" ? (player.rideDeck || []) : (player.hand || []);
+    if (source === "ride-deck" && (player.format !== "standard" || !(player.hand || []).length)) return [];
+    return candidates.filter(canRide);
+  }
+  function hasLegalRideChoice(side = "human") {
+    return legalRideCandidates(side, "hand").length > 0 || legalRideCandidates(side, "ride-deck").length > 0;
+  }
+  function renderRideChoicePrompt() {
+    const dialog = $("#ride-choice-dialog");
+    if (!dialog) return;
+    const canShow = Boolean(match && !match.ended && online.role !== "watcher" && !online.remoteRequestPending &&
+      match.side === "human" && match.phase === 2 && !match.ridePerformed && !match.ridePhaseAdvancePending &&
+      !match.pendingRide && !match.pendingAbility && !match.pendingAbilities?.length && !match.pendingTrigger &&
+      !match.pendingCrest && !match.pendingAttack && !match.pendingAttackSetup && !match.pendingBattleEnd && !match.pendingTurnEnd && !match.pendingStride && !match.pendingGAssist &&
+      !match.pendingProtectGuard && !match.pendingDamageQueue?.length && !match.revealed?.cards?.length && !match.preMatch);
+    if (!canShow) { if (dialog.open) dialog.close(); return; }
+    const otherDialog = document.querySelector('dialog[open]:not(#ride-choice-dialog)');
+    if (otherDialog) { if (dialog.open) dialog.close(); return; }
+    const player = match.players.human, vanguard = cardMap.get(player.vanguard?.cardId);
+    const currentGrade = gradeOf(vanguard), handCandidates = legalRideCandidates("human", "hand"), deckCandidates = legalRideCandidates("human", "ride-deck");
+    $("#ride-choice-vanguard").textContent = `${vanguard?.name || "Vanguard"} · Grade ${currentGrade}`;
+    $("#ride-choice-hand-cards").innerHTML = handCandidates.map(instance => {
+      const card = cardMap.get(instance.cardId);
+      return card ? `<button class="ride-choice-card" type="button" data-ride-choice-uid="${escapeHtml(instance.uid)}" aria-label="Ride ${escapeHtml(card.name)}, grade ${escapeHtml(card.grade)}">${cardImage(card, "ride-choice-art")}<span><b>${escapeHtml(card.name)}</b><small>Grade ${escapeHtml(card.grade)} · Ride from hand</small></span></button>` : "";
+    }).join("") || '<p class="ride-choice-empty">No legal ride cards in your hand.</p>';
+    const rideDeckSection = $("#ride-choice-ride-deck-section");
+    rideDeckSection.hidden = player.format !== "standard";
+    $("#ride-choice-ride-deck-cards").innerHTML = deckCandidates.map(instance => {
+      const card = cardMap.get(instance.cardId);
+      return card ? `<button class="ride-choice-card" type="button" data-ride-choice-deck-uid="${escapeHtml(instance.uid)}" aria-label="Ride ${escapeHtml(card.name)} from Ride Deck, discard one card">${cardImage(card, "ride-choice-art")}<span><b>${escapeHtml(card.name)}</b><small>Grade ${escapeHtml(card.grade)} · Ride Deck · discard 1</small></span></button>` : "";
+    }).join("") || '<p class="ride-choice-empty">No legal Ride Deck cards available.</p>';
+    if (!dialog.open) dialog.showModal();
   }
   function hasLegalStrideChoice(side = "human") {
     const player = match?.players?.[side];
@@ -821,7 +851,7 @@
     const phaseHints = [
       "Stand phase · eligible units stand automatically; resolve any effects.",
       match.drewThisTurn ? "Draw complete · resolve prompts, then continue to Ride." : "Draw phase · the required draw and its prompts resolve automatically.",
-      canRideChoice ? "Ride phase · choose a legal ride, or continue without riding." : automaticProgression ? "Ride phase · no legal ride available; continuing automatically." : "Ride phase · no legal ride available; continue when ready.",
+      canRideChoice ? "Ride phase · choose a legal ride, or skip to continue." : "Ride phase · no legal ride available; skip to continue.",
       canStrideChoice ? "Stride phase · choose a legal Stride, or continue without Striding." : automaticProgression ? "Stride phase · no legal Stride available; continuing automatically." : "Stride phase · no legal Stride available; continue when ready.",
       "Main phase · call units, use ACT skills, and proceed to Battle when ready.",
       "Battle phase · finish attacks, guards, checks, and effect prompts before ending Battle.",
@@ -878,9 +908,10 @@
     window.VanguardZonePiles?.render(match, id => cardMap.get(id)?.image || "");
     if ($("#faceup-gdeck-dialog").open) openFaceUpGDeck($("#faceup-gdeck-dialog").dataset.side || "human");
     if (match.revealed?.cards?.length) renderSharedReveal(); else if($("#reveal-dialog").open) $("#reveal-dialog").close();
-    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderBattleActionPrompt(); renderAttackArrow(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal(); renderOnlineTurnOrderAnnouncement(); renderRideDeckFlow();
+    renderOnlineSetup(); renderTriggerPrompt(); renderAttackPrompt(); renderBattleActionPrompt(); renderAttackArrow(); renderCrestPrompt(); renderPublicReveal(); renderCheckReveal(); renderOnlineTurnOrderAnnouncement(); renderRideDeckFlow(); renderRideChoicePrompt();
     window.VanguardArenaVisualEffects?.afterRender(match);
     if(!online.applyingRemote)showNextAbilityPrompt();
+    if (!online.applyingRemote) tryAdvanceRidePhase();
     if (!online.applyingRemote && match.pendingAttack?.awaitingDrive) setTimeout(resolvePracticeAttackAfterDrives, 0);
     if (online.role === "host" && !online.applyingRemote) sendOnlineSnapshot();
     scheduleAssistedPhaseAdvance();
@@ -1823,14 +1854,42 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (match.phase === 1 && match.side === "human") match.drewThisTurn = true;
     addLog(`${match.players.human.name} drew a card.`); setMessage("Card drawn."); renderMatch();
   }
+  function completeHandRide(instance) {
+    const p = match?.players?.human;
+    if (!p || !instance || !legalRideCandidates("human", "hand").some(item => item.uid === instance.uid)) {
+      toast("That card is no longer a legal ride."); return false;
+    }
+    const riderCard = cardMap.get(instance.cardId), previousVanguard = p.vanguard;
+    p.hand = p.hand.filter(item => item.uid !== instance.uid);
+    if (previousVanguard) p.soul.push(previousVanguard);
+    p.vanguard = { ...instance, rested: false };
+    window.VanguardAbilityEngine.recordFightRide(p, riderCard);
+    match.ridePerformed = true;
+    match.ridePhaseAdvancePending = true;
+    match.selected = null;
+    addLog(`You rode ${riderCard?.name || "a card"}.`);
+    if (previousVanguard) queueAbilityPrompts("ride", "human", previousVanguard.uid, { zone: "soul", riderPreviousLocation: "hand", timingWindow: "normal-ride" });
+    queueAbilityPrompts("place", "human", instance.uid, { source: "hand", zone: "vanguard" });
+    askForCardCrest("human", instance);
+    setMessage("Ride complete.");
+    return true;
+  }
   function rideHuman() {
-    const instance = selectedHandCard(); if (!instance) { toast("Select a card in your hand first."); return; }
-    const p = match.players.human;
-    if(!window.VanguardAbilityEngine.canRideCard(cardMap.get(instance.cardId),{vanguardCard:cardMap.get(p.vanguard?.cardId),crests:(p.crests||[]).map(crest=>cardMap.get(crest.cardId))})){toast("This card cannot be ridden under your current ride restrictions.");return;}
-    const grade = gradeOf(cardMap.get(instance.cardId)), currentGrade = gradeOf(cardMap.get(p.vanguard?.cardId)), previousVanguard=p.vanguard;
-    if (match.side !== "human" || match.phase !== 2 || match.ridePerformed || grade < 0 || currentGrade < 0 || grade < currentGrade || grade > currentGrade + 1) { toast("A normal ride is once per turn and must be the same grade or one grade higher than your Vanguard."); return; }
-    p.hand = p.hand.filter((x) => x.uid !== instance.uid); if (p.vanguard) p.soul.push(p.vanguard); p.vanguard = { ...instance, rested: false }; window.VanguardAbilityEngine.recordFightRide(p,cardMap.get(instance.cardId)); match.ridePerformed = true; askForCardCrest("human", instance);
-    match.selected = null; addLog(`You rode ${cardMap.get(instance.cardId)?.name || "a card"}.`); if(previousVanguard)queueAbilityPrompts("ride","human",previousVanguard.uid,{zone:"soul",riderPreviousLocation:"hand",timingWindow:"normal-ride"}); queueAbilityPrompts("place", "human", instance.uid,{source:"hand",zone:"vanguard"}); setMessage("Ride complete."); renderMatch();
+    const instance = selectedHandCard();
+    if (!instance) { toast("Select a card in your hand first."); return; }
+    if (match.side !== "human" || match.phase !== 2 || match.ridePerformed) { toast("A normal ride is once per turn during your Ride phase."); return; }
+    if (completeHandRide(instance)) renderMatch();
+  }
+  function tryAdvanceRidePhase() {
+    if (!match?.ridePhaseAdvancePending || match.side !== "human" || match.phase !== 2 || online.role === "watcher" || online.remoteRequestPending) return false;
+    if (match.pendingRide || match.pendingCrest || match.pendingAbility || match.pendingAbilities?.length || match.pendingTrigger ||
+        match.pendingAttack || match.pendingAttackSetup || match.pendingBattleEnd || match.pendingHitResolution || match.pendingTurnEnd ||
+        match.pendingDamageQueue?.length || match.pendingStride || match.pendingGAssist || match.pendingProtectGuard ||
+        match.revealed?.cards?.length || document.querySelector("dialog[open]")) return false;
+    match.ridePhaseAdvancePending = false;
+    if (online.role === "guest") performOnlineAction("advance");
+    else advancePhase();
+    return true;
   }
   function callUnitToRear(player,side,instance,index,eventContext={}){
     const zones=["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right",...Array.from({length:player.accelZones||0},(_,i)=>`accel-${i+1}`)],zone=zones[index];
@@ -2182,7 +2241,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }  function finishBotTurn(){if(!match||match.ended||match.pendingTurnEnd)return;advanceBotPhase("End");beginTurnEnd("bot")}
   function retireChargingUnitsAtBattleEnd(){const pending=match?.pendingChargeCleanup;if(!pending)return 0;match.pendingChargeCleanup=null;const retired=window.VanguardAbilityEngine.retireChargingUnitsAtBattleEnd(match.players,pending.battleId,pending.participantInstanceIds);for(const item of retired){addLog((cardMap.get(item.instance.cardId)?.name||"A charging Rear-Guard")+" was put on the bottom of its owner's deck at the end of battle.");queueMovedCardAbility(item.instance,item.side,"move",item.zone,{previousLocation:item.zone,currentLocation:"deck",battleId:item.battleId,actingPlayerId:match.players[item.side]?.playerId,timingWindow:"charge-retirement"})}return retired.length}
   function beginTurnEnd(side){const player=match?.players?.[side];if(!player||match.pendingTurnEnd)return;match.pendingTurnEnd={playerId:player.playerId,side,turn:match.turn,turnEndEventId:`${match.matchId||"match"}:turn-end:${match.turn}:${player.playerId}`};queueTurnEndEvent(side);resumeAbilityQueue();if(match?.pendingTurnEnd)renderMatch()}
-  function resumeAbilityQueue(){if(!match)return;if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}if(match.pendingTurnEnd?.endPhaseRescanPending){const pending=match.pendingTurnEnd;pending.endPhaseRescanPending=false;if(Number(pending.turn)===Number(match.turn)&&pending.playerId===match.players?.[pending.side]?.playerId)queueTurnEndEvent(pending.side,true);if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}}resolvePendingBattleEnd();if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}if(match.pendingChargeCleanup){retireChargingUnitsAtBattleEnd();if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}}if(match.pendingTurnEnd){const playerId=match.pendingTurnEnd.playerId;match.pendingTurnEnd=null;completeTurnTransition(playerId);return}if(match.resumeAfterAbility==="bot-defense"){match.resumeAfterAbility=null;practiceBotDefend();return}showNextAbilityPrompt();if(!match.pendingAbility&&!match.pendingAbilities?.length)resolvePracticeAttackAfterDrives()}
+  function resumeAbilityQueue(){if(!match)return;if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}if(match.pendingTurnEnd?.endPhaseRescanPending){const pending=match.pendingTurnEnd;pending.endPhaseRescanPending=false;if(Number(pending.turn)===Number(match.turn)&&pending.playerId===match.players?.[pending.side]?.playerId)queueTurnEndEvent(pending.side,true);if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}}resolvePendingBattleEnd();if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}if(match.pendingChargeCleanup){retireChargingUnitsAtBattleEnd();if(match.pendingAbility||match.pendingAbilities?.length){showNextAbilityPrompt();return}}if(match.pendingTurnEnd){const playerId=match.pendingTurnEnd.playerId;match.pendingTurnEnd=null;completeTurnTransition(playerId);return}if(match.resumeAfterAbility==="bot-defense"){match.resumeAfterAbility=null;practiceBotDefend();return}showNextAbilityPrompt();if(!match.pendingAbility&&!match.pendingAbilities?.length)resolvePracticeAttackAfterDrives();if(!match.pendingAbility&&!match.pendingAbilities?.length)tryAdvanceRidePhase()}
   function retireHollowedUnitsAtTurnEnd(endingPlayerId){const seen=match.hollowRetiredThisTurn||=([]),candidates=[];for(const[side,player]of Object.entries(match.players||{}))for(let index=0;index<(player.rear||[]).length;index++){const instance=player.rear[index];if(instance?.hollowed===true&&instance.hollowedExpiry===endingPlayerId&&!seen.includes(`${match.turn}:${endingPlayerId}:${instance.uid}`))candidates.push({side,instance,zone:index<5?["rear-left","rear-right","rear-back-left","rear-back-center","rear-back-right"][index]:`accel-${index-4}`})}if(!candidates.length)return 0;for(const item of candidates)seen.push(`${match.turn}:${endingPlayerId}:${item.instance.uid}`);const retired=window.VanguardAbilityEngine.retireHollowedUnitsAtTurnEnd(match.players,endingPlayerId);for(const item of retired){addLog((cardMap.get(item.instance.cardId)?.name||"A hollowed Rear-Guard")+" was retired by Hollow at the end of the turn.");queueMovedCardAbility(item.instance,item.side,"retire",item.zone,{previousLocation:item.zone,currentLocation:"drop",actingPlayerId:endingPlayerId,turnPlayerId:endingPlayerId,timingWindow:"hollow-retirement"})}return retired.length}
   function completeTurnTransition(endingPlayerId){if(!match)return;const endingSide=["human","bot"].find(side=>match.players[side]?.playerId===endingPlayerId);if(!endingSide)return;const endingPlayer=match.players[endingSide];const hollowRetired=retireHollowedUnitsAtTurnEnd(endingPlayerId);if(hollowRetired&&(match.pendingAbility||match.pendingAbilities?.length)){match.pendingTurnEnd={playerId:endingPlayerId,side:endingSide,turn:match.turn};showNextAbilityPrompt();renderMatch();return}window.VanguardAbilityEngine.expireHarmonyAssociations(match,`${match.turn}:${endingSide}`);window.VanguardAbilityEngine.clearOpponentTriggerFacts(match.players);if(online.role){addLog(endingPlayer.name+" ended their turn.");match.firstTurnComplete=true;returnStriddenVanguard(endingSide);clearTurnBonuses(endingSide);match.ridePerformed=false;match.stridePerformed=false;match.ordersPlayedThisTurn=0;match.selected=null;match.pendingAttack=null;const nextSide=flipSide(endingSide);match.side=nextSide;match.phase=0;match.turn+=1;match.turnStartGrades||={};match.turnStartGrades[nextSide]=Number(cardMap.get(match.players[nextSide].vanguard?.cardId)?.grade??-1);match.drewThisTurn=false;queueTurnStartEvent(nextSide);standAllUnits(nextSide);setMessage(match.players[nextSide].name+"'s turn — Stand phase.");renderMatch();return}if(endingSide==="human"){addLog("You ended your turn.");match.firstTurnComplete=true;returnStriddenVanguard("human");clearTurnBonuses("human");match.ridePerformed=false;match.stridePerformed=false;match.ordersPlayedThisTurn=0;match.selected=null;renderMatch();botTurn();return}returnStriddenVanguard("bot");clearTurnBonuses("bot");match.side="human";match.phase=0;match.drewThisTurn=false;match.ridePerformed=false;match.stridePerformed=false;match.turnStartGrades||={};match.turnStartGrades.human=Number(cardMap.get(match.players.human.vanguard?.cardId)?.grade??-1);match.ordersPlayedThisTurn=0;match.pendingAttack=null;match.selected=null;if(match.initialBotTurn)match.initialBotTurn=false;else match.turn+=1;match.firstTurnComplete=true;queueTurnStartEvent("human");standAllUnits("human");addLog("Your turn began — advance to Draw to draw a card.");setMessage("Your turn — Stand phase.");renderMatch()}
   function endTurn(){if(!match||match.ended)return;if(match.pendingTurnEnd)return;if(match.side!=="human"||match.phase!==phases.length-1||match.pendingAttack||match.pendingAbility||match.pendingAbilities?.length||match.pendingTrigger){toast("Finish the End phase after resolving pending actions.");return}beginTurnEnd("human")}  function returnStriddenVanguard(side) { const player=match?.players?.[side],unit=player?.vanguard;if(!unit?.strideHeart)return;const hearts=unit.strideHearts||[unit.strideHeart],heart=hearts.find((item)=>!isGDeckCard(cardMap.get(item.cardId))&&!isGGuardian(cardMap.get(item.cardId)))||unit.strideHeart,stride={...unit};delete stride.strideHeart;delete stride.strideHearts;const gHearts=hearts.filter((item)=>isGDeckCard(cardMap.get(item.cardId))&&!isGGuardian(cardMap.get(item.cardId)));gHearts.forEach((item)=>player.gZone.push({...item,faceUp:true,rested:false}));hearts.filter((item)=>item.uid!==heart.uid&&!gHearts.some((g)=>g.uid===item.uid)).forEach((item)=>player.soul.push(item));player.vanguard={...heart,rested:Boolean(unit.rested)};player.gZone.push({...stride,faceUp:true,rested:false});addLog(`${cardMap.get(stride.cardId)?.name||"The G Unit"} and its G-unit heart cards returned face up to the G zone; ${cardMap.get(heart.cardId)?.name||"the heart"} returned to the Vanguard circle.`); }
@@ -2192,7 +2251,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (!match || match.ended) return;
     if (!canUseCenterPhase()) { toast("Wait until it is your turn and all pending choices, effects, and attack steps are resolved."); return; }
     if (match.phase >= phases.length - 1) { endTurn(); return; }
-    const previousPhase=phases[match.phase]; match.phase += 1; if(match.players.human.format==="standard"&&match.phase===3)match.phase=4; match.selected = null; queuePhaseChangeEvent("human",previousPhase,phases[match.phase]); if(match.phase===2)chargeEnergyAtRidePhase(match.players.human);
+    const previousPhase=phases[match.phase]; if(previousPhase==="Ride")match.ridePhaseAdvancePending=false; match.phase += 1; if(match.players.human.format==="standard"&&match.phase===3)match.phase=4; match.selected = null; queuePhaseChangeEvent("human",previousPhase,phases[match.phase]); if(match.phase===2)chargeEnergyAtRidePhase(match.players.human);
     if (match.phase === 1 && !match.drewThisTurn) {
       const drawn = draw("human"); match.drewThisTurn = true;
       addLog(drawn ? `${match.players.human.name} drew a card for the Draw phase.` : `${match.players.human.name} has no cards to draw.`);
@@ -2260,11 +2319,12 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (action === "return-g-vanguard") { returnGVanguardToDeck(); renderMatch(); return; }
     if (player.format === "standard" && (action === "stride" || action.startsWith("stride:") || action.startsWith("stride-cost:") || action === "stride-confirm" || action === "g-guard" || action.startsWith("g-guard:"))) { toast("Standard decks have a Ride Deck instead of a G-deck."); return; }
     if (action === "ride-deck-open") { if (player.format !== "standard" || match.side !== "human" || match.phase !== 2 || match.ridePerformed || match.pendingRide) { toast("Use your Ride Deck during your Ride phase, once per turn."); return; } match.pendingRide = { ownerSide: "human", stage: "choose", unitUid: "", costUid: "" }; return; }
+    if (action.startsWith("ride-deck-start:")) { const uid = action.slice("ride-deck-start:".length), rider = legalRideCandidates("human", "ride-deck").find(item => item.uid === uid); if (player.format !== "standard" || match.side !== "human" || match.phase !== 2 || match.ridePerformed || match.pendingRide || !rider) { toast("That Ride Deck unit is no longer a legal ride."); return; } match.pendingRide = { ownerSide: "human", stage: "cost", unitUid: uid, costUid: "" }; return; }
     if (action === "ride-deck-cancel") { if (match.pendingRide?.ownerSide === "human") match.pendingRide = null; $("#ride-deck-dialog").close(); $("#ride-deck-cost-dialog").close(); return; }
     if (action.startsWith("ride-deck-select:")) { const state = match.pendingRide, uid = action.slice("ride-deck-select:".length), rider = player.rideDeck?.find(item => item.uid === uid), grade = Number(cardMap.get(rider?.cardId)?.grade), current = Number(cardMap.get(player.vanguard?.cardId)?.grade); if (!state || state.ownerSide !== "human" || state.stage !== "choose" || match.side !== "human" || match.phase !== 2 || match.ridePerformed || !rider || grade < current || grade > current + 1) { toast("That Ride Deck unit cannot be ridden now."); return; } state.unitUid = uid; return; }
     if (action === "ride-deck-begin") { const state = match.pendingRide, rider = player.rideDeck?.find(item => item.uid === state?.unitUid), grade = Number(cardMap.get(rider?.cardId)?.grade), current = Number(cardMap.get(player.vanguard?.cardId)?.grade); if (!state || state.ownerSide !== "human" || state.stage !== "choose" || !rider || grade < current || grade > current + 1 || match.side !== "human" || match.phase !== 2 || match.ridePerformed) { toast("Select a legal unit from your Ride Deck first."); return; } state.stage = "cost"; state.costUid = ""; return; }
     if (action.startsWith("ride-deck-cost:")) { const state = match.pendingRide, uid = action.slice("ride-deck-cost:".length); if (!state || state.ownerSide !== "human" || state.stage !== "cost" || !player.hand.some(item => item.uid === uid)) { toast("Choose a card in your hand to discard as the ride cost."); return; } state.costUid = uid; return; }
-    if (action === "ride-deck-confirm") { const state = match.pendingRide, rideIndex = player.rideDeck?.findIndex(item => item.uid === state?.unitUid) ?? -1, costIndex = player.hand.findIndex(item => item.uid === state?.costUid), rider = rideIndex >= 0 ? player.rideDeck[rideIndex] : null, riderCard = cardMap.get(rider?.cardId), grade = Number(riderCard?.grade), current = Number(cardMap.get(player.vanguard?.cardId)?.grade); if (!state || state.ownerSide !== "human" || state.stage !== "cost" || match.side !== "human" || match.phase !== 2 || match.ridePerformed || rideIndex < 0 || costIndex < 0 || grade < current || grade > current + 1 || !window.VanguardAbilityEngine.canRideCard(riderCard, { vanguardCard: cardMap.get(player.vanguard?.cardId), crests: (player.crests || []).map(crest => cardMap.get(crest.cardId)) })) { toast("The Ride Deck choice or discard cost is no longer legal."); return; } const cost = player.hand.splice(costIndex, 1)[0], previous = player.vanguard; player.drop.push(cost); player.rideDeck.splice(rideIndex, 1); if (previous) player.soul.push(previous); player.vanguard = { ...rider, rested: false }; window.VanguardAbilityEngine.recordFightRide(player, riderCard); match.ridePerformed = true; match.pendingRide = null; $("#ride-deck-dialog").close(); $("#ride-deck-cost-dialog").close(); addLog(`${player.name} discarded a card and rode ${riderCard.name} from the Ride Deck.`); queueMovedCardAbility(cost, "human", "discard", "hand", { discardReason: "ride-deck-cost", timingWindow: "ride-cost" }); if (previous) queueAbilityPrompts("ride", "human", previous.uid, { zone: "soul", riderPreviousLocation: "ride-deck", timingWindow: "ride-deck" }); queueAbilityPrompts("place", "human", rider.uid, { source: "ride-deck", zone: "vanguard" }); askForCardCrest("human", rider); return; }
+    if (action === "ride-deck-confirm") { const state = match.pendingRide, rideIndex = player.rideDeck?.findIndex(item => item.uid === state?.unitUid) ?? -1, costIndex = player.hand.findIndex(item => item.uid === state?.costUid), rider = rideIndex >= 0 ? player.rideDeck[rideIndex] : null, riderCard = cardMap.get(rider?.cardId); if (!state || state.ownerSide !== "human" || state.stage !== "cost" || match.side !== "human" || match.phase !== 2 || match.ridePerformed || rideIndex < 0 || costIndex < 0 || !legalRideCandidates("human", "ride-deck").some(item => item.uid === rider.uid)) { toast("The Ride Deck choice or discard cost is no longer legal."); return; } const cost = player.hand.splice(costIndex, 1)[0], previous = player.vanguard; player.drop.push(cost); player.rideDeck.splice(rideIndex, 1); if (previous) player.soul.push(previous); player.vanguard = { ...rider, rested: false }; window.VanguardAbilityEngine.recordFightRide(player, riderCard); match.ridePerformed = true; match.ridePhaseAdvancePending = true; match.pendingRide = null; $("#ride-deck-dialog").close(); $("#ride-deck-cost-dialog").close(); addLog(`${player.name} discarded a card and rode ${riderCard.name} from the Ride Deck.`); queueMovedCardAbility(cost, "human", "discard", "hand", { discardReason: "ride-deck-cost", timingWindow: "ride-cost" }); if (previous) queueAbilityPrompts("ride", "human", previous.uid, { zone: "soul", riderPreviousLocation: "ride-deck", timingWindow: "ride-deck" }); queueAbilityPrompts("place", "human", rider.uid, { source: "ride-deck", zone: "vanguard" }); askForCardCrest("human", rider); return; }
     if (action.startsWith("activate-skill:")) { const [,uid,...idParts]=action.split(":"); const abilityId=idParts.join(":"); const field=findFieldCard(uid),located=field?null:window.VanguardAbilityEngine.locateCardInstance(match,uid); const source=field?.side==="human"?{...field,side:"human"}:located&&!located.ambiguous&&located.side==="human"&&located.zone==="hand"?{side:"human",zone:"hand",instance:located.instance}:located&&!located.ambiguous&&located.side==="human"&&located.zone==="g-deck"?{side:"human",zone:"g-deck",instance:located.instance}:located&&!located.ambiguous&&located.side==="human"&&located.zone==="soul"&&String(located.instance.cardId)==="cfa-1954"?{side:"human",zone:"soul",instance:located.instance}:located&&!located.ambiguous&&located.side==="human"&&located.zone==="damage"&&located.instance.faceDown!==true?{side:"human",zone:"damage",instance:located.instance}:null; if(!source)return; const ability=eligibleActivatedAbilities(source).find(candidate=>candidate.id===abilityId); if(!ability){toast("This skill cannot be activated right now; check its conditions and once-per-turn use.");return;} if(match.pendingAbility||match.pendingTrigger){toast("Finish the current skill prompt first.");return;} match.pendingAbility={side:"human",field:source.zone,instance:source.instance,ability};showNextAbilityPrompt();return; }
     if (action.startsWith("superior-ride:")) { const [,source,uid]=action.split(":"); performSuperiorRide(source,uid); return; }
     if (action === "g-assist") {
@@ -2319,12 +2379,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       if (zone === "vanguard") {
         const instance = selectedHandCard();
         if (!instance) { toast("Select a card in your hand first."); return; }
-        if(!window.VanguardAbilityEngine.canRideCard(cardMap.get(instance.cardId),{vanguardCard:cardMap.get(player.vanguard?.cardId),crests:(player.crests||[]).map(crest=>cardMap.get(crest.cardId))})){toast("This card cannot be ridden under your current ride restrictions.");return;}
-        const grade = gradeOf(cardMap.get(instance.cardId)), currentGrade = gradeOf(cardMap.get(player.vanguard?.cardId)), previousVanguard=player.vanguard;
-        if (match.side !== "human" || match.phase !== 2 || match.ridePerformed || grade < 0 || currentGrade < 0 || grade < currentGrade || grade > currentGrade + 1) { toast("A normal ride is once per turn and must be the same grade or one grade higher than your Vanguard."); return; }
-        player.hand = player.hand.filter((item) => item.uid !== instance.uid); if (player.vanguard) player.soul.push(player.vanguard); player.vanguard = { ...instance, rested: false }; window.VanguardAbilityEngine.recordFightRide(player,cardMap.get(instance.cardId)); match.selected = null;
-        match.ridePerformed = true; askForCardCrest("human", instance);
-        addLog(`${player.name} rode ${cardMap.get(instance.cardId)?.name || "a card"} to vanguard.`); if(previousVanguard)queueAbilityPrompts("ride","human",previousVanguard.uid,{zone:"soul",riderPreviousLocation:"hand",timingWindow:"normal-ride"}); queueAbilityPrompts("place","human",instance.uid,{source:"hand",zone:"vanguard"});
+        if (match.side !== "human" || match.phase !== 2 || match.ridePerformed || !completeHandRide(instance)) return;
         renderMatch(); return;
       }
       if (match.side !== "human" || match.phase !== 4) { toast("You can call units during your Main phase."); return; }
@@ -3160,6 +3215,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (action.startsWith("ride-deck-") || action === "g-assist" || action === "g-assist-none" || action === "g-assist-finish" || action.startsWith("g-assist-pick:") || action.startsWith("g-assist-discard:") || action.startsWith("g-guard:") || action.startsWith("intercept:") || action.startsWith("superior-ride:") || action.startsWith("attack-choice:") || action.startsWith("zone-move:") || action.startsWith("deck-action:") || action.startsWith("reveal-action:") || action.startsWith("damage-action:") || action.startsWith("drop-action:") || action.startsWith("reveal-top:") || action.startsWith("gift-force:") || action.startsWith("gift-accel:") || action.startsWith("gdeck-reveal:") || action.startsWith("gdeck-flip-up:") || action.startsWith("trigger-pick:") || action === "trigger-skip" || action === "reveal-done" || action.startsWith("g-assist") ) { if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}sendGuestRequest("action",{action:"manual:"+action,selected:match?.selected||null});return;} manualGameAction(action); if(match)renderMatch(); if(action.startsWith("superior-ride:")){["deck-view-dialog","soul-dialog","bind-dialog","drop-dialog","damage-dialog","reveal-dialog","faceup-gdeck-dialog"].forEach(id=>{if($("#"+id).open)$("#"+id).close()});} if(action.startsWith("deck-action:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#deck-view-dialog").open)openMyDeck(); if(action.startsWith("zone-move:") && $("#bind-dialog").open)openBindDialog($("#bind-dialog").dataset.side || "human"); if(action.startsWith("zone-move:") && $("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind); if(action.startsWith("zone-move:") && $("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if(action.startsWith("drop-action:") && $("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); return; }
     if (action === "reveal-top-cards") { if (!match) { toast("Start a match first."); return; } $("#reveal-count-dialog").showModal(); return; }
     if (action === "gift-force" || action === "gift-accel") { openGiftDialog(action === "gift-force" ? "force" : "accel"); return; }
+    if (action === "crest-add" || action === "crest-skip") { if (online.role === "guest") { if (!online.connection?.open) { toast("You are disconnected from the match."); return; } sendGuestRequest("action", { action: `manual:${action}`, selected: match?.selected || null }); return; } manualGameAction(action); if (match) renderMatch(); return; }
     if (online.role === "guest") {
       if (!online.connection?.open) { toast("You are disconnected from the match."); return; }
       const selectedSource = action.startsWith("activate-skill:") ? action.slice("activate-skill:".length).split(":")[0] : match?.selected || null;
@@ -3348,6 +3404,31 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#ride-deck-begin").addEventListener("click", () => performManualAction("ride-deck-begin"));
   $("#ride-deck-cost-cards").addEventListener("click", event => { const card = event.target.closest("[data-ride-deck-cost]"); if (card) performManualAction("ride-deck-cost:" + card.dataset.rideDeckCost); });
   $("#ride-deck-cost-confirm").addEventListener("click", () => performManualAction("ride-deck-confirm"));
+  $("#ride-choice-hand-cards").addEventListener("click", event => {
+    const button = event.target.closest("[data-ride-choice-uid]");
+    if (!button || !match || online.role === "watcher") return;
+    const instance = legalRideCandidates("human", "hand").find(item => item.uid === button.dataset.rideChoiceUid);
+    if (!instance) { toast("That card is no longer a legal ride."); renderMatch(); return; }
+    if (online.role === "guest" && !online.connection?.open) { toast("You are disconnected from the match."); return; }
+    match.selected = instance.uid;
+    $("#ride-choice-dialog").close();
+    performOnlineAction("ride");
+  });
+  $("#ride-choice-ride-deck-cards").addEventListener("click", event => {
+    const button = event.target.closest("[data-ride-choice-deck-uid]");
+    if (!button || !match || online.role === "watcher") return;
+    if (!legalRideCandidates("human", "ride-deck").some(item => item.uid === button.dataset.rideChoiceDeckUid)) { toast("That Ride Deck card is no longer a legal ride."); renderMatch(); return; }
+    if (online.role === "guest" && !online.connection?.open) { toast("You are disconnected from the match."); return; }
+    $("#ride-choice-dialog").close();
+    performManualAction(`ride-deck-start:${button.dataset.rideChoiceDeckUid}`);
+  });
+  $("#ride-choice-skip").addEventListener("click", () => {
+    if (!match || online.role === "watcher") return;
+    if (online.role === "guest" && !online.connection?.open) { toast("You are disconnected from the match."); return; }
+    $("#ride-choice-dialog").close();
+    performOnlineAction("advance");
+  });
+  $("#ride-choice-dialog").addEventListener("cancel", event => event.preventDefault());
   $("#ride-deck-dialog").addEventListener("click", event => { if (event.target.closest("[data-ride-cancel]")) performManualAction("ride-deck-cancel"); });
   $("#ride-deck-cost-dialog").addEventListener("click", event => { if (event.target.closest("[data-ride-cancel]")) performManualAction("ride-deck-cancel"); });
   ["#ride-deck-dialog", "#ride-deck-cost-dialog"].forEach(selector => $(selector).addEventListener("cancel", event => { event.preventDefault(); performManualAction("ride-deck-cancel"); }));

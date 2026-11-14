@@ -263,3 +263,65 @@ body.mobile-mode.battlefield-expanded.battlefield-preview-open #match-layout > .
 @media (prefers-reduced-motion: reduce) {
   #match-layout .field-card, #hand-drawer #hand-cards > .game-card-wrap { transition: none !important; animation: none !important; }
 }
+
+dialog.ride-choice-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: max(22px,env(safe-area-inset-top)) max(22px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(22px,env(safe-area-inset-left));
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+  color: #eff8ff;
+  background: radial-gradient(ellipse at 50% 30%,#17375a 0,#0a162a 52%,#050b16 100%);
+  box-shadow: inset 0 0 0 1px #77d9ff70,inset 0 0 90px #54cfff12;
+  grid-template-rows: auto minmax(0,1fr) auto;
+  gap: clamp(12px,2.2vh,24px);
+  overflow: hidden;
+}
+dialog.ride-choice-dialog[open] { display: grid; animation: ride-choice-enter .22s ease-out both; }
+dialog.ride-choice-dialog::backdrop { background: #020611f5; }
+.ride-choice-header { text-align: center; }
+.ride-choice-header .eyebrow { margin: 0 0 4px; color: #75d8ff; letter-spacing: .2em; font-size: .78rem; font-weight: 800; }
+.ride-choice-header h2 { margin: 0; color: #fff; font-size: clamp(1.7rem,4vw,3rem); text-shadow: 0 0 24px #56cfff66; }
+.ride-choice-header > p:not(.eyebrow) { margin: 7px 0; color: #b8cee4; }
+.ride-choice-vanguard { display: inline-flex; margin: 8px auto 0 !important; padding: 7px 14px; border: 1px solid #f1cc70a8; border-radius: 999px; color: #ffe9a8 !important; background: #18263be8; font-weight: 700; }
+.ride-choice-sections { min-height: 0; overflow: auto; overscroll-behavior: contain; display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 2px 4px 10px; }
+.ride-choice-section { width: min(100%,1400px); }
+.ride-choice-section h3 { display: flex; align-items: baseline; justify-content: center; gap: 10px; margin: 0 0 12px; color: #ccecff; font-size: 1rem; letter-spacing: .08em; text-transform: uppercase; }
+.ride-choice-section h3 small { color: #e8c775; font-size: .75rem; letter-spacing: .02em; text-transform: none; }
+.ride-choice-card-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,205px)); justify-content: center; align-items: start; gap: clamp(10px,1.5vw,22px); }
+.ride-choice-card { display: flex; min-width: 0; flex-direction: column; align-items: stretch; gap: 8px; padding: 9px; border: 1px solid #78d7ff70; border-radius: 12px; color: #f2f8ff; background: linear-gradient(155deg,#15314cf2,#0b1628f5); box-shadow: 0 9px 28px #0008,inset 0 0 18px #64ccff0c; cursor: pointer; text-align: center; transition: transform .16s ease,border-color .16s ease,box-shadow .16s ease; }
+.ride-choice-card:hover,.ride-choice-card:focus-visible { z-index: 1; transform: translateY(-5px) scale(1.025); border-color: #ffe187; box-shadow: 0 14px 34px #000b,0 0 22px #64d6ff75; outline: none; }
+.ride-choice-art { display: block; width: 100%; height: clamp(210px,38vh,330px); object-fit: contain; border-radius: 6px; background: #07111f; filter: drop-shadow(0 4px 8px #000b); }
+.ride-choice-card .card-art-glyph { display: grid; width: 100%; height: clamp(210px,38vh,330px); place-items: center; color: #8ce1ff; font-size: 4rem; background: radial-gradient(circle,#17385b,#07111f 70%); }
+.ride-choice-card > span:last-child { display: grid; gap: 3px; }
+.ride-choice-card b { font-size: .88rem; line-height: 1.2; }
+.ride-choice-card small { color: #b6cce1; font-size: .76rem; }
+.ride-choice-empty { grid-column: 1/-1; margin: 0; padding: 22px; color: #b8cee4; text-align: center; }
+.ride-choice-footer { display: flex; align-items: center; justify-content: center; gap: 20px; padding-top: 12px; border-top: 1px solid #6dcfff42; }
+.ride-choice-footer p { margin: 0; color: #aac1d8; }
+.ride-choice-footer .button { min-width: 160px; min-height: 48px; font-size: 1rem; font-weight: 800; }
+@keyframes ride-choice-enter { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: scale(1); } }
+@media (max-width:760px) {
+  dialog.ride-choice-dialog { padding: max(14px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left)); gap: 10px; }
+  .ride-choice-header h2 { font-size: clamp(1.45rem,7vw,2.1rem); }
+  .ride-choice-header > p:not(.eyebrow) { margin: 4px 0; font-size: .86rem; }
+  .ride-choice-vanguard { margin-top: 4px !important; padding: 5px 11px; font-size: .82rem; }
+  .ride-choice-sections { gap: 10px; }
+  .ride-choice-section h3 { margin-bottom: 7px; font-size: .82rem; }
+  .ride-choice-card-grid { grid-template-columns: repeat(auto-fit,minmax(126px, min(34vw,170px))); gap: 8px; }
+  .ride-choice-card { padding: 6px; gap: 5px; border-radius: 9px; }
+  .ride-choice-art,.ride-choice-card .card-art-glyph { height: clamp(150px,31dvh,245px); }
+  .ride-choice-card b { font-size: .76rem; }
+  .ride-choice-card small { font-size: .68rem; }
+  .ride-choice-footer { flex-direction: column; gap: 8px; padding-top: 8px; }
+  .ride-choice-footer p { font-size: .78rem; text-align: center; }
+  .ride-choice-footer .button { width: min(100%,360px); min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) { dialog.ride-choice-dialog[open],.ride-choice-card { animation: none; transition: none; } }
