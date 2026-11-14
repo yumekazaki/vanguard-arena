@@ -1,9 +1,9 @@
-/* Optional conservative turn helper. It never auto-passes player-choice phases. */
+/* Rules-aware routine phase progression. Player-choice phases stay manual. */
 (() => {
   "use strict";
   const KEY = "vanguard-phase-progression";
 
-  function normalize(value) { return value === "assisted" ? "assisted" : "manual"; }
+  function normalize(value) { return value === "manual" ? "manual" : "assisted"; }
   function getMode() {
     try { return normalize(window.localStorage?.getItem(KEY)); }
     catch { return "manual"; }
@@ -26,6 +26,9 @@
     if (context.pendingDecision === true || context.hasLegalDecision === true) return false;
     if (context.phase === 0) return true;
     if (context.phase === 1) return context.drewThisTurn === true && context.canGAssist !== true;
+    if (context.phase === 2) return context.canRide !== true;
+    if (context.phase === 3) return context.canStride !== true;
+    if (context.phase === 6) return context.safeToEndTurn === true;
     return false;
   }
 

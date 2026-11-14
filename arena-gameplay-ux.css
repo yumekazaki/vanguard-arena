@@ -1,4 +1,18 @@
 /* Additive interaction feedback. Existing menus and buttons remain the primary controls. */
+.battle-phase-toolbar > .phase-timeline { grid-column: 2; grid-row: 1 / span 2; align-self: center; min-width: 0; }
+.battle-phase-toolbar > .phase-timeline > summary { min-height: 38px; display: flex; align-items: center; padding: 7px 10px; border: 1px solid #8dbbe844; border-radius: 9px; color: #c9e8ff; background: #7acaff0b; cursor: pointer; font-size: 11px; font-weight: 700; }
+.battle-phase-toolbar > .phase-timeline[open] > summary { margin-bottom: 5px; }
+.battle-phase-toolbar > .phase-timeline > .phase-list { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: 4px; min-width: 0; }
+.battle-phase-toolbar > .phase-timeline > .phase-list .phase-item { justify-content: center; flex-direction: column; gap: 4px; min-width: 0; padding: 5px 2px; text-align: center; font-size: 8px; line-height: 1.15; }
+.battle-phase-toolbar > .phase-timeline > .phase-list .phase-item .phase-bullet { width: 20px; height: 20px; }
+#center-next-phase { display: none; }
+body.battlefield-expanded #center-next-phase { display: inline-flex; }
+@media (max-width: 600px) {
+  .battle-phase-toolbar > .phase-timeline { grid-column: 1 / -1; grid-row: 2; }
+  .battle-phase-toolbar > .phase-timeline > .phase-list { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .battle-phase-toolbar > .phase-timeline > .phase-list .phase-item { flex-direction: row; justify-content: flex-start; gap: 5px; padding: 4px 5px; text-align: left; font-size: 8px; }
+  .battle-phase-toolbar > .phase-timeline > .phase-list .phase-item .phase-bullet { width: 18px; height: 18px; flex: 0 0 18px; }
+}
 .game-table.targeting-attack .field-card.attack-target-available {
   z-index: 8;
   cursor: crosshair;
@@ -45,6 +59,7 @@
 
 @keyframes attack-target-pulse { from { filter: brightness(1); } to { filter: brightness(1.35); } }
 @keyframes message-arrival { from { opacity: .35; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+.field-card[role="group"]:focus-visible { outline: 3px solid #a5dfff; outline-offset: 3px; }
 
 @media (max-width: 760px) {
   .game-table.targeting-attack .field-card.attack-target-available { outline-width: 2px; outline-offset: 1px; }
