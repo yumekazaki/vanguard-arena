@@ -90,7 +90,7 @@
   function effectAt(element, name) { if (element) transientClass(element, name, 720); }
   function animateDraw(side, origin, uid, sequence = 0, cardDefinition = null) {
     const destination = side === "human"
-      ? document.querySelector("#open-hand")
+      ? document.querySelector("#hand-cards")
       : document.querySelector(".opponent-hand-row");
     if (!destination) return;
     const target = destination.getBoundingClientRect();

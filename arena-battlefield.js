@@ -2,6 +2,7 @@
 (() => {
   const table = document.querySelector('#game-table');
   const fullscreen = document.querySelector('#battlefield-fullscreen');
+  const previewToggle = document.querySelector('#battlefield-preview-toggle');
   const controls = document.querySelector('#battlefield-controls');
   if (!table || !fullscreen || !controls) return;
   const column = table.closest('.table-column');
@@ -26,11 +27,31 @@
   const chat = document.querySelector('#online-chat');
   const chatHome = document.createComment('Online chat position');
   chat?.before(chatHome);
+  const matchLog = document.querySelector('.match-log-card');
+  const matchLogHome = document.createComment('Match log position');
+  matchLog?.before(matchLogHome);
+  function showSupportPanelsInControls() {
+    if (!document.body.classList.contains('battlefield-expanded')) return;
+    if (chat && !chat.hidden) dialog.append(chat);
+    if (matchLog) dialog.append(matchLog);
+  }
+  function restoreSupportPanels() {
+    if (chat && chat.parentElement === dialog) chatHome.after(chat);
+    if (matchLog && matchLog.parentElement === dialog) matchLogHome.after(matchLog);
+  }
   const openControls = () => {
-    if (document.body.classList.contains('battlefield-expanded') && chat && !chat.hidden) dialog.append(chat);
+    showSupportPanelsInControls();
     if (!dialog.open) dialog.showModal();
   };
-  dialog.addEventListener('close', () => { if (chat && chat.parentElement === dialog) chatHome.after(chat); });
+  previewToggle?.addEventListener('click', () => {
+    const open = !document.body.classList.contains('battlefield-preview-open');
+    document.body.classList.toggle('battlefield-preview-open', open);
+    previewToggle.setAttribute('aria-expanded', String(open));
+    previewToggle.title = open ? 'Hide card preview' : 'Show card preview';
+    const label = previewToggle.querySelector('[data-preview-label]');
+    if (label) label.textContent = open ? 'Hide preview' : 'Card preview';
+  });
+  dialog.addEventListener('close', restoreSupportPanels);
   controls.addEventListener('click', openControls);
   bottom.addEventListener('click', openControls);
   dialog.querySelector('[data-close-controls]').addEventListener('click', () => dialog.close());
@@ -40,6 +61,16 @@
   function syncFullscreen() {
     const active = Boolean(document.fullscreenElement || viewportOnly);
     document.body.classList.toggle('battlefield-expanded', active);
+    if (active && dialog.open) showSupportPanelsInControls();
+    else if (!active) restoreSupportPanels();
+    if (!active) document.body.classList.remove('battlefield-preview-open');
+    previewToggle?.setAttribute('aria-expanded', String(active && document.body.classList.contains('battlefield-preview-open')));
+    if (previewToggle) {
+      const previewOpen = active && document.body.classList.contains('battlefield-preview-open');
+      previewToggle.title = previewOpen ? 'Hide card preview' : 'Show card preview';
+      const previewLabel = previewToggle.querySelector('[data-preview-label]');
+      if (previewLabel) previewLabel.textContent = previewOpen ? 'Hide preview' : 'Card preview';
+    }
     fullscreen.setAttribute('aria-pressed', String(active));
     fullscreen.title = active ? 'Exit full screen' : 'Full screen';
     const label = fullscreen.querySelector('[data-fullscreen-label]');
