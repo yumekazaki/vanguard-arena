@@ -286,6 +286,11 @@ dialog.ride-choice-dialog {
 }
 dialog.ride-choice-dialog[open] { display: grid; animation: ride-choice-enter .22s ease-out both; }
 dialog.ride-choice-dialog::backdrop { background: #020611f5; }
+.ride-card-action-dialog { width: min(440px,calc(100vw - 28px)); text-align: center; }
+.ride-card-action-dialog h2 { margin: 0 0 8px; color: #fff; }
+.ride-card-action-dialog > p:not(.eyebrow) { color: #b8cee4; }
+.ride-card-action-dialog .empty-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+.ride-card-action-dialog #ride-card-action-cancel { grid-column: 1 / -1; }
 .ride-choice-header { text-align: center; }
 .ride-choice-header .eyebrow { margin: 0 0 4px; color: #75d8ff; letter-spacing: .2em; font-size: .78rem; font-weight: 800; }
 .ride-choice-header h2 { margin: 0; color: #fff; font-size: clamp(1.7rem,4vw,3rem); text-shadow: 0 0 24px #56cfff66; }
