@@ -778,6 +778,7 @@
     }).join("") || '<p class="ride-choice-empty">No legal ride cards in your hand.</p>';
     const rideDeckSection = $("#ride-choice-ride-deck-section");
     rideDeckSection.hidden = player.format !== "standard";
+    $("#ride-choice-open-deck").hidden = player.format !== "standard";
     $("#ride-choice-ride-deck-cards").innerHTML = deckCandidates.map(instance => {
       const card = cardMap.get(instance.cardId);
       return card ? `<button class="ride-choice-card" type="button" data-ride-choice-deck-uid="${escapeHtml(instance.uid)}" aria-label="Ride ${escapeHtml(card.name)} from Ride Deck, discard one card">${cardImage(card, "ride-choice-art")}<span><b>${escapeHtml(card.name)}</b><small>Grade ${escapeHtml(card.grade)} · Ride Deck · discard 1</small></span></button>` : "";
@@ -3427,6 +3428,12 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     if (online.role === "guest" && !online.connection?.open) { toast("You are disconnected from the match."); return; }
     $("#ride-choice-dialog").close();
     performOnlineAction("advance");
+  });
+  $("#ride-choice-open-deck").addEventListener("click", () => {
+    if (!match || match.players.human.format !== "standard" || online.role === "watcher") return;
+    if (online.role === "guest" && !online.connection?.open) { toast("You are disconnected from the match."); return; }
+    $("#ride-choice-dialog").close();
+    performManualAction("ride-deck-open");
   });
   $("#ride-choice-dialog").addEventListener("cancel", event => event.preventDefault());
   $("#ride-deck-dialog").addEventListener("click", event => { if (event.target.closest("[data-ride-cancel]")) performManualAction("ride-deck-cancel"); });
