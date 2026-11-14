@@ -324,7 +324,9 @@ dialog.ride-choice-dialog::backdrop { background: #020611f5; }
   .ride-choice-card small { font-size: .68rem; }
   .ride-choice-footer { flex-direction: column; gap: 8px; padding-top: 8px; }
   .ride-choice-footer p { font-size: .78rem; text-align: center; }
-  .ride-choice-footer-actions { width: min(100%,520px); justify-content: center; gap: 8px; }
-  .ride-choice-footer .button { flex: 1 1 0; width: auto; max-width: 260px; min-width: 0; min-height: 44px; padding-inline: 8px; font-size: .88rem; }
+  .ride-choice-footer-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); width: min(100%,520px); justify-content: stretch; gap: 8px; }
+  .ride-choice-footer-actions.has-g-assist #ride-choice-g-assist { grid-column: 1 / -1; min-height: 52px; }
+  .ride-choice-footer-actions.has-g-assist:not(.has-ride-deck) #ride-choice-skip { grid-column: 1 / -1; }
+  .ride-choice-footer .button { width: 100%; max-width: none; min-width: 0; min-height: 48px; padding: 8px; font-size: .9rem; white-space: normal; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 }
 @media (prefers-reduced-motion: reduce) { dialog.ride-choice-dialog[open],.ride-choice-card { animation: none; transition: none; } }
