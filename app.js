@@ -984,16 +984,18 @@
 function openDamageZone(side="human") {
     const player=match?.players?.[side];
     if(!player){toast("Start a match to view damage.");return;}
-    const own=side==="human",damage=player.damage||[],faceUp=damage.filter(item=>!item.faceDown).length,faceDown=damage.length-faceUp,canAct=own&&match.side==="human"&&online.role!=="watcher";
+    const own=side==="human",damage=player.damage||[],faceUp=damage.filter(item=>!item.faceDown).length,faceDown=damage.length-faceUp,canAct=own&&match.side==="human"&&online.role!=="watcher",resolutionPending=["pendingAbility","pendingAbilities","pendingTrigger","pendingAttack","pendingAttackSetup","pendingBattleEnd","pendingTurnEnd","pendingDamageQueue","pendingHitResolution","pendingDecision","pendingRide","pendingRideAssist","pendingStride","pendingGAssist","pendingProtectGuard","pendingCrest","pendingEnd","pendingOver"].some(key=>Array.isArray(match[key])?match[key].length>0:Boolean(match[key])),canMove=own&&online.role!=="watcher"&&!resolutionPending;
     $("#damage-zone-title").textContent=own?"Your damage":player.name+" · Damage";
     $("#damage-zone-help").textContent=damage.length+"/6 damage · "+faceUp+" face up · "+faceDown+" face down. Face-down card identities stay hidden.";
     $("#human-damage-zone-count").textContent=(match.players.human.damage||[]).length+"/6";
     $("#damage-zone-card-list").innerHTML=damage.length?damage.map((item,index)=>{
-      if(item.faceDown)return '<article class="zone-view-card damage-zone-face-down"><span class="damage-card-back" aria-label="Face-down damage">V</span><b>Damage '+(index+1)+'</b><small>Face-down · identity hidden</small></article>';
+      const moveMenu=canMove?'<div class="peek-actions" hidden><button class="button" type="button" data-zone-move="damage:hand:'+escapeHtml(item.uid)+'">Add to hand</button><button class="button" type="button" data-zone-move="damage:drop:'+escapeHtml(item.uid)+'">Send to Drop</button></div>':'';
+      if(item.faceDown)return '<article class="zone-view-card damage-zone-face-down">'+(canMove?'<button class="zone-card-face" type="button" data-zone-select aria-label="Select face-down damage '+(index+1)+'"><span class="damage-card-back" aria-hidden="true">V</span><b>Damage '+(index+1)+'</b></button>':'<span class="damage-card-back" aria-label="Face-down damage">V</span><b>Damage '+(index+1)+'</b>')+'<small>Face-down · identity hidden</small>'+moveMenu+'</article>';
       const card=cardMap.get(item.cardId);
-      return card?'<article class="zone-view-card damage-zone-entry"><button class="zone-card-face" type="button" data-card-zoom="'+escapeHtml(card.id)+'">'+cardImage(card)+'<b>'+escapeHtml(card.name)+'</b></button><small>Face-up damage</small></article>':'';
+      return card?'<article class="zone-view-card damage-zone-entry"><button class="zone-card-face" type="button" '+(canMove?'data-zone-select':'data-card-zoom="'+escapeHtml(card.id)+'"')+' aria-label="'+(canMove?'Select actions for ':'Zoom ')+escapeHtml(card.name)+'">'+cardImage(card)+'<b>'+escapeHtml(card.name)+'</b></button><button class="zone-card-zoom" type="button" data-card-zoom="'+escapeHtml(card.id)+'" aria-label="Zoom '+escapeHtml(card.name)+'">⤢</button><small>Face-up damage</small>'+moveMenu+'</article>':'';
     }).join(""):'<p class="zone-empty-message">No damage cards.</p>';
     $("#damage-zone-actions").innerHTML=canAct?'<button class="button" type="button" data-damage-zone-action="counter-blast" '+(faceUp?"":"disabled")+'>Counter-Blast · '+faceUp+'</button><button class="button" type="button" data-damage-zone-action="counter-charge" '+(faceDown?"":"disabled")+'>Counter-Charge · '+faceDown+'</button>':"";
+    $("#damage-zone-dialog").dataset.side=side;
     if(!$("#damage-zone-dialog").open)$("#damage-zone-dialog").showModal();
   }
 
@@ -2665,7 +2667,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
         match.selected=null;zoneFieldSelection=null;addLog(`${player.name} moved ${card?.name||"a Unit"} from ${source==="soul"?"Soul":"a zone"} to ${targetZone==="vanguard"?"Vanguard":targetZone}.`);return;
       }
       const privateMove = source === "reveal" && match.revealed?.private && ["hand", "deck-top", "deck-bottom"].includes(choice);
-      const instance = sourceCards.splice(index, 1)[0];
+      const instance = sourceCards.splice(index, 1)[0],wasFaceDownDamage=source==="damage"&&Boolean(instance.faceDown);
+      if(source==="damage")instance.faceDown=false;
       if(source==="damage")queueAbilityPrompts("damageLeave","human",instance.uid,{zone:"damage",currentLocation:({hand:"hand",soul:"soul",bind:"bind","deck-top":"deck","deck-bottom":"deck",drop:"drop"})[choice]||"drop",subjectInstance:instance});
       if (choice === "hand") player.hand.push(instance);
       else if (choice === "soul") player.soul.push(instance);
@@ -2677,7 +2680,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       const destination = { hand: "hand", soul: "Soul", bind: "Bind", drop: "Drop", "deck-top": "the top of the deck", "deck-bottom": "the bottom of the deck" }[choice] || "Drop";
       if(source!=="damage"){const currentLocation=({hand:"hand",soul:"soul",bind:"bind","deck-top":"deck","deck-bottom":"deck",drop:"drop"})[choice]||"drop",eventName=choice==="soul"?"soulMove":choice==="bind"?"bind":"move";queueMovedCardAbility(instance,"human",eventName,source,{currentLocation});}
       if (source === "reveal" && !sourceCards.length) match.revealed = null;
-      addLog(`${player.name} moved ${privateMove ? "a privately viewed card" : cardMap.get(instance.cardId)?.name || "a card"} from ${source === "gdeck" ? "the G deck" : source === "bind" ? "Bind" : source === "soul" ? "Soul" : "the deck"} to ${destination}.`);
+      const sourceLabel={gdeck:"the G deck",gzone:"the G zone",bind:"Bind",soul:"Soul",damage:"the damage zone",drop:"Drop",hand:"hand",deck:"the deck",reveal:"revealed cards"}[source]||"a zone";
+      addLog(`${player.name} moved ${privateMove||wasFaceDownDamage&&choice==="hand"?"a face-down card":cardMap.get(instance.cardId)?.name||"a card"} from ${sourceLabel} to ${destination}.`);
     } else if (action.startsWith("deck-action:")) {
       const [, choice, uid] = action.split(":"); const index = player.deck.findIndex((item) => item.uid === uid); if (index < 0) return; const instance = player.deck.splice(index, 1)[0];
       if (choice === "hand") player.hand.push(instance); else if (choice === "soul") player.soul.push(instance); else player.drop.push(instance); if(choice==="drop")queueMovedCardAbility(instance,"human","move","deck",{currentLocation:"drop"});
@@ -3019,7 +3023,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     selectedCard = null; selectedZone = null;
     if (online.role === "guest" && match.players?.human) match.players.human.name = online.localName || match.players.human.name;
     if (online.role === "guest" && online.connection?.isRelay) { online.relayStateReceived = true; if (online.joinRetry) { clearInterval(online.joinRetry); online.joinRetry = null; } $("#online-confirm").disabled = false; if ($("#online-dialog").open) $("#online-dialog").close(); }
-    revealLocalMatch(); renderMatch(); if($("#deck-view-dialog").open)openMyDeck(); if($("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); if($("#bind-dialog").open)openBindDialog(); if($("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind,$("#gdeck-dialog").dataset.gGuardHealUid||""); if($("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human");
+    revealLocalMatch(); renderMatch(); if($("#deck-view-dialog").open)openMyDeck(); if($("#drop-dialog").open)openDropDialog($("#drop-dialog").dataset.side); if($("#bind-dialog").open)openBindDialog(); if($("#gdeck-dialog").open)openGDeckDialog($("#gdeck-dialog").dataset.kind,$("#gdeck-dialog").dataset.gGuardHealUid||""); if($("#soul-dialog").open)openSoulDialog($("#soul-dialog").dataset.blast==="1",$("#soul-dialog").dataset.side||"human"); if($("#damage-zone-dialog").open)openDamageZone($("#damage-zone-dialog").dataset.side||"human");
   }
   function handleRemoteMessage(message) {
     if (!message || typeof message !== "object") return;
@@ -3561,7 +3565,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#gift-cancel").addEventListener("click", () => $("#gift-dialog").close()); $("#gift-close").addEventListener("click", () => $("#gift-dialog").close());
   $("#gift-confirm").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind === "force") { const zone = $("#gift-zone").value; if (!zone) { toast("Choose a circle for the Force marker."); return; } performManualAction(`gift-force:${type}:${zone}`); } else performManualAction(`gift-accel:${type}`); dialog.close(); });
   $("#gift-place-vanguard").addEventListener("click", (e) => { e.preventDefault(); const dialog = $("#gift-dialog"), type = $("#gift-type").value; if (dialog.dataset.kind !== "force") return; performManualAction(`gift-force:${type}:vanguard`); dialog.close(); });
-  $("#view-human-damage").addEventListener("click",()=>openDamageZone("human")); $("#damage-zone-card-list").addEventListener("click",event=>{const zoom=event.target.closest("[data-card-zoom]");if(zoom)showCardDetails(zoom.dataset.cardZoom)}); $("#damage-zone-actions").addEventListener("click",event=>{const action=event.target.closest("[data-damage-zone-action]");if(!action)return;$("#damage-zone-dialog").close();openDamageDialog(action.dataset.damageZoneAction)});
+  $("#view-human-damage").addEventListener("click",()=>openDamageZone("human")); $("#damage-zone-card-list").addEventListener("click",event=>{const move=event.target.closest("[data-zone-move]");if(move){performManualAction("zone-move:"+move.dataset.zoneMove);if(online.role!=="guest"&&$("#damage-zone-dialog").open)openDamageZone($("#damage-zone-dialog").dataset.side||"human");return;}const zoom=event.target.closest("[data-card-zoom]");if(zoom)showCardDetails(zoom.dataset.cardZoom)}); $("#damage-zone-actions").addEventListener("click",event=>{const action=event.target.closest("[data-damage-zone-action]");if(!action)return;$("#damage-zone-dialog").close();openDamageDialog(action.dataset.damageZoneAction)});
   $("#view-soul").addEventListener("click", () => openSoulDialog(false,"human")); $("#view-opponent-soul").addEventListener("click", () => openSoulDialog(false,"bot")); $("#open-drop-zone").addEventListener("click", () => openDropDialog("human"));
   $(".opponent-field .vanguard-zone").addEventListener("click", (e) => { if (match && !e.target.closest("[data-card-zoom]") && e.target.closest("[data-field-uid]")) openSoulDialog(false,"bot"); });
   $("#open-my-deck").addEventListener("click", openMyDeck); $("#open-bind-zone").addEventListener("click", () => selectedHandCard() ? performManualAction("bind") : openBindDialog());
