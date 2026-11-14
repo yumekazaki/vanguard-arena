@@ -70,6 +70,9 @@
   let pendingAttackGestureTarget = null;
   let phaseAutoTimer = null;
   let phaseAutoKey = null;
+  let hoverMenuCloseTimer = null;
+  let hoverMenuActive = false;
+  let hoverMenuUid = null;
   const shownCheckRevealIds = new Set();
   let online = { role: null, peer: null, connection: null, watchConnection: null, watchers: [], roomId: null, publicRoomCode: null, heartbeat: null, joinRetry: null, remoteRequestTimer: null, remoteRequestPending: null, relayStateReceived: false, applyingRemote: false, relayPlayerJoined: false, dialogMode: "host", selectedDeck: null, mulliganSelection: [], mulliganSubmitted: false, abilityResponsePending: null, lastSentStateSignature: null, turnOrderAnnouncementPending: false, turnOrderAnnouncementMatchId: null, turnOrderAnnouncementTimer: null };
   const localDeckStorageKey = "vanguardArenaDecks";
@@ -1026,9 +1029,30 @@ function openDamageZone(side="human") {
     $("#context-menu-actions").innerHTML = actions.map(([action, label]) => `<button class="button" type="button" data-context-action="${action}">${label}</button>`).join("");
     if (!$("#context-menu-dialog").open) $("#context-menu-dialog").showModal();
   }
-  function showContextMenu(kind) {
+  function placeHoverContextMenu(anchor) {
+    const dialog = $("#context-menu-dialog");
+    if (!dialog || !anchor) return;
+    const rect = anchor.getBoundingClientRect();
+    const width = Math.min(320, window.innerWidth - 24);
+    const height = Math.min(dialog.scrollHeight || 380, window.innerHeight * 0.68);
+    let left = rect.right + 10;
+    if (left + width > window.innerWidth - 8) left = rect.left - width - 10;
+    left = Math.max(8, Math.min(left, window.innerWidth - width - 8));
+    const top = Math.max(8, Math.min(rect.top + rect.height / 2 - height / 2, window.innerHeight - height - 8));
+    dialog.style.left = `${left}px`;
+    dialog.style.top = `${top}px`;
+  }
+  function showContextMenu(kind, options = {}) {
     if (!match || online.role === "watcher") return;
-    const hand = selectedHandCard(), field = findFieldCard(match.selected);
+    const dialog = $("#context-menu-dialog");
+    if (options.hover && document.querySelector('dialog[open]:not(#context-menu-dialog)')) return;
+    if (options.hover && dialog.open && !hoverMenuActive) return;
+    const hand = options.hover
+      ? (kind === "hand" ? match.players.human.hand.find((item) => item.uid === options.uid) : null)
+      : selectedHandCard();
+    const field = options.hover
+      ? (kind === "field" ? findFieldCard(options.uid) : null)
+      : findFieldCard(match.selected);
     const card = hand ? cardMap.get(hand.cardId) : field?.side === "human" ? cardMap.get(field.instance.cardId) : null;
     if (!card) return;
     let actions = [];
@@ -1054,7 +1078,21 @@ function openDamageZone(side="human") {
     $("#context-menu-title").textContent = card.name;
     $("#context-menu-help").textContent = hand ? "Choose what to do with this card. The hand stays open after the action." : `${field?.zone === "vanguard" ? "Vanguard actions" : "Field card actions"} · right-click to rest or stand on desktop; this menu works with touch and controller navigation.`;
     $("#context-menu-actions").innerHTML = actions.map(([action, label]) => `<button class="button" type="button" data-context-action="${escapeHtml(action)}">${escapeHtml(label)}</button>`).join("");
-    if (!$("#context-menu-dialog").open) $("#context-menu-dialog").showModal();
+    if (options.hover) {
+      hoverMenuActive = true;
+      hoverMenuUid = String(options.uid || "");
+      dialog.classList.add("hover-card-menu");
+      if (!dialog.open) dialog.show();
+      placeHoverContextMenu(options.anchor);
+    } else {
+      if (hoverMenuActive && dialog.open) dialog.close();
+      hoverMenuActive = false;
+      hoverMenuUid = null;
+      dialog.classList.remove("hover-card-menu");
+      dialog.style.removeProperty("left");
+      dialog.style.removeProperty("top");
+      if (!dialog.open) dialog.showModal();
+    }
   }
   function updateActionAvailability() {
     if (!match) return;
@@ -3200,7 +3238,12 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#ability-decline").addEventListener("click",()=>{const pending=match?.pendingAbility;if(!pending||pending.side!=="human"||!window.VanguardAbilityEngine.canDeclineAbility(pending.ability))return;if(online.role==="guest"){if(!online.connection?.open){toast("You are disconnected from the match.");return;}online.abilityResponsePending={uid:pending.instance.uid,abilityId:pending.ability.id,accept:false};sendGuestRequest("ability-response",{accept:false,selection:{instanceUid:pending.instance.uid,abilityId:pending.ability.id}});$("#ability-dialog").close();return;}addLog((cardMap.get(pending.instance.cardId)?.name||"A unit")+" ability was declined.");if(pending.ability?.definition?.source?.patternId==="auto-dragontree-gc-granted-retire-to-soul-v1")delete pending.instance.gcDragontreeRetireToSoulBattleId;match.pendingAbility=null;$("#ability-dialog").close();resumeAbilityQueue();renderMatch();});
   $("#context-menu-actions").addEventListener("click", (event) => {
     const button = event.target.closest("[data-context-action]"); if (!button) return;
-    const action = button.dataset.contextAction; $("#context-menu-dialog").close();
+    const action = button.dataset.contextAction;
+    if (hoverMenuActive && hoverMenuUid) {
+      match.selected = hoverMenuUid;
+      if (online.role === "guest" && online.connection?.open) sendGuestRequest("select", { selected: match.selected });
+    }
+    clearTimeout(hoverMenuCloseTimer); hoverMenuActive = false; hoverMenuUid = null; $("#context-menu-dialog").classList.remove("hover-card-menu"); $("#context-menu-dialog").close();
     if (action === "deck-view") { openMyDeck(); return; }
     if (action === "open-skills") { const f=findFieldCard(match?.selected); if(f)showAbilityMenu(f); else { const hand=selectedHandCard(); if(hand)showAbilityMenu({side:"human",zone:"hand",instance:hand}); } return; }
     if (action.startsWith("ability:")) { const [,side,uid,...idParts]=action.split(":"); let abilityId;try{abilityId=decodeURIComponent(idParts.join(":"))}catch{return} if(side!=="human")return;performManualAction("activate-skill:"+uid+":"+abilityId); return; }
@@ -3229,6 +3272,45 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
       if (!window.VanguardAbilityEngine.canCallCard(definition,{dragontreeMarkerCount:(player.giftZones||[]).filter(marker=>marker?.type==="Dragontree"&&/^(?:rear-|accel-)/.test(String(marker.zone||""))).length})) { toast("This unit cannot be normal called under your current restrictions."); return; }
     }
     performManualAction("place:"+zone);
+  });
+  document.addEventListener("pointerover", event => {
+    if (event.pointerType === "touch" || !window.matchMedia?.("(hover: hover) and (pointer: fine)").matches) return;
+    if (!match || online.role === "watcher" || event.target.closest("#context-menu-dialog")) {
+      if (hoverMenuActive && event.target.closest("#context-menu-dialog")) clearTimeout(hoverMenuCloseTimer);
+      return;
+    }
+    const handCard = event.target.closest("#hand-cards [data-hand-uid]");
+    const fieldCard = event.target.closest(".game-table .field-card[data-side='human'][data-field-uid]");
+    const card = handCard || fieldCard;
+    if (!card || card.contains(event.relatedTarget) || event.target.closest("[data-card-zoom]")) return;
+    clearTimeout(hoverMenuCloseTimer);
+    showContextMenu(handCard ? "hand" : "field", { hover: true, uid: handCard?.dataset.handUid || fieldCard?.dataset.fieldUid, anchor: card });
+  });
+  document.addEventListener("pointerout", event => {
+    if (!hoverMenuActive) return;
+    const card = event.target.closest("#hand-cards [data-hand-uid], .game-table .field-card[data-side='human'][data-field-uid]");
+    const menu = event.target.closest("#context-menu-dialog");
+    if (!card && !menu) return;
+    const next = event.relatedTarget;
+    if ((card && (card.contains(next) || next?.closest("#context-menu-dialog"))) ||
+        (menu && (menu.contains(next) || next?.closest("#hand-cards [data-hand-uid], .game-table .field-card[data-side='human'][data-field-uid]")))) return;
+    clearTimeout(hoverMenuCloseTimer);
+    hoverMenuCloseTimer = setTimeout(() => {
+      const dialog = $("#context-menu-dialog");
+      if (!hoverMenuActive || dialog.matches(":hover") || document.querySelector("#hand-cards [data-hand-uid]:hover, .game-table .field-card[data-side='human'][data-field-uid]:hover")) return;
+      dialog.close();
+      dialog.classList.remove("hover-card-menu");
+      hoverMenuActive = false;
+      hoverMenuUid = null;
+    }, 220);
+  });
+  $("#context-menu-dialog").addEventListener("close", () => {
+    clearTimeout(hoverMenuCloseTimer);
+    hoverMenuActive = false;
+    hoverMenuUid = null;
+    $("#context-menu-dialog").classList.remove("hover-card-menu");
+    $("#context-menu-dialog").style.removeProperty("left");
+    $("#context-menu-dialog").style.removeProperty("top");
   });
   $("#hand-cards").addEventListener("click", (e) => { const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { e.stopPropagation(); showCardDetails(zoom.dataset.cardZoom); return; } const card = e.target.closest("[data-hand-uid]"); if (!card || !match || online.role === "watcher") return; match.selected = match.selected === card.dataset.handUid ? null : card.dataset.handUid; if (online.role === "guest" && online.connection?.open) sendGuestRequest("select",{selected:match.selected}); renderMatch(); showContextMenu("hand"); });
   $(".game-table").addEventListener("click", (e) => { const zoom=e.target.closest("[data-card-zoom]"); if(zoom){e.stopPropagation();showCardDetails(zoom.dataset.cardZoom);return;} if(e.target.closest("[data-ride-deck-open]")){performManualAction("ride-deck-open");return;} const zone=e.target.closest(".field-zone[data-side='human']"); if(zone&&match&&online.role!=="watcher"){if(pendingCallSelectionUid){if(zone.dataset.zone==="vanguard"){toast("Choose a Rear-Guard circle to call this Unit.");return;}const selected=selectedHandCard();if(!selected||selected.uid!==pendingCallSelectionUid){pendingCallSelectionUid=null;toast("That hand selection changed. Choose Call again.");return;}pendingCallSelectionUid=null;performManualAction(`place:${zone.dataset.zone}`);return;}if(zone.dataset.zone==="vanguard"&&selectedHandCard()){showContextMenu("hand");return;}if(zoneFieldSelection){const {source,uid,superior}=zoneFieldSelection;if(superior&&zone.dataset.zone==="vanguard"){toast("Choose a Rear-Guard circle for Superior Call.");return;}zoneFieldSelection=null;performManualAction(`zone-move:${source}:field:${uid}:${zone.dataset.zone}`);return;}const selectedField=findFieldCard(match.selected);if(selectedField?.side==="human"&&selectedField.zone!=="vanguard"&&zone.dataset.zone!=="vanguard"&&zone.dataset.zone!==selectedField.zone){performManualAction(`move-rear-to:${match.selected}:${zone.dataset.zone}`);return;}if(!e.target.closest("[data-field-uid]")&&match.selected&&selectedHandCard()){performManualAction(`place:${zone.dataset.zone}`);return;}}if(e.target.closest("[data-gdeck-side='human']")){if(match.players.human.format==="standard")performManualAction("ride-deck-open");else if(match.phase===3&&match.side==="human")performManualAction("stride");else openGDeckDialog("inspect");return;}const field=e.target.closest("[data-field-uid]");if(!field||!match||online.role==="watcher"||field.dataset.side!=="human")return;const uid=field.dataset.fieldUid;match.selected=match.selected===uid?null:uid;if(online.role==="guest"&&online.connection?.open)sendGuestRequest("select",{selected:match.selected});renderMatch();showContextMenu("field");});
