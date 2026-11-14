@@ -779,16 +779,25 @@
     });
     return !hasLegalRideChoice(side) || (grade <= 2 && !hasNextGradeInHand);
   }
-  function openRideCardActionPrompt(source, uid) {
+  function renderRideChoiceSelection() {
+    const dialog=$("#ride-choice-dialog"),source=dialog.dataset.selectedRideSource,uid=dialog.dataset.selectedRideUid;
+    const panel=$("#ride-choice-selected-actions");
+    if(!source||!uid){panel.hidden=true;return;}
+    const instance=legalRideCandidates("human",source).find(item=>item.uid===uid),card=instance&&cardMap.get(instance.cardId);
+    if(!instance||!card){delete dialog.dataset.selectedRideSource;delete dialog.dataset.selectedRideUid;panel.hidden=true;return;}
+    panel.hidden=false;
+    $("#ride-choice-selected-name").textContent=card.name;
+    $("#ride-choice-selected-copy").textContent=source==="ride-deck"?`Grade ${card.grade} · Ride Deck · Discard one card to ride.`:`Grade ${card.grade} · Legal ride from hand.`;
+    $("#ride-choice-selected-ride").textContent=source==="ride-deck"?"Ride · discard 1":"Ride";
+    $$("#ride-choice-hand-cards [data-ride-choice-uid]").forEach(button=>button.setAttribute("aria-pressed",String(source==="hand"&&button.dataset.rideChoiceUid===uid)));
+    $$("#ride-choice-ride-deck-cards [data-ride-choice-deck-uid]").forEach(button=>button.setAttribute("aria-pressed",String(source==="ride-deck"&&button.dataset.rideChoiceDeckUid===uid)));
+  }
+  function selectRideChoice(source, uid) {
     if (!match || online.role === "watcher") return;
-    const candidates=legalRideCandidates("human",source),instance=candidates.find(item=>item.uid===uid),card=instance&&cardMap.get(instance.cardId);
-    if(!instance||!card){toast("That card is no longer a legal ride.");renderMatch();return;}
-    const dialog=$("#ride-card-action-dialog");
-    dialog.dataset.source=source;dialog.dataset.uid=uid;
-    $("#ride-card-action-title").textContent=card.name;
-    $("#ride-card-action-copy").textContent=source==="ride-deck"?`Grade ${card.grade} · Ride Deck · Discard one card to ride, or view the card first.`:`Grade ${card.grade} · Ride this card now, or view its details first.`;
-    $("#ride-card-action-ride").textContent=source==="ride-deck"?"Ride · discard 1":"Ride";
-    if(!dialog.open)dialog.showModal();
+    if(!legalRideCandidates("human",source).some(item=>item.uid===uid)){toast("That card is no longer a legal ride.");renderMatch();return;}
+    const dialog=$("#ride-choice-dialog");
+    dialog.dataset.selectedRideSource=source;dialog.dataset.selectedRideUid=uid;
+    renderRideChoiceSelection();
   }
   function renderRideChoicePrompt() {
     const dialog = $("#ride-choice-dialog");
@@ -798,9 +807,9 @@
       !match.pendingRide && !match.pendingRideAssist && !match.pendingAbility && !match.pendingAbilities?.length && !match.pendingTrigger &&
       !match.pendingCrest && !match.pendingAttack && !match.pendingAttackSetup && !match.pendingBattleEnd && !match.pendingTurnEnd && !match.pendingStride && !match.pendingGAssist &&
       !match.pendingProtectGuard && !match.pendingDamageQueue?.length && !match.revealed?.cards?.length && !match.preMatch);
-    if (!canShow) { if($("#ride-card-action-dialog")?.open)$("#ride-card-action-dialog").close();if (dialog.open) dialog.close(); return; }
-    const otherDialog = document.querySelector('dialog[open]:not(#ride-choice-dialog):not(#ride-card-action-dialog):not(#card-dialog)');
-    if (otherDialog) { if($("#ride-card-action-dialog")?.open)$("#ride-card-action-dialog").close();if (dialog.open) dialog.close(); return; }
+    if (!canShow) { if (dialog.open) dialog.close(); return; }
+    const otherDialog = document.querySelector('dialog[open]:not(#ride-choice-dialog):not(#card-dialog)');
+    if (otherDialog) { if (dialog.open) dialog.close(); return; }
     const player = match.players.human, vanguard = cardMap.get(player.vanguard?.cardId);
     const currentGrade = gradeOf(vanguard), handCandidates = legalRideCandidates("human", "hand"), deckCandidates = legalRideCandidates("human", "ride-deck");
     const gAssistAvailable = canRideGAssist(player, "human");
@@ -824,7 +833,8 @@
       const card = cardMap.get(instance.cardId);
       return card ? `<button class="ride-choice-card" type="button" data-ride-choice-deck-uid="${escapeHtml(instance.uid)}" aria-label="Ride ${escapeHtml(card.name)} from Ride Deck, discard one card">${cardImage(card, "ride-choice-art")}<span><b>${escapeHtml(card.name)}</b><small>Grade ${escapeHtml(card.grade)} · Ride Deck · discard 1</small></span></button>` : "";
     }).join("") || '<p class="ride-choice-empty">No legal Ride Deck cards available.</p>';
-    if (!dialog.open) dialog.showModal();
+    if (!dialog.open) { delete dialog.dataset.selectedRideSource; delete dialog.dataset.selectedRideUid; dialog.showModal(); }
+    renderRideChoiceSelection();
   }
   function hasLegalStrideChoice(side = "human") {
     const player = match?.players?.[side];
@@ -2022,15 +2032,6 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function continuousBoostRestriction(field){if(!field?.instance)return{legal:true,restrictions:[]};const source=cardMap.get(field.instance.cardId),location=field.zone==="vanguard"?"vanguard":"rear-guard";return window.VanguardAbilityEngine.evaluateContinuousRestrictions(cardAbilities(source),{sourceInstanceId:field.instance.uid,sourceCard:source,location,action:"boost"})}
   function canAttackFromBackRow(field) { const text=String(cardMap.get(field.instance.cardId)?.text||""); return /attack(?:s|ing)? from (?:the )?back row|back row[^.\n]*can attack/i.test(text); }
   function directlyBehind(field) { const rear=match.players[field.side].rear;if(field.zone==="vanguard")return rear[3]||null;if(field.zone==="rear-left")return rear[2]||null;if(field.zone==="rear-right")return rear[4]||null;return null; }
-  function canStartDirectAttack(field) {
-    if (!match || match.ended || online.role === "watcher" || online.applyingRemote || match.side !== "human" || match.phase !== 5 ||
-        (!match.firstTurnComplete && match.side === match.firstSide) || match.pendingAttack || match.pendingAttackSetup ||
-        match.pendingAbility || match.pendingAbilities?.length || match.pendingTrigger || field?.side !== "human") return false;
-    const instance = field.instance;
-    if (!instance || instance.rested || instance.locked || instance.cannotAttackTurnKey === `${match.turn}:${match.side}` || !continuousAttackRestriction(field).legal) return false;
-    const isFront = field.zone === "vanguard" || field.zone === "rear-left" || field.zone === "rear-right" || field.zone.startsWith("accel-");
-    return isFront || canAttackFromBackRow(field);
-  }
   function resolveHumanAttack() {
     if (!match || match.ended) { toast("Start a match before attacking."); return; }
     if (!match.firstTurnComplete && match.side === match.firstSide) { toast("The player who goes first cannot attack during their first turn."); return; }
@@ -3612,31 +3613,30 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#ride-choice-hand-cards").addEventListener("click", event => {
     const button = event.target.closest("[data-ride-choice-uid]");
     if (!button || !match || online.role === "watcher") return;
-    openRideCardActionPrompt("hand",button.dataset.rideChoiceUid);
+    selectRideChoice("hand",button.dataset.rideChoiceUid);
   });
   $("#ride-choice-ride-deck-cards").addEventListener("click", event => {
     const button = event.target.closest("[data-ride-choice-deck-uid]");
     if (!button || !match || online.role === "watcher") return;
-    openRideCardActionPrompt("ride-deck",button.dataset.rideChoiceDeckUid);
+    selectRideChoice("ride-deck",button.dataset.rideChoiceDeckUid);
   });
-  $("#ride-card-action-ride").addEventListener("click",()=>{
-    const dialog=$("#ride-card-action-dialog"),source=dialog.dataset.source,uid=dialog.dataset.uid;
+  $("#ride-choice-selected-ride").addEventListener("click",()=>{
+    const dialog=$("#ride-choice-dialog"),source=dialog.dataset.selectedRideSource,uid=dialog.dataset.selectedRideUid;
     if(!match||online.role==="watcher")return;
     const instance=legalRideCandidates("human",source).find(item=>item.uid===uid);
-    if(!instance){dialog.close();toast("That card is no longer a legal ride.");renderMatch();return;}
+    if(!instance){delete dialog.dataset.selectedRideSource;delete dialog.dataset.selectedRideUid;renderRideChoiceSelection();toast("That card is no longer a legal ride.");renderMatch();return;}
     if(online.role==="guest"&&!online.connection?.open){toast("You are disconnected from the match.");return;}
-    dialog.close();$("#ride-choice-dialog").close();
+    delete dialog.dataset.selectedRideSource;delete dialog.dataset.selectedRideUid;dialog.close();
     if(source==="ride-deck")performManualAction(`ride-deck-start:${uid}`);
     else{match.selected=instance.uid;performOnlineAction("ride");}
   });
-  $("#ride-card-action-view").addEventListener("click",()=>{
-    const dialog=$("#ride-card-action-dialog"),source=dialog.dataset.source,uid=dialog.dataset.uid;
+  $("#ride-choice-selected-view").addEventListener("click",()=>{
+    const dialog=$("#ride-choice-dialog"),source=dialog.dataset.selectedRideSource,uid=dialog.dataset.selectedRideUid;
     const instance=legalRideCandidates("human",source).find(item=>item.uid===uid),card=instance&&cardMap.get(instance.cardId);
-    if(!card){dialog.close();toast("That card is no longer a legal ride.");renderMatch();return;}
-    dialog.close();showCardDetails(card.id);
+    if(!card){delete dialog.dataset.selectedRideSource;delete dialog.dataset.selectedRideUid;renderRideChoiceSelection();toast("That card is no longer a legal ride.");renderMatch();return;}
+    showCardDetails(card.id);
   });
-  $("#ride-card-action-cancel").addEventListener("click",()=>$("#ride-card-action-dialog").close());
-  $("#ride-card-action-dialog").addEventListener("cancel",event=>{event.preventDefault();$("#ride-card-action-dialog").close();});
+  $("#ride-choice-selected-clear").addEventListener("click",()=>{const dialog=$("#ride-choice-dialog");delete dialog.dataset.selectedRideSource;delete dialog.dataset.selectedRideUid;renderRideChoiceSelection();});
   $("#ride-choice-skip").addEventListener("click", () => {
     if (!match || online.role === "watcher") return;
     if (online.role === "guest" && !online.connection?.open) { toast("You are disconnected from the match."); return; }
@@ -3666,15 +3666,6 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#stride-cost-confirm").addEventListener("click",()=>performManualAction("stride-confirm"));
   ["#stride-cost-cancel","#stride-cost-cancel-button"].forEach((selector)=>$(selector).addEventListener("click",()=>performManualAction("stride-cancel")));
   $("#attack-choice-buttons").addEventListener("click",(e)=>{const button=e.target.closest("[data-attack-choice]");if(button)performManualAction("attack-choice:"+button.dataset.attackChoice);});
-   $(".game-table").addEventListener("click", event => {
-     if (event.target.closest("[data-card-zoom]")) return;
-     const card = event.target.closest(".field-card[data-side='human'][data-field-uid]");
-     const field = card && findFieldCard(card.dataset.fieldUid);
-     if (!card || !canStartDirectAttack(field)) return;
-     event.preventDefault(); event.stopImmediatePropagation();
-     match.selected = card.dataset.fieldUid;
-     performOnlineAction("attack");
-   }, true);
    $(".game-table").addEventListener("keydown", event => {
      if (event.key !== "Enter" && event.key !== " ") return;
      if (event.target.closest("button")) return;
