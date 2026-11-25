@@ -37,4 +37,3 @@ The Realtime policies authenticate who may send on each room channel. They do no
 `match-authority-v4.sql` adds the service-only card-definition catalog and transactional deck-to-state verification used by `functions/match-initialize`. The catalog returns only rows explicitly marked `redistribution_authorized`; the tracked Cardfight Area snapshot is marked for personal local use and is not an authorized source for a public server import. The initializer and v4 migration have local tests, but the migration has not been applied to PostgreSQL, no licensed catalog import is configured, and the endpoint is not deployed or connected to the clients.
 
 `match-authority-v5.sql` adds authenticated seat-scoped state and action-result reads. It projects opponent private zones and pending ability/cost prompts away from each player. The local projection and SQL-contract tests pass, but the migration is not applied and neither client reads through these RPCs yet.
-

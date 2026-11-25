@@ -1,3 +1,2 @@
 [functions.decklog-import]
 verify_jwt = false
-
