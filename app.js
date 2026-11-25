@@ -29,6 +29,14 @@
   const importedCardIds = new Set(importedCatalog.map(card => card.id));
   const cardList = importedCatalog.length ? [...importedCatalog, ...userCards] : [...sampleCards, ...userCards];
   const cardMap = new Map(cardList.map((c) => [c.id, c]));
+  function normalizeCardNumber(value) { return String(value || "").toUpperCase().replace(/EN$/, "").replace(/[^A-Z0-9]/g, ""); }
+  const cardsByOfficialNumber = new Map();
+  cardList.forEach((card) => {
+    const number = normalizeCardNumber(card.cardNumber || card.card_number || card.number);
+    if (!number) return;
+    const matches = cardsByOfficialNumber.get(number) || [];
+    matches.push(card); cardsByOfficialNumber.set(number, matches);
+  });
 
   const cardArtByDatabaseId = new Map(cardList.filter((c) => Number.isFinite(Number(c.dbId))).map((c) => [Number(c.dbId), c.image]));
   const upstreamCardArtBase = "https://raw.githubusercontent.com/justkidding047356/cardfight-area/c2a5aad1f1e348500f1942a890c7e39a95953719";
@@ -58,7 +66,7 @@
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => [...document.querySelectorAll(q)];
   let view = "play";
-  let builder = { id: null, name: "Untitled deck", format: "premium", cards: {}, starterCardId: "", rideDeck: [] };
+  let builder = { id: null, name: "Untitled deck", format: "premium", cards: {}, starterCardId: "", rideDeck: [], rideDeckCrestId: "" };
   let selectedCard = null;
   let pendingCallSelectionUid = null;
   let zoneFieldSelection = null;
@@ -136,7 +144,7 @@
     const scope = defaultDeckStorageKey(), deck = savedDefaultDeck();
     // Account decks may arrive later. Never replace work started while they were loading.
     if (!deck || restoredDefaultDeckScopes.has(scope) || match || JSON.stringify(builder) !== defaultDeckStartupSnapshot) return;
-    builder = { id: deck.id, name: deck.name, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, starterCardId: deck.starterCardId || "", rideDeck: [...(deck.rideDeck || [])] };
+    builder = { id: deck.id, name: deck.name, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, starterCardId: deck.starterCardId || "", rideDeck: [...(deck.rideDeck || [])], rideDeckCrestId: deck.rideDeckCrestId || "" };
     restoredDefaultDeckScopes.add(scope);
     defaultDeckStartupSnapshot = JSON.stringify(builder);
     renderBuilder();
@@ -146,7 +154,7 @@
     if (!deck) return;
     localStorage.setItem(defaultDeckStorageKey(), String(deck.id));
     restoredDefaultDeckScopes.add(defaultDeckStorageKey());
-    builder = { id: deck.id, name: deck.name, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, starterCardId: deck.starterCardId || "", rideDeck: [...(deck.rideDeck || [])] };
+    builder = { id: deck.id, name: deck.name, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, starterCardId: deck.starterCardId || "", rideDeck: [...(deck.rideDeck || [])], rideDeckCrestId: deck.rideDeckCrestId || "" };
     renderBuilder(); renderSavedDecks();
     toast(`“${deck.name}” is your default deck for the workshop and practice`);
   }
@@ -177,7 +185,7 @@
     }
   }
   function localDecksToImport() { try { return JSON.parse(localStorage.getItem(localDeckStorageKey) || "[]"); } catch { return []; } }
-  function cloudDeckRows(decks, userId = account.user?.id) { return decks.map((deck) => ({ user_id: userId, deck_id: String(deck.id), name: String(deck.name || "Untitled deck"), cards: { ...(deck.cards && typeof deck.cards === "object" ? deck.cards : {}), __starterCardId: deck.starterCardId || null, __deckFormat: deck.format === "standard" ? "standard" : "premium", __rideDeck: Array.isArray(deck.rideDeck) ? deck.rideDeck : [] }, updated_at: deck.updatedAt || new Date().toISOString() })); }
+  function cloudDeckRows(decks, userId = account.user?.id) { return decks.map((deck) => ({ user_id: userId, deck_id: String(deck.id), name: String(deck.name || "Untitled deck"), cards: { ...(deck.cards && typeof deck.cards === "object" ? deck.cards : {}), __starterCardId: deck.starterCardId || null, __deckFormat: deck.format === "standard" ? "standard" : "premium", __rideDeck: Array.isArray(deck.rideDeck) ? deck.rideDeck : [], __rideDeckCrestId: deck.rideDeckCrestId || null }, updated_at: deck.updatedAt || new Date().toISOString() })); }
   async function persistCloudDecks(decks) {
     if (!account.client || !account.user || !decks.length) return;
     $("#account-sync-status").textContent = "Saving decks to your account…";
@@ -199,7 +207,7 @@
       const { data, error } = await account.client.from("player_decks").select("deck_id,name,cards,updated_at").eq("user_id", userId).order("updated_at", { ascending: false });
       if (error) throw error;
       const decks = new Map();
-      [...readSavedDecks(), ...(data || []).map((row) => { const stored = row.cards || {}; const { __starterCardId, __deckFormat, __rideDeck, ...cards } = stored; return { id: row.deck_id, name: row.name, cards, starterCardId: __starterCardId || "", format: __deckFormat === "standard" ? "standard" : "premium", rideDeck: Array.isArray(__rideDeck) ? __rideDeck : [], updatedAt: row.updated_at }; })].forEach((deck) => {
+      [...readSavedDecks(), ...(data || []).map((row) => { const stored = row.cards || {}; const { __starterCardId, __deckFormat, __rideDeck, __rideDeckCrestId, ...cards } = stored; return { id: row.deck_id, name: row.name, cards, starterCardId: __starterCardId || "", format: __deckFormat === "standard" ? "standard" : "premium", rideDeck: Array.isArray(__rideDeck) ? __rideDeck : [], rideDeckCrestId: __rideDeckCrestId || "", updatedAt: row.updated_at }; })].forEach((deck) => {
         const current = decks.get(String(deck.id));
         if (!current || Date.parse(deck.updatedAt || 0) > Date.parse(current.updatedAt || 0)) decks.set(String(deck.id), deck);
       });
@@ -337,7 +345,7 @@
     if (next === "cards") renderLibrary();
     window.location.hash = next;
   }
-  function emptyDeck(format = "premium") { builder = { id: null, name: "Untitled deck", format: format === "standard" ? "standard" : "premium", cards: {}, starterCardId: "", rideDeck: [] }; renderBuilder(); }
+  function emptyDeck(format = "premium") { builder = { id: null, name: "Untitled deck", format: format === "standard" ? "standard" : "premium", cards: {}, starterCardId: "", rideDeck: [], rideDeckCrestId: "" }; renderBuilder(); }
   function defaultDeck() {
     const cards = {};
     const pool = cardList.filter((c) => c.type === "Unit" || c.type === "Trigger");
@@ -427,6 +435,8 @@
     $("#premium-deck-fields").classList.toggle("hidden", isStandard); $("#standard-deck-fields").classList.toggle("hidden", !isStandard);
     if (!Array.isArray(builder.rideDeck)) builder.rideDeck = [];
     [0, 1, 2, 3].forEach((grade) => { const select = $(`#ride-deck-${grade}`); if (!select) return; select.innerHTML = `<option value="">Choose a Grade ${grade} unit…</option>${rideDeckOptions(grade).map((card) => `<option value="${escapeHtml(card.id)}">${escapeHtml(card.name)} · ×${Number(builder.cards[card.id] || 0)}</option>`).join("")}`; select.value = builder.rideDeck[grade] || ""; });
+    const importedCrest = builder.rideDeckCrestId ? cardMap.get(builder.rideDeckCrestId) : null;
+    const crestStatus = $("#ride-deck-crest-status"); if (crestStatus) crestStatus.textContent = importedCrest ? `DeckLog Ride Deck Crest: ${importedCrest.name}` : "";
     $("#starter-vanguard").innerHTML = `<option value="">Choose a Grade 0 unit…</option>${starterOptions.map(({ card, qty }) => `<option value="${escapeHtml(card.id)}">${escapeHtml(card.name)} · ×${qty}</option>`).join("")}`;
     $("#starter-vanguard").value = builder.starterCardId || "";
     $("#starter-vanguard-help").textContent = builder.starterCardId ? `${cardMap.get(builder.starterCardId)?.name || "Selected unit"} will begin on your Vanguard circle.` : "Choose a Grade 0 unit from your deck. It starts on your Vanguard circle.";
@@ -489,13 +499,13 @@
   function saveDeck() {
     const name = $("#deck-name").value.trim() || "Untitled deck"; const existing = readSavedDecks();
     const id = builder.id || (crypto.randomUUID?.() || String(Date.now()));
-    const saved = { id, name, format: builder.format === "standard" ? "standard" : "premium", cards: { ...builder.cards }, starterCardId: builder.starterCardId || "", rideDeck: [...(builder.rideDeck || [])], updatedAt: new Date().toISOString() };
+    const saved = { id, name, format: builder.format === "standard" ? "standard" : "premium", cards: { ...builder.cards }, starterCardId: builder.starterCardId || "", rideDeck: [...(builder.rideDeck || [])], rideDeckCrestId: builder.rideDeckCrestId || "", updatedAt: new Date().toISOString() };
     const index = existing.findIndex((d) => d.id === id);
     if (index >= 0) existing[index] = saved; else existing.unshift(saved);
     builder = { ...saved }; writeSavedDecks(existing); renderBuilder(); renderSavedDecks();
     toast(account.user ? "Deck saved to your account folder" : "Deck saved in this browser");
   }
-  function loadDeck(deck) { builder = { id: deck.id, name: deck.name, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, starterCardId: deck.starterCardId || "", rideDeck: [...(deck.rideDeck || [])] }; renderBuilder(); showView("decks"); toast(`Loaded “${deck.name}” into the builder`); }
+  function loadDeck(deck) { builder = { id: deck.id, name: deck.name, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, starterCardId: deck.starterCardId || "", rideDeck: [...(deck.rideDeck || [])], rideDeckCrestId: deck.rideDeckCrestId || "" }; renderBuilder(); showView("decks"); toast(`Loaded “${deck.name}” into the builder`); }
   function openLoadDeckDialog() {
     const decks = readSavedDecks(), select = $("#load-deck-choice"), confirm = $("#load-deck-confirm");
     select.innerHTML = decks.length ? decks.map((deck) => `<option value="${escapeHtml(deck.id)}">${escapeHtml(deck.name)} · ${deckCount(deck)} cards</option>`).join("") : '<option value="">No saved decks yet</option>';
@@ -565,7 +575,8 @@
       if (starterIndex >= 0) vanguard = { ...pile.splice(starterIndex, 1)[0], rested: false };
     }
     shuffle(pile);
-    return { playerId, name, avatarId: profileAvatars.some(avatar => avatar.id === avatarId) ? avatarId : "", format: deck.format === "standard" ? "standard" : "premium", deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rideDeck, rodeGradeThreePlusThisFight: false, opponentTriggerRevealedThisTurn:false, rear: [null, null, null, null, null], accelZones: 0, accelTypes: [], giftZones: [], orders: [], crests: [], energy: 0, energySpentThisTurn: 0, guardCircle: [], extra: [], gDeck: shuffle(gDeck), gZone: [], removed: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
+    const crests = deck.format === "standard" && cardMap.has(deck.rideDeckCrestId) ? [window.VanguardAbilityEngine.createCardInstance(deck.rideDeckCrestId, playerId)] : [];
+    return { playerId, name, avatarId: profileAvatars.some(avatar => avatar.id === avatarId) ? avatarId : "", format: deck.format === "standard" ? "standard" : "premium", deck: pile.slice(5), hand: pile.slice(0, 5), damage: [], drop: [], soul: [], bind: [], vanguard, rideDeck, rodeGradeThreePlusThisFight: false, opponentTriggerRevealedThisTurn:false, rear: [null, null, null, null, null], accelZones: 0, accelTypes: [], giftZones: [], orders: [], crests, energy: 0, energySpentThisTurn: 0, guardCircle: [], extra: [], gDeck: shuffle(gDeck), gZone: [], removed: [], quickShields: 0, protectMarkers: 0, gifts: 0, human };
   }
   function openPracticeSetup() { $("#practice-setup-dialog").showModal(); }
   function openPracticeMulligan() {
@@ -2857,8 +2868,8 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   }
   function flipSide(side) { return side === "human" ? "bot" : side === "bot" ? "human" : side; }
   function onlineDeck() {
-    if (online.selectedDeck && deckCount(online.selectedDeck)) return { name: online.selectedDeck.name, format: online.selectedDeck.format === "standard" ? "standard" : "premium", cards: { ...online.selectedDeck.cards }, starterCardId: online.selectedDeck.starterCardId || "", rideDeck: [...(online.selectedDeck.rideDeck || [])] };
-    if (builder.cards && deckCount(builder)) return { name: builder.name || "My Deck", format: builder.format === "standard" ? "standard" : "premium", cards: { ...builder.cards }, starterCardId: builder.starterCardId || "", rideDeck: [...(builder.rideDeck || [])] };
+    if (online.selectedDeck && deckCount(online.selectedDeck)) return { name: online.selectedDeck.name, format: online.selectedDeck.format === "standard" ? "standard" : "premium", cards: { ...online.selectedDeck.cards }, starterCardId: online.selectedDeck.starterCardId || "", rideDeck: [...(online.selectedDeck.rideDeck || [])], rideDeckCrestId: online.selectedDeck.rideDeckCrestId || "" };
+    if (builder.cards && deckCount(builder)) return { name: builder.name || "My Deck", format: builder.format === "standard" ? "standard" : "premium", cards: { ...builder.cards }, starterCardId: builder.starterCardId || "", rideDeck: [...(builder.rideDeck || [])], rideDeckCrestId: builder.rideDeckCrestId || "" };
     return defaultDeck();
   }
   async function registerOnlineDeckForAuthority(roomCode) {
@@ -2883,7 +2894,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     const deck = readSavedDecks().find((item) => item.id === $("#online-deck-choice").value);
     if (!deck || !deckCount(deck)) { setOnlineError("Choose a saved deck before starting an online match. Save a deck from the Deck folder first."); return false; }
     const errors = deckReadyErrors(deck); if (errors.length) { setOnlineError(`Fix this deck before online play: ${errors.join("; ")}.`); return false; }
-    online.selectedDeck = { ...deck, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, rideDeck: [...(deck.rideDeck || [])] }; return true;
+    online.selectedDeck = { ...deck, format: deck.format === "standard" ? "standard" : "premium", cards: { ...deck.cards }, rideDeck: [...(deck.rideDeck || [])], rideDeckCrestId: deck.rideDeckCrestId || "" }; return true;
   }
   function setOnlineError(message = "") { $("#online-error").textContent = message; }
   function setConnectionPill(label) { $("#connection-pill").innerHTML = `<i></i> ${escapeHtml(label)}`; }
@@ -2953,7 +2964,7 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   function sanitizedDeck(deck) {
     const cards = {};
     Object.entries(deck?.cards || {}).forEach(([id, qty]) => { if (cardMap.has(id)) cards[id] = Math.max(0, Math.min(50, Number(qty) || 0)); });
-    return { name: String(deck?.name || "Online Deck").slice(0, 40), format: deck?.format === "standard" ? "standard" : "premium", cards, starterCardId: cardMap.has(deck?.starterCardId) ? deck.starterCardId : "", rideDeck: Array.isArray(deck?.rideDeck) ? deck.rideDeck.slice(0, 4).filter(id => cardMap.has(id)) : [] };
+    return { name: String(deck?.name || "Online Deck").slice(0, 40), format: deck?.format === "standard" ? "standard" : "premium", cards, starterCardId: cardMap.has(deck?.starterCardId) ? deck.starterCardId : "", rideDeck: Array.isArray(deck?.rideDeck) ? deck.rideDeck.slice(0, 4).filter(id => cardMap.has(id)) : [], rideDeckCrestId: cardMap.has(deck?.rideDeckCrestId) ? deck.rideDeckCrestId : "" };
   }
   function revealLocalMatch() { if (!match) return; $("#match-layout").classList.remove("hidden"); $("#match-empty").classList.add("hidden"); showView("play"); }
   function snapshotForGuest() {
@@ -3430,11 +3441,63 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
     manualGameAction(action);
   }
   function exportDeck(deck, filename) {
-    const content = JSON.stringify({ format: "Vanguard Arena deck", name: deck.name, deckFormat: deck.format === "standard" ? "standard" : "premium", cards: deck.cards, starterCardId: deck.starterCardId || "", rideDeck: Array.isArray(deck.rideDeck) ? deck.rideDeck : [], exportedAt: new Date().toISOString() }, null, 2);
+    const content = JSON.stringify({ format: "Vanguard Arena deck", name: deck.name, deckFormat: deck.format === "standard" ? "standard" : "premium", cards: deck.cards, starterCardId: deck.starterCardId || "", rideDeck: Array.isArray(deck.rideDeck) ? deck.rideDeck : [], rideDeckCrestId: deck.rideDeckCrestId || "", exportedAt: new Date().toISOString() }, null, 2);
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([content], { type: "application/json" })); a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
   function importDeckFile(file) {
-    const reader = new FileReader(); reader.onload = () => { try { const data = JSON.parse(reader.result); const cards = data.cards || data; if (!cards || typeof cards !== "object") throw new Error("Invalid deck format"); builder = { id: null, name: data.name || file.name.replace(/\.json$/i, ""), format: data.deckFormat === "standard" || data.format === "standard" ? "standard" : "premium", cards: {}, starterCardId: data.starterCardId || "", rideDeck: Array.isArray(data.rideDeck) ? data.rideDeck.slice(0, 4) : [] }; Object.entries(cards).forEach(([id, qty]) => { if (cardMap.has(id)) builder.cards[id] = Math.max(0, Math.min(50, Number(qty) || 0)); }); renderBuilder(); showView("decks"); toast("Deck imported"); } catch { toast("Could not read that deck JSON"); } }; reader.readAsText(file);
+    const reader = new FileReader(); reader.onload = () => { try { const data = JSON.parse(reader.result); const cards = data.cards || data; if (!cards || typeof cards !== "object") throw new Error("Invalid deck format"); builder = { id: null, name: data.name || file.name.replace(/\.json$/i, ""), format: data.deckFormat === "standard" || data.format === "standard" ? "standard" : "premium", cards: {}, starterCardId: data.starterCardId || "", rideDeck: Array.isArray(data.rideDeck) ? data.rideDeck.slice(0, 4) : [], rideDeckCrestId: cardMap.has(data.rideDeckCrestId) ? data.rideDeckCrestId : "" }; Object.entries(cards).forEach(([id, qty]) => { if (cardMap.has(id)) builder.cards[id] = Math.max(0, Math.min(50, Number(qty) || 0)); }); renderBuilder(); showView("decks"); toast("Deck imported"); } catch { toast("Could not read that deck JSON"); } }; reader.readAsText(file);
+  }
+  function resolveDeckLogCard(row) {
+    const number = normalizeCardNumber(row?.card_number || row?.cardNumber || row?.number), choices = cardsByOfficialNumber.get(number) || [];
+    if (choices.length === 1) return choices[0];
+    const name = String(row?.name || row?.card_name || row?.cardName || "").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const named = name ? choices.filter(card => String(card.name || "").normalize("NFKD").toLowerCase().replace(/[^a-z0-9]/g, "") === name) : [];
+    return named.length === 1 ? named[0] : null;
+  }
+  function buildDeckLogDeck(payload, code) {
+    if (!payload || Number(payload.game_title_id) !== 1 || !["P", "D"].includes(String(payload.deck_param1 || "").toUpperCase())) throw new Error("That code did not return a supported Vanguard deck.");
+    if (!Array.isArray(payload.list)) throw new Error("DeckLog did not return a valid main deck list.");
+    const format = String(payload.deck_param1).toUpperCase() === "D" ? "standard" : "premium", cards = {}, rideDeck = ["", "", "", ""], importedZones = [...payload.list.map(row => ({ row, zone: "main deck" })), ...(Array.isArray(payload.sub_list) ? payload.sub_list.map(row => ({ row, zone: "G deck" })) : [])], missing = [];
+    for (const { row, zone } of importedZones) {
+      const card = resolveDeckLogCard(row), quantity = Number(row?.num ?? row?.quantity ?? row?.count);
+      if (!card || !Number.isSafeInteger(quantity) || quantity < 1 || quantity > 50) { missing.push(String(row?.card_number || row?.cardNumber || "unidentified card")); continue; }
+      cards[card.id] = (cards[card.id] || 0) + quantity;
+      if (cards[card.id] > 50) missing.push(`${card.name} (quantity exceeds 50)`);
+    }
+    let rideDeckCrestId = "";
+    const rideRows = Array.isArray(payload.p_list) ? payload.p_list : [];
+    if (format === "standard") for (const row of rideRows) {
+      const slot = String(row?.slot || "").toLowerCase().replace(/[^a-z0-9]/g, ""), card = resolveDeckLogCard(row);
+      const gradeSlot = slot.match(/grade([0-3])$/);
+      const isCrest = slot === "gradep2" || /ride deck crest/i.test(`${card?.type || ""} ${card?.name || row?.name || ""}`) || /energy generator/i.test(`${card?.name || row?.name || ""}`);
+      if (!card) { missing.push(String(row?.card_number || row?.cardNumber || "unidentified Ride Deck card")); continue; }
+      if (gradeSlot) {
+        const grade = Number(gradeSlot[1]);
+        if (Number(card.grade) !== grade || rideDeck[grade]) { missing.push(`${card.name} (invalid or duplicate Grade ${grade} Ride Deck slot)`); continue; }
+        rideDeck[grade] = card.id;
+      } else if (isCrest && !rideDeckCrestId) rideDeckCrestId = card.id;
+      else missing.push(`${card.name} (unsupported Ride Deck slot)`);
+    }
+    if (missing.length) throw new Error(`I couldn’t match every card to the site catalog (${missing.slice(0, 4).join(", ")}${missing.length > 4 ? `, and ${missing.length - 4} more` : ""}). Your current deck was left unchanged.`);
+    if (!Object.keys(cards).length) throw new Error("This DeckLog code contains no cards that can be imported.");
+    const title = String(payload.deck_name || payload.deckName || payload.name || `DeckLog ${code}`).trim().slice(0, 40) || `DeckLog ${code}`;
+    return { id: null, name: title, format, cards, starterCardId: "", rideDeck, rideDeckCrestId };
+  }
+  function openDeckLogImport() { $("#decklog-code").value = ""; $("#decklog-import-status").textContent = ""; $("#decklog-import-confirm").disabled = false; $("#decklog-import-dialog").showModal(); $("#decklog-code").focus(); }
+  async function uploadDeckLog() {
+    const code = $("#decklog-code").value.trim().toUpperCase().replace(/\s+/g, ""), status = $("#decklog-import-status"), button = $("#decklog-import-confirm");
+    if (!/^[A-Z0-9]{4,10}$/.test(code)) { status.textContent = "Enter the 4–10 character DeckLog share code."; return; }
+    if (!account.client) { status.textContent = "The DeckLog import service is not connected on this site yet."; return; }
+    button.disabled = true; status.textContent = "Loading the deck from DeckLog…";
+    try {
+      const { data, error } = await account.client.functions.invoke("decklog-import", { body: { deckCode: code } });
+      if (error) throw new Error("The DeckLog import service is unavailable. Try again later.");
+      const imported = buildDeckLogDeck(data, code);
+      builder = imported; renderBuilder(); showView("decks"); $("#decklog-import-dialog").close();
+      const note = imported.format === "premium" ? " Choose its starting Vanguard, then save." : " Review the Ride Deck, then save.";
+      toast(`Imported “${imported.name}”.${note}`);
+    } catch (error) { status.textContent = error?.message || "Could not import that DeckLog code."; }
+    finally { button.disabled = false; }
   }
   function toast(text) {
     let el = $("#toast"); if (!el) { el = document.createElement("div"); el.id = "toast"; el.style.cssText = "position:fixed;bottom:23px;left:50%;transform:translateX(-50%);background:#252633;border:1px solid #ffffff2a;color:#fff;padding:11px 15px;border-radius:9px;box-shadow:0 12px 35px #0009;font:11px 'DM Sans',sans-serif;z-index:20;transition:.2s"; document.body.appendChild(el); }
@@ -3788,6 +3851,9 @@ if(deckDropStep&&!x.effectSourceZone)$("#ability-accept").disabled=true;if(rideS
   $("#saved-decks").addEventListener("click", (e) => { const preferred = e.target.closest("[data-default-deck]"); if (preferred) { makeDefaultDeck(preferred.dataset.defaultDeck); return; } const zoom = e.target.closest("[data-card-zoom]"); if (zoom) { showCardDetails(zoom.dataset.cardZoom); return; } const load = e.target.closest("[data-load-deck]"); const duplicate = e.target.closest("[data-duplicate-deck]"); const remove = e.target.closest("[data-delete-deck]"); const exp = e.target.closest("[data-export-saved]"); const decks = readSavedDecks(); if (load) { const d = decks.find((x) => x.id === load.dataset.loadDeck); if (d) loadDeck(d); } if (duplicate) { const d = decks.find((x) => x.id === duplicate.dataset.duplicateDeck); if (d) { const copy = { ...d, id: crypto.randomUUID?.() || String(Date.now()), name: `${d.name} Copy`, updatedAt: new Date().toISOString() }; decks.unshift(copy); writeSavedDecks(decks); renderSavedDecks(); toast("Deck duplicated"); } } if (remove) { const d = decks.find((x) => x.id === remove.dataset.deleteDeck); if (d && confirm(`Delete “${d.name}” from this browser?`)) { if (String(savedDefaultDeck()?.id) === String(d.id)) localStorage.removeItem(defaultDeckStorageKey()); writeSavedDecks(decks.filter((x) => x.id !== d.id)); void deleteCloudDeck(d.id); renderSavedDecks(); } } if (exp) { const d = decks.find((x) => x.id === exp.dataset.exportSaved); if (d) exportDeck(d, `${d.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`); } });
   $("#export-deck").addEventListener("click", () => exportDeck(builder, `${builder.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase() || "deck"}.json`));
   $("#import-deck").addEventListener("click", () => $("#deck-file").click()); $("#deck-file").addEventListener("change", (e) => { if (e.target.files[0]) importDeckFile(e.target.files[0]); e.target.value = ""; });
+  $("#import-decklog").addEventListener("click", openDeckLogImport); $("#decklog-import-confirm").addEventListener("click", () => { void uploadDeckLog(); });
+  $("#decklog-code").addEventListener("input", event => { event.target.value = event.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""); });
+  $("#decklog-code").addEventListener("keydown", event => { if (event.key === "Enter") { event.preventDefault(); void uploadDeckLog(); } });
   $("#library-search").addEventListener("input", () => { libraryPage = 0; renderLibrary(); }); $("#library-grade").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-clan").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-nation").addEventListener("change", () => { libraryPage = 0; renderLibrary(); }); $("#library-prev").addEventListener("click", () => { libraryPage = Math.max(0, libraryPage - 1); renderLibrary(); }); $("#library-next").addEventListener("click", () => { libraryPage += 1; renderLibrary(); }); $("#library-grid").addEventListener("click", (e) => { const node = e.target.closest("[data-card-detail]"); if (node) showCardDetails(node.dataset.cardDetail); });
   $("#art-search").addEventListener("input", () => { artPage = 0; renderArtGallery(); });
   $("#art-prev").addEventListener("click", () => { artPage = Math.max(0, artPage - 1); renderArtGallery(); });

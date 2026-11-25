@@ -16,6 +16,18 @@ The room directory exposes room code, room name, and host name, but not the pass
 
 The account dialog can use the same project URL and publishable key. Configure the project's email/password provider and deploy the account/deck tables and policies required by the account feature before enabling account sync. Account sign-in is optional for local decks and is separate from the anonymous identity used for each online match.
 
+## DeckLog code import
+
+The Deck Workshop's **Upload from DeckLog** action accepts a DeckLog share code and fetches its public deck list through `functions/decklog-import`. The function only calls DeckLog's fixed English-card-game endpoint; it does not accept arbitrary URLs or require a service-role key. Its CORS policy allows the published GitHub Pages origin and local development origins.
+
+Deploy it to this project with the Supabase CLI from the repository root:
+
+```sh
+supabase functions deploy decklog-import --project-ref bzkbaidhgfbbbqmzokgr
+```
+
+The function is configured without gateway JWT verification because the deck builder is available while signed out. Keep the origin allowlist in `functions/decklog-import/index.ts` narrow and review any additional origins before adding them.
+
 ## Authority limitation
 
 The Realtime policies authenticate who may send on each room channel. They do not validate Vanguard actions or own canonical game state. At present, the host browser still validates and applies guest commands. A trusted server reducer, versioned server-owned state, private decision delivery, and server-side replay/concurrency protection are still required before online match actions can be considered authoritative.
